@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "452626894835",
+    "firebase_url": "https://hooging-f33b0.firebaseio.com",
+    "project_id": "hooging-f33b0",
+    "storage_bucket": "hooging-f33b0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:452626894835:android:f5aa6f72023e8a9d954c86",
+        "android_client_info": {
+          "package_name": "com.hoogingapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "452626894835-9q66v8ngdvg46lkmdmknevhbshud0alj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBHwD4oa-sroUJxCPEYASHFqsNNSKmFfjA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "452626894835-9q66v8ngdvg46lkmdmknevhbshud0alj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -53,7 +53,9 @@ const FeedDetail = ({route, navigation}) => {
         />
       </FeedImageContainer>
       <CommentContainer>
-        <CommentText>{JSON.stringify(content).replace(/\"/g, '')}</CommentText>
+        <CommentText style={{fontFamily: 'Arita4.0_M'}}>
+          {JSON.stringify(content).replace(/\"/g, '')}
+        </CommentText>
       </CommentContainer>
       <BottomBorder />
     </Container>

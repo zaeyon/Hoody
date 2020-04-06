@@ -1,6 +1,6 @@
 import React from 'react';
 import Styled from 'styled-components/native';
-import {TouchableOpacity} from 'react-native';
+import {TouchableOpacity, Text, StyleSheet} from 'react-native';
 import SubImageList from '~/Components/FeedItem/SubImageList';
 import TagList from '~/Components/FeedItem/TagList';
 const Container = Styled.View`
@@ -17,22 +17,15 @@ const ProfileImage = Styled.Image`
   border-color: #D3D3D3;
 `;
 
-const UserName = Styled.Text`
-  font-weight: bold;
-  margin-left: 8px;
-`;
-
 const ProfileContainer = Styled.View`
   flex-direction: row;
   align-items: center;
 `;
 
 const Rating = Styled.Text`
-  font-weight: bold;
   padding: 0px 60px;
   margin: 5px;
-  font-size: 22px;
-   
+  font-size: 19px;
 `;
 
 const FeedHeader = Styled.View`
@@ -115,16 +108,20 @@ const FeedItem = ({
                 }}
                 style={{width: 32, height: 32}}
               />
-              <UserName>{name}</UserName>
+              <Text style={{fontFamily: 'Arita4.0_B', marginLeft: 4}}>
+                {name}
+              </Text>
             </ProfileContainer>
-            <Rating>{rating}</Rating>
+            <Rating style={{fontFamily: 'Arita4.0_B'}}>{rating}</Rating>
           </ProfileRating>
           <SubImageList></SubImageList>
         </HeaderRight>
       </FeedHeader>
       <FeedBody>
         <TagList tags={[{tag: '#에어팟'}, {tag: '#을지로'}]}></TagList>
-        <Description>{description}</Description>
+        <Description style={{fontFamily: 'Arita4.0_M'}}>
+          {description}
+        </Description>
       </FeedBody>
       <DividerContainer>
         <FeedDivider />
@@ -132,5 +129,12 @@ const FeedItem = ({
     </Container>
   );
 };
+
+const styles = StyleSheet.create({
+  UserName: {
+    fontWeight: 'bold',
+    marginLeft: 10,
+  },
+});
 
 export default FeedItem;

@@ -2,11 +2,22 @@ import * as React from 'react';
 import {Image, TouchableOpacity} from 'react-native';
 import Styled from 'styled-components/native';
 import FeedItem from '~/Components/FeedItem';
+import FeedItem2 from '~/Components/FeedItem2';
+
+function Feed({navigation}) {
+  const ReviewContent =
+    '을지로 입구역에서 에어팟을 구입 후 언박싱을 하였다. 언박싱 후 기존의 있었다.';
+  return (
+    <Container>
+      <FeedItem2 />
+    </Container>
+  );
+}
 
 const Container = Styled.SafeAreaView`
  flex: 1;
  background-color: #FFFFFF;
- f
+ align-items: center;
 `;
 
 const HeaderBottomWidth = Styled.View`
@@ -14,11 +25,10 @@ const HeaderBottomWidth = Styled.View`
   background-color: #c3c3c3;
 `;
 
-function Feed({navigation}) {
-  const ReviewContent =
-    '을지로 입구역에서 에어팟을 구입 후 언박싱을 하였다. 언박싱 후 기존의 있었다.';
-  return (
-    <Container>
+export default Feed;
+
+/*
+
       <TouchableOpacity
         onPress={() => {
           navigation.navigate('FeedDetail', {
@@ -34,8 +44,4 @@ function Feed({navigation}) {
           navigation={navigation}
         />
       </TouchableOpacity>
-    </Container>
-  );
-}
-
-export default Feed;
+*/

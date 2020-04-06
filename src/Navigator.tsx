@@ -12,9 +12,11 @@ import Profile from '~/Tab/Profile';
 import Search from '~/Screens/Search';
 import FeedDetail from '~/Screens/FeedDetail';
 import PinterMap from '~/Screens/PinterMap';
+import UncertifiedProfile from '~/Screens/UncertifiedProfile';
+import CertifiedProfile from '~/Screens/CertifiedProfile';
+import Login from '~/Screens/Login';
 
 const Tab = createBottomTabNavigator();
-
 const HomeStack = createStackNavigator();
 const FeedStack = createStackNavigator();
 const UploadStack = createStackNavigator();
@@ -22,15 +24,27 @@ const AlarmStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
 
 function UploadTitle() {
-  return <Text style={{fontSize: 19}}>나의 후깅</Text>;
+  return (
+    <Text style={{fontSize: 17, fontFamily: 'Arita4.0_M'}}>나의 후깅</Text>
+  );
 }
 
 function FeedTitle() {
-  return <Text style={{fontSize: 19}}>오늘의 후깅</Text>;
+  return (
+    <Text style={{fontSize: 17, fontFamily: 'Arita4.0_M'}}>오늘의 후깅</Text>
+  );
 }
 
 function AlarmTitle() {
-  return <Text style={{fontSize: 19}}>알림</Text>;
+  return <Text style={{fontSize: 17, fontFamily: 'Arita4.0_M'}}>알림</Text>;
+}
+
+function ProfileTitle() {
+  return <Text style={{fontSize: 17, fontFamily: 'Arita4.0_M'}}>프로필</Text>;
+}
+
+function LoginTitle() {
+  return <Text style={{fontSize: 17, fontFamily: 'Arita4.0_M'}}>로그인</Text>;
 }
 
 function HomeStackScreen() {
@@ -56,7 +70,7 @@ function FeedStackScreen() {
         name="Feed"
         component={Feed}
         options={{
-          headerTitle: props => <FeedTitle {...props} />,
+          headerTitle: (props) => <FeedTitle {...props} />,
         }}
       />
       <FeedStack.Screen name="FeedDetail" component={FeedDetail} />
@@ -79,7 +93,7 @@ function UploadStackScreen() {
         name="Upload"
         component={Upload}
         options={{
-          headerTitle: props => <UploadTitle {...props} />,
+          headerTitle: (props) => <UploadTitle {...props} />,
         }}
       />
     </UploadStack.Navigator>
@@ -100,7 +114,7 @@ function AlarmStackScreen() {
         name="Alarm"
         component={Alarm}
         options={{
-          headerTitle: props => <AlarmTitle {...props} />,
+          headerTitle: (props) => <AlarmTitle {...props} />,
         }}
       />
     </AlarmStack.Navigator>
@@ -117,8 +131,29 @@ function ProfileStackScreen() {
         },
         headerTitleAlign: 'center',
       }}>
-      <ProfileStack.Screen name="Profile" component={Profile} />
+      <ProfileStack.Screen
+        name="Profile"
+        component={Profile}
+        options={({navigation, route}) => ({
+          headerTitle: (props) => <ProfileTitle {...props} />,
+        })}
+      />
       <ProfileStack.Screen name="PinterMap" component={PinterMap} />
+      <ProfileStack.Screen
+        name="UncertifiedProfile"
+        component={UncertifiedProfile}
+      />
+      <ProfileStack.Screen
+        name="CertifiedProfile"
+        component={CertifiedProfile}
+      />
+      <ProfileStack.Screen
+        name="Login"
+        component={Login}
+        options={({navigation, route}) => ({
+          headerTitle: (props) => <LoginTitle {...props} />,
+        })}
+      />
     </ProfileStack.Navigator>
   );
 }

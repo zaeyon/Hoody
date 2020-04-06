@@ -12,8 +12,7 @@ const Container = Styled.View`
 
 const Tag = Styled.Text`
  flex: 1;
- font-weight: bold;
- font-size: 17px;
+ font-size: 16px;
  margin-right: 4px;
 `;
 
@@ -23,7 +22,9 @@ const TagList = ({tags}: Props) => {
       <FlatList
         data={tags}
         horizontal={true}
-        renderItem={({item}) => <Tag>{item.tag}</Tag>}
+        renderItem={({item}) => (
+          <Tag style={{fontFamily: 'Arita4.0_B'}}>{item.tag}</Tag>
+        )}
       />
     </Container>
   );

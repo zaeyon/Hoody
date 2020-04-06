@@ -13,14 +13,16 @@ const Container = Styled.SafeAreaView`
 `;
 
 const MyHoogingText = Styled.Text`
-  font-size: 19px;
+  font-size: 18px;
   color: #000000;
   text-align: center;
+  font-family: 'Arita4.0_M'
 `;
 
 const UploadButton = Styled.Text`
  font-size: 19px;
  color: #001BD8;
+ font-family: 'Arita4.0_M'
 `;
 
 const CloseButton = Styled.Image`
@@ -89,21 +91,24 @@ const SelectedImage = Styled.View`
 `;
 
 const RocationInput = Styled.TextInput`
- font-size: 15px;
+ font-size: 13px;
+ font-family: 'Arita4.0_M'
 `;
 
 const TagInput = Styled.TextInput`
- font-size: 15px;
+ font-size: 13px;
+ font-family: 'Arita4.0_M'
 `;
 
 const CameraIcon = Styled.Image`
 `;
 
 const CommentInput = Styled.TextInput`
+font-family: 'Arita4.0_M'
 `;
 
 function Upload({navigation}) {
-  const ratingCompleted = rating => {
+  const ratingCompleted = (rating) => {
     console.log(`Rating is: + ${rating}`);
   };
 

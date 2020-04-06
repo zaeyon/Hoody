@@ -1,6 +1,10 @@
 import React from 'react';
 import Styled from 'styled-components/native';
-import {Text} from 'react-native';
+import {Text, TouchableOpacity} from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
+
+import Login from '~/Screens/Login';
 
 const Container = Styled.View`
   flex: 1;
@@ -9,10 +13,33 @@ const Container = Styled.View`
   align-items: center;
 `;
 
-const UncertifiedProfile = () => {
+const AuthenticationStack = createStackNavigator();
+
+function AuthenticationStackScreen() {
+  return (
+    <AuthenticationStack.Navigator
+      screenOptions={{
+        headerStyle: {
+          height: 47,
+          elevation: 1.5,
+        },
+        headerTitleAlign: 'center',
+      }}>
+      <AuthenticationStack.Screen
+        name="UncertifiedProfile"
+        component={UncertifiedProfile}
+      />
+      <AuthenticationStack.Screen name="Login" component={Login} />
+    </AuthenticationStack.Navigator>
+  );
+}
+
+const UncertifiedProfile = ({navigation}) => {
   return (
     <Container>
-      <Text>로그인</Text>
+      <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+        <Text>로그인</Text>
+      </TouchableOpacity>
       <Text style={{marginTop: 20}}>회원가입</Text>
     </Container>
   );

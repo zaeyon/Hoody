@@ -15,6 +15,7 @@ import PinterMap from '~/Screens/PinterMap';
 import UncertifiedProfile from '~/Screens/UncertifiedProfile';
 import CertifiedProfile from '~/Screens/CertifiedProfile';
 import Login from '~/Screens/Login';
+import LocationSearch from '~/Screens/LocationSearch';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
@@ -45,6 +46,12 @@ function ProfileTitle() {
 
 function LoginTitle() {
   return <Text style={{fontSize: 17, fontFamily: 'Arita4.0_M'}}>로그인</Text>;
+}
+
+function SearchLocationTitle() {
+  return (
+    <Text style={{fontSize: 17, fontFamily: 'Arita4.0_M'}}>위치 검색</Text>
+  );
 }
 
 function HomeStackScreen() {
@@ -89,11 +96,12 @@ function UploadStackScreen() {
         },
         headerTitleAlign: 'center',
       }}>
+      <UploadStack.Screen name="Upload" component={Upload} options={{}} />
       <UploadStack.Screen
-        name="Upload"
-        component={Upload}
+        name="LocationSearch"
+        component={LocationSearch}
         options={{
-          headerTitle: (props) => <UploadTitle {...props} />,
+          headerTitle: (props) => <SearchLocationTitle {...props} />,
         }}
       />
     </UploadStack.Navigator>

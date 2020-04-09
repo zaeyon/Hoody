@@ -2,8 +2,10 @@ import React, {useEffect, useState} from 'react';
 import Styled from 'styled-components/native';
 import {Keyboard, Button, Text} from 'react-native';
 import Input from '~/Components/Input';
-import auth from '@react-native-firebase/auth';
 import LoginButton from '~/Components/Button';
+import axios from 'axios';
+import {resolvePlugin} from '@babel/core';
+import {checkLogin, restHTTPGet} from '~/Route/User';
 
 const Container = Styled.SafeAreaView`
   flex: 1;
@@ -90,22 +92,7 @@ const Login = ({navigation}) => {
         <LoginButton
           label="로그인"
           style={{marginBottom: 24}}
-          onPress={() => {
-            auth()
-              .signInWithEmailAndPassword(email, password)
-              .then(() => {
-                console.log('User account signed in!');
-              })
-              .catch((error) => {
-                if (error.code === 'auth/email-alreay-in-use') {
-                  console.log('That email address is already in use!');
-                }
-                if (error.code === 'auth/incalid-email') {
-                  console.log('That email address is invalid!');
-                }
-                console.log(error);
-              });
-          }}
+          onPress={(email, password) => checkLogin(email, password)}
         />
         <SignupText>
           계정이 없는가요?{' '}

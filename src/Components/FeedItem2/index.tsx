@@ -21,7 +21,6 @@ const Container = Styled.View`
 const HeaderContainer = Styled.View`
  flex:1;
  flex-direction: row;
- border-bottom-width: 1px;
 `;
 
 const ProfileImage = Styled.Image`
@@ -46,14 +45,23 @@ flex:1;
 
 const BodyContainer = Styled.View`
  flex:2;
- border-bottom-width: 1px;
+ justify-content: center;
+ align-items: center;
 
+`;
+
+const ImageContainer = Styled.View`
+`;
+
+const ReviewImage = Styled.Image`
+ border-radius: 8px;
+ width: ${wp('83%')};
+ height: ${wp('40%')}; 
 `;
 
 const FooterContainer = Styled.View`
  flex: 1;
- border-bottom-width: 1px;
-
+ flex-direction: column;
 `;
 
 const UserNameText = Styled.Text`
@@ -64,6 +72,7 @@ const WriteTimeText = Styled.Text`
   font-family: 'Arita4.0_L';
   font-size: 11px;
   margin-top: 4px;
+  color: #AAB2B7;
 `;
 
 const RatingContainer = Styled.View`
@@ -74,26 +83,58 @@ const RatingContainer = Styled.View`
 const RatingText = Styled.Text`
   font-family: 'Arita4.0_B';
   font-size: 22px;
+  color: #707070;
 `;
 
 const CertainRatingText = Styled.Text`
   font-family: 'Arita4.0_L';
   font-size: 13px;
   margin-bottom: 2px;
+  color: #707070;
 `;
 
 const FavoriteContainer = Styled.View`
-margin-top: 3px;
+margin-top: 6px;
 flex-direction: row;
 align-items: center;
 `;
 
 const FavoriteImage = Styled.Image`
+margin-right: 5px;
 `;
 
 const FavoriteText = Styled.Text`
  font-family: 'Arita4.0_L';
  font-size: 11;
+ color : #AAB2B7;
+`;
+
+const ReviewContent = Styled.Text`
+ margin: 0px 0px 0px 12px;
+ font-family: 'Arita4.0_L';
+ font-size: 12;
+ color: #000000;
+`;
+
+const ImageCountContainer = Styled.View`
+ border-radius: 4px;
+ background-color: #F7F7F7;
+ width: ${wp('10%')};
+ height: ${wp('10%')};
+ align-items: center;
+ justify-content: center;
+`;
+
+const ImageCountView = Styled.View`
+ position: absolute;
+ right: 7;
+ bottom: 13;
+`;
+
+const ImageCountText = Styled.Text`
+ font-family: 'Arita4.0_B';
+ font-size: 15;
+ color: #707070;
 `;
 
 const FeedItem2 = () => {
@@ -107,6 +148,18 @@ const FeedItem2 = () => {
     x: 0,
     y: 3,
     style: {marginVertical: 15},
+  };
+
+  const imageCountShadow = {
+    width: wp('10%'),
+    height: wp('10%'),
+    color: '#000000',
+    border: 3,
+    radius: 5,
+    opacity: 0.09,
+    x: 0,
+    y: 0,
+    style: {marginVertical: -18},
   };
 
   return (
@@ -133,18 +186,40 @@ const FeedItem2 = () => {
             </RatingContainer>
             <FavoriteContainer>
               <FavoriteImage
-                style={{width: 22, height: 22}}
-                source={{
-                  uri:
-                    'https://i.pinimg.com/564x/29/8d/b1/298db12d2411dba1ed19329674469ba8.jpg',
-                }}
+                style={{width: 14, height: 14}}
+                source={require('~/Assets/Images/ic_heart2.png')}
+                tintColor="#AAB2B7"
               />
               <FavoriteText>249</FavoriteText>
             </FavoriteContainer>
           </HeaderLeft>
         </HeaderContainer>
-        <BodyContainer></BodyContainer>
-        <FooterContainer></FooterContainer>
+        <BodyContainer>
+          <ReviewImage
+            source={{
+              uri: 'https://t1.daumcdn.net/cfile/tistory/25053C40592D09D50A',
+            }}
+          />
+          <ImageCountView>
+            <BoxShadow setting={imageCountShadow}>
+              <ImageCountContainer>
+                <ImageCountText>+5</ImageCountText>
+              </ImageCountContainer>
+            </BoxShadow>
+          </ImageCountView>
+        </BodyContainer>
+        <FooterContainer>
+          <TagList
+            tags={[
+              {tag: '#키엘'},
+              {tag: '#수분크림'},
+              {tag: '#하울'},
+            ]}></TagList>
+          <ReviewContent>
+            이번에 남자친구가 선물해준 키엘 수분 크림을 사용해봤는데 너무 좋은거
+            같아요.
+          </ReviewContent>
+        </FooterContainer>
       </Container>
     </BoxShadow>
   );

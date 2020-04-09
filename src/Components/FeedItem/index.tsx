@@ -3,6 +3,7 @@ import Styled from 'styled-components/native';
 import {TouchableOpacity, Text, StyleSheet} from 'react-native';
 import SubImageList from '~/Components/FeedItem/SubImageList';
 import TagList from '~/Components/FeedItem/TagList';
+
 const Container = Styled.View`
  padding: 8px 0px;
 `;

@@ -37,6 +37,7 @@ interface Props {
   rating: number;
   profileImage: string;
 }
+
 const FeedDetail = ({route, navigation}) => {
   const imageWidth = Dimensions.get('window').width;
   const imageHeight = Dimensions.get('window').width;

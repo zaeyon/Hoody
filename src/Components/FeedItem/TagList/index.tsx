@@ -3,17 +3,17 @@ import Styled from 'styled-components/native';
 import {FlatList, Text} from 'react-native';
 
 interface Props {
-  tags: Array<String>;
+  tags: Array<string>;
 }
 
 const Container = Styled.View`
- margin: -4px 15px;
+ margin: 10px 0px 3px 12px;
 `;
 
 const Tag = Styled.Text`
- flex: 1;
- font-size: 16px;
+ font-size: 15px;
  margin-right: 4px;
+ font-family: 'Arita4.0_M';
 `;
 
 const TagList = ({tags}: Props) => {
@@ -22,9 +22,7 @@ const TagList = ({tags}: Props) => {
       <FlatList
         data={tags}
         horizontal={true}
-        renderItem={({item}) => (
-          <Tag style={{fontFamily: 'Arita4.0_B'}}>{item.tag}</Tag>
-        )}
+        renderItem={({item}) => <Tag>{item.tag}</Tag>}
       />
     </Container>
   );

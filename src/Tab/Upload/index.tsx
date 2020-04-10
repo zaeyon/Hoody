@@ -4,11 +4,13 @@ import {
   Text,
   TouchableOpacity,
   UIManager,
+  TouchableWithoutFeedback,
   LayoutAnimation,
   StyleSheet,
   Platform,
   FlatList,
   View,
+  ScrollView,
 } from 'react-native';
 import CameraRollPicker from 'react-native-camera-roll-picker';
 import {Rating} from 'react-native-ratings';
@@ -30,22 +32,22 @@ if (
 
 const Container = Styled.SafeAreaView`
   flex: 1;
-  height: 100%;
   background-color: #eeeeee;
   flex-direction: row;
   padding: 10px;
-  justify-content: center;
+  height: ${hp('100%')};
+
 `;
 
 const ShadowInner = Styled.View`
   flex: 1; 
-  height: 90%;
-  background-color: #FFFFFF;
+  background-color: #EEEEEE;
+  height: ${hp('85%')};
+  width: ${wp('94%')};
   flex-direction: row;
-  padding: 10px;
+  padding: 0px;
   border-radius: 7px;
   justify-content: center;
-  align-items: center;
 `;
 
 const MyHoogingText = Styled.Text`
@@ -67,18 +69,18 @@ const CloseButton = Styled.Image`
 
 const Inner = Styled.View`
   flex-direction: column;
-  width: 100%;
-  border-width: 0px;
+  height: ${hp('85%')};
+  width: ${wp('94%')};
   border-radius: 5px;
   background-color: #FFFFFF;
   border-color: #c3c3c3;
-  
 `;
 
 const Title = Styled.View`
  flex-direction: row;
- height: 40px;
- padding: 8px;
+ height: ${hp('3%')};
+ padding: 0px 10px;
+ margin-top: 13px;
  align-items: center;
  justify-content: space-between;
 `;
@@ -86,49 +88,40 @@ const Title = Styled.View`
 const ImageRatingContainer = Styled.View`
  padding: 0px 0px;
  flex-direction: column;
- border-bottom-width: 0.3px;
- border-color: #cccccc;
  justify-content:space-between;
 `;
 
 const ImageContainer = Styled.View`
-margin-top: 15px;
-`;
-
-const RatingContainer = Styled.View`
-margin-top: 20px;
+margin-top: 5px;
 `;
 
 const RocationContainer = Styled.View`
-flex: 0.45;
+margin-top: 10px;
+border-top-width: 0.3px;
 border-bottom-width: 0.3px;
 border-color: #cccccc;
 padding: 0px 15px;
+height: ${hp('5.5%')};
 `;
 
 const TagContainer = Styled.View`
-flex: 0.45;
+height: ${hp('5.5%')};
 border-bottom-width: 0.3px;
 border-color: #cccccc;
 padding: 0px 15px;
 `;
 
 const CommentContainer = Styled.View`
-flex: 3.5;
-border-bottom-width: 0.4px;
+height: ${hp('25%')};
 border-color: #c3c3c3;
 padding: 0px 15px;
 `;
 
-const GalleryContainer = Styled.TouchableOpacity`
- height: 100%;
- flex: 3;
-`;
-
 const SelectedImageContainer = Styled.View`
+ margin-top: 3px;
  border-radius: 7px;
- width: ${wp('26%')};
- height: ${wp('26%')};
+ width: ${wp('28.5%')};
+ height: ${wp('28.5%')};
  background-color: #FFFFFF;
  justify-content: center;
  align-items: center;
@@ -157,12 +150,27 @@ font-family: 'Arita4.0_M';
 const SelectedImageTouch = Styled.TouchableWithoutFeedback`
 `;
 
-const SelectedImage = Styled.Image`
-
-position: absolute;
+const EmptyImage = Styled.Image`
+  position: absolute;
   border-radius: 7px;
-  width: ${wp('26%')};
-  height: ${wp('26%')};
+  width: ${wp('28.0%')};
+  height: ${wp('28.0%')};
+`;
+
+const SelectedImage = Styled.Image`
+  position: absolute;
+  border-radius: 7px;
+  width: ${wp('28.5%')};
+  height: ${wp('28.5%')};
+`;
+
+const DeleteButton = Styled.Image`
+ position: absolute;
+ width :${wp('7%')};
+ height:${wp('7%')};
+ opacity: 0.9;
+ right: 2px;
+ top: 2px;
 `;
 
 const options = {
@@ -173,24 +181,37 @@ const options = {
 };
 
 function Upload({navigation}) {
-  const items = [{name: 'TURQUOISE', code: '#1abc9c'}];
-
   const [imageUrl, setImageUrl] = useState('');
-  const [imageUrl_arr, setImageUrl_arr] = useState(['']);
-  const itemss = [
-    'https://interactive-examples.mdn.mozilla.net/media/examples/grapefruit-slice-332-332.jpg',
-    'https://miro.medium.com/max/1200/1*mk1-6aYaf_Bes1E3Imhc0A.jpeg',
-    'https://www.iconsdb.com/icons/preview/gray/slr-camera-xxl.png',
-  ];
+  const [imageUrl_arr, setImageUrl_arr] = useState([
+    'https://firebasestorage.googleapis.com/v0/b/hooging-f33b0.appspot.com/o/zz.png?alt=media&token=eb26a783-c54b-4205-bab6-5357e103aef4',
+  ]);
+
+  var deleted_arr;
 
   const openGallery = () => {
     ImagePicker.launchImageLibrary(options, (response) => {
       if (response.error) {
         console.log('LaunchImageLibrary Error: ', response.error);
       } else {
-        setImageUrl(response.uri);
+        var newImage_arr = new Array();
+        newImage_arr = imageUrl_arr.slice(0, imageUrl_arr.length - 1);
+        newImage_arr[imageUrl_arr.length] =
+          'https://firebasestorage.googleapis.com/v0/b/hooging-f33b0.appspot.com/o/zz.png?alt=media&token=eb26a783-c54b-4205-bab6-5357e103aef4';
+        newImage_arr[imageUrl_arr.length - 1] = response.uri;
+        setImageUrl_arr(newImage_arr);
       }
     });
+  };
+
+  const deleteImage = (index) => {
+    if (index > -1) {
+      console.log('삭제 전', imageUrl_arr);
+      setImageUrl_arr((prev) => {
+        console.log('prev : ', prev);
+        prev.splice(index, 1);
+        return prev.slice(0);
+      });
+    }
   };
 
   const shadowOpt = {
@@ -213,7 +234,13 @@ function Upload({navigation}) {
     navigation.setOptions({
       headerRight: () => <Text onPress={() => 1} title="공유" />,
     });
-  }, [navigation]);
+
+    deleted_arr = imageUrl_arr;
+  }, [navigation, imageUrl_arr]);
+
+  useEffect(() => {
+    return setImageUrl_arr(imageUrl_arr);
+  });
 
   return (
     <Container>
@@ -231,27 +258,44 @@ function Upload({navigation}) {
             <ImageRatingContainer>
               <ImageContainer>
                 <FlatGrid
-                  itemDimension={wp('20%')}
-                  items={itemss}
+                  itemDimension={wp('21%')}
+                  items={imageUrl_arr}
                   // staticDimension={300}
                   // fixed
                   // spacing={20}
-                  renderItem={({item, index}) => (
-                    <SelectedImageTouch onPress={() => openGallery()}>
-                      <SelectedImageContainer>
-                        <SelectedImage source={{uri: item}} />
-                      </SelectedImageContainer>
-                    </SelectedImageTouch>
-                  )}
+                  renderItem={({item, index}) => {
+                    if (index == imageUrl_arr.length - 1) {
+                      return (
+                        <SelectedImageTouch onPress={() => openGallery()}>
+                          <SelectedImageContainer>
+                            <EmptyImage source={{uri: item}} />
+                          </SelectedImageContainer>
+                        </SelectedImageTouch>
+                      );
+                    } else {
+                      return (
+                        <SelectedImageContainer>
+                          <SelectedImage source={{uri: item}} />
+                          <TouchableWithoutFeedback
+                            onPress={() => deleteImage(index)}>
+                            <DeleteButton
+                              position="absolute"
+                              source={require('~/Assets/Images/delete.png')}
+                            />
+                          </TouchableWithoutFeedback>
+                        </SelectedImageContainer>
+                      );
+                    }
+                  }}
                 />
               </ImageContainer>
-              <RatingContainer>
-                <Rating
-                  onFinishRating={ratingCompleted}
-                  style={{paddingVertical: 10}}
-                  imageSize={33}
-                />
-              </RatingContainer>
+              {/* <RatingContainer>
+                  <Rating
+                    onFinishRating={ratingCompleted}
+                    style={{paddingVertical: 10}}
+                    imageSize={33}
+                  />
+               </RatingContainer>*/}
             </ImageRatingContainer>
             <RocationContainer>
               <TouchableOpacity

@@ -16,6 +16,7 @@ import UncertifiedProfile from '~/Screens/UncertifiedProfile';
 import CertifiedProfile from '~/Screens/CertifiedProfile';
 import Login from '~/Screens/Login';
 import LocationSearch from '~/Screens/LocationSearch';
+import Animation from '~/Screens/Animation';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
@@ -58,6 +59,7 @@ function HomeStackScreen() {
   return (
     <HomeStack.Navigator headerMode="none">
       <HomeStack.Screen name="Home" component={Home} />
+      <HomeStack.Screen name="Animation" component={Animation} />
       <HomeStack.Screen name="Search" component={Search} />
     </HomeStack.Navigator>
   );

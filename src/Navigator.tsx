@@ -17,6 +17,7 @@ import CertifiedProfile from '~/Screens/CertifiedProfile';
 import Login from '~/Screens/Login';
 import LocationSearch from '~/Screens/LocationSearch';
 import Animation from '~/Screens/Animation';
+import {createConfigItem} from '@babel/core';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
@@ -55,12 +56,28 @@ function SearchLocationTitle() {
   );
 }
 
+const config = {
+  animation: 'timing',
+  config: {
+    duration: 0,
+  },
+};
+
 function HomeStackScreen() {
   return (
     <HomeStack.Navigator headerMode="none">
       <HomeStack.Screen name="Home" component={Home} />
       <HomeStack.Screen name="Animation" component={Animation} />
-      <HomeStack.Screen name="Search" component={Search} />
+      <HomeStack.Screen
+        name="Search"
+        component={Search}
+        options={{
+          transitionSpec: {
+            open: config,
+            close: config,
+          },
+        }}
+      />
     </HomeStack.Navigator>
   );
 }

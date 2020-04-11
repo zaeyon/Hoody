@@ -61,16 +61,13 @@ class Home extends Component<Props> {
   }
 
   _moveSearchBar() {
+    this.props.navigation.navigate('Search');
     this.setState({showLogo: false});
     Animated.timing(this.state.position, {
       toValue: {x: 0, y: -hp('39%')},
       duration: 500,
       delay: 10,
     }).start();
-  }
-
-  _getStyle() {
-    return;
   }
 
   render() {
@@ -85,7 +82,8 @@ class Home extends Component<Props> {
               transform: [{translateY: this.state.position.y}],
             },
           ]}>
-          <TouchableWithoutFeedback onPress={() => this._moveSearchBar()}>
+          <TouchableWithoutFeedback
+            onPress={() => this.props.navigation.navigate('Search')}>
             <View>
               <InputBoxContainer>
                 <InputBox
@@ -109,57 +107,4 @@ class Home extends Component<Props> {
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-
-  inner: {
-    padding: 10,
-    flex: 1,
-    justifyContent: 'space-around',
-  },
-
-  SectionStyle: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F7F6F6',
-    height: 40,
-    borderRadius: 20,
-    margin: 10,
-    borderWidth: 1.5,
-    borderColor: '#23E5D2',
-  },
-
-  header: {
-    width: '100%',
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-    flexWrap: 'wrap',
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  headerTxt: {
-    fontSize: 12,
-    color: 'rgb(74,74,74)',
-    marginRight: 60,
-    flexWrap: 'wrap',
-  },
-  txt: {
-    fontSize: 14,
-    fontFamily: 'Arita4.0_M',
-  },
-});
-
 export default Home;
-
-/*
-function Home({navigation}) {
-  return (
-   
-  );
-}
-*/

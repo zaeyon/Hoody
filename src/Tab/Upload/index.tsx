@@ -5,14 +5,11 @@ import {
   TouchableOpacity,
   UIManager,
   TouchableWithoutFeedback,
-  LayoutAnimation,
   StyleSheet,
   Platform,
-  FlatList,
-  View,
-  ScrollView,
+  Alert,
+  BackHandler,
 } from 'react-native';
-import CameraRollPicker from 'react-native-camera-roll-picker';
 import {Rating} from 'react-native-ratings';
 import {BoxShadow} from 'react-native-shadow';
 import {
@@ -20,7 +17,6 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import ImagePicker from 'react-native-image-picker';
-import UploadImageItem from '~/Components/UploadImageItem';
 import {FlatGrid} from 'react-native-super-grid';
 
 if (
@@ -36,17 +32,16 @@ const Container = Styled.SafeAreaView`
   flex-direction: row;
   padding: 10px;
   height: ${hp('100%')};
-
 `;
 
 const ShadowInner = Styled.View`
   flex: 1; 
   background-color: #EEEEEE;
-  height: ${hp('85%')};
+  height: ${hp('70%')};
   width: ${wp('94%')};
   flex-direction: row;
   padding: 0px;
-  border-radius: 7px;
+  border-radius: 10px;
   justify-content: center;
 `;
 
@@ -54,13 +49,13 @@ const MyHoogingText = Styled.Text`
   font-size: 18px;
   color: #000000;
   text-align: center;
-  font-family: 'Arita4.0_M';
+  font-family: 'Arita4.0_B';
 `;
 
 const UploadButton = Styled.Text`
  font-size: 19px;
- color: #001BD8;
- font-family: 'Arita4.0_M';
+ color: #338EFC;
+ font-family: 'Arita4.0_B';
 `;
 
 const CloseButton = Styled.Image`
@@ -69,9 +64,9 @@ const CloseButton = Styled.Image`
 
 const Inner = Styled.View`
   flex-direction: column;
-  height: ${hp('85%')};
+  height: ${hp('88.5%')};
   width: ${wp('94%')};
-  border-radius: 5px;
+  border-radius: 10px;
   background-color: #FFFFFF;
   border-color: #c3c3c3;
 `;
@@ -96,8 +91,6 @@ margin-top: 5px;
 `;
 
 const RocationContainer = Styled.View`
-margin-top: 10px;
-border-top-width: 0.3px;
 border-bottom-width: 0.3px;
 border-color: #cccccc;
 padding: 0px 15px;
@@ -105,10 +98,37 @@ height: ${hp('5.5%')};
 `;
 
 const TagContainer = Styled.View`
-height: ${hp('5.5%')};
+border-top-width: 0.3px;
+margin-top: 10px;
+height: ${hp('21%')};
 border-bottom-width: 0.3px;
 border-color: #cccccc;
 padding: 0px 15px;
+flex-direction: column;
+`;
+
+const InsertedTag1 = Styled.View`
+ height: ${hp('5.3%')};
+ width: ${wp('94%')};
+ border-top-width: 0.3px;
+ border-color: #cccccc;
+ align-self: center;
+`;
+
+const InsertedTag2 = Styled.View`
+ height: ${hp('5.3%')};
+ border-top-width: 0.3px;
+ border-color: #cccccc;
+ width: ${wp('94%')};
+ align-self: center;
+`;
+
+const InsertedTag3 = Styled.View`
+ height: ${hp('5.3%')};
+ border-top-width: 0.3px;
+ border-color: #cccccc;
+ width: ${wp('94%')};
+ align-self: center;
 `;
 
 const CommentContainer = Styled.View`
@@ -132,11 +152,14 @@ const SelectedImageContainer = Styled.View`
 const RocationInput = Styled.TextInput`
  font-size: 13px;
  font-family: 'Arita4.0_M';
+ color: #707070;
 `;
 
 const TagInput = Styled.TextInput`
+ height: ${hp('5.5%')};
  font-size: 13px;
  font-family: 'Arita4.0_M';
+ color: #707070;
 `;
 
 const CameraIcon = Styled.Image`
@@ -180,13 +203,15 @@ const options = {
   },
 };
 
-function Upload({navigation}) {
-  const [imageUrl, setImageUrl] = useState('');
+function Upload({route, navigation}) {
   const [imageUrl_arr, setImageUrl_arr] = useState([
     'https://firebasestorage.googleapis.com/v0/b/hooging-f33b0.appspot.com/o/zz.png?alt=media&token=eb26a783-c54b-4205-bab6-5357e103aef4',
   ]);
 
-  var deleted_arr;
+  React.useEffect(() => {
+    if (route.params?.placeName) {
+    }
+  }, [route.params?.placeName]);
 
   const openGallery = () => {
     ImagePicker.launchImageLibrary(options, (response) => {
@@ -216,7 +241,7 @@ function Upload({navigation}) {
 
   const shadowOpt = {
     width: wp('93%'),
-    height: hp('100%'),
+    height: hp('88.5%'),
     color: '#000000',
     border: 3,
     radius: 10,
@@ -234,13 +259,67 @@ function Upload({navigation}) {
     navigation.setOptions({
       headerRight: () => <Text onPress={() => 1} title="공유" />,
     });
-
-    deleted_arr = imageUrl_arr;
   }, [navigation, imageUrl_arr]);
 
+  const cancelReviewUpload = () => {
+    Alert.alert(
+      '후기 작성을 취소하시겠어요?',
+      ' ',
+      [
+        {
+          text: '확인',
+          onPress: () => {
+            var initializedImage_arr = [
+              'https://firebasestorage.googleapis.com/v0/b/hooging-f33b0.appspot.com/o/zz.png?alt=media&token=eb26a783-c54b-4205-bab6-5357e103aef4',
+            ];
+            setImageUrl_arr(initializedImage_arr);
+            navigation.goBack();
+          },
+        },
+        {
+          text: '취소',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancle',
+        },
+      ],
+      {cancelable: false},
+    );
+  };
+
   useEffect(() => {
-    return setImageUrl_arr(imageUrl_arr);
-  });
+    const backAction = () => {
+      Alert.alert(
+        '후기 작성을 취소하시겠어요?',
+        ' ',
+        [
+          {
+            text: '취소',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancle',
+          },
+          {
+            text: '확인',
+            onPress: () => {
+              var initializedImage_arr = [
+                'https://firebasestorage.googleapis.com/v0/b/hooging-f33b0.appspot.com/o/zz.png?alt=media&token=eb26a783-c54b-4205-bab6-5357e103aef4',
+              ];
+              setImageUrl_arr(initializedImage_arr);
+              navigation.goBack();
+            },
+          },
+        ],
+        {cancelable: false},
+      );
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, []);
 
   return (
     <Container>
@@ -248,11 +327,13 @@ function Upload({navigation}) {
         <ShadowInner>
           <Inner>
             <Title>
-              <CloseButton
-                style={{width: 20, height: 20}}
-                source={require('~/Assets/Images/close_gray.png')}
-              />
-              <MyHoogingText>나의 후깅</MyHoogingText>
+              <TouchableWithoutFeedback onPress={() => cancelReviewUpload()}>
+                <CloseButton
+                  style={{width: 20, height: 20}}
+                  source={require('~/Assets/Images/close_gray.png')}
+                />
+              </TouchableWithoutFeedback>
+              <MyHoogingText>나의 게시물</MyHoogingText>
               <UploadButton>공유</UploadButton>
             </Title>
             <ImageRatingContainer>
@@ -297,15 +378,24 @@ function Upload({navigation}) {
                   />
                </RatingContainer>*/}
             </ImageRatingContainer>
+            <TagContainer>
+              <TouchableOpacity>
+                <TagInput placeholder="# 태그 추가" editable={false} />
+              </TouchableOpacity>
+              <InsertedTag1></InsertedTag1>
+              <InsertedTag2></InsertedTag2>
+              <InsertedTag3></InsertedTag3>
+            </TagContainer>
             <RocationContainer>
               <TouchableOpacity
                 onPress={() => navigation.navigate('LocationSearch')}>
-                <RocationInput placeholder="위치 추가" editable={false} />
+                <RocationInput
+                  placeholder="위치 추가"
+                  editable={false}
+                  value={route.params?.placeName}
+                />
               </TouchableOpacity>
             </RocationContainer>
-            <TagContainer>
-              <TagInput placeholder="태그" />
-            </TagContainer>
             <CommentContainer>
               <CommentInput placeholder="comment ..." />
             </CommentContainer>

@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, useEffect} from 'react';
 import Styled from 'styled-components/native';
 import {
   Keyboard,
@@ -62,8 +62,17 @@ class Search extends Component<Props> {
     };
   }
 
+  _keyboardDidHide = () => {
+    this.props.navigation.navigate('Home');
+  };
+
   componentDidMount() {
     this._moveSearchBar();
+    Keyboard.addListener('keyboardDidHide', this._keyboardDidHide);
+  }
+
+  componentWillUnmount() {
+    Keyboard.removeListener('keyboardDidHide', this._keyboardDidHide);
   }
 
   _moveSearchBar() {
@@ -71,7 +80,7 @@ class Search extends Component<Props> {
     this.setState({showLogo: false});
     Animated.timing(this.state.position, {
       toValue: {x: 0, y: -hp('39%')},
-      duration: 500,
+      duration: 350,
       delay: 10,
     }).start();
   }
@@ -94,7 +103,7 @@ class Search extends Component<Props> {
                 <InputBox
                   placeholder="태그로 후기를 검색하세요."
                   clearButtonMode={'while-editing'}
-                  editable={false}
+                  autoFocus="true"
                   style={{
                     fontFamily: 'Arita4.0_M',
                     fontSize: 12,
@@ -112,19 +121,3 @@ class Search extends Component<Props> {
   }
 }
 export default Search;
-
-/*
-
-  useEffect(() => {
-    Keyboard.addListener('keyboardDidHide', _keyboardDidHide);
-
-    //cleanup function
-    return () => {
-      Keyboard.removeListener('keyboardDidHide', _keyboardDidHide);
-    };
-  }, []);
-
-  const _keyboardDidHide = () => {
-    navigation.navigate('Home');
-  };
-*/

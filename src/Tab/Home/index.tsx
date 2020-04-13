@@ -91,7 +91,7 @@ class Home extends Component<Props> {
                   clearButtonMode={'while-editing'}
                   editable={false}
                   style={{
-                    fontFamily: 'Arita4.0_M',
+                    fontFamily: 'Arita4.0_L',
                     fontSize: 12,
                   }}
                 />

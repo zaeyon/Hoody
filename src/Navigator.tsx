@@ -236,6 +236,8 @@ function Navigator() {
                 }
               />
             ),
+            unmountOnBlur: true,
+            tabBarVisible: false,
           }}
         />
         <Tab.Screen

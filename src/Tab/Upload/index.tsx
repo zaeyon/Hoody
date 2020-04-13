@@ -18,6 +18,8 @@ import {
 } from 'react-native-responsive-screen';
 import ImagePicker from 'react-native-image-picker';
 import {FlatGrid} from 'react-native-super-grid';
+import TagInput from '~/Components/TagInput';
+import Modal from 'react-native-modal';
 
 if (
   Platform.OS === 'android' &&
@@ -32,6 +34,18 @@ const Container = Styled.SafeAreaView`
   flex-direction: row;
   padding: 10px;
   height: ${hp('100%')};
+`;
+
+const StyledModalContainer = Styled.View`
+  position: absolute;
+  flex-direction: column;
+  align-items: center;
+  /* 모달창 크기 조절 */
+  width: ${wp('42%')};
+  height: ${hp('17%')};
+
+  background-color: rgba(255, 255, 255, 1);
+  border-radius: 10px;
 `;
 
 const ShadowInner = Styled.View`
@@ -98,7 +112,6 @@ height: ${hp('5.5%')};
 `;
 
 const TagContainer = Styled.View`
-border-top-width: 0.3px;
 margin-top: 10px;
 height: ${hp('21%')};
 border-bottom-width: 0.3px;
@@ -107,28 +120,44 @@ padding: 0px 15px;
 flex-direction: column;
 `;
 
+const InsertTagContainer = Styled.View`
+ height: ${hp('5.3%')};
+ width: ${wp('94%')};
+ border-top-width: 0.3px;
+ border-color: #cccccc;
+ align-self: center;
+ justify-content: center;
+ padding-left: 15px;
+`;
+
 const InsertedTag1 = Styled.View`
  height: ${hp('5.3%')};
  width: ${wp('94%')};
  border-top-width: 0.3px;
  border-color: #cccccc;
- align-self: center;
+ padding-left: 15px;
+ flex-direction: row;
+ align-items: center;
 `;
 
 const InsertedTag2 = Styled.View`
- height: ${hp('5.3%')};
- border-top-width: 0.3px;
- border-color: #cccccc;
- width: ${wp('94%')};
- align-self: center;
+height: ${hp('5.3%')};
+width: ${wp('94%')};
+border-top-width: 0.3px;
+border-color: #cccccc;
+padding-left: 15px;
+flex-direction: row;
+align-items: center;
 `;
 
 const InsertedTag3 = Styled.View`
  height: ${hp('5.3%')};
+ width: ${wp('94%')};
  border-top-width: 0.3px;
  border-color: #cccccc;
- width: ${wp('94%')};
- align-self: center;
+ padding-left: 15px;
+ flex-direction: row;
+ align-items: center;
 `;
 
 const CommentContainer = Styled.View`
@@ -155,12 +184,20 @@ const RocationInput = Styled.TextInput`
  color: #707070;
 `;
 
-const TagInput = Styled.TextInput`
+const ModalContainer = Styled.View`
+position: absolute;
+right: -${wp('2%')};
+top: ${hp('31.7%')};
+`;
+/*
+const TagInput = Styled.TextInput;
+ padding: 10px;
  height: ${hp('5.5%')};
  font-size: 13px;
  font-family: 'Arita4.0_M';
  color: #707070;
 `;
+*/
 
 const CameraIcon = Styled.Image`
  color: #CCCCCC;
@@ -207,6 +244,10 @@ function Upload({route, navigation}) {
   const [imageUrl_arr, setImageUrl_arr] = useState([
     'https://firebasestorage.googleapis.com/v0/b/hooging-f33b0.appspot.com/o/zz.png?alt=media&token=eb26a783-c54b-4205-bab6-5357e103aef4',
   ]);
+  // State를 이용하여 Modal을 제어함
+  const [modalVisible, setModalVisible] = useState<boolean>(false);
+  // Output을 State로 받아서 화면에 표출하거나 정보 값으로 활용
+  const [modalOutput, setModalOutput] = useState<string>('Open Modal');
 
   React.useEffect(() => {
     if (route.params?.placeName) {
@@ -248,6 +289,18 @@ function Upload({route, navigation}) {
     opacity: 0.03,
     x: 0,
     y: 0,
+    style: {marginVertical: 15},
+  };
+
+  const modalShadow = {
+    width: wp('42%'),
+    height: hp('17%'),
+    color: '#000000',
+    border: 7,
+    radius: 10,
+    opacity: 0.04,
+    x: 0,
+    y: 3,
     style: {marginVertical: 15},
   };
 
@@ -323,6 +376,30 @@ function Upload({route, navigation}) {
 
   return (
     <Container>
+      <Modal
+        isVisible={modalVisible}
+        useNativeDriver={true}
+        coverScreen={false}
+        hideModalContentWhileAnimating={true}
+        hasBackdrop={false}
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <ModalContainer>
+          <BoxShadow setting={modalShadow}>
+            <StyledModalContainer>
+              <TouchableOpacity
+                onPress={() => {
+                  setModalVisible(false);
+                }}>
+                <Text>취소</Text>
+              </TouchableOpacity>
+            </StyledModalContainer>
+          </BoxShadow>
+        </ModalContainer>
+      </Modal>
       <BoxShadow setting={shadowOpt}>
         <ShadowInner>
           <Inner>
@@ -380,11 +457,34 @@ function Upload({route, navigation}) {
             </ImageRatingContainer>
             <TagContainer>
               <TouchableOpacity>
-                <TagInput placeholder="# 태그 추가" editable={false} />
+                <InsertTagContainer>
+                  <Text style={{color: '#707070', fontFamily: 'Arita4.0_L'}}>
+                    # 태그추가
+                  </Text>
+                </InsertTagContainer>
               </TouchableOpacity>
-              <InsertedTag1></InsertedTag1>
-              <InsertedTag2></InsertedTag2>
-              <InsertedTag3></InsertedTag3>
+              <InsertedTag1>
+                <Text style={{color: '#707070', fontFamily: 'Arita4.0_L'}}>
+                  #
+                </Text>
+                <TagInput />
+                <TouchableOpacity
+                  onPress={() => {
+                    setModalVisible(true);
+                  }}>
+                  <Text>모달</Text>
+                </TouchableOpacity>
+              </InsertedTag1>
+              <InsertedTag2>
+                <Text style={{color: '#707070', fontFamily: 'Arita4.0_L'}}>
+                  #
+                </Text>
+              </InsertedTag2>
+              <InsertedTag3>
+                <Text style={{color: '#707070', fontFamily: 'Arita4.0_L'}}>
+                  #
+                </Text>
+              </InsertedTag3>
             </TagContainer>
             <RocationContainer>
               <TouchableOpacity

@@ -10,6 +10,7 @@ import {
   Alert,
   BackHandler,
   Image,
+  View,
 } from 'react-native';
 import {Rating} from 'react-native-ratings';
 import {BoxShadow} from 'react-native-shadow';
@@ -42,9 +43,8 @@ const StyledModalContainer = Styled.View`
   flex-direction: column;
   align-items: center;
   /* 모달창 크기 조절 */
-  width: ${wp('42%')};
-  height: ${hp('17%')};
-
+  width: ${wp('60%')};
+  height: ${hp('25%')};
   background-color: rgba(255, 255, 255, 1);
   border-radius: 10px;
 `;
@@ -114,7 +114,6 @@ height: ${hp('5.5%')};
 
 const TagContainer = Styled.View`
 margin-top: 10px;
-height: ${hp('21%')};
 border-bottom-width: 0.3px;
 border-color: #cccccc;
 padding: 0px 15px;
@@ -186,9 +185,6 @@ const RocationInput = Styled.TextInput`
 `;
 
 const ModalContainer = Styled.View`
-position: absolute;
-right: -${wp('2%')};
-top: ${hp('31.7%')};
 `;
 
 const TagInput = Styled.TextInput`
@@ -296,8 +292,8 @@ function Upload({route, navigation}) {
   };
 
   const modalShadow = {
-    width: wp('42%'),
-    height: hp('17%'),
+    width: wp('60%'),
+    height: hp('25%'),
     color: '#000000',
     border: 7,
     radius: 10,
@@ -344,29 +340,34 @@ function Upload({route, navigation}) {
 
   useEffect(() => {
     const backAction = () => {
-      Alert.alert(
-        '후기 작성을 취소하시겠어요?',
-        ' ',
-        [
-          {
-            text: '취소',
-            onPress: () => console.log('Cancel Pressed'),
-            style: 'cancle',
-          },
-          {
-            text: '확인',
-            onPress: () => {
-              var initializedImage_arr = [
-                'https://firebasestorage.googleapis.com/v0/b/hooging-f33b0.appspot.com/o/zz.png?alt=media&token=eb26a783-c54b-4205-bab6-5357e103aef4',
-              ];
-              setImageUrl_arr(initializedImage_arr);
-              navigation.goBack();
+      if (modalVisible === true) {
+        setModalVisible(false);
+        return true;
+      } else {
+        Alert.alert(
+          '후기 작성을 취소하시겠어요?',
+          ' ',
+          [
+            {
+              text: '취소',
+              onPress: () => console.log('Cancel Pressed'),
+              style: 'cancle',
             },
-          },
-        ],
-        {cancelable: false},
-      );
-      return true;
+            {
+              text: '확인',
+              onPress: () => {
+                var initializedImage_arr = [
+                  'https://firebasestorage.googleapis.com/v0/b/hooging-f33b0.appspot.com/o/zz.png?alt=media&token=eb26a783-c54b-4205-bab6-5357e103aef4',
+                ];
+                setImageUrl_arr(initializedImage_arr);
+                navigation.goBack();
+              },
+            },
+          ],
+          {cancelable: false},
+        );
+        return true;
+      }
     };
 
     const backHandler = BackHandler.addEventListener(
@@ -375,7 +376,7 @@ function Upload({route, navigation}) {
     );
 
     return () => backHandler.remove();
-  }, []);
+  }, [modalVisible]);
 
   const STAR_IMAGE = require('~/Assets/Images/star_outline.png');
 
@@ -387,9 +388,10 @@ function Upload({route, navigation}) {
         coverScreen={false}
         hideModalContentWhileAnimating={true}
         hasBackdrop={true}
-        backdropColor={'#FFFFFF'}
-        backdropOpacity={0.1}
+        backdropColor={'#000000'}
+        backdropOpacity={0.4}
         onBackdropPress={() => setModalVisible(false)}
+        onBackButtonPress={() => setModalVisible(false)}
         style={{
           flex: 1,
           justifyContent: 'center',
@@ -397,17 +399,7 @@ function Upload({route, navigation}) {
         }}>
         <ModalContainer>
           <BoxShadow setting={modalShadow}>
-            <StyledModalContainer>
-              <Rating
-                type="custom"
-                ratingImage={STAR_IMAGE}
-                onFinishRating={ratingCompleted}
-                style={{paddingVertical: 10}}
-                imageSize={25}
-                ratingColor="#23E5D2"
-                ratingBackgroundColor="#FFFFFF"
-              />
-            </StyledModalContainer>
+            <StyledModalContainer></StyledModalContainer>
           </BoxShadow>
         </ModalContainer>
       </Modal>
@@ -444,7 +436,18 @@ function Upload({route, navigation}) {
                     } else {
                       return (
                         <SelectedImageContainer>
-                          <SelectedImage source={{uri: item}} />
+                          <TouchableWithoutFeedback
+                            onPress={() =>
+                              navigation.navigate('ImagesPullScreen', {
+                                imagesUrl_arr: imageUrl_arr.slice(
+                                  0,
+                                  imageUrl_arr.length - 1,
+                                ),
+                                imageIndex: index,
+                              })
+                            }>
+                            <SelectedImage source={{uri: item}} />
+                          </TouchableWithoutFeedback>
                           <TouchableWithoutFeedback
                             onPress={() => deleteImage(index)}>
                             <DeleteButton
@@ -467,42 +470,13 @@ function Upload({route, navigation}) {
                </RatingContainer>*/}
             </ImageRatingContainer>
             <TagContainer>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => setModalVisible(true)}>
                 <InsertTagContainer>
                   <Text style={{color: '#707070', fontFamily: 'Arita4.0_L'}}>
-                    # 태그추가
+                    # 태그 추가
                   </Text>
                 </InsertTagContainer>
               </TouchableOpacity>
-              <InsertedTag1>
-                <Text style={{color: '#707070', fontFamily: 'Arita4.0_L'}}>
-                  #
-                </Text>
-                <TagInput
-                  onSubmitEditing={() => {
-                    setModalVisible(true);
-                  }}
-                />
-                <Image
-                  style={{width: 20, height: 20}}
-                  source={require('~/Assets/Images/star_outline.png')}
-                />
-                <Text>4.5</Text>
-                <TouchableOpacity
-                  onPress={() => {
-                    setModalVisible(true);
-                  }}></TouchableOpacity>
-              </InsertedTag1>
-              <InsertedTag2>
-                <Text style={{color: '#707070', fontFamily: 'Arita4.0_L'}}>
-                  #
-                </Text>
-              </InsertedTag2>
-              <InsertedTag3>
-                <Text style={{color: '#707070', fontFamily: 'Arita4.0_L'}}>
-                  #
-                </Text>
-              </InsertedTag3>
             </TagContainer>
             <RocationContainer>
               <TouchableOpacity

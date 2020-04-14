@@ -9,6 +9,7 @@ import {
   Platform,
   Alert,
   BackHandler,
+  Image,
 } from 'react-native';
 import {Rating} from 'react-native-ratings';
 import {BoxShadow} from 'react-native-shadow';
@@ -18,7 +19,7 @@ import {
 } from 'react-native-responsive-screen';
 import ImagePicker from 'react-native-image-picker';
 import {FlatGrid} from 'react-native-super-grid';
-import TagInput from '~/Components/TagInput';
+// import TagInput from '~/Components/TagInput';
 import Modal from 'react-native-modal';
 
 if (
@@ -189,15 +190,15 @@ position: absolute;
 right: -${wp('2%')};
 top: ${hp('31.7%')};
 `;
-/*
-const TagInput = Styled.TextInput;
+
+const TagInput = Styled.TextInput`
+ width: 100px;
  padding: 10px;
  height: ${hp('5.5%')};
  font-size: 13px;
  font-family: 'Arita4.0_M';
  color: #707070;
 `;
-*/
 
 const CameraIcon = Styled.Image`
  color: #CCCCCC;
@@ -258,12 +259,14 @@ function Upload({route, navigation}) {
     ImagePicker.launchImageLibrary(options, (response) => {
       if (response.error) {
         console.log('LaunchImageLibrary Error: ', response.error);
+      } else if (response.didCancel) {
       } else {
         var newImage_arr = new Array();
         newImage_arr = imageUrl_arr.slice(0, imageUrl_arr.length - 1);
         newImage_arr[imageUrl_arr.length] =
           'https://firebasestorage.googleapis.com/v0/b/hooging-f33b0.appspot.com/o/zz.png?alt=media&token=eb26a783-c54b-4205-bab6-5357e103aef4';
         newImage_arr[imageUrl_arr.length - 1] = response.uri;
+        console.log('responsive.uri', response.uri);
         setImageUrl_arr(newImage_arr);
       }
     });
@@ -374,6 +377,8 @@ function Upload({route, navigation}) {
     return () => backHandler.remove();
   }, []);
 
+  const STAR_IMAGE = require('~/Assets/Images/star_outline.png');
+
   return (
     <Container>
       <Modal
@@ -381,7 +386,10 @@ function Upload({route, navigation}) {
         useNativeDriver={true}
         coverScreen={false}
         hideModalContentWhileAnimating={true}
-        hasBackdrop={false}
+        hasBackdrop={true}
+        backdropColor={'#FFFFFF'}
+        backdropOpacity={0.1}
+        onBackdropPress={() => setModalVisible(false)}
         style={{
           flex: 1,
           justifyContent: 'center',
@@ -390,12 +398,15 @@ function Upload({route, navigation}) {
         <ModalContainer>
           <BoxShadow setting={modalShadow}>
             <StyledModalContainer>
-              <TouchableOpacity
-                onPress={() => {
-                  setModalVisible(false);
-                }}>
-                <Text>취소</Text>
-              </TouchableOpacity>
+              <Rating
+                type="custom"
+                ratingImage={STAR_IMAGE}
+                onFinishRating={ratingCompleted}
+                style={{paddingVertical: 10}}
+                imageSize={25}
+                ratingColor="#23E5D2"
+                ratingBackgroundColor="#FFFFFF"
+              />
             </StyledModalContainer>
           </BoxShadow>
         </ModalContainer>
@@ -467,13 +478,20 @@ function Upload({route, navigation}) {
                 <Text style={{color: '#707070', fontFamily: 'Arita4.0_L'}}>
                   #
                 </Text>
-                <TagInput />
+                <TagInput
+                  onSubmitEditing={() => {
+                    setModalVisible(true);
+                  }}
+                />
+                <Image
+                  style={{width: 20, height: 20}}
+                  source={require('~/Assets/Images/star_outline.png')}
+                />
+                <Text>4.5</Text>
                 <TouchableOpacity
                   onPress={() => {
                     setModalVisible(true);
-                  }}>
-                  <Text>모달</Text>
-                </TouchableOpacity>
+                  }}></TouchableOpacity>
               </InsertedTag1>
               <InsertedTag2>
                 <Text style={{color: '#707070', fontFamily: 'Arita4.0_L'}}>

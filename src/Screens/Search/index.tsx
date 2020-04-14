@@ -36,7 +36,7 @@ const InputBox = Styled.TextInput`
  width: ${wp('85%')};
  height: 40px;
  border-radius: 25px;
- background-color: #F7F6F6;
+ background-color: #FFFFFF;
  justify-content: center;
  text-align: center;
  font-family: 'Arita4.0_B.otf';

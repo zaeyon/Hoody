@@ -274,6 +274,18 @@ const TagDeleteButton = Styled.Image`
  opacity: 0.1;
 `;
 
+const TagDeleteButtonContainer = Styled.View`
+ height: ${wp('4%')};
+ align-items: flex-end; 
+ flex: 0.5;
+`;
+
+const TagItemLeftContainer = Styled.View`
+flex: 1; 
+flex-direction:row;
+justify-content: space-between;
+`;
+
 const AddRatingOnTagText = Styled.Text`
  font-family: 'Arita4.0_M';
  font-size: 16px;
@@ -348,8 +360,12 @@ function Upload({route, navigation}) {
   const [inputedTag, setInputedTag] = useState<string>();
   const [ratingChecked, setRatingChecked] = useState(false);
   const [currentRating, setCurrentRating] = useState<number>();
-  const [revisingTagName, setRevisingTagName] = useState<String>();
-  const [revisingTagRating, setRevisingTagRating] = useState<String>();
+  const [revisingTagName, setRevisingTagName] = useState<string>();
+  const [revisingTagRating, setRevisingTagRating] = useState<string>();
+  const [revisingTagRatingChecked, setRevisingTagRatingChecked] = useState<
+    boolean
+  >();
+  const [revisingTagIndex, setRevisingTagIndex] = useState<number>();
 
   React.useEffect(() => {
     if (route.params?.placeName) {
@@ -409,9 +425,11 @@ function Upload({route, navigation}) {
   };
 
   const ratingCompleted = (rating) => {
-    console.log(`Rating is: + ${rating}`);
-    //setTagRatingList([...tagRatingList, rating]);
     setCurrentRating(rating);
+  };
+
+  const ratingRevised = (rating) => {
+    setRevisingTagRating(rating);
   };
 
   React.useLayoutEffect(() => {
@@ -452,6 +470,7 @@ function Upload({route, navigation}) {
         return true;
       } else if (tagReviseModalVisible === true) {
         setTagReviseModalVisible(false);
+        return true;
       } else {
         Alert.alert(
           '후기 작성을 취소하시겠어요?',
@@ -508,16 +527,58 @@ function Upload({route, navigation}) {
           tagName: tmp,
           tagRating: null,
           ratingExistence: ratingChecked,
+          tagIndex: array1.length,
         });
       } else {
         array1.push({
           tagName: tmp,
           tagRating: currentRating,
           ratingExistence: ratingChecked,
+          tagIndex: array1.length,
         });
       }
       setTagRatingList(array1);
     }
+  };
+
+  const reviseTag = () => {
+    if (revisingTagName === '' || revisingTagName == undefined) {
+      Alert.alert('태그를 입력하세요.', '', [
+        {
+          text: '확인',
+          onPress: () => 0,
+        },
+      ]);
+    } else {
+      setTagReviseModalVisible(false);
+      var array2 = tagRatingList;
+      console.log('revisingTagIndex', revisingTagIndex);
+      if (revisingTagRatingChecked === false) {
+        array2.splice(revisingTagIndex, 1, {
+          tagName: revisingTagName,
+          tagRating: null,
+          ratingExistence: revisingTagRatingChecked,
+          tagIndex: revisingTagIndex,
+        });
+      } else {
+        array2.splice(revisingTagIndex, 1, {
+          tagName: revisingTagName,
+          tagRating: revisingTagRating,
+          ratingExistence: revisingTagRatingChecked,
+          tagIndex: revisingTagIndex,
+        });
+
+        setTagList(array2);
+      }
+    }
+  };
+
+  const deleteTag = (index) => {
+    var deletedArray = tagRatingList;
+    deletedArray.splice(index, 1);
+    // deletedArray.splice(index, 1);
+    //deletedArray = tagRatingList.splice(index, 1);
+    setTagRatingList(deletedArray.slice(0));
   };
 
   const STAR_IMAGE = require('~/Assets/Images/star_outline.png');
@@ -541,9 +602,11 @@ function Upload({route, navigation}) {
     }
   };
 
-  const revisignTag_func = (tagName, tagRating) => {
+  const revisingTag_func = (tagName, tagRating, tagRatingChecked, tagIndex) => {
     setRevisingTagName(tagName);
     setRevisingTagRating(tagRating);
+    setRevisingTagRatingChecked(tagRatingChecked);
+    setRevisingTagIndex(tagIndex);
     setTagReviseModalVisible(true);
   };
 
@@ -601,6 +664,7 @@ function Upload({route, navigation}) {
                       style={{paddingVertical: 0, marginLeft: 3}}
                       imageSize={27}
                       readonly={!ratingAbled}
+                      startingValue={0}
                     />
                   )}
                 </RatingContainer>
@@ -698,25 +762,35 @@ function Upload({route, navigation}) {
               <FlatList
                 data={tagRatingList}
                 renderItem={({item, index}) => (
-                  <TouchableWithoutFeedback
-                    onPress={() =>
-                      revisignTag_func(item.tagName, item.tagRating)
-                    }>
-                    <TagListItem>
-                      <TagText># {item.tagName}</TagText>
-                      <TagRatingContainer>
-                        {item.ratingExistence && (
-                          <TagRatingImage
-                            source={require('~/Assets/Images/ic_star.png')}
-                          />
-                        )}
-                        <TagRatingText>{item.tagRating}</TagRatingText>
-                        <TagDeleteButton
-                          source={require('~/Assets/Images/delete.png')}
-                        />
-                      </TagRatingContainer>
-                    </TagListItem>
-                  </TouchableWithoutFeedback>
+                  <TagListItem>
+                    <TouchableWithoutFeedback
+                      onPress={() =>
+                        revisingTag_func(
+                          item.tagName,
+                          item.tagRating,
+                          item.ratingExistence,
+                          item.tagIndex,
+                        )
+                      }>
+                      <TagItemLeftContainer>
+                        <TagText># {item.tagName}</TagText>
+                        <TagRatingContainer>
+                          {item.ratingExistence && (
+                            <TagRatingImage
+                              source={require('~/Assets/Images/ic_star.png')}
+                            />
+                          )}
+                          <TagRatingText>{item.tagRating}</TagRatingText>
+                        </TagRatingContainer>
+                      </TagItemLeftContainer>
+                    </TouchableWithoutFeedback>
+                    <TouchableWithoutFeedback
+                      onPress={() => deleteTag(item.tagIndex)}>
+                      <TagDeleteButton
+                        source={require('~/Assets/Images/delete.png')}
+                      />
+                    </TouchableWithoutFeedback>
+                  </TagListItem>
                 )}
               />
             </TagContainer>
@@ -770,9 +844,11 @@ function Upload({route, navigation}) {
               <ModalBodyContainer>
                 <CheckBoxContainer>
                   <CheckBox
-                    value={ratingChecked}
+                    value={revisingTagRatingChecked}
                     disabled={false}
-                    onValueChange={(value) => CheckRatingEnabled(value)}
+                    onValueChange={(value) =>
+                      setRevisingTagRatingChecked(value)
+                    }
                     tintColors={{true: '#23E5D2'}}
                   />
                   <Text style={{fontSize: 15, fontFamily: 'Arita4.0_M'}}>
@@ -780,18 +856,19 @@ function Upload({route, navigation}) {
                   </Text>
                 </CheckBoxContainer>
                 <RatingContainer>
-                  {ratingAbled && (
+                  {revisingTagRatingChecked && (
                     <Rating
                       type="custom"
-                      onFinishRating={ratingCompleted}
+                      onFinishRating={ratingRevised}
                       style={{paddingVertical: 0, marginLeft: 3}}
                       imageSize={27}
-                      readonly={!ratingAbled}
+                      readonly={!revisingTagRatingChecked}
+                      startingValue={revisingTagRating}
                     />
                   )}
                 </RatingContainer>
               </ModalBodyContainer>
-              <TouchableWithoutFeedback onPress={() => addTag(inputedTag)}>
+              <TouchableWithoutFeedback onPress={() => reviseTag()}>
                 <ModalFooterContainer>
                   <Text
                     style={{
@@ -799,7 +876,7 @@ function Upload({route, navigation}) {
                       fontFamily: 'Arita4.0_M',
                       color: '#000000',
                     }}>
-                    등록하기
+                    수정하기
                   </Text>
                 </ModalFooterContainer>
               </TouchableWithoutFeedback>

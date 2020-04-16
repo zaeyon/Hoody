@@ -23,6 +23,7 @@ import ImagePicker from 'react-native-image-picker';
 import {FlatGrid} from 'react-native-super-grid';
 // import TagInput from '~/Components/TagInput';
 import Modal from 'react-native-modal';
+import CheckBox from '@react-native-community/checkbox';
 
 if (
   Platform.OS === 'android' &&
@@ -45,32 +46,30 @@ const StyledModalContainer = Styled.View`
   align-items: center;
   /* 모달창 크기 조절 */
   width: ${wp('60%')};
-  height: ${hp('25%')};
+  height: ${hp('30%')};
   background-color: rgba(255, 255, 255, 1);
   border-radius: 10px;
-  padding: 10px;
+  padding: 0px;
   flex: 1;
 `;
 
 const ModalHeaderContainer = Styled.View`
  height: ${hp('5.3%')};
  width: ${wp('50%')};
- justify-content: center;
  align-items: center;
  flex-direction: row;
  flex: 1.5;
 `;
 
 const ModalBodyContainer = Styled.View`
- flex: 1.5;
+ flex: 1.7;
+ width: ${wp('50%')};
  align-items: center;
- justify-content: center;
 `;
 
 const ModalFooterContainer = Styled.View`
  flex: 1;
  width: 100%;
- align-items: center;
  border-top-width: 0.5px;
  justify-content: center;
  align-items: center;
@@ -133,7 +132,7 @@ margin-top: 5px;
 `;
 
 const RatingContainer = Styled.View`
- position: absolute;
+  width: ${wp('50%')};
 `;
 
 const RocationContainer = Styled.View`
@@ -225,7 +224,7 @@ const ModalContainer = Styled.View`
 
 const TagInput = Styled.TextInput`
  margin-left: 5px;
- width: 100px;
+ width: ${wp('43%')};
  padding: 10px;
  height: ${hp('5.5%')};
  font-size: 13px;
@@ -269,8 +268,14 @@ const DeleteButton = Styled.Image`
  top: 2px;
 `;
 
+const TagDeleteButton = Styled.Image`
+ width :${wp('4%')};
+ height:${wp('4%')};
+ opacity: 0.1;
+`;
+
 const AddRatingOnTagText = Styled.Text`
- font-family: 'Arita4.0_M'
+ font-family: 'Arita4.0_M';
  font-size: 16px;
 `;
 
@@ -279,6 +284,7 @@ const TagListItem = Styled.View`
  border-top-width: 0.3px;
  border-color: #cccccc;
  padding: 8px 7px;
+ justify-content: space-between;
 `;
 
 const TagBorderTop = Styled.View`
@@ -288,9 +294,33 @@ const TagBorderTop = Styled.View`
 `;
 
 const TagText = Styled.Text`
- font-family: 'Arita4.0_L'
+ font-family: 'Arita4.0_L';
  font-size: 14px;
  color: #898989;
+`;
+
+const TagRatingContainer = Styled.View`
+ flex-direction: row;
+ align-items: center;
+ justify-content: center;
+`;
+
+const TagRatingImage = Styled.Image`
+ width: 15px;
+ height: 15px;
+ tint-color: #23E5D2;
+`;
+
+const TagRatingText = Styled.Text`
+ font-family: 'Arita4.0_L';
+ font-size: 14px;
+ color: #707070;
+ margin-right: 17px;
+`;
+
+const CheckBoxContainer = Styled.View`
+ flex-direction: row;
+ align-items: center;
 `;
 
 const options = {
@@ -308,9 +338,12 @@ function Upload({route, navigation}) {
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   // Output을 State로 받아서 화면에 표출하거나 정보 값으로 활용
   const [modalOutput, setModalOutput] = useState<string>('Open Modal');
-  const [ratingVisible, setRatingVisible] = useState<boolean>(false);
-  const [tagList, setTagList] = useState<Array<string>>([]);
+  const [ratingAbled, setRatingAbled] = useState<boolean>(false);
+  const [tagList, setTagList] = useState([]);
+  const [tagRatingList, setTagRatingList] = useState<Array<Object>>([]);
   const [inputedTag, setInputedTag] = useState<string>();
+  const [ratingChecked, setRatingChecked] = useState(false);
+  const [currentRating, setCurrentRating] = useState<number>();
 
   React.useEffect(() => {
     if (route.params?.placeName) {
@@ -371,6 +404,8 @@ function Upload({route, navigation}) {
 
   const ratingCompleted = (rating) => {
     console.log(`Rating is: + ${rating}`);
+    //setTagRatingList([...tagRatingList, rating]);
+    setCurrentRating(rating);
   };
 
   React.useLayoutEffect(() => {
@@ -444,13 +479,34 @@ function Upload({route, navigation}) {
     return () => backHandler.remove();
   }, [modalVisible]);
 
-  const addTag = (tag: srtring) => {
-    setModalVisible(false);
-    var tmp = ' #' + tag;
-    setTagList([...tagList, tmp]);
+  const addTag = (tag: string, rating: number) => {
+    if (tag === '' || tag == undefined) {
+      Alert.alert('태그를 입력하세요.', ' ', [
+        {
+          text: '확인',
+          onPress: () => 0,
+        },
+      ]);
+    } else {
+      setModalVisible(false);
+      var tmp = ' #' + tag;
+
+      setTagList([...tagList, tmp]);
+      setRatingAbled(false);
+      setRatingChecked(false);
+      var array1 = tagRatingList;
+      array1.push({tagName: tmp, tagRating: currentRating});
+      setTagRatingList(array1);
+    }
   };
 
   const STAR_IMAGE = require('~/Assets/Images/star_outline.png');
+  const colorValue = 0xff00ff00;
+
+  const CheckRatingEnabled = (value) => {
+    setRatingChecked(value);
+    setRatingAbled(value);
+  };
 
   return (
     <Container>
@@ -487,16 +543,25 @@ function Upload({route, navigation}) {
                   }></TagInput>
               </ModalHeaderContainer>
               <ModalBodyContainer>
-                <TouchableWithoutFeedback
-                  onPress={() => setRatingVisible(true)}>
-                  <AddRatingOnTagText>태그에 별점 달기</AddRatingOnTagText>
-                </TouchableWithoutFeedback>
+                <CheckBoxContainer>
+                  <CheckBox
+                    value={ratingChecked}
+                    disabled={false}
+                    onValueChange={(value) => CheckRatingEnabled(value)}
+                    tintColors={{true: '#23E5D2'}}
+                  />
+                  <Text style={{fontSize: 15, fontFamily: 'Arita4.0_M'}}>
+                    태그에 별점 주기
+                  </Text>
+                </CheckBoxContainer>
                 <RatingContainer>
-                  {ratingVisible && (
+                  {ratingAbled && (
                     <Rating
+                      type="custom"
                       onFinishRating={ratingCompleted}
-                      style={{paddingVertical: 10}}
-                      imageSize={33}
+                      style={{paddingVertical: 0, marginLeft: 3}}
+                      imageSize={27}
+                      readonly={!ratingAbled}
                     />
                   )}
                 </RatingContainer>
@@ -592,10 +657,19 @@ function Upload({route, navigation}) {
                 </InsertTagContainer>
               </TouchableOpacity>
               <FlatList
-                data={tagList}
-                renderItem={({item}) => (
+                data={tagRatingList}
+                renderItem={({item, index}) => (
                   <TagListItem>
-                    <TagText>{item}</TagText>
+                    <TagText>{item.tagName}</TagText>
+                    <TagRatingContainer>
+                      <TagRatingImage
+                        source={require('~/Assets/Images/ic_star.png')}
+                      />
+                      <TagRatingText>{item.tagRating}</TagRatingText>
+                      <TagDeleteButton
+                        source={require('~/Assets/Images/delete.png')}
+                      />
+                    </TagRatingContainer>
                   </TagListItem>
                 )}
               />

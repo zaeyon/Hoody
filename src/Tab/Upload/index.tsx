@@ -337,13 +337,19 @@ function Upload({route, navigation}) {
   // State를 이용하여 Modal을 제어함
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   // Output을 State로 받아서 화면에 표출하거나 정보 값으로 활용
-  const [modalOutput, setModalOutput] = useState<string>('Open Modal');
+  const [tagReviseModalVisible, setTagReviseModalVisible] = useState<boolean>(
+    false,
+  );
+  const [tag2ModalVisible, setTag2ModalVisible] = useState<boolean>(false);
+  const [tag3ModalVisible, setTag3ModalVisible] = useState<boolean>(false);
   const [ratingAbled, setRatingAbled] = useState<boolean>(false);
   const [tagList, setTagList] = useState([]);
   const [tagRatingList, setTagRatingList] = useState<Array<Object>>([]);
   const [inputedTag, setInputedTag] = useState<string>();
   const [ratingChecked, setRatingChecked] = useState(false);
   const [currentRating, setCurrentRating] = useState<number>();
+  const [revisingTagName, setRevisingTagName] = useState<String>();
+  const [revisingTagRating, setRevisingTagRating] = useState<String>();
 
   React.useEffect(() => {
     if (route.params?.placeName) {
@@ -444,6 +450,8 @@ function Upload({route, navigation}) {
       if (modalVisible === true) {
         setModalVisible(false);
         return true;
+      } else if (tagReviseModalVisible === true) {
+        setTagReviseModalVisible(false);
       } else {
         Alert.alert(
           '후기 작성을 취소하시겠어요?',
@@ -489,13 +497,25 @@ function Upload({route, navigation}) {
       ]);
     } else {
       setModalVisible(false);
-      var tmp = ' #' + tag;
+      var tmp = tag;
 
       setTagList([...tagList, tmp]);
       setRatingAbled(false);
       setRatingChecked(false);
       var array1 = tagRatingList;
-      array1.push({tagName: tmp, tagRating: currentRating});
+      if (ratingChecked === false) {
+        array1.push({
+          tagName: tmp,
+          tagRating: null,
+          ratingExistence: ratingChecked,
+        });
+      } else {
+        array1.push({
+          tagName: tmp,
+          tagRating: currentRating,
+          ratingExistence: ratingChecked,
+        });
+      }
       setTagRatingList(array1);
     }
   };
@@ -506,6 +526,25 @@ function Upload({route, navigation}) {
   const CheckRatingEnabled = (value) => {
     setRatingChecked(value);
     setRatingAbled(value);
+  };
+
+  const addTagTextClick = () => {
+    if (tagRatingList.length >= 3) {
+      Alert.alert('태그는 최대 3개까지 등록할 수 있습니다.', ' ', [
+        {
+          text: '확인',
+          onPress: () => 0,
+        },
+      ]);
+    } else {
+      setModalVisible(true);
+    }
+  };
+
+  const revisignTag_func = (tagName, tagRating) => {
+    setRevisingTagName(tagName);
+    setRevisingTagRating(tagRating);
+    setTagReviseModalVisible(true);
   };
 
   return (
@@ -649,7 +688,7 @@ function Upload({route, navigation}) {
                </RatingContainer>*/}
             </ImageRatingContainer>
             <TagContainer>
-              <TouchableOpacity onPress={() => setModalVisible(true)}>
+              <TouchableOpacity onPress={() => addTagTextClick()}>
                 <InsertTagContainer>
                   <Text style={{color: '#707070', fontFamily: 'Arita4.0_L'}}>
                     # 태그 추가
@@ -659,18 +698,25 @@ function Upload({route, navigation}) {
               <FlatList
                 data={tagRatingList}
                 renderItem={({item, index}) => (
-                  <TagListItem>
-                    <TagText>{item.tagName}</TagText>
-                    <TagRatingContainer>
-                      <TagRatingImage
-                        source={require('~/Assets/Images/ic_star.png')}
-                      />
-                      <TagRatingText>{item.tagRating}</TagRatingText>
-                      <TagDeleteButton
-                        source={require('~/Assets/Images/delete.png')}
-                      />
-                    </TagRatingContainer>
-                  </TagListItem>
+                  <TouchableWithoutFeedback
+                    onPress={() =>
+                      revisignTag_func(item.tagName, item.tagRating)
+                    }>
+                    <TagListItem>
+                      <TagText># {item.tagName}</TagText>
+                      <TagRatingContainer>
+                        {item.ratingExistence && (
+                          <TagRatingImage
+                            source={require('~/Assets/Images/ic_star.png')}
+                          />
+                        )}
+                        <TagRatingText>{item.tagRating}</TagRatingText>
+                        <TagDeleteButton
+                          source={require('~/Assets/Images/delete.png')}
+                        />
+                      </TagRatingContainer>
+                    </TagListItem>
+                  </TouchableWithoutFeedback>
                 )}
               />
             </TagContainer>
@@ -690,6 +736,77 @@ function Upload({route, navigation}) {
           </Inner>
         </ShadowInner>
       </BoxShadow>
+      <Modal
+        isVisible={tagReviseModalVisible}
+        useNativeDriver={true}
+        coverScreen={false}
+        hideModalContentWhileAnimating={true}
+        hasBackdrop={true}
+        backdropColor={'#000000'}
+        backdropOpacity={0.4}
+        onBackdropPress={() => setTagReviseModalVisible(false)}
+        onBackButtonPress={() => setTagReviseModalVisible(false)}
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <ModalContainer>
+          <BoxShadow setting={modalShadow}>
+            <StyledModalContainer>
+              <ModalHeaderContainer>
+                <Text
+                  style={{
+                    fontSize: 24,
+                    fontFamily: 'Arita4.0_L',
+                    color: '#C3C3C3',
+                  }}>
+                  #
+                </Text>
+                <TagInput
+                  onChangeText={(text: string) => setRevisingTagName(text)}
+                  value={revisingTagName}></TagInput>
+              </ModalHeaderContainer>
+              <ModalBodyContainer>
+                <CheckBoxContainer>
+                  <CheckBox
+                    value={ratingChecked}
+                    disabled={false}
+                    onValueChange={(value) => CheckRatingEnabled(value)}
+                    tintColors={{true: '#23E5D2'}}
+                  />
+                  <Text style={{fontSize: 15, fontFamily: 'Arita4.0_M'}}>
+                    태그에 별점 주기
+                  </Text>
+                </CheckBoxContainer>
+                <RatingContainer>
+                  {ratingAbled && (
+                    <Rating
+                      type="custom"
+                      onFinishRating={ratingCompleted}
+                      style={{paddingVertical: 0, marginLeft: 3}}
+                      imageSize={27}
+                      readonly={!ratingAbled}
+                    />
+                  )}
+                </RatingContainer>
+              </ModalBodyContainer>
+              <TouchableWithoutFeedback onPress={() => addTag(inputedTag)}>
+                <ModalFooterContainer>
+                  <Text
+                    style={{
+                      fontSize: 15,
+                      fontFamily: 'Arita4.0_M',
+                      color: '#000000',
+                    }}>
+                    등록하기
+                  </Text>
+                </ModalFooterContainer>
+              </TouchableWithoutFeedback>
+            </StyledModalContainer>
+          </BoxShadow>
+        </ModalContainer>
+      </Modal>
     </Container>
   );
 }

@@ -92,7 +92,7 @@ const Login = ({navigation}) => {
         <LoginButton
           label="로그인"
           style={{marginBottom: 24}}
-          onPress={(email, password) => checkLogin(email, password)}
+          onPress={() => checkLogin(email, password)}
         />
         <SignupText>
           계정이 없는가요?{' '}

@@ -3,24 +3,28 @@ import axios from 'axios';
 const baseUrl = 'http://15.164.185.120:3000';
 function checkLogin(email, password) {
   const userData = {
-    email: {email},
-    password: {password},
+    email: email,
+    pw: password,
   };
-  restHTTPGet(baseUrl + '/signIn', userData).then(function (data) {
+  console.log('userData: ', userData);
+
+  restHTTPPost(baseUrl + '/signIn', userData).then(function (data) {
     console.log('hh', data);
   });
 }
 
 function restHTTPPost(url, data = null) {
+  console.log('data: ', data);
+  let form = new FormData();
+  form.append('email', data.email);
+  form.append('pw', data.pw);
   return new Promise(function (resolve, reject) {
     axios
-      .post(url, {
-        data: {data},
-        // withCredentials: true,
+      .post(url, form, {
+        //withCredentials: true,
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
           Accept: 'application/json',
-          Authorization: 'Bearer ',
         },
       })
       .then(function (response) {
@@ -41,7 +45,7 @@ function restHTTPGet(url, params = null) {
         params: {params},
         // withCredentials: true,
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
+          'Content-Type': 'application/json',
           Accept: 'application/json',
           Authorization: 'Bearer ',
         },

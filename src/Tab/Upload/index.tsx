@@ -24,6 +24,7 @@ import {FlatGrid} from 'react-native-super-grid';
 // import TagInput from '~/Components/TagInput';
 import Modal from 'react-native-modal';
 import CheckBox from '@react-native-community/checkbox';
+import ReviewUploadAPI from '~/Route/ReviewUpload';
 
 if (
   Platform.OS === 'android' &&
@@ -366,6 +367,7 @@ function Upload({route, navigation}) {
     boolean
   >();
   const [revisingTagIndex, setRevisingTagIndex] = useState<number>();
+  const [reviewContent, setReviewContent] = useState<string>();
 
   React.useEffect(() => {
     if (route.params?.placeName) {
@@ -431,12 +433,6 @@ function Upload({route, navigation}) {
   const ratingRevised = (rating) => {
     setRevisingTagRating(rating);
   };
-
-  React.useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: () => <Text onPress={() => 1} title="공유" />,
-    });
-  }, [navigation, imageUrl_arr]);
 
   const cancelReviewUpload = () => {
     Alert.alert(
@@ -610,6 +606,11 @@ function Upload({route, navigation}) {
     setTagReviseModalVisible(true);
   };
 
+  const reviewUpload = (images) => {
+    ReviewUploadAPI(images[0]);
+    console.log(images[0]);
+  };
+
   return (
     <Container>
       <Modal
@@ -696,7 +697,10 @@ function Upload({route, navigation}) {
                 />
               </TouchableWithoutFeedback>
               <MyHoogingText>나의 게시물</MyHoogingText>
-              <UploadButton>공유</UploadButton>
+              <TouchableWithoutFeedback
+                onPress={() => reviewUpload(imageUrl_arr)}>
+                <UploadButton>공유</UploadButton>
+              </TouchableWithoutFeedback>
             </Title>
             <ImageRatingContainer>
               <ImageContainer>
@@ -805,7 +809,12 @@ function Upload({route, navigation}) {
               </TouchableOpacity>
             </RocationContainer>
             <CommentContainer>
-              <CommentInput placeholder="comment ..." />
+              <CommentInput
+                placeholder="comment ..."
+                multiline={true}
+                value={reviewContent}
+                onChangeText={(text) => setReviewContent(text)}
+              />
             </CommentContainer>
           </Inner>
         </ShadowInner>

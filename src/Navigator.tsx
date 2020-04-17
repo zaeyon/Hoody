@@ -39,6 +39,10 @@ function FeedTitle() {
   );
 }
 
+function FeedDetailTitle() {
+  return <Text style={{fontSize: 17, fontFamily: 'Arita4.0_M'}}></Text>;
+}
+
 function AlarmTitle() {
   return <Text style={{fontSize: 17, fontFamily: 'Arita4.0_M'}}>알림</Text>;
 }
@@ -100,7 +104,13 @@ function FeedStackScreen() {
           headerTitle: (props) => <FeedTitle {...props} />,
         }}
       />
-      <FeedStack.Screen name="FeedDetail" component={FeedDetail} />
+      <FeedStack.Screen
+        name="FeedDetail"
+        component={FeedDetail}
+        options={{
+          headerTitle: (props) => <FeedDetailTitle {...props} />,
+        }}
+      />
     </FeedStack.Navigator>
   );
 }

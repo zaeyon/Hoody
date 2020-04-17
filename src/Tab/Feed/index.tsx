@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Image, TouchableOpacity, FlatList} from 'react-native';
+import {TouchableWithoutFeedback, FlatList, View} from 'react-native';
 import Styled from 'styled-components/native';
 import FeedItem2 from '~/Components/FeedItem2';
 
@@ -7,6 +7,12 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+
+const BottomTabHeight = Styled.View`
+ width: ${wp('100%')};
+ height: 45px;
+ background-color: #F4F8FB;
+`;
 
 const FEED_DATA = [
   {
@@ -19,6 +25,8 @@ const FEED_DATA = [
     favorite_count: 2531,
     main_image:
       'https://www.travelnbike.com/news/photo/201903/77604_141293_4837.png',
+    review_image_list:
+      'https://www.travelnbike.com/news/photo/201903/77604_141293_4837.png$#$https://www.travelnbike.com/news/photo/201903/77604_141293_4837.png',
     tag_list: '을지로&#&맛집&#&하핳',
     review_content: '을지로에있는 맛집 다녀왔어요!',
     image_count: 4,
@@ -33,6 +41,8 @@ const FEED_DATA = [
     favorite_count: 221,
     main_image:
       'https://img-wishbeen.akamaized.net/plan/1454465238030_15657083522_d45a489b15_b.jpg',
+    review_image_list:
+      'https://www.travelnbike.com/news/photo/201903/77604_141293_4837.png$#$https://www.travelnbike.com/news/photo/201903/77604_141293_4837.png',
     tag_list: '태그태그&#&테스트',
     review_content: '하하하호호호',
     image_count: 3,
@@ -45,20 +55,37 @@ function Feed({navigation}) {
       <FlatList
         data={FEED_DATA}
         renderItem={({item}) => (
-          <FeedItem2
-            id={item.id}
-            profile_image={item.profile_image}
-            nickname={item.nickname}
-            write_time={item.write_time}
-            rating={item.rating}
-            favorite_count={item.favorite_count}
-            main_image={item.main_image}
-            tag_list={item.tag_list}
-            review_content={item.review_content}
-            image_count={item.image_count}
-          />
+          <TouchableWithoutFeedback
+            onPress={() =>
+              navigation.navigate('FeedDetail', {
+                review_imageArray: item.review_image_list,
+                profile_image: item.profile_image,
+                nickname: item.nickname,
+                write_time: item.write_time,
+                rating: item.rating,
+                favorite_count: item.favorite_count,
+                tag_list: item.tag_list,
+                review_content: item.review_content,
+              })
+            }>
+            <View>
+              <FeedItem2
+                id={item.id}
+                profile_image={item.profile_image}
+                nickname={item.nickname}
+                write_time={item.write_time}
+                rating={item.rating}
+                favorite_count={item.favorite_count}
+                main_image={item.main_image}
+                tag_list={item.tag_list}
+                review_content={item.review_content}
+                image_count={item.image_count}
+              />
+            </View>
+          </TouchableWithoutFeedback>
         )}
       />
+      <BottomTabHeight />
     </Container>
   );
 }

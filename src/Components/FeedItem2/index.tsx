@@ -9,7 +9,7 @@ import {
 } from 'react-native-responsive-screen';
 
 const Container = Styled.View`
-background-color: #FFFFFF;
+background-color: #F4F8FB;
 width: ${wp('100%')};
 height: ${wp('86%')};
 align-items: center;
@@ -28,6 +28,8 @@ const FeedItemContainer = Styled.View`
 const HeaderContainer = Styled.View`
  flex:1;
  flex-direction: row;
+ padding-left: 7px;
+ padding-right: 7px;
 `;
 
 const ProfileImage = Styled.Image`
@@ -35,19 +37,22 @@ const ProfileImage = Styled.Image`
 `;
 
 const HeaderLeft = Styled.View`
- flex:1.5;
+ flex:1.0;
  justify-content: center;
  align-items: center;
 `;
 
 const HeaderCenter = Styled.View`
-flex:3;
+flex:3.3;
 justify-content: center;
 flex-direction: column;
+align-items: flex-start;
 `;
 
 const HeaderRight = Styled.View`
-flex:1;
+ flex:1.0;
+ justify-content: center;
+ align-items: center;
 `;
 
 const BodyContainer = Styled.View`
@@ -181,13 +186,13 @@ const FeedItem2 = ({
   image_count,
 }: Props) => {
   const shadowOpt = {
-    width: wp('91%'),
+    width: wp('90.7%'),
     height: wp('81%'),
     color: '#000000',
-    border: 3,
+    border: 6,
     radius: 10,
-    opacity: 0.06,
-    x: -2,
+    opacity: 0.02,
+    x: -1,
     y: 1,
   };
 
@@ -195,7 +200,7 @@ const FeedItem2 = ({
     width: wp('10%'),
     height: wp('10%'),
     color: '#000000',
-    border: 3,
+    border: 2,
     radius: 5,
     opacity: 0.09,
     x: 0,
@@ -212,7 +217,7 @@ const FeedItem2 = ({
           <HeaderContainer>
             <HeaderLeft>
               <ProfileImage
-                style={{width: 57, height: 57}}
+                style={{width: 45, height: 45}}
                 source={{
                   uri: profile_image,
                 }}
@@ -222,7 +227,7 @@ const FeedItem2 = ({
               <UserNameText>{nickname}</UserNameText>
               <WriteTimeText>{write_time}</WriteTimeText>
             </HeaderCenter>
-            <HeaderLeft>
+            <HeaderRight>
               <RatingContainer>
                 <RatingText>{rating}</RatingText>
                 <CertainRatingText> / 5</CertainRatingText>
@@ -235,7 +240,7 @@ const FeedItem2 = ({
                 />
                 <FavoriteText>{favorite_count}</FavoriteText>
               </FavoriteContainer>
-            </HeaderLeft>
+            </HeaderRight>
           </HeaderContainer>
           <BodyContainer>
             <ReviewImage

@@ -923,16 +923,3 @@ const styles = StyleSheet.create({
 });
 
 export default Upload;
-
-/*
-<SelectedImageTouch onPress={() => openGallery()}>
-<SelectedImageContainer>
-  <CameraIcon
-    style={{width: 25, height: 25}}
-    source={require('~/Assets/Images/camera.png')}
-    tintColor="#C3C3C3"
-  />
-  <SelectedImage source={{uri: imageUrl}} />
-</SelectedImageContainer>
-</SelectedImageTouch>
-*/

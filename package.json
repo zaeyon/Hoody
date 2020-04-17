@@ -19,6 +19,7 @@
     "axios": "0.19.2",
     "react": "16.11.0",
     "react-native": "0.62.0",
+    "react-native-camera-kit": "8.0.4",
     "react-native-camera-roll-picker": "2.0.0",
     "react-native-drop-down-item": "1.1.0",
     "react-native-dropdown-menu": "2.0.0",

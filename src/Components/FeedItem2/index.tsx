@@ -1,8 +1,6 @@
 import React from 'react';
 import Styled from 'styled-components/native';
-import {TouchableOpacity} from 'react-native';
-import SubImageList from '~/Components/FeedItem/SubImageList';
-import TagList from '~/Components/FeedItem/TagList';
+import {TouchableOpacity, FlatList} from 'react-native';
 import {BoxShadow} from 'react-native-shadow';
 
 import {
@@ -11,11 +9,20 @@ import {
 } from 'react-native-responsive-screen';
 
 const Container = Styled.View`
+background-color: #FFFFFF;
+width: ${wp('100%')};
+height: ${wp('86%')};
+align-items: center;
+justify-content: center;
+`;
+
+const FeedItemContainer = Styled.View`
  background-color: #FFFFFF;
  border-radius: 8;
  width: ${wp('90%')};
  height: ${wp('81%')};
  flex-direction: column;
+ 
 `;
 
 const HeaderContainer = Styled.View`
@@ -60,8 +67,11 @@ const ReviewImage = Styled.Image`
 `;
 
 const FooterContainer = Styled.View`
- flex: 1;
+ flex: 0.8;
  flex-direction: column;
+ margin-top: 10px;
+ margin-left: 10px;
+ 
 `;
 
 const UserNameText = Styled.Text`
@@ -93,6 +103,13 @@ const CertainRatingText = Styled.Text`
   color: #707070;
 `;
 
+const TagText = Styled.Text`
+  font-family: 'Arita4.0_M';
+  font-size: 14px;
+  margin-left: 5px;
+  flex: 1;
+`;
+
 const FavoriteContainer = Styled.View`
 margin-top: 6px;
 flex-direction: row;
@@ -110,10 +127,11 @@ const FavoriteText = Styled.Text`
 `;
 
 const ReviewContent = Styled.Text`
- margin: 0px 0px 0px 12px;
+ margin: 0px 0px 0px 5px;
  font-family: 'Arita4.0_L';
  font-size: 12;
  color: #000000;
+ flex: 10;
 `;
 
 const ImageCountContainer = Styled.View`
@@ -137,17 +155,40 @@ const ImageCountText = Styled.Text`
  color: #707070;
 `;
 
-const FeedItem2 = () => {
+interface Props {
+  id: number;
+  profile_image: string;
+  nickname: string;
+  write_time: string;
+  rating: number;
+  favorite_count: number;
+  main_image: string;
+  tag_list: string;
+  review_content: string;
+  image_count: number;
+}
+
+const FeedItem2 = ({
+  id,
+  profile_image,
+  nickname,
+  write_time,
+  rating,
+  favorite_count,
+  main_image,
+  tag_list,
+  review_content,
+  image_count,
+}: Props) => {
   const shadowOpt = {
     width: wp('91%'),
     height: wp('81%'),
     color: '#000000',
-    border: 10,
+    border: 3,
     radius: 10,
-    opacity: 0.08,
-    x: 0,
-    y: 3,
-    style: {marginVertical: 15},
+    opacity: 0.06,
+    x: -2,
+    y: 1,
   };
 
   const imageCountShadow = {
@@ -162,66 +203,65 @@ const FeedItem2 = () => {
     style: {marginVertical: -18},
   };
 
+  const tagList = tag_list.split('&#&');
+
   return (
-    <BoxShadow setting={shadowOpt}>
-      <Container>
-        <HeaderContainer>
-          <HeaderLeft>
-            <ProfileImage
-              style={{width: 57, height: 57}}
+    <Container>
+      <BoxShadow setting={shadowOpt}>
+        <FeedItemContainer>
+          <HeaderContainer>
+            <HeaderLeft>
+              <ProfileImage
+                style={{width: 57, height: 57}}
+                source={{
+                  uri: profile_image,
+                }}
+              />
+            </HeaderLeft>
+            <HeaderCenter>
+              <UserNameText>{nickname}</UserNameText>
+              <WriteTimeText>{write_time}</WriteTimeText>
+            </HeaderCenter>
+            <HeaderLeft>
+              <RatingContainer>
+                <RatingText>{rating}</RatingText>
+                <CertainRatingText> / 5</CertainRatingText>
+              </RatingContainer>
+              <FavoriteContainer>
+                <FavoriteImage
+                  style={{width: 14, height: 14}}
+                  source={require('~/Assets/Images/ic_heart2.png')}
+                  tintColor="#AAB2B7"
+                />
+                <FavoriteText>{favorite_count}</FavoriteText>
+              </FavoriteContainer>
+            </HeaderLeft>
+          </HeaderContainer>
+          <BodyContainer>
+            <ReviewImage
               source={{
-                uri:
-                  'http://www.bloter.net/wp-content/uploads/2016/08/%EC%8A%A4%EB%A7%88%ED%8A%B8%ED%8F%B0-%EC%82%AC%EC%A7%84.jpg',
+                uri: main_image,
               }}
             />
-          </HeaderLeft>
-          <HeaderCenter>
-            <UserNameText>b_doggy</UserNameText>
-            <WriteTimeText>47 seconds ago</WriteTimeText>
-          </HeaderCenter>
-          <HeaderLeft>
-            <RatingContainer>
-              <RatingText>4.8</RatingText>
-              <CertainRatingText> / 5</CertainRatingText>
-            </RatingContainer>
-            <FavoriteContainer>
-              <FavoriteImage
-                style={{width: 14, height: 14}}
-                source={require('~/Assets/Images/ic_heart2.png')}
-                tintColor="#AAB2B7"
-              />
-              <FavoriteText>249</FavoriteText>
-            </FavoriteContainer>
-          </HeaderLeft>
-        </HeaderContainer>
-        <BodyContainer>
-          <ReviewImage
-            source={{
-              uri: 'https://t1.daumcdn.net/cfile/tistory/25053C40592D09D50A',
-            }}
-          />
-          <ImageCountView>
-            <BoxShadow setting={imageCountShadow}>
-              <ImageCountContainer>
-                <ImageCountText>+5</ImageCountText>
-              </ImageCountContainer>
-            </BoxShadow>
-          </ImageCountView>
-        </BodyContainer>
-        <FooterContainer>
-          <TagList
-            tags={[
-              {tag: '#키엘'},
-              {tag: '#수분크림'},
-              {tag: '#하울'},
-            ]}></TagList>
-          <ReviewContent>
-            이번에 남자친구가 선물해준 키엘 수분 크림을 사용해봤는데 너무 좋은거
-            같아요.
-          </ReviewContent>
-        </FooterContainer>
-      </Container>
-    </BoxShadow>
+            <ImageCountView>
+              <BoxShadow setting={imageCountShadow}>
+                <ImageCountContainer>
+                  <ImageCountText>+{image_count}</ImageCountText>
+                </ImageCountContainer>
+              </BoxShadow>
+            </ImageCountView>
+          </BodyContainer>
+          <FooterContainer>
+            <FlatList
+              data={tagList}
+              renderItem={({item}) => <TagText>#{item}</TagText>}
+              horizontal={true}
+            />
+            <ReviewContent>{review_content}</ReviewContent>
+          </FooterContainer>
+        </FeedItemContainer>
+      </BoxShadow>
+    </Container>
   );
 };
 

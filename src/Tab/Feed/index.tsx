@@ -1,38 +1,64 @@
 import * as React from 'react';
-import {Image, TouchableOpacity} from 'react-native';
+import {Image, TouchableOpacity, FlatList} from 'react-native';
 import Styled from 'styled-components/native';
-import FeedItem from '~/Components/FeedItem';
 import FeedItem2 from '~/Components/FeedItem2';
 
-const FEEDDATA = [
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
+
+const FEED_DATA = [
   {
-    id: '1',
+    id: 1,
     profile_image:
       'https://t1.daumcdn.net/thumb/R600x0/?fname=https%3A%2F%2Ft1.daumcdn.net%2Fqna%2Fimage%2F1542632018000000528',
     nickname: '하핳',
     write_time: '29 seconds ago',
-    rating: '4.7',
-    favoriteCount: '2531',
-    image_list:
-      'https://www.travel141.co.kr/wp-content/uploads/2017/02/dscf5729.jpg$#$http://m1.daumcdn.net/cfile229/R400x0/9936CA415BBEEE31313B9D',
+    rating: 4,
+    favorite_count: 2531,
+    main_image:
+      'https://www.travelnbike.com/news/photo/201903/77604_141293_4837.png',
     tag_list: '을지로&#&맛집&#&하핳',
     review_content: '을지로에있는 맛집 다녀왔어요!',
+    image_count: 4,
+  },
+  {
+    id: 2,
+    profile_image:
+      'https://img-wishbeen.akamaized.net/plan/1454465238030_15657083522_d45a489b15_b.jpg',
+    nickname: 'jaeyeon',
+    write_time: '1 minute ago',
+    rating: 5,
+    favorite_count: 221,
+    main_image:
+      'https://img-wishbeen.akamaized.net/plan/1454465238030_15657083522_d45a489b15_b.jpg',
+    tag_list: '태그태그&#&테스트',
+    review_content: '하하하호호호',
+    image_count: 3,
   },
 ];
 
 function Feed({navigation}) {
-  const ReviewContent =
-    '을지로 입구역에서 에어팟을 구입 후 언박싱을 하였다. 언박싱 후 기존의 있었다.';
   return (
     <Container>
-      <TouchableOpacity
-        onPress={() => {
-          navigation.navigate('FeedDetail', {
-            content: ReviewContent,
-          });
-        }}>
-        <FeedItem2 />
-      </TouchableOpacity>
+      <FlatList
+        data={FEED_DATA}
+        renderItem={({item}) => (
+          <FeedItem2
+            id={item.id}
+            profile_image={item.profile_image}
+            nickname={item.nickname}
+            write_time={item.write_time}
+            rating={item.rating}
+            favorite_count={item.favorite_count}
+            main_image={item.main_image}
+            tag_list={item.tag_list}
+            review_content={item.review_content}
+            image_count={item.image_count}
+          />
+        )}
+      />
     </Container>
   );
 }
@@ -41,6 +67,8 @@ const Container = Styled.SafeAreaView`
  flex: 1;
  background-color: #FFFFFF;
  align-items: center;
+ width: ${wp('100%')};
+ height: ${hp('100%')};
 `;
 
 const HeaderBottomWidth = Styled.View`

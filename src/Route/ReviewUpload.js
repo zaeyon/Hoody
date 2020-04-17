@@ -1,9 +1,8 @@
 import axios from 'axios';
-import {PushNotificationIOS} from 'react-native';
-
 const baseUrl = 'http://15.164.185.120:3000';
 
 const ReviewUpload = async (image) => {
+  console.log('image:', image);
   var photo = {
     uri: image,
     type: 'image/jpeg',

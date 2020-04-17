@@ -1,6 +1,11 @@
 import React from 'react';
 import Styled from 'styled-components/native';
 import {Dimensions} from 'react-native';
+import {SliderBox} from 'react-native-image-slider-box';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 
 const Container = Styled.View`
    flex: 1;
@@ -116,7 +121,9 @@ const FeedDetail = ({route, navigation}: Props) => {
     tag_list,
     review_content,
     rocation,
+    review_image_list,
   } = route.params;
+  var reviewImage_Array = review_image_list.split('$#$');
   return (
     <Container>
       <HeaderContainer>
@@ -140,12 +147,11 @@ const FeedDetail = ({route, navigation}: Props) => {
         </HeaderRight>
       </HeaderContainer>
       <FeedImageContainer>
-        <FeedImage
-          style={{width: imageWidth, height: imageHeight}}
-          source={{
-            uri:
-              'https://cdn.clien.net/web/api/file/F01/9207614/48f0dc3910a37b.jpeg?w=780&h=30000',
-          }}
+        <SliderBox
+          images={reviewImage_Array}
+          disableOnPress={true}
+          resizeMode="cover"
+          sliderBoxHeight={imageHeight}
         />
       </FeedImageContainer>
       <CommentContainer>

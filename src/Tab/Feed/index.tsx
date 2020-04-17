@@ -66,6 +66,7 @@ function Feed({navigation}) {
                 favorite_count: item.favorite_count,
                 tag_list: item.tag_list,
                 review_content: item.review_content,
+                review_image_list: item.review_image_list,
               })
             }>
             <View>

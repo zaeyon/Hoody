@@ -6,7 +6,7 @@ import {
   NativeSyntheticEvent,
   ScrollView,
   ImageSourcePropType,
-  TouchableOpacity,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import Styled from 'styled-components/native';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
@@ -17,7 +17,6 @@ import FeedItem from '~/Components/FeedItem';
 const ProfileContainer = Styled.View`
   flex: 1;
   background-color: #FEFFFF;
-  border-bottom-width: 0.4px;
   border-color: #C3C3C3;
   
 `;
@@ -45,19 +44,43 @@ const PinterMapContainer = Styled.View`
 
 const MapViewContainer = Styled.View`
  margin-top: 0px;
- border-width: 0.4px;
- border-color: #C3C3C3;
+ background-color :#FFFFFF;
+
 `;
 
-const PinterMapTextContainer = Styled.View`
+const PinterMapHeaderContainer = Styled.View`
  background-color: #FFFFFF;
  align-items: center;
- justify-content: center;
- padding: 5px;
+ justify-content: space-between;
+ flex-direction: row;
+ padding: 10px 15px 10px 15px;
 `;
 
 const PinterMapText = Styled.Text`
- font-size: 23px;
+ font-size: 15px;
+ font-family: 'Arita4.0_M';
+ background-color: #FFFFFF;
+`;
+
+const ViewAllText = Styled.Text`
+font-size: 13px;
+font-family: 'Arita4.0_L';
+color: #c3c3c3;
+`;
+
+const ReviewHeaderContainer = Styled.View`
+ background-color: #FFFFFF;
+ align-items: center;
+ justify-content: space-between;
+ flex-direction: row;
+ padding: 10px 15px 10px 15px;
+ margin-top: 15px;
+`;
+
+const ReviewText = Styled.Text`
+
+ font-size: 15px;
+ font-family: 'Arita4.0_M';
 `;
 
 const MyFeedList = Styled.View`
@@ -78,6 +101,7 @@ function CertifiedProfile({navigation}) {
 
   return (
     <ScrollView
+      backgroundColor="#FFFFFF"
       stickyHeaderIndices={[2]}
       onScroll={(event: NativeSyntheticEvent<NativeScrollEvent>) => {
         if (isBottom(event.nativeEvent)) {
@@ -94,14 +118,16 @@ function CertifiedProfile({navigation}) {
           tags="#을지로 #홍대입구 #신촌"
         />
       </ProfileContainer>
-      <TouchableOpacity onPress={() => navigation.navigate('PinterMap')}>
+      <TouchableWithoutFeedback
+        onPress={() => navigation.navigate('PinterMap')}>
         <PinterMapContainer>
-          <PinterMapTextContainer>
-            <PinterMapText>Pinter Map</PinterMapText>
-          </PinterMapTextContainer>
+          <PinterMapHeaderContainer>
+            <PinterMapText>핀터맵</PinterMapText>
+            <ViewAllText>View All</ViewAllText>
+          </PinterMapHeaderContainer>
           <MapViewContainer>
             <MapView
-              style={{height: 170}}
+              style={{height: 200}}
               provider={PROVIDER_GOOGLE}
               initialRegion={{
                 latitude: 37.78825,
@@ -112,31 +138,11 @@ function CertifiedProfile({navigation}) {
             />
           </MapViewContainer>
         </PinterMapContainer>
-      </TouchableOpacity>
-      <MyFeedList>
-        <FeedItem
-          name="hooging"
-          photo="https://t1.daumcdn.net/thumb/R600x0/?fname=https%3A%2F%2Ft1.daumcdn.net%2Fqna%2Fimage%2F1542632018000000528"
-          description="을지로 입구역에서 에어팟을 구입 후 언박싱을 하였다. 언박싱 후 기존의 에어팟보다 기능이 좋다는것을 알 수 있었다."
-          mainImage="https://cdn.clien.net/web/api/file/F01/9207614/48f0dc3910a37b.jpeg?w=780&h=30000"
-          rating="4.5 / 5"
-        />
-        <FeedItem
-          name="hooging"
-          photo="https://t1.daumcdn.net/thumb/R600x0/?fname=https%3A%2F%2Ft1.daumcdn.net%2Fqna%2Fimage%2F1542632018000000528"
-          description="을지로 입구역에서 에어팟을 구입 후 언박싱을 하였다. 언박싱 후 기존의 에어팟보다 기능이 좋다는것을 알 수 있었다."
-          mainImage="https://cdn.clien.net/web/api/file/F01/9207614/48f0dc3910a37b.jpeg?w=780&h=30000"
-          rating="4.5 / 5"
-        />
-
-        <FeedItem
-          name="hooging"
-          photo="https://t1.daumcdn.net/thumb/R600x0/?fname=https%3A%2F%2Ft1.daumcdn.net%2Fqna%2Fimage%2F1542632018000000528"
-          description="을지로 입구역에서 에어팟을 구입 후 언박싱을 하였다. 언박싱 후 기존의 에어팟보다 기능이 좋다는것을 알 수 있었다."
-          mainImage="https://cdn.clien.net/web/api/file/F01/9207614/48f0dc3910a37b.jpeg?w=780&h=30000"
-          rating="4.5 / 5"
-        />
-      </MyFeedList>
+      </TouchableWithoutFeedback>
+      <ReviewHeaderContainer>
+        <ReviewText>리뷰</ReviewText>
+        <ViewAllText>View All</ViewAllText>
+      </ReviewHeaderContainer>
     </ScrollView>
   );
 }

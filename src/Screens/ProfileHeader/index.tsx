@@ -1,6 +1,10 @@
 import React from 'react';
 import Styled from 'styled-components/native';
 import Button from '~/Components/Button';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hpm,
+} from 'react-native-responsive-screen';
 
 const Container = Styled.View`
   flex-direction: column;
@@ -15,13 +19,12 @@ const ProfileImageContainer = Styled.View`
 
 const Header = Styled.View`
   flex-direction: row;
-  justify-content: center;
   align-items: center;
 `;
 
 const Body = Styled.View`
-  flex-direction: column;
-  padding: 0px 20px;
+  flex-direction: row;
+  padding: 0px 10px;
 `;
 
 const ProfileImage = Styled.Image`
@@ -48,23 +51,36 @@ const ProfileItem = Styled.View`
 `;
 
 const LabelCount = Styled.Text`
-  font-size: 16px;
-  font-weight: bold;
+font-family: 'Arita4.0_SB';
+font-size: 15px;
+margin-top: 15px;
 `;
 
 const LabelTitle = Styled.Text`
- font-weight: 300;
+  font-family: 'Arita4.0_L';
+  color: #707070;
+  font-size: 13px;
+  margin-top: 10px;
 `;
 
-const LabelName = Styled.Text`
-font-weight: bold;
+const UserName = Styled.Text`
+font-family: 'Roboto-Regular';
+font-size: 17px;
 `;
 
-const LabelTags = Styled.Text`
+const UserTags = Styled.Text`
+font-family: 'Arita4.0_L';
 `;
 
-const LabelDescription = Styled.Text`
- line-height: 20px;
+const HeaderRight = Styled.View`
+margin-left: 5px;
+`;
+
+const Tags = Styled.Text`
+font-family:'Arita4.0_L';
+font-size: 13px;
+color: #707070;
+margin-top: 1px;
 `;
 
 interface Props {
@@ -92,29 +108,31 @@ const ProfileHeader = ({
         <ProfileImageContainer>
           <ProfileImage
             source={{uri: image}}
-            style={{width: 100, height: 100}}
+            style={{width: wp('16%'), height: wp('16%')}}
           />
         </ProfileImageContainer>
+        <HeaderRight>
+          <UserName>{name}</UserName>
+          <Tags numberOfLines={5}>{tags}</Tags>
+        </HeaderRight>
+      </Header>
+      <Body>
         <ProfileItem>
           <LabelCount>{posts}</LabelCount>
-          <LabelTitle>후기 수</LabelTitle>
-        </ProfileItem>
-        <ProfileItem>
-          <LabelCount>{follower}</LabelCount>
-          <LabelTitle>팔로워</LabelTitle>
+          <LabelTitle>후기 갯수</LabelTitle>
         </ProfileItem>
         <ProfileItem>
           <LabelCount>{following}</LabelCount>
           <LabelTitle>팔로잉</LabelTitle>
         </ProfileItem>
         <ProfileItem>
-          <LabelCount>{IP}</LabelCount>
-          <LabelTitle>IP</LabelTitle>
+          <LabelCount>{follower}</LabelCount>
+          <LabelTitle>팔로워</LabelTitle>
         </ProfileItem>
-      </Header>
-      <Body>
-        <LabelName>{name}</LabelName>
-        <LabelDescription numberOfLines={5}>{tags}</LabelDescription>
+        <ProfileItem>
+          <LabelCount>{IP}</LabelCount>
+          <LabelTitle>포인트</LabelTitle>
+        </ProfileItem>
       </Body>
     </Container>
   );

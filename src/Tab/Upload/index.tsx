@@ -368,6 +368,7 @@ function Upload({route, navigation}) {
   >();
   const [revisingTagIndex, setRevisingTagIndex] = useState<number>();
   const [reviewContent, setReviewContent] = useState<string>();
+  const [currentLocation, setCurrentLocation] = useState<string>();
 
   React.useEffect(() => {
     if (route.params?.placeName) {

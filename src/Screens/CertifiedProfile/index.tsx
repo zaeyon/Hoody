@@ -77,7 +77,6 @@ const ReviewHeaderContainer = Styled.View`
  justify-content: space-between;
  flex-direction: row;
  padding: 10px 15px 10px 15px;
- margin-top: 15px;
 `;
 
 const ReviewText = Styled.Text`

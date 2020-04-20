@@ -276,7 +276,7 @@ const LocationSearch = ({navigation}) => {
             </SearchContainer>
             <SavedLocationContainer>
               <SavedLeftContainer>
-                <CurrentLocationText>사진에 저장된 위치</CurrentLocationText>
+                <CurrentLocationText>현재 위치</CurrentLocationText>
                 <SavedLocationText>
                   을지로 3가역 사랑방 칼국수
                 </SavedLocationText>

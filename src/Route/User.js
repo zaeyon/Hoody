@@ -1,4 +1,9 @@
 import axios from 'axios';
+import Login from '~/Screens/Login';
+import {createStore} from 'redux';
+import rootReducer from './reducers;';
+
+const store = createStore(rootReducer);
 
 const baseUrl = 'http://15.164.185.120:3000';
 function checkLogin(email, password) {
@@ -8,8 +13,21 @@ function checkLogin(email, password) {
   };
   console.log('userData: ', userData);
 
+  console.log(
+    '로그인 전 store.getState().data.certified_user:',
+    store.getState().data.certified_user,
+  );
   restHTTPPost(baseUrl + '/signIn', userData).then(function (data) {
-    console.log('hh', data);
+    console.log('data.success', data.success);
+    if (data.success === true) {
+      store.dispatch({type: 'CERTIFY'});
+      console.log(
+        'store.getState().data.certified_user:',
+        store.getState().data.certified_user,
+      );
+    } else {
+      Login.FailedLogin();
+    }
   });
 }
 

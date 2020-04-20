@@ -42,7 +42,7 @@ const FEED_DATA = [
     main_image:
       'https://img-wishbeen.akamaized.net/plan/1454465238030_15657083522_d45a489b15_b.jpg',
     review_image_list:
-      'https://www.travelnbike.com/news/photo/201903/77604_141293_4837.png$#$https://www.travelnbike.com/news/photo/201903/77604_141293_4837.png',
+      'https://img-wishbeen.akamaized.net/plan/1454465238030_15657083522_d45a489b15_b.jpg',
     tag_list: '태그태그&#&테스트',
     review_content: '하하하호호호',
     image_count: 3,

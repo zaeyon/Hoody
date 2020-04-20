@@ -6,6 +6,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import {FlatList} from 'react-native-gesture-handler';
 
 const Container = Styled.View`
    flex: 1;
@@ -13,7 +14,7 @@ const Container = Styled.View`
 `;
 
 const HeaderContainer = Styled.View`
- flex:0.55;
+ height: ${hp('11%')};
  flex-direction: row;
  padding-left: 7px;
  padding-right: 7px;
@@ -79,6 +80,7 @@ align-items: center;
 `;
 
 const FeedImageContainer = Styled.View`
+height: ${wp('100%')}; 
 `;
 
 const FeedImage = Styled.Image`
@@ -95,7 +97,7 @@ const CommentText = Styled.Text`
 
 const BottomBorder = Styled.View`
   background-color: #C3C3C3;
-  width: 100%;
+  width: ${wp('100%')};
   height: 0.4px;
 `;
 
@@ -103,10 +105,30 @@ const FavoriteImage = Styled.Image`
 margin-right: 5px;
 `;
 
+const BodyContainer = Styled.View`
+  flex-direction: column;
+  padding: 15px;
+`;
+
 const FavoriteText = Styled.Text`
+  font-family: 'Arita4.0_B';
+  font-size: 12px;
+  color: #707070;
+`;
+
+const TagText = Styled.Text`
+font-family: 'Arita4.0_B';
+margin-right: 5px;
+margin-top: 3px;
+  font-size: 12px;
+  color: #707070;
+`;
+
+const ReviewText = Styled.Text`
+ margin-top: 5px;
  font-family: 'Arita4.0_L';
- font-size: 11;
- color : #AAB2B7;
+ font-size: 12px;
+ color: #707070;
 `;
 
 const FeedDetail = ({route, navigation}: Props) => {
@@ -124,6 +146,7 @@ const FeedDetail = ({route, navigation}: Props) => {
     review_image_list,
   } = route.params;
   var reviewImage_Array = review_image_list.split('$#$');
+  var tag_Array = tag_list.split('&#&');
   return (
     <Container>
       <HeaderContainer>
@@ -154,9 +177,15 @@ const FeedDetail = ({route, navigation}: Props) => {
           sliderBoxHeight={imageHeight}
         />
       </FeedImageContainer>
-      <CommentContainer>
-        <CommentText style={{fontFamily: 'Arita4.0_M'}}></CommentText>
-      </CommentContainer>
+      <BodyContainer>
+        <FavoriteText>{favorite_count}명이 좋아합니다.</FavoriteText>
+        <FlatList
+          horizontal={true}
+          data={tag_Array}
+          renderItem={({item}) => <TagText>#{item}</TagText>}
+        />
+        <ReviewText>{review_content}</ReviewText>
+      </BodyContainer>
       <BottomBorder />
     </Container>
   );

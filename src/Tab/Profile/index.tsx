@@ -4,6 +4,8 @@ import {View, Text} from 'react-native';
 import CertifiedProfile from '~/Screens/CertifiedProfile';
 import UncertifiedProfile from '~/Screens/UncertifiedProfile';
 import Login from '~/Screens/Login';
+import {createStore} from 'redux';
+import {useSelector} from 'react-redux';
 
 const Container = Styled.View`
  flex: 1;
@@ -11,9 +13,12 @@ const Container = Styled.View`
 `;
 
 const Profile = ({navigation}) => {
+  const currentUser = useSelector((state) => state.currentUser);
   // Set an initializing state whilst Firebase connects
-
-  return <Login navigation={navigation} />;
+  if (currentUser.loggedIn) {
+    return <CertifiedProfile navigation={navigation} />;
+  } else {
+    return <Login navigation={navigation} />;
+  }
 };
-
 export default Profile;

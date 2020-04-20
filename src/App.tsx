@@ -11,6 +11,14 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {TextInput} from 'react-native-gesture-handler';
 import Navigator from '~/Navigator';
+import {createStore} from 'redux';
+import {Provider} from 'react-redux';
+import rootReducer from '~/reducers';
+
+const store = createStore(
+  rootReducer,
+  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
+);
 
 async function requestCameraPermission() {
   try {
@@ -35,7 +43,11 @@ async function requestCameraPermission() {
 
 function App() {
   requestCameraPermission();
-  return <Navigator />;
+  return (
+    <Provider store={store}>
+      <Navigator />
+    </Provider>
+  );
 }
 
 export default App;

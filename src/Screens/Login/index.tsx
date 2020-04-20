@@ -5,7 +5,8 @@ import Input from '~/Components/Input';
 import LoginButton from '~/Components/Button';
 import axios from 'axios';
 import {resolvePlugin} from '@babel/core';
-import {checkLogin, restHTTPGet} from '~/Route/User';
+import {useSelector, useDispatch} from 'react-redux';
+import allActions from '~/action';
 
 const Container = Styled.SafeAreaView`
   flex: 1;
@@ -63,6 +64,10 @@ function LoginTitle() {
 const Login = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const counter = useSelector((state) => state.counter);
+  const currentUser = useSelector((state) => state.currentUser);
+  const dispatch = useDispatch();
+  const user = {name: 'Rei'};
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -70,6 +75,57 @@ const Login = ({navigation}) => {
       headerRight: () => <Text></Text>,
     });
   }, []);
+
+  const baseUrl = 'http://15.164.185.120:3000';
+
+  function checkLogin(email, password) {
+    const userData = {
+      email: email,
+      pw: password,
+    };
+    console.log('userData: ', userData);
+
+    console.log('로그인 전 currentUser.loggedIn', currentUser.loggedIn);
+    restHTTPPost(baseUrl + '/signIn', userData).then(function (data) {
+      console.log('data.success', data.success);
+      if (data.success === true) {
+        dispatch(allActions.userActions.setUser(user));
+        console.log('로그인 후 currentUser.loggedIn', currentUser.loggedIn);
+      } else {
+      }
+    });
+  }
+
+  function restHTTPPost(url, data) {
+    console.log('data: ', data);
+    let form = new FormData();
+    form.append('email', data.email);
+    form.append('pw', data.pw);
+    return new Promise(function (resolve, reject) {
+      axios
+        .post(url, form, {
+          //withCredentials: true,
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            Accept: 'application/json',
+          },
+        })
+        .then(function (response) {
+          console.log('response : ', response);
+          resolve(response.data);
+        })
+        .catch(function (error) {
+          console.log('error : ', error);
+          reject(error);
+        });
+    });
+  }
+
+  const SuccessedLogin = () => {
+    navigation.navigate('CertifiedProfile');
+  };
+
+  const FailedLogin = () => {};
 
   return (
     <Container>

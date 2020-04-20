@@ -5,14 +5,17 @@ import {
   Dimensions,
   NativeSyntheticEvent,
   ScrollView,
-  ImageSourcePropType,
   TouchableWithoutFeedback,
 } from 'react-native';
 import Styled from 'styled-components/native';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 import ProfileHeader from '~/Screens/ProfileHeader';
 import PinterMap from '~/Screens/PinterMap';
-import FeedItem from '~/Components/FeedItem';
+import {FlatGrid} from 'react-native-super-grid';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 
 const ProfileContainer = Styled.View`
   flex: 1;
@@ -88,8 +91,25 @@ const MyFeedList = Styled.View`
  flex-direction: column;
 `;
 
+const ReviewFeedContainer = Styled.View`
+ background-color: #FFFFFF;
+ width: 100%;
+`;
+
+const ReviewImage = Styled.Image`
+ width: ${wp('32.4%')};
+ height: ${wp('32.4%')};
+ margin-right: 4px;
+`;
+
 function CertifiedProfile({navigation}) {
   const imageWidth = Dimensions.get('window').width / 3;
+
+  const userReview_arr = [
+    'https://d28dpoj42hxr8c.cloudfront.net/files/topics/9592_ext_14_ko_0.png?v=1456718570',
+    'https://img.kbs.co.kr/kbs/620/nsimg.kbs.co.kr/data/news/2019/11/27/4331817_Z1f.jpg',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQRiHGyfVX0g8i9yxoFqsJhX9K7Ww-EOx71LPAyDqHArNibwcfc&usqp=CAU',
+  ];
 
   const isBottom = ({
     layoutMeasurement,
@@ -143,6 +163,17 @@ function CertifiedProfile({navigation}) {
         <ReviewText>리뷰</ReviewText>
         <ViewAllText>View All</ViewAllText>
       </ReviewHeaderContainer>
+      <ReviewFeedContainer>
+        <FlatGrid
+          itemDimension={wp('100%')}
+          horizontal={true}
+          items={userReview_arr}
+          spacing={0}
+          renderItem={({item, index}) => {
+            return <ReviewImage source={{uri: item}} />;
+          }}
+        />
+      </ReviewFeedContainer>
     </ScrollView>
   );
 }

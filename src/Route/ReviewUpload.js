@@ -2,9 +2,9 @@ import axios from 'axios';
 const baseUrl = 'http://15.164.185.120:3000';
 
 const ReviewUpload = async (image) => {
-  console.log('image:', image);
+  console.log('image:', image.uri);
   var photo = {
-    uri: image,
+    uri: image.uri,
     type: 'image/jpeg',
     name: 'photo.jpg',
   };
@@ -18,14 +18,14 @@ const ReviewUpload = async (image) => {
     data: formData,
     headers: {
       Accept: 'application/json',
-      'Content-Type': 'multipart/form-data;',
+      'Content-Type': 'multipart/form-data',
     },
   })
     .then(function (response) {
-      console.log(response);
+      console.log('response', response);
     })
     .catch(function (error) {
-      console.log(error.response);
+      console.log('error', error);
     });
 };
 

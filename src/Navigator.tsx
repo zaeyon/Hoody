@@ -19,6 +19,7 @@ import LocationSearch from '~/Screens/LocationSearch';
 import Animation from '~/Screens/Animation';
 import {createConfigItem} from '@babel/core';
 import ImagesPullScreen from '~/Screens/ImagesPullScreen';
+import Gallery from '~/Screens/Gallery';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
@@ -137,6 +138,16 @@ function UploadStackScreen() {
       <UploadStack.Screen
         name="ImagesPullScreen"
         component={ImagesPullScreen}
+      />
+      <UploadStack.Screen
+        name="Gallery"
+        component={Gallery}
+        options={{
+          transitionSpec: {
+            open: config,
+            close: config,
+          },
+        }}
       />
     </UploadStack.Navigator>
   );

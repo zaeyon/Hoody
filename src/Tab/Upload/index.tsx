@@ -25,6 +25,7 @@ import {FlatGrid} from 'react-native-super-grid';
 import Modal from 'react-native-modal';
 import CheckBox from '@react-native-community/checkbox';
 import ReviewUploadAPI from '~/Route/ReviewUpload';
+import ImageMultiplePicker from 'react-native-customized-image-picker';
 
 if (
   Platform.OS === 'android' &&
@@ -369,6 +370,7 @@ function Upload({route, navigation}) {
   const [revisingTagIndex, setRevisingTagIndex] = useState<number>();
   const [reviewContent, setReviewContent] = useState<string>();
   const [currentLocation, setCurrentLocation] = useState<string>();
+  const [selectedPhoto, setSelectedPhoto] = useState([]);
 
   React.useEffect(() => {
     if (route.params?.placeName) {
@@ -388,6 +390,32 @@ function Upload({route, navigation}) {
         newImage_arr[imageUrl_arr.length - 1] = response.uri;
         console.log('responsive.uri', response.uri);
         setImageUrl_arr(newImage_arr);
+        var newPhoto_arr = new Array();
+        newPhoto_arr = selectedPhoto;
+        newPhoto_arr.push(response);
+        setSelectedPhoto(newPhoto_arr);
+      }
+    });
+  };
+
+  const openImageMultiplePicker = () => {
+    ImageMultiplePicker.openPicker({
+      multiple: true,
+      isCamera: true,
+    }).then((images) => {
+      console.log(images);
+      var newImage_arr = new Array();
+      newImage_arr = imageUrl_arr.slice(0, imageUrl_arr.length - 1);
+      var selectedImage_arr = new Array();
+      for (var i = 0; i < images.length; i++) {
+        selectedImage_arr[i] = images[i].path;
+        console.log('selectedImage_arr[i]', selectedImage_arr[i]);
+        if (i === images.length - 1) {
+          const concatedImage_arr = newImage_arr.concat(selectedImage_arr);
+          concatedImage_arr[concatedImage_arr.length] =
+            'https://firebasestorage.googleapis.com/v0/b/hooging-f33b0.appspot.com/o/zz.png?alt=media&token=eb26a783-c54b-4205-bab6-5357e103aef4';
+          setImageUrl_arr(concatedImage_arr);
+        }
       }
     });
   };
@@ -609,7 +637,7 @@ function Upload({route, navigation}) {
 
   const reviewUpload = (images) => {
     ReviewUploadAPI(images[0]);
-    console.log(images[0]);
+    console.log(images[0].uri);
   };
 
   return (
@@ -699,7 +727,7 @@ function Upload({route, navigation}) {
               </TouchableWithoutFeedback>
               <MyHoogingText>나의 게시물</MyHoogingText>
               <TouchableWithoutFeedback
-                onPress={() => reviewUpload(imageUrl_arr)}>
+                onPress={() => reviewUpload(selectedPhoto)}>
                 <UploadButton>공유</UploadButton>
               </TouchableWithoutFeedback>
             </Title>

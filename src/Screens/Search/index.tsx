@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
 import Styled from 'styled-components/native';
-import {TouchableWithoutFeedback, Animated, FlatList} from 'react-native';
+import {TouchableWithoutFeedback, Animated, FlatList, View} from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import {NavigationContainer} from '@react-navigation/native';
+import TagAverageRatingItem from '~/Components/TagAverageRatingItem';
 
 const Container = Styled.SafeAreaView`
  flex: 1;
@@ -13,7 +14,7 @@ const Container = Styled.SafeAreaView`
  align-items: center;
  justify-content: center;
  flex-direction: column;
- padding: 0px 0px 50px 0px;
+ padding: 0px 0px 0px 0px;
 `;
 
 const HoogingLogo = Styled.Image`
@@ -127,6 +128,19 @@ const TagDeleteContainer = Styled.View`
  height: ${wp('4%')};
 `;
 
+const TagItemContainer = Styled.View`
+height: ${hp('14%')};
+border-bottom-width: 0.5px;
+background-color: #707070;
+`;
+
+const SearchResultContainer = Styled.View`
+width: ${wp('100%')};
+height: ${hp('10%')};
+border-bottom-width: 0.5px;
+background-color: #707070;
+`;
+
 type Props = {navigation};
 
 interface State {
@@ -143,6 +157,7 @@ class Search extends Component<Props> {
       inputedTag_arr: [],
       inputedTag: null,
       inputingTag: null,
+      searchedTag_arr: [],
     };
   }
 
@@ -160,7 +175,7 @@ class Search extends Component<Props> {
     this.props.navigation.navigate('Search');
     this.setState({showLogo: false});
     Animated.timing(this.state.position, {
-      toValue: {x: 0, y: -hp('39%')},
+      toValue: {x: 0, y: -hp('43%')},
       duration: 350,
       delay: 10,
     }).start();
@@ -186,6 +201,8 @@ class Search extends Component<Props> {
       inputedTag_arr: deletedTag_arr,
     });
   }
+
+  _searchTag(tags) {}
 
   updateSize = (width) => {
     this.setState({
@@ -242,11 +259,16 @@ class Search extends Component<Props> {
             </TagInputContainer>
             <SearchTextContainer>
               <TouchableWithoutFeedback
-                onPress={() => this.props.navigation.navigate('SearchResult')}>
+                onPress={() => this._searchTag(this.state.inputedTag_arr)}>
                 <SearchText>검색</SearchText>
               </TouchableWithoutFeedback>
             </SearchTextContainer>
           </InputBoxContainer>
+          {this.state.searchedTag_arr[0] && (
+            <TagItemContainer>
+              <TagAverageRatingItem></TagAverageRatingItem>
+            </TagItemContainer>
+          )}
         </Animated.View>
       </Container>
     );

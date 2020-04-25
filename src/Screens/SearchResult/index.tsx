@@ -125,9 +125,15 @@ const TagDeleteContainer = Styled.View`
  height: ${wp('4%')};
 `;
 
-const SearchResult = ({navigation}) => {
+const SearchResult = ({navigation, route}) => {
   const [inputedTag_arr, setInputedTag_arr] = useState<Array<string>>([]);
   const [inputingTag, setInputingTag] = useState<string>();
+  console.log('route.params.searchedTag_arr', route.params.searchedTag_arr);
+  let searchedTag_arr = route.params.searchedTag_arr;
+
+  useEffect(() => {
+    setInputedTag_arr(searchedTag_arr);
+  }, []);
 
   const deleteTag = (index) => {
     let deletedTag_arr = inputedTag_arr;

@@ -7,7 +7,9 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "postinstall": "yarn run infinite-flatlist-patch",
+    "postuninstall": "yarn run infinite-flatlist-patch"
   },
   "dependencies": {
     "@react-native-community/cameraroll": "1.5.2",
@@ -56,6 +58,7 @@
     "eslint": "6.8.0",
     "jest": "25.2.4",
     "metro-react-native-babel-preset": "0.59.0",
+    "react-native-infinite-flatlist-patch": "1.0.5",
     "react-test-renderer": "16.11.0",
     "typescript": "3.8.3"
   },

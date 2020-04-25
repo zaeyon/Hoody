@@ -742,7 +742,7 @@ function Upload({route, navigation}) {
                   renderItem={({item, index}) => {
                     if (index == imageUrl_arr.length - 1) {
                       return (
-                        <SelectedImageTouch onPress={() => openGallery()}>
+                        <SelectedImageTouch onPress={() => navigation.navigate('Gallery')}>
                           <SelectedImageContainer>
                             <EmptyImage source={{uri: item}} />
                           </SelectedImageContainer>

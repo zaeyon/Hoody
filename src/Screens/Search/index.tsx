@@ -3,10 +3,11 @@ import Styled from 'styled-components/native';
 import {
   Keyboard,
   View,
-  StyleSheet,
   TouchableWithoutFeedback,
   TouchableOpacity,
   Animated,
+  TextInput,
+  FlatList,
 } from 'react-native';
 import {
   widthPercentageToDP as wp,
@@ -51,7 +52,75 @@ const SearchIcon = Styled.Image`
  margin-left: 10px;
 `;
 
+const TagInputContainer = Styled.View`
+ position: absolute;
+ height: ${wp('10%')};
+ border-radius: 5px;
+ flex-direction: row;
+ left: ${wp('4.3%')};
+ align-items: center;
+ justify-content: flex-start;
+ `;
+
+const TagTextInput = Styled.TextInput`
+ font-family: 'Arita4.0_L';
+ font-size: 13px;
+ color: #999999;
+ width: ${wp('30%')};
+ height: ${wp('10%')};
+`;
+
+const TagText = Styled.Text`
+ color: #707070;
+ font-size: 13px;
+ font-family: 'Arita4.0_L';
+`;
+
+const HashText = Styled.Text`
+ font-family: 'Arita4.0_L';
+ font-size: 15px;
+ color: #999999;
+`;
+
+const InputedTagContainer = Styled.View`
+ height: ${wp('7%')};
+ border-radius: 10px;
+ align-items: center;
+ justify-content: center;
+ margin-right: 5px;
+ padding-left: 5px;
+ padding-right: 5px;
+ background-color: #ECE9EC;
+`;
+
+const SearchTextContainer = Styled.View`
+ width: ${wp('13%')};
+ height: 40px;
+ position: absolute;
+ right: 5px;
+ align-items: center;
+ justify-content: center;
+`;
+
+const SearchText = Styled.Text`
+ font-family: 'Arita4.0_M';
+ font-size: 13px;
+ color: #000000;
+`;
+
+const InsertTagContainer = Styled.View`
+ margin-left: 5px;
+ flex-direction: row;
+ align-items:center;
+ justify-content: center;
+`;
+
 type Props = {navigation};
+
+interface State {
+  inputedTag_arr: Array<string>;
+  inputedTag: string;
+}
 
 class Search extends Component<Props> {
   constructor(props) {
@@ -59,6 +128,9 @@ class Search extends Component<Props> {
     this.state = {
       position: new Animated.ValueXY({x: 0, y: 0}),
       showLogo: true,
+      inputedTag_arr: [],
+      inputedTag: null,
+      inputingTag: null,
     };
   }
 
@@ -68,12 +140,9 @@ class Search extends Component<Props> {
 
   componentDidMount() {
     this._moveSearchBar();
-    Keyboard.addListener('keyboardDidHide', this._keyboardDidHide);
   }
 
-  componentWillUnmount() {
-    Keyboard.removeListener('keyboardDidHide', this._keyboardDidHide);
-  }
+  componentWillUnmount() {}
 
   _moveSearchBar() {
     this.props.navigation.navigate('Search');
@@ -84,6 +153,26 @@ class Search extends Component<Props> {
       delay: 10,
     }).start();
   }
+
+  _submitTag(text) {
+    const newTag = text.nativeEvent.text;
+    console.log('newTag : ', newTag);
+    var newTag_arr = this.state.inputedTag_arr;
+    newTag_arr.push(newTag);
+    this.setState({
+      inputedTag_arr: newTag_arr,
+      inputedTag: newTag,
+      inputingTag: '',
+    });
+
+    console.log('inputedTag_arr', this.state.inputedTag_arr);
+  }
+
+  updateSize = (width) => {
+    this.setState({
+      width,
+    });
+  };
 
   render() {
     return (
@@ -97,24 +186,37 @@ class Search extends Component<Props> {
               transform: [{translateY: this.state.position.y}],
             },
           ]}>
-          <TouchableWithoutFeedback>
-            <View>
-              <InputBoxContainer>
-                <InputBox
-                  placeholder="태그로 후기를 검색하세요."
-                  clearButtonMode={'while-editing'}
-                  autoFocus="true"
-                  style={{
-                    fontFamily: 'Arita4.0_M',
-                    fontSize: 12,
-                  }}
+          <InputBoxContainer>
+            <InputBox editable={false} />
+            <TagInputContainer>
+              <FlatList
+                data={this.state.inputedTag_arr}
+                horizontal={true}
+                renderItem={({item, index}) => (
+                  <InputedTagContainer>
+                    <TagText>#{item}</TagText>
+                  </InputedTagContainer>
+                )}
+              />
+              <InsertTagContainer>
+                <HashText>#</HashText>
+                <TagTextInput
+                  placeholder="태그 입력"
+                  value={this.state.inputingTag}
+                  onChangeText={(text: string) =>
+                    this.setState({
+                      inputingTag: text,
+                    })
+                  }
+                  autoFocus={true}
+                  onSubmitEditing={(text: string) => this._submitTag(text)}
                 />
-                <SearchIcon
-                  source={require('~/Assets/Images/search_icon.png')}
-                />
-              </InputBoxContainer>
-            </View>
-          </TouchableWithoutFeedback>
+              </InsertTagContainer>
+            </TagInputContainer>
+            <SearchTextContainer>
+              <SearchText>검색</SearchText>
+            </SearchTextContainer>
+          </InputBoxContainer>
         </Animated.View>
       </Container>
     );

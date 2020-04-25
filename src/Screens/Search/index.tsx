@@ -5,6 +5,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import {NavigationContainer} from '@react-navigation/native';
 
 const Container = Styled.SafeAreaView`
  flex: 1;
@@ -240,7 +241,10 @@ class Search extends Component<Props> {
               </InsertTagContainer>
             </TagInputContainer>
             <SearchTextContainer>
-              <SearchText>검색</SearchText>
+              <TouchableWithoutFeedback
+                onPress={() => this.props.navigation.navigate('SearchResult')}>
+                <SearchText>검색</SearchText>
+              </TouchableWithoutFeedback>
             </SearchTextContainer>
           </InputBoxContainer>
         </Animated.View>

@@ -2,7 +2,7 @@ import * as React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
-import {Image, StyleSheet, Alert, Text} from 'react-native';
+import {Image, StyleSheet, Text} from 'react-native';
 
 import Home from '~/Tab/Home';
 import Feed from '~/Tab/Feed';
@@ -10,14 +10,13 @@ import Upload from '~/Tab/Upload';
 import Alarm from '~/Tab/Alarm';
 import Profile from '~/Tab/Profile';
 import Search from '~/Screens/Search';
+import SearchResult from '~/Screens/SearchResult';
 import FeedDetail from '~/Screens/FeedDetail';
 import PinterMap from '~/Screens/PinterMap';
 import UncertifiedProfile from '~/Screens/UncertifiedProfile';
 import CertifiedProfile from '~/Screens/CertifiedProfile';
 import Login from '~/Screens/Login';
 import LocationSearch from '~/Screens/LocationSearch';
-import Animation from '~/Screens/Animation';
-import {createConfigItem} from '@babel/core';
 import ImagesPullScreen from '~/Screens/ImagesPullScreen';
 import Gallery from '~/Screens/Gallery';
 
@@ -27,12 +26,6 @@ const FeedStack = createStackNavigator();
 const UploadStack = createStackNavigator();
 const AlarmStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
-
-function UploadTitle() {
-  return (
-    <Text style={{fontSize: 17, fontFamily: 'Arita4.0_M'}}>나의 후깅</Text>
-  );
-}
 
 function FeedTitle() {
   return (
@@ -73,10 +66,19 @@ function HomeStackScreen() {
   return (
     <HomeStack.Navigator headerMode="none">
       <HomeStack.Screen name="Home" component={Home} />
-      <HomeStack.Screen name="Animation" component={Animation} />
       <HomeStack.Screen
         name="Search"
         component={Search}
+        options={{
+          transitionSpec: {
+            open: config,
+            close: config,
+          },
+        }}
+      />
+      <HomeStack.Screen
+        name="SearchResult"
+        component={SearchResult}
         options={{
           transitionSpec: {
             open: config,

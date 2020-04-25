@@ -1,14 +1,6 @@
-import React, {Component, useEffect} from 'react';
+import React, {Component} from 'react';
 import Styled from 'styled-components/native';
-import {
-  Keyboard,
-  View,
-  TouchableWithoutFeedback,
-  TouchableOpacity,
-  Animated,
-  TextInput,
-  FlatList,
-} from 'react-native';
+import {TouchableWithoutFeedback, Animated, FlatList} from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -63,6 +55,7 @@ const TagInputContainer = Styled.View`
  `;
 
 const TagTextInput = Styled.TextInput`
+ margin-left: 8px;
  font-family: 'Arita4.0_L';
  font-size: 13px;
  color: #999999;
@@ -77,6 +70,8 @@ const TagText = Styled.Text`
 `;
 
 const HashText = Styled.Text`
+ position: absolute;
+ left: 0px;
  font-family: 'Arita4.0_L';
  font-size: 15px;
  color: #999999;
@@ -85,11 +80,12 @@ const HashText = Styled.Text`
 const InputedTagContainer = Styled.View`
  height: ${wp('7%')};
  border-radius: 10px;
+ flex-direction: row;
  align-items: center;
  justify-content: center;
  margin-right: 5px;
- padding-left: 5px;
- padding-right: 5px;
+ padding-left: 8px;
+ padding-right: 8px;
  background-color: #ECE9EC;
 `;
 
@@ -113,6 +109,21 @@ const InsertTagContainer = Styled.View`
  flex-direction: row;
  align-items:center;
  justify-content: center;
+`;
+
+const TagDeleteButton = Styled.Image`
+ width :${wp('2.5%')};
+ height:${wp('2.5%')};
+ opacity: 1;
+ tint-color: #999999;
+`;
+
+const TagDeleteContainer = Styled.View`
+ justify-content: center;
+ align-items: flex-end;
+ margin-left: 0px;
+ width: ${wp('5%')};
+ height: ${wp('4%')};
 `;
 
 type Props = {navigation};
@@ -164,8 +175,15 @@ class Search extends Component<Props> {
       inputedTag: newTag,
       inputingTag: '',
     });
-
     console.log('inputedTag_arr', this.state.inputedTag_arr);
+  }
+
+  _deleteTag(index) {
+    let deletedTag_arr = this.state.inputedTag_arr;
+    deletedTag_arr.splice(index, 1);
+    this.setState({
+      inputedTag_arr: deletedTag_arr,
+    });
   }
 
   updateSize = (width) => {
@@ -195,6 +213,14 @@ class Search extends Component<Props> {
                 renderItem={({item, index}) => (
                   <InputedTagContainer>
                     <TagText>#{item}</TagText>
+                    <TouchableWithoutFeedback
+                      onPress={() => this._deleteTag(index)}>
+                      <TagDeleteContainer>
+                        <TagDeleteButton
+                          source={require('~/Assets/Images/delete_empty.png')}
+                        />
+                      </TagDeleteContainer>
+                    </TouchableWithoutFeedback>
                   </InputedTagContainer>
                 )}
               />

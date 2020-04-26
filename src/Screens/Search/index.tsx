@@ -11,8 +11,9 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import {NavigationContainer} from '@react-navigation/native';
 import TagInfoItem from '~/Components/TagInfoItem';
+import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import SearchResultTopNavigation from '~/Components/SearchResultTopNavigation';
 
 const Container = Styled.SafeAreaView`
  flex: 1;
@@ -136,8 +137,6 @@ const TagDeleteContainer = Styled.View`
 `;
 
 const TagItemContainer = Styled.View`
-position: absolute;
-top: ${hp('9%')};
 background-color: #ffffff;
 padding-left: 5px;
 padding-right: 5px;
@@ -145,8 +144,13 @@ padding-bottom: 5px;
 border-bottom-width: 0.5px;
 border-color: #eeeeee;
 width: 100%;
+`;
 
-
+const TagSearchResultContainer = Styled.View`
+position: absolute;
+top: ${hp('9%')};
+background-color: #ffffff;
+width: 100%;
 `;
 
 const TagInfoItemContainer = Styled.View`
@@ -155,9 +159,22 @@ const TagInfoItemContainer = Styled.View`
 
 const SearchResultContainer = Styled.View`
 width: ${wp('100%')};
-height: ${hp('10%')};
-border-bottom-width: 0.5px;
-background-color: #707070;
+background-color:#ffffff;
+`;
+
+const SearchResultItemImage = Styled.Image`
+width: ${wp('33%')};
+height: ${wp('33%')};
+`;
+
+const SearchResultItemContainer = Styled.View`
+width: ${wp('33%')};
+height: ${wp('33%')};
+margin-right: 2px;
+margin-bottom: 2px;
+`;
+
+const ResultItemRatingContainer = Styled.View`
 `;
 
 type Props = {navigation};
@@ -179,6 +196,21 @@ class Search extends Component<Props> {
       searchedTag_arr: [],
       initalTag_arr: [],
       afterTag_arr: [],
+      searchResult_popular_arr: [
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQOQIknR9cXIueb8RIJccEvZ3o8OZhOrCKxmOJQkqCsaab3CnrX&usqp=CAU',
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRh28mNQsB8JSm0UzQrdLfMfoKH-xgfOD07yBAxcsPTQXIEmh6N&usqp=CAU',
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSzykKVDf4uLOTMQuQ_tbKCqwZUllOn_lpe1CRA5MF5lDxZGbI3&usqp=CAU',
+        'https://img.insight.co.kr/static/2019/10/11/700/3m3g34c219o3r94hpyh4.jpg',
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQs2MAK0heKtNzCdUWV0grmgbzrs5HEpoy3B8V_gwV5eXUyZFU9&usqp=CAU',
+      ],
+      searchResult_latest_arr: [
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRWVPhC9j1zL3dWUecVri4SjTVHCWe_AKtKsihfIPj3eGKFT2Iu&usqp=CAU',
+        'https://img.danawa.com/prod_img/500000/982/971/img/7971982_1.jpg?shrink=500:500&_v=20190521141641',
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQDuUXFqLldPV5PrXoiLZ_gJlOOXH53puGNvtzvg6aPZIzKDByZ&usqp=CAU',
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQQCzqJXkTudbgrXR0ChdXsKGia9xQA1bDXxWdmTO8m5OIzJkKa&usqp=CAU',
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcTInjJfDl2d8W3jd7QROuglx8RUdl-cLPY-5wIFi7rihHZKyovE&usqp=CAU',
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcS7NfeiPqbHbPmnCro0LmoBCC2ipH_Hqy36ndTlR99njJKN4zet&usqp=CAU',
+      ],
     };
   }
 
@@ -301,22 +333,28 @@ class Search extends Component<Props> {
           </InputBoxContainer>
         </Animated.View>
         {this.state.searchedTag_arr[0] && (
-          <TagItemContainer>
-            <FlatList
-              data={this.state.searchedTag_arr}
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}
-              renderItem={({item, index}) => (
-                <TagInfoItemContainer>
-                  <TagInfoItem
-                    tagName={item}
-                    tagReviewCount={234}
-                    tagRatingAverage={4.5}
-                    tagThumbnail={''}></TagInfoItem>
-                </TagInfoItemContainer>
-              )}
+          <TagSearchResultContainer>
+            <TagItemContainer>
+              <FlatList
+                data={this.state.searchedTag_arr}
+                horizontal={true}
+                showsHorizontalScrollIndicator={false}
+                renderItem={({item, index}) => (
+                  <TagInfoItemContainer>
+                    <TagInfoItem
+                      tagName={item}
+                      tagReviewCount={234}
+                      tagRatingAverage={4.5}
+                      tagThumbnail={''}></TagInfoItem>
+                  </TagInfoItemContainer>
+                )}
+              />
+            </TagItemContainer>
+            <SearchResultTopNavigation
+              searchData_popular={this.state.searchResult_popular_arr}
+              searchData_latest={this.state.searchResult_latest_arr}
             />
-          </TagItemContainer>
+          </TagSearchResultContainer>
         )}
       </Container>
     );

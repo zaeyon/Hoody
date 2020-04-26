@@ -9,39 +9,52 @@ const Container = Styled.View`
  width: ${wp('40%')};
  height: ${hp('13%')};
  border-radius: 10px;
- border-width: 0.5px;
+ elevation: 0.35;
  flex-direction: row;
  align-items: center;
  justify-content: center;
 `;
 
 const TagThumbnail = Styled.Image`
- width: ${wp('5%')};
- height: ${wp('5%')};
+ width: ${wp('15%')};
+ height: ${wp('15%')};
  border-radius: 100px;
 `;
 
 const TagInfoContainer = Styled.View`
+ padding-left: 6px;
  flex-direction: column;
  justify-content: center;
 `;
 
 const TagNameText = Styled.Text`
-font-family: 'Roboto-light';
+font-family: 'Roboto-Light';
 font-size: 13px;
 `;
 
 const TagCountText = Styled.Text`
-font-family: 'Roboto-light';
+font-family: 'Roboto-Light';
 font-size: 13px;
 `;
 
 const TagRatingText = Styled.Text`
-font-family: 'Roboto-light';
+font-family: 'Roboto-Light';
 font-size: 13px;
 `;
 
-const TagAverageRatingItem = () => {
+interface Props {
+  tagName: string;
+  tagThumbnail: string;
+  tagReviewCount: number;
+  tagRatingAverage: number;
+}
+
+const TagInfoItem = ({
+  tagName,
+  tagThumbnail,
+  tagReviewCount,
+  tagRatingAverage,
+}: Props) => {
   return (
     <Container>
       <TagThumbnail
@@ -51,12 +64,12 @@ const TagAverageRatingItem = () => {
         }}
       />
       <TagInfoContainer>
-        <TagNameText>#하하</TagNameText>
-        <TagCountText>후기수 : 123</TagCountText>
-        <TagRatingText>평점 : 4.5</TagRatingText>
+        <TagNameText>#{tagName}</TagNameText>
+        <TagCountText>후기수: {tagReviewCount}</TagCountText>
+        <TagRatingText>평점: {tagRatingAverage}</TagRatingText>
       </TagInfoContainer>
     </Container>
   );
 };
 
-export default TagAverageRatingItem;
+export default TagInfoItem;

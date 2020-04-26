@@ -1,19 +1,25 @@
 import React, {Component} from 'react';
 import Styled from 'styled-components/native';
-import {TouchableWithoutFeedback, Animated, FlatList, View} from 'react-native';
+import {
+  TouchableWithoutFeedback,
+  Animated,
+  FlatList,
+  View,
+  Text,
+} from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import {NavigationContainer} from '@react-navigation/native';
-import TagAverageRatingItem from '~/Components/TagAverageRatingItem';
+import TagInfoItem from '~/Components/TagInfoItem';
 
 const Container = Styled.SafeAreaView`
  flex: 1;
  background-color: #FFFFFF;
  align-items: center;
- justify-content: center;
  flex-direction: column;
+ justify-content: center;
  padding: 0px 0px 0px 0px;
 `;
 
@@ -34,6 +40,7 @@ const InputBox = Styled.TextInput`
  background-color: #FFFFFF;
  justify-content: center;
  text-align: center;
+ align-self: center;
  font-family: 'Arita4.0_B.otf';
  border-width: 1.5px;
  border-color: #23E5D2;
@@ -129,9 +136,21 @@ const TagDeleteContainer = Styled.View`
 `;
 
 const TagItemContainer = Styled.View`
-height: ${hp('14%')};
+position: absolute;
+top: ${hp('9%')};
+background-color: #ffffff;
+padding-left: 5px;
+padding-right: 5px;
+padding-bottom: 5px;
 border-bottom-width: 0.5px;
-background-color: #707070;
+border-color: #eeeeee;
+width: 100%;
+
+
+`;
+
+const TagInfoItemContainer = Styled.View`
+ margin-right: 6px;
 `;
 
 const SearchResultContainer = Styled.View`
@@ -158,6 +177,8 @@ class Search extends Component<Props> {
       inputedTag: null,
       inputingTag: null,
       searchedTag_arr: [],
+      initalTag_arr: [],
+      afterTag_arr: [],
     };
   }
 
@@ -183,26 +204,41 @@ class Search extends Component<Props> {
 
   _submitTag(text) {
     const newTag = text.nativeEvent.text;
-    console.log('newTag : ', newTag);
     var newTag_arr = this.state.inputedTag_arr;
     newTag_arr.push(newTag);
-    this.setState({
-      inputedTag_arr: newTag_arr,
-      inputedTag: newTag,
-      inputingTag: '',
-    });
     console.log('inputedTag_arr', this.state.inputedTag_arr);
+    if (this.state.searchedTag_arr[0]) {
+      console.log('태그 검색후');
+      this.setState({
+        afterTag_arr: newTag_arr,
+        inputingTag: '',
+      });
+    } else {
+      console.log('태그 검색전');
+      this.setState({
+        inputedTag_arr: newTag_arr,
+        inputingTag: '',
+      });
+    }
   }
 
   _deleteTag(index) {
     let deletedTag_arr = this.state.inputedTag_arr;
+    let deletedTag_arr2 = this.state.initalTag_arr;
     deletedTag_arr.splice(index, 1);
     this.setState({
       inputedTag_arr: deletedTag_arr,
     });
+    console.log('this.searchedTag_arr', this.state.searchedTag_arr);
   }
 
-  _searchTag(tags) {}
+  _searchTag() {
+    console.log('onPress searchButton');
+    const searchTag_arr = this.state.inputedTag_arr.slice(0);
+    this.setState({
+      searchedTag_arr: searchTag_arr,
+    });
+  }
 
   updateSize = (width) => {
     this.setState({
@@ -258,18 +294,30 @@ class Search extends Component<Props> {
               </InsertTagContainer>
             </TagInputContainer>
             <SearchTextContainer>
-              <TouchableWithoutFeedback
-                onPress={() => this._searchTag(this.state.inputedTag_arr)}>
+              <TouchableWithoutFeedback onPress={() => this._searchTag()}>
                 <SearchText>검색</SearchText>
               </TouchableWithoutFeedback>
             </SearchTextContainer>
           </InputBoxContainer>
-          {this.state.searchedTag_arr[0] && (
-            <TagItemContainer>
-              <TagAverageRatingItem></TagAverageRatingItem>
-            </TagItemContainer>
-          )}
         </Animated.View>
+        {this.state.searchedTag_arr[0] && (
+          <TagItemContainer>
+            <FlatList
+              data={this.state.searchedTag_arr}
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+              renderItem={({item, index}) => (
+                <TagInfoItemContainer>
+                  <TagInfoItem
+                    tagName={item}
+                    tagReviewCount={234}
+                    tagRatingAverage={4.5}
+                    tagThumbnail={''}></TagInfoItem>
+                </TagInfoItemContainer>
+              )}
+            />
+          </TagItemContainer>
+        )}
       </Container>
     );
   }

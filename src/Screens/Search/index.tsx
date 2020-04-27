@@ -16,12 +16,12 @@ import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs
 import SearchResultTopNavigation from '~/Components/SearchResultTopNavigation';
 
 const Container = Styled.SafeAreaView`
- flex: 1;
  background-color: #FFFFFF;
  align-items: center;
  flex-direction: column;
  justify-content: center;
  padding: 0px 0px 0px 0px;
+ position: relative;
 `;
 
 const HoogingLogo = Styled.Image`
@@ -29,6 +29,8 @@ margin-left: 10px;
 `;
 
 const InputBoxContainer = Styled.View`
+ flex:1
+ position: relative;
  justify-content: center;
  transform:
    {translateY: this.state.position.y}
@@ -36,7 +38,7 @@ const InputBoxContainer = Styled.View`
 
 const InputBox = Styled.TextInput`
  width: ${wp('85%')};
- height: 40px;
+ height: ${hp('6.5%')};
  border-radius: 25px;
  background-color: #FFFFFF;
  justify-content: center;
@@ -48,6 +50,7 @@ const InputBox = Styled.TextInput`
 `;
 
 const SearchIcon = Styled.Image`
+flex:1;
  position: absolute;
  width: ${wp('4.5%')};
  height: ${wp('4.5%')};
@@ -147,9 +150,10 @@ width: 100%;
 `;
 
 const TagSearchResultContainer = Styled.View`
+top: ${hp('10%')};
+bottom: 0px;
 position: absolute;
-top: ${hp('9%')};
-background-color: #ffffff;
+background-color: #000000;
 width: 100%;
 `;
 
@@ -197,6 +201,16 @@ class Search extends Component<Props> {
       initalTag_arr: [],
       afterTag_arr: [],
       searchResult_popular_arr: [
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQOQIknR9cXIueb8RIJccEvZ3o8OZhOrCKxmOJQkqCsaab3CnrX&usqp=CAU',
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRh28mNQsB8JSm0UzQrdLfMfoKH-xgfOD07yBAxcsPTQXIEmh6N&usqp=CAU',
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSzykKVDf4uLOTMQuQ_tbKCqwZUllOn_lpe1CRA5MF5lDxZGbI3&usqp=CAU',
+        'https://img.insight.co.kr/static/2019/10/11/700/3m3g34c219o3r94hpyh4.jpg',
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQs2MAK0heKtNzCdUWV0grmgbzrs5HEpoy3B8V_gwV5eXUyZFU9&usqp=CAU',
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQOQIknR9cXIueb8RIJccEvZ3o8OZhOrCKxmOJQkqCsaab3CnrX&usqp=CAU',
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRh28mNQsB8JSm0UzQrdLfMfoKH-xgfOD07yBAxcsPTQXIEmh6N&usqp=CAU',
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSzykKVDf4uLOTMQuQ_tbKCqwZUllOn_lpe1CRA5MF5lDxZGbI3&usqp=CAU',
+        'https://img.insight.co.kr/static/2019/10/11/700/3m3g34c219o3r94hpyh4.jpg',
+        'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQs2MAK0heKtNzCdUWV0grmgbzrs5HEpoy3B8V_gwV5eXUyZFU9&usqp=CAU',
         'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQOQIknR9cXIueb8RIJccEvZ3o8OZhOrCKxmOJQkqCsaab3CnrX&usqp=CAU',
         'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRh28mNQsB8JSm0UzQrdLfMfoKH-xgfOD07yBAxcsPTQXIEmh6N&usqp=CAU',
         'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcSzykKVDf4uLOTMQuQ_tbKCqwZUllOn_lpe1CRA5MF5lDxZGbI3&usqp=CAU',

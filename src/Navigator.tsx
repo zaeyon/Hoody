@@ -19,6 +19,7 @@ import Login from '~/Screens/Login';
 import LocationSearch from '~/Screens/LocationSearch';
 import ImagesPullScreen from '~/Screens/ImagesPullScreen';
 import Gallery from '~/Screens/Gallery';
+import TopNavigator from '~/Screens/TapNavigatorTest';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
@@ -209,6 +210,7 @@ function ProfileStackScreen() {
           headerTitle: (props) => <LoginTitle {...props} />,
         })}
       />
+      <ProfileStack.Screen name="TopNavigator" component={TopNavigator} />
     </ProfileStack.Navigator>
   );
 }

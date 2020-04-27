@@ -1,6 +1,6 @@
 import React from 'react';
 import Styled from 'styled-components/native';
-import {View, Text, FlatList} from 'react-native';
+import {View, Text, FlatList, ScrollView, image, Image} from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -12,6 +12,7 @@ const SearchResultContainer = Styled.View`
 width: ${wp('100%')};
 height: ${hp('100%')};
 background-color:#ffffff;
+padding-bottom: 45px;
 `;
 
 const SearchResultItemImage = Styled.Image`
@@ -27,11 +28,34 @@ margin-bottom: 2px;
 `;
 
 const ResultItemRatingContainer = Styled.View`
+position: absolute;
+bottom: 5px;
+right: 5px;
+width: ${wp('11%')};
+height: ${wp('5%')};
+padding: 6.5px;
+justify-content: space-between;
+align-items: center;
+background-color: 'rgba(52, 52, 52, 0.6)'
+flex-direction: row;
+border-radius: 5px;
+`;
+
+const ResultItemStarImage = Styled.Image`
+width: ${wp('4%')};
+height: ${wp('4%')};
+tint-color: #23E5D2;
+`;
+
+const ResultItemRatingText = Styled.Text`
+font-size: 13px;
+font-family: 'Arita4.0_SB';
+color: #ffffff;
 `;
 
 interface Props {
-  searchData_popular: Array<string>;
-  searchData_latest: Array<string>;
+  searchData_popular?: Array<string>;
+  searchData_latest?: Array<string>;
 }
 
 const SearchResultTopNavigation = ({
@@ -42,21 +66,30 @@ const SearchResultTopNavigation = ({
 
   function PopularityPost() {
     return (
-      <SearchResultContainer>
-        <FlatList
-          data={searchData_popular}
-          numColumns={3}
-          renderItem={({item, index}) => (
-            <SearchResultItemContainer>
-              <SearchResultItemImage
-                source={{
-                  uri: item,
-                }}
-              />
-            </SearchResultItemContainer>
-          )}
-        />
-      </SearchResultContainer>
+      <ScrollView bounces={false} overScrollMode="never">
+        <SearchResultContainer>
+          <FlatList
+            bounces={false}
+            data={searchData_popular}
+            numColumns={3}
+            renderItem={({item, index}) => (
+              <SearchResultItemContainer>
+                <SearchResultItemImage
+                  source={{
+                    uri: item,
+                  }}
+                />
+                <ResultItemRatingContainer>
+                  <ResultItemStarImage
+                    source={require('~/Assets/Images/ic_star.png')}
+                  />
+                  <ResultItemRatingText>4</ResultItemRatingText>
+                </ResultItemRatingContainer>
+              </SearchResultItemContainer>
+            )}
+          />
+        </SearchResultContainer>
+      </ScrollView>
     );
   }
 
@@ -73,6 +106,13 @@ const SearchResultTopNavigation = ({
                   uri: item,
                 }}
               />
+
+              <ResultItemRatingContainer>
+                <ResultItemStarImage
+                  source={require('~/Assets/Images/ic_star.png')}
+                />
+                <ResultItemRatingText>4</ResultItemRatingText>
+              </ResultItemRatingContainer>
             </SearchResultItemContainer>
           )}
         />

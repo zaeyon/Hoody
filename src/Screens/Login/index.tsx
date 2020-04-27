@@ -152,7 +152,7 @@ const Login = ({navigation}) => {
         />
         <SignupText>
           계정이 없는가요?{' '}
-          <SignupLink onPress={() => navigation.navigate('Signup')}>
+          <SignupLink onPress={() => navigation.navigate('TopNavigator')}>
             가입하기.
           </SignupLink>
         </SignupText>

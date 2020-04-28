@@ -457,6 +457,7 @@ function Upload({route, navigation}) {
 
   const ratingCompleted = (rating) => {
     setCurrentRating(rating);
+    console.log(rating);
   };
 
   const ratingRevised = (rating) => {
@@ -693,6 +694,7 @@ function Upload({route, navigation}) {
                       onFinishRating={ratingCompleted}
                       style={{paddingVertical: 0, marginLeft: 3}}
                       imageSize={27}
+                      fractions={1}
                       readonly={!ratingAbled}
                       startingValue={0}
                     />
@@ -742,7 +744,8 @@ function Upload({route, navigation}) {
                   renderItem={({item, index}) => {
                     if (index == imageUrl_arr.length - 1) {
                       return (
-                        <SelectedImageTouch onPress={() => navigation.navigate('Gallery')}>
+                        <SelectedImageTouch
+                          onPress={() => navigation.navigate('Gallery')}>
                           <SelectedImageContainer>
                             <EmptyImage source={{uri: item}} />
                           </SelectedImageContainer>
@@ -899,6 +902,7 @@ function Upload({route, navigation}) {
                       type="custom"
                       onFinishRating={ratingRevised}
                       style={{paddingVertical: 0, marginLeft: 3}}
+                      fractions={10}
                       imageSize={27}
                       readonly={!revisingTagRatingChecked}
                       startingValue={revisingTagRating}

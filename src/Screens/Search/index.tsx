@@ -13,7 +13,7 @@ import {
 } from 'react-native-responsive-screen';
 import TagInfoItem from '~/Components/TagInfoItem';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import SearchResultTopNavigation from '~/Components/SearchResultTopNavigation';
+import SearchResult from '~/Components/SearchResult';
 
 const Container = Styled.SafeAreaView`
  background-color: #FFFFFF;
@@ -139,21 +139,11 @@ const TagDeleteContainer = Styled.View`
  height: ${wp('4%')};
 `;
 
-const TagItemContainer = Styled.View`
-background-color: #ffffff;
-padding-left: 5px;
-padding-right: 5px;
-padding-bottom: 5px;
-border-bottom-width: 0.5px;
-border-color: #eeeeee;
-width: 100%;
-`;
-
 const TagSearchResultContainer = Styled.View`
 top: ${hp('10%')};
 bottom: 0px;
 position: absolute;
-background-color: #000000;
+background-color: #ffffff;
 width: 100%;
 `;
 
@@ -348,23 +338,8 @@ class Search extends Component<Props> {
         </Animated.View>
         {this.state.searchedTag_arr[0] && (
           <TagSearchResultContainer>
-            <TagItemContainer>
-              <FlatList
-                data={this.state.searchedTag_arr}
-                horizontal={true}
-                showsHorizontalScrollIndicator={false}
-                renderItem={({item, index}) => (
-                  <TagInfoItemContainer>
-                    <TagInfoItem
-                      tagName={item}
-                      tagReviewCount={234}
-                      tagRatingAverage={4.5}
-                      tagThumbnail={''}></TagInfoItem>
-                  </TagInfoItemContainer>
-                )}
-              />
-            </TagItemContainer>
-            <SearchResultTopNavigation
+            <SearchResult
+              searchedTag_arr={this.state.searchedTag_arr}
               searchData_popular={this.state.searchResult_popular_arr}
               searchData_latest={this.state.searchResult_latest_arr}
             />

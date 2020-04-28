@@ -14,6 +14,7 @@ import {
 import TagInfoItem from '~/Components/TagInfoItem';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import SearchResult from '~/Components/SearchResult';
+import {BoxShadow} from 'react-native-shadow';
 
 const Container = Styled.SafeAreaView`
  background-color: #FFFFFF;
@@ -170,6 +171,17 @@ margin-bottom: 2px;
 
 const ResultItemRatingContainer = Styled.View`
 `;
+
+const headerShadow = {
+  width: wp('100%'),
+  height: 1,
+  color: '#000000',
+  border: 3,
+  radius: 0,
+  opacity: 0.1,
+  x: 0,
+  y: 0.5,
+};
 
 type Props = {navigation};
 

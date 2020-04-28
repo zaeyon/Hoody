@@ -1,12 +1,13 @@
 import React from 'react';
 import Styled from 'styled-components/native';
 import {Dimensions} from 'react-native';
-import {SliderBox} from 'react-native-image-slider-box';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import {FlatList} from 'react-native-gesture-handler';
+
+import {SliderBox} from '~/Components/SliderBox';
 
 const Container = Styled.View`
    flex: 1;

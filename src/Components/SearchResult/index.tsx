@@ -3,14 +3,17 @@ import Styled from 'styled-components/native';
 import {
   FlatList,
   Text,
+  View,
   ScrollView,
   TouchableWithoutFeedback,
+  BackHandler,
 } from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import {BoxShadow} from 'react-native-shadow';
 
 import TagInfoItem from '~/Components/TagInfoItem';
 import FeedItem from '~/Components/SearchResultFeedListItem';
@@ -85,7 +88,7 @@ top: 0px;
 bottom: 0px;
 background-color:#ffffff;
 width: ${wp('100%')};
-height: ${hp('100%')};
+margin-bottom: 44px;
 `;
 
 const FeedDetailList_DATA = [
@@ -153,6 +156,22 @@ const SearchResult = ({
 }: Props) => {
   const [openFeedDetail, setOpenFeedDetail] = useState<boolean>(false);
   const PostTab = createMaterialTopTabNavigator();
+
+  useEffect(() => {
+    const backAction = () => {
+      if (openFeedDetail) {
+        setOpenFeedDetail(false);
+        return true;
+      }
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, [openFeedDetail]);
 
   function PopularityPost() {
     return (
@@ -245,6 +264,9 @@ const SearchResult = ({
       </PostTab.Navigator>
       {openFeedDetail && (
         <FeedDetailListContainer>
+          <View
+            style={{width: wp('100%'), height: 0.5, backgroundColor: '#eeeeee'}}
+          />
           <FlatList
             data={FeedDetailList_DATA}
             renderItem={({item, index}) => (

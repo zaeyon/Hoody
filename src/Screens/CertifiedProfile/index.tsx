@@ -137,27 +137,6 @@ function CertifiedProfile({navigation}) {
           tags="#을지로 #홍대입구 #신촌"
         />
       </ProfileContainer>
-      <TouchableWithoutFeedback
-        onPress={() => navigation.navigate('PinterMap')}>
-        <PinterMapContainer>
-          <PinterMapHeaderContainer>
-            <PinterMapText>핀터맵</PinterMapText>
-            <ViewAllText>View All</ViewAllText>
-          </PinterMapHeaderContainer>
-          <MapViewContainer>
-            <MapView
-              style={{height: 200}}
-              provider={PROVIDER_GOOGLE}
-              initialRegion={{
-                latitude: 37.78825,
-                longitude: -122.4324,
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421,
-              }}
-            />
-          </MapViewContainer>
-        </PinterMapContainer>
-      </TouchableWithoutFeedback>
       <ReviewHeaderContainer>
         <ReviewText>리뷰</ReviewText>
         <ViewAllText>View All</ViewAllText>
@@ -178,3 +157,24 @@ function CertifiedProfile({navigation}) {
 }
 
 export default CertifiedProfile;
+
+/*
+<PinterMapContainer>
+          <PinterMapHeaderContainer>
+            <PinterMapText>핀터맵</PinterMapText>
+            <ViewAllText>View All</ViewAllText>
+          </PinterMapHeaderContainer>
+          <MapViewContainer>
+            <MapView
+              style={{height: 200}}
+              provider={PROVIDER_GOOGLE}
+              initialRegion={{
+                latitude: 37.78825,
+                longitude: -122.4324,
+                latitudeDelta: 0.0922,
+                longitudeDelta: 0.0421,
+              }}
+            />
+          </MapViewContainer>
+        </PinterMapContainer>
+        */

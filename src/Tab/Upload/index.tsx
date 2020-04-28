@@ -137,11 +137,62 @@ const RatingContainer = Styled.View`
   width: ${wp('50%')};
 `;
 
-const RocationContainer = Styled.View`
+const PriceContainer = Styled.View`
 border-bottom-width: 0.3px;
 border-color: #cccccc;
-padding: 0px 15px;
+padding: 0px 5px;
 height: ${hp('5.5%')};
+flex-direction: row;
+align-items: center;
+justify-content: space-between;
+`;
+
+const PriceCheckContainer = Styled.View`
+ width: ${hp('2.5%')};
+ height: ${hp('2.5%')};
+ border-radius: 3px;
+ border-width: 2px;
+ border-color: #cccccc;
+ align-items: center;
+ justify-content :center;
+`;
+
+const CheckIconImage = Styled.Image`
+ position: absolute;
+ bottom: 0px;
+ width: ${hp('2.5%')};
+ height: ${hp('2.5%')};
+ tint-color: #c3c3c3;
+`;
+
+const PriceInput = Styled.TextInput`
+ width: 50px;
+ font-size: 13px;
+ font-family: 'Arita4.0_M';
+ color: #707070;
+ height: 40px;
+ 
+`;
+
+const WonText = Styled.Text`
+font-size: 13px;
+font-family: 'Arita4.0_M';
+color: #707070;
+`;
+
+const LocationIconImage = Styled.Image`
+ width: ${hp('2.5%')};
+ height: ${hp('2.5%')};
+ tint-color: #cccccc;
+`;
+
+const LocationContainer = Styled.View`
+border-bottom-width: 0.3px;
+border-color: #cccccc;
+padding: 0px 5px;
+height: ${hp('5.5%')};
+align-items: center;
+flex-direction: row;
 `;
 
 const TagContainer = Styled.View`
@@ -154,11 +205,12 @@ flex-direction: column;
 const InsertTagContainer = Styled.View`
  height: ${hp('5.3%')};
  width: ${wp('94%')};
- justify-content: center;
+ align-items: center;
  align-self: center;
- padding-left: 10px;
+ padding-left: 7px;
  border-top-width: 0.3px;
  border-color: #cccccc;
+ flex-direction: row;
 `;
 
 const InsertedTagText = Styled.Text`
@@ -371,6 +423,7 @@ function Upload({route, navigation}) {
   const [reviewContent, setReviewContent] = useState<string>();
   const [currentLocation, setCurrentLocation] = useState<string>();
   const [selectedPhoto, setSelectedPhoto] = useState([]);
+  const [checkedPrice, setCheckedPrice] = useState<boolean>();
 
   React.useEffect(() => {
     if (route.params?.placeName) {
@@ -599,6 +652,14 @@ function Upload({route, navigation}) {
     }
   };
 
+  const setPriceCheck = () => {
+    if (checkedPrice) {
+      setCheckedPrice(false);
+    } else {
+      setCheckedPrice(true);
+    }
+  };
+
   const deleteTag = (index) => {
     var deletedArray = tagRatingList;
     deletedArray.splice(index, 1);
@@ -790,8 +851,21 @@ function Upload({route, navigation}) {
             <TagContainer>
               <TouchableOpacity onPress={() => addTagTextClick()}>
                 <InsertTagContainer>
-                  <Text style={{color: '#707070', fontFamily: 'Arita4.0_L'}}>
-                    # 태그 추가
+                  <Text
+                    style={{
+                      color: '#CCCCCC',
+                      fontFamily: 'Arita4.0_SB',
+                      fontSize: 19,
+                    }}>
+                    #
+                  </Text>
+                  <Text
+                    style={{
+                      color: '#707070',
+                      fontFamily: 'Arita4.0_L',
+                      marginLeft: 6,
+                    }}>
+                    태그 추가
                   </Text>
                 </InsertTagContainer>
               </TouchableOpacity>
@@ -830,16 +904,56 @@ function Upload({route, navigation}) {
                 )}
               />
             </TagContainer>
-            <RocationContainer>
+            <PriceContainer>
+              <View style={{flexDirection: 'row'}}>
+                <TouchableWithoutFeedback onPress={() => setPriceCheck()}>
+                  <PriceCheckContainer>
+                    {checkedPrice && (
+                      <CheckIconImage
+                        source={require('~/Assets/Images/ic_check2.png')}
+                      />
+                    )}
+                  </PriceCheckContainer>
+                </TouchableWithoutFeedback>
+                <Text
+                  style={{
+                    color: '#707070',
+                    fontFamily: 'Arita4.0_L',
+                    marginLeft: 7,
+                  }}>
+                  소비 금액
+                </Text>
+              </View>
+              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <PriceInput editable={checkedPrice} />
+                <View
+                  style={{
+                    width: 50,
+                    height: 0.5,
+                    backgroundColor: '#707070',
+                    position: 'absolute',
+                    bottom: 13,
+                  }}
+                />
+                <WonText>원</WonText>
+              </View>
+            </PriceContainer>
+            <LocationContainer>
+              <LocationIconImage
+                source={require('~/Assets/Images/ic_location.png')}
+              />
               <TouchableOpacity
                 onPress={() => navigation.navigate('LocationSearch')}>
-                <RocationInput
-                  placeholder="위치 추가"
-                  editable={false}
-                  value={route.params?.placeName}
-                />
+                <Text
+                  style={{
+                    color: '#707070',
+                    fontFamily: 'Arita4.0_L',
+                    marginLeft: 7,
+                  }}>
+                  위치 추가
+                </Text>
               </TouchableOpacity>
-            </RocationContainer>
+            </LocationContainer>
             <CommentContainer>
               <CommentInput
                 placeholder="comment ..."

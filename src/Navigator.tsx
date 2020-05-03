@@ -20,6 +20,7 @@ import LocationSearch from '~/Screens/LocationSearch';
 import ImagesPullScreen from '~/Screens/ImagesPullScreen';
 import Gallery from '~/Screens/Gallery';
 import TopNavigator from '~/Screens/TapNavigatorTest';
+import Gallery2 from '~/Screens/Gallery2';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
@@ -145,6 +146,16 @@ function UploadStackScreen() {
       <UploadStack.Screen
         name="Gallery"
         component={Gallery}
+        options={{
+          transitionSpec: {
+            open: config,
+            close: config,
+          },
+        }}
+      />
+      <UploadStack.Screen
+        name="Gallery2"
+        component={Gallery2}
         options={{
           transitionSpec: {
             open: config,

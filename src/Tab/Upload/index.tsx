@@ -398,7 +398,13 @@ const options = {
 
 function Upload({route, navigation}) {
   const [imageUrl_arr, setImageUrl_arr] = useState([
-    'https://firebasestorage.googleapis.com/v0/b/hooging-f33b0.appspot.com/o/zz.png?alt=media&token=eb26a783-c54b-4205-bab6-5357e103aef4',
+    {
+      filename: 'as',
+      height: 1000,
+      uri:
+        'https://firebasestorage.googleapis.com/v0/b/hooging-f33b0.appspot.com/o/zz.png?alt=media&token=eb26a783-c54b-4205-bab6-5357e103aef4',
+      width: 1000,
+    },
   ]);
   // State를 이용하여 Modal을 제어함
   const [modalVisible, setModalVisible] = useState<boolean>(false);
@@ -430,7 +436,39 @@ function Upload({route, navigation}) {
     }
   }, [route.params?.placeName]);
 
+  useEffect(() => {
+    console.log('사진선택');
+    if (route.params?.selectedImages) {
+      /*
+      console.log('route.params.selectedImages', route.params.selectedImages);
+      var selectedImage_arr = new Array();
+      for (var i = 0; i < route.params.selectedImages.length; i++) {
+        selectedImage_arr[i] = route.params.selectedImages[i].uri;
+        console.log('selectedImage_arr[i]', selectedImage_arr[i]);
+
+        if (i === route.params.selectedImages.length - 1) {
+          selectedImage_arr.push(
+            'https://firebasestorage.googleapis.com/v0/b/hooging-f33b0.appspot.com/o/zz.png?alt=media&token=eb26a783-c54b-4205-bab6-5357e103aef4',
+          );
+          setImageUrl_arr(selectedImage_arr);
+        }
+      }
+      selectedImage_arr = imageUrl_arr.slice(0, imageUrl_arr.length - 1);
+    */
+      var imageSelectButton = {
+        filename: 'imageSelect',
+        height: null,
+        uri:
+          'https://firebasestorage.googleapis.com/v0/b/hooging-f33b0.appspot.com/o/zz.png?alt=media&token=eb26a783-c54b-4205-bab6-5357e103aef4',
+        width: null,
+      };
+      route.params.selectedImages.push(imageSelectButton);
+      setImageUrl_arr(route.params.selectedImages);
+    }
+  }, [route.params?.selectedImages]);
+
   const openGallery = () => {
+    /*
     ImagePicker.launchImageLibrary(options, (response) => {
       if (response.error) {
         console.log('LaunchImageLibrary Error: ', response.error);
@@ -448,6 +486,12 @@ function Upload({route, navigation}) {
         newPhoto_arr.push(response);
         setSelectedPhoto(newPhoto_arr);
       }
+    });
+    */
+    var _images = imageUrl_arr;
+    _images.pop();
+    navigation.navigate('Gallery', {
+      imagesObj: _images,
     });
   };
 
@@ -805,10 +849,9 @@ function Upload({route, navigation}) {
                   renderItem={({item, index}) => {
                     if (index == imageUrl_arr.length - 1) {
                       return (
-                        <SelectedImageTouch
-                          onPress={() => navigation.navigate('Gallery')}>
+                        <SelectedImageTouch onPress={() => openGallery()}>
                           <SelectedImageContainer>
-                            <EmptyImage source={{uri: item}} />
+                            <EmptyImage source={{uri: item.uri}} />
                           </SelectedImageContainer>
                         </SelectedImageTouch>
                       );
@@ -825,7 +868,7 @@ function Upload({route, navigation}) {
                                 imageIndex: index,
                               })
                             }>
-                            <SelectedImage source={{uri: item}} />
+                            <SelectedImage source={{uri: item.uri}} />
                           </TouchableWithoutFeedback>
                           <TouchableWithoutFeedback
                             onPress={() => deleteImage(index)}>

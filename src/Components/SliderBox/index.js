@@ -34,7 +34,7 @@ export class SliderBox extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentImage: 0,
+      currentImage: this.props.imageIndex,
       loading: [],
     };
     this.onCurrentImagePressedHandler = this.onCurrentImagePressedHandler.bind(
@@ -124,9 +124,11 @@ export class SliderBox extends Component {
       inactiveDotColor,
       paginationBoxStyle,
       paginationBoxVerticalPadding,
+      imageIndex,
     } = this.props;
     return (
       <Pagination
+        firstItem={imageIndex}
         borderRadius={2}
         dotsLength={images.length}
         activeDotIndex={currentImage}
@@ -156,10 +158,12 @@ export class SliderBox extends Component {
       autoplay,
       parentWidth,
       loopClonesPerSide,
+      imageIndex,
     } = this.props;
     return (
       <View>
         <Carousel
+          firstItem={imageIndex}
           layout={'default'}
           inactiveSlideScale={1}
           inactiveSlideOpacity={1}

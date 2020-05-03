@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import Styled from 'styled-components/native';
 import {BackHandler} from 'react-native';
 import Swiper from 'react-native-swipe-image';
-import {SliderBox} from 'react-native-image-slider-box';
+import {SliderBox} from '~/Components/SliderBox';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,

@@ -92,20 +92,7 @@ class ImageItem extends Component {
   handleClick(item) {
     this.props.onClick(item);
     console.log('item @@:', item);
-    console.log('selectd @@', this.props.selected);
-
-    console.log('setState전:', this.state.selectedImages_arr);
-
-    let newImage_arr = this.state.selectedImages_arr;
-    let newImage_arr2 = newImage_arr.slice(0);
-    newImage_arr.push(item);
-    console.log('ASDADASD', newImage_arr);
-
-    this.setState({
-      selectedImages_arr: newImage_arr,
-    });
-
-    console.log('setState후:', this.state.selectedImages_arr);
+    this.props.navigation.navigate('ProfileInput', {profileImage: item.uri});
   }
 
   render() {
@@ -121,15 +108,11 @@ class ImageItem extends Component {
 
     return (
       <View style={{marginBottom: 2, marginRight: 2}}>
-        <Image
-          source={{uri: image.uri}}
-          style={{height: wp('33%'), width: wp('33%')}}
-        />
         <TouchableWithoutFeedback onPress={() => this.handleClick(image)}>
-          <SelectButtonContainer>
-            <ImageUnselectedButton />
-            {selected ? marker : null}
-          </SelectButtonContainer>
+          <Image
+            source={{uri: image.uri}}
+            style={{height: wp('33%'), width: wp('33%')}}
+          />
         </TouchableWithoutFeedback>
       </View>
     );

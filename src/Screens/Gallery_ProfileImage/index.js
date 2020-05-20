@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
   BackHandler,
   TouchableWithoutFeedback,
+  Image,
 } from 'react-native';
 import {
   widthPercentageToDP as wp,
@@ -90,7 +91,7 @@ const nEveryRow = (data, n) => {
   return result;
 };
 
-class Gallery extends Component {
+class Gallery_ProfileImage extends Component {
   constructor(props) {
     super(props);
 
@@ -124,9 +125,6 @@ class Gallery extends Component {
       'hardwareBackPress',
       this._backAction,
     );
-    this.setState({
-      selected: this.props.route.params.imagesObj,
-    });
     const params = {
       assetType: 'All',
     };
@@ -262,16 +260,18 @@ class Gallery extends Component {
     const isSelected = arrayObjectIndexOf(selected, 'uri', uri) >= 0;
 
     return (
-      <ImageItem
-        key={uri}
-        item={item}
-        selected={isSelected}
-        imageMargin={imageMargin}
-        selectedMarker={selectedMarker}
-        imagesPerRow={imagesPerRow}
-        containerWidth={containerWidth}
-        onClick={this.selectImage}
-      />
+      <TouchableWithoutFeedback onPress={() => console.log('이미지선택')}>
+        <ImageItem
+          key={uri}
+          item={item}
+          selected={isSelected}
+          imageMargin={imageMargin}
+          selectedMarker={selectedMarker}
+          imagesPerRow={imagesPerRow}
+          containerWidth={containerWidth}
+          onClick={this.selectImage}
+        />
+      </TouchableWithoutFeedback>
     );
   }
 
@@ -285,6 +285,7 @@ class Gallery extends Component {
 
     return (
       <Row
+        navigation={this.props.navigation}
         rowData={item}
         isSelected={isSelected}
         selectImage={this.selectImage}
@@ -380,7 +381,7 @@ class Gallery extends Component {
   }
 }
 
-Gallery.propTypes = {
+Gallery_ProfileImage.propTypes = {
   initialNumToRender: PropTypes.number,
   groupTypes: PropTypes.oneOf([
     'Album',
@@ -406,7 +407,7 @@ Gallery.propTypes = {
   loader: PropTypes.node,
 };
 
-Gallery.defaultProps = {
+Gallery_ProfileImage.defaultProps = {
   initialNumToRender: 5,
   groupTypes: 'SavedPhotos',
   maximum: 15,
@@ -423,4 +424,4 @@ Gallery.defaultProps = {
   emptyText: 'No photos.',
 };
 
-export default Gallery;
+export default Gallery_ProfileImage;

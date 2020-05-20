@@ -24,6 +24,6 @@ const Profile = ({navigation}) => {
   }
 */
   }
-  return <CertifiedProfile navigation={navigation} />;
+  return <Login navigation={navigation} />;
 };
 export default Profile;

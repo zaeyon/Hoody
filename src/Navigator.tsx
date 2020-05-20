@@ -19,8 +19,10 @@ import Login from '~/Screens/Login';
 import LocationSearch from '~/Screens/LocationSearch';
 import ImagesPullScreen from '~/Screens/ImagesPullScreen';
 import Gallery from '~/Screens/Gallery';
-import TopNavigator from '~/Screens/TapNavigatorTest';
-import Gallery2 from '~/Screens/Gallery2';
+import Gallery_ProfileImage from '~/Screens/Gallery_ProfileImage';
+import Signup from '~/Screens/Signup';
+import ProfileInput from '~/Screens/Signup/profileInput';
+import ImageItem from '~/Screens/Gallery_ProfileImage/ImageItem';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
@@ -28,6 +30,7 @@ const FeedStack = createStackNavigator();
 const UploadStack = createStackNavigator();
 const AlarmStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
+const AuthStack = createStackNavigator();
 
 function FeedTitle() {
   return (
@@ -49,6 +52,18 @@ function ProfileTitle() {
 
 function LoginTitle() {
   return <Text style={{fontSize: 17, fontFamily: 'Arita4.0_M'}}>로그인</Text>;
+}
+
+function SignupTitle() {
+  return (
+    <Text style={{fontSize: 17, fontFamily: 'Arita4.0_M'}}>회원 가입</Text>
+  );
+}
+
+function ProfileInputTitle() {
+  return (
+    <Text style={{fontSize: 17, fontFamily: 'Arita4.0_M'}}>회원 가입</Text>
+  );
 }
 
 function SearchLocationTitle() {
@@ -153,16 +168,6 @@ function UploadStackScreen() {
           },
         }}
       />
-      <UploadStack.Screen
-        name="Gallery2"
-        component={Gallery2}
-        options={{
-          transitionSpec: {
-            open: config,
-            close: config,
-          },
-        }}
-      />
     </UploadStack.Navigator>
   );
 }
@@ -191,6 +196,7 @@ function AlarmStackScreen() {
 function ProfileStackScreen() {
   return (
     <ProfileStack.Navigator
+      headerMode="none"
       screenOptions={{
         headerStyle: {
           height: 47,
@@ -221,10 +227,62 @@ function ProfileStackScreen() {
           headerTitle: (props) => <LoginTitle {...props} />,
         })}
       />
-      <ProfileStack.Screen name="TopNavigator" component={TopNavigator} />
+      <ProfileStack.Screen
+        name="Signup"
+        component={Signup}
+        options={({navigation, route}) => ({
+          headerTitle: (props) => <SignupTitle {...props} />,
+          transitionSpec: {
+            open: config,
+            close: config,
+          },
+        })}
+      />
+      <ProfileStack.Screen
+        name="ProfileInput"
+        component={ProfileInput}
+        options={({navigation, route}) => ({
+          headerTitle: (props) => <ProfileInputTitle {...props} />,
+          transitionSpec: {
+            open: config,
+            close: config,
+          },
+        })}
+      />
+      <ProfileStack.Screen
+        name="Gallery_ProfileImage"
+        component={Gallery_ProfileImage}
+        options={{
+          transitionSpec: {
+            open: config,
+            close: config,
+          },
+          headerShown: false,
+        }}
+      />
+      <ProfileStack.Screen
+        name="ImageItem"
+        component={ImageItem}
+        options={{
+          transitionSpec: {
+            open: config,
+            close: config,
+          },
+          headerShown: false,
+        }}
+      />
     </ProfileStack.Navigator>
   );
 }
+/*
+function AuthStackScreen() {
+  return (
+    <AuthStack.Navigator>
+      <AuthStack.Screen name="Initial"
+    </AuthStack.Navigator>
+  )
+}
+*/
 
 function Navigator() {
   return (
@@ -240,10 +298,14 @@ function Navigator() {
           options={{
             tabBarIcon: ({focused}: {focused: boolean}) => (
               <Image
+                style={{width: 22, height: 22}}
                 source={
+                  /*
                   focused
                     ? require('~/Assets/Images/Tabs/ic_home.png')
                     : require('~/Assets/Images/Tabs/ic_home_outline.png')
+                */
+                  require('~/Assets/Images/Tabs/ic_homeTap.png')
                 }
               />
             ),
@@ -255,10 +317,14 @@ function Navigator() {
           options={{
             tabBarIcon: ({focused}: {focused: boolean}) => (
               <Image
+                style={{width: 22, height: 22}}
                 source={
-                  focused
-                    ? require('~/Assets/Images/Tabs/ic_feed.png')
-                    : require('~/Assets/Images/Tabs/ic_feed_outline.png')
+                  /*
+                focused
+                  ? require('~/Assets/Images/Tabs/ic_home.png')
+                  : require('~/Assets/Images/Tabs/ic_home_outline.png')
+              */
+                  require('~/Assets/Images/Tabs/ic_feedTap.png')
                 }
               />
             ),
@@ -270,10 +336,14 @@ function Navigator() {
           options={{
             tabBarIcon: ({focused}: {focused: boolean}) => (
               <Image
+                style={{width: 22, height: 22}}
                 source={
-                  focused
-                    ? require('~/Assets/Images/Tabs/ic_add.png')
-                    : require('~/Assets/Images/Tabs/ic_add_outline.png')
+                  /*
+                focused
+                  ? require('~/Assets/Images/Tabs/ic_home.png')
+                  : require('~/Assets/Images/Tabs/ic_home_outline.png')
+              */
+                  require('~/Assets/Images/Tabs/ic_uploadTap.png')
                 }
               />
             ),
@@ -287,10 +357,14 @@ function Navigator() {
           options={{
             tabBarIcon: ({focused}: {focused: boolean}) => (
               <Image
+                style={{width: 22, height: 22}}
                 source={
-                  focused
-                    ? require('~/Assets/Images/Tabs/ic_alarm.png')
-                    : require('~/Assets/Images/Tabs/ic_alarm_outline.png')
+                  /*
+                focused
+                  ? require('~/Assets/Images/Tabs/ic_home.png')
+                  : require('~/Assets/Images/Tabs/ic_home_outline.png')
+              */
+                  require('~/Assets/Images/Tabs/ic_alarmTap.png')
                 }
               />
             ),
@@ -302,10 +376,14 @@ function Navigator() {
           options={{
             tabBarIcon: ({focused}: {focused: boolean}) => (
               <Image
+                style={{width: 22, height: 22}}
                 source={
-                  focused
-                    ? require('~/Assets/Images/Tabs/ic_profile.png')
-                    : require('~/Assets/Images/Tabs/ic_profile_outline.png')
+                  /*
+                focused
+                  ? require('~/Assets/Images/Tabs/ic_home.png')
+                  : require('~/Assets/Images/Tabs/ic_home_outline.png')
+              */
+                  require('~/Assets/Images/Tabs/ic_profileTap.png')
                 }
               />
             ),

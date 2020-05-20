@@ -1,12 +1,22 @@
 import React, {useEffect, useState} from 'react';
 import Styled from 'styled-components/native';
 import {Keyboard, Button, Text} from 'react-native';
-import Input from '~/Components/Input';
 import LoginButton from '~/Components/Button';
 import axios from 'axios';
 import {resolvePlugin} from '@babel/core';
 import {useSelector, useDispatch} from 'react-redux';
 import allActions from '~/action';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
+
+const Input = Styled.TextInput`
+position: relative;
+top: 5px;
+width: ${wp('80%')};
+height: 50px;
+`;
 
 const Container = Styled.SafeAreaView`
   flex: 1;
@@ -132,12 +142,12 @@ const Login = ({navigation}) => {
       <FormContainer>
         <Logo>HOOGING</Logo>
         <Input
-          style={{marginBottom: 16}}
+          style={{marginBottom: 16, borderBottomWidth: 0.3}}
           placeholder="이메일"
           onChangeText={(text: string) => setEmail(text)}
         />
         <Input
-          style={{marginBottom: 16}}
+          style={{marginBottom: 16, borderBottomWidth: 0.3}}
           placeholder="비밀번호"
           secureTextEntry={true}
           onChangeText={(text: string) => setPassword(text)}
@@ -152,7 +162,7 @@ const Login = ({navigation}) => {
         />
         <SignupText>
           계정이 없는가요?{' '}
-          <SignupLink onPress={() => navigation.navigate('TopNavigator')}>
+          <SignupLink onPress={() => navigation.navigate('Signup')}>
             가입하기.
           </SignupLink>
         </SignupText>

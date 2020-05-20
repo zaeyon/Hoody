@@ -1,0 +1,15 @@
+{
+    "dev": {
+        "awscloudformation": {
+            "AuthRoleName": "amplify-hoogingapp-dev-135427-authRole",
+            "UnauthRoleArn": "arn:aws:iam::751612718299:role/amplify-hoogingapp-dev-135427-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::751612718299:role/amplify-hoogingapp-dev-135427-authRole",
+            "Region": "ap-northeast-2",
+            "DeploymentBucketName": "amplify-hoogingapp-dev-135427-deployment",
+            "UnauthRoleName": "amplify-hoogingapp-dev-135427-unauthRole",
+            "StackName": "amplify-hoogingapp-dev-135427",
+            "StackId": "arn:aws:cloudformation:ap-northeast-2:751612718299:stack/amplify-hoogingapp-dev-135427/060f1c60-9a56-11ea-8cd8-06435d7b912e",
+            "AmplifyAppId": "d1byog18g308im"
+        }
+    }
+}

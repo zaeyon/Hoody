@@ -1,11 +1,10 @@
-import React, {useLayoutEffect, useState} from 'react';
+import React, {useState, useLayoutEffect} from 'react';
 import Styled from 'styled-components/native';
-import {Text, Button, TouchableWithoutFeedback, TextInput} from 'react-native';
+import {TouchableWithoutFeedback} from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import Amplify, {Auth} from 'aws-amplify';
 
 const Container = Styled.View`
  flex: 1;
@@ -70,17 +69,13 @@ const HeaderTitle = Styled.Text`
 font-size: 17px;
 `;
 
-const Signup = ({navigation}) => {
+const BasicInput = ({navigation}) => {
   const [email2, setEmail2] = useState('');
   const [password2, setPassword2] = useState('');
   const [inputedEmail, setInputedEmail] = useState('');
 
   const moveToProfileInput = () => {
     console.log('inputedEmail', inputedEmail);
-    navigation.navigate('ProfileInput', {
-      signup_email: inputedEmail,
-      signup_password: password2,
-    });
   };
 
   useLayoutEffect(() => {
@@ -95,14 +90,7 @@ const Signup = ({navigation}) => {
 
   return (
     <Container>
-      <Header>
-        <HeaderTitle>취소</HeaderTitle>
-        <HeaderTitle>회원가입</HeaderTitle>
-        <TouchableWithoutFeedback onPress={() => moveToProfileInput()}>
-          <HeaderTitle>다음</HeaderTitle>
-        </TouchableWithoutFeedback>
-      </Header>
-      <InputContainer style={{marginTop: 100}}>
+      <InputContainer style={{marginTop: 0}}>
         <LabelInputContainer>
           <TextInputLabelText>이메일</TextInputLabelText>
           <Input
@@ -132,4 +120,4 @@ const Signup = ({navigation}) => {
   );
 };
 
-export default Signup;
+export default BasicInput;

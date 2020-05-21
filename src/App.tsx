@@ -10,11 +10,14 @@ import {
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {TextInput} from 'react-native-gesture-handler';
-import Navigator from '~/Navigator';
-import {createStore} from 'redux';
-import {Provider} from 'react-redux';
-import rootReducer from '~/reducers';
 import Amplify, {Auth} from 'aws-amplify';
+import {createStore} from 'redux';
+import {Provider, useSelector} from 'react-redux';
+
+import rootReducer from '~/reducers';
+import Unauthorized from '~/Screens/Unauthorized';
+import AuthUser from '~/Auth';
+import Navigator from '~/Navigator';
 
 Amplify.configure({
   Auth: {

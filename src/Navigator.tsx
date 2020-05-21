@@ -3,6 +3,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
 import {Image, StyleSheet, Text} from 'react-native';
+import {useSelector} from 'react-redux';
 
 import Home from '~/Tab/Home';
 import Feed from '~/Tab/Feed';
@@ -15,14 +16,14 @@ import FeedDetail from '~/Screens/FeedDetail';
 import PinterMap from '~/Screens/PinterMap';
 import UncertifiedProfile from '~/Screens/UncertifiedProfile';
 import CertifiedProfile from '~/Screens/CertifiedProfile';
-import Login from '~/Screens/Login';
 import LocationSearch from '~/Screens/LocationSearch';
 import ImagesPullScreen from '~/Screens/ImagesPullScreen';
 import Gallery from '~/Screens/Gallery';
 import Gallery_ProfileImage from '~/Screens/Gallery_ProfileImage';
-import Signup from '~/Screens/Signup';
-import ProfileInput from '~/Screens/Signup/profileInput';
 import ImageItem from '~/Screens/Gallery_ProfileImage/ImageItem';
+import Unauthorized from '~/Screens/Unauthorized';
+import BasicInput from '~/Screens/SignUp/BasicInput';
+import Auth from '~/Auth';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
@@ -30,7 +31,7 @@ const FeedStack = createStackNavigator();
 const UploadStack = createStackNavigator();
 const AlarmStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
-const AuthStack = createStackNavigator();
+const UnauthStack = createStackNavigator();
 
 function FeedTitle() {
   return (
@@ -69,6 +70,12 @@ function ProfileInputTitle() {
 function SearchLocationTitle() {
   return (
     <Text style={{fontSize: 17, fontFamily: 'Arita4.0_M'}}>위치 검색</Text>
+  );
+}
+
+function BasicInputTitle() {
+  return (
+    <Text style={{fontSize: 17, fontFamily: 'Arita4.0_M'}}>회원 가입</Text>
   );
 }
 
@@ -221,35 +228,6 @@ function ProfileStackScreen() {
         component={CertifiedProfile}
       />
       <ProfileStack.Screen
-        name="Login"
-        component={Login}
-        options={({navigation, route}) => ({
-          headerTitle: (props) => <LoginTitle {...props} />,
-        })}
-      />
-      <ProfileStack.Screen
-        name="Signup"
-        component={Signup}
-        options={({navigation, route}) => ({
-          headerTitle: (props) => <SignupTitle {...props} />,
-          transitionSpec: {
-            open: config,
-            close: config,
-          },
-        })}
-      />
-      <ProfileStack.Screen
-        name="ProfileInput"
-        component={ProfileInput}
-        options={({navigation, route}) => ({
-          headerTitle: (props) => <ProfileInputTitle {...props} />,
-          transitionSpec: {
-            open: config,
-            close: config,
-          },
-        })}
-      />
-      <ProfileStack.Screen
         name="Gallery_ProfileImage"
         component={Gallery_ProfileImage}
         options={{
@@ -274,122 +252,147 @@ function ProfileStackScreen() {
     </ProfileStack.Navigator>
   );
 }
-/*
-function AuthStackScreen() {
+
+function UnauthStackScreen() {
   return (
-    <AuthStack.Navigator>
-      <AuthStack.Screen name="Initial"
-    </AuthStack.Navigator>
-  )
+    <UnauthStack.Navigator>
+      <UnauthStack.Screen
+        name="Unauthorized"
+        component={Unauthorized}
+        options={{
+          transitionSpec: {
+            open: config,
+            close: config,
+          },
+          headerShown: false,
+        }}
+      />
+      <UnauthStack.Screen
+        name="BasicInput"
+        component={BasicInput}
+        options={({navigation, route}) => ({
+          transitionSpec: {
+            open: config,
+            close: config,
+          },
+          headerTitle: (props) => <BasicInputTitle {...props} />,
+        })}
+      />
+    </UnauthStack.Navigator>
+  );
 }
-*/
 
 function Navigator() {
+  const currentUser = useSelector((state) => state.currentUser);
   return (
     <NavigationContainer>
-      <Tab.Navigator
-        tabBarOptions={{
-          showLabel: false,
-          style: styles.tabBar,
-        }}>
-        <Tab.Screen
-          name="Home"
-          component={HomeStackScreen}
-          options={{
-            tabBarIcon: ({focused}: {focused: boolean}) => (
-              <Image
-                style={{width: 22, height: 22}}
-                source={
-                  /*
+      {currentUser.loggedIn ? (
+        <Tab.Navigator
+          tabBarOptions={{
+            showLabel: false,
+            style: styles.tabBar,
+          }}>
+          <Tab.Screen
+            name="Home"
+            component={HomeStackScreen}
+            options={{
+              tabBarIcon: ({focused}: {focused: boolean}) => (
+                <Image
+                  style={{width: 22, height: 22}}
+                  source={
+                    /*
                   focused
                     ? require('~/Assets/Images/Tabs/ic_home.png')
                     : require('~/Assets/Images/Tabs/ic_home_outline.png')
                 */
-                  require('~/Assets/Images/Tabs/ic_homeTap.png')
-                }
-              />
-            ),
-          }}
-        />
-        <Tab.Screen
-          name="Feed"
-          component={FeedStackScreen}
-          options={{
-            tabBarIcon: ({focused}: {focused: boolean}) => (
-              <Image
-                style={{width: 22, height: 22}}
-                source={
-                  /*
+                    require('~/Assets/Images/Tabs/ic_homeTap.png')
+                  }
+                />
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="Feed"
+            component={FeedStackScreen}
+            options={{
+              tabBarIcon: ({focused}: {focused: boolean}) => (
+                <Image
+                  style={{width: 22, height: 22}}
+                  source={
+                    /*
                 focused
                   ? require('~/Assets/Images/Tabs/ic_home.png')
                   : require('~/Assets/Images/Tabs/ic_home_outline.png')
               */
-                  require('~/Assets/Images/Tabs/ic_feedTap.png')
-                }
-              />
-            ),
-          }}
-        />
-        <Tab.Screen
-          name="Upload"
-          component={UploadStackScreen}
-          options={{
-            tabBarIcon: ({focused}: {focused: boolean}) => (
-              <Image
-                style={{width: 22, height: 22}}
-                source={
-                  /*
+                    require('~/Assets/Images/Tabs/ic_feedTap.png')
+                  }
+                />
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="Upload"
+            component={UploadStackScreen}
+            options={{
+              tabBarIcon: ({focused}: {focused: boolean}) => (
+                <Image
+                  style={{width: 22, height: 22}}
+                  source={
+                    /*
                 focused
                   ? require('~/Assets/Images/Tabs/ic_home.png')
                   : require('~/Assets/Images/Tabs/ic_home_outline.png')
               */
-                  require('~/Assets/Images/Tabs/ic_uploadTap.png')
-                }
-              />
-            ),
-            unmountOnBlur: true,
-            tabBarVisible: false,
-          }}
-        />
-        <Tab.Screen
-          name="Alarm"
-          component={AlarmStackScreen}
-          options={{
-            tabBarIcon: ({focused}: {focused: boolean}) => (
-              <Image
-                style={{width: 22, height: 22}}
-                source={
-                  /*
+                    require('~/Assets/Images/Tabs/ic_uploadTap.png')
+                  }
+                />
+              ),
+              unmountOnBlur: true,
+              tabBarVisible: false,
+            }}
+          />
+          <Tab.Screen
+            name="Alarm"
+            component={AlarmStackScreen}
+            options={{
+              tabBarIcon: ({focused}: {focused: boolean}) => (
+                <Image
+                  style={{width: 22, height: 22}}
+                  source={
+                    /*
                 focused
                   ? require('~/Assets/Images/Tabs/ic_home.png')
                   : require('~/Assets/Images/Tabs/ic_home_outline.png')
               */
-                  require('~/Assets/Images/Tabs/ic_alarmTap.png')
-                }
-              />
-            ),
-          }}
-        />
-        <Tab.Screen
-          name="Profile"
-          component={ProfileStackScreen}
-          options={{
-            tabBarIcon: ({focused}: {focused: boolean}) => (
-              <Image
-                style={{width: 22, height: 22}}
-                source={
-                  /*
+                    require('~/Assets/Images/Tabs/ic_alarmTap.png')
+                  }
+                />
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="Profile"
+            component={ProfileStackScreen}
+            options={{
+              tabBarIcon: ({focused}: {focused: boolean}) => (
+                <Image
+                  style={{width: 22, height: 22}}
+                  source={
+                    /*
                 focused
                   ? require('~/Assets/Images/Tabs/ic_home.png')
                   : require('~/Assets/Images/Tabs/ic_home_outline.png')
               */
-                  require('~/Assets/Images/Tabs/ic_profileTap.png')
-                }
-              />
-            ),
-          }}
-        />
-      </Tab.Navigator>
+                    require('~/Assets/Images/Tabs/ic_profileTap.png')
+                  }
+                />
+              ),
+            }}
+          />
+        </Tab.Navigator>
+      ) : (
+        <UnauthStackScreen />
+      )}
     </NavigationContainer>
   );
 }

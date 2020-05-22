@@ -23,7 +23,7 @@ import Gallery_ProfileImage from '~/Screens/Gallery_ProfileImage';
 import ImageItem from '~/Screens/Gallery_ProfileImage/ImageItem';
 import Unauthorized from '~/Screens/Unauthorized';
 import BasicInput from '~/Screens/SignUp/BasicInput';
-import Auth from '~/Auth';
+import ProfileInput from '~/Screens/SignUp/ProfileInput';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
@@ -56,12 +56,6 @@ function LoginTitle() {
 }
 
 function SignupTitle() {
-  return (
-    <Text style={{fontSize: 17, fontFamily: 'Arita4.0_M'}}>회원 가입</Text>
-  );
-}
-
-function ProfileInputTitle() {
   return (
     <Text style={{fontSize: 17, fontFamily: 'Arita4.0_M'}}>회원 가입</Text>
   );
@@ -255,7 +249,7 @@ function ProfileStackScreen() {
 
 function UnauthStackScreen() {
   return (
-    <UnauthStack.Navigator>
+    <UnauthStack.Navigator headerMode="none">
       <UnauthStack.Screen
         name="Unauthorized"
         component={Unauthorized}
@@ -264,7 +258,6 @@ function UnauthStackScreen() {
             open: config,
             close: config,
           },
-          headerShown: false,
         }}
       />
       <UnauthStack.Screen
@@ -275,7 +268,26 @@ function UnauthStackScreen() {
             open: config,
             close: config,
           },
-          headerTitle: (props) => <BasicInputTitle {...props} />,
+        })}
+      />
+      <UnauthStack.Screen
+        name="ProfileInput"
+        component={ProfileInput}
+        options={({navigation, route}) => ({
+          transitionSpec: {
+            open: config,
+            close: config,
+          },
+        })}
+      />
+      <UnauthStack.Screen
+        name="Gallery_ProfileImage"
+        component={Gallery_ProfileImage}
+        options={({navigation, route}) => ({
+          transitionSpec: {
+            open: config,
+            close: config,
+          },
         })}
       />
     </UnauthStack.Navigator>

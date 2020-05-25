@@ -35,7 +35,7 @@ function restHTTPPost(url, data = null) {
   console.log('data: ', data);
   let form = new FormData();
   form.append('email', data.email);
-  form.append('pw', data.pw);
+  form.append('password', data.pw);
   return new Promise(function (resolve, reject) {
     axios
       .post(url, form, {

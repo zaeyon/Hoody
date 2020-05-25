@@ -143,6 +143,11 @@ const BasicInput = ({navigation, route}) => {
 
   const moveToProfileInput = () => {
     console.log('inputedEmail', inputedEmail);
+    console.log('inputedPassword', inputedPassword);
+    navigation.navigate('ProfileInput', {
+      email: inputedEmail,
+      password: inputedPassword,
+    });
   };
 
   function checkEmail(str) {
@@ -286,7 +291,9 @@ const BasicInput = ({navigation, route}) => {
   return (
     <Container>
       <Header>
-        <CloseButton source={require('~/Assets/Images/close.png')} />
+        <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
+          <CloseButton source={require('~/Assets/Images/close.png')} />
+        </TouchableWithoutFeedback>
         <HeaderTitle>회원가입</HeaderTitle>
         <CloseButton
           style={{tintColor: '#ffffff'}}
@@ -299,10 +306,8 @@ const BasicInput = ({navigation, route}) => {
             autoCapitalize="none"
             placeholder="이메일"
             onChangeText={(text: string) => changingEmail(text)}
-            onSubmitEditing={(text: string) =>
-              checkEmail(text.nativeEvent.text)
-            }
-            onEndEditing={(text: string) => checkEmail(text.nativeEvent.text)}
+            onSubmitEditing={(text) => checkEmail(text.nativeEvent.text)}
+            onEndEditing={(text) => checkEmail(text.nativeEvent.text)}
           />
           <InputBottomLine />
           {blankEmail && (
@@ -359,8 +364,7 @@ const BasicInput = ({navigation, route}) => {
         </UnabledFinishButton>
       )}
       {confirmedEmail && confirmedPassword && confirmedPasswordSame && (
-        <TouchableWithoutFeedback
-          onPress={() => navigation.navigate('ProfileInput')}>
+        <TouchableWithoutFeedback onPress={() => moveToProfileInput()}>
           <FinishButton style={{marginBottom: keyboardHeight}}>
             <FinishText>다음</FinishText>
           </FinishButton>

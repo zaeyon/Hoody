@@ -3,14 +3,18 @@ import Styled from 'styled-components/native';
 import {
   TouchableWithoutFeedback,
   View,
+  Text,
   KeyboardAvoidingView,
   Keyboard,
   keyboardEvent,
+  Platform,
 } from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import axios from 'axios';
 
 const Container = Styled.View`
  flex: 1;
@@ -125,12 +129,103 @@ const ProfileImage = Styled.Image`
  border-radius: 100;
 `;
 
+const BirthDateGenderContainer = Styled.View`
+ width: ${wp('85%')};
+ flex-direction: row;
+ justify-content: space-between;
+ align-items: stretch;
+`;
+
+const BirthDateContainer = Styled.View`
+flex-direction: column;
+`;
+
+const BirthDateBox = Styled.View`
+border-radius: 4px;
+border-width: 0.5px;
+border-color: #c3c3c3;
+padding: 5px;
+`;
+
+const BirthDateText = Styled.Text`
+font-size: 18px;
+color: #000000;
+`;
+
+const GenderContainer = Styled.View`
+ flex-direction: column;
+`;
+
+const GenderButtonContainer = Styled.View`
+ flex-direction: row;
+`;
+
+const LabelText = Styled.Text`
+font-size: 15px;
+color:#9E9E9E;
+`;
+
+const GenderButton = Styled.View`
+ width: 55px;
+ height: 35px;
+ margin-right: 6px;
+ border-radius: 4px;
+ justify-content: center;
+ align-items: center;
+ border-width: 0.5px;
+ border-color: #c3c3c3;
+`;
+
+const SelectedGenderButton = Styled.View`
+ width: 55px;
+ height: 35px;
+ margin-right: 6px;
+ border-radius: 4px;
+ justify-content: center;
+ position: absolute;
+ align-items: center;
+ border-width: 0.5px;
+ border-color: #c3c3c3;
+ background-color: #23e5d2;
+`;
+
+const SelectedGenderText = Styled.Text`
+font-size: 18px;
+color: #ffffff;
+`;
+
+const UnselectedGenderText = Styled.Text`
+font-size: 18px;
+color: #000000;
+`;
+
 const ProfileInput = ({navigation, route}) => {
+  let submitingEmail = route.params!.email;
+  let submitingPassword = route.params!.password;
+  let submitingNickname;
+  let submitingBirthDate;
+  let submitingGender;
+
   const [keyboardHeight, setKeyboardHeight] = useState(0);
   const [profileImage, setProfileImage] = useState(
     'https://www.pngitem.com/pimgs/m/30-307416_profile-icon-png-image-free-download-searchpng-employee.png',
   );
   const [inputedNickname, setInputedNickname] = useState('');
+  const [date, setDate] = useState(new Date(1998 - 1 - 3));
+  const [dateStr, setDateStr] = useState('선택');
+  const [mode, setMode] = useState('date');
+  const [show, setShow] = useState(false);
+
+  const [inputedGender, setInputedGender] = useState('');
+  const [selectedGender, setSelectedGender] = useState('');
+  const [selectedMale, setSelectedMale] = useState(false);
+  const [selectedFemale, setSelectedFemale] = useState(false);
+  const [selectedColor, setSelectedColor] = useState('#ffffff');
+  const [selectedColor2, setSelectedColor2] = useState('#ffffff');
+
+  const [confirmedNickname, setConfirmedNickname] = useState(false);
+  const [confirmedBirthDate, setConfirmedBirthDate] = useState(false);
+  const [confirmedGender, setConfirmedGender] = useState(false);
 
   function onKeyboardDidShow(e: KeyboardEvent): void {
     setKeyboardHeight(e.endCoordinates.height);
@@ -140,6 +235,100 @@ const ProfileInput = ({navigation, route}) => {
   function onKeyboardDidHide(): void {
     setKeyboardHeight(0);
   }
+
+  function checkNickname(nickname) {
+    setConfirmedNickname(true);
+    console.log('입력된 nickname', nickname);
+    submitingNickname = nickname;
+  }
+
+  function formatDate(date) {
+    var d = new Date(date),
+      month = '' + (d.getMonth() + 1),
+      day = '' + d.getDate(),
+      year = d.getFullYear();
+
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+
+    return [year, month, day].join('/');
+  }
+
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShow(Platform.OS === 'ios');
+
+    let BirthDate = formatDate(selectedDate || date);
+    console.log('BirthDate', BirthDate);
+    setDate(currentDate);
+    setDateStr(BirthDate.toString());
+    setConfirmedBirthDate(true);
+    submitingBirthDate = BirthDate.toString();
+  };
+
+  const showMode = (currentMode) => {
+    setShow(true);
+    setMode(currentMode);
+  };
+
+  const showDatepicker = () => {
+    showMode('date');
+  };
+
+  const selectMale = () => {
+    setSelectedFemale(false);
+    setSelectedColor2('#ffffff');
+    setSelectedColor('#23e5d2');
+    setSelectedMale(true);
+    setConfirmedGender(true);
+    setInputedGender('male');
+  };
+
+  const selectFemale = () => {
+    setSelectedMale(false);
+    setSelectedColor('#ffffff');
+    setSelectedColor2('#23e5d2');
+    setSelectedFemale(true);
+    setConfirmedGender(true);
+    setInputedGender('female');
+  };
+
+  const signUp = () => {
+    submitingNickname = inputedNickname;
+    submitingBirthDate = dateStr;
+    console.log('inputedGender!!!', inputedGender);
+    submitingGender = inputedGender;
+    console.log('가입요청 email', submitingEmail);
+    console.log('가입요청 password', submitingPassword);
+    console.log('가입요청 nickname', submitingNickname);
+    console.log('가입요청 birthDate', submitingBirthDate);
+    console.log('가입요청 gender', submitingGender);
+    let form = new FormData();
+    const url = 'https://160dfedd.ngrok.io/' + 'auth/signUp';
+    form.append('email', submitingEmail);
+    form.append('password', submitingPassword);
+    form.append('nickname', submitingNickname);
+    form.append('birthDate', submitingBirthDate);
+    form.append('gender', submitingGender);
+    return new Promise(function (resolve, reject) {
+      axios
+        .post(url, form, {
+          //withCredentials: true,
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            Accept: 'application/json',
+          },
+        })
+        .then(function (response) {
+          console.log('response : ', response);
+          resolve(response.data);
+        })
+        .catch(function (error) {
+          console.log('error : ', error);
+          reject(error);
+        });
+    });
+  };
 
   useEffect(() => {
     Keyboard.addListener('keyboardDidShow', onKeyboardDidShow);
@@ -177,27 +366,63 @@ const ProfileInput = ({navigation, route}) => {
         <LabelInputContainer>
           <Input
             placeholder="닉네임"
-            onChangeText={(text: string) => setInputedEmail(text)}
-            onSubmitEditing={(text: string) =>
-              checkEmail(text.nativeEvent.text)
-            }
-            onEndEditing={(text: string) => checkEmail(text.nativeEvent.text)}
+            onChangeText={(text: string) => setInputedNickname(text)}
+            onSubmitEditing={(text) => checkNickname(text.nativeEvent.text)}
+            onEndEditing={(text) => checkNickname(text.nativeEvent.text)}
           />
           <InputBottomLine />
         </LabelInputContainer>
-      </InputContainer>
-      <UnabledFinishButton style={{marginBottom: keyboardHeight}}>
-        <FinishText>완료</FinishText>
-      </UnabledFinishButton>
+        <BirthDateGenderContainer>
+          <BirthDateContainer>
+            <LabelText>생년월일</LabelText>
+            <TouchableWithoutFeedback onPress={() => showDatepicker()}>
+              <BirthDateBox>
+                <BirthDateText>{dateStr}</BirthDateText>
+              </BirthDateBox>
+            </TouchableWithoutFeedback>
+            {show && (
+              <DateTimePicker
+                testID="dateTimePicker"
+                timeZoneOffsetInMinutes={0}
+                value={date}
+                mode={mode}
+                is24Hour={true}
+                display="spinner"
+                onChange={onChange}
+                maximumDate={new Date(2020, 5, 25)}
+              />
+            )}
+          </BirthDateContainer>
+          <GenderContainer>
+            <LabelText>성별</LabelText>
+            <GenderButtonContainer>
+              <TouchableWithoutFeedback onPress={() => selectMale()}>
+                <GenderButton style={{backgroundColor: selectedColor}}>
+                  <UnselectedGenderText>남성</UnselectedGenderText>
+                </GenderButton>
+              </TouchableWithoutFeedback>
 
-      {/*
-        <TouchableWithoutFeedback
-          onPress={() => navigation.navigate('ProfileInput')}>
+              <TouchableWithoutFeedback onPress={() => selectFemale()}>
+                <GenderButton style={{backgroundColor: selectedColor2}}>
+                  <UnselectedGenderText>여성</UnselectedGenderText>
+                </GenderButton>
+              </TouchableWithoutFeedback>
+            </GenderButtonContainer>
+          </GenderContainer>
+        </BirthDateGenderContainer>
+      </InputContainer>
+      {confirmedNickname && confirmedBirthDate && confirmedGender && (
+        <TouchableWithoutFeedback onPress={() => signUp()}>
           <FinishButton style={{marginBottom: keyboardHeight}}>
             <FinishText>완료</FinishText>
           </FinishButton>
         </TouchableWithoutFeedback>
-      */}
+      )}
+      {(!confirmedNickname || !confirmedBirthDate || !confirmedGender) && (
+        <UnabledFinishButton style={{marginBottom: keyboardHeight}}>
+          <FinishText>완료</FinishText>
+        </UnabledFinishButton>
+      )}
     </Container>
   );
 };

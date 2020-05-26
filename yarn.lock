@@ -2377,6 +2377,11 @@
   resolved "https://registry.yarnpkg.com/@react-native-community/eslint-plugin/-/eslint-plugin-1.0.0.tgz#ae9a430f2c5795debca491f15a989fce86ea75a0"
   integrity sha512-GLhSN8dRt4lpixPQh+8prSCy6PYk/MT/mvji/ojAd5yshowDo6HFsimCSTD/uWAdjpUq91XK9tVdTNWfGRlKQA==
 
+"@react-native-community/google-signin@4.0.3":
+  version "4.0.3"
+  resolved "https://registry.yarnpkg.com/@react-native-community/google-signin/-/google-signin-4.0.3.tgz#66fbdd469e5895ec787224334d480c1c867240e8"
+  integrity sha512-0RyMHAPTOejxXuHkcrVLJ9Co1hxG/b1shmtn29QSjZ9W8oLj23gyLhJI4jjca389jToVjr2HsXsDXfNU4CA2Uw==
+
 "@react-native-community/masked-view@0.1.7":
   version "0.1.7"
   resolved "https://registry.yarnpkg.com/@react-native-community/masked-view/-/masked-view-0.1.7.tgz#a65ce0702f55cb67fd777995de6fc7b3e5781903"
@@ -2386,6 +2391,13 @@
   version "5.9.1"
   resolved "https://registry.yarnpkg.com/@react-native-community/netinfo/-/netinfo-5.9.1.tgz#375cf605436a73a30cd674ccdcba1e2c56db0b48"
   integrity sha512-rUMSBgcrzbwGUzz0n5I2C8BR0hTLlVOrHvlXxsdZWNz541BiTo9AONkmZerzFNpk8nxExq99ed/nIzAWHWNoBQ==
+
+"@react-native-seoul/kakao-login@2.4.5":
+  version "2.4.5"
+  resolved "https://registry.yarnpkg.com/@react-native-seoul/kakao-login/-/kakao-login-2.4.5.tgz#9c284eef158875e7d01f2e597529bfac9e7c3539"
+  integrity sha512-q5++U19zcuBbIRTeGk3oLaNwexvTgNCQSdB6AC812uzOrgPOafo8P2SV4sdVNsXywbgK3nuatA6RMF1Ld3llKQ==
+  dependencies:
+    dooboolab-welcome "^1.1.0"
 
 "@react-navigation/bottom-tabs@5.2.5":
   version "5.2.5"
@@ -3967,6 +3979,11 @@ domutils@^1.7.0:
   dependencies:
     dom-serializer "0"
     domelementtype "1"
+
+dooboolab-welcome@^1.1.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/dooboolab-welcome/-/dooboolab-welcome-1.2.0.tgz#295818ce85a8e97dc90c0ec0510b4008e2d722dc"
+  integrity sha512-XgEbjJHAsKLge/e8jtuHsv84Ovg1Gx0GvnOTOmOlVGV1643nduTAkT3fyo/mxKbzvyXBr47RHaJAY4R2toI0UA==
 
 ecc-jsbn@~0.1.1:
   version "0.1.2"

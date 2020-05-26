@@ -15,15 +15,6 @@ const Container = Styled.View`
 const Profile = ({navigation}) => {
   const currentUser = useSelector((state) => state.currentUser);
   // Set an initializing state whilst Firebase connects
-  {
-    /*
-  if (currentUser.loggedIn) {
-    return <CertifiedProfile navigation={navigation} />;
-  } else {
-    return <Login navigation={navigation} />;
-  }
-*/
-  }
-  return <Login navigation={navigation} />;
+  return <CertifiedProfile navigation={navigation} />;
 };
 export default Profile;

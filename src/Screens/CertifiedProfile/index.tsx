@@ -1,11 +1,12 @@
 import React, {useState, useContext, useEffect} from 'react';
 import {
   NativeScrollEvent,
-  Image,
   Dimensions,
   NativeSyntheticEvent,
   ScrollView,
   TouchableWithoutFeedback,
+  Text,
+  View,
 } from 'react-native';
 import Styled from 'styled-components/native';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
@@ -16,6 +17,9 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import {useSelector, useDispatch} from 'react-redux';
+import allActions from '~/action';
+import KakaoLogins from '@react-native-seoul/kakao-login';
 
 const ProfileContainer = Styled.View`
   flex: 1;
@@ -102,14 +106,14 @@ const ReviewImage = Styled.Image`
 `;
 
 function CertifiedProfile({navigation}) {
+  const currentUser = useSelector((state) => state.currentUser);
+  const dispatch = useDispatch();
   const imageWidth = Dimensions.get('window').width / 3;
-
   const userReview_arr = [
     'https://d28dpoj42hxr8c.cloudfront.net/files/topics/9592_ext_14_ko_0.png?v=1456718570',
     'https://img.kbs.co.kr/kbs/620/nsimg.kbs.co.kr/data/news/2019/11/27/4331817_Z1f.jpg',
     'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQRiHGyfVX0g8i9yxoFqsJhX9K7Ww-EOx71LPAyDqHArNibwcfc&usqp=CAU',
   ];
-
   const isBottom = ({
     layoutMeasurement,
     contentOffset,
@@ -117,6 +121,20 @@ function CertifiedProfile({navigation}) {
   }: NativeScrollEvent) => {
     return layoutMeasurement.height + contentOffset.y >= contentSize.height;
   };
+
+  function Logout() {
+    console.log('접속 사용자 정보', currentUser);
+    if (currentUser.user.provider === 'kakao') {
+      KakaoLogins.logout()
+        .then((result) => {
+          console.log('로그아웃성공', result);
+          dispatch(allActions.userActions.logOut());
+        })
+        .catch((err) => {
+          console.log('에러 발생', err.code, err.message);
+        });
+    }
+  }
 
   return (
     <ScrollView
@@ -127,6 +145,13 @@ function CertifiedProfile({navigation}) {
         }
       }}>
       <ProfileContainer>
+        <TouchableWithoutFeedback onPress={() => Logout()}>
+          <View style={{justifyContent: 'flex-end', alignItems: 'flex-end'}}>
+            <Text style={{marginTop: 10, marginRight: 10, fontSize: 17}}>
+              로그아웃
+            </Text>
+          </View>
+        </TouchableWithoutFeedback>
         <ProfileHeader
           image="https://t1.daumcdn.net/thumb/R600x0/?fname=https%3A%2F%2Ft1.daumcdn.net%2Fqna%2Fimage%2F1542632018000000528"
           posts={3431}

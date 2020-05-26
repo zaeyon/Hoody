@@ -15,6 +15,8 @@ import {
 } from 'react-native-responsive-screen';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import axios from 'axios';
+import {useSelector, useDispatch} from 'react-redux';
+import allActions from '~/action';
 
 const Container = Styled.View`
  flex: 1;
@@ -116,17 +118,17 @@ font-size: 20px;
 color: #ffffff;
 `;
 
-const UnvalidEmailText = Styled.Text`
- font-size: 14px;
- position: absolute;
- bottom: -15px;
- color: #FF0000;
-`;
-
 const ProfileImage = Styled.Image`
  width: ${wp('25%')};
  height: ${wp('25%')};
  border-radius: 100;
+`;
+
+const UnvalidInputText = Styled.Text`
+ font-size: 14px;
+ position: absolute;
+ bottom: -15px;
+ color: #FF0000;
 `;
 
 const BirthDateGenderContainer = Styled.View`
@@ -200,11 +202,19 @@ color: #000000;
 `;
 
 const ProfileInput = ({navigation, route}) => {
-  let submitingEmail = route.params!.email;
-  let submitingPassword = route.params!.password;
+  let submitingEmail = route.params!.email || route.params!.socialEmail;
+  let submitingPassword;
+  let submitingSocialId;
+  let submitingProvider;
   let submitingNickname;
   let submitingBirthDate;
   let submitingGender;
+
+  let socialNickname = '';
+  let socialGender = '';
+
+  const currentUser = useSelector((state) => state.currentUser);
+  const dispatch = useDispatch();
 
   const [keyboardHeight, setKeyboardHeight] = useState(0);
   const [profileImage, setProfileImage] = useState(
@@ -223,9 +233,73 @@ const ProfileInput = ({navigation, route}) => {
   const [selectedColor, setSelectedColor] = useState('#ffffff');
   const [selectedColor2, setSelectedColor2] = useState('#ffffff');
 
+  const [validNickname, setValidNickname] = useState(true);
   const [confirmedNickname, setConfirmedNickname] = useState(false);
   const [confirmedBirthDate, setConfirmedBirthDate] = useState(false);
   const [confirmedGender, setConfirmedGender] = useState(false);
+
+  const [socialId, setSocialId] = useState('');
+  const [provider, setProvider] = useState('local');
+
+  if (route.params!.password) {
+    submitingPassword = route.params!.password;
+  } else {
+    console.log('소셜 로그인함');
+    submitingPassword = null;
+    if (route.params!.socialNickname) {
+      socialNickname = route.params!.socialNickname;
+      //setConfirmedNickname(true);
+    }
+    socialGender = route.params!.socialGender;
+    console.log(route.params.socialGender);
+  }
+
+  const selectMale = () => {
+    setSelectedFemale(false);
+    setSelectedColor2('#ffffff');
+    setSelectedColor('#23e5d2');
+    setSelectedMale(true);
+    setConfirmedGender(true);
+    setInputedGender('male');
+  };
+
+  const selectFemale = () => {
+    setSelectedMale(false);
+    setSelectedColor('#ffffff');
+    setSelectedColor2('#23e5d2');
+    setSelectedFemale(true);
+    setConfirmedGender(true);
+    setInputedGender('female');
+  };
+
+  useEffect(() => {
+    if (
+      route.params!.socialGender === 'MALE' ||
+      route.params!.socialGender === 'Male' ||
+      route.params!.socialGender === 'male'
+    ) {
+      console.log('이미 남자');
+      selectMale();
+    } else if (
+      route.params!.socialGender === 'FEMALE' ||
+      route.params!.socialGender === 'Female' ||
+      route.params!.socialGender === 'female'
+    ) {
+      selectFemale();
+    }
+    if (route.params!.socialNickname) {
+      submitingNickname = route.params.socialNickname;
+      setInputedNickname(route.params.socialNickname);
+      setConfirmedNickname(true);
+    }
+    if (route.params!.socialId) {
+      console.log('소셜로그인', route.params.socialId);
+      setSocialId(route.params!.socialId);
+    }
+    if (route.params!.socialProvider) {
+      setProvider(route.params.socialProvider);
+    }
+  }, []);
 
   function onKeyboardDidShow(e: KeyboardEvent): void {
     setKeyboardHeight(e.endCoordinates.height);
@@ -237,9 +311,20 @@ const ProfileInput = ({navigation, route}) => {
   }
 
   function checkNickname(nickname) {
-    setConfirmedNickname(true);
     console.log('입력된 nickname', nickname);
+    var strArray = nickname.split('');
+    if (strArray.length >= 2 && strArray.length <= 12) {
+      setConfirmedNickname(true);
+      setValidNickname(true);
+    } else {
+      setValidNickname(false);
+    }
     submitingNickname = nickname;
+  }
+
+  function changingNickname(nickname) {
+    setValidNickname(true);
+    setConfirmedNickname(false);
   }
 
   function formatDate(date) {
@@ -275,27 +360,16 @@ const ProfileInput = ({navigation, route}) => {
     showMode('date');
   };
 
-  const selectMale = () => {
-    setSelectedFemale(false);
-    setSelectedColor2('#ffffff');
-    setSelectedColor('#23e5d2');
-    setSelectedMale(true);
-    setConfirmedGender(true);
-    setInputedGender('male');
-  };
-
-  const selectFemale = () => {
-    setSelectedMale(false);
-    setSelectedColor('#ffffff');
-    setSelectedColor2('#23e5d2');
-    setSelectedFemale(true);
-    setConfirmedGender(true);
-    setInputedGender('female');
-  };
-
   const signUp = () => {
     submitingNickname = inputedNickname;
+    submitingSocialId = socialId;
     submitingBirthDate = dateStr;
+    submitingProvider = provider;
+    const testArray = {
+      1: 'aaaaa',
+      2: 'zzzzz',
+      3: 'xccccc',
+    };
     console.log('inputedGender!!!', inputedGender);
     submitingGender = inputedGender;
     console.log('가입요청 email', submitingEmail);
@@ -303,13 +377,19 @@ const ProfileInput = ({navigation, route}) => {
     console.log('가입요청 nickname', submitingNickname);
     console.log('가입요청 birthDate', submitingBirthDate);
     console.log('가입요청 gender', submitingGender);
+    console.log('가입요청 socialId', submitingSocialId);
+    console.log('가입요청 provider', submitingProvider);
     let form = new FormData();
-    const url = 'https://160dfedd.ngrok.io/' + 'auth/signUp';
+    const url = 'https://b73dfd06.ngrok.io/' + 'auth/signUp';
     form.append('email', submitingEmail);
     form.append('password', submitingPassword);
     form.append('nickname', submitingNickname);
     form.append('birthDate', submitingBirthDate);
     form.append('gender', submitingGender);
+    form.append('socialId', submitingSocialId);
+    form.append('provider', submitingProvider);
+    form.append('content', testArray);
+    console.log('content', testArray);
     return new Promise(function (resolve, reject) {
       axios
         .post(url, form, {
@@ -322,6 +402,20 @@ const ProfileInput = ({navigation, route}) => {
         .then(function (response) {
           console.log('response : ', response);
           resolve(response.data);
+          if (response.status === 200) {
+            console.log('회원가입 성공');
+            dispatch(
+              allActions.userActions.setUser({
+                email: submitingEmail,
+                password: submitingPassword,
+                nickname: submitingNickname,
+                birthDate: submitingBirthDate,
+                gender: submitingGender,
+                socialId: submitingSocialId,
+                provider: submitingProvider,
+              }),
+            );
+          }
         })
         .catch(function (error) {
           console.log('error : ', error);
@@ -369,8 +463,10 @@ const ProfileInput = ({navigation, route}) => {
             onChangeText={(text: string) => setInputedNickname(text)}
             onSubmitEditing={(text) => checkNickname(text.nativeEvent.text)}
             onEndEditing={(text) => checkNickname(text.nativeEvent.text)}
+            value={inputedNickname}
           />
           <InputBottomLine />
+          {!validNickname && <UnvalidInputText>2~12자</UnvalidInputText>}
         </LabelInputContainer>
         <BirthDateGenderContainer>
           <BirthDateContainer>

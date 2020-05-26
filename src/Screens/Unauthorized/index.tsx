@@ -1,10 +1,17 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import Styled from 'styled-components/native';
 import {TouchableWithoutFeedback} from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+
+import KakaoLogins from '@react-native-seoul/kakao-login';
+import {
+  GoogleSignin,
+  GoogleSigninButton,
+  statusCodes,
+} from '@react-native-community/google-signin';
 
 const Container = Styled.View`
  flex: 1;
@@ -46,24 +53,19 @@ justify-content: center;
 align-items: center;
 `;
 
-const FacebookLogin = Styled.Image`
- width: ${wp('15%')};
- height: ${wp('15%')};
-`;
-
-const KakaoLogin = Styled.Image`
+const KakaoLoginButton = Styled.Image`
 margin-left: 5px;
 width: ${wp('16%')};
 height: ${wp('16%')};
 `;
 
-const GoogleLogin = Styled.Image`
+const GoogleLoginButton = Styled.Image`
 margin-left: 5.5px;
 width: ${wp('15%')};
 height: ${wp('15%')};
 `;
 
-const AppleLogin = Styled.Image`
+const AppleLoginButton = Styled.Image`
 margin-left: 6.7px;
 width: ${wp('15%')};
 height: ${wp('15%')};
@@ -94,23 +96,130 @@ font-size: 15px;
 color: #707070;
 `;
 
+if (!KakaoLogins) {
+  console.log('Module is Not Linked');
+}
+
+const logCallback = (log, callback) => {
+  console.log(log);
+  callback;
+};
+
+const TOKEN_EMPTY = 'token has not fetched';
+const PROFILE_EMPTY = {
+  id: 'profile has not fetched',
+  email: 'profile has not fetched',
+  profile_image_url: '',
+};
+
 const Unauthorized = ({navigation}) => {
+  const [loginLoading, setLoginLoading] = useState(false);
+  const [profileLoading, setProfileLoading] = useState(false);
+  const [token, setToken] = useState(TOKEN_EMPTY);
+  const [profile, setProfile] = useState(PROFILE_EMPTY);
+
+  useEffect(() => {
+    configureGoogleSignIn();
+  }, []);
+
+  const kakaoLogin = () => {
+    logCallback('Login Start', setLoginLoading(true));
+    KakaoLogins.login()
+      .then((result) => {
+        setToken(result.accessToken);
+        logCallback(
+          `Login Finished: ${JSON.stringify(result)}`,
+          setLoginLoading(false),
+        );
+        getKakaoProfile();
+      })
+      .catch((err) => {
+        if (err.code === 'E_CANCELLED_OPERATION') {
+          logCallback(`Login Canclled:${err.message}`, setLoginLoading(false));
+        } else {
+          logCallback(
+            `Login Faild:${err.code} ${err.message}`,
+            setLoginLoading(false),
+          );
+        }
+      });
+  };
+
+  const getKakaoProfile = () => {
+    logCallback('Get Profile Start', setProfileLoading(true));
+
+    KakaoLogins.getProfile()
+      .then((result) => {
+        setProfile(result);
+        logCallback(
+          `Get Profile Finished:${JSON.stringify(result)}`,
+          setProfileLoading(false),
+        );
+
+        navigation.navigate('ProfileInput', {
+          socialId: result.accessToken,
+          socialEmail: result.email,
+          socialNickname: result.nickname,
+          socialGender: result.gender,
+          socialProvider: 'kakao',
+        });
+      })
+      .catch((err) => {
+        logCallback(
+          `Get Profile Failed:${err.code} ${err.message}`,
+          setProfileLoading(false),
+        );
+      });
+  };
+
+  const googleLogin = async () => {
+    try {
+      await GoogleSignin.hasPlayServices();
+      const token = await GoogleSignin.getTokens();
+      console.log('사용자 토큰', token);
+      const userInfo = await GoogleSignin.signIn();
+      console.log('구글 로그인 성공 사용자 정보:', userInfo);
+      navigation.navigate('ProfileInput', {
+        socialId: token.accessToken,
+        socialEmail: userInfo.user.email,
+        socialNickname: userInfo.user.name,
+        socialProvider: 'google',
+      });
+    } catch (error) {
+      console.log('구글 로그인 실패', error.code);
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        // user cancelled the login flow
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        // operation (e.g. sign in) is in progress already
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        // play services not available or outdated
+      } else {
+        // some other error happened
+      }
+    }
+  };
+
+  const configureGoogleSignIn = () => {
+    GoogleSignin.configure();
+  };
+
   return (
     <Container>
       <LogoContainer>
         <HoogingLogo source={require('~/Assets/Images/Logo/logo.png')} />
       </LogoContainer>
       <SocialLoginContainer>
-        <FacebookLogin
-          source={require('~/Assets/Images/SocialLogin/ic_facebookLogin.png')}
-        />
-        <KakaoLogin
-          source={require('~/Assets/Images/SocialLogin/ic_kakaoLogin.png')}
-        />
-        <GoogleLogin
-          source={require('~/Assets/Images/SocialLogin/ic_googleLogin.png')}
-        />
-        <AppleLogin
+        <TouchableWithoutFeedback onPress={() => kakaoLogin()}>
+          <KakaoLoginButton
+            source={require('~/Assets/Images/SocialLogin/ic_kakaoLogin.png')}
+          />
+        </TouchableWithoutFeedback>
+        <TouchableWithoutFeedback onPress={() => googleLogin()}>
+          <GoogleLoginButton
+            source={require('~/Assets/Images/SocialLogin/ic_googleLogin.png')}
+          />
+        </TouchableWithoutFeedback>
+        <AppleLoginButton
           source={require('~/Assets/Images/SocialLogin/ic_appleLogin.png')}
         />
       </SocialLoginContainer>

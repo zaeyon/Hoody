@@ -187,6 +187,7 @@ const Unauthorized = ({navigation}) => {
       });
     } catch (error) {
       console.log('구글 로그인 실패', error.code);
+      console.log('statusCodes', statusCodes);
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         // user cancelled the login flow
       } else if (error.code === statusCodes.IN_PROGRESS) {

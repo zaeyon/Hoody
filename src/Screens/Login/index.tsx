@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import Styled from 'styled-components/native';
-import {Keyboard, Button, Text} from 'react-native';
+import {Text, TouchableWithoutFeedback} from 'react-native';
 import LoginButton from '~/Components/Button';
 import axios from 'axios';
 import {resolvePlugin} from '@babel/core';
@@ -78,6 +78,8 @@ const Login = ({navigation}) => {
   const currentUser = useSelector((state) => state.currentUser);
   const dispatch = useDispatch();
   const user = {name: 'Rei'};
+  let submitingEmail;
+  let submitingPassword;
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -131,11 +133,44 @@ const Login = ({navigation}) => {
     });
   }
 
-  const SuccessedLogin = () => {
-    navigation.navigate('CertifiedProfile');
-  };
+  const Login = () => {
+    const url = 'https://bc240926.ngrok.io/' + 'auth/login';
+    submitingEmail = email;
+    submitingPassword = password;
+    console.log('로그인 요청 email', submitingEmail);
+    console.log('로그인 요청 password', submitingPassword);
 
-  const FailedLogin = () => {};
+    let form = new FormData();
+    form.append('email', submitingEmail);
+    form.append('password', submitingPassword);
+    return new Promise(function (resolve, reject) {
+      axios
+        .post(url, form, {
+          //withCredentials: true,
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            Accept: 'application/json',
+          },
+        })
+        .then(function (response) {
+          console.log('response : ', response);
+          resolve(response.data);
+          if (response.status === 200) {
+            console.log('로그인 성공', response);
+            dispatch(
+              allActions.userActions.setUser({
+                email: submitingEmail,
+                password: submitingPassword,
+              }),
+            );
+          }
+        })
+        .catch(function (error) {
+          console.log('error : ', error);
+          reject(error);
+        });
+    });
+  };
 
   return (
     <Container>
@@ -158,7 +193,7 @@ const Login = ({navigation}) => {
         <LoginButton
           label="로그인"
           style={{marginBottom: 24}}
-          onPress={() => checkLogin(email, password)}
+          onPress={() => Login()}
         />
         <SignupText>
           계정이 없는가요?{' '}

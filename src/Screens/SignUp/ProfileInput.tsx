@@ -380,7 +380,7 @@ const ProfileInput = ({navigation, route}) => {
     console.log('가입요청 socialId', submitingSocialId);
     console.log('가입요청 provider', submitingProvider);
     let form = new FormData();
-    const url = 'https://b73dfd06.ngrok.io/' + 'auth/signUp';
+    const url = 'https://bc240926.ngrok.io/' + 'auth/signUp';
     form.append('email', submitingEmail);
     form.append('password', submitingPassword);
     form.append('nickname', submitingNickname);
@@ -388,8 +388,6 @@ const ProfileInput = ({navigation, route}) => {
     form.append('gender', submitingGender);
     form.append('socialId', submitingSocialId);
     form.append('provider', submitingProvider);
-    form.append('content', testArray);
-    console.log('content', testArray);
     return new Promise(function (resolve, reject) {
       axios
         .post(url, form, {

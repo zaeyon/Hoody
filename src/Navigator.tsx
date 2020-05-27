@@ -24,6 +24,7 @@ import ImageItem from '~/Screens/Gallery_ProfileImage/ImageItem';
 import Unauthorized from '~/Screens/Unauthorized';
 import BasicInput from '~/Screens/SignUp/BasicInput';
 import ProfileInput from '~/Screens/SignUp/ProfileInput';
+import Login from '~/Screens/Login';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
@@ -261,6 +262,16 @@ function UnauthStackScreen() {
         }}
       />
       <UnauthStack.Screen
+        name="Login"
+        component={Login}
+        options={{
+          transitionSpec: {
+            open: config,
+            close: config,
+          },
+        }}
+      />
+      <UnauthStack.Screen
         name="BasicInput"
         component={BasicInput}
         options={({navigation, route}) => ({
@@ -298,7 +309,7 @@ function Navigator() {
   const currentUser = useSelector((state) => state.currentUser);
   return (
     <NavigationContainer>
-      {currentUser.loggedIn ? (
+      {!currentUser.loggedIn ? (
         <Tab.Navigator
           tabBarOptions={{
             showLabel: false,

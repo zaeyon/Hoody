@@ -102,7 +102,7 @@ class Gallery extends Component {
       loadingMore: false,
       noMore: false,
       data: [],
-      album: [{}],
+      albumName: [{value: 'aa'}],
       albumTitleCount: [],
     };
 
@@ -118,6 +118,25 @@ class Gallery extends Component {
     return true;
   };
 
+  componentDidMount() {
+    const params = {
+      assetType: 'All',
+    };
+    CameraRoll.getAlbums(params).then((data) => {
+      const titleCount = data.map((x) => x.title + '(' + x.count + ')');
+      var dataTitle = data.map(function (obj) {
+        var albumObj = {};
+        albumObj.value = obj.title;
+        console.log('albumObj', albumObj);
+        return albumObj;
+      });
+      this.setState({
+        albumName: dataTitle,
+      });
+      console.log('22 albumName', this.state.albumName);
+    });
+  }
+
   componentWillMount() {
     this.fetch();
     const backHandler = BackHandler.addEventListener(
@@ -127,18 +146,6 @@ class Gallery extends Component {
     this.setState({
       selected: this.props.route.params.imagesObj,
     });
-    const params = {
-      assetType: 'All',
-    };
-    CameraRoll.getAlbums(params).then(
-      (data) => console.log(data),
-      (data) => {
-        const titleCount = data.map((x) => x.title + '(' + x.count + ')');
-      },
-      this.setState({
-        album: this.data,
-      }),
-    );
   }
 
   componentWillUnmount() {
@@ -313,20 +320,7 @@ class Gallery extends Component {
       loader,
     } = this.props;
 
-    let albumName = [
-      {
-        value: '모두 보기',
-      },
-      {
-        value: 'Camera',
-      },
-      {
-        value: 'Download',
-      },
-      {
-        value: 'KakaoTalk',
-      },
-    ];
+    console.log('this.state.albumName', this.state.albumName);
 
     if (this.state.initialLoading) {
       return (
@@ -360,11 +354,11 @@ class Gallery extends Component {
             <CloseButton source={require('~/Assets/Images/close_gray.png')} />
           </TouchableWithoutFeedback>
           <Dropdown
-            containerStyle={{width: 90, height: hp('13%')}}
-            data={albumName}
+            containerStyle={{width: 110, height: hp('13%')}}
+            data={this.state.albumName}
             animationDureation={0}
             rippleOpacity={0}
-            dropdownPosition={0}
+            dropdownPosition={-5}
             shadeOpacity={0}
             value={'모두 보기'}
             inputContainerStyle={{borderBottomWidth: 0}}

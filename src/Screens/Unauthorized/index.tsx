@@ -83,6 +83,8 @@ background-color: #23e5d2;
 border-radius: 20px;
 border-width: 0.3px;
 border-color: #cccccc;
+justify-content: center;
+align-items: center;
 `;
 
 const LoginText = Styled.Text`
@@ -226,8 +228,12 @@ const Unauthorized = ({navigation}) => {
       </SocialLoginContainer>
       <LocalContainer>
         <LoginContainer>
-          <LoginButton />
-          <LoginText>이메일로 로그인</LoginText>
+          <TouchableWithoutFeedback
+            onPress={() => navigation.navigate('Login')}>
+            <LoginButton>
+              <LoginText>이메일로 로그인</LoginText>
+            </LoginButton>
+          </TouchableWithoutFeedback>
         </LoginContainer>
         <SignupContainer>
           <TouchableWithoutFeedback

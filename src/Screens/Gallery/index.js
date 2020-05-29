@@ -102,8 +102,9 @@ class Gallery extends Component {
       loadingMore: false,
       noMore: false,
       data: [],
-      albumName: [{value: 'aa'}],
+      albumName: [{}],
       albumTitleCount: [],
+      selectedAlbum: '모두 보기',
     };
 
     this.renderFooterSpinner = this.renderFooterSpinner.bind(this);
@@ -130,6 +131,9 @@ class Gallery extends Component {
         console.log('albumObj', albumObj);
         return albumObj;
       });
+
+      dataTitle.unshift({value: '모두 보기'});
+
       this.setState({
         albumName: dataTitle,
       });
@@ -159,6 +163,23 @@ class Gallery extends Component {
     this.setState({
       selected: nextProps.selected,
     });
+  }
+  /*
+
+  componentDidUpdate(prevState) {
+    console.log('componentDidUpdate 실행');
+    if (this.state.selectedAlbum !== prevState.selectedAlbum) {
+      this.fetch();
+    }
+  }
+  */
+
+  changeSelectedAlbum(data) {
+    this.setState({
+      selectedAlbum: data,
+    });
+
+    console.log('selectedAlbum', this.state.selectedAlbum);
   }
 
   onEndReached() {
@@ -196,18 +217,35 @@ class Gallery extends Component {
   }
 
   doFetch() {
-    const {groupTypes, assetType} = this.props;
+    let {groupTypes, assetType} = this.props;
+    let groupName;
+    let fetchParams;
+    if (this.state.selectedAlbum === '모두 보기') {
+      fetchParams = {
+        first: 100,
+        groupTypes,
+        assetType,
+      };
+    } else {
+      groupName = this.state.selectedAlbum;
+      fetchParams = {
+        first: 100,
+        groupTypes,
+        groupName,
+        assetType,
+      };
+    }
+    console.log('groupNamezzzzz', groupName);
 
-    const fetchParams = {
-      first: 100,
-      groupTypes,
-      assetType,
-    };
+    groupTypes = 'Album';
+    console.log('groupTypes', groupTypes);
 
+    /*
     if (Platform.OS === 'android') {
       // not supported in android
-      delete fetchParams.groupTypes;
+      //delete fetchParams.groupTypes;
     }
+    */
 
     if (this.state.lastCursor) {
       fetchParams.after = this.state.lastCursor;
@@ -363,6 +401,7 @@ class Gallery extends Component {
             value={'모두 보기'}
             inputContainerStyle={{borderBottomWidth: 0}}
             fontSize={18}
+            onChangeText={(value) => this.changeSelectedAlbum(value)}
           />
           <TouchableWithoutFeedback onPress={() => this._pressFinish()}>
             <FinishButton source={require('~/Assets/Images/check.png')} />

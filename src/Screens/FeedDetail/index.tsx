@@ -141,13 +141,11 @@ const FeedDetail = ({route, navigation}: Props) => {
     write_time,
     rating,
     favorite_count,
-    tag_list,
     review_content,
-    rocation,
+    location,
     review_image_list,
   } = route.params;
   var reviewImage_Array = review_image_list.split('$#$');
-  var tag_Array = tag_list.split('&#&');
   return (
     <Container>
       <HeaderContainer>
@@ -182,7 +180,6 @@ const FeedDetail = ({route, navigation}: Props) => {
         <FavoriteText>{favorite_count}명이 좋아합니다.</FavoriteText>
         <FlatList
           horizontal={true}
-          data={tag_Array}
           renderItem={({item}) => <TagText>#{item}</TagText>}
         />
         <ReviewText>{review_content}</ReviewText>

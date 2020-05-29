@@ -124,6 +124,7 @@ function FeedStackScreen() {
         component={Feed}
         options={{
           headerTitle: (props) => <FeedTitle {...props} />,
+          headerShown: false,
         }}
       />
       <FeedStack.Screen
@@ -131,6 +132,10 @@ function FeedStackScreen() {
         component={FeedDetail}
         options={{
           headerTitle: (props) => <FeedDetailTitle {...props} />,
+          transitionSpec: {
+            open: config,
+            close: config,
+          },
         }}
       />
     </FeedStack.Navigator>
@@ -309,7 +314,7 @@ function Navigator() {
   const currentUser = useSelector((state) => state.currentUser);
   return (
     <NavigationContainer>
-      {!currentUser.loggedIn ? (
+      {currentUser.loggedIn ? (
         <Tab.Navigator
           tabBarOptions={{
             showLabel: false,

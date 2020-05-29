@@ -267,7 +267,7 @@ const SelectedImageContainer = Styled.View`
  border-color: #CCCCCC;
 `;
 
-const RocationInput = Styled.TextInput`
+const locationInput = Styled.TextInput`
  font-size: 13px;
  font-family: 'Arita4.0_M';
  color: #707070;

@@ -361,15 +361,12 @@ const ProfileInput = ({navigation, route}) => {
   };
 
   const signUp = () => {
+    const url = 'https://f13c78ab3849.ngrok.io/' + 'auth/signUp';
     submitingNickname = inputedNickname;
     submitingSocialId = socialId;
     submitingBirthDate = dateStr;
     submitingProvider = provider;
-    const testArray = {
-      1: 'aaaaa',
-      2: 'zzzzz',
-      3: 'xccccc',
-    };
+
     console.log('inputedGender!!!', inputedGender);
     submitingGender = inputedGender;
     console.log('가입요청 email', submitingEmail);
@@ -379,8 +376,8 @@ const ProfileInput = ({navigation, route}) => {
     console.log('가입요청 gender', submitingGender);
     console.log('가입요청 socialId', submitingSocialId);
     console.log('가입요청 provider', submitingProvider);
+
     let form = new FormData();
-    const url = 'https://bc240926.ngrok.io/' + 'auth/signUp';
     form.append('email', submitingEmail);
     form.append('password', submitingPassword);
     form.append('nickname', submitingNickname);

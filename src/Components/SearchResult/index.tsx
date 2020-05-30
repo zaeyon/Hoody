@@ -13,8 +13,6 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import {BoxShadow} from 'react-native-shadow';
-
 import TagInfoItem from '~/Components/TagInfoItem';
 import FeedItem from '~/Components/SearchResultFeedListItem';
 
@@ -28,6 +26,7 @@ width: ${wp('100%')};
 height: ${hp('101%')};
 background-color:#ffffff;
 padding-bottom: 47px;
+
 `;
 
 const SearchResultItemImage = Styled.Image`
@@ -235,6 +234,7 @@ const SearchResult = ({
 
   return (
     <Container>
+      {/*
       <TagItemContainer>
         <FlatList
           data={searchedTag_arr}
@@ -251,6 +251,7 @@ const SearchResult = ({
           )}
         />
       </TagItemContainer>
+          */}
       <PostTab.Navigator
         initialRouteName="인기 게시물"
         swipeEnabled={true}

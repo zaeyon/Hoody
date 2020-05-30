@@ -14,7 +14,7 @@ import {
 import TagInfoItem from '~/Components/TagInfoItem';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import SearchResult from '~/Components/SearchResult';
-import {BoxShadow} from 'react-native-shadow';
+import SearchAutoComplete from '~/Components/Presentational/SearchAutoComplete';
 
 const Container = Styled.SafeAreaView`
  background-color: #FFFFFF;
@@ -148,40 +148,13 @@ background-color: #ffffff;
 width: 100%;
 `;
 
-const TagInfoItemContainer = Styled.View`
- margin-right: 6px;
+const TagAutoCompleteContainer = Styled.View`
+top: ${hp('10%')};
+bottom: 0px;
+position: absolute;
+background-color: #ffffff;
+width: 100%;
 `;
-
-const SearchResultContainer = Styled.View`
-width: ${wp('100%')};
-background-color:#ffffff;
-`;
-
-const SearchResultItemImage = Styled.Image`
-width: ${wp('33%')};
-height: ${wp('33%')};
-`;
-
-const SearchResultItemContainer = Styled.View`
-width: ${wp('33%')};
-height: ${wp('33%')};
-margin-right: 2px;
-margin-bottom: 2px;
-`;
-
-const ResultItemRatingContainer = Styled.View`
-`;
-
-const headerShadow = {
-  width: wp('100%'),
-  height: 1,
-  color: '#000000',
-  border: 3,
-  radius: 0,
-  opacity: 0.1,
-  x: 0,
-  y: 0.5,
-};
 
 type Props = {navigation};
 
@@ -348,6 +321,9 @@ class Search extends Component<Props> {
             </SearchTextContainer>
           </InputBoxContainer>
         </Animated.View>
+        <TagAutoCompleteContainer>
+          <SearchAutoComplete></SearchAutoComplete>
+        </TagAutoCompleteContainer>
         {this.state.searchedTag_arr[0] && (
           <TagSearchResultContainer>
             <SearchResult

@@ -322,7 +322,9 @@ class Search extends Component<Props> {
           </InputBoxContainer>
         </Animated.View>
         <TagAutoCompleteContainer>
-          <SearchAutoComplete></SearchAutoComplete>
+          {!this.state.searchedTag_arr[0] && (
+            <SearchAutoComplete></SearchAutoComplete>
+          )}
         </TagAutoCompleteContainer>
         {this.state.searchedTag_arr[0] && (
           <TagSearchResultContainer>

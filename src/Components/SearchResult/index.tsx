@@ -174,7 +174,10 @@ const SearchResult = ({
 
   function PopularityPost() {
     return (
-      <ScrollView bounces={false} overScrollMode="never">
+      <ScrollView
+        bounces={false}
+        overScrollMode="never"
+        showsVerticalScrollIndicator={false}>
         <SearchResultContainer>
           <FlatList
             bounces={false}
@@ -205,7 +208,10 @@ const SearchResult = ({
 
   function LatestPost() {
     return (
-      <ScrollView bounces={false} overScrollMode="never">
+      <ScrollView
+        bounces={false}
+        overScrollMode="never"
+        showsVerticalScrollIndicator={false}>
         <SearchResultContainer>
           <FlatList
             data={searchData_latest}

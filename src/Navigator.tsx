@@ -25,6 +25,8 @@ import Unauthorized from '~/Screens/Unauthorized';
 import BasicInput from '~/Screens/SignUp/BasicInput';
 import ProfileInput from '~/Screens/SignUp/ProfileInput';
 import Login from '~/Screens/Login';
+import ParagraphDivider from '~/Components/Test/ParagraphDivider';
+import ParagraphInput from '~/Components/Test/ParagraphInput';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
@@ -153,6 +155,20 @@ function UploadStackScreen() {
         },
         headerTitleAlign: 'center',
       }}>
+      <UploadStack.Screen
+        name="ParagraphDivider"
+        component={ParagraphDivider}
+      />
+      <UploadStack.Screen
+        name="ParagraphInput"
+        component={ParagraphInput}
+        options={{
+          transitionSpec: {
+            open: config,
+            close: config,
+          },
+        }}
+      />
       <UploadStack.Screen name="Upload" component={Upload} options={{}} />
       <UploadStack.Screen
         name="LocationSearch"

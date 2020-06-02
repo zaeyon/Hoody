@@ -13,6 +13,7 @@ import {
   Platform,
   PixelRatio,
 } from 'react-native';
+import {BoxShadow} from 'react-native-shadow';
 
 import {
   widthPercentageToDP as wp,
@@ -73,9 +74,7 @@ const ParagraphDivider = ({navigation, route}: Props) => {
   const [vy, setVy] = useState(0);
   const [nativeEvent, setNativeEvent] = useState(null);
   const [stepRef, stepSize] = useDimensions();
-
   // const myRef = useRef();
-
   const [paragraphY, setParagraphY] = useState([]);
   const [paragraphData, setParagraphData] = useState([
     {
@@ -99,64 +98,6 @@ const ParagraphDivider = ({navigation, route}: Props) => {
       description: '문단나누기 테스트 글3',
     },
   ]);
-  const [panArray, setPanArray] = useState([]);
-  const pan = useRef(new Animated.ValueXY()).current;
-
-  console.log('pan', pan);
-  const panResponder = useRef(
-    PanResponder.create({
-      onMoveShouldSetPanResponder: (nativeEvent, gestureState) => {
-        if (gestureState.moveY > 75) {
-          return false;
-        } else {
-          return true;
-        }
-      },
-      onPanResponderGrant: () => {
-        pan.setOffset({
-          x: pan.x._value,
-          y: pan.y._value,
-        });
-      },
-      onPanResponderMove: (nativeEvent, gestureState) => {
-        console.log('gestureState', gestureState.y0);
-        console.log('gestureState moveY', gestureState.moveY);
-        if (gestureState.moveY > 75) {
-          setParagraph([
-            {
-              index: 1,
-              type: 'image',
-              url:
-                'https://pbs.twimg.com/media/EA9UJBjU4AAdkCm?format=jpg&name=small',
-            },
-            {
-              index: 2,
-              type: 'description',
-              description: '문단나누기 테스트 글',
-            },
-            {
-              index: 3,
-              type: 'description',
-              description: '문단나누기 테스트 글글글zz',
-            },
-            {
-              index: 4,
-              type: 'description',
-              description: '문단나누기 테스트 글글글222',
-            },
-          ]);
-        } else {
-          Animated.event([null, {dx: pan.x, dy: pan.y}])(
-            nativeEvent,
-            gestureState,
-          );
-        }
-      },
-      onPanResponderRelease: () => {
-        pan.flattenOffset();
-      },
-    }),
-  ).current;
 
   useEffect(() => {
     if (route.params?.description) {
@@ -165,32 +106,40 @@ const ParagraphDivider = ({navigation, route}: Props) => {
     }
   }, [route.params?.description]);
 
+  const changeParagraph = (data) => {
+    console.log('changed paragraph', data);
+    setParagraphData(data);
+  };
+
   const renderItem = ({item, index, drag, isActive}) => {
     if (item.type === 'description') {
       return (
-        <TouchableWithoutFeedback onLongPress={drag} delayLongPress={0.2}>
-          <TextParagraphContainer
-            onLayout={(event) => {
-              const layout = event.nativeEvent.layout;
-              console.log('height', layout.height);
-            }}>
-            <DescriptionText>{item.description}</DescriptionText>
+        <TextParagraphContainer
+          style={isActive && {elevation: 4}}
+          onLayout={(event) => {
+            const layout = event.nativeEvent.layout;
+            console.log('height', layout.height);
+          }}>
+          <DescriptionText>{item.description}</DescriptionText>
+
+          <TouchableWithoutFeedback onLongPress={drag} delayLongPress={0.2}>
             <ParagraphIcon source={require('~/Assets/Images/check.png')} />
-          </TextParagraphContainer>
-        </TouchableWithoutFeedback>
+          </TouchableWithoutFeedback>
+        </TextParagraphContainer>
       );
     } else if (item.type === 'image') {
       return (
-        <TouchableWithoutFeedback onLongPress={drag} delayLongPress={0.2}>
-          <ImageParagraphContainer
-            onLayout={(event) => {
-              const layout = event.nativeEvent.layout;
-              console.log('height222', layout.height);
-            }}>
-            <InsertedImage source={{uri: item.url}} />
+        <ImageParagraphContainer
+          style={isActive && {elevation: 4}}
+          onLayout={(event) => {
+            const layout = event.nativeEvent.layout;
+            console.log('height222', layout.height);
+          }}>
+          <InsertedImage source={{uri: item.url}} />
+          <TouchableWithoutFeedback onLongPress={drag} delayLongPress={0.2}>
             <ParagraphIcon source={require('~/Assets/Images/check.png')} />
-          </ImageParagraphContainer>
-        </TouchableWithoutFeedback>
+          </TouchableWithoutFeedback>
+        </ImageParagraphContainer>
       );
     }
   };
@@ -200,7 +149,7 @@ const ParagraphDivider = ({navigation, route}: Props) => {
       <DraggableFlatList
         data={paragraphData}
         renderItem={renderItem}
-        onDragEnd={({data}) => setParagraphData(data)}
+        onDragEnd={({data}) => changeParagraph(data)}
         keyExtractor={(item, index) => `draggable-item-${item.index}`}
       />
       <TouchableWithoutFeedback

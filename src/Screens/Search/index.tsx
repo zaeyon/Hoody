@@ -14,7 +14,7 @@ import {
 import TagInfoItem from '~/Components/TagInfoItem';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import SearchResult from '~/Components/SearchResult';
-import SearchAutoComplete from '~/Components/Presentational/SearchAutoComplete';
+import SearchAutoComplete from '~/Components/Presentational/SearchScreen/SearchAutoComplete';
 
 const Container = Styled.SafeAreaView`
  background-color: #FFFFFF;

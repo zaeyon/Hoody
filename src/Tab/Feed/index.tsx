@@ -8,8 +8,8 @@ import {
 import {useSelector} from 'react-redux';
 import axios from 'axios';
 
-import FeedItem from '~/Components/Presentational/FeedItem';
-import PopularTagItem from '~/Components/Presentational/PopularTagItem';
+import FeedItem from '~/Components/Presentational/FeedListScreen/FeedItem';
+import PopularTagItem from '~/Components/Presentational/FeedListScreen/PopularTagItem';
 
 const BottomTabHeight = Styled.View`
  width: ${wp('100%')};

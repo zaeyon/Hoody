@@ -211,7 +211,6 @@ const FeedItem = ({
   comment_count,
   scrap_count,
 }: Props) => {
-  const [ratingInteger, setRatingInteger] = useState<boolean>();
   const [ratingArray, setRatingArray] = useState([
     'empty',
     'empty',
@@ -225,17 +224,13 @@ const FeedItem = ({
 
   useEffect(() => {
     if (rating % 1 === 0) {
-      setRatingInteger(true);
       for (var i = 0; i < rating; i++) {
         tmpRatingArr[i] = 'full';
         if (i === rating - 1) {
-          console.log('ratingArray', ratingArray);
           setRatingArray(tmpRatingArr);
         }
       }
     } else {
-      console.log('rating', rating);
-      setRatingInteger(false);
       for (var i = 0; i < rating; i++) {
         if (i === rating - 0.5) {
           tmpRatingArr[i] = 'half';

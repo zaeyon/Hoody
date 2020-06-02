@@ -75,11 +75,6 @@ const CloseButton = Styled.Image`
  tint-color: #000000;
 `;
 
-const FinishButtonContainer = Styled.View`
- justify-content:flex-end;
- background-color:#000000;
-`;
-
 const FinishButton = Styled.View`
  width: ${wp('100%')};
  height: ${hp('8.8%')};

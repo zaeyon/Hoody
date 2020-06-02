@@ -361,7 +361,7 @@ const ProfileInput = ({navigation, route}) => {
   };
 
   const signUp = () => {
-    const url = 'https://f13c78ab3849.ngrok.io/' + 'auth/signUp';
+    const url = 'https://e82f43910fe9.ngrok.io/' + 'auth/signUp';
     submitingNickname = inputedNickname;
     submitingSocialId = socialId;
     submitingBirthDate = dateStr;
@@ -397,14 +397,14 @@ const ProfileInput = ({navigation, route}) => {
         .then(function (response) {
           console.log('response : ', response);
           resolve(response.data);
-          if (response.status === 200) {
+          if (response.status === 201) {
             console.log('회원가입 성공');
             dispatch(
               allActions.userActions.setUser({
                 email: submitingEmail,
                 password: submitingPassword,
                 nickname: submitingNickname,
-                birthDate: submitingBirthDate,
+                birthDate: Date.parse(submitingBirthDate),
                 gender: submitingGender,
                 socialId: submitingSocialId,
                 provider: submitingProvider,

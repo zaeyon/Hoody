@@ -134,7 +134,7 @@ const Login = ({navigation}) => {
   }
 
   const Login = () => {
-    const url = 'https://f13c78ab3849.ngrok.io/' + 'auth/login';
+    const url = 'https://e82f43910fe9.ngrok.io/' + 'auth/login';
     submitingEmail = email;
     submitingPassword = password;
     console.log('로그인 요청 email', submitingEmail);

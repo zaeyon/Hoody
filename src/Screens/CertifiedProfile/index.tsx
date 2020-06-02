@@ -133,6 +133,8 @@ function CertifiedProfile({navigation}) {
         .catch((err) => {
           console.log('에러 발생', err.code, err.message);
         });
+    } else {
+      dispatch(allActions.userActions.logOut());
     }
   }
 

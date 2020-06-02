@@ -175,6 +175,7 @@ class Search extends Component<Props> {
       searchedTag_arr: [],
       initalTag_arr: [],
       afterTag_arr: [],
+      searchInput: false,
       searchResult_popular_arr: [
         'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQOQIknR9cXIueb8RIJccEvZ3o8OZhOrCKxmOJQkqCsaab3CnrX&usqp=CAU',
         'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcRh28mNQsB8JSm0UzQrdLfMfoKH-xgfOD07yBAxcsPTQXIEmh6N&usqp=CAU',
@@ -307,6 +308,7 @@ class Search extends Component<Props> {
                   onChangeText={(text: string) =>
                     this.setState({
                       inputingTag: text,
+                      searchInput: true,
                     })
                   }
                   autoFocus={true}
@@ -321,11 +323,11 @@ class Search extends Component<Props> {
             </SearchTextContainer>
           </InputBoxContainer>
         </Animated.View>
-        <TagAutoCompleteContainer>
-          {!this.state.searchedTag_arr[0] && (
+        {this.state.searchInput && (
+          <TagAutoCompleteContainer>
             <SearchAutoComplete></SearchAutoComplete>
-          )}
-        </TagAutoCompleteContainer>
+          </TagAutoCompleteContainer>
+        )}
         {this.state.searchedTag_arr[0] && (
           <TagSearchResultContainer>
             <SearchResult

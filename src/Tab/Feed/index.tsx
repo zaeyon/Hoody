@@ -98,7 +98,7 @@ function Feed({navigation}) {
   }, []);
 
   const getFeedData = () => {
-    const url = 'https://f13c78ab3849.ngrok.io' + '/feed';
+    const url = 'https://e82f43910fe9.ngrok.io' + '/feed';
     return new Promise(function (resolve, reject) {
       axios
         .get(url)

@@ -37,7 +37,7 @@ const ImageSelectedButton = Styled.View`
 `;
 
 const ImageSelectedCount = Styled.Text`
- font-family: 'Arita4.0_B';
+ ';
  font-size: 15px;
  color: #ffffff;
 

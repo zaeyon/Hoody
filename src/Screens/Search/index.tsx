@@ -45,7 +45,6 @@ const InputBox = Styled.TextInput`
  justify-content: center;
  text-align: center;
  align-self: center;
- font-family: 'Arita4.0_B.otf';
  border-width: 1.5px;
  border-color: #23E5D2;
 `;
@@ -70,7 +69,7 @@ const TagInputContainer = Styled.View`
 
 const TagTextInput = Styled.TextInput`
  margin-left: 8px;
- font-family: 'Arita4.0_L';
+ 
  font-size: 13px;
  color: #999999;
  width: ${wp('30%')};
@@ -80,13 +79,13 @@ const TagTextInput = Styled.TextInput`
 const TagText = Styled.Text`
  color: #707070;
  font-size: 13px;
- font-family: 'Arita4.0_L';
+ 
 `;
 
 const HashText = Styled.Text`
  position: absolute;
  left: 0px;
- font-family: 'Arita4.0_L';
+ 
  font-size: 15px;
  color: #999999;
 `;
@@ -113,7 +112,7 @@ const SearchTextContainer = Styled.View`
 `;
 
 const SearchText = Styled.Text`
- font-family: 'Arita4.0_M';
+ 
  font-size: 13px;
  color: #000000;
 `;

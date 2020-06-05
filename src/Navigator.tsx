@@ -4,6 +4,10 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
 import {Image, StyleSheet, Text} from 'react-native';
 import {useSelector} from 'react-redux';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 
 import Home from '~/Tab/Home';
 import Feed from '~/Tab/Feed';
@@ -39,41 +43,41 @@ const UnauthStack = createStackNavigator();
 
 function FeedTitle() {
   return (
-    <Text style={{fontSize: 17, fontFamily: 'Arita4.0_M'}}>오늘의 후깅</Text>
+    <Text style={{fontSize: 17, }}>오늘의 후깅</Text>
   );
 }
 
 function FeedDetailTitle() {
-  return <Text style={{fontSize: 17, fontFamily: 'Arita4.0_M'}}></Text>;
+  return <Text style={{fontSize: 17, }}></Text>;
 }
 
 function AlarmTitle() {
-  return <Text style={{fontSize: 17, fontFamily: 'Arita4.0_M'}}>알림</Text>;
+  return <Text style={{fontSize: 17, }}>알림</Text>;
 }
 
 function ProfileTitle() {
-  return <Text style={{fontSize: 17, fontFamily: 'Arita4.0_M'}}>프로필</Text>;
+  return <Text style={{fontSize: 17, }}>프로필</Text>;
 }
 
 function LoginTitle() {
-  return <Text style={{fontSize: 17, fontFamily: 'Arita4.0_M'}}>로그인</Text>;
+  return <Text style={{fontSize: 17, }}>로그인</Text>;
 }
 
 function SignupTitle() {
   return (
-    <Text style={{fontSize: 17, fontFamily: 'Arita4.0_M'}}>회원 가입</Text>
+    <Text style={{fontSize: 17, }}>회원 가입</Text>
   );
 }
 
 function SearchLocationTitle() {
   return (
-    <Text style={{fontSize: 17, fontFamily: 'Arita4.0_M'}}>위치 검색</Text>
+    <Text style={{fontSize: 17, }}>위치 검색</Text>
   );
 }
 
 function BasicInputTitle() {
   return (
-    <Text style={{fontSize: 17, fontFamily: 'Arita4.0_M'}}>회원 가입</Text>
+    <Text style={{fontSize: 17, }}>회원 가입</Text>
   );
 }
 
@@ -431,7 +435,7 @@ function Navigator() {
 
 const styles = StyleSheet.create({
   tabBar: {
-    height: 45,
+    height: hp('7.5%'),
     position: 'absolute',
   },
 });

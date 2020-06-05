@@ -50,7 +50,7 @@ const HeaderContainer = Styled.View`
 
 const HeaderTitleText = Styled.Text`
  font-size: 15px;
- font-family: 'Arita4.0_SB';
+ 
 `;
 
 const CloseButton = Styled.Image`

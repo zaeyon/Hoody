@@ -273,7 +273,7 @@ const SearchAutoComplete = () => {
         tabBarOptions={{
           indicatorStyle: {backgroundColor: '#ffffff'},
           style: {elevation: 0.5},
-          labelStyle: {fontSize: 13, fontFamily: 'Arita4.0_M'},
+          labelStyle: {fontSize: 13, },
         }}>
         <AutoCompleteTab.Screen name="인기" component={Popularity} />
         <AutoCompleteTab.Screen name="태그" component={Tag} />

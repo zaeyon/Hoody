@@ -6,6 +6,7 @@ import {
   ToastAndroid,
   BackHandler,
 } from 'react-native';
+import Styled from 'styled-components/native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {TextInput} from 'react-native-gesture-handler';
@@ -18,6 +19,10 @@ import rootReducer from '~/reducers';
 import Unauthorized from '~/Screens/Unauthorized';
 import AuthUser from '~/Auth';
 import Navigator from '~/Navigator';
+
+const Container = Styled.View`
+  
+`;
 
 const store = createStore(
   rootReducer,
@@ -53,7 +58,9 @@ function App() {
         <Navigator />
       </Provider>
     </ApplicationProvider>
-  );
+  
+    );
+  
 }
 
 export default App;

@@ -77,7 +77,7 @@ tint-color: #23E5D2;
 
 const ResultItemRatingText = Styled.Text`
 font-size: 13px;
-font-family: 'Arita4.0_SB';
+
 color: #ffffff;
 `;
 
@@ -264,7 +264,7 @@ const SearchResult = ({
         tabBarOptions={{
           indicatorStyle: {backgroundColor: '#ffffff'},
           style: {elevation: 0.5},
-          labelStyle: {fontSize: 13, fontFamily: 'Arita4.0_M'},
+          labelStyle: {fontSize: 13, },
         }}>
         <PostTab.Screen name="인기 게시물" component={PopularityPost} />
         <PostTab.Screen name="최근 게시물" component={LatestPost} />

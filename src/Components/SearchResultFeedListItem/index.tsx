@@ -45,11 +45,11 @@ align-items: center;
 `;
 
 const UserNameText = Styled.Text`
-  font-family: 'Arita4.0_B';
+  ';
 `;
 
 const WriteTimeText = Styled.Text`
-  font-family: 'Arita4.0_L';
+  
   font-size: 11px;
   margin-top: 4px;
   color: #AAB2B7;
@@ -62,13 +62,13 @@ const RatingContainer = Styled.View`
 `;
 
 const RatingText = Styled.Text`
-  font-family: 'Arita4.0_B';
+  ';
   font-size: 20px;
   color: #707070;
 `;
 
 const CertainRatingText = Styled.Text`
-  font-family: 'Arita4.0_L';
+  
   font-size: 13px;
   margin-bottom: 2px;
   color: #707070;
@@ -112,13 +112,13 @@ const BodyContainer = Styled.View`
 `;
 
 const FavoriteText = Styled.Text`
-  font-family: 'Arita4.0_B';
+  ';
   font-size: 12px;
   color: #707070;
 `;
 
 const TagText = Styled.Text`
-font-family: 'Arita4.0_B';
+';
 margin-right: 5px;
 margin-top: 3px;
   font-size: 12px;
@@ -127,7 +127,7 @@ margin-top: 3px;
 
 const ReviewText = Styled.Text`
  margin-top: 5px;
- font-family: 'Arita4.0_L';
+ 
  font-size: 12px;
  color: #707070;
 `;

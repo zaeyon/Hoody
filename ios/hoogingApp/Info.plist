@@ -27,10 +27,13 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.452626894835-j0ug76lttmloea42vag69hf71gchvafk</string>
+				<string>com.googleusercontent.apps.829653698047-sqnl4mf76c4srsupi6vaq1kd70sg0f7l</string>
 			</array>
 		</dict>
-		<dict/>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>

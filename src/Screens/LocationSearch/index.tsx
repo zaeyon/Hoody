@@ -38,7 +38,7 @@ const TitleText = Styled.Text`
   color: #000000;
   text-align: center;
   align-self: center;
-  font-family: 'Arita4.0_B';
+  ';
 `;
 
 const Inner = Styled.View`
@@ -112,17 +112,17 @@ const SavedRightContainer = Styled.View`
 
 const CurrentLocationText = Styled.Text`
  font-size: 11px;
- font-family: 'Arita4.0_B';
+ ';
 `;
 
 const SavedLocationText = Styled.Text`
  font-size: 13px;
- font-family: 'Arita4.0_M';
+ 
 `;
 
 const UseSavedButton = Styled.Text`
  font-size: 14px;
- font-family: 'Arita4.0_B';
+ ';
  color: #338EFC;
  
 `;
@@ -145,7 +145,7 @@ const options = {
 const TitleRightButton = Styled.Text`
  font-size: 19px;
  color: #338EFC;
- font-family: 'Arita4.0_B';
+ ';
 `;
 
 const CloseButton = Styled.Image`
@@ -264,7 +264,6 @@ const LocationSearch = ({navigation}) => {
                 placeholder="위치를 입력하세요."
                 onChangeText={(text: string) => setLocation(text)}
                 style={{
-                  fontFamily: 'Arita4.0_M',
                   fontSize: 12,
                 }}
               />
@@ -326,11 +325,10 @@ const styles = StyleSheet.create({
   },
   location: {
     fontSize: 13,
-    fontFamily: 'Arita4.0_M',
   },
   address: {
     fontSize: 11,
-    fontFamily: 'Arita4.0_L',
+    
     color: '#707070',
   },
 });

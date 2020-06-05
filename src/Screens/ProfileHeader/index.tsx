@@ -51,25 +51,24 @@ const ProfileItem = Styled.View`
 `;
 
 const LabelCount = Styled.Text`
-font-family: 'Arita4.0_SB';
+
 font-size: 15px;
 margin-top: 15px;
 `;
 
 const LabelTitle = Styled.Text`
-  font-family: 'Arita4.0_L';
+  
   color: #707070;
   font-size: 13px;
   margin-top: 10px;
 `;
 
 const UserName = Styled.Text`
-font-family: 'Roboto-Regular';
 font-size: 17px;
 `;
 
 const UserTags = Styled.Text`
-font-family: 'Arita4.0_L';
+
 `;
 
 const HeaderRight = Styled.View`
@@ -77,7 +76,7 @@ margin-left: 5px;
 `;
 
 const Tags = Styled.Text`
-font-family:'Arita4.0_L';
+
 font-size: 13px;
 color: #707070;
 margin-top: 1px;

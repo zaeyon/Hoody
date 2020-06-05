@@ -65,13 +65,13 @@ const PinterMapHeaderContainer = Styled.View`
 
 const PinterMapText = Styled.Text`
  font-size: 15px;
- font-family: 'Arita4.0_M';
+ 
  background-color: #FFFFFF;
 `;
 
 const ViewAllText = Styled.Text`
 font-size: 13px;
-font-family: 'Arita4.0_L';
+
 color: #c3c3c3;
 `;
 
@@ -86,7 +86,7 @@ const ReviewHeaderContainer = Styled.View`
 const ReviewText = Styled.Text`
 
  font-size: 15px;
- font-family: 'Arita4.0_M';
+ 
 `;
 
 const MyFeedList = Styled.View`

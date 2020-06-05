@@ -68,7 +68,7 @@ const Copyright = Styled.Text`
 `;
 
 function LoginTitle() {
-  return <Text style={{fontSize: 17, fontFamily: 'Arita4.0_M'}}>로그인</Text>;
+  return <Text style={{fontSize: 17, }}>로그인</Text>;
 }
 
 const Login = ({navigation}) => {

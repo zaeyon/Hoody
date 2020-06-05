@@ -28,17 +28,14 @@ const TagInfoContainer = Styled.View`
 `;
 
 const TagNameText = Styled.Text`
-font-family: 'Roboto-Light';
 font-size: 13px;
 `;
 
 const TagCountText = Styled.Text`
-font-family: 'Roboto-Light';
 font-size: 13px;
 `;
 
 const TagRatingText = Styled.Text`
-font-family: 'Roboto-Light';
 font-size: 13px;
 `;
 

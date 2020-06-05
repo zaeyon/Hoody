@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import {TouchableWithoutFeedback} from 'react-native';
 import Styled from 'styled-components/native';
 import {
   widthPercentageToDP as wp,
@@ -13,7 +14,7 @@ const Container = Styled.View`
 
 const HeaderContainer = Styled.View`
  width: ${wp('100%')};
- height: ${hp('10%')};
+ height: ${hp('9%')};
  flex-direction: row;
  align-items: center;
  justify-content:space-between;
@@ -35,6 +36,7 @@ const RightContainer = Styled.View`
 
 const MainTagText = Styled.Text`
  font-size: 16px;
+ margin-left: 6px;
 `;
 
 const RatingContainer = Styled.View`
@@ -126,6 +128,7 @@ const UploadHeader = ({
   rating,
   location,
   expense,
+  navigation,
 }: Props) => {
   const [ratingArray, setRatingArray] = useState([
     'empty',
@@ -161,7 +164,9 @@ const UploadHeader = ({
     <Container>
       <HeaderContainer>
         <LeftContainer>
+          <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
           <BackButton source={require('~/Assets/Images/ic_back2.png')} />
+          </TouchableWithoutFeedback>
         </LeftContainer>
         <CenterContainer>
           <MainTagText>{mainTag || '#대표 태그 입력'}</MainTagText>

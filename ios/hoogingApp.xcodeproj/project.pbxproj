@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* hoogingAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* hoogingAppTests.m */; };
-		0A43A711247E77B300CFAF01 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0A43A710247E77B300CFAF01 /* GoogleService-Info.plist */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
@@ -21,6 +20,7 @@
 		7B10D48C7B4CBA3FA0285B5A /* libPods-hoogingApp-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 204702964D8C930995A429B9 /* libPods-hoogingApp-tvOSTests.a */; };
 		8C06D9E813CD0D4CD32ED606 /* libPods-hoogingApp-hoogingAppTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B01F1B6422912FAB61449A1 /* libPods-hoogingApp-hoogingAppTests.a */; };
 		CAEEFDC57250645DF9A7ACBF /* libPods-hoogingApp-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A0B6F667D08504809466AAD /* libPods-hoogingApp-tvOS.a */; };
+		E66A0AC12487B39A002A5F86 /* libRNGestureHandler.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E66A0AC02487B39A002A5F86 /* libRNGestureHandler.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,6 +38,20 @@
 			remoteGlobalIDString = 2D02E47A1E0B4A5D006451C7;
 			remoteInfo = "hoogingApp-tvOS";
 		};
+		E66A0AB92487B24A002A5F86 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E66A0AB42487B249002A5F86 /* RNGestureHandler.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 134814201AA4EA6300B7C361;
+			remoteInfo = RNGestureHandler;
+		};
+		E66A0ABB2487B24A002A5F86 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E66A0AB42487B249002A5F86 /* RNGestureHandler.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = B5C32A36220C603B000FFB8D;
+			remoteInfo = "RNGestureHandler-tvOS";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -46,7 +60,6 @@
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* hoogingAppTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = hoogingAppTests.m; sourceTree = "<group>"; };
 		0A43A70F247E4C3300CFAF01 /* hoogingApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = hoogingApp.entitlements; path = hoogingApp/hoogingApp.entitlements; sourceTree = "<group>"; };
-		0A43A710247E77B300CFAF01 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* hoogingApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = hoogingApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = hoogingApp/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = hoogingApp/AppDelegate.m; sourceTree = "<group>"; };
@@ -68,6 +81,8 @@
 		AC2C70034B291C638054D103 /* Pods-hoogingApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hoogingApp.debug.xcconfig"; path = "Target Support Files/Pods-hoogingApp/Pods-hoogingApp.debug.xcconfig"; sourceTree = "<group>"; };
 		BA18F9F6A534589601D7B447 /* Pods-hoogingApp-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hoogingApp-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-hoogingApp-tvOS/Pods-hoogingApp-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		D65FB9D3FEF16F547D24D8E3 /* Pods-hoogingApp-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hoogingApp-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-hoogingApp-tvOSTests/Pods-hoogingApp-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
+		E66A0AB42487B249002A5F86 /* RNGestureHandler.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNGestureHandler.xcodeproj; path = "../node_modules/react-native-gesture-handler/ios/RNGestureHandler.xcodeproj"; sourceTree = "<group>"; };
+		E66A0AC02487B39A002A5F86 /* libRNGestureHandler.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libRNGestureHandler.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
@@ -85,6 +100,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E66A0AC12487B39A002A5F86 /* libRNGestureHandler.a in Frameworks */,
 				64D7CC1C17B390CBFB55F4C2 /* libPods-hoogingApp.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -128,7 +144,6 @@
 		13B07FAE1A68108700A75B9A /* hoogingApp */ = {
 			isa = PBXGroup;
 			children = (
-				0A43A710247E77B300CFAF01 /* GoogleService-Info.plist */,
 				0A43A70F247E4C3300CFAF01 /* hoogingApp.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
@@ -144,6 +159,7 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E66A0AC02487B39A002A5F86 /* libRNGestureHandler.a */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
 				936011DE93AFF44535E70ABB /* libPods-hoogingApp.a */,
@@ -172,6 +188,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				E66A0AB42487B249002A5F86 /* RNGestureHandler.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -198,6 +215,15 @@
 				00E356EE1AD99517003FC87E /* hoogingAppTests.xctest */,
 				2D02E47B1E0B4A5D006451C7 /* hoogingApp-tvOS.app */,
 				2D02E4901E0B4A5D006451C7 /* hoogingApp-tvOSTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		E66A0AB52487B249002A5F86 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				E66A0ABA2487B24A002A5F86 /* libRNGestureHandler.a */,
+				E66A0ABC2487B24A002A5F86 /* libRNGestureHandler-tvOS.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -323,6 +349,12 @@
 			mainGroup = 83CBB9F61A601CBA00E9B192;
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = E66A0AB52487B249002A5F86 /* Products */;
+					ProjectRef = E66A0AB42487B249002A5F86 /* RNGestureHandler.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				13B07F861A680F5B00A75B9A /* hoogingApp */,
@@ -332,6 +364,23 @@
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		E66A0ABA2487B24A002A5F86 /* libRNGestureHandler.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNGestureHandler.a;
+			remoteRef = E66A0AB92487B24A002A5F86 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		E66A0ABC2487B24A002A5F86 /* libRNGestureHandler-tvOS.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = "libRNGestureHandler-tvOS.a";
+			remoteRef = E66A0ABB2487B24A002A5F86 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		00E356EC1AD99517003FC87E /* Resources */ = {
@@ -347,7 +396,6 @@
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
-				0A43A711247E77B300CFAF01 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

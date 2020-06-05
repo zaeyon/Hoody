@@ -8,7 +8,7 @@ const Container = Styled.View`
 const InputField = Styled.TextInput`
   color: #292929;
   width: 100px;
-  font-family: 'Arita4.0_M'
+  
   font-size: 12px;
 `;
 

@@ -92,13 +92,13 @@ const MyHoogingText = Styled.Text`
   font-size: 18px;
   color: #000000;
   text-align: center;
-  font-family: 'Arita4.0_B';
+  ';
 `;
 
 const UploadButton = Styled.Text`
  font-size: 19px;
  color: #338EFC;
- font-family: 'Arita4.0_B';
+ ';
 `;
 
 const CloseButton = Styled.Image`
@@ -168,7 +168,7 @@ const CheckIconImage = Styled.Image`
 const PriceInput = Styled.TextInput`
  width: 50px;
  font-size: 13px;
- font-family: 'Arita4.0_M';
+ 
  color: #707070;
  height: 40px;
  
@@ -176,7 +176,7 @@ const PriceInput = Styled.TextInput`
 
 const WonText = Styled.Text`
 font-size: 13px;
-font-family: 'Arita4.0_M';
+
 color: #707070;
 `;
 
@@ -215,7 +215,7 @@ const InsertTagContainer = Styled.View`
 
 const InsertedTagText = Styled.Text`
  font-size: 13px;
- font-family: 'Arita4.0_M';
+ 
  color: #707070;
 `;
 
@@ -269,7 +269,7 @@ const SelectedImageContainer = Styled.View`
 
 const locationInput = Styled.TextInput`
  font-size: 13px;
- font-family: 'Arita4.0_M';
+ 
  color: #707070;
 `;
 
@@ -282,7 +282,7 @@ const TagInput = Styled.TextInput`
  padding: 10px;
  height: ${hp('5.5%')};
  font-size: 13px;
- font-family: 'Arita4.0_M';
+ 
  color: #707070;
  border-radius: 8px;
  background-color: #EEEEEE;
@@ -293,7 +293,7 @@ const CameraIcon = Styled.Image`
 `;
 
 const CommentInput = Styled.TextInput`
-font-family: 'Arita4.0_M';
+
 `;
 
 const SelectedImageTouch = Styled.TouchableWithoutFeedback`
@@ -341,7 +341,7 @@ justify-content: space-between;
 `;
 
 const AddRatingOnTagText = Styled.Text`
- font-family: 'Arita4.0_M';
+ 
  font-size: 16px;
 `;
 
@@ -360,7 +360,7 @@ const TagBorderTop = Styled.View`
 `;
 
 const TagText = Styled.Text`
- font-family: 'Arita4.0_L';
+ 
  font-size: 14px;
  color: #898989;
 `;
@@ -378,7 +378,7 @@ const TagRatingImage = Styled.Image`
 `;
 
 const TagRatingText = Styled.Text`
- font-family: 'Arita4.0_L';
+ 
  font-size: 14px;
  color: #707070;
  margin-right: 17px;
@@ -770,7 +770,7 @@ function Upload({route, navigation}) {
                 <Text
                   style={{
                     fontSize: 24,
-                    fontFamily: 'Arita4.0_L',
+                    
                     color: '#C3C3C3',
                   }}>
                   #
@@ -788,7 +788,7 @@ function Upload({route, navigation}) {
                     onValueChange={(value) => CheckRatingEnabled(value)}
                     tintColors={{true: '#23E5D2'}}
                   />
-                  <Text style={{fontSize: 15, fontFamily: 'Arita4.0_M'}}>
+                  <Text style={{fontSize: 15, }}>
                     태그에 별점 주기
                   </Text>
                 </CheckBoxContainer>
@@ -811,7 +811,6 @@ function Upload({route, navigation}) {
                   <Text
                     style={{
                       fontSize: 15,
-                      fontFamily: 'Arita4.0_M',
                       color: '#000000',
                     }}>
                     등록하기
@@ -897,7 +896,7 @@ function Upload({route, navigation}) {
                   <Text
                     style={{
                       color: '#CCCCCC',
-                      fontFamily: 'Arita4.0_SB',
+                      
                       fontSize: 19,
                     }}>
                     #
@@ -905,7 +904,7 @@ function Upload({route, navigation}) {
                   <Text
                     style={{
                       color: '#707070',
-                      fontFamily: 'Arita4.0_L',
+                      
                       marginLeft: 6,
                     }}>
                     태그 추가
@@ -961,7 +960,7 @@ function Upload({route, navigation}) {
                 <Text
                   style={{
                     color: '#707070',
-                    fontFamily: 'Arita4.0_L',
+                    
                     marginLeft: 7,
                   }}>
                   소비 금액
@@ -990,7 +989,7 @@ function Upload({route, navigation}) {
                 <Text
                   style={{
                     color: '#707070',
-                    fontFamily: 'Arita4.0_L',
+                    
                     marginLeft: 7,
                   }}>
                   위치 추가
@@ -1030,7 +1029,7 @@ function Upload({route, navigation}) {
                 <Text
                   style={{
                     fontSize: 24,
-                    fontFamily: 'Arita4.0_L',
+                    
                     color: '#C3C3C3',
                   }}>
                   #
@@ -1049,7 +1048,7 @@ function Upload({route, navigation}) {
                     }
                     tintColors={{true: '#23E5D2'}}
                   />
-                  <Text style={{fontSize: 15, fontFamily: 'Arita4.0_M'}}>
+                  <Text style={{fontSize: 15, }}>
                     태그에 별점 주기
                   </Text>
                 </CheckBoxContainer>
@@ -1072,7 +1071,6 @@ function Upload({route, navigation}) {
                   <Text
                     style={{
                       fontSize: 15,
-                      fontFamily: 'Arita4.0_M',
                       color: '#000000',
                     }}>
                     수정하기

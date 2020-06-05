@@ -468,26 +468,7 @@ function Upload({route, navigation}) {
   }, [route.params?.selectedImages]);
 
   const openGallery = () => {
-    /*
-    ImagePicker.launchImageLibrary(options, (response) => {
-      if (response.error) {
-        console.log('LaunchImageLibrary Error: ', response.error);
-      } else if (response.didCancel) {
-      } else {
-        var newImage_arr = new Array();
-        newImage_arr = imageUrl_arr.slice(0, imageUrl_arr.length - 1);
-        newImage_arr[imageUrl_arr.length] =
-          'https://firebasestorage.googleapis.com/v0/b/hooging-f33b0.appspot.com/o/zz.png?alt=media&token=eb26a783-c54b-4205-bab6-5357e103aef4';
-        newImage_arr[imageUrl_arr.length - 1] = response.uri;
-        console.log('responsive.uri', response.uri);
-        setImageUrl_arr(newImage_arr);
-        var newPhoto_arr = new Array();
-        newPhoto_arr = selectedPhoto;
-        newPhoto_arr.push(response);
-        setSelectedPhoto(newPhoto_arr);
-      }
-    });
-    */
+    
     var _images = imageUrl_arr;
     _images.pop();
     navigation.navigate('Gallery', {

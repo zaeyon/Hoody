@@ -32,6 +32,7 @@ import Login from '~/Screens/Login';
 import ParagraphDivider from '~/Components/Test/ParagraphDivider';
 import ParagraphInput from '~/Components/Test/ParagraphInput';
 import UploadScreen from '~/Components/Container/UploadScreen';
+import UploadAdditionInfo from '~/Screens/UploadAdditionInfo'; 
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
@@ -183,6 +184,15 @@ function UploadStackScreen() {
           },
         }}
       />
+      <UploadStack.Screen
+        name="UploadAdditionInfo"
+        component={UploadAdditionInfo}
+        options={{
+          transitionSpec: {
+            open: config,
+            close: config,
+          }
+        }}/>
     </UploadStack.Navigator>
   );
 }

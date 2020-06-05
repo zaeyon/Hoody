@@ -6,22 +6,13 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import {FlatList} from 'react-native-gesture-handler';
+import UploadScreen from '~/Components/Container/UploadScreen';
 
 const Container = Styled.View`
  background-color:#ffffff;
 
 `;
 
-const HeaderContainer = Styled.View`
- width: ${wp('100%')};
- height: ${hp('9%')};
- flex-direction: row;
- align-items: center;
- justify-content:space-between;
- border-bottom-width: 0.3px;
- border-color: #c3c3c3;
- padding: 10px;
-`;
 
 const LeftContainer = Styled.View`
 `;
@@ -63,15 +54,16 @@ width: 11px;
 height: 19px;
 `;
 
-const UploadButtonText = Styled.Text`
+const ButtonText = Styled.Text`
  font-size: 16px;
  color: #338EFC;
 `;
 
 const LocationPriceContainer = Styled.View`
- margin-top: 5px;
+ margin-top: 12px;
  flex-direction: row;
  justify-content: center;
+ margin-bottom: 12px;
 `;
 
 const LocationContainer = Styled.View`
@@ -128,7 +120,10 @@ const UploadHeader = ({
   rating,
   location,
   expense,
+  changingPara,
   navigation,
+  route,
+  addDes,
 }: Props) => {
   const [ratingArray, setRatingArray] = useState([
     'empty',
@@ -199,7 +194,14 @@ const UploadHeader = ({
           </RatingContainer>
         </CenterContainer>
         <RightContainer>
-          <UploadButtonText>공유</UploadButtonText>
+          {changingPara && (
+              <TouchableWithoutFeedback onPress = {() => addDes()}>
+              <ButtonText>완료</ButtonText>
+              </TouchableWithoutFeedback>
+          )}
+          {!changingPara && (
+          <ButtonText>공유</ButtonText>
+          )} 
         </RightContainer>
       </HeaderContainer>
       <LocationPriceContainer>

@@ -14,13 +14,14 @@ const FeedItemContainer = Styled.View`
  width: ${wp('100%')};
  height: ${hp('68%')};
  background-color:#ffffff;
- padding: 10px;
 `;
 
 const HeaderContainer = Styled.View`
  flex: 1.2;
  flex-direction: row;
  justify-content: space-between;
+ padding-left: 5px;
+ padding-right: 5px;
  `;
 
 const BodyContainer = Styled.View`
@@ -71,7 +72,6 @@ tint-color: #23E5D2;
 `;
 
 const ReviewImage = Styled.Image`
-border-radius: 5px;
 resize-mode:cover;
  height: 100%;
  width: 100%;

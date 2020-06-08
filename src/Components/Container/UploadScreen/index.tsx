@@ -4,7 +4,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import {FlatList, TouchableWithoutFeedback, Keyboard, View, SegmentedControlIOSComponent, Platform, StyleSheet, Text} from 'react-native';
+import {FlatList, TouchableWithoutFeedback, Keyboard, Alert, View, SegmentedControlIOSComponent, Platform, StyleSheet, Text} from 'react-native';
 import DraggableFlatList from 'react-native-draggable-flatlist';
 
 import UploadHeader from '~/Components/Presentational/UploadScreen/UploadHeader';
@@ -364,6 +364,27 @@ const UploadScreen = ({navigation}) => {
   };
 
 
+  const uploadCancel = () => {
+    Alert.alert(
+      '후기 작성을 취소하시겠어요?',
+      ' ',
+      [
+        {
+          text: '확인',
+          onPress: () => {
+            navigation.goBack();
+          },
+        },
+        {
+          text: '취소',
+          onPress: () => 0,
+          style: 'cancle',
+        }
+      ],
+      {cancelable: false},
+    );
+  };
+
   const renderItem = ({item, index, drag, isActive}) => {
     if (index != paragraphData.length - 1) {
       if (item.type === 'description') {
@@ -512,7 +533,7 @@ const UploadScreen = ({navigation}) => {
     <Container>
       <HeaderContainer>
         <LeftContainer>
-          <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
+          <TouchableWithoutFeedback onPress={() => uploadCancel()}>
           <BackButton source={require('~/Assets/Images/ic_back2.png')} />
           </TouchableWithoutFeedback>
         </LeftContainer>

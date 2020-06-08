@@ -16,38 +16,58 @@ import {
 
 const Container = Styled.SafeAreaView`
   flex: 1;
-  background-color: #eeeeee;
-  flex-direction: row;
+  flex-direction: column;
   padding: 10px;
   height: ${hp('100%')};
-`;
-
-const ShadowInner = Styled.View`
-  flex: 1; 
-  background-color: #EEEEEE;
-  height: ${hp('70%')};
-  width: ${wp('94%')};
-  flex-direction: row;
-  padding: 0px;
-  border-radius: 10px;
   justify-content: center;
+  background-color: #ffffff;
 `;
 
-const TitleText = Styled.Text`
-  font-size: 18px;
-  color: #000000;
-  text-align: center;
-  align-self: center;
-  ';
+const HeaderContainer = Styled.View`
+ width: ${wp('100%')};
+ height: ${hp('7.5%')};
+ flex-direction: row;
+ align-items: center;
+ justify-content:space-between;
+ padding: 10px 20px 0px 20px;
+`;
+
+
+const LeftContainer = Styled.View`
+`;
+
+const CenterContainer = Styled.View`
+justify-content: center;
+margin-left: 7px;
+`;
+
+const RightContainer = Styled.View`
+`;
+
+const HeaderTitleText = Styled.Text`
+ font-size: 16px;
+ margin-left: 6px;
+`;
+
+
+const BackButton = Styled.Image`
+width: 11px;
+height: 19px;
+`;
+
+const ButtonText = Styled.Text`
+ font-size: 16px;
+ color: #338EFC;
 `;
 
 const Inner = Styled.View`
   flex-direction: column;
   height: ${hp('88.5%')};
-  width: ${wp('94%')};
+  width: ${wp('100%')};
   border-radius: 10px;
-  background-color: #FFFFFF;
   border-color: #c3c3c3;
+  justify-content: center;
+  align-items: center;
 `;
 
 const Title = Styled.View`
@@ -79,13 +99,13 @@ const SearchContainer = Styled.View`
  flex-direction: row;
  justify-content: center;
  align-items: center;
- margin: 15px 0px;
+ margin: 4px 0px;
 `;
 
 const SearchButton = Styled.TouchableOpacity`
  position: absolute;
  justify-content: center;
- right: 25px;
+ right: 42px;
 `;
 
 const SearchText = Styled.Text`
@@ -93,7 +113,8 @@ const SearchText = Styled.Text`
 `;
 
 const SavedLocationContainer = Styled.View`
- flex: 0.5;
+  width: ${wp('95%')};
+ flex: 0.4;
  padding: 10px 15px 7px 15px;
  flex-direction: row;
  justify-content: space-between;
@@ -133,6 +154,8 @@ const SearchInput = Styled.TextInput`
 const LocationListContainer = Styled.View`
  flex: 6;
  flex-direction: column;
+ align-items: center;
+ justify-content: center;
 `;
 
 const options = {
@@ -179,18 +202,7 @@ const LocationSearch = ({navigation}) => {
   const [searchResult_arr, setSearchResult_arr] = useState([]);
   const API_KEY = 'd824d5c645bfeafcb06f24db24be7238';
 
-  const shadowOpt = {
-    width: wp('93%'),
-    height: hp('88.5%'),
-    color: '#000000',
-    border: 3,
-    radius: 10,
-    opacity: 0.03,
-    x: 0,
-    y: 0,
-    style: {marginVertical: 15},
-  };
-
+  
   const SearchLocation = (location) => {
     fetch(
       `https://dapi.kakao.com/v2/local/search/keyword.json?query=${location}`,
@@ -246,19 +258,24 @@ const LocationSearch = ({navigation}) => {
 
   return (
     <Container>
-      <BoxShadow setting={shadowOpt}>
-        <ShadowInner>
+      <HeaderContainer>
+        <LeftContainer>
+          <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
+          <BackButton source={require('~/Assets/Images/ic_back2.png')} />
+          </TouchableWithoutFeedback>
+        </LeftContainer>
+        <TouchableWithoutFeedback onPress={() => 0}>
+          <CenterContainer>
+          <HeaderTitleText>게시물 정보</HeaderTitleText>
+        </CenterContainer>
+        </TouchableWithoutFeedback>
+        <RightContainer>
+              <TouchableWithoutFeedback onPress = {() => 0}>
+              <ButtonText>완료</ButtonText>
+              </TouchableWithoutFeedback>
+        </RightContainer>
+      </HeaderContainer>
           <Inner>
-            <Title>
-              {/*<TouchableWithoutFeedback onPress={() => cancelReviewUpload()}>
-                <CloseButton
-                  style={{width: 20, height: 20}}
-                  source={require('~/Assets/Images/close_gray.png')}
-                />
-  </TouchableWithoutFeedback>*/}
-              <TitleText>위치</TitleText>
-              {/*<TitleRightButton> </TitleRightButton>*/}
-            </Title>
             <SearchContainer>
               <InputBox
                 placeholder="위치를 입력하세요."
@@ -290,8 +307,8 @@ const LocationSearch = ({navigation}) => {
                 renderItem={({item}) => (
                   <TouchableWithoutFeedback
                     onPress={() => {
-                      navigation.navigate('Upload', {
-                        placeName: item.place_name,
+                      navigation.navigate('UploadAdditionInfo', {
+                        location: item.place_name,
                       });
                     }}>
                     <View>
@@ -306,8 +323,6 @@ const LocationSearch = ({navigation}) => {
               />
             </LocationListContainer>
           </Inner>
-        </ShadowInner>
-      </BoxShadow>
     </Container>
   );
 };
@@ -317,7 +332,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   item: {
-    marginHorizontal: 10,
+    width: wp('95%'),
     paddingTop: 10,
     paddingBottom: 10,
     borderBottomWidth: 0.3,

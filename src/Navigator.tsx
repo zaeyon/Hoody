@@ -33,6 +33,7 @@ import ParagraphDivider from '~/Components/Test/ParagraphDivider';
 import ParagraphInput from '~/Components/Test/ParagraphInput';
 import UploadScreen from '~/Components/Container/UploadScreen';
 import UploadAdditionInfo from '~/Screens/UploadAdditionInfo'; 
+import TagAutoComplete from '~/Screens/TagAutoComplete';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
@@ -193,6 +194,15 @@ function UploadStackScreen() {
             close: config,
           }
         }}/>
+      <UploadStack.Screen
+      name="TagAutoComplete"
+      component={TagAutoComplete}
+      options={{
+        transitionSpec: {
+          open: config,
+          close: config,
+        }
+      }}/>
     </UploadStack.Navigator>
   );
 }

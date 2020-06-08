@@ -4,8 +4,9 @@ import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import {FlatList, TouchableWithoutFeedback} from 'react-native';
+import {FlatList, TouchableWithoutFeedback, Alert} from 'react-native';
 import {Rating} from 'react-native-ratings';
+import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 
 const Container = Styled.SafeAreaView`
 flex: 1;
@@ -76,7 +77,7 @@ color:#000000;
 `;
 
 const MainTagContainer = Styled.View`
- margin-top: 15px;
+ margin-top: 50px;
  width: ${wp('80%')};
  height: 70px;
  flex-direction: column;
@@ -85,8 +86,30 @@ const MainTagContainer = Styled.View`
 const SubTagContainer = Styled.View`
 margin-top: 20px;
  width: ${wp('80%')};
+ flex-direction: column;
+`;
+
+const SubTagItemContainer = Styled.View`
+ width: ${wp('80%')};
+ height: 45px;
+ flex-direction :column;
+ `;
+
+const ExpenseContainer = Styled.View`
+ margin-top: 20px;
+ width: ${wp('80%')};
  height: 70px;
  flex-direction: column;
+`;
+
+const LocationContainer = Styled.View`
+ margin-top: 20px;
+ width: ${wp('80%')};
+ height: 70px;
+ flex-direction: column;
+`;
+
+const MapViewContainer = Styled.View`
 `;
 
 const SubTagAddContainer = Styled.View`
@@ -97,16 +120,33 @@ const SubTagAddContainer = Styled.View`
 const IconInputContainer = Styled.View`
  flex-direction: row;
  align-items: center;
+ width: ${wp('75.5%')};
+ height: ${hp('5%')};
 `;
 
 const InputContainer = Styled.View`
-
 `;
 
-const SharpImage = Styled.Image`
+const InputWonContainer = Styled.View`
+flex-direction: row;
+align-items: center;
+`;
+
+const HashImage = Styled.Image`
  width: ${wp('4.5%')};
- height: ${hp('3.4')};
+ height: ${hp('3.4%')};
 `;
+
+const ExpenseImage = Styled.Image`
+ width: ${wp('4.7%')};
+ height: ${hp('2%')};
+`;
+
+const SearchImage = Styled.Image`
+ width: ${wp('5%')};
+ height: ${hp('2.3%')};
+`;
+
 
 const InputText = Styled.TextInput`
  font-size: 20px;
@@ -115,12 +155,29 @@ const InputText = Styled.TextInput`
  padding-left: 5px;
 `;
 
+
+
+const MainTagText = Styled.Text`
+ font-size: 20px;
+ padding-left: 5px;
+`;
+
+const SubTagText = Styled.Text`
+ font-size: 20px;
+ padding-left: 5px;
+`;
+
+const LocationText = Styled.Text`
+ font-size: 20px;
+ padding-left: 5px;
+`;
+
 const InputBottomBorder = Styled.View`
  position: absolute;
- bottom: 3px;
- width: ${wp('75.5%')};
- height: 0.2px;
- background-color: #707070;
+ bottom: 6px;
+ width: ${wp('80%')};
+ height: 0.3px;
+ background-color: #c3c3c3;
 `;
 
 const BottomArrowIcon = Styled.Image`
@@ -130,44 +187,114 @@ margin-left: 5px;
 `;
 
 
+const WonText = Styled.Text`
+right: 5px;
+position: absolute;
+ font-size: 20px;
+ padding-left: 5px;
+`;
 
-const UploadAdditionInfo = ({navigation}) => {
+
+const UploadAdditionInfo = ({navigation, route}: Props) => {
+  const [mainTag, setMainTag] = useState<string>("");
+  const [rating, setRating] = useState<number>();
+  const [subTag1, setSubTag1] = useState<string>("");
+  const [subTag2, setSubTag2] = useState<string>("");
+  const [expanse, setExpanse] = useState<string>("");
+  const [location, setLocation] = useState<string>("");
     
     const ratingCompleted = (rating) => {
         console.log("rating", rating);
-        
+        setRating(rating);
     }
+
+    useEffect(() => {
+      if(route.params?.location) {
+        setLocation(route.params.location);
+      }
+    }, [route.params?.location]);
+
+    useEffect(() => {
+      if(route.params?.tagType) {
+        if(route.params.tagType === "main") {
+          console.log("메인태그 수정");
+          setMainTag(route.params.selectTag);       
+        } else if(route.params.tagType === "sub1") {
+          console.log("서브태그1 수정");
+          setSubTag1(route.params.selectTag);
+        } else if(route.params.tagType === "sub2") {
+          console.log("서브태그2 수정");
+          setSubTag2(route.params.selectTag);
+        }
+      }
+    }, [route.params?.tagType, route.params?.selectTag])
+
+    const addSubTag = () => {
+      if(subTag1 === "") {
+        navigation.navigate("TagAutoComplete", {
+          tagType: "sub1"
+        })
+      } else if(subTag2 === "") {
+        navigation.navigate("TagAutoComplete", {
+          tagType: "sub2"
+        })
+      } else {
+        Alert.alert(
+          '태그는 3개까지 등록할 수 있습니다.', '', [
+          {
+            text: '확인',
+            onPress: () => 0,
+          },
+          ])
+      }  
+    }
+
+    const clickFinish = () => {
+      navigation.navigate('UploadScreen', {
+        mainTag: mainTag,
+        rating: rating,
+        subTag1: subTag1,
+        subTag2: subTag2,
+        expanse: expanse,
+        location: location
+      })
+
+    }
+
+
+
     return (
         <Container>
-                  <HeaderContainer>
+        <HeaderContainer>
         <LeftContainer>
           <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
           <BackButton source={require('~/Assets/Images/ic_back2.png')} />
           </TouchableWithoutFeedback>
         </LeftContainer>
-        <TouchableWithoutFeedback onPress={() => navigation.navigate("UploadAdditionInfo")}>
+        <TouchableWithoutFeedback onPress={() => 0}>
           <CenterContainer>
-          <HeaderTitleText>{''}</HeaderTitleText>
+          <HeaderTitleText>게시물 정보</HeaderTitleText>
         </CenterContainer>
         </TouchableWithoutFeedback>
         <RightContainer>
-              <TouchableWithoutFeedback onPress = {() => 0}>
+              <TouchableWithoutFeedback onPress = {() => clickFinish()}>
               <ButtonText>완료</ButtonText>
               </TouchableWithoutFeedback>
         </RightContainer>
       </HeaderContainer>
             <MainTagContainer>
                 <LabelText>대표 태그</LabelText>
+                <TouchableWithoutFeedback onPress={() => navigation.navigate("TagAutoComplete", {
+                  tagType: "main"
+                })}>
                 <IconInputContainer>
-                <SharpImage
+                <HashImage
                 source={require('~/Assets/Images/ic_sharp.png')}/>
-                <InputContainer>
-                <InputText
-                editable={false}
-                />
+                <MainTagText>{mainTag}</MainTagText>
+
                 <InputBottomBorder/>
-                </InputContainer>
                 </IconInputContainer>
+                </TouchableWithoutFeedback>
             </MainTagContainer>
             <RatingContainer>
               <Rating
@@ -178,12 +305,90 @@ const UploadAdditionInfo = ({navigation}) => {
               startingValue={0}/>
             </RatingContainer>
             <SubTagContainer>
+              <TouchableWithoutFeedback onPress={() => addSubTag()}>
                 <SubTagAddContainer>
                 <LabelText>태그 추가</LabelText>
                 <BottomArrowIcon
                 source={require('~/Assets/Images/ic_bottomArrow.png')}/>
                 </SubTagAddContainer>
+                </TouchableWithoutFeedback>
+    {subTag1 != "" && (
+        <SubTagItemContainer>
+        <TouchableWithoutFeedback onPress={() => navigation.navigate("TagAutoComplete", {
+          tagType: "sub1"
+        })}>
+        <IconInputContainer>
+        <HashImage
+        source={require('~/Assets/Images/ic_sharp.png')}/>
+        <SubTagText>{subTag1}</SubTagText>
+        <InputBottomBorder/>
+        </IconInputContainer>
+        </TouchableWithoutFeedback>
+    </SubTagItemContainer>
+    )}
+    {subTag2 != "" && (
+      <SubTagItemContainer>
+        <TouchableWithoutFeedback onPress={() => navigation.navigate("TagAutoComplete", {
+          tagType: "sub2"
+        })}>
+          <IconInputContainer>
+            <HashImage
+            source={require('~/Assets/Images/ic_sharp.png')}/>
+            <SubTagText>{subTag2}</SubTagText>
+            <InputBottomBorder/>
+          </IconInputContainer>
+        </TouchableWithoutFeedback>
+      </SubTagItemContainer>
+    )
+
+    }
+
+                
             </SubTagContainer>
+            <ExpenseContainer>
+                <LabelText>소비 금액</LabelText>
+                <IconInputContainer>
+                <ExpenseImage
+                source={require('~/Assets/Images/ic_expense.png')}/>
+                <InputContainer>
+                <InputWonContainer>
+                <InputText
+                keyboardType="number-pad"
+                value={expanse}
+                onChangeText={(text: string) => {
+                  setExpanse(text)
+                }}
+                />
+                <WonText>원</WonText>
+                </InputWonContainer>
+                </InputContainer>
+
+                <InputBottomBorder/>
+                </IconInputContainer>
+            </ExpenseContainer>
+
+            <LocationContainer>
+                <LabelText>위치</LabelText>
+                <TouchableWithoutFeedback onPress={() => navigation.navigate("LocationSearch")}>
+                <IconInputContainer>
+                <SearchImage
+                source={require('~/Assets/Images/ic_search.png')}/>
+                <LocationText>{location}</LocationText>
+                <InputBottomBorder/>
+                </IconInputContainer>
+                </TouchableWithoutFeedback>
+            </LocationContainer>
+            <MapViewContainer>
+              <MapView
+              style={{width: wp('80%'), height: 200}}
+              provider={PROVIDER_GOOGLE}
+              initialRegion={{
+                latitude: 37.78825,
+                longitude: -122.4324,
+                latitudeDelta: 0.0922,
+                longitudeDelta: 0.0421,
+              }}/>
+            </MapViewContainer>
         </Container>
     )
 }

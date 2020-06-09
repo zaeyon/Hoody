@@ -4,7 +4,7 @@ import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp
 } from 'react-native-responsive-screen';
-import {TouchableWithoutFeedback, FlatList} from 'react-native'
+import {TouchableWithoutFeedback, FlatList ,Keyboard, KeyboardAvoidingView} from 'react-native'
 
 const Container = Styled.SafeAreaView`
   flex: 1;
@@ -121,17 +121,17 @@ const TagAutoComplete = ({navigation, route}: Props) => {
     ]);
     const [tagType, setTagType] = useState();
 
+    const selectTag = (item) => {
+        navigation.navigate("UploadAdditionInfo", {
+            selectTag: item.tagName,
+            tagType: tagType
+        })
+    }
+
     const renderItem = ({item, index}) => {
         return (
-            <TagResultItemContainer>
-                <TagNameText>{'#' + item.tagName}</TagNameText>
-                <TouchableWithoutFeedback onPress={() => navigation.navigate("UploadAdditionInfo", {
-                    selectTag: item.tagName,
-                    tagType: tagType
-                })}>
-                <UseTagButtonText>사용</UseTagButtonText>
-                </TouchableWithoutFeedback>
-            </TagResultItemContainer>
+            <KeyboardAvoidingView>
+            </KeyboardAvoidingView>
         )
     }
 
@@ -172,8 +172,18 @@ const TagAutoComplete = ({navigation, route}: Props) => {
         </TagInputContainer>
         <TagResultContainer>
             <FlatList
+            keyboardShouldPersistTaps="handled"
             data={tagData}
-            renderItem={renderItem}/>
+            renderItem={({item, index}) => {
+            return (
+            <TagResultItemContainer>
+            <TagNameText>{'#' + item.tagName}</TagNameText>
+            <TouchableWithoutFeedback onPress={() => selectTag(item)}>
+            <UseTagButtonText>사용</UseTagButtonText>
+            </TouchableWithoutFeedback>
+            </TagResultItemContainer>
+            )
+            }}/>
         </TagResultContainer>
     </Container>
     );

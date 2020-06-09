@@ -4,10 +4,11 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import {FlatList, TouchableWithoutFeedback, Keyboard, Alert, View, SegmentedControlIOSComponent, Platform, StyleSheet, Text} from 'react-native';
+import {FlatList, TouchableWithoutFeedback, Keyboard, Alert, View, SegmentedControlIOSComponent, Platform, StyleSheet, Text, KeyboardAvoidingView} from 'react-native';
 import DraggableFlatList from 'react-native-draggable-flatlist';
 
 import UploadHeader from '~/Components/Presentational/UploadScreen/UploadHeader';
+import { BaseRouter } from '@react-navigation/native';
 
 const Container = Styled.SafeAreaView`
  flex: 1;
@@ -238,7 +239,17 @@ const EmptyContentContainer = Styled.View`
 height: 100px;
 `;
 
-const UploadScreen = ({navigation}) => {
+const UploadScreen = ({navigation, route}: Props) => {
+  const [mainTag, setMainTag] = useState();
+  const [rating, setRating] = useState(0);
+  const [subTag1, setSubTag1] = useState();
+  const [subTag2, setSubTag2] = useState();
+  const [expanse, setExpanse] = useState();
+  const [location, setLocation] = useState();
+  const [longitude, setLongitude] = useState();
+  const [latitude, setLatitude] = useState();
+  const [selected, setSelected] = useState(false);
+
   const [keyboardHeight, setKeyboardHeight] = useState(0);
   const [changeDescription, setChangeDescription] = useState(false);
   const [changingDes, setChangingDes] = useState('');
@@ -251,9 +262,7 @@ const UploadScreen = ({navigation}) => {
   const [noParagraphData, setNoParagraphData] = useState(true);
   const [addDescription, setAddDescription] = useState(true);
   const [changingPara, setChangingPara] = useState(true);
-  const [rating, setRating] = useState(0);
- const [ratingArray, setRatingArray] = useState(
- ['empty', 'empty', 'empty', 'empty', 'empty']);
+ const [ratingArray, setRatingArray] = useState(['empty', 'empty', 'empty', 'empty', 'empty']);
   const tmpRatingArr = ['empty', 'empty', 'empty', 'empty', 'empty'];
   const [imageUrl_arr, setImageUrl_arr] = useState([
     {
@@ -304,6 +313,39 @@ const UploadScreen = ({navigation}) => {
     };
   }, []);
 
+  useEffect(() => {
+    if(route.params?.mainTag) {
+      setMainTag(route.params.mainTag);
+      console.log("mainTagzz", mainTag);
+    }
+    if(route.params?.rating) {
+      console.log("별점 등록", route.params.rating)
+      const addRating = route.params.rating;
+      setRating(addRating);
+      //setRatingArray(route.params.ratingArray);
+      //console.log("route.params?.ratingArray", route.params.ratingArray);
+      //setSelected(!selected);
+    }
+    if(route.params?.subTag1) {
+      setSubTag1(route.params.subTag1);
+    }
+    if(route.params?.subTag2) {
+      setSubTag2(route.params.subTag2);
+    }
+    if(route.params?.expanse) {
+      setExpanse(route.params.expanse);
+    }
+    if(route.params?.location) {
+      setLocation(route.params.location);
+    }
+    if(route.params?.longitude) {
+      setLongitude(route.params.longitude);
+    }
+    if(route.params?.latitude) {
+      setLatitude(route.params.latitude);
+    }
+  }, [route.params?.mainTag, route.params?.rating, route.params?.subTag1, route.params?.subTag2, route.params?.expanse, route.params?.location, route.params?.longitude, route.params?.latitude]);
+
 
   const changeParagraph = (data) => {
     console.log('changed paragraph', data);
@@ -336,6 +378,11 @@ const UploadScreen = ({navigation}) => {
   }
 
   const addDes = (text) => {
+    if(text == "") 
+    {
+      setHeightArray([]);
+      setAddDescription(true);
+    } else {
     let preParaData = paragraphData;
     preParaData.push({
       index: paragraphData.length + 1,
@@ -347,7 +394,7 @@ const UploadScreen = ({navigation}) => {
     setParagraphData(preParaData);
     setNoParagraphData(false);
     setAddDescription(false);
-
+  }
   }
 
   async function sumParagraphHeight() {
@@ -384,6 +431,29 @@ const UploadScreen = ({navigation}) => {
       {cancelable: false},
     );
   };
+
+  const ratingRenderItem = ({item, index}) => {
+    if (item === 'full') {
+      return (
+        <RatingStarImage
+          source={require('~/Assets/Images/star-24px.png')}
+        />
+      );
+    } else if (item === 'half') {
+      return (
+        <HalfRatingStarImage
+          source={require('~/Assets/Images/half-star-24px.png')}
+        />
+      );
+    } else if (item === 'empty') {
+      return (
+        <RatingStarImage
+          source={require('~/Assets/Images/emptyStar-24px.png')}
+        />
+      );
+    }
+    
+  }
 
   const renderItem = ({item, index, drag, isActive}) => {
     if (index != paragraphData.length - 1) {
@@ -539,34 +609,169 @@ const UploadScreen = ({navigation}) => {
         </LeftContainer>
         <TouchableWithoutFeedback onPress={() => navigation.navigate("UploadAdditionInfo")}>
           <CenterContainer>
-          <MainTagText>{'#대표 태그 입력'}</MainTagText>
+          <MainTagText>{mainTag || '#대표 태그 입력'}</MainTagText>
+          {rating === 0 && (
           <RatingContainer>
-            <FlatList
-              horizontal={true}
-              data={ratingArray}
-              renderItem={({item, index}) => {
-                if (item === 'full') {
-                  return (
-                    <RatingStarImage
-                      source={require('~/Assets/Images/star-24px.png')}
-                    />
-                  );
-                } else if (item === 'half') {
-                  return (
-                    <HalfRatingStarImage
-                      source={require('~/Assets/Images/half-star-24px.png')}
-                    />
-                  );
-                } else if (item === 'empty') {
-                  return (
-                    <RatingStarImage
-                      source={require('~/Assets/Images/emptyStar-24px.png')}
-                    />
-                  );
-                }
-              }}
-            />
+              <RatingStarImage
+              source={require('~/Assets/Images/emptyStar-24px.png')}/>
+              <RatingStarImage
+              source={require('~/Assets/Images/emptyStar-24px.png')}/>
+              <RatingStarImage
+              source={require('~/Assets/Images/emptyStar-24px.png')}/>
+              <RatingStarImage
+              source={require('~/Assets/Images/emptyStar-24px.png')}/>
+              <RatingStarImage
+              source={require('~/Assets/Images/emptyStar-24px.png')}/>
           </RatingContainer>
+            )}
+            {rating === 0.5 && (
+          <RatingContainer>
+              <HalfRatingStarImage
+              source={require('~/Assets/Images/half-star-24px.png')}/>
+              <RatingStarImage
+              source={require('~/Assets/Images/emptyStar-24px.png')}/>
+              <RatingStarImage
+              source={require('~/Assets/Images/emptyStar-24px.png')}/>
+              <RatingStarImage
+              source={require('~/Assets/Images/emptyStar-24px.png')}/>
+              <RatingStarImage
+              source={require('~/Assets/Images/emptyStar-24px.png')}/>
+          </RatingContainer>
+            )}
+         {rating === 1 && (
+          <RatingContainer>
+              <RatingStarImage
+              source={require('~/Assets/Images/star-24px.png')}/>
+              <RatingStarImage
+              source={require('~/Assets/Images/emptyStar-24px.png')}/>
+              <RatingStarImage
+              source={require('~/Assets/Images/emptyStar-24px.png')}/>
+              <RatingStarImage
+              source={require('~/Assets/Images/emptyStar-24px.png')}/>
+              <RatingStarImage
+              source={require('~/Assets/Images/emptyStar-24px.png')}/>
+          </RatingContainer>
+            )}
+          {rating === 1.5 && (
+          <RatingContainer>
+              <RatingStarImage
+              source={require('~/Assets/Images/star-24px.png')}/>
+
+<HalfRatingStarImage
+              source={require('~/Assets/Images/half-star-24px.png')}/>
+              <RatingStarImage
+              source={require('~/Assets/Images/emptyStar-24px.png')}/>
+              <RatingStarImage
+              source={require('~/Assets/Images/emptyStar-24px.png')}/>
+              <RatingStarImage
+              source={require('~/Assets/Images/emptyStar-24px.png')}/>
+          </RatingContainer>
+            )}
+              {rating === 2 && (
+          <RatingContainer>
+              <RatingStarImage
+              source={require('~/Assets/Images/star-24px.png')}/>
+
+<RatingStarImage
+              source={require('~/Assets/Images/star-24px.png')}/>
+              <RatingStarImage
+              source={require('~/Assets/Images/emptyStar-24px.png')}/>
+              <RatingStarImage
+              source={require('~/Assets/Images/emptyStar-24px.png')}/>
+              <RatingStarImage
+              source={require('~/Assets/Images/emptyStar-24px.png')}/>
+          </RatingContainer>
+            )}
+            {rating === 2.5 && (
+          <RatingContainer>
+              <RatingStarImage
+              source={require('~/Assets/Images/star-24px.png')}/>
+
+<RatingStarImage
+              source={require('~/Assets/Images/star-24px.png')}/>
+              <HalfRatingStarImage
+              source={require('~/Assets/Images/half-star-24px.png')}/>
+              <RatingStarImage
+              source={require('~/Assets/Images/emptyStar-24px.png')}/>
+              <RatingStarImage
+              source={require('~/Assets/Images/emptyStar-24px.png')}/>
+          </RatingContainer>
+            )}
+            {rating === 3 && (
+          <RatingContainer>
+              <RatingStarImage
+              source={require('~/Assets/Images/star-24px.png')}/>
+
+<RatingStarImage
+              source={require('~/Assets/Images/star-24px.png')}/>
+              <RatingStarImage
+              source={require('~/Assets/Images/star-24px.png')}/>
+              <RatingStarImage
+              source={require('~/Assets/Images/emptyStar-24px.png')}/>
+              <RatingStarImage
+              source={require('~/Assets/Images/emptyStar-24px.png')}/>
+          </RatingContainer>
+            )} 
+            {rating === 3.5 && (
+          <RatingContainer>
+              <RatingStarImage
+              source={require('~/Assets/Images/star-24px.png')}/>
+
+<RatingStarImage
+              source={require('~/Assets/Images/star-24px.png')}/>
+              <RatingStarImage
+              source={require('~/Assets/Images/star-24px.png')}/>
+              <HalfRatingStarImage
+              source={require('~/Assets/Images/half-star-24px.png')}/>
+              <RatingStarImage
+              source={require('~/Assets/Images/emptyStar-24px.png')}/>
+          </RatingContainer>
+            )}
+             {rating === 4 && (
+          <RatingContainer>
+              <RatingStarImage
+              source={require('~/Assets/Images/star-24px.png')}/>
+
+<RatingStarImage
+              source={require('~/Assets/Images/star-24px.png')}/>
+              <RatingStarImage
+              source={require('~/Assets/Images/star-24px.png')}/>
+              <RatingStarImage
+              source={require('~/Assets/Images/star-24px.png')}/>
+              <RatingStarImage
+              source={require('~/Assets/Images/emptyStar-24px.png')}/>
+          </RatingContainer>
+            )}
+             {rating === 4.5 && (
+          <RatingContainer>
+              <RatingStarImage
+              source={require('~/Assets/Images/star-24px.png')}/>
+
+<RatingStarImage
+              source={require('~/Assets/Images/star-24px.png')}/>
+              <RatingStarImage
+              source={require('~/Assets/Images/star-24px.png')}/>
+              <RatingStarImage
+              source={require('~/Assets/Images/star-24px.png')}/>
+              <HalfRatingStarImage
+              source={require('~/Assets/Images/half-star-24px.png')}/>
+          </RatingContainer>
+            )}
+             {rating === 5 && (
+          <RatingContainer>
+              <RatingStarImage
+              source={require('~/Assets/Images/star-24px.png')}/>
+
+<RatingStarImage
+              source={require('~/Assets/Images/star-24px.png')}/>
+              <RatingStarImage
+              source={require('~/Assets/Images/star-24px.png')}/>
+              <RatingStarImage
+              source={require('~/Assets/Images/star-24px.png')}/>
+              <RatingStarImage
+              source={require('~/Assets/Images/star-24px.png')}/>
+          </RatingContainer>
+            )}      
         </CenterContainer>
         </TouchableWithoutFeedback>
         <RightContainer>
@@ -589,13 +794,13 @@ const UploadScreen = ({navigation}) => {
         <TouchableWithoutFeedback onPress={() => navigation.navigate("UploadAdditionInfo")}>
         <LocationContainer>
           <LocationIcon source={require('~/Assets/Images/ic_map.png')} />
-          <LocationText>위치 입력</LocationText>
+          <LocationText>{location || "위치 입력"}</LocationText>
         </LocationContainer>
         </TouchableWithoutFeedback>
         <TouchableWithoutFeedback onPress={() => navigation.navigate('UploadAdditionInfo')}>
         <ExpenseContainer>
           <ExpenseIcon source={require('~/Assets/Images/price.png')} />
-          <ExpenseText>소비 금액 입력</ExpenseText>
+          <ExpenseText>{expanse || "소비 금액 입력"}</ExpenseText>
         </ExpenseContainer>
         </TouchableWithoutFeedback>
       </LocationPriceContainer>

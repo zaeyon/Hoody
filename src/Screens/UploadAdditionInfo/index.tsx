@@ -4,9 +4,11 @@ import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import {FlatList, TouchableWithoutFeedback, Alert} from 'react-native';
-import {Rating} from 'react-native-ratings';
-import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
+import {FlatList, TouchableWithoutFeedback, Alert, Keyboard} from 'react-native';
+import {Rating} from '~/Components/Presentational/UploadScreen/Rating';
+import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
+
+const ratingImage = require('~/Assets/Images/ic_star4.png');
 
 const Container = Styled.SafeAreaView`
 flex: 1;
@@ -37,7 +39,7 @@ const RightContainer = Styled.View`
 `;
 
 const HeaderTitleText = Styled.Text`
- font-size: 16px;
+ font-size: 20px;
  margin-left: 6px;
 `;
 
@@ -67,7 +69,7 @@ height: 19px;
 `;
 
 const ButtonText = Styled.Text`
- font-size: 16px;
+ font-size: 20px;
  color: #338EFC;
 `;
 
@@ -202,15 +204,47 @@ const UploadAdditionInfo = ({navigation, route}: Props) => {
   const [subTag2, setSubTag2] = useState<string>("");
   const [expanse, setExpanse] = useState<string>("");
   const [location, setLocation] = useState<string>("");
+  const [locationLong, setLocationLong] = useState<number>();
+  const [locationLat, setLocationLat] = useState<number>();
+  const [LatLng, setLatLng] = useState<LatLng>()
+  const [ratingArray, setRatingArray] = useState(
+    ['empty', 'empty', 'empty', 'empty', 'empty']);
+
+  const tmpRatingArr = ['empty', 'empty', 'empty', 'empty', 'empty'];
     
     const ratingCompleted = (rating) => {
         console.log("rating", rating);
         setRating(rating);
+
+        if (rating % 1 === 0) {
+          for (var i = 0; i < rating; i++) {
+            tmpRatingArr[i] = 'full';
+            if (i === rating - 1) {
+              setRatingArray(tmpRatingArr);
+            }
+          }
+        } else {
+          for (var i = 0; i < rating; i++) {
+            if (i === rating - 0.5) {
+              tmpRatingArr[i] = 'half';
+              setRatingArray(tmpRatingArr);
+            } else {
+              tmpRatingArr[i] = 'full';
+            }
+          }
+        }
+  
     }
 
     useEffect(() => {
       if(route.params?.location) {
         setLocation(route.params.location);
+        setLocationLong(route.params.longitude);
+        setLocationLat(route.params.latitude);
+        setLatLng({
+          latitude: route.params.latitude,
+          longitude: route.params.longitude,
+        })
       }
     }, [route.params?.location]);
 
@@ -250,13 +284,18 @@ const UploadAdditionInfo = ({navigation, route}: Props) => {
     }
 
     const clickFinish = () => {
+      console.log("ratingArrayzzzz", ratingArray);
+
       navigation.navigate('UploadScreen', {
         mainTag: mainTag,
         rating: rating,
         subTag1: subTag1,
         subTag2: subTag2,
         expanse: expanse,
-        location: location
+        location: location,
+        longitude: locationLong,
+        latitude: locationLat,
+        ratingArray: ratingArray
       })
 
     }
@@ -264,6 +303,7 @@ const UploadAdditionInfo = ({navigation, route}: Props) => {
 
 
     return (
+      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <Container>
         <HeaderContainer>
         <LeftContainer>
@@ -300,9 +340,10 @@ const UploadAdditionInfo = ({navigation, route}: Props) => {
               <Rating
               type="custom"
               onFinishRating={ratingCompleted}
-              imageSize={35}
-              fractions={0}
-              startingValue={0}/>
+              ratingImage={ratingImage}
+              imageSize={45}
+              fractions={2}
+              startingValue={0.5}/>
             </RatingContainer>
             <SubTagContainer>
               <TouchableWithoutFeedback onPress={() => addSubTag()}>
@@ -339,11 +380,7 @@ const UploadAdditionInfo = ({navigation, route}: Props) => {
           </IconInputContainer>
         </TouchableWithoutFeedback>
       </SubTagItemContainer>
-    )
-
-    }
-
-                
+    )}  
             </SubTagContainer>
             <ExpenseContainer>
                 <LabelText>소비 금액</LabelText>
@@ -378,18 +415,25 @@ const UploadAdditionInfo = ({navigation, route}: Props) => {
                 </IconInputContainer>
                 </TouchableWithoutFeedback>
             </LocationContainer>
+            {location != "" && (
             <MapViewContainer>
               <MapView
               style={{width: wp('80%'), height: 200}}
               provider={PROVIDER_GOOGLE}
-              initialRegion={{
-                latitude: 37.78825,
-                longitude: -122.4324,
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421,
-              }}/>
+              scrollEnabled={false}
+              region={{
+                latitude: LatLng.latitude,
+                longitude: LatLng.longitude,
+                latitudeDelta: 0.0020,
+                longitudeDelta: 0.0021,
+              }}>
+                <Marker
+                coordinate={LatLng}/>
+              </MapView>
             </MapViewContainer>
+            )}
         </Container>
+        </TouchableWithoutFeedback>
     )
 }
 

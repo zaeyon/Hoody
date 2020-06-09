@@ -228,6 +228,8 @@ const LocationSearch = ({navigation}) => {
           search_obj.place_name = json.documents[i].place_name;
           search_obj.address = json.documents[i].address_name;
           search_obj.index = i;
+          search_obj.x = json.documents[i].x;
+          search_obj.y = json.documents[i].y;
           searchedResult_arr.push(search_obj);
           console.log('search_obj.place_name', search_obj.place_name);
           console.log(
@@ -303,12 +305,15 @@ const LocationSearch = ({navigation}) => {
             </SavedLocationContainer>
             <LocationListContainer>
               <FlatList
+                keyboardShouldPersistTaps="handled"
                 data={searchResult_arr}
                 renderItem={({item}) => (
                   <TouchableWithoutFeedback
                     onPress={() => {
                       navigation.navigate('UploadAdditionInfo', {
                         location: item.place_name,
+                        longitude: item.x,
+                        latitude: item.y,
                       });
                     }}>
                     <View>
@@ -343,7 +348,6 @@ const styles = StyleSheet.create({
   },
   address: {
     fontSize: 11,
-    
     color: '#707070',
   },
 });

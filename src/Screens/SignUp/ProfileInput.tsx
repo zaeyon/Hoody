@@ -8,6 +8,7 @@ import {
   Keyboard,
   keyboardEvent,
   Platform,
+  SafeAreaView,
 } from 'react-native';
 import {
   widthPercentageToDP as wp,
@@ -18,7 +19,7 @@ import axios from 'axios';
 import {useSelector, useDispatch} from 'react-redux';
 import allActions from '~/action';
 
-const Container = Styled.View`
+const Container = Styled.SafeAreaView`
  flex: 1;
  background-color: #ffffff;
  align-items: center;
@@ -361,7 +362,7 @@ const ProfileInput = ({navigation, route}) => {
   };
 
   const signUp = () => {
-    const url = 'https://e82f43910fe9.ngrok.io/' + 'auth/signUp';
+    const url = 'http://4691c7d12be5.ngrok.io/' + 'auth/signUp';
     submitingNickname = inputedNickname;
     submitingSocialId = socialId;
     submitingBirthDate = dateStr;
@@ -391,7 +392,7 @@ const ProfileInput = ({navigation, route}) => {
           //withCredentials: true,
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
-            Accept: 'application/json',
+            Accept: 'application/json; charset=utf-8' 
           },
         })
         .then(function (response) {

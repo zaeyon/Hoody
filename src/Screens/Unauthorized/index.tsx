@@ -203,7 +203,9 @@ const Unauthorized = ({navigation}) => {
   };
 
   const configureGoogleSignIn = () => {
-    GoogleSignin.configure();
+    GoogleSignin.configure({
+      iosClientId: "com.googleusercontent.apps.829653698047-sqnl4mf76c4srsupi6vaq1kd70sg0f7l"
+    });
   };
 
   return (

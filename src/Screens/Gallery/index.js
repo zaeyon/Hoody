@@ -17,7 +17,6 @@ import CameraRoll from '@react-native-community/cameraroll';
 import Styled from 'styled-components/native';
 import PropTypes from 'prop-types';
 import {Dropdown} from 'react-native-material-dropdown';
-
 import Row from './Row';
 import ImageItem from './ImageItem';
 const styles = StyleSheet.create({
@@ -33,6 +32,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
+
+const Container = Styled.SafeAreaView`
+ flex: 1;
+ background-color: #FFFFFF;
+ align-items: center;
+`;
 
 const HeaderContainer = Styled.View`
  width: ${wp('100%')};
@@ -141,15 +146,12 @@ class Gallery extends Component {
     });
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.fetch();
     const backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
       this._backAction,
     );
-    this.setState({
-      selected: this.props.route.params.imagesObj,
-    });
   }
 
   componentWillUnmount() {
@@ -157,9 +159,13 @@ class Gallery extends Component {
       'hardwareBackPress',
       this._backAction,
     );
+
+    this.setState({
+      selected: []
+    })
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     this.setState({
       selected: nextProps.selected,
     });
@@ -289,9 +295,12 @@ class Gallery extends Component {
     console.log('사진선택 this.state.selected', this.state.selected);
     var _selectedImages = this.state.selected.slice(0);
 
-    this.props.navigation.navigate('Upload', {
+    this.props.navigation.navigate('UploadScreen', {
       selectedImages: _selectedImages,
     });
+    this.setState({
+      selected: [],
+    })
   }
 
   renderImage(item) {
@@ -385,14 +394,14 @@ class Gallery extends Component {
       );
 
     return (
-      <View style={styles.wrapper}>
+      <Container>
         <HeaderContainer>
           <TouchableWithoutFeedback
             onPress={() => this.props.navigation.goBack()}>
             <CloseButton source={require('~/Assets/Images/close_gray.png')} />
           </TouchableWithoutFeedback>
           <Dropdown
-            containerStyle={{width: 110, height: hp('13%')}}
+            containerStyle={{width: 130, height: hp('13%'), marginTop: 20}}
             data={this.state.albumName}
             animationDureation={0}
             rippleOpacity={0}
@@ -408,7 +417,7 @@ class Gallery extends Component {
           </TouchableWithoutFeedback>
         </HeaderContainer>
         {flatListOrEmptyText}
-      </View>
+      </Container>
     );
   }
 }

@@ -134,7 +134,7 @@ const Login = ({navigation}) => {
   }
 
   const Login = () => {
-    const url = 'https://e82f43910fe9.ngrok.io/' + 'auth/login';
+    const url = 'http://4691c7d12be5.ngrok.io/' + 'auth/login';
     submitingEmail = email;
     submitingPassword = password;
     console.log('로그인 요청 email', submitingEmail);
@@ -163,6 +163,8 @@ const Login = ({navigation}) => {
                 password: submitingPassword,
               }),
             );
+          } else {
+            console.log("response", response.body);
           }
         })
         .catch(function (error) {
@@ -180,12 +182,14 @@ const Login = ({navigation}) => {
           style={{marginBottom: 16, borderBottomWidth: 0.3}}
           placeholder="이메일"
           onChangeText={(text: string) => setEmail(text)}
+          autoCapitalize="none"
         />
         <Input
           style={{marginBottom: 16, borderBottomWidth: 0.3}}
           placeholder="비밀번호"
           secureTextEntry={true}
           onChangeText={(text: string) => setPassword(text)}
+          autoCapitalize="none"
         />
         <PasswordReset onPress={() => navigation.navigate('PasswordReset')}>
           비밀번호 재설정

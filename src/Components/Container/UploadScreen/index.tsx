@@ -4,11 +4,12 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import {FlatList, TouchableWithoutFeedback, Keyboard, Alert, View, SegmentedControlIOSComponent, Platform, StyleSheet, Text, KeyboardAvoidingView} from 'react-native';
+import {FlatList, TouchableWithoutFeedback, Keyboard, Alert, View, SegmentedControlIOSComponent, Platform, StyleSheet, Text, KeyboardAvoidingView, ScrollView} from 'react-native';
 import DraggableFlatList from 'react-native-draggable-flatlist';
 
 import UploadHeader from '~/Components/Presentational/UploadScreen/UploadHeader';
 import { BaseRouter } from '@react-navigation/native';
+import PostUpload from '~/Route/Upload';
 
 const Container = Styled.SafeAreaView`
  flex: 1;
@@ -136,6 +137,7 @@ border-color: #eeeeee;
 const FooterContainer = Styled.View`
 position: absolute;
 bottom: 0;
+background-color: #ffffff;
 `;
 
 const DescriptionInput = Styled.TextInput`
@@ -224,9 +226,11 @@ const ParagraphIcon = Styled.Image`
 
 const ParagraphIconContainer = Styled.View`
 flex: 0.4;
-padding: 15px;
 justify-content: center;
 align-items: center;
+padding-top: 12px;
+padding-bottom: 12px;
+padding-right: 10px;
 `;
 
 const ParagraphContentContainer = Styled.View`
@@ -239,7 +243,12 @@ const EmptyContentContainer = Styled.View`
 height: 100px;
 `;
 
-const UploadScreen = ({navigation, route}: Props) => {
+interface Props {
+  navigation:any,
+  route:any
+}
+
+const UploadScreen = ({navigation, route}:Props) => {
   const [mainTag, setMainTag] = useState();
   const [rating, setRating] = useState(0);
   const [subTag1, setSubTag1] = useState();
@@ -249,6 +258,14 @@ const UploadScreen = ({navigation, route}: Props) => {
   const [longitude, setLongitude] = useState();
   const [latitude, setLatitude] = useState();
   const [selected, setSelected] = useState(false);
+  const [addImageArray, setAddImageArray] = useState<Array<string>>([]);
+  const [certifiedLocation, setCertifiedLocation] = useState<boolean>(false);
+  const [dump, setDump] = useState<boolean>(false);
+  const [sequence, setSequence] = useState<string>();
+  const [products, setProducts] = useState();
+
+  const [desArray, setDesArray] = useState<Array<string>>([]);
+  const [mediaArray, setMediaArray] = useState([]);
 
   const [keyboardHeight, setKeyboardHeight] = useState(0);
   const [changeDescription, setChangeDescription] = useState(false);
@@ -346,6 +363,16 @@ const UploadScreen = ({navigation, route}: Props) => {
     }
   }, [route.params?.mainTag, route.params?.rating, route.params?.subTag1, route.params?.subTag2, route.params?.expanse, route.params?.location, route.params?.longitude, route.params?.latitude]);
 
+  useEffect(() => {
+    console.log('사진 선택');
+    if(route.params?.selectedImages) {
+      console.log("route.params.selectedImages", route.params.selectedImages);
+      
+      addImages(route.params.selectedImages);
+
+    }
+  }, [route.params?.selectedImages])
+
 
   const changeParagraph = (data) => {
     console.log('changed paragraph', data);
@@ -373,7 +400,6 @@ const UploadScreen = ({navigation, route}: Props) => {
     setChangingDes(text);
     setChangeDescription(false);
     setChangingIndex(null);
-    
 
   }
 
@@ -384,17 +410,46 @@ const UploadScreen = ({navigation, route}: Props) => {
       setAddDescription(true);
     } else {
     let preParaData = paragraphData;
+    let preDesArray = desArray;
+    preDesArray.push(text);
     preParaData.push({
       index: paragraphData.length + 1,
       type: 'description',
       description: text
     })
+    setDesArray(preDesArray);
+    console.log("desArray", "desArray");
     setHeightArray([]);
     setAddParagraph(true);
     setParagraphData(preParaData);
     setNoParagraphData(false);
     setAddDescription(false);
+    }
   }
+
+  const addImages = (imageArray) => {
+    console.log("imageArray", imageArray);
+    let preParaData = paragraphData;
+    let preMediaArray = mediaArray;
+  
+    for(var i = 0; i < imageArray.length; i++) {
+      preParaData.push({
+        index: paragraphData.length + 1,
+        type: 'image',
+        url: imageArray[i].uri,
+      })
+      preMediaArray.push(imageArray[i]);
+      if(i === imageArray.length - 1) {
+        setParagraphData(preParaData);
+        console.log("preParaData", preParaData);
+        setMediaArray(preMediaArray);
+        console.log("mediaArray", mediaArray);
+      }
+    }
+    setHeightArray([]);
+    setAddParagraph(true);
+    setNoParagraphData(false);
+    setAddDescription(false);
   }
 
   async function sumParagraphHeight() {
@@ -403,11 +458,8 @@ const UploadScreen = ({navigation, route}: Props) => {
   }
 
   const openGallery = () => {
-    var _images = imageUrl_arr;
-    _images.pop();
-    navigation.navigate('Gallery', {
-      imagesObj: _images,
-    });
+    navigation.navigate('Gallery')
+    //navigation.navigate("GalleryTest");
   };
 
 
@@ -431,6 +483,39 @@ const UploadScreen = ({navigation, route}: Props) => {
       {cancelable: false},
     );
   };
+
+  const uploadFinish = () => {
+    console.log("업로드할 paragraphData", paragraphData);
+    console.log("업로드할 desArray", desArray);
+    console.log("업로드할 mediaArray", mediaArray);
+    var tmpSequence = "";
+   for(var i = 0; i < paragraphData.length; i++) {
+     if(paragraphData[i].type === "description") tmpSequence = tmpSequence + "D";
+     else if(paragraphData[i].type === "image") tmpSequence = tmpSequence + "M";
+     else if(paragraphData[i].type === "video") tmpSequence = tmpSequence + "M";
+     
+     if(i === paragraphData.length -1) {
+       console.log("tmpSequence", tmpSequence);
+
+       setTimeout(function() {
+         console.log("sequence", tmpSequence);
+         var description = "";
+         for(var i = 0; i < desArray.length; i++)
+         { 
+           if(i == desArray.length -1) {
+           description = description + '"' + desArray[i] + '"';
+             description = "[" + description + "]"
+             console.log("description", description);
+            PostUpload(description, mediaArray, mainTag, subTag1, subTag2, rating, location, longitude, latitude, certifiedLocation, dump, tmpSequence, products)
+           } else {
+            description = description + '"' + desArray[i] + '"' + ",";
+           }
+         }
+       }, 1000)
+     }
+   }
+  //  PostUpload()
+  }
 
   const ratingRenderItem = ({item, index}) => {
     if (item === 'full') {
@@ -463,6 +548,8 @@ const UploadScreen = ({navigation, route}: Props) => {
           style={isActive && styles.shadow}
           onLayout={(event) => {
             const layout = event.nativeEvent.layout;
+            itemHeight = layout.height;
+            /*
             let tmpArray = heightArray;
             tmpArray.push(layout.height);
             setHeightArray(tmpArray);
@@ -476,6 +563,7 @@ const UploadScreen = ({navigation, route}: Props) => {
               setAddParagraph(false);
               }
             }
+            */
           }}>
           <TouchableWithoutFeedback
             onPress={() => clickToParagraphContent(item.description, index)}>
@@ -493,10 +581,11 @@ const UploadScreen = ({navigation, route}: Props) => {
         </TextParagraphContainer>
       );
     } else if (item.type === 'image') {
+      console.log("image 삽입", item.url)
       return (
         <ImageParagraphContainer
           style={isActive && styles.shadow}
-          onLayout={(event) => {
+          /*onLayout={(event) => {
             const layout = event.nativeEvent.layout;
             let tmpArray = heightArray;
             tmpArray.push(layout.height);
@@ -510,7 +599,7 @@ const UploadScreen = ({navigation, route}: Props) => {
               }
             }
 
-          }}>
+          }}*/>
           <ParagraphContentContainer>
             <InsertedImage source={{uri: item.url}} />
           </ParagraphContentContainer>
@@ -529,7 +618,7 @@ const UploadScreen = ({navigation, route}: Props) => {
         return (
           <LastTextParagraphContainer
             style={isActive && styles.shadow}
-            onLayout={(event) => {
+            /*onLayout={(event) => {
               const layout = event.nativeEvent.layout;
             let tmpArray = heightArray;
             tmpArray.push(layout.height);
@@ -544,7 +633,7 @@ const UploadScreen = ({navigation, route}: Props) => {
               setAddParagraph(false);
               }
             }
-            }}>
+            }}*/>
             <TouchableWithoutFeedback
               onPress={() => clickToParagraphContent(item.description, index)}>
               <ParagraphContentContainer>
@@ -562,10 +651,12 @@ const UploadScreen = ({navigation, route}: Props) => {
           </LastTextParagraphContainer>
         );
       } else if (item.type === 'image') {
+      console.log("마지막 image 삽입", item.url)
         return (
           <LastImageParagraphContainer
             style={isActive && styles.shadow}
-            onLayout={(event) => {
+            /*onLayout={(event) => {
+              
               console.log("마지막 이미지")
               const layout = event.nativeEvent.layout;
             let tmpArray = heightArray;
@@ -573,14 +664,21 @@ const UploadScreen = ({navigation, route}: Props) => {
             setHeightArray(tmpArray);
 
             console.log("height Array222", heightArray);
+
+            console.log("heightArray", heightArray);
+            console.log("paragraphData", paragraphData);
+            console.log("tmpArray", tmpArray);
             if(heightArray.length === paragraphData.length) {
+
               if(addParagraph){
+              console.log("addParagraph", "gkgkgk");
               const sum = heightArray.reduce((a, b ) => a + b);
               setParagraphHeight(sum);
               setAddParagraph(false);
               }
             }
-            }}>
+            }}
+            */>
             <TouchableWithoutFeedback onPress={() => 0}>
               <ParagraphContentContainer>
                 <InsertedImage source={{uri: item.url}} />
@@ -786,7 +884,9 @@ const UploadScreen = ({navigation, route}: Props) => {
               </TouchableWithoutFeedback>
           )}
           {!addDescription && !changeDescription && (
+          <TouchableWithoutFeedback onPress={() => uploadFinish()}>
           <ButtonText>공유</ButtonText>
+          </TouchableWithoutFeedback>
           )} 
         </RightContainer>
       </HeaderContainer>
@@ -805,8 +905,7 @@ const UploadScreen = ({navigation, route}: Props) => {
         </TouchableWithoutFeedback>
       </LocationPriceContainer>
       
-      <BodyContainer
-      style={{height: paragraphHeight, backgroundColor:"#ffffff"}}> 
+      <ScrollView style={{backgroundColor:"#ffffff"}}>
         {addDescription && (
           <DescriptionInputContainer>
           <DescriptionInput
@@ -835,15 +934,22 @@ const UploadScreen = ({navigation, route}: Props) => {
         )}
         {!changeDescription && !addDescription && (
           <DraggableFlatList
+          onLayout={(event) => {
+            const layout = event.nativeEvent.layout;
+            console.log("DraggableFlatList", layout.height)
+            setParagraphHeight(layout.height);
+            }}
+            style={{flex: 0}}
             data={paragraphData}
+            extraData={paragraphData}
             renderItem={renderItem}
             onDragEnd={({data}) => changeParagraph(data)}
             keyExtractor={(item, index) => `draggable-item-${item.index}`}
           />
         )}
-        </BodyContainer>
+        </ScrollView>
         <TouchableWithoutFeedback onPress={() => clickToEmptyContent()}>
-      <EmptyContentContainer>
+      <EmptyContentContainer style={{flex:100}}>
       </EmptyContentContainer>
       </TouchableWithoutFeedback>
       <FooterContainer style={{marginBottom: keyboardHeight}}>

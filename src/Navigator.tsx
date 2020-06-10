@@ -34,6 +34,7 @@ import ParagraphInput from '~/Components/Test/ParagraphInput';
 import UploadScreen from '~/Components/Container/UploadScreen';
 import UploadAdditionInfo from '~/Screens/UploadAdditionInfo'; 
 import TagAutoComplete from '~/Screens/TagAutoComplete';
+import GalleryTest from '~/Components/Test/GalleryTest';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
@@ -203,6 +204,9 @@ function UploadStackScreen() {
           close: config,
         }
       }}/>
+      <UploadStack.Screen
+      name="GalleryTest"
+      component={GalleryTest}/>
     </UploadStack.Navigator>
   );
 }
@@ -342,7 +346,7 @@ function Navigator() {
   const currentUser = useSelector((state) => state.currentUser);
   return (
     <NavigationContainer>
-      {!currentUser.loggedIn ? (
+      {currentUser.loggedIn ? (
         <Tab.Navigator
           tabBarOptions={{
             showLabel: false,
@@ -455,6 +459,7 @@ function Navigator() {
 
 const styles = StyleSheet.create({
   tabBar: {
+    paddingTop: 20,
     height: hp('7.5%'),
     position: 'absolute',
   },

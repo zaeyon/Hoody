@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* hoogingAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* hoogingAppTests.m */; };
+		0A32ECC224906FD100A93EC6 /* libreact-native-cameraroll.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A32ECC124906FD100A93EC6 /* libreact-native-cameraroll.a */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
@@ -30,6 +31,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 13B07F861A680F5B00A75B9A;
 			remoteInfo = hoogingApp;
+		};
+		0A32ECBE24906E5800A93EC6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0A32ECBA24906E5800A93EC6 /* RNCCameraRoll.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 58B5115D1A9E6B3D00147676;
+			remoteInfo = RNCCameraRoll;
 		};
 		2D02E4911E0B4A5D006451C7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -59,6 +67,8 @@
 		00E356EE1AD99517003FC87E /* hoogingAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = hoogingAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* hoogingAppTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = hoogingAppTests.m; sourceTree = "<group>"; };
+		0A32ECBA24906E5800A93EC6 /* RNCCameraRoll.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNCCameraRoll.xcodeproj; path = "../node_modules/@react-native-community/cameraroll/ios/RNCCameraRoll.xcodeproj"; sourceTree = "<group>"; };
+		0A32ECC124906FD100A93EC6 /* libreact-native-cameraroll.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libreact-native-cameraroll.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0A43A70F247E4C3300CFAF01 /* hoogingApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = hoogingApp.entitlements; path = hoogingApp/hoogingApp.entitlements; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* hoogingApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = hoogingApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = hoogingApp/AppDelegate.h; sourceTree = "<group>"; };
@@ -100,6 +110,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0A32ECC224906FD100A93EC6 /* libreact-native-cameraroll.a in Frameworks */,
 				E66A0AC12487B39A002A5F86 /* libRNGestureHandler.a in Frameworks */,
 				64D7CC1C17B390CBFB55F4C2 /* libPods-hoogingApp.a in Frameworks */,
 			);
@@ -141,6 +152,14 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		0A32ECBB24906E5800A93EC6 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				0A32ECBF24906E5800A93EC6 /* libRNCCameraRoll.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		13B07FAE1A68108700A75B9A /* hoogingApp */ = {
 			isa = PBXGroup;
 			children = (
@@ -159,6 +178,7 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0A32ECC124906FD100A93EC6 /* libreact-native-cameraroll.a */,
 				E66A0AC02487B39A002A5F86 /* libRNGestureHandler.a */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
@@ -188,6 +208,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				0A32ECBA24906E5800A93EC6 /* RNCCameraRoll.xcodeproj */,
 				E66A0AB42487B249002A5F86 /* RNGestureHandler.xcodeproj */,
 			);
 			name = Libraries;
@@ -317,7 +338,7 @@
 		83CBB9F71A601CBA00E9B192 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1130;
+				LastUpgradeCheck = 1150;
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
 						CreatedOnToolsVersion = 6.2;
@@ -351,6 +372,10 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
+					ProductGroup = 0A32ECBB24906E5800A93EC6 /* Products */;
+					ProjectRef = 0A32ECBA24906E5800A93EC6 /* RNCCameraRoll.xcodeproj */;
+				},
+				{
 					ProductGroup = E66A0AB52487B249002A5F86 /* Products */;
 					ProjectRef = E66A0AB42487B249002A5F86 /* RNGestureHandler.xcodeproj */;
 				},
@@ -366,6 +391,13 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
+		0A32ECBF24906E5800A93EC6 /* libRNCCameraRoll.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libRNCCameraRoll.a;
+			remoteRef = 0A32ECBE24906E5800A93EC6 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 		E66A0ABA2487B24A002A5F86 /* libRNGestureHandler.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
@@ -688,6 +720,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 7CB03E1A36E9C053B7B17587 /* Pods-hoogingApp-hoogingAppTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -711,6 +744,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = A365A2414BF58C8052B4EB43 /* Pods-hoogingApp-hoogingAppTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = hoogingAppTests/Info.plist;

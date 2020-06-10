@@ -242,7 +242,8 @@ class Gallery_ProfileImage extends Component {
     console.log('사진선택 this.state.selected', this.state.selected);
     var _selectedImages = this.state.selected.slice(0);
 
-    this.props.navigation.navigate('Upload', {
+
+    this.props.navigation.navigate('UploadAdditionInfo', {
       selectedImages: _selectedImages,
     });
   }

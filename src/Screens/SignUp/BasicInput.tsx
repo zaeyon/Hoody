@@ -1,12 +1,12 @@
 import React, {useState, useLayoutEffect, useEffect} from 'react';
 import Styled from 'styled-components/native';
-import {TouchableWithoutFeedback, Keyboard} from 'react-native';
+import {TouchableWithoutFeedback, Keyboard, SafeAreaView} from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 
-const Container = Styled.View`
+const Container = Styled.SafeAreaView`
  flex: 1;
  background-color: #ffffff;
  align-items: center;
@@ -53,25 +53,24 @@ background-color: #c3c3c3;
 `;
 
 const Header = Styled.View`
-position: absolute;
-top: 0px;
 width: ${wp('100%')};
-height: ${hp('8%')};
+height: ${hp('6%')};
 border-color: #707070;
 flex-direction: row;
 justify-content: space-between;
 align-items: center;
-padding-right: 10px;
-padding-left: 10px;
+padding-right: 15px;
+padding-left: 15px;
 `;
 
 const HeaderTitle = Styled.Text`
 font-size: 20px;
+margin-top: 5px;
 `;
 
 const CloseButton = Styled.Image`
- width: ${wp('5.0%')};
- height: ${wp('5.0%')};
+ width: ${wp('4.5%')};
+ height: ${wp('4.5%')};
  tint-color: #000000;
 `;
 

@@ -28,13 +28,14 @@ import ImageItem from '~/Screens/Gallery_ProfileImage/ImageItem';
 import Unauthorized from '~/Screens/Unauthorized';
 import BasicInput from '~/Screens/SignUp/BasicInput';
 import ProfileInput from '~/Screens/SignUp/ProfileInput';
-import Login from '~/Screens/Login';
+import LoginScreen from '~/Screens/LoginScreen';
 import ParagraphDivider from '~/Components/Test/ParagraphDivider';
 import ParagraphInput from '~/Components/Test/ParagraphInput';
 import UploadScreen from '~/Components/Container/UploadScreen';
 import UploadAdditionInfo from '~/Screens/UploadAdditionInfo'; 
 import TagAutoComplete from '~/Screens/TagAutoComplete';
 import GalleryTest from '~/Components/Test/GalleryTest';
+import FeedDetailScreen from '~/Components/Container/FeedDetailScreen';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
@@ -138,14 +139,10 @@ function FeedStackScreen() {
         }}
       />
       <FeedStack.Screen
-        name="FeedDetail"
-        component={FeedDetail}
+        name="FeedDetailScreen"
+        component={FeedDetailScreen}
         options={{
-          headerTitle: (props) => <FeedDetailTitle {...props} />,
-          transitionSpec: {
-            open: config,
-            close: config,
-          },
+          headerShown: false
         }}
       />
     </FeedStack.Navigator>
@@ -299,8 +296,8 @@ function UnauthStackScreen() {
         }}
       />
       <UnauthStack.Screen
-        name="Login"
-        component={Login}
+        name="LoginScreen"
+        component={LoginScreen}
         options={{
           transitionSpec: {
             open: config,
@@ -352,6 +349,7 @@ function Navigator() {
             showLabel: false,
             style: styles.tabBar,
           }}>
+            {/*
           <Tab.Screen
             name="Home"
             component={HomeStackScreen}
@@ -364,13 +362,14 @@ function Navigator() {
                   focused
                     ? require('~/Assets/Images/Tabs/ic_home.png')
                     : require('~/Assets/Images/Tabs/ic_home_outline.png')
-                */
+                
                     require('~/Assets/Images/Tabs/ic_homeTap.png')
                   }
                 />
               ),
             }}
           />
+          */}
           <Tab.Screen
             name="Feed"
             component={FeedStackScreen}

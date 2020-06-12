@@ -154,7 +154,7 @@ const InputText = Styled.TextInput`
  font-size: 20px;
  width: ${wp('75.5%')};
  height: ${hp('5%')};
- padding-left: 5px;
+ padding-right: 27px;
 `;
 
 
@@ -390,6 +390,7 @@ const UploadAdditionInfo = ({navigation, route}: Props) => {
                 <InputContainer>
                 <InputWonContainer>
                 <InputText
+                textAlign="right"
                 keyboardType="number-pad"
                 value={expanse}
                 onChangeText={(text: string) => {

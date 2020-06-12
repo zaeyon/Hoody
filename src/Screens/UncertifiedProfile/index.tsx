@@ -4,7 +4,7 @@ import {Text, TouchableOpacity} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
-import Login from '~/Screens/Login';
+import Login from '~/Screens/LoginScreen';
 
 const Container = Styled.View`
   flex: 1;
@@ -37,7 +37,7 @@ function AuthenticationStackScreen() {
 const UncertifiedProfile = ({navigation}) => {
   return (
     <Container>
-      <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+      <TouchableOpacity onPress={() => navigation.navigate('LoginScreen')}>
         <Text>로그인</Text>
       </TouchableOpacity>
       <Text style={{marginTop: 20}}>회원가입</Text>

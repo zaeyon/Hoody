@@ -12,7 +12,6 @@ const Container = Styled.View`
 
 const FeedItemContainer = Styled.View`
  width: ${wp('100%')};
- height: ${hp('68%')};
  background-color:#ffffff;
 `;
 
@@ -73,8 +72,8 @@ tint-color: #23E5D2;
 
 const ReviewImage = Styled.Image`
 resize-mode:cover;
- height: 100%;
- width: 100%;
+width: ${wp('100%')};
+height: ${wp('100%')};
 `;
 
 const TagContainer = Styled.View`
@@ -100,7 +99,8 @@ color: #000000;
 `;
 
 const LocationPriceContainer = Styled.View`
- margin-top: 8px;
+ margin-top: 10px;
+ margin-left: 8px;
  flex-direction: row;
  `;
 
@@ -116,7 +116,7 @@ const LocationIcon = Styled.Image`
 `;
 
 const LocationText = Styled.Text`
- font-size: 12px;
+ font-size: 14px;
  color: #707070;
 `;
 
@@ -134,13 +134,13 @@ const PriceIcon = Styled.Image`
 
 const PriceText = Styled.Text`
  margin-left: 2px;
- font-size: 12px;
+ font-size: 14px;
  color: #707070;
 `;
 
 const DescriptionContainer = Styled.View`
 padding-top: 3px;
-padding-left: 3px;
+padding-left: 8px;
 `;
 
 const DescriptionText = Styled.Text`
@@ -148,10 +148,9 @@ const DescriptionText = Styled.Text`
 `;
 
 const AdditionalInfoContainer = Styled.View`
- flex: 1px;
+ padding: 15px;
  flex-direction: row;
  justify-content: center;
- align-items: flex-end;
 `;
 
 const InfoLabelText = Styled.Text`
@@ -188,11 +187,13 @@ interface Props {
   main_tag: string;
   sub_tag1?: string;
   sub_tag2?: string;
-  review_content: string;
+  review_content: array;
   image_count: number;
   favorite_count: number;
   comment_count: number;
   scrap_count: number;
+  location: string;
+  expanse: number;
 }
 
 const FeedItem = ({
@@ -210,6 +211,8 @@ const FeedItem = ({
   favorite_count,
   comment_count,
   scrap_count,
+  location,
+  expanse,
 }: Props) => {
   const [ratingArray, setRatingArray] = useState([
     'empty',
@@ -243,8 +246,8 @@ const FeedItem = ({
 
     let tmpTagList = new Array();
     tmpTagList.push(main_tag);
-    if (sub_tag1) tmpTagList.push(sub_tag1);
-    if (sub_tag2) tmpTagList.push(sub_tag2);
+    if (sub_tag1 !== "undefined") tmpTagList.push(sub_tag1);
+    if (sub_tag2 !== "undefined") tmpTagList.push(sub_tag2);
     setTagList(tmpTagList);
   }, []);
 
@@ -295,7 +298,7 @@ const FeedItem = ({
               data={tagList}
               renderItem={({item}) => (
                 <TagBackground>
-                  <TagText>{item}</TagText>
+                  <TagText>#{item}</TagText>
                 </TagBackground>
               )}
             />
@@ -303,14 +306,18 @@ const FeedItem = ({
         </BodyContainer>
         <FooterContainer>
           <LocationPriceContainer>
+            {location && (
             <LocationContainer>
               <LocationIcon source={require('~/Assets/Images/marker.png')} />
-              <LocationText>콩티드툴레아 도산점</LocationText>
+              <LocationText>{location}</LocationText>
             </LocationContainer>
+            )}
+            {expanse && (
             <PriceContainer>
               <PriceIcon source={require('~/Assets/Images/price.png')} />
-              <PriceText>8,900원</PriceText>
+            <PriceText>{expanse}원</PriceText>
             </PriceContainer>
+            )}
           </LocationPriceContainer>
           <DescriptionContainer>
             <DescriptionText>{review_content}</DescriptionText>

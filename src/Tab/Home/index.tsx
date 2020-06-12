@@ -31,7 +31,7 @@ const InputBoxContainer = Styled.View`
    {translateY: this.state.position.y}
 `;
 
-const InputBox = Styled.TextInput`
+const SearchBar = Styled.TextInput`
  width: ${wp('85%')};
  height: 40px;
  border-radius: 25px;
@@ -85,7 +85,7 @@ class Home extends Component<Props> {
             onPress={() => this.props.navigation.navigate('Search')}>
             <View>
               <InputBoxContainer>
-                <InputBox
+                <SearchBar
                   placeholder="태그로 후기를 검색하세요."
                   clearButtonMode={'while-editing'}
                   editable={false}

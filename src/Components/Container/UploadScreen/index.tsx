@@ -9,7 +9,7 @@ import DraggableFlatList from 'react-native-draggable-flatlist';
 
 import UploadHeader from '~/Components/Presentational/UploadScreen/UploadHeader';
 import { BaseRouter } from '@react-navigation/native';
-import PostUpload from '~/Route/Upload';
+import PostUpload from '~/Route/Post/Upload';
 
 const Container = Styled.SafeAreaView`
  flex: 1;
@@ -507,6 +507,12 @@ const UploadScreen = ({navigation, route}:Props) => {
              description = "[" + description + "]"
              console.log("description", description);
             PostUpload(description, mediaArray, mainTag, subTag1, subTag2, rating, location, longitude, latitude, certifiedLocation, dump, tmpSequence, products)
+            .then(function(response) {
+              if(response.status === 201) {
+                console.log("response.status", response.status);
+                navigation.navigate("Feed")
+              }
+            })
            } else {
             description = description + '"' + desArray[i] + '"' + ",";
            }

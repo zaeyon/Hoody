@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {TouchableWithoutFeedback, FlatList, View} from 'react-native';
+import {TouchableWithoutFeedback, FlatList, View, Keyboard} from 'react-native';
 import Styled from 'styled-components/native';
 import {
   widthPercentageToDP as wp,
@@ -10,6 +10,10 @@ import axios from 'axios';
 
 import FeedItem from '~/Components/Presentational/FeedListScreen/FeedItem';
 import PopularTagItem from '~/Components/Presentational/FeedListScreen/PopularTagItem';
+import GetAllFeed from '~/Route/Post/TestFeed';
+import SearchBar from '~/Components/Presentational/FeedListScreen/SearchBar'
+import SearchResult from '~/Components/SearchResult';
+import SearchAutoComplete from '~/Components/Presentational/SearchScreen/SearchAutoComplete';
 
 const BottomTabHeight = Styled.View`
  width: ${wp('100%')};
@@ -25,11 +29,36 @@ const Container = Styled.SafeAreaView`
 
 const HeaderBar = Styled.View`
  width: ${wp('100%')};
- height: ${hp('13%')};
+ height: ${hp('7%')};
  background-color: #ffffff;
  padding: 5px;
  border-bottom-width: 0.4px;
  border-color: #eeeeee;
+ align-items: center;
+`;
+
+const NoFeedListDataContainer = Styled.View`
+ width: ${wp('100%')};
+ height: ${hp('87%')};
+ justify-content: center;
+ align-items: center;
+`;
+
+const NoFeedText = Styled.Text`
+ font-size: 17px;
+ color: #c3c3c3;
+`;
+
+const BodyContainer = Styled.View`
+ background-color: #ffffff;
+`;
+
+
+const TagAutoCompleteContainer = Styled.View`
+width: ${wp('100%')};
+top: 0px;
+position: absolute;
+background-color: #ffffff;
 `;
 
 const FEED_DATA = [
@@ -92,106 +121,103 @@ const POPULAR_TAG_DATE = [
 ];
 
 function Feed({navigation}) {
-  const [feedData, setFeedData] = useState([]);
+  const [feedListData, setFeedListData] = useState([]);
+  const [searchFocus, setSearchFocus] = useState<boolean>(false);
+  const [desArray, setDesArray] = useState;
+
   useEffect(() => {
     getFeedData();
   }, []);
 
   const getFeedData = () => {
-    const url = 'https://e82f43910fe9.ngrok.io' + '/feed';
-    return new Promise(function (resolve, reject) {
-      axios
-        .get(url)
-        .then(function (response) {
-          console.log('response.data: ', JSON.stringify(response.data));
-          const stringifyedData = JSON.stringify(response.data);
-          const parsedData = JSON.parse(stringifyedData);
-          console.log('parsedData', parsedData);
-          const feedData = [
-            {
-              id: 1,
-              profile_image:
-                'https://img-wishbeen.akamaized.net/plan/1454465238030_15657083522_d45a489b15_b.jpg',
-              nickname: 'jaeyeon',
-              write_time: '1 minute ago',
-              rating: 0,
-              favorite_count: 221,
-              comment_count: 42,
-              scrap_count: 51,
-              main_image:
-                'https://img-wishbeen.akamaized.net/plan/1454465238030_15657083522_d45a489b15_b.jpg',
-              review_image_list:
-                'https://img-wishbeen.akamaized.net/plan/1454465238030_15657083522_d45a489b15_b.jpg',
-              main_tag: '메인',
-              sub_tag1: '서브1',
-              sub_tag2: '서브2',
-              review_content: '하하하호호호',
-              image_count: 3,
-              location: '을지로 3가역 1번출구',
-            },
-          ];
-          resolve(response.data);
-        })
-        .catch(function (error) {
-          console.log('error : ', error);
-          reject(error);
-        });
-    });
+    GetAllFeed().then(function(response) {
+      console.log("피드 목록 가져오기 성공");
+      console.log("response", response);
+      
+      setFeedListData(response);
+      var tmpDesArray = [[]];
+      for(var i = 0; i < response.length; i++) {
+        console.log("response[i].description", response[i].descriptions);
+        for(var j = 0; j < response[i].descriptions.length; i++) {
+          tmpDesArray[i][j] = response[i].descriptions[j].description; 
+        }
+      }
+    })
+    .catch(function(error) {
+      console.log("피드 목록 가져오기 실패", error);
+    })
   };
 
+  const onFocusSearch = () => {
+    setSearchFocus(true);
+  }
+  
+  const onBlurSearch = () => {
+    if(searchFocus === true) {
+    setSearchFocus(false);
+    Keyboard.dismiss();
+    }
+  }
+  
+
   return (
+    <TouchableWithoutFeedback onPress={() => onBlurSearch()}>
     <Container>
       <HeaderBar>
-        <FlatList
-          horizontal={true}
-          data={POPULAR_TAG_DATE}
-          renderItem={({item}) => (
-            <PopularTagItem
-              tag_image={item.tag_image}
-              tag_name={item.tag_name}
-            />
-          )}
+        <SearchBar
+        onFocusSearch={onFocusSearch}
         />
       </HeaderBar>
+      <BodyContainer>
+      {feedListData[0] && (
       <FlatList
-        data={FEED_DATA}
+        data={feedListData}
         renderItem={({item}) => (
           <View style={{marginBottom: 12}}>
             <TouchableWithoutFeedback
               onPress={() =>
-                navigation.navigate('FeedDetail', {
-                  review_imageArray: item.review_image_list,
-                  profile_image: item.profile_image,
-                  nickname: item.nickname,
-                  write_time: item.write_time,
-                  rating: item.rating,
-                  favorite_count: item.favorite_count,
-                  review_content: item.review_content,
-                  review_image_list: item.review_image_list,
+                navigation.navigate('FeedDetailScreen', {
+                  feed_id : item.id,  
                 })
               }>
               <View>
                 <FeedItem
                   id={item.id}
-                  profile_image={item.profile_image}
-                  nickname={item.nickname}
-                  write_time={item.write_time}
-                  rating={item.rating}
-                  main_tag={item.main_tag}
-                  sub_tag1={item.sub_tag1}
-                  sub_tag2={item.sub_tag2}
-                  favorite_count={item.favorite_count}
-                  main_image={item.main_image}
-                  review_content={item.review_content}
-                  image_count={item.image_count}
+                  profile_image={item.user.profileImg}
+                  nickname={item.user.nickname}
+                  write_time={item.createdAt}
+                  rating={item.starRate}
+                  main_tag={item.mainTags.name}
+                  sub_tag1={item.subTagOnes.name}
+                  sub_tag2={item.subTagTwos.name}
+                  favorite_count={item.likes}
+                  main_image={'https://img1.daumcdn.net/thumb/R720x0/?fname=https%3A%2F%2Ft1.daumcdn.net%2Fliveboard%2Fdailylife%2F6d8abd51eb3644958240a9ca6ddf28bd.JPG'}
+                  {...item.descriptions}
+                  image_count={0}
+                  location={item.address.address}
+                  expanse={item.expanse}
                 />
               </View>
             </TouchableWithoutFeedback>
           </View>
         )}
       />
-      <BottomTabHeight />
+      )}
+      {!feedListData[0] && (
+        <NoFeedListDataContainer>
+          <NoFeedText>등록된 피드가 없어요</NoFeedText>
+
+        </NoFeedListDataContainer>
+      )}
+      {searchFocus && (
+        <TagAutoCompleteContainer>
+        <SearchAutoComplete> 
+        </SearchAutoComplete>
+        </TagAutoCompleteContainer>
+      )}
+      </BodyContainer>
     </Container>
+    </TouchableWithoutFeedback>
   );
 }
 

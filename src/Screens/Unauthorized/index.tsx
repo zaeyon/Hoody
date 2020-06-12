@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import Styled from 'styled-components/native';
-import {TouchableWithoutFeedback} from 'react-native';
+import {TouchableWithoutFeedback, Platform} from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -20,15 +20,24 @@ const Container = Styled.View`
 `;
 
 const LogoContainer = Styled.View`
+
 width: ${wp('100%')};
 height: ${hp('70%')};
  justify-content: center;
  align-items: center;
 `;
 
+const AuthContainer = Styled.View`
+width: ${wp('100%')};
+height: ${hp('30%')};
+ justify-content: center;
+ align-items: center;
+`;
+
 const SocialLoginContainer = Styled.View`
+margin-top: 20px;
   width: ${wp('100%')};
-height: ${hp('9%')};
+height: ${hp('8%')};
  justify-content: center;
  flex-direction: row;
  align-items: center;
@@ -40,10 +49,11 @@ const LocalContainer = Styled.View`
 
 const LoginContainer = Styled.View`
  width: ${wp('100%')};
-height: ${hp('10%')};
+height: ${hp('8%')};
 margin-top: 0px;
  align-items: center;
  justify-content: center;
+ margin-bottom: 5px;
 `;
 
 const SignupContainer = Styled.View`
@@ -78,7 +88,7 @@ margin-top: 40px;
 
 const LoginButton = Styled.View`
 width: ${wp('80%')};
-height: ${hp('8.5%')};
+height: ${Platform.select({ ios: hp('6.5%'), android: hp('8.5%')})};
 background-color: #23e5d2;
 border-radius: 20px;
 border-width: 0.3px;
@@ -213,6 +223,7 @@ const Unauthorized = ({navigation}) => {
       <LogoContainer>
         <HoogingLogo source={require('~/Assets/Images/Logo/logo.png')} />
       </LogoContainer>
+      <AuthContainer>
       <SocialLoginContainer>
         <TouchableWithoutFeedback onPress={() => kakaoLogin()}>
           <KakaoLoginButton
@@ -231,7 +242,7 @@ const Unauthorized = ({navigation}) => {
       <LocalContainer>
         <LoginContainer>
           <TouchableWithoutFeedback
-            onPress={() => navigation.navigate('Login')}>
+            onPress={() => navigation.navigate('LoginScreen')}>
             <LoginButton>
               <LoginText>이메일로 로그인</LoginText>
             </LoginButton>
@@ -244,8 +255,10 @@ const Unauthorized = ({navigation}) => {
           </TouchableWithoutFeedback>
         </SignupContainer>
       </LocalContainer>
+      </AuthContainer>
     </Container>
   );
 };
+
 
 export default Unauthorized;

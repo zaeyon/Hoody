@@ -10,6 +10,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import Login from '~/Route/Auth/Login';
 
 const Input = Styled.TextInput`
 position: relative;
@@ -21,6 +22,55 @@ height: 50px;
 const Container = Styled.SafeAreaView`
   flex: 1;
   background-color: #FEFFFF;
+`;
+
+const HeaderContainer = Styled.View`
+ width: ${wp('100%')};
+ height: ${hp('7%')};
+ flex-direction: row;
+ align-items: center;
+ justify-content:space-between;
+ background-color: #c3c3c3;
+ padding: 0px 0px 0px 0px;
+`;
+
+
+const LeftContainer = Styled.View`
+background-color: #ffffff;
+height: ${hp('7%')};
+flex: 1;
+justify-content: center;
+align-items: center;
+`;
+
+const CenterContainer = Styled.View`
+justify-content: center;
+align-items: center;
+background-color: #ffffff;
+height: ${hp('7%')};
+flex: 7;
+`;
+
+const RightContainer = Styled.View`
+justify-content: center;
+background-color: #ffffff;
+height: ${hp('7%')};
+flex: 1;
+`;
+
+const HeaderTitleText = Styled.Text`
+ font-size: 20px;
+ margin-left: 6px;
+`;
+
+const BackButton = Styled.Image`
+width: 11px;
+height: 19px;
+`;
+
+const ButtonText = Styled.Text`
+ font-size: 20px;
+ color: #338EFC;
 `;
 
 const FormContainer = Styled.View`
@@ -71,7 +121,7 @@ function LoginTitle() {
   return <Text style={{fontSize: 17, }}>로그인</Text>;
 }
 
-const Login = ({navigation}) => {
+const LoginScreen = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const counter = useSelector((state) => state.counter);
@@ -87,8 +137,6 @@ const Login = ({navigation}) => {
       headerRight: () => <Text></Text>,
     });
   }, []);
-
-  const baseUrl = 'http://15.164.185.120:3000';
 
   function checkLogin(email, password) {
     const userData = {
@@ -133,49 +181,50 @@ const Login = ({navigation}) => {
     });
   }
 
-  const Login = () => {
-    const url = 'http://4691c7d12be5.ngrok.io/' + 'auth/login';
+  const clickFinish = () => {
+    const url = 'https://fb79033da0c4.ngrok.io/' + 'auth/login';
     submitingEmail = email;
     submitingPassword = password;
     console.log('로그인 요청 email', submitingEmail);
     console.log('로그인 요청 password', submitingPassword);
 
-    let form = new FormData();
-    form.append('email', submitingEmail);
-    form.append('password', submitingPassword);
-    return new Promise(function (resolve, reject) {
-      axios
-        .post(url, form, {
-          //withCredentials: true,
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            Accept: 'application/json',
-          },
-        })
-        .then(function (response) {
-          console.log('response : ', response);
-          resolve(response.data);
-          if (response.status === 200) {
-            console.log('로그인 성공', response);
-            dispatch(
-              allActions.userActions.setUser({
-                email: submitingEmail,
-                password: submitingPassword,
-              }),
-            );
-          } else {
-            console.log("response", response.body);
-          }
-        })
-        .catch(function (error) {
-          console.log('error : ', error);
-          reject(error);
-        });
-    });
+    Login(submitingEmail, submitingPassword)
+    .then(function(response) {
+      console.log('response', response);
+      if(response.status === 200) {
+        dispatch(
+          allActions.userActions.setUser({
+            email: submitingEmail,
+            password: submitingPassword,
+          })
+        )
+      }
+    })
+    .catch(function (error) {
+      console.log("error: ", error);
+    })
   };
 
   return (
     <Container>
+
+<HeaderContainer>
+        <LeftContainer>
+          <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
+          <BackButton source={require('~/Assets/Images/ic_back2.png')} />
+          </TouchableWithoutFeedback>
+        </LeftContainer>
+        <TouchableWithoutFeedback onPress={() => 0}>
+          <CenterContainer>
+          <HeaderTitleText>로그인</HeaderTitleText>
+        </CenterContainer>
+        </TouchableWithoutFeedback>
+        <RightContainer>
+              <TouchableWithoutFeedback onPress = {() => 0}>
+              <ButtonText></ButtonText>
+              </TouchableWithoutFeedback>
+        </RightContainer>
+      </HeaderContainer>
       <FormContainer>
         <Logo>HOOGING</Logo>
         <Input
@@ -197,7 +246,7 @@ const Login = ({navigation}) => {
         <LoginButton
           label="로그인"
           style={{marginBottom: 24}}
-          onPress={() => Login()}
+          onPress={() => clickFinish()}
         />
         <SignupText>
           계정이 없는가요?{' '}
@@ -213,8 +262,8 @@ const Login = ({navigation}) => {
   );
 };
 
-Login.navigationOptions = {
+LoginScreen.navigationOptions = {
   headerShown: false,
 };
 
-export default Login;
+export default LoginScreen;

@@ -66,26 +66,24 @@ background-color: #c3c3c3;
 `;
 
 const Header = Styled.View`
-position: absolute;
-top: 0px;
 width: ${wp('100%')};
-height: ${hp('8%')};
+height: ${hp('6%')};
 border-color: #707070;
 flex-direction: row;
 justify-content: space-between;
 align-items: center;
-padding-right: 10px;
-padding-left: 10px;
+padding-right: 15px;
+padding-left: 15px;
 `;
 
 const HeaderTitle = Styled.Text`
 font-size: 20px;
+margin-top: 5px;
 `;
 
 const CloseButton = Styled.Image`
  width: ${wp('6.5%')};
  height: ${wp('6.5%')};
- border-width: 10px;
  tint-color: #000000;
 `;
 
@@ -337,7 +335,7 @@ const ProfileInput = ({navigation, route}) => {
     if (month.length < 2) month = '0' + month;
     if (day.length < 2) day = '0' + day;
 
-    return [year, month, day].join('/');
+    return [year, month, day].join('-');
   }
 
   const onChange = (event, selectedDate) => {
@@ -362,7 +360,7 @@ const ProfileInput = ({navigation, route}) => {
   };
 
   const signUp = () => {
-    const url = 'http://4691c7d12be5.ngrok.io/' + 'auth/signUp';
+    const url = 'https://fb79033da0c4.ngrok.io/' + 'auth/signUp';
     submitingNickname = inputedNickname;
     submitingSocialId = socialId;
     submitingBirthDate = dateStr;
@@ -382,7 +380,7 @@ const ProfileInput = ({navigation, route}) => {
     form.append('email', submitingEmail);
     form.append('password', submitingPassword);
     form.append('nickname', submitingNickname);
-    form.append('birthDate', submitingBirthDate);
+    form.append('birthdate', submitingBirthDate);
     form.append('gender', submitingGender);
     form.append('socialId', submitingSocialId);
     form.append('provider', submitingProvider);

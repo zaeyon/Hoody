@@ -152,7 +152,7 @@ top: ${hp('10%')};
 bottom: 0px;
 position: absolute;
 background-color: #ffffff;
-width: 100%;
+width: ${wp('100%')};
 `;
 
 type Props = {navigation};

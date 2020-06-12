@@ -37,9 +37,15 @@ const HeaderBar = Styled.View`
  align-items: center;
 `;
 
-const NoFeedListDataContainer = Styled.View`
+const NoFeedListContainer = Styled.View`
  width: ${wp('100%')};
  height: ${hp('87%')};
+ justify-content: center;
+ align-items: center;
+`;
+
+const FeedListContainer = Styled.View`
+ width: ${wp('100%')};
  justify-content: center;
  align-items: center;
 `;
@@ -61,48 +67,51 @@ position: absolute;
 background-color: #ffffff;
 `;
 
-const FEED_DATA = [
+const TEST_FEED_DATA = [
   {
     id: 1,
-    profile_image:
-      'https://t1.daumcdn.net/thumb/R600x0/?fname=https%3A%2F%2Ft1.daumcdn.net%2Fqna%2Fimage%2F1542632018000000528',
-    nickname: '하핳',
-    write_time: '29 seconds ago',
-    rating: 2.5,
-    favorite_count: 2531,
-    comment_count: 12,
-    scrap_count: 22,
-    main_image:
-      'https://www.travelnbike.com/news/photo/201903/77604_141293_4837.png',
-    review_image_list:
-      'https://www.travelnbike.com/news/photo/201903/77604_141293_4837.png$#$https://www.travelnbike.com/news/photo/201903/77604_141293_4837.png',
-    main_tag: '메인태그',
-    sub_tag1: '서브태그1',
-    sub_tag2: '서브태그2',
-    review_content: '을지로에있는 맛집 다녀왔어요!',
-    image_count: 4,
-    location: '대한민국 서울특별시',
-  },
-  {
-    id: 2,
-    profile_image:
-      'https://img-wishbeen.akamaized.net/plan/1454465238030_15657083522_d45a489b15_b.jpg',
-    nickname: 'jaeyeon',
-    write_time: '1 minute ago',
-    rating: 0,
-    favorite_count: 221,
-    comment_count: 42,
-    scrap_count: 51,
-    main_image:
-      'https://img-wishbeen.akamaized.net/plan/1454465238030_15657083522_d45a489b15_b.jpg',
-    review_image_list:
-      'https://img-wishbeen.akamaized.net/plan/1454465238030_15657083522_d45a489b15_b.jpg',
-    main_tag: '메인',
-    sub_tag1: '서브1',
-    sub_tag2: '서브2',
-    review_content: '하하하호호호',
-    image_count: 3,
-    location: '을지로 3가역 1번출구',
+    user : {
+      profileImg: 'https://t1.daumcdn.net/thumb/R600x0/?fname=https%3A%2F%2Ft1.daumcdn.net%2Fqna%2Fimage%2F1542632018000000528',
+      nickname: '테스트닉네임'
+    },
+    createAt: '2020-05-22',
+    starRate: 2.5,
+    mainTags : {
+      name: '메인태그'
+    },
+    subTagOnes: {
+      name: '서브태그1'
+    },
+    subTagTwos: {
+      name: '서브태그2'
+    },
+    likes: 233,
+    address : {
+      address: '블루문 스터디 카페'
+    },
+    expanse: 2000,
+    descriptions: [
+      {
+        description: "내용1"
+      },
+      {
+        description: "내용2"
+      }
+    ],
+    paragraphData: [
+      {
+        type:"description",
+        description: "내용1"
+      },
+      {
+        type:"image",
+        url: 'https://img1.daumcdn.net/thumb/R720x0/?fname=https%3A%2F%2Ft1.daumcdn.net%2Fliveboard%2Fdailylife%2F6d8abd51eb3644958240a9ca6ddf28bd.JPG',
+      },
+      {
+        type:"description",
+        description: "내용2"
+      }
+    ]
   },
 ];
 
@@ -123,7 +132,9 @@ const POPULAR_TAG_DATE = [
 function Feed({navigation}) {
   const [feedListData, setFeedListData] = useState([]);
   const [searchFocus, setSearchFocus] = useState<boolean>(false);
-  const [desArray, setDesArray] = useState;
+  const [desArray, setDesArray] = useState();
+  const test = ["test1", "test2"];
+  
 
   useEffect(() => {
     getFeedData();
@@ -169,18 +180,11 @@ function Feed({navigation}) {
         />
       </HeaderBar>
       <BodyContainer>
-      {feedListData[0] && (
+      {TEST_FEED_DATA[0] && (
+      <FeedListContainer>
       <FlatList
-        data={feedListData}
+        data={TEST_FEED_DATA}
         renderItem={({item}) => (
-          <View style={{marginBottom: 12}}>
-            <TouchableWithoutFeedback
-              onPress={() =>
-                navigation.navigate('FeedDetailScreen', {
-                  feed_id : item.id,  
-                })
-              }>
-              <View>
                 <FeedItem
                   id={item.id}
                   profile_image={item.user.profileImg}
@@ -192,22 +196,22 @@ function Feed({navigation}) {
                   sub_tag2={item.subTagTwos.name}
                   favorite_count={item.likes}
                   main_image={'https://img1.daumcdn.net/thumb/R720x0/?fname=https%3A%2F%2Ft1.daumcdn.net%2Fliveboard%2Fdailylife%2F6d8abd51eb3644958240a9ca6ddf28bd.JPG'}
-                  {...item.descriptions}
                   image_count={0}
                   location={item.address.address}
                   expanse={item.expanse}
+                  desArray={item.descriptions}
+                  navigation={navigation}
+                  paragraphData={item.paragraphData}
                 />
-              </View>
-            </TouchableWithoutFeedback>
-          </View>
         )}
       />
+      </FeedListContainer>
       )}
-      {!feedListData[0] && (
-        <NoFeedListDataContainer>
+      {!TEST_FEED_DATA[0] && (
+        <NoFeedListContainer>
           <NoFeedText>등록된 피드가 없어요</NoFeedText>
 
-        </NoFeedListDataContainer>
+        </NoFeedListContainer>
       )}
       {searchFocus && (
         <TagAutoCompleteContainer>

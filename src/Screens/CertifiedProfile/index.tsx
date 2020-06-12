@@ -7,6 +7,7 @@ import {
   TouchableWithoutFeedback,
   Text,
   View,
+  Platform,
 } from 'react-native';
 import Styled from 'styled-components/native';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
@@ -100,9 +101,9 @@ const ReviewFeedContainer = Styled.View`
 `;
 
 const ReviewImage = Styled.Image`
- width: ${wp('32.4%')};
- height: ${wp('32.4%')};
- margin-right: 4px;
+ width: ${wp('33%')};
+ height: ${wp('33%')};
+ margin-right: ${Platform.select({ios: 4, android: 4})};
 `;
 
 function CertifiedProfile({navigation}) {

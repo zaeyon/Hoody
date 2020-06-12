@@ -7,7 +7,9 @@ import {
 import {FlatList} from 'react-native';
 
 const Container = Styled.View`
- background-color: #ffffff
+ background-color: #ffffff;
+ width: ${wp('100%')};
+ height: ${hp('100%')};
 `;
 
 const DescriptionContainer = Styled.View`

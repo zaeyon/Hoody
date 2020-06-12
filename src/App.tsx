@@ -18,7 +18,7 @@ import {mapping, light as lightTheme} from '@eva-design/eva';
 import rootReducer from '~/reducers';
 import Unauthorized from '~/Screens/Unauthorized';
 import AuthUser from '~/Auth';
-import Navigator from '~/Navigator';
+import AppNavigator from '~/Navigator';
 
 const Container = Styled.View`
   
@@ -55,7 +55,7 @@ function App() {
   return (
     <ApplicationProvider mapping={mapping} theme={lightTheme}>
       <Provider store={store}>
-        <Navigator />
+        <AppNavigator />
       </Provider>
     </ApplicationProvider>
   

@@ -4,13 +4,13 @@ import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import {TouchableWithoutFeedback} from 'react-native';
+import {TouchableWithoutFeedback, Text} from 'react-native';
 
 import FeedContent from '~/Components/Presentational/FeedDetailScreen/FeedContent';
 
 const Container = Styled.SafeAreaView`
- flex: 1;
- background-color: #ffffff;
+width: ${wp('100%')};
+height:${hp('100%')};
 `;
 
 const HeaderContainer = Styled.View`
@@ -19,7 +19,6 @@ const HeaderContainer = Styled.View`
  flex-direction: row;
  align-items: center;
  justify-content:space-between;
- background-color: #c3c3c3;
  padding: 0px 0px 0px 0px;
 `;
 
@@ -63,8 +62,9 @@ const ButtonText = Styled.Text`
 `;
 
 const FeedContentContainer = Styled.View`
-background-color: #c3c3c3;
-flex: 1;
+height: ${hp('100%')};
+background-color: #000000;
+
 `;
 
 const HeaderBorder = Styled.View`
@@ -73,9 +73,23 @@ const HeaderBorder = Styled.View`
  background-color: #c3c3c3;
 `;
 
+const BottomBar = Styled.View`
+ width: ${wp('100%')};
+ height: ${hp('6%')};
+ position: absolute;
+ bottom: 0;
+ align-items: center;
+ justify-content: space-around;
+ background-color: #ffffff;
+ border-top-width: 0.3px;
+ border-color: #c3c3c3;
+ flex-direction: row;
+`;
+
+
 interface Props {
     navigation: any,
-    route: any
+    route: any,
 }
 
 var PARAGRAPH_DATA: Array<Object>;
@@ -123,8 +137,14 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
                 "type": "image"
             }
         ]
-        setParagraphData(PARAGRAPH_DATA);
+       // setParagraphData(PARAGRAPH_DATA);
     }, [])
+
+    useEffect(() => {
+        if(route.params?.paragraphData) {
+            setParagraphData(route.params.paragraphData);
+        }
+    }, [route.params.paragraphData]);
 
    return (
        <Container>
@@ -146,12 +166,14 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
         </RightContainer>
       </HeaderContainer>
       <HeaderBorder/>
-      <FeedContentContainer>
           <FeedContent
           paragraphData={paragraphData}
           ></FeedContent>
-      </FeedContentContainer>
-
+      <BottomBar>
+          <Text>좋아요</Text>
+          <Text>댓글</Text>
+          <Text>스크랩</Text>
+      </BottomBar>
 
        </Container>
    )

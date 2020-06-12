@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {NavigationContainer} from '@react-navigation/native';
+import {NavigationContainer, StackActions} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
 import {Image, StyleSheet, Text} from 'react-native';
@@ -44,6 +44,7 @@ const UploadStack = createStackNavigator();
 const AlarmStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
 const UnauthStack = createStackNavigator();
+const Stack = createStackNavigator();
 
 function FeedTitle() {
   return (
@@ -142,7 +143,7 @@ function FeedStackScreen() {
         name="FeedDetailScreen"
         component={FeedDetailScreen}
         options={{
-          headerShown: false
+          headerShown: false,
         }}
       />
     </FeedStack.Navigator>
@@ -343,7 +344,7 @@ function Navigator() {
   const currentUser = useSelector((state) => state.currentUser);
   return (
     <NavigationContainer>
-      {currentUser.loggedIn ? (
+      {!currentUser.loggedIn ? (
         <Tab.Navigator
           tabBarOptions={{
             showLabel: false,
@@ -456,6 +457,108 @@ function Navigator() {
   );
 }
 
+function BottomTab() {
+  return (
+    <Tab.Navigator
+      tabBarOptions={{
+        showLabel: false,
+        style: styles.tabBar
+      }}>
+      <Tab.Screen 
+      name="FeedListScreen" 
+      component={Feed}
+      options={{
+        tabBarIcon: ({focused}: {focused: boolean}) => (
+          <Image
+            style={{width: 22, height: 22}}
+            source={
+              /*
+          focused
+            ? require('~/Assets/Images/Tabs/ic_home.png')
+            : require('~/Assets/Images/Tabs/ic_home_outline.png')
+        */
+              require('~/Assets/Images/Tabs/ic_feedTap.png')
+            }
+          />
+        ),
+      }}
+      />
+      <Tab.Screen 
+      name="Upload"
+      component={UploadStackScreen}
+      options={{
+        tabBarIcon: ({focused}: {focused: boolean}) => (
+          <Image
+            style={{width: 22, height: 22}}
+            source={
+              /*
+          focused
+            ? require('~/Assets/Images/Tabs/ic_home.png')
+            : require('~/Assets/Images/Tabs/ic_home_outline.png')
+        */
+              require('~/Assets/Images/Tabs/ic_uploadTap.png')
+            }
+          />
+        ),
+        unmountOnBlur: true,
+        tabBarVisible: false,
+      }}
+      />
+      <Tab.Screen 
+      name="Alarm" 
+      component={AlarmStackScreen}
+      options={{
+        tabBarIcon: ({focused}: {focused: boolean}) => (
+          <Image
+            style={{width: 22, height: 22}}
+            source={
+              /*
+          focused
+            ? require('~/Assets/Images/Tabs/ic_home.png')
+            : require('~/Assets/Images/Tabs/ic_home_outline.png')
+        */
+              require('~/Assets/Images/Tabs/ic_alarmTap.png')
+            }
+          />
+        ),
+      }}
+      />
+      <Tab.Screen 
+      name="Profile" 
+      component={ProfileStackScreen}
+      options={{
+        tabBarIcon: ({focused}: {focused: boolean}) => (
+          <Image
+            style={{width: 22, height: 22}}
+            source={
+              /*
+          focused
+            ? require('~/Assets/Images/Tabs/ic_home.png')
+            : require('~/Assets/Images/Tabs/ic_home_outline.png')
+        */
+              require('~/Assets/Images/Tabs/ic_profileTap.png')
+            }
+          />
+        ),
+      }}
+      />
+    </Tab.Navigator>
+  )
+}
+
+function AppNavigator() {
+  return (
+    <NavigationContainer>
+    <Stack.Navigator
+    headerMode="none"
+    >
+      <Stack.Screen name="BottomTab" component={BottomTab}/>
+      <Stack.Screen name="FeedDetailScreen" component={FeedDetailScreen}/>
+    </Stack.Navigator>
+    </NavigationContainer>
+  )
+}
+
 const styles = StyleSheet.create({
   tabBar: {
     paddingTop: 20,
@@ -464,4 +567,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Navigator;
+export default AppNavigator;

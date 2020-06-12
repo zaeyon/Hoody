@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import Styled from 'styled-components/native';
-import {FlatList} from 'react-native';
+import {FlatList, TouchableWithoutFeedback} from 'react-native';
 
 import {
   widthPercentageToDP as wp,
@@ -8,6 +8,7 @@ import {
 } from 'react-native-responsive-screen';
 
 const Container = Styled.View`
+ margin-bottom: 12px;
  `;
 
 const FeedItemContainer = Styled.View`
@@ -24,7 +25,6 @@ const HeaderContainer = Styled.View`
  `;
 
 const BodyContainer = Styled.View`
- 
  padding-top: 10px;
  flex: 10;
 `;
@@ -140,7 +140,7 @@ const PriceText = Styled.Text`
 
 const DescriptionContainer = Styled.View`
 padding-top: 3px;
-padding-left: 8px;
+padding-left: 10px;
 `;
 
 const DescriptionText = Styled.Text`
@@ -194,6 +194,9 @@ interface Props {
   scrap_count: number;
   location: string;
   expanse: number;
+  desArray: Array<object>;
+  navigation: any;
+  paragraphData: Array<object>;
 }
 
 const FeedItem = ({
@@ -213,6 +216,9 @@ const FeedItem = ({
   scrap_count,
   location,
   expanse,
+  desArray,
+  navigation,
+  paragraphData,
 }: Props) => {
   const [ratingArray, setRatingArray] = useState([
     'empty',
@@ -249,6 +255,10 @@ const FeedItem = ({
     if (sub_tag1 !== "undefined") tmpTagList.push(sub_tag1);
     if (sub_tag2 !== "undefined") tmpTagList.push(sub_tag2);
     setTagList(tmpTagList);
+
+    console.log("description", desArray);
+    console.log("paragraphData!!!", paragraphData);
+
   }, []);
 
   return (
@@ -289,6 +299,9 @@ const FeedItem = ({
             />
           </RatingContainer>
         </HeaderContainer>
+        <TouchableWithoutFeedback onPress={() => navigation.navigate("FeedDetailScreen", {
+          paragraphData: paragraphData
+        })}>
         <BodyContainer>
           <ReviewImage source={{uri: main_image}} />
           <TagContainer>
@@ -303,8 +316,6 @@ const FeedItem = ({
               )}
             />
           </TagContainer>
-        </BodyContainer>
-        <FooterContainer>
           <LocationPriceContainer>
             {location && (
             <LocationContainer>
@@ -320,8 +331,11 @@ const FeedItem = ({
             )}
           </LocationPriceContainer>
           <DescriptionContainer>
-            <DescriptionText>{review_content}</DescriptionText>
+            <DescriptionText>{desArray[0].description}</DescriptionText>
           </DescriptionContainer>
+        </BodyContainer>
+        </TouchableWithoutFeedback>
+        <FooterContainer>
           <AdditionalInfoContainer>
             <InfoLabelText>좋아요</InfoLabelText>
             <InfoCountText>{favorite_count}개</InfoCountText>

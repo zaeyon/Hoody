@@ -15,7 +15,7 @@ height:${hp('100%')};
 
 const HeaderContainer = Styled.View`
  width: ${wp('100%')};
- height: ${hp('7%')};
+ height: ${hp('6%')};
  flex-direction: row;
  align-items: center;
  justify-content:space-between;
@@ -25,7 +25,7 @@ const HeaderContainer = Styled.View`
 
 const LeftContainer = Styled.View`
 background-color: #ffffff;
-height: ${hp('7%')};
+height: ${hp('6%')};
 flex: 1;
 justify-content: center;
 align-items: center;
@@ -35,14 +35,14 @@ const CenterContainer = Styled.View`
 justify-content: center;
 align-items: center;
 background-color: #ffffff;
-height: ${hp('7%')};
+height: ${hp('6%')};
 flex: 7;
 `;
 
 const RightContainer = Styled.View`
 justify-content: center;
 background-color: #ffffff;
-height: ${hp('7%')};
+height: ${hp('6%')};
 flex: 1;
 `;
 
@@ -194,8 +194,11 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
       <BottomBar>
           <LikeContainer>
           <Text>좋아요</Text>
+          <TouchableWithoutFeedback onPress={() => navigation.navigate("LikeListScreen")}>
+          <Text style={{marginTop:5}}>목록</Text>
+          </TouchableWithoutFeedback>
           </LikeContainer>
-          <TouchableWithoutFeedback onPress={() => navigation.navigate("CommentScreen")}>
+          <TouchableWithoutFeedback onPress={() => navigation.navigate("CommentListScreen")}>
           <CommentContainer>
           <Text>댓글</Text>
           </CommentContainer>

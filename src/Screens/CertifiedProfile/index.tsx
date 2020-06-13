@@ -8,6 +8,7 @@ import {
   Text,
   View,
   Platform,
+  SafeAreaView
 } from 'react-native';
 import Styled from 'styled-components/native';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
@@ -103,7 +104,7 @@ const ReviewFeedContainer = Styled.View`
 const ReviewImage = Styled.Image`
  width: ${wp('33%')};
  height: ${wp('33%')};
- margin-right: ${Platform.select({ios: 4, android: 4})};
+ margin-right: ${Platform.select({ios: 3, android: 4})};
 `;
 
 function CertifiedProfile({navigation}) {
@@ -140,6 +141,7 @@ function CertifiedProfile({navigation}) {
   }
 
   return (
+    <SafeAreaView>
     <ScrollView
       backgroundColor="#FFFFFF"
       stickyHeaderIndices={[2]}
@@ -181,6 +183,7 @@ function CertifiedProfile({navigation}) {
         />
       </ReviewFeedContainer>
     </ScrollView>
+    </SafeAreaView>
   );
 }
 

@@ -10,6 +10,7 @@ import DraggableFlatList from 'react-native-draggable-flatlist';
 import UploadHeader from '~/Components/Presentational/UploadScreen/UploadHeader';
 import { BaseRouter } from '@react-navigation/native';
 import PostUpload from '~/Route/Post/Upload';
+import ProductItem from '~/Components/Presentational/UploadScreen/ProductItem';
 
 const Container = Styled.SafeAreaView`
  flex: 1;
@@ -28,25 +29,43 @@ border-color: #c3c3c3;
 
 const HeaderContainer = Styled.View`
  width: ${wp('100%')};
- height: ${hp('7.5%')};
+ height: ${hp('10%')};
  flex-direction: row;
  align-items: center;
  justify-content:space-between;
- border-bottom-width: 0.3px;
  border-color: #c3c3c3;
- padding: 10px 20px 0px 20px;
+`;
+
+
+const HeaderBorder = Styled.View`
+ width: ${wp('100%')};
+ height: 0.3px;
+ background-color: #c3c3c3;
 `;
 
 
 const LeftContainer = Styled.View`
+background-color: #ffffff;
+height: ${hp('10%')};
+flex: 1;
+align-items: center;
+margin-top: 40px;
 `;
 
 const CenterContainer = Styled.View`
 justify-content: center;
-margin-left: 7px;
+align-items: center;
+height: ${hp('10%')};
+flex: 7;
+margin-top: 10px;
 `;
 
 const RightContainer = Styled.View`
+align-items: center;
+background-color: #ffffff;
+height: ${hp('10%')};
+margin-top: 40px;
+flex: 1;
 `;
 
 const MainTagText = Styled.Text`
@@ -84,7 +103,7 @@ const ButtonText = Styled.Text`
 `;
 
 const LocationPriceContainer = Styled.View`
- margin-top: 12px;
+ margin-top: 5px;
  flex-direction: row;
  justify-content: center;
  margin-bottom: 12px;
@@ -243,6 +262,47 @@ const EmptyContentContainer = Styled.View`
 height: 100px;
 `;
 
+
+
+const AddProductContainer = Styled.View`
+flex-direction: column;
+justify-content: center;
+align-items: center;
+padding: 20px 20px 20px 20px;
+width:${wp('100%')};
+`;
+
+const AddProductInputContainer = Styled.View`
+width:${wp('100%')};
+flex-direction: row;
+justify-content: center;
+align-items: center;
+`;
+
+
+const LinkButton2 = Styled.Image`
+ width: ${wp('5.0%')};
+ height:${wp('5.0%')};
+ tint-color: #707070;
+`;
+
+const AddProductInput = Styled.TextInput`
+margin-left: 5px;
+font-size: 15px;
+text-align: left;
+width: ${wp('70%')};
+padding-bottom: 5px;
+padding-left: 5px;
+border-bottom-width: 0.3px;
+border-color: #c3c3c3;
+`;
+
+const AddProductSearchText = Styled.Text`
+margin-left: 5px;
+font-size: 16px;
+color: #338EFC;
+`;
+
 interface Props {
   navigation:any,
   route:any
@@ -262,11 +322,13 @@ const UploadScreen = ({navigation, route}:Props) => {
   const [certifiedLocation, setCertifiedLocation] = useState<boolean>(false);
   const [dump, setDump] = useState<boolean>(false);
   const [sequence, setSequence] = useState<string>();
-  const [products, setProducts] = useState();
+  const [productArray, setProductArray] = useState<Array>([]);
+  const [resultProduct, setResultProduct] = useState<Object>();
 
   const [desArray, setDesArray] = useState<Array<string>>([]);
   const [mediaArray, setMediaArray] = useState([]);
 
+  const [addProduct, setAddProduct] = useState<boolean>(false);
   const [keyboardHeight, setKeyboardHeight] = useState(0);
   const [changeDescription, setChangeDescription] = useState(false);
   const [changingDes, setChangingDes] = useState('');
@@ -390,6 +452,7 @@ const UploadScreen = ({navigation, route}:Props) => {
     setChangingPara(true);
     setChangingDes("");
     setAddDescription(true);
+    setAddProduct(false);
   }
 
   const endChangeDes = (text) => {
@@ -461,6 +524,10 @@ const UploadScreen = ({navigation, route}:Props) => {
     navigation.navigate('Gallery')
     //navigation.navigate("GalleryTest");
   };
+
+  const searchLocation = () => {
+    navigation.navigate('LocationSearch');
+  }
 
 
   const uploadCancel = () => {
@@ -702,6 +769,38 @@ const UploadScreen = ({navigation, route}:Props) => {
       }
     }
 }
+  const addProductTrue = () => {
+    return (
+      <AddProductContainer>
+        <LinkButton2 source={require('~/Assets/Images/ic_link.png')} />
+        <AddProductInput
+        placeholder={"URL을 작성해주세요."}
+        />
+        <AddProductSearchText>검색</AddProductSearchText>
+      </AddProductContainer>
+    )
+  }
+
+  const clickAddProduct = () => {
+    setAddProduct(true);
+    setAddDescription(false);
+    setChangeDescription(false);
+  }
+
+  const searchProduct = () => {
+    // Product Search API 코드 추가해야됌 
+    // 아래코드는 테스트용
+    const resultProduct1 = {
+      productImage: "https://t1.daumcdn.net/cfile/tistory/995BB63A5BDF9C0F0B",
+      productName: "Macbook Pro",
+      productDescription: "애플 맥북 프로",
+      shopIcon: "aa",
+      shopName: "애플스토어"
+    }
+
+    setResultProduct(resultProduct1);
+  }
+
 
   return (
     <Container>
@@ -875,7 +974,21 @@ const UploadScreen = ({navigation, route}:Props) => {
               <RatingStarImage
               source={require('~/Assets/Images/star-24px.png')}/>
           </RatingContainer>
-            )}      
+            )}    
+      <LocationPriceContainer>
+        <TouchableWithoutFeedback onPress={() => navigation.navigate("UploadAdditionInfo")}>
+        <LocationContainer>
+          <LocationIcon source={require('~/Assets/Images/ic_map.png')} />
+          <LocationText>{location || "위치 입력"}</LocationText>
+        </LocationContainer>
+        </TouchableWithoutFeedback>
+        <TouchableWithoutFeedback onPress={() => navigation.navigate('UploadAdditionInfo')}>
+        <ExpenseContainer>
+          <ExpenseIcon source={require('~/Assets/Images/price.png')} />
+          <ExpenseText>{expanse || "소비 금액 입력"}</ExpenseText>
+        </ExpenseContainer>
+        </TouchableWithoutFeedback>
+      </LocationPriceContainer>      
         </CenterContainer>
         </TouchableWithoutFeedback>
         <RightContainer>
@@ -896,20 +1009,7 @@ const UploadScreen = ({navigation, route}:Props) => {
           )} 
         </RightContainer>
       </HeaderContainer>
-      <LocationPriceContainer>
-        <TouchableWithoutFeedback onPress={() => navigation.navigate("UploadAdditionInfo")}>
-        <LocationContainer>
-          <LocationIcon source={require('~/Assets/Images/ic_map.png')} />
-          <LocationText>{location || "위치 입력"}</LocationText>
-        </LocationContainer>
-        </TouchableWithoutFeedback>
-        <TouchableWithoutFeedback onPress={() => navigation.navigate('UploadAdditionInfo')}>
-        <ExpenseContainer>
-          <ExpenseIcon source={require('~/Assets/Images/price.png')} />
-          <ExpenseText>{expanse || "소비 금액 입력"}</ExpenseText>
-        </ExpenseContainer>
-        </TouchableWithoutFeedback>
-      </LocationPriceContainer>
+      <HeaderBorder/>
       
       <ScrollView style={{backgroundColor:"#ffffff"}}>
         {addDescription && (
@@ -938,6 +1038,26 @@ const UploadScreen = ({navigation, route}:Props) => {
             />
           </DescriptionInputContainer>
         )}
+        {addProduct && (
+      <AddProductContainer>
+        <AddProductInputContainer>
+      <LinkButton2 source={require('~/Assets/Images/ic_link.png')} />
+      <AddProductInput
+      placeholder={"URL을 작성해주세요."}
+      autoFocus={true}
+      />
+      <AddProductSearchText>검색</AddProductSearchText>
+      </AddProductInputContainer>
+      {resultProduct && (
+        <ProductItem
+        productImage={resultProduct.productImage}
+        productName={resultProduct.productName}
+        productDescription={resultProduct.productDescription}
+        shopIcon={"aa"}
+        shopName={resultProduct.shopName}/>
+      )}
+    </AddProductContainer>
+        )}
         {!changeDescription && !addDescription && (
           <DraggableFlatList
           onLayout={(event) => {
@@ -963,8 +1083,12 @@ const UploadScreen = ({navigation, route}:Props) => {
           <TouchableWithoutFeedback onPress={() => openGallery()}>
        <CameraButton source={require('~/Assets/Images/ic_camera.png')} />
        </TouchableWithoutFeedback>
+          <TouchableWithoutFeedback onPress={() => searchLocation()}>
           <LocationButton source={require('~/Assets/Images/ic_map.png')} />
+          </TouchableWithoutFeedback>
+          <TouchableWithoutFeedback onPress={() => clickAddProduct()}>
           <LinkButton source={require('~/Assets/Images/ic_link.png')} />
+          </TouchableWithoutFeedback>
         </BottomBar>
       </FooterContainer>
     </Container>

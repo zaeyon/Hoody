@@ -5,7 +5,7 @@ import {
     heightPercentageToDP as hp
 } from 'react-native-responsive-screen';
 import {FlatList, TouchableWithoutFeedback, Keyboard} from 'react-native';
-import CommentItem from '~/Components/Presentational/CommentScreen/CommentItem';
+import CommentItem from '~/Components/Presentational/CommentListScreen/CommentItem';
 
 
 const Container = Styled.SafeAreaView`
@@ -16,7 +16,7 @@ const Container = Styled.SafeAreaView`
 
 const HeaderContainer = Styled.View`
  width: ${wp('100%')};
- height: ${hp('7%')};
+ height: ${hp('6%')};
  flex-direction: row;
  align-items: center;
  justify-content:space-between;
@@ -26,7 +26,7 @@ const HeaderContainer = Styled.View`
 
 const LeftContainer = Styled.View`
 background-color: #ffffff;
-height: ${hp('7%')};
+height: ${hp('6%')};
 flex: 1;
 justify-content: center;
 align-items: center;
@@ -36,14 +36,14 @@ const CenterContainer = Styled.View`
 justify-content: center;
 align-items: center;
 background-color: #ffffff;
-height: ${hp('7%')};
+height: ${hp('6%')};
 flex: 7;
 `;
 
 const RightContainer = Styled.View`
 justify-content: center;
 background-color: #ffffff;
-height: ${hp('7%')};
+height: ${hp('6%')};
 flex: 1;
 `;
 
@@ -77,6 +77,7 @@ const ProfileImage = Styled.Image`
  width: ${hp('4.5%')};
  height: ${hp('4.5%')};
  border-radius: 100px;
+ margin-left: 5px;
 `;
 
 const CommentInputContainer = Styled.View`
@@ -148,7 +149,7 @@ interface Props {
     route: any
 }
 
-const CommentScreen = ({navigation, route}: Props) => {
+const CommentListScreen = ({navigation, route}: Props) => {
     const [commentData, setCommentData] = useState();
     const [keyboardHeight, setKeyboardHeight] = useState<number>(0);
 
@@ -209,4 +210,4 @@ const CommentScreen = ({navigation, route}: Props) => {
     )
 }
 
-export default CommentScreen;
+export default CommentListScreen;

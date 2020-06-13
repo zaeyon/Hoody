@@ -36,6 +36,7 @@ import UploadAdditionInfo from '~/Screens/UploadAdditionInfo';
 import TagAutoComplete from '~/Screens/TagAutoComplete';
 import GalleryTest from '~/Components/Test/GalleryTest';
 import FeedDetailScreen from '~/Components/Container/FeedDetailScreen';
+import CommentScreen from '~/Components/Container/CommentScreen';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
@@ -554,6 +555,7 @@ function AppNavigator() {
     >
       <Stack.Screen name="BottomTab" component={BottomTab}/>
       <Stack.Screen name="FeedDetailScreen" component={FeedDetailScreen}/>
+      <Stack.Screen name="CommentScreen" component={CommentScreen}/>
     </Stack.Navigator>
     </NavigationContainer>
   )

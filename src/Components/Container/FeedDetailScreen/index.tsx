@@ -61,16 +61,16 @@ const ButtonText = Styled.Text`
  color: #338EFC;
 `;
 
-const FeedContentContainer = Styled.View`
-height: ${hp('100%')};
-background-color: #000000;
-
-`;
 
 const HeaderBorder = Styled.View`
  width: ${wp('100%')};
  height: 0.3px;
  background-color: #c3c3c3;
+`;
+
+const FeedContentContainer = Styled.View`
+height: ${hp('100%')};
+background-color: #000000;
 `;
 
 const BottomBar = Styled.View`
@@ -85,6 +85,28 @@ const BottomBar = Styled.View`
  border-color: #c3c3c3;
  flex-direction: row;
 `;
+
+const LikeContainer = Styled.View`
+ flex: 1;
+ justify-content: center;
+ align-items: center;
+ height: ${hp('6%')};
+`;
+
+const CommentContainer = Styled.View`
+ flex:1;
+ justify-content: center;
+ align-items: center;
+ height: ${hp('6%')};
+`;
+
+const ScrapContainer = Styled.View`
+ flex:1;
+ justify-content: center;
+ align-items: center;
+ height: ${hp('6%')};
+`;
+
 
 
 interface Props {
@@ -170,9 +192,17 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
           paragraphData={paragraphData}
           ></FeedContent>
       <BottomBar>
+          <LikeContainer>
           <Text>좋아요</Text>
+          </LikeContainer>
+          <TouchableWithoutFeedback onPress={() => navigation.navigate("CommentScreen")}>
+          <CommentContainer>
           <Text>댓글</Text>
+          </CommentContainer>
+          </TouchableWithoutFeedback>
+          <ScrapContainer>
           <Text>스크랩</Text>
+          </ScrapContainer>
       </BottomBar>
 
        </Container>

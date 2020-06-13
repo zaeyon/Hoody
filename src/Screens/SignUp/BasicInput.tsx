@@ -128,7 +128,6 @@ const BasicInput = ({navigation, route}) => {
 
   function onKeyboardDidShow(e: KeyboardEvent): void {
     setKeyboardHeight(e.endCoordinates.height);
-    console.log('키보드 높이', e.endCoordinates.height);
   }
 
   function onKeyboardDidHide(): void {

@@ -19,6 +19,8 @@ import axios from 'axios';
 import {useSelector, useDispatch} from 'react-redux';
 import allActions from '~/action';
 
+import SignUp from '~/Route/Auth/SignUp';
+
 const Container = Styled.SafeAreaView`
  flex: 1;
  background-color: #ffffff;
@@ -202,12 +204,12 @@ color: #000000;
 
 const ProfileInput = ({navigation, route}) => {
   let submitingEmail = route.params!.email || route.params!.socialEmail;
-  let submitingPassword;
-  let submitingSocialId;
-  let submitingProvider;
-  let submitingNickname;
-  let submitingBirthDate;
-  let submitingGender;
+  let submitingPassword: string;
+  let submitingSocialId: string;
+  let submitingProvider: string;
+  let submitingNickname: string;
+  let submitingBirthDate: string;
+  let submitingGender: string;
 
   let socialNickname = '';
   let socialGender = '';
@@ -360,13 +362,11 @@ const ProfileInput = ({navigation, route}) => {
   };
 
   const signUp = () => {
-    const url = 'https://fb79033da0c4.ngrok.io/' + 'auth/signUp';
+    
     submitingNickname = inputedNickname;
     submitingSocialId = socialId;
     submitingBirthDate = dateStr;
     submitingProvider = provider;
-
-    console.log('inputedGender!!!', inputedGender);
     submitingGender = inputedGender;
     console.log('가입요청 email', submitingEmail);
     console.log('가입요청 password', submitingPassword);
@@ -376,14 +376,29 @@ const ProfileInput = ({navigation, route}) => {
     console.log('가입요청 socialId', submitingSocialId);
     console.log('가입요청 provider', submitingProvider);
 
-    let form = new FormData();
-    form.append('email', submitingEmail);
-    form.append('password', submitingPassword);
-    form.append('nickname', submitingNickname);
-    form.append('birthdate', submitingBirthDate);
-    form.append('gender', submitingGender);
-    form.append('socialId', submitingSocialId);
-    form.append('provider', submitingProvider);
+    SignUp(submitingEmail, submitingPassword, submitingNickname, submitingBirthDate, submitingGender, submitingSocialId, submitingProvider)
+    .then(function(response) {
+      if(response.status === 201) {
+      console.log("회원가입 성공", response)
+      dispatch(
+        allActions.userActions.setUser({
+          email: submitingEmail,
+          password: submitingPassword,
+          nickname: submitingNickname,
+          birthDate: Date.parse(submitingBirthDate),
+          gender: submitingGender,
+          socialId: submitingSocialId,
+          provider: submitingProvider,
+        }),
+      );
+      }
+    })
+    .catch(function(error) {
+      console.log("회원가입 실패", error);
+    })
+
+
+    /*
     return new Promise(function (resolve, reject) {
       axios
         .post(url, form, {
@@ -409,13 +424,17 @@ const ProfileInput = ({navigation, route}) => {
                 provider: submitingProvider,
               }),
             );
+          } else if(response.status === 400) {
+            console.log("response", response);
           }
         })
-        .catch(function (error) {
-          console.log('error : ', error);
-          reject(error);
+        .catch(function (response) {
+          console.log("response", response);
         });
     });
+    */
+  
+
   };
 
   useEffect(() => {

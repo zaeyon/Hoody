@@ -99,8 +99,9 @@ color: #000000;
 `;
 
 const LocationPriceContainer = Styled.View`
- margin-top: 10px;
+ margin-top: 5px;
  margin-left: 8px;
+ height: 20px;
  flex-direction: row;
  `;
 
@@ -196,7 +197,7 @@ interface Props {
   expanse: number;
   desArray: Array<object>;
   navigation: any;
-  paragraphData: Array<object>;
+  mediaFiles: Array<objevt>;
 }
 
 const FeedItem = ({
@@ -218,7 +219,7 @@ const FeedItem = ({
   expanse,
   desArray,
   navigation,
-  paragraphData,
+  mediaFiles,
 }: Props) => {
   const [ratingArray, setRatingArray] = useState([
     'empty',
@@ -257,7 +258,8 @@ const FeedItem = ({
     setTagList(tmpTagList);
 
     console.log("description", desArray);
-    console.log("paragraphData!!!", paragraphData);
+    console.log("feedId", id);
+    console.log("피드 상세 미디어파일",mediaFiles )
 
   }, []);
 
@@ -300,10 +302,16 @@ const FeedItem = ({
           </RatingContainer>
         </HeaderContainer>
         <TouchableWithoutFeedback onPress={() => navigation.navigate("FeedDetailScreen", {
-          paragraphData: paragraphData
+          feedId:id 
         })}>
         <BodyContainer>
-          <ReviewImage source={{uri: main_image}} />
+          <ReviewImage source={
+            mediaFiles[0] ? (
+              {uri:mediaFiles[0].url}
+            ) : (
+              {uri:"https://t1.daumcdn.net/liveboard/dailylife/cc9a6c65c72443d6ac70b9634102c3ef.JPG"}
+            )
+          } />
           <TagContainer>
             <FlatList
               style={{position: 'absolute', right: 5, bottom: 5}}

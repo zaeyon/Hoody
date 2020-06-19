@@ -182,8 +182,7 @@ const LoginScreen = ({navigation}) => {
   }
 
   const clickFinish = () => {
-    const url = 'https://fb79033da0c4.ngrok.io/' + 'auth/login';
-    submitingEmail = email;
+     submitingEmail = email;
     submitingPassword = password;
     console.log('로그인 요청 email', submitingEmail);
     console.log('로그인 요청 password', submitingPassword);

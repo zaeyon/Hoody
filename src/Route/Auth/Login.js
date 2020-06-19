@@ -1,7 +1,8 @@
 import axios from 'axios';
 import allActions from '~/action';
+import setCurrentUser from '~/AsyncStorage/User';
 
-const baseUrl = 'https://fb79033da0c4.ngrok.io';
+const baseUrl = 'https://c7ede387e39b.ngrok.io';
 
 
 const Login = (email, password) => {
@@ -23,13 +24,13 @@ const Login = (email, password) => {
         })
         .then(function (response) {
           resolve(response);
+          setCurrentUser(email, "login");
         })
         .catch(function (error) {
           console.log('error : ', error);
           reject(error);
         });
     });
-
 }
 
 export default Login;

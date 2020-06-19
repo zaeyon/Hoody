@@ -56,14 +56,17 @@ const SearchText = Styled.Text`
 
 interface Props {
     onFocusSearch:Function
+    changingSearchInput:Function
 }
 
-const SearchBar = ({onFocusSearch}: Props) => {
+const SearchBar = ({onFocusSearch, changingSearchInput}: Props) => {
     return (
         <SearchBarContainer>
             <SearchBarInput
+            autoCapitalize={false}
             placeholder="태그로 후기를 검색하세요."
             onFocus={() => onFocusSearch()}
+            onChangeText={(text: string) => changingSearchInput(text)}
             />
             <SearchIcon
             source={require('~/Assets/Images/ic_searchh.png')}/>

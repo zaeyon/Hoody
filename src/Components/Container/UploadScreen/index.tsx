@@ -11,6 +11,7 @@ import UploadHeader from '~/Components/Presentational/UploadScreen/UploadHeader'
 import { BaseRouter } from '@react-navigation/native';
 import PostUpload from '~/Route/Post/Upload';
 import ProductItem from '~/Components/Presentational/UploadScreen/ProductItem';
+import SearchProductUrl from '~/Route/Post/SearchProductUrl';
 
 const Container = Styled.SafeAreaView`
  flex: 1;
@@ -221,7 +222,29 @@ const ImageParagraphContainer = Styled.View`
  background-color: #ffffff;
 `;
 
+
 const LastImageParagraphContainer = Styled.View`
+ border-top-width: 0.2px;
+ border-bottom-width: 0.2px;
+ border-color: #eeeeee;
+ flex-direction: row;
+ justify-content: space-between;
+ align-items:center;
+ background-color: #ffffff;
+`;
+
+
+const ProductParagraphContainer = Styled.View`
+ border-top-width: 0.2px;
+ border-color: #eeeeee;
+ flex-direction: row;
+ justify-content: space-between;
+ align-items:center;
+ background-color: #ffffff;
+`;
+
+
+const LastProductParagraphContainer = Styled.View`
  border-top-width: 0.2px;
  border-bottom-width: 0.2px;
  border-color: #eeeeee;
@@ -303,6 +326,29 @@ font-size: 16px;
 color: #338EFC;
 `;
 
+const SearchProductResultContainer = Styled.View`
+ width:${wp('100%')};
+ margin-top: 10px;
+ align-items: center;
+`;
+
+const ProductResultItemContainer = Styled.View`
+ align-items: center;
+ flex-direction: row;
+`;
+
+const ProductRegisterContainer = Styled.View`
+ height: ${hp('10%')};
+ padding-left: 10px;
+ align-items: center;
+ justify-content: center;
+`;
+
+const ProductRegisterText= Styled.Text`
+ color: #338EFC;
+ font-size: 18px;
+`;
+
 interface Props {
   navigation:any,
   route:any
@@ -342,6 +388,8 @@ const UploadScreen = ({navigation, route}:Props) => {
   const [addDescription, setAddDescription] = useState(true);
   const [changingPara, setChangingPara] = useState(true);
  const [ratingArray, setRatingArray] = useState(['empty', 'empty', 'empty', 'empty', 'empty']);
+  const [productUrl, setProductUrl] = useState<string>();
+
   const tmpRatingArr = ['empty', 'empty', 'empty', 'empty', 'empty'];
   const [imageUrl_arr, setImageUrl_arr] = useState([
     {
@@ -560,6 +608,7 @@ const UploadScreen = ({navigation, route}:Props) => {
      if(paragraphData[i].type === "description") tmpSequence = tmpSequence + "D";
      else if(paragraphData[i].type === "image") tmpSequence = tmpSequence + "M";
      else if(paragraphData[i].type === "video") tmpSequence = tmpSequence + "M";
+     else if(paragraphData[i].type === 'product') tmpSequence = tmpSequence + "P";
      
      if(i === paragraphData.length -1) {
        console.log("tmpSequence", tmpSequence);
@@ -573,7 +622,7 @@ const UploadScreen = ({navigation, route}:Props) => {
            description = description + '"' + desArray[i] + '"';
              description = "[" + description + "]"
              console.log("description", description);
-            PostUpload(description, mediaArray, mainTag, subTag1, subTag2, rating, location, longitude, latitude, certifiedLocation, dump, tmpSequence, products)
+            PostUpload(description, mediaArray, mainTag, subTag1, subTag2, rating, location, longitude, latitude, certifiedLocation, dump, tmpSequence, productArray)
             .then(function(response) {
               if(response.status === 201) {
                 console.log("response.status", response.status);
@@ -619,25 +668,7 @@ const UploadScreen = ({navigation, route}:Props) => {
       return (
         <TextParagraphContainer
           style={isActive && styles.shadow}
-          onLayout={(event) => {
-            const layout = event.nativeEvent.layout;
-            itemHeight = layout.height;
-            /*
-            let tmpArray = heightArray;
-            tmpArray.push(layout.height);
-            setHeightArray(tmpArray);
-
-            console.log("height Array333", heightArray);
-            if(heightArray.length === paragraphData.length) {
-              if(addParagraph)
-              {
-              const sum = heightArray.reduce((a, b ) => a + b);
-              setParagraphHeight(sum);
-              setAddParagraph(false);
-              }
-            }
-            */
-          }}>
+          >
           <TouchableWithoutFeedback
             onPress={() => clickToParagraphContent(item.description, index)}>
             <ParagraphContentContainer>
@@ -658,21 +689,7 @@ const UploadScreen = ({navigation, route}:Props) => {
       return (
         <ImageParagraphContainer
           style={isActive && styles.shadow}
-          /*onLayout={(event) => {
-            const layout = event.nativeEvent.layout;
-            let tmpArray = heightArray;
-            tmpArray.push(layout.height);
-            setHeightArray(tmpArray);
-            console.log("height Array444", heightArray);
-            if(heightArray.length === paragraphData.length) {
-              if(addParagraph){
-              const sum = heightArray.reduce((a, b ) => a + b);
-              setParagraphHeight(sum);
-              setAddParagraph(false);
-              }
-            }
-
-          }}*/>
+      >
           <ParagraphContentContainer>
             <InsertedImage source={{uri: item.url}} />
           </ParagraphContentContainer>
@@ -685,28 +702,33 @@ const UploadScreen = ({navigation, route}:Props) => {
           </TouchableWithoutFeedback>
         </ImageParagraphContainer>
       );
-    }
+    } else if(item.type === 'product') {
+      return (
+      <ProductParagraphContainer
+      style={isActive && styles.shadow}>
+        <ParagraphContentContainer>
+        <ProductItem
+        productImage={item.productImage}
+        productName={item.productName}
+        productDescription={item.productDescription}
+        shopIcon={item.shopIcon}
+        shopName={item.shopName}/>
+        </ParagraphContentContainer>
+        <TouchableWithoutFeedback onLongPress={drag} delayLongPress={0.2}>
+            <ParagraphIconContainer>
+              <ParagraphIcon
+                source={require('~/Assets/Images/ic_paragraph.png')}
+              />
+            </ParagraphIconContainer>
+          </TouchableWithoutFeedback>
+      </ProductParagraphContainer>
+      )}
   } else if(index === paragraphData.length -1) {
       if (item.type === 'description') {
         return (
           <LastTextParagraphContainer
             style={isActive && styles.shadow}
-            /*onLayout={(event) => {
-              const layout = event.nativeEvent.layout;
-            let tmpArray = heightArray;
-            tmpArray.push(layout.height);
-            setHeightArray(tmpArray);
-
-            console.log("height Array111", heightArray);
-    
-            if(heightArray.length === paragraphData.length) {
-              if(addParagraph) {
-              const sum = heightArray.reduce((a, b ) => a + b);
-              setParagraphHeight(sum);
-              setAddParagraph(false);
-              }
-            }
-            }}*/>
+            >
             <TouchableWithoutFeedback
               onPress={() => clickToParagraphContent(item.description, index)}>
               <ParagraphContentContainer>
@@ -728,30 +750,7 @@ const UploadScreen = ({navigation, route}:Props) => {
         return (
           <LastImageParagraphContainer
             style={isActive && styles.shadow}
-            /*onLayout={(event) => {
-              
-              console.log("마지막 이미지")
-              const layout = event.nativeEvent.layout;
-            let tmpArray = heightArray;
-            tmpArray.push(layout.height);
-            setHeightArray(tmpArray);
-
-            console.log("height Array222", heightArray);
-
-            console.log("heightArray", heightArray);
-            console.log("paragraphData", paragraphData);
-            console.log("tmpArray", tmpArray);
-            if(heightArray.length === paragraphData.length) {
-
-              if(addParagraph){
-              console.log("addParagraph", "gkgkgk");
-              const sum = heightArray.reduce((a, b ) => a + b);
-              setParagraphHeight(sum);
-              setAddParagraph(false);
-              }
-            }
-            }}
-            */>
+            >
             <TouchableWithoutFeedback onPress={() => 0}>
               <ParagraphContentContainer>
                 <InsertedImage source={{uri: item.url}} />
@@ -766,7 +765,28 @@ const UploadScreen = ({navigation, route}:Props) => {
             </TouchableWithoutFeedback>
           </LastImageParagraphContainer>
         );
-      }
+      } else if(item.type === 'product') {
+        return (
+        <LastProductParagraphContainer
+        style={isActive && styles.shadow}>
+          <ParagraphContentContainer>
+          <ProductItem
+          productImage={item.productImage}
+          productName={item.productName}
+          productDescription={item.productDescription}
+          shopIcon={item.shopIcon}
+          shopName={item.shopName}/>
+          </ParagraphContentContainer>
+          <TouchableWithoutFeedback onLongPress={drag} delayLongPress={0.2}>
+              <ParagraphIconContainer>
+                <ParagraphIcon
+                  source={require('~/Assets/Images/ic_paragraph.png')}
+                />
+              </ParagraphIconContainer>
+            </TouchableWithoutFeedback>
+        </LastProductParagraphContainer>
+        
+        )}
     }
 }
   const addProductTrue = () => {
@@ -788,17 +808,43 @@ const UploadScreen = ({navigation, route}:Props) => {
   }
 
   const searchProduct = () => {
-    // Product Search API 코드 추가해야됌 
-    // 아래코드는 테스트용
-    const resultProduct1 = {
-      productImage: "https://t1.daumcdn.net/cfile/tistory/995BB63A5BDF9C0F0B",
-      productName: "Macbook Pro",
-      productDescription: "애플 맥북 프로",
-      shopIcon: "aa",
-      shopName: "애플스토어"
-    }
+    SearchProductUrl(productUrl).then(function(response) {
+      console.log("검색된 상품 정보", response)
+      const product = {
+        productImage: response.image,
+        productName: response.title,
+        productDescription: response.description,
+        shopIcon: response.favicon,
+        shopName: response.site,
+        url: response.url
+      }
+    setResultProduct(product);
+    }).catch(function(error) {
+      console.log("상품 검색 실패", error);
+    }) 
+  }
 
-    setResultProduct(resultProduct1);
+  const registerProduct = () => {
+    var preParaData = paragraphData;
+    var preProductArray = productArray;
+
+    preParaData.push({
+      index: paragraphData.length + 1,
+      type: "product",
+      productImage: resultProduct.productImage,
+      productName: resultProduct.productName,
+      productDescription: resultProduct.productDescription,
+      shopIcon: resultProduct.shopIcon,
+      shopName: resultProduct.shopName,
+      url: resultProduct.url
+    })
+
+    preProductArray.push(resultProduct);
+    setProductArray(preProductArray);
+    setParagraphData(preParaData);
+    setAddProduct(false);
+    setAddDescription(false);
+    setChangeDescription(false);
   }
 
 
@@ -1011,7 +1057,8 @@ const UploadScreen = ({navigation, route}:Props) => {
       </HeaderContainer>
       <HeaderBorder/>
       
-      <ScrollView style={{backgroundColor:"#ffffff"}}>
+      <ScrollView style={{backgroundColor:"#ffffff"}}
+      keyboardShouldPersistTaps="handled">
         {addDescription && (
           <DescriptionInputContainer>
           <DescriptionInput
@@ -1045,21 +1092,34 @@ const UploadScreen = ({navigation, route}:Props) => {
       <AddProductInput
       placeholder={"URL을 작성해주세요."}
       autoFocus={true}
+      onChangeText={(text:string) => setProductUrl(text)}
       />
+      <TouchableWithoutFeedback onPress={() => searchProduct()}>
       <AddProductSearchText>검색</AddProductSearchText>
+      </TouchableWithoutFeedback>
       </AddProductInputContainer>
       {resultProduct && (
+        <SearchProductResultContainer>
+          <ProductResultItemContainer>
         <ProductItem
         productImage={resultProduct.productImage}
         productName={resultProduct.productName}
         productDescription={resultProduct.productDescription}
-        shopIcon={"aa"}
+        shopIcon={resultProduct.shopIcon}
         shopName={resultProduct.shopName}/>
+        <TouchableWithoutFeedback onPress={() => registerProduct()}>
+        <ProductRegisterContainer>
+             <ProductRegisterText>등록</ProductRegisterText>
+        </ProductRegisterContainer>
+        </TouchableWithoutFeedback>
+        </ProductResultItemContainer>
+        </SearchProductResultContainer>
       )}
     </AddProductContainer>
         )}
-        {!changeDescription && !addDescription && (
+        {!changeDescription && !addDescription && !addProduct && (
           <DraggableFlatList
+          keyboardShouldPersistTaps="always"
           onLayout={(event) => {
             const layout = event.nativeEvent.layout;
             console.log("DraggableFlatList", layout.height)

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {useState, useEffect} from 'react';
 import {NavigationContainer, StackActions} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
@@ -38,6 +38,8 @@ import GalleryTest from '~/Components/Test/GalleryTest';
 import FeedDetailScreen from '~/Components/Container/FeedDetailScreen';
 import CommentListScreen from '~/Components/Container/CommentListScreen';
 import LikeListScreen from '~/Components/Container/LikeListScreen';
+
+import getCurrentUser from '~/AsyncStorage/User';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
@@ -514,11 +516,6 @@ function BottomTab() {
           <Image
             style={{width: 22, height: 22}}
             source={
-              /*
-          focused
-            ? require('~/Assets/Images/Tabs/ic_home.png')
-            : require('~/Assets/Images/Tabs/ic_home_outline.png')
-        */
               require('~/Assets/Images/Tabs/ic_alarmTap.png')
             }
           />
@@ -533,11 +530,6 @@ function BottomTab() {
           <Image
             style={{width: 22, height: 22}}
             source={
-              /*
-          focused
-            ? require('~/Assets/Images/Tabs/ic_home.png')
-            : require('~/Assets/Images/Tabs/ic_home_outline.png')
-        */
               require('~/Assets/Images/Tabs/ic_profileTap.png')
             }
           />
@@ -549,8 +541,20 @@ function BottomTab() {
 }
 
 function AppNavigator() {
+  const [currentUser, setCurrentUser] = useState();
+  const currentUserState = useSelector((state) => state.currentUser)
+  
+  getCurrentUser().then(function(response) {
+    console.log("response", response);
+    setCurrentUser(response);
+  })
+  .catch(function(error) {
+    console.log("error");
+  })
+
   return (
     <NavigationContainer>
+    {currentUserState.loggedIn  ? (  
     <Stack.Navigator
     headerMode="none"
     >
@@ -559,6 +563,9 @@ function AppNavigator() {
       <Stack.Screen name="CommentListScreen" component={CommentListScreen}/>
       <Stack.Screen name="LikeListScreen" component={LikeListScreen}/>
     </Stack.Navigator>
+    ) : (
+      <UnauthStackScreen/>
+    )}
     </NavigationContainer>
   )
 }

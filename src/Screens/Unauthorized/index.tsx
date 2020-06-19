@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import Styled from 'styled-components/native';
-import {TouchableWithoutFeedback, Platform} from 'react-native';
+import {TouchableWithoutFeedback, Platform, View} from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -12,6 +12,13 @@ import {
   GoogleSigninButton,
   statusCodes,
 } from '@react-native-community/google-signin';
+
+import appleAuth, {
+  AppleButton,
+  AppleAuthRequestOperation,
+  AppleAuthRequestScope,
+  AppleAuthCredentialState,
+} from '@invertase/react-native-apple-authentication';
 
 const Container = Styled.View`
  flex: 1;
@@ -106,6 +113,12 @@ color: #ffffff;
 const SignupText = Styled.Text`
 font-size: 15px;
 color: #707070;
+text-decoration-line: underline
+`;
+
+const ReviewImage = Styled.Image`
+ width: ${wp('100%')};
+ height: ${wp('100%')};
 `;
 
 if (!KakaoLogins) {
@@ -133,6 +146,23 @@ const Unauthorized = ({navigation}) => {
   useEffect(() => {
     configureGoogleSignIn();
   }, []);
+
+  async function onAppleButtonPress() {
+    // performs login request
+    const appleAuthRequestResponse = await appleAuth.performRequest({
+      requestedOperation: AppleAuthRequestOperation.LOGIN,
+      requestedScopes: [AppleAuthRequestScope.EMAIL, AppleAuthRequestScope.FULL_NAME],
+    });
+  
+    // get current authentication state for user
+    const credentialState = await appleAuth.getCredentialStateForUser(appleAuthRequestResponse.user);
+  
+    // use credentialState response to ensure the user is authenticated
+    if (credentialState === AppleAuthCredentialState.AUTHORIZED) {
+      // user is authenticated
+      console.log("credentialState", credentialState)
+    }
+  }
 
   const kakaoLogin = () => {
     logCallback('Login Start', setLoginLoading(true));
@@ -187,20 +217,33 @@ const Unauthorized = ({navigation}) => {
   const googleLogin = async () => {
     try {
       await GoogleSignin.hasPlayServices();
+      if(Platform.OS === "android") {
       const token = await GoogleSignin.getTokens();
       console.log('사용자 토큰', token);
       const userInfo = await GoogleSignin.signIn();
       console.log('구글 로그인 성공 사용자 정보:', userInfo);
       navigation.navigate('ProfileInput', {
-        socialId: token.accessToken,
+        socialId: userInfo.idToken,
         socialEmail: userInfo.user.email,
         socialNickname: userInfo.user.name,
         socialProvider: 'google',
-      });
+      })
+      } else if(Platform.OS === 'ios') {
+        const userInfo = await GoogleSignin.signIn();
+        console.log('구글 로그인 성공 사용자 정보:', userInfo);
+        navigation.navigate('ProfileInput', {
+          socialId: userInfo.idToken,
+          socialEmail: userInfo.user.email,
+          socialNickname: userInfo.user.name,
+          socialProvider: 'google',
+        })
+        
+      } 
     } catch (error) {
-      console.log('구글 로그인 실패', error.code);
+      console.log('구글 로그인 실패', error);
       console.log('statusCodes', statusCodes);
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+
         // user cancelled the login flow
       } else if (error.code === statusCodes.IN_PROGRESS) {
         // operation (e.g. sign in) is in progress already
@@ -213,14 +256,23 @@ const Unauthorized = ({navigation}) => {
   };
 
   const configureGoogleSignIn = () => {
-    GoogleSignin.configure({
-      iosClientId: "com.googleusercontent.apps.829653698047-sqnl4mf76c4srsupi6vaq1kd70sg0f7l"
-    });
+    if(Platform.OS === 'ios')
+    {
+      console.log("플랫폼 IOS")
+      GoogleSignin.configure({
+        scopes: ['https://www.googleapis.com/auth/drive.readonly'],
+        webClientId: '452626894835-9q66v8ngdvg46lkmdmknevhbshud0alj.apps.googleusercontent.com', 
+        
+      });
+  } else {
+    GoogleSignin.configure();
+  }
   };
 
   return (
     <Container>
       <LogoContainer>
+        
         <HoogingLogo source={require('~/Assets/Images/Logo/logo.png')} />
       </LogoContainer>
       <AuthContainer>
@@ -235,9 +287,12 @@ const Unauthorized = ({navigation}) => {
             source={require('~/Assets/Images/SocialLogin/ic_googleLogin.png')}
           />
         </TouchableWithoutFeedback>
+        <TouchableWithoutFeedback onPress={() => onAppleButtonPress()}>
         <AppleLoginButton
           source={require('~/Assets/Images/SocialLogin/ic_appleLogin.png')}
         />
+        </TouchableWithoutFeedback>
+       
       </SocialLoginContainer>
       <LocalContainer>
         <LoginContainer>
@@ -253,6 +308,7 @@ const Unauthorized = ({navigation}) => {
             onPress={() => navigation.navigate('BasicInput')}>
             <SignupText>이메일 가입하기</SignupText>
           </TouchableWithoutFeedback>
+
         </SignupContainer>
       </LocalContainer>
       </AuthContainer>

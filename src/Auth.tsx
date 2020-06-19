@@ -1,3 +1,4 @@
+/*
 import React from 'react';
 import Styled from 'styled-components/native';
 import {useSelector} from 'react-redux';
@@ -16,3 +17,4 @@ const Auth = ({navigation}) => {
 };
 
 export default Auth;
+*/

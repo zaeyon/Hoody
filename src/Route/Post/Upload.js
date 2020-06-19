@@ -1,22 +1,22 @@
 import axios from 'axios';
-const baseUrl = 'https://fb79033da0c4.ngrok.io'; 
+const baseUrl = 'https://c7ede387e39b.ngrok.io'; 
 
 const PostUpload = (desArray, mediaArray,mainTag, subTag1, subTag2, rating, location, longitude, latitude, certifiedLocation, dump, sequence, products) => {
     const url = baseUrl + "/post/upload"
 
     console.log("업로드할 사진", mediaArray);
     console.log("업로드할 desArray", desArray);
+    console.log("업로드할 상품", products);
+
+
+    var form = new FormData();
 
     // IOS simulator 테스트용 이미지 추가
-    
-/*
     form.append('mediaFile', {
-        name: mediaArray[0].filename,
+        name: "test",
         type: 'image/jpeg',
-        uri:  mediaArray[0].uri,
+        uri:  'https://mp-seoul-image-production-s3.mangoplate.com/722502_1537752067560597.jpg',
     });
-*/
-    var form = new FormData();
     form.append('description', desArray);
     form.append('starRate', rating);
     form.append('address', location);
@@ -27,9 +27,10 @@ const PostUpload = (desArray, mediaArray,mainTag, subTag1, subTag2, rating, loca
     form.append('subTag1', subTag1);
     form.append('subTag2', subTag2);
     form.append('dump', dump);
-    form.append('sequence', sequence);
+    //form.append('sequence', sequence);
+    // ios simulator 테스트용
+    form.append('sequence', "DM");
     form.append('products', products);
-
     console.log("FormData", form);
 
     return new Promise(function(resolve, reject) {

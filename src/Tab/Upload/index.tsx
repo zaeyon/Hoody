@@ -24,7 +24,7 @@ import {FlatGrid} from 'react-native-super-grid';
 // import TagInput from '~/Components/TagInput';
 import Modal from 'react-native-modal';
 import CheckBox from '@react-native-community/checkbox';
-import ReviewUploadAPI from '~/Route/ReviewUpload';
+//import ReviewUploadAPI from '~/Route/ReviewUpload';
 import ImageMultiplePicker from 'react-native-customized-image-picker';
 
 if (
@@ -723,7 +723,7 @@ function Upload({route, navigation}) {
   };
 
   const reviewUpload = (images) => {
-    ReviewUploadAPI(images[0]);
+ //   ReviewUploadAPI(images[0]);
     console.log(images[0].uri);
   };
 

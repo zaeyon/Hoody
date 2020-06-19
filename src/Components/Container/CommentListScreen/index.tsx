@@ -4,15 +4,15 @@ import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp
 } from 'react-native-responsive-screen';
-import {FlatList, TouchableWithoutFeedback, Keyboard} from 'react-native';
-import CommentItem from '~/Components/Presentational/CommentListScreen/CommentItem';
+import {FlatList, TouchableWithoutFeedback, Keyboard, ScrollView} from 'react-native';
 
+import CommentItem from '~/Components/Presentational/CommentListScreen/CommentItem';
+import {PostComment, GetComment} from '~/Route/Post/Comment';
 
 const Container = Styled.SafeAreaView`
  flex: 1;
  background-color: #ffffff;
 `;
-
 
 const HeaderContainer = Styled.View`
  width: ${wp('100%')};
@@ -22,7 +22,6 @@ const HeaderContainer = Styled.View`
  justify-content:space-between;
  padding: 0px 0px 0px 0px;
 `;
-
 
 const LeftContainer = Styled.View`
 background-color: #ffffff;
@@ -70,7 +69,6 @@ const HeaderBorder = Styled.View`
 
 const CommentListContainer = Styled.View`
  margin-top: 5px;
- height: ${hp('100%')};
 `;
 
 const ProfileImage = Styled.Image`
@@ -82,7 +80,7 @@ const ProfileImage = Styled.Image`
 
 const CommentInputContainer = Styled.View`
  width: ${wp('100%')};
- height: ${hp('6.5%')};
+ padding: 10px;
  position: absolute;
  bottom: 0px;
  background-color: #ffffff;
@@ -91,6 +89,7 @@ const CommentInputContainer = Styled.View`
  border-top-width: 0.2px;
  border-color: #c3c3c3;
  flex-direction: row;
+
 `;
 
 const CommentInputLeftContainer = Styled.View`
@@ -101,17 +100,25 @@ const CommentInputLeftContainer = Styled.View`
 const CommentInput = Styled.TextInput`
  margin-left: 5px;
  width: ${wp('75%')};
- height: ${hp('4.5%')};
  border-radius: 35px;
  border-width: 0.3px;
  border-color: #707070;
- padding-left: 15px;
+ padding-left: 12px;
+ padding-top: 10px;
+ padding-bottom: 10px;
+ padding-right: 5px;
 `;
 
 const PostCommentButtonText = Styled.Text`
  font-size: 16px;
  color: #338EFC;
  margin-right: 10px;
+`;
+
+const PostCommentButtonContainer = Styled.View`
+padding-left: 25px;
+padding-top: 10px;
+padding-bottom: 10px;
 `;
 
 const COMMENT_DATA = [
@@ -132,26 +139,18 @@ const COMMENT_DATA = [
     createAt: '6/11 05:25',
     }
 ]
-
-const renderCommentItem = ({item, index}) => {
-    return (
-    <CommentItem
-    profileImage={item.user.profileImage}
-    nickname={item.user.nickname}
-    comment={item.comment}
-    createAt={item.createAt}
-    />
-    )
-}
-
 interface Props {
     navigation: any,
     route: any
 }
 
 const CommentListScreen = ({navigation, route}: Props) => {
-    const [commentData, setCommentData] = useState();
+    const [commentList, setCommentList] = useState();
     const [keyboardHeight, setKeyboardHeight] = useState<number>(0);
+    const [postId, setPostId] = useState<number>();
+    const [inputComment, setInputComment] = useState<string>("");
+    const [replyTarget, setReplyTarget] = useState<string>();
+    const [inputHeight, setInputHeight] = useState<number>(0);
 
     const onKeyboardDidShow = (e: KeyboardEvent) => {
         setKeyboardHeight(e.endCoordinates.height);
@@ -170,12 +169,79 @@ const CommentListScreen = ({navigation, route}: Props) => {
         }
     })
 
+    useEffect(() => {
+        if(route.params?.postId) {
+            //console.log("route.params.comments", route.params.comments);
+            console.log("route.params.feedId", route.params.feedId);
+            setPostId(route.params.postId);
+            GetComment(route.params.postId)
+            .then(function(response) {
+                console.log("댓글 불러오기 성공", response)
+                setCommentList(response);
+            })
+            .catch(function(error) {
+                console.log("댓글 불러오기 실패", error);
+            })
+        }
+    }, [route.params?.postId])
+
+    const setTarget = (target: string) => {
+        console.log("답글 달기", target);
+        setReplyTarget(target)
+    }
+
+
+    function getDateFormat(date) {
+        var year = date.getFullYear();
+        var month = (1+ date.getMonth());
+        month = month >= 10 ? month : '0' + month;
+        var day = date.getDate();
+        day = day >= 10 ? day : '0' + day;
+        return year + '/' + month + '/' + day;
+    }
+
+    const renderCommentItem = ({item, index}) => {
+    var date = new Date(item.createdAt);
+    date = getDateFormat(date);
+
+    return (
+    <CommentItem
+    setTarget={setTarget}
+    profileImage={item.user.profileImg}
+    nickname={item.user.nickname}
+    comment={item.description}
+    replys={item.replys}
+    createAt={date.toString()}
+    />
+    )
+   }
+
+   const postComment = () => {
+    PostComment(postId, inputComment)
+    .then(function(response) {
+        console.log("response", response);
+        GetComment(route.params.postId)
+        .then(function(response) {
+            console.log("댓글 불러오기 성공", response)
+            setCommentList(response);
+            setInputComment("")
+            Keyboard.dismiss();
+        })
+        .catch(function(error) {
+            console.log("댓글 불러오기 실패", error);
+        })
+    })
+    .catch(function(error) {
+        console.log("error", error);
+    })
+   }
+
     return (
     <Container>
         <HeaderContainer>
         <LeftContainer>
           <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
-          <BackButton source={require('~/Assets/Images/ic_back2.png')} />
+          <BackButton source={require('~/Assets/Images/ic_back2.png')}/>
           </TouchableWithoutFeedback>
         </LeftContainer>
         <TouchableWithoutFeedback onPress={() => 0}>
@@ -190,21 +256,34 @@ const CommentListScreen = ({navigation, route}: Props) => {
         </RightContainer>
       </HeaderContainer>
       <HeaderBorder/>
-      <CommentListContainer>
-        <FlatList
-        data={COMMENT_DATA}
+      <CommentListContainer
+      style={{marginBottom:inputHeight+keyboardHeight}}>
+         <FlatList
+        data={commentList}
         renderItem={renderCommentItem}
         />
         </CommentListContainer>
-        <CommentInputContainer style={{marginBottom:keyboardHeight}}>
+        <CommentInputContainer 
+        style={{marginBottom:keyboardHeight}}
+        onLayout={(event) => {
+            const layout = event.nativeEvent.layout;
+            setInputHeight(layout.height+30);
+        }}>
             <CommentInputLeftContainer>
             <ProfileImage
             source={{uri:"https://clip-instagram.com/wp-content/uploads/2017/12/%EA%B9%80%EC%97%B0%EC%95%84-%ED%8F%89%EC%B0%BD%EB%8F%99%EA%B3%84%EC%98%AC%EB%A6%BC%ED%94%BD-%EC%9D%B8%EC%8A%A4%ED%83%80%EA%B7%B8%EB%9E%A8-%EC%82%AC%EC%A7%84.jpg"}}/>
             <CommentInput
+            multiline={true}
             placeholder={"댓글 달기"}
+            onChangeText={(text: string) => setInputComment(text)}
+            value={inputComment}
             />
             </CommentInputLeftContainer>
+            <TouchableWithoutFeedback onPress={() => postComment()}>
+            <PostCommentButtonContainer>
             <PostCommentButtonText>작성</PostCommentButtonText>
+            </PostCommentButtonContainer>
+            </TouchableWithoutFeedback>
         </CommentInputContainer>
     </Container>
     )

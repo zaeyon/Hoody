@@ -1,19 +1,19 @@
 import axios from 'axios';
 const baseUrl = 'https://c7ede387e39b.ngrok.io'; 
 
-const GetAllFeed = () => {
-    url = baseUrl + "/feed/testFeed";
-
+const GetFeedDetail = (postId) => {
+    console.log("postId", postId);
+    const url = baseUrl + '/post/?postId=' + postId;
     return new Promise(function(resolve, reject) {
         axios
         .get(url)
         .then(function(response) {
-            resolve(response.data)
+            resolve(response)
         })
         .catch(function(error) {
-          reject(error);  
+            reject(error)
         })
     })
 }
 
-export default GetAllFeed;
+export default GetFeedDetail;

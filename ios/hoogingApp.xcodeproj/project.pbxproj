@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* hoogingAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* hoogingAppTests.m */; };
 		0A32ECC224906FD100A93EC6 /* libreact-native-cameraroll.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A32ECC124906FD100A93EC6 /* libreact-native-cameraroll.a */; };
+		0A84A5C72499F01F00749D25 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0A84A5BF2499ECE100749D25 /* GoogleService-Info.plist */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
@@ -70,6 +71,7 @@
 		0A32ECBA24906E5800A93EC6 /* RNCCameraRoll.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNCCameraRoll.xcodeproj; path = "../node_modules/@react-native-community/cameraroll/ios/RNCCameraRoll.xcodeproj"; sourceTree = "<group>"; };
 		0A32ECC124906FD100A93EC6 /* libreact-native-cameraroll.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libreact-native-cameraroll.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0A43A70F247E4C3300CFAF01 /* hoogingApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = hoogingApp.entitlements; path = hoogingApp/hoogingApp.entitlements; sourceTree = "<group>"; };
+		0A84A5BF2499ECE100749D25 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* hoogingApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = hoogingApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = hoogingApp/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = hoogingApp/AppDelegate.m; sourceTree = "<group>"; };
@@ -163,6 +165,7 @@
 		13B07FAE1A68108700A75B9A /* hoogingApp */ = {
 			isa = PBXGroup;
 			children = (
+				0A84A5BF2499ECE100749D25 /* GoogleService-Info.plist */,
 				0A43A70F247E4C3300CFAF01 /* hoogingApp.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
@@ -426,6 +429,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0A84A5C72499F01F00749D25 /* GoogleService-Info.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 			);

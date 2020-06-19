@@ -12,8 +12,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {TextInput} from 'react-native-gesture-handler';
 import {createStore} from 'redux';
 import {Provider, useSelector} from 'react-redux';
-import {ApplicationProvider, Layout, Text} from '@ui-kitten/components';
-import {mapping, light as lightTheme} from '@eva-design/eva';
+import AsyncStorage from '@react-native-community/async-storage';
 
 import rootReducer from '~/reducers';
 import Unauthorized from '~/Screens/Unauthorized';
@@ -53,14 +52,10 @@ async function requestCameraPermission() {
 function App() {
   requestCameraPermission();
   return (
-    <ApplicationProvider mapping={mapping} theme={lightTheme}>
       <Provider store={store}>
         <AppNavigator />
       </Provider>
-    </ApplicationProvider>
-  
     );
-  
 }
 
 export default App;

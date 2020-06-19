@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useLayoutEffect} from 'react';
 import Styled from 'styled-components/native';
 import {
   FlatList,
@@ -11,10 +11,18 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import { useIsFocused } from '@react-navigation/native'; 
 
 const Container = Styled.View`
  flex:1;
  background-color: #ffffff;
+`;
+
+const EmptyInputContainer = Styled.View`
+width: ${wp('100%')};
+height: ${hp('101%')};
+background-color: #ffffff;
+padding-bottom: 47px;
 `;
 
 const AutoCompleteContainer = Styled.View`
@@ -89,17 +97,25 @@ color: #707070;
 font-size: 13px;
 `;
 
-const SearchAutoComplete = () => {
+interface Props {
+  children: any,
+  autoCompleteResult: any,
+  resultCategory: any,
+  query: string,
+  changeSearchCategory: (changedCategory: string) => void,
+}
+
+const SearchAutoComplete = ({navigation, resultCategory,changeSearchCategory, autoCompleteResult, query}) => {
   const AutoCompleteTab = createMaterialTopTabNavigator();
   const [popularityData, setPopularityData] = useState([
     {
-      type: 'tag',
-      tagName: '인기 태그1',
-      tagRating: 5,
-      tagCount: 23,
+      category: 'tag',
+      query: '인기 태그1',
+      starRate: 5,
+      COUNT: 23,
     },
     {
-      type: 'user',
+      category: 'user',
       userName: '인기 사용자1',
       userFollwer: 103,
       userScore: 80,
@@ -135,28 +151,57 @@ const SearchAutoComplete = () => {
       userScore: 80,
     },
   ]);
+  const [autoCompleteUserData, setAutoCompleteUserData] = useState();
+  const [autoCompleteData, setAutoCompleteData] = useState();
+  const [autoCompleteChange, setAutoCompleteChange] = useState(false);
+  const [emptyInput, setEmptyInput] = useState(true);
+
+  useLayoutEffect(() => {
+    if(autoCompleteResult) {
+      console.log("autoCompleteResult", autoCompleteResult);
+      console.log("자동완성 query", query);
+      if(query === undefined) {
+        setAutoCompleteData(null);
+        setAutoCompleteUserData(null);
+      } else {
+        if(resultCategory === "user")
+      {
+        setAutoCompleteUserData(autoCompleteResult);
+        setAutoCompleteChange(true);
+      } else {
+      setAutoCompleteData(autoCompleteResult);
+      setAutoCompleteChange(true);
+      }
+      }  
+    }
+
+  }, [autoCompleteResult]);
 
   function Popularity() {
+    const isFocused = useIsFocused();
+    
+    if(isFocused) {
+      console.log("인기탭");
+      changeSearchCategory("popular");
+    }
+
     return (
-      <ScrollView
-        bounces={false}
-        overScrollMode="never"
-        showsVerticalScrollIndicator={false}>
         <AutoCompleteContainer>
+          {autoCompleteData && (
           <FlatList
             bounces={false}
-            data={popularityData}
+            data={autoCompleteData}
             renderItem={({item, index}) => {
               if (item.type === 'tag') {
                 return (
                   <AutoCompleteItemContainer>
                     <ItemLeftContainer>
-                      <TagName>#{item.tagName}</TagName>
+                      <TagName>#{item[0].name}</TagName>
                     </ItemLeftContainer>
                     <ItemRightContainer>
-                      <TagRating>평점 {item.tagRating}</TagRating>
+                      <TagRating>평점 {item[0].starRate}</TagRating>
                       <Text style={{color: '#707070'}}> | </Text>
-                      <TagCount>후기 수 {item.tagCount}개</TagCount>
+                      <TagCount>후기 수 {item[0].reviewNum}개</TagCount>
                     </ItemRightContainer>
                   </AutoCompleteItemContainer>
                 );
@@ -164,104 +209,113 @@ const SearchAutoComplete = () => {
                 return (
                   <AutoCompleteItemContainer>
                     <ItemLeftContainer>
-                      <UserName>{item.userName}</UserName>
+                      <UserName>{item.nickname}</UserName>
                     </ItemLeftContainer>
                     <ItemRightContainer>
-                      <UserFollwer>팔로워 수 {item.userFollwer}명</UserFollwer>
-                      <Text style={{color: '#707070'}}> | </Text>
-                      <UserScore>점수 {item.userScore}</UserScore>
+                      <UserFollwer></UserFollwer>
+                      <Text style={{color: '#707070'}}></Text>
+                      <UserScore></UserScore>
                     </ItemRightContainer>
                   </AutoCompleteItemContainer>
                 );
               }
             }}
           />
+  )}
         </AutoCompleteContainer>
-      </ScrollView>
     );
   }
 
   function Tag() {
+
+    const isFocused = useIsFocused();
+    console.log("tag autoCompleteData", autoCompleteData);
+    
+    if(isFocused) {
+      console.log("태그탭");
+      changeSearchCategory("tag")
+      
+    }
+
     return (
-      <ScrollView
-        bounces={false}
-        overScrollMode="never"
-        showsVerticalScrollIndicator={false}>
         <AutoCompleteContainer>
           <FlatList
             bounces={false}
-            data={tagData}
+            data={autoCompleteData}
+            extraData={autoCompleteChange}
             renderItem={({item, index}) => (
               <AutoCompleteItemContainer>
                 <ItemLeftContainer>
-                  <TagName>#{item.tagName}</TagName>
+                  <TagName>#{item[0].name}</TagName>
                 </ItemLeftContainer>
                 <ItemRightContainer>
-                  <TagRating>평점 {item.tagRating}</TagRating>
+                  <TagRating>평점 {item[0].starRate}</TagRating>
                   <Text style={{color: '#707070'}}> | </Text>
-                  <TagCount>후기 수 {item.tagCount}개</TagCount>
+                  <TagCount>후기 수 {item[0].reviewNum}개</TagCount>
                 </ItemRightContainer>
               </AutoCompleteItemContainer>
             )}
           />
-        </AutoCompleteContainer>
-      </ScrollView>
+         </AutoCompleteContainer>
     );
   }
 
   function Location() {
+    const isFocused = useIsFocused();
+    
+    if(isFocused) {
+      console.log("위치탭");
+      changeSearchCategory("address");
+    }
+
     return (
-      <ScrollView
-        bounces={false}
-        overScrollMode="never"
-        showsVerticalScrollIndicator={false}>
         <AutoCompleteContainer>
           <FlatList
             bounces={false}
-            data={locationData}
+            data={autoCompleteData}
+            extraData={autoCompleteData}
             renderItem={({item, index}) => (
               <AutoCompleteItemContainer>
                 <ItemLeftContainer>
-                  <LocationName>{item.locationName}</LocationName>
+                  <LocationName>{item[0].name}</LocationName>
                 </ItemLeftContainer>
                 <ItemRightContainer>
-                  <LocationRating>평점 {item.locationRating}</LocationRating>
+                  <LocationRating>평점 {item[0].starRate}</LocationRating>
                   <Text> | </Text>
-                  <LocationCount>후기 수 {item.locationCount}</LocationCount>
+                  <LocationCount>후기 수 {item[0].reviewNum}</LocationCount>
                 </ItemRightContainer>
               </AutoCompleteItemContainer>
             )}
           />
         </AutoCompleteContainer>
-      </ScrollView>
     );
   }
 
   function User() {
+    const isFocused = useIsFocused();
+    if(isFocused) {
+      console.log("사용자탭");
+      changeSearchCategory("user");
+    }
+
     return (
-      <ScrollView
-        bounces={false}
-        overScrollMode="never"
-        showsVerticalScrollIndicator={false}>
         <AutoCompleteContainer>
           <FlatList
             bounces={false}
-            data={userData}
+            data={autoCompleteUserData}
             renderItem={({item, index}) => (
               <AutoCompleteItemContainer>
                 <ItemLeftContainer>
-                  <UserName>{item.userName}</UserName>
+                  <UserName>{item.nickname}</UserName>
                 </ItemLeftContainer>
                 <ItemRightContainer>
-                  <UserFollwer>팔로워 수 {item.userFollwer}명</UserFollwer>
-                  <Text style={{color: '#707070'}}> | </Text>
-                  <UserScore>점수 {item.userScore}</UserScore>
+                  <UserFollwer></UserFollwer>
+                  <UserScore></UserScore>
                 </ItemRightContainer>
               </AutoCompleteItemContainer>
             )}
           />
         </AutoCompleteContainer>
-      </ScrollView>
     );
   }
 
@@ -275,10 +329,22 @@ const SearchAutoComplete = () => {
           style: {elevation: 0.5},
           labelStyle: {fontSize: 13, },
         }}>
-        <AutoCompleteTab.Screen name="인기" component={Popularity} />
-        <AutoCompleteTab.Screen name="태그" component={Tag} />
-        <AutoCompleteTab.Screen name="장소" component={Location} />
-        <AutoCompleteTab.Screen name="계정" component={User} />
+        <AutoCompleteTab.Screen 
+        name="인기" 
+        component={Popularity}
+        />
+        <AutoCompleteTab.Screen 
+        name="태그" 
+        component={Tag}
+        />
+        <AutoCompleteTab.Screen 
+        name="장소" 
+        component={Location}
+        />
+        <AutoCompleteTab.Screen 
+        name="계정" 
+        component={User}
+        />
       </AutoCompleteTab.Navigator>
     </Container>
   );

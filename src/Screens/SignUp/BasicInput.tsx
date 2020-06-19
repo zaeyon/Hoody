@@ -293,7 +293,7 @@ const BasicInput = ({navigation, route}) => {
           source={require('~/Assets/Images/close.png')}
         />
       </Header>
-      <InputContainer style={{marginTop: 60}}>
+      <InputContainer style={{marginTop: 20}}>
         <LabelInputContainer>
           <Input
             autoCapitalize="none"

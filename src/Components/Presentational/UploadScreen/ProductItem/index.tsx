@@ -1,18 +1,25 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import Styled from 'styled-components/native';
 import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp
 } from 'react-native-responsive-screen';
+import { unstable_enableLogBox } from 'react-native';
 
 const Container = Styled.View`
 width: ${wp('68%')};
-height: ${hp('10%')};
-background-color: #f2f2f2;
+background-color: #ffffff;
 flex-direction: row;
+border-color: #c3c3c3;
+padding-right: 10px;
+padding-top: 5px;
+padding-bottom: 5px;
+padding-left: 7px;
 `;
 
 const ProductImageContainer = Styled.View`
+align-items: center;
+justify-content: center;
 `;
 
 const ProductContentContainer = Styled.View`
@@ -22,8 +29,8 @@ padding-left: 10px;
 
 
 const ProductImage = Styled.Image`
- width: ${wp('26%')};
- height: ${wp('26%')};
+ width: ${wp('22%')};
+ height: ${hp('12%')};
 `;
 
 const ProductName = Styled.Text`
@@ -31,11 +38,14 @@ const ProductName = Styled.Text`
 `;
 
 const ProductDescription = Styled.Text`
+ margin-top: 4px;
  font-size: 12px;
 `;
 
 const ShopContainer = Styled.View`
+ margin-top: 6px;
  flex-direction: row;
+ align-items: center;
 `;
 
 const ShopIcon = Styled.Image`
@@ -45,7 +55,7 @@ const ShopIcon = Styled.Image`
 
 const ShopName = Styled.Text`
 margin-left: 5px;
-font-size: 9px;
+font-size:11px;
 `;
 
 interface Props {
@@ -57,6 +67,47 @@ interface Props {
 }
 
 const ProductItem = ({productImage, productName, productDescription, shopIcon, shopName}: Props) => {
+    const [subDescription, setSubDescription] = useState<string>();
+    const [subTitle, setSubTitle] = useState<string>();
+
+    const getDesLength = (str) => {
+        var len = 0;
+        for (var i = 0; i < str.length; i++) {
+            if(escape(str.charAt(i)).length == 6) {
+                len++;
+            }
+            len++;
+        }
+        if(len > 130) {
+            setSubDescription(productDescription.substr(0, 30) + "...")
+        } else {
+            setSubDescription(productDescription)
+        }     
+    }
+
+    const getTitleLength = (str) => {
+        var len = 0;
+        for (var i = 0; i < str.length; i++) {
+            if(escape(str.charAt(i)).length == 6) {
+                len++;
+            }
+            len++;
+        }
+        if(len > 12) {
+            setSubTitle(productName.substr(0, 12) + "...")
+        } else {
+            setSubTitle(productName)
+        }     
+    }
+
+    useEffect(() => {
+        getDesLength(productDescription);
+        getTitleLength(productName);
+        console.log("productUrl", productImage);
+        console.log("shopIcon", shopIcon);
+    })
+
+
     return (
         <Container>
             <ProductImageContainer>
@@ -65,11 +116,11 @@ const ProductItem = ({productImage, productName, productDescription, shopIcon, s
                 />
             </ProductImageContainer>
             <ProductContentContainer>
-    <ProductName>{productName}</ProductName>
-    <ProductDescription>{productDescription}</ProductDescription>
+    <ProductName>{subTitle}</ProductName>
+    <ProductDescription>{subDescription}</ProductDescription>
     <ShopContainer>
         <ShopIcon
-        source={require('~/Assets/Images/SocialLogin/ic_googleLogin.png')}
+        source={{uri: shopIcon}}
         />
     <ShopName>{shopName}</ShopName>
     </ShopContainer>

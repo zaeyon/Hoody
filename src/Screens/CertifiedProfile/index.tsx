@@ -102,9 +102,8 @@ const ReviewFeedContainer = Styled.View`
 `;
 
 const ReviewImage = Styled.Image`
- width: ${wp('33%')};
- height: ${wp('33%')};
- margin-right: ${Platform.select({ios: 3, android: 4})};
+ width: ${wp('32%')};
+ height: ${wp('32%')};
 `;
 
 function CertifiedProfile({navigation}) {

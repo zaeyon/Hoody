@@ -4,9 +4,7 @@ import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp 
 } from 'react-native-responsive-screen';
-import {TouchableWithoutFeedback, FlatList} from 'react-native';
-
-import ReplyItem from '~/Components/Presentational/CommentListScreen/ReplyItem';
+import {TouchableWithoutFeedback} from 'react-native';
 
 const Container = Styled.View`
  width: ${wp('100%')};
@@ -41,8 +39,8 @@ const FooterContainer = Styled.View`
 `;
 
 const ProfileImage = Styled.Image`
- width: ${wp('8.3%')};
- height: ${wp('8.3%')};
+ width: ${wp('7.3%')};
+ height: ${wp('7.3%')};
  border-radius: 100px;
 `;
 
@@ -67,44 +65,14 @@ const ReplyText = Styled.Text`
  color: #9b9b9b;
 `;
 
-const ReplyContainer = Styled.View`
-`;
-
-
-
 interface Props {
     profileImage: string,
     nickname: string,
     comment: string,
     createAt: string,
-    replys: Array<Object>,
-    setTarget: (target:string) => void,
 }
 
-const CommentItem = ({profileImage, nickname, comment, createAt, replys, setTarget}: Props) => {
-
-    function getDateFormat(date) {
-        var year = date.getFullYear();
-        var month = (1+ date.getMonth());
-        month = month >= 10 ? month : '0' + month;
-        var day = date.getDate();
-        day = day >= 10 ? day : '0' + day;
-        return year + '/' + month + '/' + day;
-    }
-
-    const renderReplyItem = ({item, index}) => {
-    var date = new Date(item.createdAt);
-    date = getDateFormat(date);   
-    
-    return (
-        <ReplyItem
-        profileImage={item.user.profileImg}
-        nickname={item.user.nickname}
-        comment={item.description}
-        createAt={date.toString()}/>
-    )
-    }
-
+const ReplyItem = ({profileImage, nickname, comment, createAt}: Props) => {
     return (
         <Container>
             <BodyContainer>
@@ -119,21 +87,13 @@ const CommentItem = ({profileImage, nickname, comment, createAt, replys, setTarg
             </BodyContainer>
             <FooterContainer>
     <CreateAtText>{createAt}</CreateAtText>
-    <TouchableWithoutFeedback onPress={() => setTarget(nickname)}>
     <ReplyText>{"답글 달기"}</ReplyText>
-    </TouchableWithoutFeedback>
             </FooterContainer>
-            <ReplyContainer>
-                <FlatList
-                data={replys}
-                renderItem={renderReplyItem}
-                />
-            </ReplyContainer>
         </Container>
     )
 }
 
-export default CommentItem;
+export default ReplyItem;
 
 
 

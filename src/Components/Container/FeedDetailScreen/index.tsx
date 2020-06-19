@@ -6,6 +6,7 @@ import {
 } from 'react-native-responsive-screen';
 import {TouchableWithoutFeedback, Text} from 'react-native';
 
+import GetFeedDetail from '~/Route/Post/GetFeedDetail';
 import FeedContent from '~/Components/Presentational/FeedDetailScreen/FeedContent';
 
 const Container = Styled.SafeAreaView`
@@ -118,55 +119,35 @@ var PARAGRAPH_DATA: Array<Object>;
 
 const FeedDetailScreen = ({navigation, route}: Props) => {
     const [mainTag, setMainTag] = useState("메인태그");
-    const [paragraphData, setParagraphData] = useState<Array<Object>>();
+    const [paragraphData, setParagraphData] = useState();
+    const [commentArray, setCommentArray] = useState();
+    const [postId, setPostId] = useState();
 
     useEffect(() => {
-        PARAGRAPH_DATA = [
-            {
-                "id": 7,
-                "description": "test1",
-                "index": 1,
-                "type": "description"
-            },
-            {
-                "id": 3,
-                "filename": "original/159184478970219159759.jpeg",
-                "size": 24711,
-                "mimetype": "image/jpeg",
-                "index": 2,
-                "url": "https://hoogingpostmedia.s3.ap-northeast-2.amazonaws.com/original/159184478970219159759.jpeg",
-                "type": "image"
-            },
-            {
-                "id": 8,
-                "description": "test2",
-                "index": 3,
-                "type" : "description"
-            },
-            {
-                "id": 9,
-                "description": "test3",
-                "index": 4,
-                "type": "description"
-            },
-            {
-                "id": 4,
-                "filename": "original/1591844789702IMG_1014.jpg",
-                "size": 1183759,
-                "mimetype": "image/jpeg",
-                "index": 5,
-                "url": "https://hoogingpostmedia.s3.ap-northeast-2.amazonaws.com/original/1591844789702IMG_1014.jpg",
-                "type": "image"
-            }
-        ]
-       // setParagraphData(PARAGRAPH_DATA);
-    }, [])
+        if(route.params?.feedId) {
+       GetFeedDetail(route.params.feedId).then(function(response) {
+           console.log("GetFeedDetail Success:", response.data.postBody)
+           console.log("response.data.post!!!", response.data.post.comments);
+           setCommentArray(response.data.post.comments);
+           setParagraphData(response.data.postBody);
+           setPostId(route.params.feedId);
+       })
+       .catch(function(error) {
+           console.log("error", error);
+       })
+    }
+    }, [route.params.feedId])
 
-    useEffect(() => {
-        if(route.params?.paragraphData) {
-            setParagraphData(route.params.paragraphData);
-        }
-    }, [route.params.paragraphData]);
+    const moveCommentList = () => {
+        console.log("commentArray", commentArray);
+        console.log("postId", postId);
+
+        navigation.navigate("CommentListScreen", {
+            postId: postId,
+            comments: commentArray,
+        })
+    }
+
 
    return (
        <Container>
@@ -198,7 +179,7 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
           <Text style={{marginTop:5}}>목록</Text>
           </TouchableWithoutFeedback>
           </LikeContainer>
-          <TouchableWithoutFeedback onPress={() => navigation.navigate("CommentListScreen")}>
+          <TouchableWithoutFeedback onPress={() => moveCommentList()}>
           <CommentContainer>
           <Text>댓글</Text>
           </CommentContainer>

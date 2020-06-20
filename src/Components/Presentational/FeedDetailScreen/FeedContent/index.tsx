@@ -10,7 +10,6 @@ const Container = Styled.View`
  background-color: #ffffff;
  flex: 1;
  width: ${wp('100%')};
- height: ${hp('100%')};
 `;
 
 const DescriptionContainer = Styled.View`
@@ -21,7 +20,8 @@ justify-content: center;
 `;
 
 const ReviewDescription = Styled.Text`
- font-size: 12px;
+ font-size: 14px;
+ color: #4B4B4B;
 `;
 
 const ImageContainer = Styled.View`
@@ -40,12 +40,11 @@ interface Props {
 const FeedContent = ({paragraphData}: Props) => {
     const [paragraph, setParagraph] = useState();
 
-    /*
+    
     useEffect(() => {
-        setParagraph(paragraphData);
         console.log("paragraph", paragraphData);
-    }, paragraphData)
-    */
+    }, [paragraphData])
+    
 
 const renderItem = ({item, index}) => {
     if(item.type === "description") {
@@ -70,7 +69,6 @@ const renderItem = ({item, index}) => {
             style={{backgroundColor:"c3c3c3"}}
             data={paragraphData}
             renderItem={renderItem}/>
-            <Text>아아아아ㅏㅇ아아ㅏ</Text>
         </Container>
     )
 }

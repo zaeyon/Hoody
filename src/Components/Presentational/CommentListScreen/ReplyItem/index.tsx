@@ -7,9 +7,11 @@ import {
 import {TouchableWithoutFeedback} from 'react-native';
 
 const Container = Styled.View`
+ margin-left: 20px;
  width: ${wp('100%')};
- height: ${hp('6.5%')};
+ height: ${hp('5.5%')};
  margin-bottom: 2px;
+ background-color:#c3c3c3;
 `;
 
 const ProfileImageContainer = Styled.View`

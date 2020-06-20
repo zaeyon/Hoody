@@ -94,10 +94,16 @@ const TEST_FEED_DATA = [
     expanse: 2000,
     descriptions: [
       {
-        description: "내용1"
+        description: "이번 남자친구가 선물해준 키엘 수분 크림을 사용해 봤는데 너무 좋은거 같아요 이번에 남자 ..."
       },
       {
         description: "내용2"
+      }
+    ],
+    mediaFiles: [
+      {
+        type: 'image',
+        url: 'https://img1.daumcdn.net/thumb/R720x0/?fname=https%3A%2F%2Ft1.daumcdn.net%2Fliveboard%2Fdailylife%2F6d8abd51eb3644958240a9ca6ddf28bd.JPG'
       }
     ],
     paragraphData: [
@@ -200,10 +206,10 @@ function Feed({navigation, route}: Props) {
         />
       </HeaderBar>
       <BodyContainer>
-      {feedListData[0] && (
+      {TEST_FEED_DATA[0] && (
       <FeedListContainer>
       <FlatList
-        data={feedListData}
+        data={TEST_FEED_DATA}
         renderItem={({item}) => (
                 <FeedItem
                   id={item.id}

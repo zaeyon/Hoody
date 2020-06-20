@@ -8,28 +8,43 @@ import {
 } from 'react-native-responsive-screen';
 
 const Container = Styled.View`
- margin-bottom: 12px;
+
  `;
 
 const FeedItemContainer = Styled.View`
  width: ${wp('100%')};
  background-color:#ffffff;
+ flex-direction: row;
+ padding-top: 10px;
+`;
+
+const LeftContainer = Styled.View`
+ width: ${wp('12%')};
+ padding: 5px 0px 0px 55px;
+ align-items: flex-end;
+`;
+
+const RightContainer = Styled.View`
+ width: ${wp('88%')}
+ padding: 5px 20px 0px 7px;
 `;
 
 const HeaderContainer = Styled.View`
  flex: 1.2;
+height: ${wp('9.6%')};
  flex-direction: row;
  justify-content: space-between;
- padding-left: 5px;
- padding-right: 5px;
  `;
 
 const BodyContainer = Styled.View`
- padding-top: 10px;
  flex: 10;
+ padding-top: 5px;
 `;
 
 const FooterContainer = Styled.View`
+padding-top: 15px;
+padding-bottom: 20px;
+align-items: flex-end;
  flex: 3;
 `;
 
@@ -37,18 +52,38 @@ const WriterContainer = Styled.View`
  flex-direction: row;
  justify-content: center;
  align-items: center;
- margin-left: 5px;
+`;
+
+const HeaderCenterContainer = Styled.View`
+`;
+
+const NicknameCreatedAtContainer = Styled.View`
+ flex-direction: row;
+ align-items: center;
+`;
+
+const CreatedAtText = Styled.Text`
+ margin-left: 7px;
+ color: #cccccc;
+ font-size: 12px;
 `;
 
 const WriterProfileImage = Styled.Image`
 border-radius: 100px;
-width: 30px;
-height: 30px;
+width: ${wp('9.6%')};
+height: ${wp('9.6%')};
 `;
 
 const WriterNickname = Styled.Text`
-margin-left: 5px;
-font-size: 12px;
+font-size: 15px;
+font-weight: 600;
+`;
+
+
+const LocationText = Styled.Text`
+ margin-top: 4px;
+ font-size: 13px;
+ color: #8e8e8e;
 `;
 
 const RatingContainer = Styled.View`
@@ -56,9 +91,9 @@ const RatingContainer = Styled.View`
 `;
 
 const RatingStarImage = Styled.Image`
-margin-left: -2px;
-width: 25px;
-height: 25px;
+margin-right: 3px;
+width: ${wp('3.2%')};
+height: ${wp('3.2%')};
 `;
 
 const HalfRatingStarImage = Styled.Image`
@@ -70,32 +105,78 @@ height: 18px;
 tint-color: #23E5D2;
 `;
 
+const ManyReviewImageContainer = Styled.View`
+padding-top: 10px;
+ flex-direction: row;
+`;
+
+const ImageCountBackground = Styled.View`
+ top: 15px;
+ right: 5px;
+ padding: 5px 9px 5px 9px;
+ position: absolute;
+ border-radius: 26px;
+ background-color: #000000;
+ opacity: 0.5;
+`;
+
+const ImageCountText = Styled.Text`
+ font-size: 14px;
+ font-weight: 500;
+ color: #ffffff;
+`;
+
+const FirstImage = Styled.Image`
+ border-top-left-radius: 10px;
+ border-bottom-left-radius: 10px;
+resize-mode:cover;
+width: ${wp('40.5%')};
+height: ${wp('44%')};
+`;
+
+const SecondImage = Styled.Image`
+ margin-left: 2.5px;
+ border-top-right-radius: 10px;
+ border-bottom-right-radius: 10px;
+resize-mode:cover;
+ width: ${wp('40.5%')};
+ height: ${wp('44%')};
+`;
+
+const ReviewImageContainer = Styled.View`
+padding-top: 10px;
+height: ${wp('44%')};
+`;
+
 const ReviewImage = Styled.Image`
 resize-mode:cover;
-width: ${wp('100%')};
-height: ${wp('100%')};
+border-radius: 10px; 
+height: ${wp('44%')};
 `;
 
 const TagContainer = Styled.View`
 flex-direction: row;
-background-color: #c3c3c3;
 `;
 
 const TagBackground = Styled.View`
-margin-left: 5px;
 padding: 5px;
 border-radius: 4px;
 background-color: #ffffff;
 opacity: 1;
 `;
 
-const TagText = Styled.Text`
-color: #000000;
-font-size: 15px;
+const MainTagText = Styled.Text`
+ font-size: 16px;
+ font-weight: 600;
+ color: #3384FF;
+ margin-right: 7px;
 `;
 
 const SubTagText = Styled.Text`
-color: #000000;
+color: #CCCCCC;
+font-size: 16px;
+font-weight: 600;
+margin-right: 7px;
 `;
 
 const LocationPriceContainer = Styled.View`
@@ -116,10 +197,6 @@ const LocationIcon = Styled.Image`
  height: 14px;
 `;
 
-const LocationText = Styled.Text`
- font-size: 14px;
- color: #707070;
-`;
 
 const PriceContainer = Styled.View`
  margin-left: 8px;
@@ -140,16 +217,16 @@ const PriceText = Styled.Text`
 `;
 
 const DescriptionContainer = Styled.View`
-padding-top: 3px;
-padding-left: 10px;
+padding-top: 5px;
 `;
 
 const DescriptionText = Styled.Text`
- font-size: 13px;
+ font-size: 16px;
+ color: #4B4B4B;
 `;
 
 const AdditionalInfoContainer = Styled.View`
- padding: 15px;
+ padding-top: 10px;
  flex-direction: row;
  justify-content: center;
 `;
@@ -160,9 +237,9 @@ const InfoLabelText = Styled.Text`
 `;
 
 const InfoCountText = Styled.Text`
- margin-left: 3px;
- font-size: 12px;
- color: #AAB2B7;
+ margin-left: 5px;
+ font-size: 13px;
+ color: #cccccc;
 `;
 
 const InfoDivider = Styled.Text`
@@ -172,11 +249,35 @@ const InfoDivider = Styled.Text`
  color: #AAB2B7;
 `;
 
-const Border = Styled.View`
- background-color: #c3c3c3;
- width: ${wp('100%')};
- height: 0.3px;
+const InfoContainer = Styled.View`
+ flex-direction: row;
+ align-items: center;
+ margin-left: 15px;
 `;
+
+const ItemBottomBorder = Styled.View`
+ background-color: #F1F1F1;
+ width: ${wp('100%')};
+ height: 1px;
+`;
+
+const LikeIcon = Styled.Image`
+width: ${wp('4.0%')};
+height: ${wp('3.5%')};
+`;
+
+const CommentIcon = Styled.Image`
+width: ${wp('4%')};
+height: ${wp('4%')};
+`;
+
+const ScrapIcon = Styled.Image`
+width: ${wp('3.5%')};
+height: ${wp('4.0%')};
+`;
+
+
+
 
 interface Props {
   id: number;
@@ -266,14 +367,24 @@ const FeedItem = ({
   return (
     <Container>
       <FeedItemContainer>
+        <LeftContainer>
+        <WriterProfileImage
+              source={{uri: profile_image}}></WriterProfileImage>
+        </LeftContainer>
+        <RightContainer>
         <HeaderContainer>
           <WriterContainer>
-            <WriterProfileImage
-              source={{uri: profile_image}}></WriterProfileImage>
+              <HeaderCenterContainer>
+             <NicknameCreatedAtContainer>
             <WriterNickname>{nickname}</WriterNickname>
+  <CreatedAtText>{"3시간전"}</CreatedAtText>
+            </NicknameCreatedAtContainer>
+            {location && (
+              <LocationText>{location}</LocationText>
+            )}
+            </HeaderCenterContainer>
           </WriterContainer>
-          <RatingContainer
-            style={{justifyContent: 'center', alignItems: 'center'}}>
+          <RatingContainer>
             <FlatList
               horizontal={true}
               data={ratingArray}
@@ -281,83 +392,88 @@ const FeedItem = ({
                 if (item === 'full') {
                   return (
                     <RatingStarImage
-                      source={require('~/Assets/Images/star-24px.png')}
+                      source={require('~/Assets/Images/ic_newStar.png')}
                     />
                   );
                 } else if (item === 'half') {
                   return (
-                    <HalfRatingStarImage
-                      source={require('~/Assets/Images/half-star-24px.png')}
+                    <RatingStarImage
+                      source={require('~/Assets/Images/ic_newHalfStar.png')}
                     />
                   );
                 } else if (item === 'empty') {
-                  return (
-                    <RatingStarImage
-                      source={require('~/Assets/Images/emptyStar-24px.png')}
-                    />
-                  );
+                  
                 }
               }}
             />
           </RatingContainer>
         </HeaderContainer>
         <TouchableWithoutFeedback onPress={() => navigation.navigate("FeedDetailScreen", {
-          feedId:id 
+          feedId:id,
+          tagList: tagList,
+          ratingArray: ratingArray,
         })}>
         <BodyContainer>
-          <ReviewImage source={
-            mediaFiles[0] ? (
-              {uri:mediaFiles[0].url}
-            ) : (
-              {uri:"https://t1.daumcdn.net/liveboard/dailylife/cc9a6c65c72443d6ac70b9634102c3ef.JPG"}
-            )
-          } />
-          <TagContainer>
+        <TagContainer>
             <FlatList
-              style={{position: 'absolute', right: 5, bottom: 5}}
               horizontal={true}
               data={tagList}
-              renderItem={({item}) => (
-                <TagBackground>
-                  <TagText>#{item}</TagText>
-                </TagBackground>
-              )}
+              renderItem={({item, index}) => {
+                if(index === 0) 
+                { return (
+                  <MainTagText>#{item}</MainTagText>
+                )
+                } else {
+                  return (
+                  <SubTagText>#{item}</SubTagText>
+                  )
+                }
+              }}
             />
           </TagContainer>
-          <LocationPriceContainer>
-            {location && (
-            <LocationContainer>
-              <LocationIcon source={require('~/Assets/Images/marker.png')} />
-              <LocationText>{location}</LocationText>
-            </LocationContainer>
-            )}
-            {expanse && (
-            <PriceContainer>
-              <PriceIcon source={require('~/Assets/Images/price.png')} />
-            <PriceText>{expanse}원</PriceText>
-            </PriceContainer>
-            )}
-          </LocationPriceContainer>
-          <DescriptionContainer>
+        <DescriptionContainer>
             <DescriptionText>{desArray[0].description}</DescriptionText>
           </DescriptionContainer>
+          {mediaFiles.length === 1 && (
+          <ReviewImageContainer>
+          <ReviewImage source={{uri:mediaFiles[0].url}}/>
+          </ReviewImageContainer>
+          )}
+          {mediaFiles.length > 1 && (
+            <ManyReviewImageContainer>
+              <FirstImage source={{uri:mediaFiles[0].url}}/>
+              <SecondImage source={{uri:mediaFiles[1].url}}/>
+              {mediaFiles.length > 2 && (
+              <ImageCountBackground>
+          <ImageCountText>+{mediaFiles.length-2}</ImageCountText>
+              </ImageCountBackground>
+              )}
+            </ManyReviewImageContainer>
+          )}
         </BodyContainer>
         </TouchableWithoutFeedback>
         <FooterContainer>
           <AdditionalInfoContainer>
-            <InfoLabelText>좋아요</InfoLabelText>
-            <InfoCountText>{favorite_count}개</InfoCountText>
-            <InfoDivider>|</InfoDivider>
-
-            <InfoLabelText>댓글</InfoLabelText>
-            <InfoCountText>{favorite_count}개</InfoCountText>
-            <InfoDivider>|</InfoDivider>
-
-            <InfoLabelText>스크랩</InfoLabelText>
-            <InfoCountText>{favorite_count}개</InfoCountText>
+            <InfoContainer>
+            <LikeIcon
+            source={require('~/Assets/Images/ic_like.png')}/>
+            <InfoCountText>{favorite_count}</InfoCountText>
+            </InfoContainer>
+            <InfoContainer>
+            <CommentIcon
+            source={require('~/Assets/Images/ic_comment.png')}/>
+            <InfoCountText>{favorite_count}</InfoCountText>
+            </InfoContainer>
+            <InfoContainer>
+            <ScrapIcon
+            source={require('~/Assets/Images/ic_scrap.png')}/>
+            <InfoCountText>{favorite_count}</InfoCountText>
+            </InfoContainer>
           </AdditionalInfoContainer>
         </FooterContainer>
+        </RightContainer>
       </FeedItemContainer>
+      <ItemBottomBorder/>
     </Container>
   );
 };

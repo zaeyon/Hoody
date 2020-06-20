@@ -364,6 +364,8 @@ PODS:
     - React
   - react-native-date-picker (2.7.10):
     - React
+  - react-native-geolocation-service (5.0.0):
+    - React
   - react-native-google-maps (0.27.1):
     - Google-Maps-iOS-Utils (= 2.1.0)
     - GoogleMaps (= 3.5.0)
@@ -495,6 +497,7 @@ DEPENDENCIES:
   - "react-native-cameraroll (from `../node_modules/@react-native-community/cameraroll`)"
   - "react-native-checkbox (from `../node_modules/@react-native-community/checkbox`)"
   - react-native-date-picker (from `../node_modules/react-native-date-picker`)
+  - react-native-geolocation-service (from `../node_modules/react-native-geolocation-service`)
   - react-native-google-maps (from `../node_modules/react-native-maps`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - react-native-maps (from `../node_modules/react-native-maps`)
@@ -597,6 +600,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@react-native-community/checkbox"
   react-native-date-picker:
     :path: "../node_modules/react-native-date-picker"
+  react-native-geolocation-service:
+    :path: "../node_modules/react-native-geolocation-service"
   react-native-google-maps:
     :path: "../node_modules/react-native-maps"
   react-native-image-picker:
@@ -700,6 +705,7 @@ SPEC CHECKSUMS:
   react-native-cameraroll: 06e60780a4e6e7bb9a588eca72506744cf6e133b
   react-native-checkbox: f25a53683bf992d14df6c3cf5b590865f293b2d8
   react-native-date-picker: 74c129e693b43483d5a870e239bc6e70dceb1cb0
+  react-native-geolocation-service: 141e33bdb179bcba10b216ee13962611e21f2be4
   react-native-google-maps: 0a989abda71059db2caa98b9dacca7a8f38a47d0
   react-native-image-picker: 6a850c41f57f0848d918c2a77aedd7aa272ffa30
   react-native-maps: f4b89da81626ad7f151a8bfcb79733295d31ce5c

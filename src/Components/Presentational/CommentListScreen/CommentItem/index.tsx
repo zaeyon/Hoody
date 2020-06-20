@@ -73,6 +73,7 @@ const ReplyContainer = Styled.View`
 
 
 interface Props {
+    commentId: number,
     profileImage: string,
     nickname: string,
     comment: string,
@@ -81,7 +82,7 @@ interface Props {
     setTarget: (target:string) => void,
 }
 
-const CommentItem = ({profileImage, nickname, comment, createAt, replys, setTarget}: Props) => {
+const CommentItem = ({profileImage, nickname, comment, createAt, replys, setTarget, commentId}: Props) => {
 
     function getDateFormat(date) {
         var year = date.getFullYear();
@@ -119,16 +120,10 @@ const CommentItem = ({profileImage, nickname, comment, createAt, replys, setTarg
             </BodyContainer>
             <FooterContainer>
     <CreateAtText>{createAt}</CreateAtText>
-    <TouchableWithoutFeedback onPress={() => setTarget(nickname)}>
+    <TouchableWithoutFeedback onPress={() => setTarget(nickname, commentId)}>
     <ReplyText>{"답글 달기"}</ReplyText>
     </TouchableWithoutFeedback>
             </FooterContainer>
-            <ReplyContainer>
-                <FlatList
-                data={replys}
-                renderItem={renderReplyItem}
-                />
-            </ReplyContainer>
         </Container>
     )
 }

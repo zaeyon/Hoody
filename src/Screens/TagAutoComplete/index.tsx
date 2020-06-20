@@ -51,28 +51,32 @@ const ButtonText = Styled.Text`
 `;
 
 const TagInputContainer = Styled.View`
-margin-top: 40px;
-width: ${wp('80%')};
-height: 70px;
+margin-top: 10px;
+padding-left: ${wp('11%')};
+width: ${wp('90%')};
+height: ${hp('5%')};
 flex-direction: row;
 align-items: center;
 justify-content: center;
+background-color: #f3f3f3;
+border-radius: 40px;
 `;
 
 const InputContainer = Styled.View`
 `;
 
 const TagInput = Styled.TextInput`
-font-size: 20px;
- width: ${wp('75.5%')};
- height: ${hp('5%')};
+font-size: 18px;
+width: ${wp('90%')};
+height: ${hp('5%')};
  padding-left: 5px;
 `;
 
 
 const HashImage = Styled.Image`
- width: ${wp('4.5%')};
- height: ${hp('3.4%')};
+ width: ${wp('3.3%')};
+ height: ${hp('1.8%')};
+ tint-color: #3384FF
 `;
 
 
@@ -85,19 +89,17 @@ const InputBottomBorder = Styled.View`
 `;
 
 const TagResultContainer = Styled.View`
-
-border-top-width: 0.3px;
+padding: 15px; 15px 15px 15px;
 border-color: #c3c3c3;
  
 `;
 
 const TagResultItemContainer = Styled.View`
 
-width: ${wp('100%')};
-padding: 10px;
+width: ${wp('90%')};
+padding: 10px 0px 10px 0px;
  flex-direction: row;
  justify-content: space-between;
- border-bottom-width: 0.3px;
  border-color: #c3c3c3;
 `;
 
@@ -152,7 +154,7 @@ const TagAutoComplete = ({navigation, route}: Props) => {
         </LeftContainer>
         <TouchableWithoutFeedback onPress={() => 0}>
           <CenterContainer>
-          <HeaderTitleText>게시물 정보</HeaderTitleText>
+          <HeaderTitleText></HeaderTitleText>
         </CenterContainer>
         </TouchableWithoutFeedback>
         <RightContainer>
@@ -163,11 +165,10 @@ const TagAutoComplete = ({navigation, route}: Props) => {
       </HeaderContainer>
         <TagInputContainer>
             <HashImage
-            source={require('~/Assets/Images/ic_sharp.png')}/>
+            source={require('~/Assets/Images/ic_boldSharp.png')}/>
             <InputContainer>
             <TagInput
             autoFocus={true}/>
-            <InputBottomBorder/>
             </InputContainer>
         </TagInputContainer>
         <TagResultContainer>
@@ -178,9 +179,6 @@ const TagAutoComplete = ({navigation, route}: Props) => {
             return (
             <TagResultItemContainer>
             <TagNameText>{'#' + item.tagName}</TagNameText>
-            <TouchableWithoutFeedback onPress={() => selectTag(item)}>
-            <UseTagButtonText>사용</UseTagButtonText>
-            </TouchableWithoutFeedback>
             </TagResultItemContainer>
             )
             }}/>

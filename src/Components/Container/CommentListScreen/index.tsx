@@ -4,10 +4,10 @@ import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp
 } from 'react-native-responsive-screen';
-import {FlatList, TouchableWithoutFeedback, Keyboard, ScrollView} from 'react-native';
+import {FlatList, TouchableWithoutFeedback, Keyboard, ScrollView, Text} from 'react-native';
 
 import CommentItem from '~/Components/Presentational/CommentListScreen/CommentItem';
-import {PostComment, GetComment} from '~/Route/Post/Comment';
+import {PostComment, GetComment, PostReply} from '~/Route/Post/Comment';
 
 const Container = Styled.SafeAreaView`
  flex: 1;
@@ -89,7 +89,9 @@ const CommentInputContainer = Styled.View`
  border-top-width: 0.2px;
  border-color: #c3c3c3;
  flex-direction: row;
+`;
 
+const CommentItemContainer = Styled.View`
 `;
 
 const CommentInputLeftContainer = Styled.View`
@@ -139,6 +141,7 @@ const COMMENT_DATA = [
     createAt: '6/11 05:25',
     }
 ]
+
 interface Props {
     navigation: any,
     route: any
@@ -151,6 +154,8 @@ const CommentListScreen = ({navigation, route}: Props) => {
     const [inputComment, setInputComment] = useState<string>("");
     const [replyTarget, setReplyTarget] = useState<string>();
     const [inputHeight, setInputHeight] = useState<number>(0);
+    const [inputType, setInputType] = useState<string>("comment");
+    const [replyCommentId, setReplyCommentId] = useState<number>();
 
     const onKeyboardDidShow = (e: KeyboardEvent) => {
         setKeyboardHeight(e.endCoordinates.height);
@@ -185,9 +190,12 @@ const CommentListScreen = ({navigation, route}: Props) => {
         }
     }, [route.params?.postId])
 
-    const setTarget = (target: string) => {
+    const setTarget = (target: string, commentId: number) => {
         console.log("답글 달기", target);
+        console.log("commentId", commentId);
         setReplyTarget(target)
+        setInputType("reply");
+        setReplyCommentId(commentId);
     }
 
 
@@ -203,9 +211,11 @@ const CommentListScreen = ({navigation, route}: Props) => {
     const renderCommentItem = ({item, index}) => {
     var date = new Date(item.createdAt);
     date = getDateFormat(date);
-
+      
     return (
+    <CommentItemContainer>
     <CommentItem
+    commentId={item.id}
     setTarget={setTarget}
     profileImage={item.user.profileImg}
     nickname={item.user.nickname}
@@ -213,10 +223,15 @@ const CommentListScreen = ({navigation, route}: Props) => {
     replys={item.replys}
     createAt={date.toString()}
     />
+    {item.replys[0] && (
+        <Text>답글존재</Text>
+    )}
+    </CommentItemContainer>
     )
    }
 
    const postComment = () => {
+   if(inputType === "comment") {
     PostComment(postId, inputComment)
     .then(function(response) {
         console.log("response", response);
@@ -234,7 +249,23 @@ const CommentListScreen = ({navigation, route}: Props) => {
     .catch(function(error) {
         console.log("error", error);
     })
-   }
+   } else if(inputType === 'reply') {
+       PostReply(replyCommentId, inputComment)
+       .then(function(response) {
+           console.log("response", response);
+           GetComment(route.params.postId)
+           .then(function(response) {
+               console.log("댓글 불러오기 성공", response)
+               setCommentList(response);
+               setInputComment("")
+               setInputType("comment")
+               Keyboard.dismiss();
+           })
+           .catch(function(error) {
+               console.log("댓글 불러오기 실패", error);
+           })
+       })
+   }}
 
     return (
     <Container>

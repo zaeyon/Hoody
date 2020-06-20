@@ -37,4 +37,25 @@ const GetComment = (postId) => {
     })
 }
 
-export {PostComment, GetComment};
+const PostReply = (commentId, reply) => {
+    var url = baseUrl + '/comment/reply?commentId=' + commentId;
+
+    console.log("reply commentId", commentId);
+    console.log("reply comment", reply);
+
+    var form = new FormData();
+    form.append("comment", reply)
+
+    return new Promise(function(resolve, reject) {
+        axios
+        .post(url, form)
+        .then(function(response) {
+            resolve(response.data)
+        })
+        .catch(function(error) {
+            reject(error)
+        })
+    })
+}
+
+export {PostComment, GetComment, PostReply};

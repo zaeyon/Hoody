@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {NavigationContainer, StackActions} from '@react-navigation/native';
+import {NavigationContainer, StackActions, StackRouter} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
 import {Image, StyleSheet, Text} from 'react-native';
@@ -38,6 +38,8 @@ import GalleryTest from '~/Components/Test/GalleryTest';
 import FeedDetailScreen from '~/Components/Container/FeedDetailScreen';
 import CommentListScreen from '~/Components/Container/CommentListScreen';
 import LikeListScreen from '~/Components/Container/LikeListScreen';
+import FeedListScreen from '~/Components/Container/FeedListScreen';
+import NearFeedMapScreen from '~/Components/Container/NearFeedMapScreen';
 
 import getCurrentUser from '~/AsyncStorage/User';
 
@@ -470,7 +472,7 @@ function BottomTab() {
       }}>
       <Tab.Screen 
       name="FeedListScreen" 
-      component={Feed}
+      component={FeedListScreen}
       options={{
         tabBarIcon: ({focused}: {focused: boolean}) => (
           <Image
@@ -554,7 +556,7 @@ function AppNavigator() {
 
   return (
     <NavigationContainer>
-    {currentUserState.loggedIn  ? (  
+    {!currentUserState.loggedIn  ? (  
     <Stack.Navigator
     headerMode="none"
     >
@@ -562,6 +564,7 @@ function AppNavigator() {
       <Stack.Screen name="FeedDetailScreen" component={FeedDetailScreen}/>
       <Stack.Screen name="CommentListScreen" component={CommentListScreen}/>
       <Stack.Screen name="LikeListScreen" component={LikeListScreen}/>
+      <Stack.Screen name="NearFeedMapScreen" component={NearFeedMapScreen}/>
     </Stack.Navigator>
     ) : (
       <UnauthStackScreen/>

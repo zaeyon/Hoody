@@ -6,6 +6,8 @@ import {
 } from 'react-native-responsive-screen';
 import {TouchableWithoutFeedback, FlatList ,Keyboard, KeyboardAvoidingView} from 'react-native'
 
+import GetAutoComplete from '~/Route/Search/GetAutoComplete';
+
 const Container = Styled.SafeAreaView`
   flex: 1;
   background-color: #ffffff;
@@ -95,16 +97,22 @@ border-color: #c3c3c3;
 `;
 
 const TagResultItemContainer = Styled.View`
-
 width: ${wp('90%')};
 padding: 10px 0px 10px 0px;
- flex-direction: row;
+ flex-direction: column;
  justify-content: space-between;
  border-color: #c3c3c3;
 `;
 
+
 const TagNameText = Styled.Text`
 font-size: 16px;
+font-weight: 500;
+`;
+
+const TagReviewNum = Styled.Text`
+font-size: 15px;
+color: #b9b9b9;
 `;
 
 const UseTagButtonText = Styled.Text`
@@ -113,15 +121,17 @@ color: #4090FC;
 `;
 
 const TagAutoComplete = ({navigation, route}: Props) => {
-    const [tagData, setTagData] = useState([
-        {
-            tagName: '자동완성테스트1'
-        },
-        {
-            tagName: '자동완성테스트2'
-        }
-    ]);
+    const [tagAutoCompleteArray, setTagAutoCompleteArray] = useState([]);
+    const [firstTagResult, setFirstTagResult] = useState([]);
     const [tagType, setTagType] = useState();
+
+    
+    useEffect(() => {
+        if(route.params.tagType) {
+            setTagType(route.params.tagType)
+            console.log("태그타입", route.params.tagType);
+        }
+    }, [route.params.tagType])
 
     const selectTag = (item) => {
         navigation.navigate("UploadAdditionInfo", {
@@ -137,12 +147,17 @@ const TagAutoComplete = ({navigation, route}: Props) => {
         )
     }
 
-    useEffect(() => {
-        if(route.params.tagType) {
-            setTagType(route.params.tagType)
-            console.log("태그타입", route.params.tagType);
-        }
-    }, [route.params.tagType])
+    const changeTagInput = (query) => {
+        GetAutoComplete(query, "tag")
+        .then(function(response) {
+            console.log("태그 자동완성", response.result[0])
+            setFirstTagResult(response.result[0]);
+        })
+        .catch(function(error) {
+            console.log("태그 자동완성 실패", error);
+        })
+    }
+
 
     return (
     <Container>
@@ -168,17 +183,21 @@ const TagAutoComplete = ({navigation, route}: Props) => {
             source={require('~/Assets/Images/ic_boldSharp.png')}/>
             <InputContainer>
             <TagInput
-            autoFocus={true}/>
+            autoFocus={true}
+            onChangeText={(text: string) => changeTagInput(text)}
+            autoCapitalize={false}
+            />
             </InputContainer>
         </TagInputContainer>
         <TagResultContainer>
             <FlatList
             keyboardShouldPersistTaps="handled"
-            data={tagData}
+            data={firstTagResult}
             renderItem={({item, index}) => {
             return (
             <TagResultItemContainer>
-            <TagNameText>{'#' + item.tagName}</TagNameText>
+            <TagNameText>{'#' + item.name}</TagNameText>
+            <TagReviewNum>{item.reviewNum + " 후기"}</TagReviewNum>
             </TagResultItemContainer>
             )
             }}/>

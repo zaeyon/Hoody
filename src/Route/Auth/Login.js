@@ -2,7 +2,7 @@ import axios from 'axios';
 import allActions from '~/action';
 import setCurrentUser from '~/AsyncStorage/User';
 
-const baseUrl = 'https://c7ede387e39b.ngrok.io';
+const baseUrl = 'https://7aba7fe3e57e.ngrok.io';
 
 
 const Login = (email, password) => {

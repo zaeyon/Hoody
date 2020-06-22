@@ -176,7 +176,6 @@ const CommentListScreen = ({navigation, route}: Props) => {
 
     useEffect(() => {
         if(route.params?.postId) {
-            //console.log("route.params.comments", route.params.comments);
             console.log("route.params.feedId", route.params.feedId);
             setPostId(route.params.postId);
             GetComment(route.params.postId)

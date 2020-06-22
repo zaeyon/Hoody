@@ -40,8 +40,10 @@ const HeaderBar = Styled.View`
 
 const HeaderTitleText = Styled.Text`
  font-size: 24px;
- font-weight: 600;
+ 
 `;
+
+
 
 const ReviewMapIcon = Styled.Image`
  width: ${wp('8%')}
@@ -372,23 +374,25 @@ function FeedListScreen({navigation, route}: Props) {
           </TouchableWithoutFeedback>
       </HeaderBar>
       <BodyContainer>
-      {TEST_FEED_DATA[0] && (
+      {feedListData[0] && (
       <FeedListContainer>
       <FlatList
-        data={TEST_FEED_DATA}
+        data={feedListData}
         renderItem={({item}) => (
                 <FeedItem
                   id={item.id}
                   profile_image={item.user.profileImg}
                   nickname={item.user.nickname}
-                  write_time={item.createdAt}
+                  createdAt={item.createdAt}
                   rating={item.starRate}
                   main_tag={item.mainTags.name}
                   sub_tag1={item.subTagOnes.name}
                   sub_tag2={item.subTagTwos.name}
-                  favorite_count={item.likes}
+                  like_count={item.Likers.length}
+                  comment_count={item.comments.length}
+                  scrap_count={item.Scrapers.length}
                   mediaFiles={item.mediaFiles}
-                  image_count={0}
+                  image_count={item.mediaFiles.length}
                   location={item.address.address}
                   expanse={item.expanse}
                   desArray={item.descriptions}

@@ -189,12 +189,13 @@ const LoginScreen = ({navigation}) => {
 
     Login(submitingEmail, submitingPassword)
     .then(function(response) {
-      console.log('response', response);
+      console.log('로그인성공 유저 정보@@', response.data.user);
       if(response.status === 200) {
         dispatch(
           allActions.userActions.setUser({
             email: submitingEmail,
             password: submitingPassword,
+            nickname: response.data.user.nickname,
           })
         )
       }

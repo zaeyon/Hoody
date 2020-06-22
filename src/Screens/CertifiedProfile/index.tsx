@@ -23,6 +23,8 @@ import {useSelector, useDispatch} from 'react-redux';
 import allActions from '~/action';
 import KakaoLogins from '@react-native-seoul/kakao-login';
 
+import GetUserProfile from '~/Route/User/GetUserProfile';
+
 const ProfileContainer = Styled.View`
   flex: 1;
   background-color: #FEFFFF;
@@ -108,6 +110,7 @@ const ReviewImage = Styled.Image`
 
 function CertifiedProfile({navigation}) {
   const currentUser = useSelector((state) => state.currentUser);
+  console.log("currentUser", currentUser);
   const dispatch = useDispatch();
   const imageWidth = Dimensions.get('window').width / 3;
   const userReview_arr = [
@@ -115,6 +118,18 @@ function CertifiedProfile({navigation}) {
     'https://img.kbs.co.kr/kbs/620/nsimg.kbs.co.kr/data/news/2019/11/27/4331817_Z1f.jpg',
     'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQRiHGyfVX0g8i9yxoFqsJhX9K7Ww-EOx71LPAyDqHArNibwcfc&usqp=CAU',
   ];
+
+  useEffect(() => {
+    GetUserProfile(currentUser.user.nickname)
+    .then(function(response) {
+      console.log("유저프로필", response)
+    })
+    .catch(function(error) {
+      console.log("유저프로필 불러오기실패", error);
+    })
+
+  },[])
+
   const isBottom = ({
     layoutMeasurement,
     contentOffset,
@@ -138,6 +153,8 @@ function CertifiedProfile({navigation}) {
       dispatch(allActions.userActions.logOut());
     }
   }
+
+
 
   return (
     <SafeAreaView>

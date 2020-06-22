@@ -95,7 +95,7 @@ const HeaderBorder = Styled.View`
 `;
 
 const InformationContainer = Styled.View`
-padding: 20px 20px 0px 20px;
+padding: 20px 20px 20px 20px;
 background-color: #ffffff;
 `;
 
@@ -146,7 +146,6 @@ height: ${wp('3.5%')};
 
 const ExpanseContainer = Styled.View`
 flex-direction: row;
-align-items: center;
 `;
 
 const ExpanseIcon = Styled.Image`
@@ -162,7 +161,6 @@ color: #C4C4C4;
 
 const LocationContainer = Styled.View`
 flex-direction: row;
-align-items: center;
 `;
 
 const LocationIcon = Styled.Image`
@@ -329,25 +327,36 @@ interface Props {
 const FeedDetailScreen = ({navigation, route}: Props) => {
     const [mainTag, setMainTag] = useState("메인태그");
     const [paragraphData, setParagraphData] = useState();
-    const [commentArray, setCommentArray] = useState();
     const [postId, setPostId] = useState();
-    const [feedDetailInfo, setFeedDetailInfo] = useState();
+    const [feedDetailInfo, setFeedDetailInfo] = useState({
+      post: {
+        user : {
+          profileImg: "",
+        },
+        address : {
+          address : ""
+        }
+
+      }
+    });
     const [ratingArray, setRatingArray] = useState<Array<string>>();
     const [tagList, setTagList] = useState<Array<string>>();
+    const [createdDate, setCreatedDate] = useState();
 
-    /*
-
-    useEffect(() => {
+    // 서버 연결 코드
+    useLayoutEffect(() => {
         if(route.params?.feedId) {
        GetFeedDetail(route.params.feedId).then(function(response) {
-           console.log("GetFeedDetail Success:", response.data.postBody)
+           console.log("GetFeedDetail Success:", response.data)
            console.log("response.data.post!!!", response.data.post.comments);
-           setCommentArray(response.data.post.comments);
            setParagraphData(response.data.postBody);
            setPostId(route.params.feedId);
-           setFeedDetailInfo(TEST_FEED_DETAIL);
+           setFeedDetailInfo(response.data)
            setTagList(route.params.tagList);
            setRatingArray(route.params.ratingArray);
+           setCreatedDate(route.params.createdAt)
+
+           console.log("response.datagg", response.data);
        })
        .catch(function(error) {
            console.log("error", error);
@@ -355,8 +364,8 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
     }
     }, [route.params.feedId])
 
-    */
 
+    /*
     // 서버연결X 테스트용 코드
     useLayoutEffect(() => {
         if(route.params?.feedId) {
@@ -366,14 +375,13 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
            setRatingArray(route.params.ratingArray);
     }
     }, [route.params.feedId])
+    */
 
     const moveCommentList = () => {
-        console.log("commentArray", commentArray);
         console.log("postId", postId);
 
         navigation.navigate("CommentListScreen", {
             postId: postId,
-            comments: commentArray,
         })
     }
 
@@ -388,8 +396,7 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
             )
         }
     }
-    
-
+  
 
    return (
        <Container>
@@ -403,9 +410,9 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
           <CenterContainer>
               <WriterContainer>
                   <WriterProfileImage
-                  source={{uri: TEST_FEED_DETAIL.user.profileImg}}
+                  source={{uri: feedDetailInfo.post.user.profileImg}}
                   />
-                  <WriterNicknameText>{TEST_FEED_DETAIL.user.nickname}</WriterNicknameText>
+                  <WriterNicknameText>{feedDetailInfo.post.user.nickname}</WriterNicknameText>
               </WriterContainer>
         </CenterContainer>
         </TouchableWithoutFeedback>
@@ -419,7 +426,7 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
       <HeaderBorder/>
       <ScrollView>
       <InformationContainer>
-   <CreatedAtText>{TEST_FEED_DETAIL.createAt}</CreatedAtText>
+   <CreatedAtText>{createdDate}</CreatedAtText>
    <TagListContainer>
             <FlatList
               horizontal={true}
@@ -446,7 +453,7 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
                     />
                   );
                 } else if (item === 'empty') {
-                  
+                
                 }
               }}
             />
@@ -461,7 +468,7 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
    <LocationContainer>
        <LocationIcon
        source={require('~/Assets/Images/ic_location.png')}/>
-       <LocationText>{TEST_FEED_DETAIL.address.address}</LocationText>
+       <LocationText>{feedDetailInfo.post.address.address}</LocationText>
    </LocationContainer>
    </MetadataContainer>
    <ExpanseDateContainer>
@@ -471,7 +478,7 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
    </ExpanseDateContainer>
       </InformationContainer>
           <FeedContent
-          paragraphData={TEST_FEED_DETAIL.paragraphData}
+          paragraphData={paragraphData}
           ></FeedContent>
           </ScrollView>
       <BottomBar>

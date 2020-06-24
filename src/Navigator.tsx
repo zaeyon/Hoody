@@ -40,6 +40,7 @@ import CommentListScreen from '~/Components/Container/CommentListScreen';
 import LikeListScreen from '~/Components/Container/LikeListScreen';
 import FeedListScreen from '~/Components/Container/FeedListScreen';
 import NearFeedMapScreen from '~/Components/Container/NearFeedMapScreen';
+import NewUploadScreen from '~/Components/Container/NewUploadScreen';
 
 import getCurrentUser from '~/AsyncStorage/User';
 
@@ -167,8 +168,7 @@ function UploadStackScreen() {
         },
         headerTitleAlign: 'center',
       }}>
-      <UploadStack.Screen name="UploadScreen" component={UploadScreen} />
-      <UploadStack.Screen name="Upload" component={Upload} options={{}} />
+      <UploadStack.Screen name="UploadScreen" component={NewUploadScreen} />
       <UploadStack.Screen
         name="LocationSearch"
         component={LocationSearch}
@@ -556,7 +556,7 @@ function AppNavigator() {
 
   return (
     <NavigationContainer>
-    {currentUserState.loggedIn  ? (  
+    {!currentUserState.loggedIn  ? (  
     <Stack.Navigator
     headerMode="none"
     >

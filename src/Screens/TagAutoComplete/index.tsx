@@ -161,23 +161,6 @@ const TagAutoComplete = ({navigation, route}: Props) => {
 
     return (
     <Container>
-    <HeaderContainer>
-        <LeftContainer>
-          <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
-          <BackButton source={require('~/Assets/Images/ic_back2.png')} />
-          </TouchableWithoutFeedback>
-        </LeftContainer>
-        <TouchableWithoutFeedback onPress={() => 0}>
-          <CenterContainer>
-          <HeaderTitleText></HeaderTitleText>
-        </CenterContainer>
-        </TouchableWithoutFeedback>
-        <RightContainer>
-              <TouchableWithoutFeedback onPress = {() => 0}>
-              <ButtonText></ButtonText>
-              </TouchableWithoutFeedback>
-        </RightContainer>
-      </HeaderContainer>
         <TagInputContainer>
             <HashImage
             source={require('~/Assets/Images/ic_boldSharp.png')}/>

@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@eva-design/eva": "2.0.0",
-    "@invertase/react-native-apple-authentication": "^1.1.0",
+    "@invertase/react-native-apple-authentication": "^1.1.1",
     "@react-native-community/async-storage": "^1.11.0",
     "@react-native-community/cameraroll": "^1.7.2",
     "@react-native-community/checkbox": "0.3.0",
@@ -61,6 +61,7 @@
     "react-redux": "7.2.0",
     "react-use-dimensions": "1.2.1",
     "redux": "4.0.5",
+    "rn-sliding-up-panel": "^2.4.2",
     "styled-components": "5.0.1",
     "typesafe-actions": "5.1.0"
   },
@@ -82,10 +83,5 @@
   },
   "jest": {
     "preset": "react-native"
-  },
-  "rnpm": {
-    "assets": [
-      "./assets/fonts/"
-    ]
   }
 }

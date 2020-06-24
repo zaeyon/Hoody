@@ -26,6 +26,7 @@ import Modal from 'react-native-modal';
 import CheckBox from '@react-native-community/checkbox';
 //import ReviewUploadAPI from '~/Route/ReviewUpload';
 import ImageMultiplePicker from 'react-native-customized-image-picker';
+import TagAutoComplete from '~/Screens/TagAutoComplete';
 
 if (
   Platform.OS === 'android' &&

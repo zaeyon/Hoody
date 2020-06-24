@@ -14,7 +14,7 @@ import PopularTagItem from '~/Components/Presentational/FeedListScreen/PopularTa
 import GetAllFeed from '~/Route/Post/TestFeed';
 import SearchBar from '~/Components/Presentational/FeedListScreen/SearchBar'
 import SearchResult from '~/Components/SearchResult';
-import SearchAutoComplete from '~/Components/Presentational/SearchScreen/SearchAutoComplete';
+import SearchAutoComplete from '~/Components/Presentational/SearchScreen/SearchAutoCompleteItem';
 import GetAutoComplete from '~/Route/Search/GetAutoComplete';
 import Geolocation from 'react-native-geolocation-service';
 
@@ -40,9 +40,8 @@ const HeaderBar = Styled.View`
 
 const HeaderTitleText = Styled.Text`
  font-size: 24px;
- 
+ font-family: 'SFProDisplay-Regular';
 `;
-
 
 
 const ReviewMapIcon = Styled.Image`

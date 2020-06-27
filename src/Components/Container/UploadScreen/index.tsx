@@ -592,7 +592,7 @@ const UploadScreen = ({navigation, route}:Props) => {
         {
           text: '취소',
           onPress: () => 0,
-          style: 'cancle',
+          style: 'cancel',
         }
       ],
       {cancelable: false},

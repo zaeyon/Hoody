@@ -322,6 +322,7 @@ class Search extends Component<Props> {
             </SearchTextContainer>
           </InputBoxContainer>
         </Animated.View>
+        {/*
         {this.state.searchInput && (
           <TagAutoCompleteContainer>
             <SearchAutoComplete></SearchAutoComplete>
@@ -336,6 +337,7 @@ class Search extends Component<Props> {
             />
           </TagSearchResultContainer>
         )}
+        */}
       </Container>
     );
   }

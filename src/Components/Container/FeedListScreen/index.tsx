@@ -389,7 +389,7 @@ function FeedListScreen({navigation, route}: Props) {
                   sub_tag2={item.subTagTwos.name}
                   like_count={item.Likers.length}
                   comment_count={item.comments.length}
-                  scrap_count={item.Scrapers.length}
+                  scrap_count={item.Scraps.length}
                   mediaFiles={item.mediaFiles}
                   image_count={item.mediaFiles.length}
                   location={item.address.address}

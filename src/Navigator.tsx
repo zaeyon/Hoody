@@ -41,6 +41,8 @@ import LikeListScreen from '~/Components/Container/LikeListScreen';
 import FeedListScreen from '~/Components/Container/FeedListScreen';
 import NearFeedMapScreen from '~/Components/Container/NearFeedMapScreen';
 import NewUploadScreen from '~/Components/Container/NewUploadScreen';
+import TagSearchScreen from '~/Components/Container/TagSearchScreen';
+import TestTextWidth from '~/Components/Container/TestTextWidth';
 
 import getCurrentUser from '~/AsyncStorage/User';
 
@@ -168,7 +170,27 @@ function UploadStackScreen() {
         },
         headerTitleAlign: 'center',
       }}>
-      <UploadStack.Screen name="UploadScreen" component={NewUploadScreen} />
+      <UploadStack.Screen 
+      name="UploadScreen" 
+      component={NewUploadScreen}
+      options={{
+        transitionSpec: {
+          open: config,
+          close: config,
+        }
+      }}
+      />
+           
+           <UploadStack.Screen 
+      name="TagSearchScreen"
+      component={TagSearchScreen}
+      options={{
+        transitionSpec: {
+          open: config,
+          close: config,
+        }
+      }}
+      />
       <UploadStack.Screen
         name="LocationSearch"
         component={LocationSearch}
@@ -356,7 +378,7 @@ function Navigator() {
             showLabel: false,
             style: styles.tabBar,
           }}>
-            {/*
+          
           <Tab.Screen
             name="Home"
             component={HomeStackScreen}
@@ -376,7 +398,7 @@ function Navigator() {
               ),
             }}
           />
-          */}
+      
           <Tab.Screen
             name="Feed"
             component={FeedStackScreen}

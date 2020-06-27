@@ -18,6 +18,7 @@ import rootReducer from '~/reducers';
 import Unauthorized from '~/Screens/Unauthorized';
 import AuthUser from '~/Auth';
 import AppNavigator from '~/Navigator';
+import Navigator from '~/Navigator';
 
 const Container = Styled.View`
   

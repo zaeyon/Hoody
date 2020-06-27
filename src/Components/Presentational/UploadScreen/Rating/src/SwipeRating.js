@@ -40,7 +40,7 @@ export default class SwipeRating extends Component {
   static defaultProps = {
     type: 'star',
     ratingImage: require('~/Assets/Images/ic_ratingStar.png'),
-    ratingColor: '#2EE0CE',
+    ratingColor: '#F6D211',
     ratingBackgroundColor: '#e4e4e4',
     ratingCount: 5,
     imageSize: 40,
@@ -50,7 +50,7 @@ export default class SwipeRating extends Component {
 
   constructor(props) {
     super(props);
-    const { onStartRating, onFinishRating, fractions, imageSize } = this.props;
+    const { onStartRating, onFinishRating, fractions, imageSize, setRatingInMove } = this.props;
     const position = new Animated.ValueXY();
 
     const panResponder = PanResponder.create({
@@ -63,7 +63,31 @@ export default class SwipeRating extends Component {
       onPanResponderMove: (event, gesture) => {
         const newPosition = new Animated.ValueXY();
         newPosition.setValue({ x: gesture.dx, y: 0});
-        this.setState({ position: newPosition, value: gesture.dx });  
+        this.setState({ position: newPosition, value: gesture.dx });
+
+        if(-((imageSize*5)/2) > gesture.dx) {
+          setRatingInMove(0);
+        } else if(-((imageSize*5)/2) <= gesture.dx && gesture.dx < -((imageSize * 5)/2) + (imageSize/2)) {
+          setRatingInMove(0.5);
+        } else if(-((imageSize * 5)/2) + (imageSize/2) <= gesture.dx && gesture.dx < -((imageSize * 5)/2) + imageSize) {
+          setRatingInMove(1);
+        } else if(-((imageSize * 5)/2) + imageSize <= gesture.dx && gesture.dx < -((imageSize * 5)/2) + imageSize + imageSize/2) {
+          setRatingInMove(1.5);
+        } else if(-((imageSize * 5)/2) + imageSize + imageSize/2 <= gesture.dx && gesture.dx < -((imageSize * 5)/2) + 2*imageSize) {
+          setRatingInMove(2);
+        } else if(-((imageSize * 5)/2) + 2*imageSize <= gesture.dx && gesture.dx < -((imageSize * 5)/2) + 2*imageSize + imageSize/2) {
+          setRatingInMove(2.5);
+        } else if(-((imageSize * 5)/2) + 2*imageSize+imageSize/2 <= gesture.dx && gesture.dx < -((imageSize * 5)/2) + 3*imageSize) {
+          setRatingInMove(3);
+        } else if(-((imageSize * 5)/2) + 3*imageSize <= gesture.dx && gesture.dx < -((imageSize * 5)/2) + 3*imageSize + imageSize/2) {
+          setRatingInMove(3.5);
+        } else if(-((imageSize * 5)/2) + 3*imageSize+imageSize/2 <= gesture.dx && gesture.dx < -((imageSize * 5)/2) + 4*imageSize) {
+          setRatingInMove(4);
+        } else if(-((imageSize * 5)/2) + 4*imageSize <= gesture.dx && gesture.dx < -((imageSize * 5)/2) + 4*imageSize + imageSize/2) {
+          setRatingInMove(4.5);
+        } else if(-((imageSize * 5)/2) + 4*imageSize+imageSize/2 <= gesture.dx) {
+          setRatingInMove(5);
+        }
       },
       onPanResponderRelease: (event, gesture) => {
         const newPosition = new Animated.ValueXY();
@@ -206,15 +230,19 @@ export default class SwipeRating extends Component {
       currentRating = !fractions ? Math.ceil(startingValue) : +startingValue.toFixed(fractions);
     }
 
-    const remainder = currentRating % 1;
-    
+    if(currentRating === 5) {
+      return currentRating;
+    } else {
+      const remainder = currentRating % 1;
     if(0 <= remainder && remainder < 0.5) {
       currentRating = currentRating - remainder + 0.5;
+      return currentRating;
     } else if(0.5 <= remainder && remainder < 1) {
       currentRating = (currentRating - remainder) + 1;
+      return currentRating;
     }
-
-    return currentRating;
+    }
+    
   }
 
   setCurrentRating(rating) {

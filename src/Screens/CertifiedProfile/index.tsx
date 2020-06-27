@@ -119,6 +119,7 @@ function CertifiedProfile({navigation}) {
     'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQRiHGyfVX0g8i9yxoFqsJhX9K7Ww-EOx71LPAyDqHArNibwcfc&usqp=CAU',
   ];
 
+  /*
   useEffect(() => {
     GetUserProfile(currentUser.user.nickname)
     .then(function(response) {
@@ -129,6 +130,7 @@ function CertifiedProfile({navigation}) {
     })
 
   },[])
+  */
 
   const isBottom = ({
     layoutMeasurement,

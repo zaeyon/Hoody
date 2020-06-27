@@ -8,8 +8,8 @@
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint .",
-    "postinstall": "yarn run infinite-flatlist-patch",
-    "postuninstall": "yarn run infinite-flatlist-patch"
+    "postinstall": "yarn run infinite-flatlist-patch; yarn run cjk-textinput-patch",
+    "postuninstall": "yarn run infinite-flatlist-patch; yarn run cjk-textinput-patch"
   },
   "dependencies": {
     "@eva-design/eva": "2.0.0",
@@ -32,7 +32,7 @@
     "axios": "0.19.2",
     "native-base": "2.13.12",
     "react": "16.11.0",
-    "react-native": "0.62.0",
+    "react-native": "0.62.2",
     "react-native-camera-kit": "8.0.4",
     "react-native-camera-roll-picker": "^2.0.0",
     "react-native-customized-image-picker": "0.1.11",
@@ -58,6 +58,7 @@
     "react-native-svg": "12.0.3",
     "react-native-swipe-image": "1.1.0",
     "react-native-tab-view": "2.14.0",
+    "react-native-text-size": "^4.0.0-rc.1",
     "react-redux": "7.2.0",
     "react-use-dimensions": "1.2.1",
     "redux": "4.0.5",
@@ -77,6 +78,7 @@
     "eslint": "6.8.0",
     "jest": "25.2.4",
     "metro-react-native-babel-preset": "0.59.0",
+    "react-native-cjk-textinput-patch": "^1.0.0",
     "react-native-infinite-flatlist-patch": "1.0.5",
     "react-test-renderer": "16.11.0",
     "typescript": "3.8.3"

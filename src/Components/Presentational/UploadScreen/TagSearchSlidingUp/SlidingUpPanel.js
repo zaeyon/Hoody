@@ -70,6 +70,8 @@ class SlidingUpPanel extends React.PureComponent {
     selectingTagType: PropTypes.string,
     selectTagBool: PropTypes.bool,
     selectTagName: PropTypes.string,
+    visiblePanel: PropTypes.bool,
+    changeVisiblePanel: PropTypes.func,
   }
 
   static defaultProps = {
@@ -96,6 +98,8 @@ class SlidingUpPanel extends React.PureComponent {
     selectingTagType: PropTypes.string,
     selectTagBool: false,
     selectTagName: "",
+    visiblePanel: false,
+    changeVisiblePanel: () => {},
   }
 
   // eslint-disable-next-line react/sort-comp
@@ -156,9 +160,9 @@ class SlidingUpPanel extends React.PureComponent {
     this._animatedValueListener = this.props.animatedValue.addListener(
       this._onAnimatedValueChange.bind(this)
     )
-
+    
     this.state = {
-      visiblePanel:true
+      visiblePanel: false,
     }
   }
 
@@ -183,13 +187,30 @@ class SlidingUpPanel extends React.PureComponent {
     console.log("preProps.hideSliding", prevProps.hideSliding);
     console.log("this.props.hideSliging", this.props.hideSliding)
 
+    /*
     if(this.props.hideSliding === true) {
+      console.log("하하하");
       this.hide();
     }
 
     if(this.props.selectTagBool === true) {
+      console.log("호호호")
       this.hide();
       this.props.selectTag(this.props.selectingTagType, this.props.selectTagName)
+    }
+    */
+
+    if(this.props.selectTagName) {
+      this.props.selectTag(this.props.selectingTagType, this.props.selectTagName)
+    }
+
+    if(this.props.visiblePanel === true) {
+      console.log("visiblePanel", this.props.visiblePanel);
+      this.show();
+    } 
+    
+    if(this.props.visiblePanel === false) {
+      this.hide();
     }
   }
 
@@ -248,7 +269,6 @@ class SlidingUpPanel extends React.PureComponent {
     if(evt.nativeEvent.locationY < 100) {
     this.props.animatedValue.setValue(newValue)
     }
-    
   }
 
   // Trigger when you release your finger
@@ -259,6 +279,7 @@ class SlidingUpPanel extends React.PureComponent {
 
     if(gestureState.dy > 0 && evt.nativeEvent.locationY < 20) {
       this.hide();
+      this.props.changeVisiblePanel(false)
     }
     /*
 
@@ -424,10 +445,14 @@ class SlidingUpPanel extends React.PureComponent {
     const remainingDistance = animatedValue - options.toValue
     const velocity = options.velocity || remainingDistance / Constants.TIME_CONSTANT // prettier-ignore
 
+    //console.log("animatedValue", animatedValue);
+    //console.log("remainingDistance", remainingDistance);
+    //console.log("velocity", velocity);
+
     this._flick.start({
-      velocity,
+      velocity: 2.2,
       toValue: options.toValue,
-      fromValue: animatedValue,
+      fromValue: 600,
       friction: this.props.friction
     })
   }
@@ -510,28 +535,34 @@ class SlidingUpPanel extends React.PureComponent {
   }
 
   show(mayBeValueOrOptions) {
+    this.setState({
+      visiblePanel: true
+    })
+
     if (!mayBeValueOrOptions) {
       const {top} = this.props.draggableRange
-      return this._triggerAnimation({toValue: top})
+      return this._triggerAnimation({toValue: top+1000})
     }
 
     if (typeof mayBeValueOrOptions === 'object') {
       return this._triggerAnimation(mayBeValueOrOptions)
     }
-
     return this._triggerAnimation({toValue: mayBeValueOrOptions})
   }
 
   hide() {
+    console.log("패널 숨기기");
     const {bottom} = this.props.draggableRange
-    this._triggerAnimation({toValue: bottom})
+    this._triggerAnimation({toValue: 0})
 
+    console.log("panel hide bottom", bottom);
+
+    
     setTimeout(() => {
       this.setState({
         visiblePanel:false
       })
-    }, 1000)
-
+    }, 600)
   }
 
   async scrollIntoView(node, options = {}) {

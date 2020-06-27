@@ -205,7 +205,7 @@ const DisabledNextText = Styled.Text`
 
 const AbledNextText = Styled.Text`
  font-size: ${wp('4.5%')};
- color: #cccccc;
+ color: #3384FF;
 `;
 
 const MaxTagCountText = Styled.Text`
@@ -348,14 +348,15 @@ const TagSearchScreen = ({navigation, route}: Props) => {
         
         if(query.search(/\s/) != -1) {
 
+            var tag = query.trim();
             console.log("공백 존재")
-            query.trim();
+            console.log("query", query)       
             setInputMainTag(query)
             setMainTagExis(true);
             setInputingMainTag(false);
             setInputingSubTag1(true)
             var tmpTagList = tagList;
-            tmpTagList[0] = query;
+            tmpTagList[0] = tag;
             setTagList(tmpTagList);
 
             console.log("메인태그 길이", mainTagSize.width)
@@ -382,14 +383,14 @@ const TagSearchScreen = ({navigation, route}: Props) => {
         console.log("inputingSubTag1", inputingSubTag1);
 
         if(query.search(/\s/) != -1) {
-            query.trim();
+            var tag = query.trim();
             console.log("공백 존재")
             setInputSubTag1(query)
             setSubTag1Exis(true)
             setInputingSubTag1(false)
             setInputingSubTag2(true)
             var tmpTagList = tagList;
-            tmpTagList[1] = query;
+            tmpTagList[1] = tag;
             setTagList(tmpTagList);
 
             console.log("서브태그 길이", subTag1Size.width)
@@ -412,14 +413,14 @@ const TagSearchScreen = ({navigation, route}: Props) => {
         setInputingSubTag2Text(query);
 
         if(query.search(/\s/) != -1) {
-            query.trim();
+            var tag = query.trim()
             console.log("공백 존재")
         
             setInputSubTag2(query)
             setSubTag2Exis(true)
             setInputingSubTag2(false)
             var tmpTagList = tagList;
-            tmpTagList[2] = query;
+            tmpTagList[2] = tag;
             setTagList(tmpTagList);
 
             console.log("서브태그2 길이", subTag2Size.width);
@@ -454,6 +455,14 @@ const TagSearchScreen = ({navigation, route}: Props) => {
         }
     }
 
+    // 화살표함수는 현재환경을 따르게할때 유용
+
+    const moveUpload = () => {
+        navigation.navigate('UploadScreen', {
+            tagList: tagList
+        })
+    }
+
     return (
     <Container>
               <HeaderBar>
@@ -463,7 +472,14 @@ const TagSearchScreen = ({navigation, route}: Props) => {
                 </HeaderLeftContainer>
                 </TouchableWithoutFeedback>
                 <HeaderRightContainer>
-                    <DisabledNextText>다음</DisabledNextText>
+                    {!inputMainTag && (
+                        <DisabledNextText>다음</DisabledNextText>
+                    )}
+                    {inputMainTag && (
+                        <TouchableWithoutFeedback onPress={() => moveUpload()}>
+                        <AbledNextText>다음</AbledNextText>
+                        </TouchableWithoutFeedback>
+                    )}
                 </HeaderRightContainer>
             </HeaderBar>
         <TagContainer>

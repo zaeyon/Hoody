@@ -4,9 +4,8 @@ import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import {Text, ScrollView, View, FlatList, TouchableWithoutFeedback, Alert, StyleSheet, TextInput} from 'react-native';
-import {BoxShadow} from 'react-native-shadow';
-import { CommonActions } from '@react-navigation/native';
+import {Text, ScrollView, View, FlatList, TouchableWithoutFeedback, Alert, StyleSheet, TextInput, Keyboard} from 'react-native';
+import DraggableFlatList from 'react-native-draggable-flatlist';
 
 import SlidingUpPanel from '~/Components/Presentational/UploadScreen/TagSearchSlidingUp';
 import LatelySearchItem from '~/Components/Presentational/TagSearch/LatelySearchItem';
@@ -26,15 +25,14 @@ const HeaderTagPlaceholderContainer = Styled.View`
 
 const HeaderBar = Styled.View`
  width: ${wp('100%')};
- height: ${hp('7.5%')};
+ height: ${hp('6.5%')};
  flex-direction: row;
- background-color: #ffffff;
  align-items: center;
  justify-content: space-between;
 `;
 
 const HeaderLeftContainer = Styled.View`
-padding: 20px 20px 15px 20px;
+padding: 10px 15px 10px 15px;
  align-items: center;
  justify-content: center;
 `;
@@ -45,7 +43,7 @@ const CancleText = Styled.Text`
 `;
 
 const HeaderRightContainer = Styled.View`
-padding: 20px 20px 15px 20px;
+padding: 10px 15px 10px 15px;
  align-items: center;
  justify-content: center;
  flex-direction: row;
@@ -70,7 +68,6 @@ const FinishText = Styled.Text`
 `;
 
 const BodyContainer = Styled.View`
- padding: 0px 15px 10px 15px;
  width: ${wp('100%')};
  background-color:#ffffff;
 `;
@@ -86,7 +83,7 @@ const MainTagText = Styled.Text`
  font-weight: bold;
  font-size: 24px;
  color: #3384FF;
- fles-shrink: 1;
+ flex-shrink: 1;
 `;
 
 const SlidingUpContainer = Styled.View`
@@ -221,13 +218,13 @@ const RatingContainer = Styled.View`
 `;
 
 const AdditionInfoContainer = Styled.View`
+ padding : 15px 15px 5px 15px;
 `;
 
 const ContentContainer = Styled.View`
  margin-top: 15px;
- background-color:#ffffff;
  width:${wp('100%')};
- height: ${hp('50%')};
+ padding-bottom: 10px;
 `;
 
 const MetaInfoContainer = Styled.View`
@@ -292,9 +289,10 @@ const ContentPlaceholderText = Styled.Text`
 `;
 
 const SubTagPlaceholderText = Styled.Text`
- font-size: 20px;
- color: #EFEFEF;
+ font-size: 24px;
+ color: #eeeeee;
  font-weight: bold;
+ margin-left: 6px;
 `;
 
 const BottomMenuBarContainer = Styled.View`
@@ -302,19 +300,17 @@ const BottomMenuBarContainer = Styled.View`
  align-items: center;
  position: absolute;
  bottom: 0px
- padding-bottom: 20px;
+ padding-bottom: 10px;
 `;
 
 const BottomMenuBar = Styled.View`
- width: ${wp('75%')};
+ width: ${wp('85%')};
  height: 44px;
  background-color: #FAFAFA;
  border-radius: 22px;
  flex-direction: row;
  justify-content: space-between;
  align-items: center;
- padding-left: 15px;
- padding-right: 23px;
 `;
 
 const BottomMenuTIcon = Styled.Image`
@@ -357,6 +353,29 @@ const BottomMenuAlbumIcon = Styled.Image`
  height: ${wp('8%')};
 `;
 
+const AddDescripContainer = Styled.View`
+ padding: 10px 15px 70px 15px;
+`;
+
+const DescripInput = Styled.TextInput`
+ font-size: 17px;
+ color: #4b4b4b;
+`;
+
+const BottomMenuTextContainer = Styled.View`
+ width: ${wp('16%')};
+ height: 44px;
+ justify-content: center;
+ align-items: center;
+`;
+
+const BottomMenuIconContainer = Styled.View`
+ width: ${wp('13.8%')};
+ height: 44px;
+ justify-content: center;
+ align-items: center;
+`;
+
 interface Props {
     navigation: any,
     route: any,
@@ -371,18 +390,35 @@ const NewUploadScreen = ({navigation, route}: Props) => {
     const [selectTagName, setSelectTagName] = useState<string>("");
     const [visiblePanel, setVisiblePanel] = useState<boolean>(false);
     const [firstTagResult, setFirstTagResult] = useState([]);
-    const [mainTagProcess, setMainTagProcess] = useState<boolean>();
+    const [mainTagProcess, setMainTagProcess] = useState<boolean>(false);
     const [mainTagInserted, setMainTagInserted] = useState<boolean>(false);
-    const [showPanel, setShowPanel] = useState<boolean>(false);
+    const [keyboardHeight, setKeyboardHeight] = useState(0);
    
-    //후기 정보 state
+    //후기 정보 관련 state
     const [rating, setRating] = useState<string>();
     const [incompleteMainTag, setIncompleteMainTag] = useState<string>();
     const [mainTag, setMainTag] = useState<string>();
     const [subTag1, setSubTag1] = useState<string>();
     const [subTag2, setSubTag2] = useState<string>();
     const [location, setLocation] = useState<string>();
+    const [longitude, setLongitude] = useState<number>();
+    const [latitude, setLatitude] = useState<number>();
     const [expanse, setExpanse] = useState<string>();
+
+    // Paragraph 관련 state
+    const [paragraphData, setParagraphData] = useState([]);
+
+    useEffect(() => {
+        if(route.params?.location) {
+            console.log("route.params.location", route.params.location);
+            console.log("route.params.longitude", route.params.longitude);
+            console.log("route.params.latitude", route.params.latitude);
+            
+            setLocation(route.params.location);
+            setLongitude(route.params.longitude);
+            setLatitude(route.params.latitude);
+        }
+    }, [route.params?.location])
 
     useEffect(() => {
         //console.log("route.params.selectTagName", route.params.selectTagName)
@@ -394,6 +430,37 @@ const NewUploadScreen = ({navigation, route}: Props) => {
         }
         }
     }, [route.params?.selectTagName])
+
+    useEffect(() => {
+        if(route.params?.tagList) {
+            console.log("tagList", route.params.tagList);
+
+            if(route.params?.tagList[0] !== mainTag) {
+                setMainTagProcess(true);
+                setIncompleteMainTag(route.params.tagList[0])
+            }
+        }
+    }, [route.params?.tagList])
+
+    useEffect(() => {
+        Keyboard.addListener('keyboardDidShow', onKeyboardDidShow);
+        Keyboard.addListener('keyboardDidHide', onKeyboardDidHide);
+        
+        return (): void => {
+            Keyboard.removeListener('keyboardDidShow', onKeyboardDidShow);
+            Keyboard.removeListener('keyboardDidHide', onKeyboardDidHide);
+        }
+    }, [])
+
+    function onKeyboardDidShow(e: KeyboardEvent): void {
+        setKeyboardHeight(e.endCoordinates.height);
+    }
+
+    function onKeyboardDidHide(): void {
+        setKeyboardHeight(0);
+    }
+
+
 
     /*
     useEffect(() => {
@@ -493,8 +560,6 @@ const NewUploadScreen = ({navigation, route}: Props) => {
         //setVisiblePanel(false);
     }
 
-    const s
-
     /*
     const clickInputedTag = (name: string, type: string) => {
         navigation.navigate("TagSearchScreen", {
@@ -522,6 +587,10 @@ const moveTagSearch = (tagType: string, inputedTagName: string) => {
     navigation.navigate("TagSearchScreen", {
         tagType: tagType,
     })
+}
+
+const clickLocationIcon = () => {
+    navigation.navigate("LocationSearch")
 }
 
 
@@ -590,7 +659,7 @@ const moveTagSearch = (tagType: string, inputedTagName: string) => {
                         </RatingInputContainer>
                     </MainTagProcessContainer>
                 )} 
-                {/*mainTagInserted && !mainTagProcess && */(
+                {mainTagInserted && !mainTagProcess && (
                     <MetaInfoContainer>
                     <InputedRatingContainer>
                     <InputedRatingText>{rating+"점"}</InputedRatingText>
@@ -617,31 +686,52 @@ const moveTagSearch = (tagType: string, inputedTagName: string) => {
                     </MetaInfoContainer>
                 )}
                 </AdditionInfoContainer>
-                {mainTag && (
-                <ScrollView style={{backgroundColor:"#ffffff", width:wp('100%')}}>
+                {mainTag && !mainTagProcess && (
+                <ScrollView>
                 <ContentContainer>
+                    <AddDescripContainer>
+                        <DescripInput
+                        placeholder={!paragraphData[0] ? "나의 소비에 이야기를 담아주세요" : ""}
+                        multiline={true}
+                        />
+                    </AddDescripContainer>
                 </ContentContainer>
                 </ScrollView>
                 )}
-
             </BodyContainer>
-            <BottomMenuBarContainer>
+            {mainTag && !mainTagProcess && (
+            <BottomMenuBarContainer style={{marginBottom: keyboardHeight}}>
                 <BottomMenuBar>
+                    <BottomMenuTextContainer>
                     <BottomMenuTIcon
                     source={require('~/Assets/Images/ic_t.png')}/>
+                    </BottomMenuTextContainer>
                     <BottomMenuDivider/>
+                    <BottomMenuIconContainer>
                     <BottomMenuUrlIcon
                     source={require('~/Assets/Images/ic_bottomMenu_url.png')}/>
+                    </BottomMenuIconContainer>
+                    <TouchableWithoutFeedback onPress={() => clickLocationIcon()}>
+                    <BottomMenuIconContainer>
                     <BottomMenuLocationIcon
                     source={require('~/Assets/Images/ic_bottomMenu_location.png')}/>
+                    </BottomMenuIconContainer>
+                    </TouchableWithoutFeedback>
+                    <BottomMenuIconContainer>
                     <BottomMenuExpanseIcon
                     source={require('~/Assets/Images/ic_bottomMenu_expanse.png')}/>
+                    </BottomMenuIconContainer>
+                    <BottomMenuIconContainer>
                     <BottomMenuCalendarIcon
                     source={require('~/Assets/Images/ic_bottomMenu_calendar.png')}/>
+                    </BottomMenuIconContainer>
+                    <BottomMenuIconContainer>
                     <BottomMenuAlbumIcon
                     source={require('~/Assets/Images/ic_bottomMenu_album.png')}/>
+                    </BottomMenuIconContainer>
                 </BottomMenuBar>
             </BottomMenuBarContainer>
+            )}
             </Container>
     )
 }

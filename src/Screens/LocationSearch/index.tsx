@@ -16,55 +16,63 @@ import {
 
 const Container = Styled.SafeAreaView`
   flex: 1;
-  flex-direction: column;
-  padding: 10px;
-  height: ${hp('100%')};
-  justify-content: center;
   background-color: #ffffff;
 `;
 
-const HeaderContainer = Styled.View`
+const HeaderBar = Styled.View`
  width: ${wp('100%')};
- height: ${hp('7.5%')};
+ height: ${hp('6.5%')};
  flex-direction: row;
  align-items: center;
- justify-content:space-between;
- padding: 10px 20px 0px 20px;
+ justify-content: space-between;
+`;
+
+const HeaderLeftContainer = Styled.View`
+padding: 10px 15px 10px 15px;
+ align-items: center;
+ justify-content: center;
+`;
+
+const CancleText = Styled.Text`
+ font-size: 17px;
+ color: #cccccc;
+`;
+
+const HeaderRightContainer = Styled.View`
+padding: 10px 15px 10px 15px;
+ align-items: center;
+ justify-content: center;
+ flex-direction: row;
+`;
+
+const TempoSaveText = Styled.Text`
+ font-size: 17px;
+ color: #cccccc;
+`;
+
+const FinishContainer = Styled.View`
+padding: 20px 20px 15px 20px;
+ align-items: center;
+ justify-content: center;
+ flex-direction: row;
+`;
+
+const FinishText = Styled.Text`
+ font-size: 17px
+ font-weight: 600;
+ color: #ffffff;
+`;
+
+const HeaderTitle = Styled.Text`
+ font-size: 17px;
+ font-weight: 500;
+ color: #333333;
 `;
 
 
-const LeftContainer = Styled.View`
-`;
-
-const CenterContainer = Styled.View`
-justify-content: center;
-margin-left: 7px;
-`;
-
-const RightContainer = Styled.View`
-`;
-
-const HeaderTitleText = Styled.Text`
- font-size: 16px;
- margin-left: 6px;
-`;
-
-
-const BackButton = Styled.Image`
-width: 11px;
-height: 19px;
-`;
-
-const ButtonText = Styled.Text`
- font-size: 16px;
- color: #338EFC;
-`;
-
-const Inner = Styled.View`
+const SearchResultContainer = Styled.View`
   flex-direction: column;
-  height: ${hp('88.5%')};
   width: ${wp('100%')};
-  border-radius: 10px;
   border-color: #c3c3c3;
   justify-content: center;
   align-items: center;
@@ -79,47 +87,37 @@ const Title = Styled.View`
  justify-content: center;
 `;
 
-const InputBox = Styled.TextInput`
- width: ${wp('87%')};
- height: 35px;
- border-radius: 25px;
- background-color: #FFFFFF;
- justify-content: center;
- padding-left: 15px;
- border-width: 1.0px;
- border-color: #23E5D2;
+const SearchInputContainer = Styled.View`
+justify-content: center;
+align-items: center;
+`;
+
+const SearchInput = Styled.TextInput`
+ width: ${wp('91%')};
+ height: 36px;
+ border-radius: 40px;
+ background-color: #F3F3F3;
+ padding-left: ${wp('10%')};
+ font-size: 18px;
 `;
 
 const SearchContainer = Styled.View`
- top:0;
- align-self: stretch;
- right:0;
- left: 0;
- flex: 0.5;
  flex-direction: row;
  justify-content: center;
  align-items: center;
- margin: 4px 0px;
-`;
-
-const SearchButton = Styled.TouchableOpacity`
- position: absolute;
- justify-content: center;
- right: 42px;
+ padding-top: 5px;
+ padding-bottom: 5px;
 `;
 
 const SearchText = Styled.Text`
   font-size: 17px;
 `;
 
-const SavedLocationContainer = Styled.View`
-  width: ${wp('95%')};
- flex: 0.4;
- padding: 10px 15px 7px 15px;
+const MyLocationContainer = Styled.View`
+width: ${wp('100%')};
+ padding: 17px 15px 17px 15px;
  flex-direction: row;
- justify-content: space-between;
- border-bottom-width: 0.4px;
- border-color: #cccccc;
+ align-items: center;
 `;
 
 const SavedLeftContainer = Styled.View`
@@ -136,8 +134,10 @@ const CurrentLocationText = Styled.Text`
  ';
 `;
 
-const SavedLocationText = Styled.Text`
- font-size: 13px;
+const MyLocationText = Styled.Text`
+ font-size: 17px;
+ color: #3384FF;
+ margin-left: 3px;
  
 `;
 
@@ -148,11 +148,8 @@ const UseSavedButton = Styled.Text`
  
 `;
 
-const SearchInput = Styled.TextInput`
-`;
 
 const LocationListContainer = Styled.View`
- flex: 6;
  flex-direction: column;
  align-items: center;
  justify-content: center;
@@ -174,16 +171,28 @@ const TitleRightButton = Styled.Text`
 const CloseButton = Styled.Image`
 `;
 
+
+const SearchButton = Styled.TouchableOpacity`
+ position: absolute;
+ justify-content: center;
+ left: 10px;
+`;
+
+
 const SearchIcon = Styled.Image`
- width: ${wp('4.5%')};
- height: ${wp('4.5%')};
- margin-left: 10px;
+ width: ${wp('6.4%')};
+ height: ${wp('6.4%')};
 `;
 
 const LocationItemCon = Styled.View`
  height: 0.3px;
  width: ${wp('94%')};
  background-color: #cccccc;
+`;
+
+const MyLocationIcon = Styled.Image`
+ width: ${wp('6.4%')};
+ height: ${wp('6.4%')};
 `;
 
 const LocationItem = ({location, address}) => {
@@ -202,6 +211,19 @@ const LocationSearch = ({navigation}) => {
   const [searchResult_arr, setSearchResult_arr] = useState([]);
   const API_KEY = 'd824d5c645bfeafcb06f24db24be7238';
 
+  useEffect(() => {
+    const backAction = () => {
+      navigation.goBack();
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, []);
   
   const SearchLocation = (location) => {
     fetch(
@@ -244,78 +266,61 @@ const LocationSearch = ({navigation}) => {
       });
   };
 
-  useEffect(() => {
-    const backAction = () => {
-      navigation.goBack();
-      return true;
-    };
+  const changeSearchInput = (text: string) => {
+    SearchLocation(text)
+  }
 
-    const backHandler = BackHandler.addEventListener(
-      'hardwareBackPress',
-      backAction,
-    );
+  const clickLocationItem = (item: object) => {
+    navigation.navigate("UploadScreen", {
+      location: item.place_name,
+      longitude: item.x,
+      latitude: item.y,
+    })
+  }
 
-    return () => backHandler.remove();
-  }, []);
 
   return (
     <Container>
-      <HeaderContainer>
-        <LeftContainer>
-          <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
-          <BackButton source={require('~/Assets/Images/ic_back2.png')} />
-          </TouchableWithoutFeedback>
-        </LeftContainer>
-        <TouchableWithoutFeedback onPress={() => 0}>
-          <CenterContainer>
-          <HeaderTitleText>게시물 정보</HeaderTitleText>
-        </CenterContainer>
-        </TouchableWithoutFeedback>
-        <RightContainer>
-              <TouchableWithoutFeedback onPress = {() => 0}>
-              <ButtonText>완료</ButtonText>
-              </TouchableWithoutFeedback>
-        </RightContainer>
-      </HeaderContainer>
-          <Inner>
+       <HeaderBar>
+                <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
+                <HeaderLeftContainer>
+                    <CancleText>취소</CancleText>
+                </HeaderLeftContainer>
+                </TouchableWithoutFeedback>
+                <HeaderTitle>위치</HeaderTitle>
+                <HeaderRightContainer>
+                        <FinishText>완료</FinishText>
+                </HeaderRightContainer>
+            </HeaderBar>
             <SearchContainer>
-              <InputBox
-                placeholder="위치를 입력하세요."
-                onChangeText={(text: string) => setLocation(text)}
-                style={{
-                  fontSize: 12,
-                }}
+              <SearchInputContainer>
+              <SearchInput
+                placeholder="위치"
+                onChangeText={(text: string) => changeSearchInput(text)}
+                placeholderTextColor="#979797"
               />
               <SearchButton onPress={() => SearchLocation(location)}>
                 <SearchIcon
-                  source={require('~/Assets/Images/search_icon.png')}
+                  source={require('~/Assets/Images/ic_search.png')}
                 />
-              </SearchButton>
+                </SearchButton>
+                </SearchInputContainer>
             </SearchContainer>
-            <SavedLocationContainer>
-              <SavedLeftContainer>
-                <CurrentLocationText>현재 위치</CurrentLocationText>
-                <SavedLocationText>
-                  을지로 3가역 사랑방 칼국수
-                </SavedLocationText>
-              </SavedLeftContainer>
-              <SavedRightContainer>
-                <UseSavedButton>사용</UseSavedButton>
-              </SavedRightContainer>
-            </SavedLocationContainer>
+            <MyLocationContainer>
+              <MyLocationIcon
+              source={require('~/Assets/Images/ic_myLocation.png')}/>
+                <MyLocationText>
+                  내 위치 : 을지로 3가역 사랑방 칼국수
+                </MyLocationText>
+            </MyLocationContainer>
+            <SearchResultContainer>
             <LocationListContainer>
               <FlatList
                 keyboardShouldPersistTaps="handled"
                 data={searchResult_arr}
                 renderItem={({item}) => (
                   <TouchableWithoutFeedback
-                    onPress={() => {
-                      navigation.navigate('UploadAdditionInfo', {
-                        location: item.place_name,
-                        longitude: item.x,
-                        latitude: item.y,
-                      });
-                    }}>
+                    onPress={() => clickLocationItem(item)}>
                     <View>
                       <LocationItem
                         location={item.place_name}
@@ -327,7 +332,7 @@ const LocationSearch = ({navigation}) => {
                 keyExtractor={(item) => item.index}
               />
             </LocationListContainer>
-          </Inner>
+          </SearchResultContainer>
     </Container>
   );
 };

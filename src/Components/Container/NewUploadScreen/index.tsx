@@ -1,16 +1,20 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import Styled from 'styled-components/native';
 import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import {Text, ScrollView, View, FlatList, TouchableWithoutFeedback, Alert, StyleSheet, TextInput, Keyboard} from 'react-native';
+import {Text, ScrollView, View, FlatList, TouchableWithoutFeedback, Alert, StyleSheet, TextInput, Keyboard, KeyboardAvoidingView} from 'react-native';
 import DraggableFlatList from 'react-native-draggable-flatlist';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import AboveKeyboard from 'react-native-above-keyboard';
 
+// Local Components
 import SlidingUpPanel from '~/Components/Presentational/UploadScreen/TagSearchSlidingUp';
 import LatelySearchItem from '~/Components/Presentational/TagSearch/LatelySearchItem';
 import GetAutoComplete from '~/Route/Search/GetAutoComplete';
 import {Rating} from '~/Components/Presentational/UploadScreen/Rating';
+
 
 const ratingImage = require('~/Assets/Images/ic_star4.png');
 
@@ -85,6 +89,16 @@ const MainTagText = Styled.Text`
  color: #3384FF;
  flex-shrink: 1;
 `;
+
+
+
+const SubTagText = Styled.Text`
+color: #cccccc;
+font-size: 24px;
+font-weight: bold;
+flex-shrink: 1;
+`;
+
 
 const SlidingUpContainer = Styled.View`
 flex: 1;
@@ -296,14 +310,15 @@ const SubTagPlaceholderText = Styled.Text`
 `;
 
 const BottomMenuBarContainer = Styled.View`
- width: ${wp('100%')};
- align-items: center;
+ background-color: #707070;
+ justify-content: flex-end;
  position: absolute;
- bottom: 0px
- padding-bottom: 10px;
+ bottom: 15;
 `;
 
+
 const BottomMenuBar = Styled.View`
+ margin-left: ${wp('7.5%')};
  width: ${wp('85%')};
  height: 44px;
  background-color: #FAFAFA;
@@ -357,9 +372,11 @@ const AddDescripContainer = Styled.View`
  padding: 10px 15px 70px 15px;
 `;
 
-const DescripInput = Styled.TextInput`
+const NewDescripInput = Styled.TextInput`
  font-size: 17px;
  color: #4b4b4b;
+ background-color: #707070;
+ padding-bottom: 200px;
 `;
 
 const BottomMenuTextContainer = Styled.View`
@@ -375,6 +392,72 @@ const BottomMenuIconContainer = Styled.View`
  justify-content: center;
  align-items: center;
 `;
+
+
+const DraggableFlatListContainer = Styled.View`
+`;
+
+
+const DescripParagraphContainer = Styled.View`
+width: ${wp('90%')};
+border-top-width: 0.2px;
+border-color: #eeeeee;
+flex-direction: row;
+justify-content: space-between;
+align-items: center;
+background-color: #c3c3c3;
+`;
+
+const ScrollEnabledContainer = Styled.View`
+ width: ${wp('10%')};
+ background-color: #707070;
+`;
+
+
+const ParagraphContentContainer = Styled.View`
+padding: 15px;
+justify-content: center;
+flex: 2.5;
+`;
+
+const DescripParaText = Styled.Text`
+ font-size: 17px;
+ color: #4B4B4B;
+`;
+
+
+const ParagraphIconContainer = Styled.View`
+flex: 0.4;
+justify-content: center;
+align-items: center;
+padding-top: 12px;
+padding-bottom: 12px;
+padding-right: 10px;
+`;
+
+
+const ParagraphIcon = Styled.Image`
+ width: ${wp('8%')};
+ height: ${wp('8%')};
+ margin-left: 15px;
+ tint-color: #707070;
+`;
+
+const InputedTagRowContainer = Styled.View`
+ flex-direction: row;
+`;
+
+const InputedTagColumnContainer = Styled.View`
+ flex-direction: column;
+`;
+
+
+const TEST_DATA = ["1", "2"]
+
+
+
+
+
 
 interface Props {
     navigation: any,
@@ -392,7 +475,11 @@ const NewUploadScreen = ({navigation, route}: Props) => {
     const [firstTagResult, setFirstTagResult] = useState([]);
     const [mainTagProcess, setMainTagProcess] = useState<boolean>(false);
     const [mainTagInserted, setMainTagInserted] = useState<boolean>(false);
-    const [keyboardHeight, setKeyboardHeight] = useState(0);
+    const [enableScrollViewScroll, setEnableScrollViewScroll] = useState(true)
+    const [mainTagWidth, setMainTagWidth] = useState<number>();
+    const [subTag1Width, setSubTag1Width] = useState<number>();
+    const [subTag2Width, setsubTag2Width] = useState<number>();
+    const [keyboardHeight, setKeyboardHeight] = useState<number>(0);
    
     //후기 정보 관련 state
     const [rating, setRating] = useState<string>();
@@ -404,9 +491,19 @@ const NewUploadScreen = ({navigation, route}: Props) => {
     const [longitude, setLongitude] = useState<number>();
     const [latitude, setLatitude] = useState<number>();
     const [expanse, setExpanse] = useState<string>();
+    const [tagList, setTagList] = useState<Array<string>>();
+
 
     // Paragraph 관련 state
-    const [paragraphData, setParagraphData] = useState([]);
+    const [paragraphData, setParagraphData] = useState<Array<object>>([]);
+    const [inputingNewDescripText, setInputingNewDescripText] = useState<string>();
+    const [focusingNewDescripInput, setFocusingNewDescripInput] = useState<boolean>(false);
+    const [paragraphHeight, setParagraphHeight] = useState<number>(0);
+
+    // useRef
+    const newDescripInput = useRef(null);
+    const scrollViewRef = useRef(null);
+
 
     useEffect(() => {
         if(route.params?.location) {
@@ -432,35 +529,62 @@ const NewUploadScreen = ({navigation, route}: Props) => {
     }, [route.params?.selectTagName])
 
     useEffect(() => {
-        if(route.params?.tagList) {
-            console.log("tagList", route.params.tagList);
-
-            if(route.params?.tagList[0] !== mainTag) {
+        if(route.params?.mainTag && !route.params?.subTag1) {
+            if(route.params?.mainTag !== mainTag) {
                 setMainTagProcess(true);
-                setIncompleteMainTag(route.params.tagList[0])
+                setIncompleteMainTag(route.params.mainTag)
             }
-        }
-    }, [route.params?.tagList])
+        } else if(route.params?.subTag1 && !route.params?.subTag2) {
+            console.log("route.params.subTag1Width", route.params.subTag1Width);
+            console.log("route.params.mainTagWwidth", route.params.mainTagWidth);
+            setSubTag1(route.params.subTag1)
+            setSubTag1Width(route.params.subTag1Width);
+            setIncompleteMainTag(route.params.mainTag);
+            setMainTagWidth(route.params.mainTagWidth);
+            if(route.params?.mainTag !== mainTag) {
+                setMainTagProcess(true);
+            }
+        } else if(route.params?.subTag2) {
+            console.log("route.params.subTag1Width33", route.params.subTag1Width);
+            console.log("route.params.mainTagWwidth33", route.params.mainTagWidth);
+            console.log("route.params.subTag2Width33", route.params.subTag2Width);
 
+            setSubTag1(route.params.subTag1)
+            setSubTag1Width(route.params.subTag1Width);
+            setIncompleteMainTag(route.params.mainTag);
+            setMainTagWidth(route.params.mainTagWidth);
+            setSubTag2(route.params.subTag2);
+            setsubTag2Width(route.params.subTag2Width);
+            if(route.params?.mainTag !== mainTag) {
+                setMainTagProcess(true);
+            }
+            
+        }
+    }, [route.params?.mainTag, route.params?.subTag1, route.params?.subTag2])
+
+    /*
     useEffect(() => {
         Keyboard.addListener('keyboardDidShow', onKeyboardDidShow);
         Keyboard.addListener('keyboardDidHide', onKeyboardDidHide);
+    }, [paragraphData])
+    
+    */
+    
+    useEffect(() => {
         
-        return (): void => {
-            Keyboard.removeListener('keyboardDidShow', onKeyboardDidShow);
-            Keyboard.removeListener('keyboardDidHide', onKeyboardDidHide);
-        }
-    }, [])
+        console.log("paragraphData", paragraphData)
+
+    }, [paragraphData])
 
     function onKeyboardDidShow(e: KeyboardEvent): void {
         setKeyboardHeight(e.endCoordinates.height);
+        //keyboardHeight = e.endCoordinates.height;
     }
 
     function onKeyboardDidHide(): void {
-        setKeyboardHeight(0);
+       setKeyboardHeight(0);
+      //keyboardHeight = 0;
     }
-
-
 
     /*
     useEffect(() => {
@@ -570,19 +694,6 @@ const NewUploadScreen = ({navigation, route}: Props) => {
 
     */
 
-const TagAutoCompleteItem = ({item, index}) => {
-    return (
-    <TouchableWithoutFeedback onPress={() => selectTagAutoComplete(item)}>
-    <Container>
-        <TagContainer>
-        <TagNameText>{"#" + item.name}</TagNameText>
-        <TagReviewCount>{item.reviewNum + "개"}</TagReviewCount>
-        </TagContainer>
-    </Container>
-    </TouchableWithoutFeedback>
-    )
-}
-
 const moveTagSearch = (tagType: string, inputedTagName: string) => {
     navigation.navigate("TagSearchScreen", {
         tagType: tagType,
@@ -590,9 +701,89 @@ const moveTagSearch = (tagType: string, inputedTagName: string) => {
 }
 
 const clickLocationIcon = () => {
+    if(focusingNewDescripInput) {
+        addNewDescripParagraph()
+    }
     navigation.navigate("LocationSearch")
 }
 
+const addNewDescripParagraph = () => {
+    var tmpParagraphData = paragraphData;
+        var newDescripPara = {
+            index: paragraphData.length,
+            type: "description",
+            description: inputingNewDescripText
+        }
+        tmpParagraphData.push(newDescripPara);
+        setParagraphData(tmpParagraphData)
+        setFocusingNewDescripInput(false);
+        setInputingNewDescripText("");
+        //newDescripInput.current.blur();
+}
+
+const onFocusNewDescripInput = (nativeEvent: any) => {
+    console.log("onFocusDescripInput nativeEvent", nativeEvent.nativeEvent)
+    //setFocusingNewDescripInput(true);
+}
+
+const onChangeNewDescripInput = (text: string) => {
+    //setInputingNewDescripText(text);
+}
+
+const changeParagraphOrder = (data: any) => {
+    console.log("changed paragraph", data);
+    setParagraphData(data);
+}
+
+const clickParagraphContent = () => {
+    console.log("clickParagraphContent");
+}
+
+const onEnableScroll = (value: boolean) => {
+    setEnableScrollViewScroll(value)
+}
+
+
+const renderDraggableItem = ({item, index, drag, isActive}) => {
+    if(item.type === 'description') {
+        return (
+            <DescripParagraphContainer style={isActive && styles.shadow}>
+                <TouchableWithoutFeedback onPress={() => clickParagraphContent()}>
+                <ParagraphContentContainer>
+                    <DescripParaText>{item.description}</DescripParaText>
+                </ParagraphContentContainer>
+                </TouchableWithoutFeedback>
+                <TouchableWithoutFeedback onLongPress={drag} delayLongPress={0.2}>
+                    <ParagraphIconContainer>
+                        <ParagraphIcon
+                        source={require('~/Assets/Images/ic_paragraph.png')}/>
+                    </ParagraphIconContainer>
+                </TouchableWithoutFeedback>
+                <TouchableWithoutFeedback onPress={() => setEnableScrollViewScroll(true)}>
+                <ScrollEnabledContainer>
+                </ScrollEnabledContainer>
+                </TouchableWithoutFeedback>
+            </DescripParagraphContainer>
+        )
+    }
+}
+
+const renderAddNewDescripInput = () => {
+    var footer =  (
+        <AddDescripContainer>
+        <NewDescripInput
+        ref={newDescripInput}
+        placeholder={!paragraphData[0] ? "나의 소비에 이야기를 담아주세요" : ""}
+        multiline={true}
+        value={inputingNewDescripText}
+        onFocus={(nativeEvent) => onFocusNewDescripInput(nativeEvent)}
+        onChangeText={(text:string) => onChangeNewDescripInput(text)}
+        />
+    </AddDescripContainer>
+    )
+
+    return footer;
+}
 
     return (
         <Container>
@@ -619,16 +810,60 @@ const clickLocationIcon = () => {
                 </TagInputPlaceholder>
                 </TouchableWithoutFeedback>
                 )}
-                {incompleteMainTag && (
+                {incompleteMainTag && !mainTag && (
                     <TouchableWithoutFeedback onPress={() => moveTagSearch("main", incompleteMainTag)}>
                     <MainTagText>{"#" + incompleteMainTag}</MainTagText>
                     </TouchableWithoutFeedback>
-                )}  
-                {mainTag && !subTag1 && (
-                    <TouchableWithoutFeedback onPress={() => 0}>
-                        <SubTagPlaceholderText>{"#태그추가"}</SubTagPlaceholderText>
-                    </TouchableWithoutFeedback>
                 )}    
+            {mainTag && !subTag1 && !subTag2 && (
+                <InputedTagRowContainer>
+                <MainTagText>{"#" + mainTag}</MainTagText>
+                </InputedTagRowContainer>
+            )}
+            {mainTag && subTag1 && !subTag2 && (mainTagWidth + subTag1Width < wp('87%')) && (
+                <InputedTagRowContainer>
+                <MainTagText>{"#" + mainTag}</MainTagText>
+                <SubTagText>{"#" + subTag1}</SubTagText>
+                </InputedTagRowContainer>
+            )}
+            {mainTag && subTag1 && !subTag2 && (mainTagWidth + subTag1Width > wp('87%')) && (
+                <InputedTagColumnContainer>
+                <MainTagText>{"#" + mainTag}</MainTagText>
+                <SubTagText>{"#" + subTag1}</SubTagText>
+                </InputedTagColumnContainer>
+            )}
+            {mainTag && subTag1 && subTag2 && (mainTagWidth + subTag1Width + subTag2Width < wp('87%')) && (
+                <InputedTagRowContainer>
+                <MainTagText>{"#" + mainTag}</MainTagText>
+                <SubTagText>{"#" + subTag1}</SubTagText>
+                <SubTagText>{"#" + subTag2}</SubTagText>
+                </InputedTagRowContainer>
+            )}
+            {mainTag && subTag1 && subTag2 && (mainTagWidth + subTag1Width > wp('87%')) && (subTag1Width + subTag2Width < wp('87%')) && (
+                <InputedTagColumnContainer>
+                <MainTagText>{"#" + mainTag}</MainTagText>
+                <InputedTagRowContainer>
+                <SubTagText>{"#" + subTag1}</SubTagText>
+                <SubTagText>{"#" + subTag2}</SubTagText>
+                </InputedTagRowContainer>
+                </InputedTagColumnContainer>
+            )}
+            {mainTag && subTag1 && subTag2 && (mainTagWidth + subTag1Width > wp('87%')) && (subTag1Width + subTag2Width > wp('87%')) && (
+                <InputedTagColumnContainer>
+                <MainTagText>{"#" + mainTag}</MainTagText>
+                <SubTagText>{"#" + subTag1}</SubTagText>
+                <SubTagText>{"#" + subTag2}</SubTagText>
+                </InputedTagColumnContainer>
+            )}
+            {mainTag && subTag1 && subTag2 && (mainTagWidth + subTag1Width < wp('87%')) && (mainTagWidth + subTag1Width + subTag2Width > wp('87%')) && (
+                <InputedTagColumnContainer>
+                <InputedTagRowContainer>
+                <MainTagText>{"#" + mainTag}</MainTagText>
+                <SubTagText>{"#" + subTag1}</SubTagText>
+                </InputedTagRowContainer>
+                <SubTagText>{"#" + subTag2}</SubTagText>
+                </InputedTagColumnContainer>
+            )}
                 </TagListContainer>
                 
                 {mainTagProcess && (
@@ -687,20 +922,37 @@ const clickLocationIcon = () => {
                 )}
                 </AdditionInfoContainer>
                 {mainTag && !mainTagProcess && (
-                <ScrollView>
+                    <KeyboardAwareScrollView
+                    keyboardDismissMode="none"
+                    scrollEnabled={enableScrollViewScroll}
+                    keyboardShouldPersistTaps="always"
+                    >
                 <ContentContainer>
-                    <AddDescripContainer>
-                        <DescripInput
-                        placeholder={!paragraphData[0] ? "나의 소비에 이야기를 담아주세요" : ""}
-                        multiline={true}
-                        />
-                    </AddDescripContainer>
+                        <DraggableFlatList
+                        keyboardDismissMode="none"
+                        keyboardShouldPersistTaps="always"
+                        style={{width:wp('100%'), height:hp('70%')}}
+                        onLayout={(event) => {
+                            const layout = event.nativeEvent.layout;
+                            setParagraphHeight(layout.height);
+                        }}
+                        data={paragraphData}
+                        extraData={paragraphData}
+                        renderItem={renderDraggableItem}
+                        onDragEnd={({data}) => changeParagraphOrder(data)}
+                        keyExtractor={(item,index) => `draggable-item-${item.index}`}
+                        nestedScrollEnabled={true}
+                        onTouchStart={() => onEnableScroll(false)}
+                        onMomentumScrollEnd={() => onEnableScroll(true)}
+                        ListFooterComponent={renderAddNewDescripInput}
+                        /> 
                 </ContentContainer>
-                </ScrollView>
+                </KeyboardAwareScrollView>
                 )}
             </BodyContainer>
             {mainTag && !mainTagProcess && (
-            <BottomMenuBarContainer style={{marginBottom: keyboardHeight}}>
+                <BottomMenuBarContainer>
+                <AboveKeyboard>
                 <BottomMenuBar>
                     <BottomMenuTextContainer>
                     <BottomMenuTIcon
@@ -730,7 +982,8 @@ const clickLocationIcon = () => {
                     source={require('~/Assets/Images/ic_bottomMenu_album.png')}/>
                     </BottomMenuIconContainer>
                 </BottomMenuBar>
-            </BottomMenuBarContainer>
+                </AboveKeyboard>
+                </BottomMenuBarContainer>
             )}
             </Container>
     )
@@ -740,7 +993,11 @@ const styles = StyleSheet.create({
     invisibleMainTagProcess : {
         width: 0,
         height: 0,
-    }
+    },
+
+    shadow: {
+
+    },
 })
 
 export default NewUploadScreen;

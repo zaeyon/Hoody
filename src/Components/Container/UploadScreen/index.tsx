@@ -349,6 +349,7 @@ const ProductRegisterText= Styled.Text`
  font-size: 18px;
 `;
 
+
 interface Props {
   navigation:any,
   route:any
@@ -1125,7 +1126,6 @@ const UploadScreen = ({navigation, route}:Props) => {
             console.log("DraggableFlatList", layout.height)
             setParagraphHeight(layout.height);
             }}
-            style={{flex: 0}}
             data={paragraphData}
             extraData={paragraphData}
             renderItem={renderItem}

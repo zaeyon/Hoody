@@ -275,6 +275,15 @@ const TagSearchScreen = ({navigation, route}: Props) => {
     const [mainTagWidth, setMainTagWidth] = useState<number>();
     const [subTag1Width, setSubTag1Width] = useState<number>();
     const [subTag2Width, setSubTag2Width] = useState<number>();
+    const [tagSort, setTagSort] = useState<string>();
+
+      
+    useEffect(() => {
+        if(route.params?.tagType) {
+            setTagType(route.params.tagType)
+            console.log("태그타입", route.params.tagType);
+        }
+    }, [route.params?.tagType])
 
     
 
@@ -326,13 +335,7 @@ const TagSearchScreen = ({navigation, route}: Props) => {
 
    // const [subTag1Size, subTag1OnLayout] = useTagComponentSize();
    // const [subTag2Size, subTag2OnLayout] = useTagComponentSize();
-    
-    useEffect(() => {
-        if(route.params?.tagType) {
-            setTagType(route.params.tagType)
-            console.log("태그타입", route.params.tagType);
-        }
-    }, [route.params?.tagType])
+  
 
     const selectTag = (item) => {
         console.log("item", item);
@@ -458,9 +461,34 @@ const TagSearchScreen = ({navigation, route}: Props) => {
     // 화살표함수는 현재환경을 따르게할때 유용
 
     const moveUpload = () => {
+        if(!inputSubTag1) {
         navigation.navigate('UploadScreen', {
-            tagList: tagList
+            mainTag: inputMainTag,
         })
+        } else if (inputSubTag1 && !inputSubTag2) {
+            navigation.navigate('UploadScreen', {
+                mainTag: inputMainTag,
+                mainTagWidth: mainTagWidth,
+                subTag1: inputSubTag1,
+                subTag1Width: subTag1Width,
+            })
+        } else if (inputSubTag1 && inputSubTag2) {
+
+
+        console.log("TagSearchScreen22 mainTagwidth", mainTagWidth);
+        console.log("TagSearchScreen22 subTag1Width", subTag1Width);
+        console.log("TagSearchScreen22 subTag2Width", subTag2Width);
+
+            navigation.navigate('UploadScreen', {
+                mainTag: inputMainTag,
+                mainTagWidth: mainTagWidth,
+                subTag1: inputSubTag1,
+                subTag1Width: subTag1Width,
+                subTag2: inputSubTag2,
+                subTag2Width: subTag2Width,
+            })
+
+        }
     }
 
     return (
@@ -564,7 +592,7 @@ const TagSearchScreen = ({navigation, route}: Props) => {
                 <SubTagText>{"#" + inputSubTag2}</SubTagText>
                 </InputedTagColumnContainer>
             )}
-            {inputMainTag && inputSubTag1 && inputSubTag2 && (mainTagWidth + subTag1Width < wp('87%')) && (subTag1Width + subTag2Width > wp('87%')) && (
+            {inputMainTag && inputSubTag1 && inputSubTag2 && (mainTagWidth + subTag1Width < wp('87%')) && (mainTagWidth + subTag1Width + subTag2Width > wp('87%')) && (
                 <InputedTagColumnContainer>
                 <InputedTagRowContainer>
                 <MainTagText>{"#" + inputMainTag}</MainTagText>

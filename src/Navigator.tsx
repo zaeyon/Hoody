@@ -548,7 +548,7 @@ function BottomTab() {
       />
       <Tab.Screen 
       name="Profile" 
-      component={ProfileStackScreen}
+      component={UploadScreen}
       options={{
         tabBarIcon: ({focused}: {focused: boolean}) => (
           <Image

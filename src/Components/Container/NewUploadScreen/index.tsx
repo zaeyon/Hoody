@@ -15,7 +15,6 @@ import LatelySearchItem from '~/Components/Presentational/TagSearch/LatelySearch
 import GetAutoComplete from '~/Route/Search/GetAutoComplete';
 import {Rating} from '~/Components/Presentational/UploadScreen/Rating';
 
-
 const ratingImage = require('~/Assets/Images/ic_star4.png');
 
 
@@ -99,60 +98,6 @@ font-weight: bold;
 flex-shrink: 1;
 `;
 
-
-const SlidingUpContainer = Styled.View`
-flex: 1;
-background-color: #FFFFFF;
-`;
-
-const SlidingUpHeaderContainer = Styled.View`
- width: ${wp('100%')};
- padding-top: 8px;
- padding-bottom: 8px;
- align-items: center;
-`;
-
-const SlidingUpContentContainer = Styled.View`
-flex:1;
-background-color: #ffffff;
-border-top-left-radius: 15px;
-border-top-right-radius: 15px;
-align-items: center;
-`;
-
-const SlidingUpIcon = Styled.View`
- background-color: #c4c4c4;
- width: ${wp('13%')};
- height: 5px;
- border-radius: 5px;
-`;
-
-const PanelTagInputContainer = Styled.View`
- margin-top: 3px;
- width:${wp('100%')};
- height: 58px;
- background-color: #ffffff;
- flex-direction: row;
- align-items: center;
- justify-content: center;
-`;
-
-const HashText = Styled.Text`
- font-weight: 600;
- font-size: 24px;
- color: #3384FF;
-`;
-
-const TagInput = Styled.TextInput`
- margin-left: 10px;
- width: ${wp('85%')};
- height: 36px;
- background-color: #F3F3F3;
- border-radius: 40px;
- padding-left: 15px;
- font-size: 17px;
-`;
-
 const TagAutoCompleteContainer = Styled.View`
  width: ${wp('100%')};
 `;
@@ -168,26 +113,6 @@ const TAG_AUTO_COMPLETE_DATA = [
     }
 ]
 
-const TagItemContainer = Styled.View`
- width: ${wp('100%')};
- height: 50px;
- flex-direction: row;
-`;
-
-const TagNameText = Styled.Text`
- font-weight: 500;
- font-size: 16px;
- color: #333333;
-`;
-
-const TagReviewCount = Styled.Text`
- font-size: 15px;
- color: #b9b9b9;
-`;
-
-const TagContainer = Styled.View`
-padding: 10px 20px 10px 20px;
-`;
 
 const TagListContainer = Styled.View`
  flex-direction: row;
@@ -375,7 +300,6 @@ const AddDescripContainer = Styled.View`
 const NewDescripInput = Styled.TextInput`
  font-size: 17px;
  color: #4b4b4b;
- background-color: #707070;
  padding-bottom: 200px;
 `;
 
@@ -393,19 +317,12 @@ const BottomMenuIconContainer = Styled.View`
  align-items: center;
 `;
 
-
-const DraggableFlatListContainer = Styled.View`
-`;
-
-
 const DescripParagraphContainer = Styled.View`
-width: ${wp('90%')};
+width: ${wp('100%')};
 border-top-width: 0.2px;
 border-color: #eeeeee;
 flex-direction: row;
 justify-content: space-between;
-align-items: center;
-background-color: #c3c3c3;
 `;
 
 const ScrollEnabledContainer = Styled.View`
@@ -417,7 +334,8 @@ const ScrollEnabledContainer = Styled.View`
 const ParagraphContentContainer = Styled.View`
 padding: 15px;
 justify-content: center;
-flex: 2.5;
+flex: 6;
+background-color:#ffffff;
 `;
 
 const DescripParaText = Styled.Text`
@@ -427,7 +345,7 @@ const DescripParaText = Styled.Text`
 
 
 const ParagraphIconContainer = Styled.View`
-flex: 0.4;
+flex: 1;
 justify-content: center;
 align-items: center;
 padding-top: 12px;
@@ -437,8 +355,8 @@ padding-right: 10px;
 
 
 const ParagraphIcon = Styled.Image`
- width: ${wp('8%')};
- height: ${wp('8%')};
+ width: ${wp('7%')};
+ height: ${wp('7%')};
  margin-left: 15px;
  tint-color: #707070;
 `;
@@ -480,6 +398,7 @@ const NewUploadScreen = ({navigation, route}: Props) => {
     const [subTag1Width, setSubTag1Width] = useState<number>();
     const [subTag2Width, setsubTag2Width] = useState<number>();
     const [keyboardHeight, setKeyboardHeight] = useState<number>(0);
+
    
     //후기 정보 관련 state
     const [rating, setRating] = useState<string>();
@@ -492,17 +411,21 @@ const NewUploadScreen = ({navigation, route}: Props) => {
     const [latitude, setLatitude] = useState<number>();
     const [expanse, setExpanse] = useState<string>();
     const [tagList, setTagList] = useState<Array<string>>();
+    
 
 
     // Paragraph 관련 state
     const [paragraphData, setParagraphData] = useState<Array<object>>([]);
-    const [inputingNewDescripText, setInputingNewDescripText] = useState<string>();
-    const [focusingNewDescripInput, setFocusingNewDescripInput] = useState<boolean>(false);
+    const [inputingNewDescripBool, setInputingNewDescripBool] = useState<boolean>(false);
     const [paragraphHeight, setParagraphHeight] = useState<number>(0);
 
     // useRef
     const newDescripInput = useRef(null);
     const scrollViewRef = useRef(null);
+    const draggableFlatListRef = useRef(null);
+
+     var focusingNewDescripInput = false;
+     var inputingNewDescripText = "";
 
 
     useEffect(() => {
@@ -534,9 +457,8 @@ const NewUploadScreen = ({navigation, route}: Props) => {
                 setMainTagProcess(true);
                 setIncompleteMainTag(route.params.mainTag)
             }
-        } else if(route.params?.subTag1 && !route.params?.subTag2) {
-            console.log("route.params.subTag1Width", route.params.subTag1Width);
-            console.log("route.params.mainTagWwidth", route.params.mainTagWidth);
+        } else if(route.params?.subTag1 && !route.params?.subTag2) { 
+
             setSubTag1(route.params.subTag1)
             setSubTag1Width(route.params.subTag1Width);
             setIncompleteMainTag(route.params.mainTag);
@@ -545,9 +467,6 @@ const NewUploadScreen = ({navigation, route}: Props) => {
                 setMainTagProcess(true);
             }
         } else if(route.params?.subTag2) {
-            console.log("route.params.subTag1Width33", route.params.subTag1Width);
-            console.log("route.params.mainTagWwidth33", route.params.mainTagWidth);
-            console.log("route.params.subTag2Width33", route.params.subTag2Width);
 
             setSubTag1(route.params.subTag1)
             setSubTag1Width(route.params.subTag1Width);
@@ -561,6 +480,14 @@ const NewUploadScreen = ({navigation, route}: Props) => {
             
         }
     }, [route.params?.mainTag, route.params?.subTag1, route.params?.subTag2])
+
+    useEffect(() => {
+        console.log("scrollToEnd paragraphChange");
+        if(draggableFlatListRef.current !== null) {
+        console.log("scrollToEnd");
+        }
+
+    }, [paragraphData])
 
     /*
     useEffect(() => {
@@ -708,6 +635,9 @@ const clickLocationIcon = () => {
 }
 
 const addNewDescripParagraph = () => {
+
+     console.log("not state inputingNewDescripText", inputingNewDescripText)
+
     var tmpParagraphData = paragraphData;
         var newDescripPara = {
             index: paragraphData.length,
@@ -715,19 +645,28 @@ const addNewDescripParagraph = () => {
             description: inputingNewDescripText
         }
         tmpParagraphData.push(newDescripPara);
-        setParagraphData(tmpParagraphData)
-        setFocusingNewDescripInput(false);
-        setInputingNewDescripText("");
-        //newDescripInput.current.blur();
+        setParagraphData(tmpParagraphData);
+
+         focusingNewDescripInput = false;
+         inputingNewDescripText = "";
+        // setFocusingNewDescripInput(false);
+        // setInputingNewDescripText("");
+         setInputingNewDescripBool(!inputingNewDescripBool)
+         newDescripInput.current.blur();
+        
+        // draggableFlatListRef.current.scrollToEnd();
+        // scrollViewRef.current.scrollTo();
 }
 
 const onFocusNewDescripInput = (nativeEvent: any) => {
     console.log("onFocusDescripInput nativeEvent", nativeEvent.nativeEvent)
-    //setFocusingNewDescripInput(true);
+    // setFocusingNewDescripInput(true);
+    focusingNewDescripInput = true;
 }
 
 const onChangeNewDescripInput = (text: string) => {
-    //setInputingNewDescripText(text);
+    // setInputingNewDescripText(text);
+    inputingNewDescripText = text;
 }
 
 const changeParagraphOrder = (data: any) => {
@@ -759,10 +698,6 @@ const renderDraggableItem = ({item, index, drag, isActive}) => {
                         source={require('~/Assets/Images/ic_paragraph.png')}/>
                     </ParagraphIconContainer>
                 </TouchableWithoutFeedback>
-                <TouchableWithoutFeedback onPress={() => setEnableScrollViewScroll(true)}>
-                <ScrollEnabledContainer>
-                </ScrollEnabledContainer>
-                </TouchableWithoutFeedback>
             </DescripParagraphContainer>
         )
     }
@@ -775,7 +710,6 @@ const renderAddNewDescripInput = () => {
         ref={newDescripInput}
         placeholder={!paragraphData[0] ? "나의 소비에 이야기를 담아주세요" : ""}
         multiline={true}
-        value={inputingNewDescripText}
         onFocus={(nativeEvent) => onFocusNewDescripInput(nativeEvent)}
         onChangeText={(text:string) => onChangeNewDescripInput(text)}
         />
@@ -923,15 +857,12 @@ const renderAddNewDescripInput = () => {
                 </AdditionInfoContainer>
                 {mainTag && !mainTagProcess && (
                     <KeyboardAwareScrollView
-                    keyboardDismissMode="none"
                     scrollEnabled={enableScrollViewScroll}
-                    keyboardShouldPersistTaps="always"
+                    ref={scrollViewRef}
                     >
                 <ContentContainer>
                         <DraggableFlatList
-                        keyboardDismissMode="none"
-                        keyboardShouldPersistTaps="always"
-                        style={{width:wp('100%'), height:hp('70%')}}
+                        style={{width:wp('100%'), height:hp('100%')}}
                         onLayout={(event) => {
                             const layout = event.nativeEvent.layout;
                             setParagraphHeight(layout.height);

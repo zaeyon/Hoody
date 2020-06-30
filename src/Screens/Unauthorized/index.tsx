@@ -272,7 +272,6 @@ const Unauthorized = ({navigation}) => {
   return (
     <Container>
       <LogoContainer>
-        
         <HoogingLogo source={require('~/Assets/Images/Logo/logo.png')} />
       </LogoContainer>
       <AuthContainer>

@@ -87,6 +87,7 @@ const MainTagText = Styled.Text`
  font-size: 24px;
  color: #3384FF;
  flex-shrink: 1;
+ margin-right: 5px;
 `;
 
 
@@ -96,6 +97,7 @@ color: #cccccc;
 font-size: 24px;
 font-weight: bold;
 flex-shrink: 1;
+margin-right: 5px;
 `;
 
 const TagAutoCompleteContainer = Styled.View`
@@ -157,7 +159,7 @@ const RatingContainer = Styled.View`
 `;
 
 const AdditionInfoContainer = Styled.View`
- padding : 15px 15px 5px 15px;
+ padding : 10px 15px 10px 15px;
 `;
 
 const ContentContainer = Styled.View`
@@ -251,6 +253,8 @@ const BottomMenuBar = Styled.View`
  flex-direction: row;
  justify-content: space-between;
  align-items: center;
+ padding-left: 20px;
+ padding-right: 20px;
 `;
 
 const BottomMenuTIcon = Styled.Image`
@@ -294,7 +298,7 @@ const BottomMenuAlbumIcon = Styled.Image`
 `;
 
 const AddDescripContainer = Styled.View`
- padding: 10px 15px 70px 15px;
+ padding: 10px 15px 0px 15px;
 `;
 
 const NewDescripInput = Styled.TextInput`
@@ -398,6 +402,7 @@ const NewUploadScreen = ({navigation, route}: Props) => {
     const [subTag1Width, setSubTag1Width] = useState<number>();
     const [subTag2Width, setsubTag2Width] = useState<number>();
     const [keyboardHeight, setKeyboardHeight] = useState<number>(0);
+    const [MetaContainerHeight, setMetaContainerHeight] = useState<number>(0);
 
    
     //후기 정보 관련 state
@@ -456,6 +461,7 @@ const NewUploadScreen = ({navigation, route}: Props) => {
             if(route.params?.mainTag !== mainTag) {
                 setMainTagProcess(true);
                 setIncompleteMainTag(route.params.mainTag)
+                setMainTagWidth(route.params.mainTagWidth);
             }
         } else if(route.params?.subTag1 && !route.params?.subTag2) { 
 
@@ -622,9 +628,31 @@ const NewUploadScreen = ({navigation, route}: Props) => {
     */
 
 const moveTagSearch = (tagType: string, inputedTagName: string) => {
-    navigation.navigate("TagSearchScreen", {
-        tagType: tagType,
-    })
+    if(!mainTag) {
+    navigation.navigate("TagSearchScreen")
+    } else if(mainTag && !subTag1 && !subTag2) {
+        console.log("메인태그길이는뭘까여", mainTagWidth);
+        navigation.navigate("TagSearchScreen", {
+            mainTag: mainTag,
+            mainTagWidth: mainTagWidth,
+        })
+    } else if(mainTag && subTag1 && !subTag2) {
+        navigation.navigate("TagSearchScreen", {
+            mainTag: mainTag,
+            mainTagWidth: mainTagWidth,
+            subTag1: subTag1,
+            subTag1Width: subTag1Width,
+        })
+    } else if(mainTag && subTag1 && subTag2) {
+        navigation.navigate("TagSearchScreen", {
+            mainTag: mainTag,
+            mainTagWidth: mainTagWidth,
+            subTag1: subTag1,
+            subTag1Width: subTag1Width,
+            subTag2: subTag2,
+            subTag2Width: subTag2Width,
+        })
+    }
 }
 
 const clickLocationIcon = () => {
@@ -735,14 +763,17 @@ const renderAddNewDescripInput = () => {
                 </HeaderRightContainer>
             </HeaderBar>
             <BodyContainer>
-                <AdditionInfoContainer> 
+                <AdditionInfoContainer
+                onLayout={(event) => {
+                    const layout = event.nativeEvent.layout;
+                    setMetaContainerHeight(layout.height);
+                }}> 
+                <TouchableWithoutFeedback onPress={() => moveTagSearch()}>
                 <TagListContainer>
                 {!incompleteMainTag && (
-                    <TouchableWithoutFeedback onPress={() => moveTagSearch("main")}>
                     <TagInputPlaceholder>
                     {"#태그를 입력해주세요."}
                 </TagInputPlaceholder>
-                </TouchableWithoutFeedback>
                 )}
                 {incompleteMainTag && !mainTag && (
                     <TouchableWithoutFeedback onPress={() => moveTagSearch("main", incompleteMainTag)}>
@@ -799,6 +830,7 @@ const renderAddNewDescripInput = () => {
                 </InputedTagColumnContainer>
             )}
                 </TagListContainer>
+                </TouchableWithoutFeedback>
                 
                 {mainTagProcess && (
                     <MainTagProcessContainer>
@@ -862,7 +894,7 @@ const renderAddNewDescripInput = () => {
                     >
                 <ContentContainer>
                         <DraggableFlatList
-                        style={{width:wp('100%'), height:hp('100%')}}
+                        style={{width:wp('100%'), height:(hp('100%')-(hp('6.5%') + MetaContainerHeight))}}
                         onLayout={(event) => {
                             const layout = event.nativeEvent.layout;
                             setParagraphHeight(layout.height);
@@ -885,14 +917,9 @@ const renderAddNewDescripInput = () => {
                 <BottomMenuBarContainer>
                 <AboveKeyboard>
                 <BottomMenuBar>
-                    <BottomMenuTextContainer>
-                    <BottomMenuTIcon
-                    source={require('~/Assets/Images/ic_t.png')}/>
-                    </BottomMenuTextContainer>
-                    <BottomMenuDivider/>
-                    <BottomMenuIconContainer>
-                    <BottomMenuUrlIcon
-                    source={require('~/Assets/Images/ic_bottomMenu_url.png')}/>
+                <BottomMenuIconContainer>
+                    <BottomMenuAlbumIcon
+                    source={require('~/Assets/Images/ic_bottomMenu_album.png')}/>
                     </BottomMenuIconContainer>
                     <TouchableWithoutFeedback onPress={() => clickLocationIcon()}>
                     <BottomMenuIconContainer>
@@ -909,8 +936,8 @@ const renderAddNewDescripInput = () => {
                     source={require('~/Assets/Images/ic_bottomMenu_calendar.png')}/>
                     </BottomMenuIconContainer>
                     <BottomMenuIconContainer>
-                    <BottomMenuAlbumIcon
-                    source={require('~/Assets/Images/ic_bottomMenu_album.png')}/>
+                    <BottomMenuUrlIcon
+                    source={require('~/Assets/Images/ic_bottomMenu_url.png')}/>
                     </BottomMenuIconContainer>
                 </BottomMenuBar>
                 </AboveKeyboard>

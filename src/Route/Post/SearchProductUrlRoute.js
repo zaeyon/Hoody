@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { SegmentedControlIOSComponent } from 'react-native';
-const baseUrl = 'https://7c5b38f3cc6b.ngrok.io'
+const baseUrl = 'https://a63b85bce587.ngrok.io'
 
-const SearchProductUrl = (productUrl) => {
+const SearchProductUrlRoute = (productUrl) => {
     console.log("입력된 productUrl", productUrl); 
 
     const url = baseUrl + "/post/productUrl";
@@ -26,4 +26,4 @@ const SearchProductUrl = (productUrl) => {
     })
 }
 
-export default SearchProductUrl;
+export default SearchProductUrlRoute;

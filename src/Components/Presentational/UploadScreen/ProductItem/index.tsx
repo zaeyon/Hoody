@@ -7,39 +7,52 @@ import {
 import { unstable_enableLogBox } from 'react-native';
 
 const Container = Styled.View`
-width: ${wp('68%')};
+width: ${wp('87.7%')};
+height: ${wp('43.85%')};
 background-color: #ffffff;
 flex-direction: row;
-border-color: #c3c3c3;
-padding-right: 10px;
-padding-top: 5px;
-padding-bottom: 5px;
-padding-left: 7px;
+border-width: 1px;
+border-color: #EFEFEF;
+border-radius: 15px;
 `;
 
 const ProductImageContainer = Styled.View`
-align-items: center;
-justify-content: center;
 `;
 
 const ProductContentContainer = Styled.View`
-justify-content: center;
-padding-left: 10px;
+justify-content: space-between;
+padding-left: 15px;
+padding-top: 15px;
+padding-right: 13px;
+padding-bottom: 15px;
+background-color: #fafafa;
+border-top-right-radius: 15px;
+border-bottom-right-radius: 15px;
+flex-shrink: 1;
 `;
 
 
 const ProductImage = Styled.Image`
- width: ${wp('22%')};
- height: ${hp('12%')};
+ width: ${wp('43.3%')};
+ height: ${wp('43.3%')};
+ background-color: #c3c3c3;
+ border-radius: 15px;
+`;
+
+const Divider = Styled.View`
+ width: 1px;
+ height: ${wp('43.85%')};
+ background-color: #EFEFEF;
 `;
 
 const ProductName = Styled.Text`
- font-size: 15px;
+ font-size: 18px;
 `;
 
 const ProductDescription = Styled.Text`
  margin-top: 4px;
- font-size: 12px;
+ font-size: 15px;
+ color: #4b4b4b;
 `;
 
 const ShopContainer = Styled.View`
@@ -49,13 +62,13 @@ const ShopContainer = Styled.View`
 `;
 
 const ShopIcon = Styled.Image`
- width: ${wp('4.3%')};
- height: ${wp('4.3%')};
+ width: ${wp('6.4%')};
+ height: ${wp('6.4%')};
 `;
 
 const ShopName = Styled.Text`
 margin-left: 5px;
-font-size:11px;
+font-size:14px;
 `;
 
 interface Props {
@@ -68,7 +81,15 @@ interface Props {
 
 const ProductItem = ({productImage, productName, productDescription, shopIcon, shopName}: Props) => {
     const [subDescription, setSubDescription] = useState<string>();
-    const [subTitle, setSubTitle] = useState<string>();
+    const [productTitle, setProductTitle] = useState<string>();
+
+
+    useEffect(() => {
+        getDesLength(productDescription);
+        getTitleLength(productName);
+        console.log("productUrl", productImage);
+        console.log("shopIcon", shopIcon);
+    })
 
     const getDesLength = (str) => {
         var len = 0;
@@ -86,6 +107,8 @@ const ProductItem = ({productImage, productName, productDescription, shopIcon, s
     }
 
     const getTitleLength = (str) => {
+
+        /*
         var len = 0;
         for (var i = 0; i < str.length; i++) {
             if(escape(str.charAt(i)).length == 6) {
@@ -97,15 +120,9 @@ const ProductItem = ({productImage, productName, productDescription, shopIcon, s
             setSubTitle(productName.substr(0, 12) + "...")
         } else {
             setSubTitle(productName)
-        }     
+        }*/
+       setProductTitle(str)   
     }
-
-    useEffect(() => {
-        getDesLength(productDescription);
-        getTitleLength(productName);
-        console.log("productUrl", productImage);
-        console.log("shopIcon", shopIcon);
-    })
 
 
     return (
@@ -115,9 +132,9 @@ const ProductItem = ({productImage, productName, productDescription, shopIcon, s
                 source={{uri:productImage}}
                 />
             </ProductImageContainer>
+            <Divider/>
             <ProductContentContainer>
-    <ProductName>{subTitle}</ProductName>
-    <ProductDescription>{subDescription}</ProductDescription>
+    <ProductName>{productTitle}</ProductName>
     <ShopContainer>
         <ShopIcon
         source={{uri: shopIcon}}

@@ -14,6 +14,7 @@ import SlidingUpPanel from '~/Components/Presentational/UploadScreen/TagSearchSl
 import LatelySearchItem from '~/Components/Presentational/TagSearch/LatelySearchItem';
 import GetAutoComplete from '~/Route/Search/GetAutoComplete';
 import {Rating} from '~/Components/Presentational/UploadScreen/Rating';
+import ProductItem from '~/Components/Presentational/UploadScreen/ProductItem';
 
 const ratingImage = require('~/Assets/Images/ic_star4.png');
 
@@ -335,6 +336,11 @@ flex-direction: row;
 justify-content: space-between;
 `;
 
+const ProductParagraphContainer = Styled.View`
+flex-direction: row;
+justify-content: space-between;
+`;
+
 const ParagraphContainer = Styled.View`
 `;
 
@@ -566,6 +572,7 @@ const NewUploadScreen = ({navigation, route}: Props) => {
     const [expanse, setExpanse] = useState<string>();
     const [tagList, setTagList] = useState<Array<string>>();
     const [allTagText, setAllTagText] = useState<string>();
+    const [product, setProduct] = useState<object>();
 
     // toggle input expanse
     const [visibleExpanseInput, setVisibleExpanseInput] = useState<boolean>(false);
@@ -581,7 +588,6 @@ const NewUploadScreen = ({navigation, route}: Props) => {
 
     // Inputing Descript Paragraph Modal
     const [visibleDescripModal, setVisibleDescripModal] = useState<boolean>(false);
-
     const [descripModalInputText, setDescripModalInputText] = useState<boolean>(false);
 
     // useRef
@@ -594,6 +600,25 @@ const NewUploadScreen = ({navigation, route}: Props) => {
      var inputingNewDescripText = "";
 
 
+     useEffect(() => {
+         if(route.params?.product) {
+             console.log("product", route.params.product)
+             var tmpParagraphData = paragraphData;
+             var newProductPara = {
+                index: paragraphData.length,
+                type: "product",
+                productImage: route.params.product.productImage,
+                productName: route.params.product.productName,
+                productDescription: route.params.product.productDescription,
+                shopIcon: route.params.product.shopIcon,
+                shopName: route.params.product.shopName,  
+                }
+
+                tmpParagraphData.push(newProductPara);
+                setParagraphData(newProductPara);
+           }
+     }, [route.params?.product])
+ 
 
     useEffect(() => {
         if(route.params?.location) {
@@ -933,6 +958,10 @@ const moveLocationSearch = () => {
     navigation.navigate("LocationSearch")
 }
 
+const moveProductUrlSearch = () => {
+    navigation.navigate("ProductUrlSearchScreen")
+}
+
 const toggleInputExpanse = (bool: boolean) => {
     console.log("toggleInputExpanse")
     setVisibleExpanseInput(!visibleExpanseInput)
@@ -1027,6 +1056,27 @@ const renderDraggableItem = ({item, index, drag, isActive}) => {
                     </ParagraphIconContainer>
                 </TouchableWithoutFeedback>
             </DescripParagraphContainer>
+            </ParagraphContainer>
+        )
+    } else if(item.type === 'product') {
+        return (
+            <ParagraphContainer>
+                <ProductParagraphContainer>
+                    <ParagraphContentContainer>
+                        <ProductItem
+                        productImage={item.productImage}
+                        productName={item.productName}
+                        productDescription={item.productDescription}
+                        shopIcon={item.shopIcon}
+                        shopName={item.shopName}/>
+                    </ParagraphContentContainer>
+                    <TouchableWithoutFeedback onLongPress={drag} delayLongPress={0.2}>
+                    <ParagraphIconContainer>
+                        <ParagraphIcon
+                        source={require('~/Assets/Images/ic_paragraph.png')}/>
+                    </ParagraphIconContainer>
+                </TouchableWithoutFeedback>
+                </ProductParagraphContainer>
             </ParagraphContainer>
         )
     }
@@ -1241,10 +1291,12 @@ const renderAddNewDescripInput = () => {
                     <BottomMenuCalendarIcon
                     source={require('~/Assets/Images/ic_bottomMenu_calendar.png')}/>
                     </BottomMenuIconContainer>
+                    <TouchableWithoutFeedback onPress={() => moveProductUrlSearch()}>
                     <BottomMenuIconContainer>
                     <BottomMenuUrlIcon
                     source={require('~/Assets/Images/ic_bottomMenu_url.png')}/>
                     </BottomMenuIconContainer>
+                    </TouchableWithoutFeedback>
                 </BottomMenuBar>
                 </AboveKeyboard>
                 </BottomMenuBarContainer>

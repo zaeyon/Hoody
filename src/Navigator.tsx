@@ -44,6 +44,7 @@ import NewUploadScreen from '~/Components/Container/NewUploadScreen';
 import TagSearchScreen from '~/Components/Container/TagSearchScreen';
 import TestTextWidth from '~/Components/Container/TestTextWidth';
 import UploadDescripInputScreen from '~/Screens/UploadDescripInputScreen';
+import ProductUrlSearchScreen from '~/Components/Container/ProductUrlSearchScreen';
 
 import getCurrentUser from '~/AsyncStorage/User';
 
@@ -181,16 +182,7 @@ function UploadStackScreen() {
         }
       }}
       />
-      <UploadStack.Screen
-      name="UploadDescripInputScreen"
-      component={UploadDescripInputScreen}
-      options={{
-        transitionSpec: {
-          open: config,
-          close: config,
-        }
-      }}/> 
-           <UploadStack.Screen 
+      <UploadStack.Screen 
       name="TagSearchScreen"
       component={TagSearchScreen}
       options={{
@@ -206,6 +198,10 @@ function UploadStackScreen() {
         options={{
           headerTitle: (props) => <SearchLocationTitle {...props} />,
         }}
+      />
+      <UploadStack.Screen
+      name="ProductUrlSearchScreen"
+      component={ProductUrlSearchScreen}
       />
       <UploadStack.Screen
         name="ImagesPullScreen"

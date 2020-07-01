@@ -34,6 +34,14 @@ const HeaderBar = Styled.View`
  justify-content: space-between;
 `;
 
+const HeaderBarCover = Styled.View`
+position: absolute;
+width: ${wp('100%')};
+height: ${hp('100%')};
+background-color: #000000;
+opacity: 0.2;
+`;
+
 const HeaderLeftContainer = Styled.View`
 padding: 10px 15px 10px 15px;
  align-items: center;
@@ -298,13 +306,13 @@ const BottomMenuAlbumIcon = Styled.Image`
 `;
 
 const AddDescripContainer = Styled.View`
- padding: 10px 15px 0px 15px;
+ padding: 10px 15px 100px 15px;
 `;
 
 const NewDescripInput = Styled.TextInput`
  font-size: 17px;
  color: #4b4b4b;
- padding-bottom: 200px;
+ padding-bottom: 10px;
 `;
 
 const BottomMenuTextContainer = Styled.View`
@@ -373,13 +381,136 @@ const InputedTagColumnContainer = Styled.View`
  flex-direction: column;
 `;
 
+const ExpanseInputContainer = Styled.View`
+ position: absolute;
+ width: ${wp('100%')}
+ height: ${hp('5.4%')};
+ bottom: 0px;
+ background-color: #EFEFEF;
+`;
 
-const TEST_DATA = ["1", "2"]
+const ExpanseInputKeyboardContainer = Styled.View`
+ flex-direction: row;
+ position: absolute;
+ bottom: 0px;
+ background-color: #EFEFEF;
+ width: ${wp('100%')}
+ height: ${hp('7.4%')};
+ justify-content: space-around;
+ align-items: center;
+ padding-left: 8px;
+ padding-right: 9px;
+`;
+
+const ExpanseInput = Styled.TextInput`
+ width: ${wp('78.5%')};
+ height: ${hp('5%')};
+ background-color: #ffffff;
+ border-radius: 5px;
+ color: #ffffff;
+ font-size: 24px;
+ font-weight: 600;
+`;
+
+const MoneyContainer = Styled.View`
+
+`;
+
+const MoneyText = Styled.Text`
+color: #3384FF;
+font-size: 24px;
+font-weight: 600;
+position: absolute;
+left: 0;
+margin-left: 15px;
+`;
+
+const ExpanseInputTextContainer = Styled.View`
+ align-items: center;
+ justify-content: center;
+`;
+
+const ExpanseInputWonContainer = Styled.View`
+align-items: center;
+justify-content: center;
+`;
+
+const ExpanseInputText = Styled.Text`
+font-size: 20px;
+font-weight: 600;
+color: #7e7e7e;
+`;
+
+const WonText = Styled.Text`
+position: absolute;
+right: 10;
+font-size: 20px;
+color: #cccccc;
+`;
+
+const DescripModalContainer = Styled.View`
+ width: ${wp('100%')};
+ height: ${hp('100%')};
+ padding: 20px 15px 20px 15px;
+`;
+
+const DescripPlaceholder = Styled.Text`
+ color: #cccccc;
+ font-size: 17px;
+`;
 
 
+const DescripInput = Styled.TextInput`
+ font-size: 17px;
+ color: #4b4b4b;
+ padding-bottom: 10px;
+`;
 
+const DescripModalBottomBarContainer = Styled.View`
+ width: ${wp('100%')};
+ height: ${hp('5.7%')};
+ background-color: #FAFAFA;
+ position: absolute;
+ bottom: 0px;
+`;
 
+const DescripModalBottomBar = Styled.View`
+width: ${wp('100%')};
+height: ${hp('5.3%')};
+background-color: #FAFAFA;
+flex-direction: row;
+justify-content: space-between;
+`;
 
+const RemoveDescripIcon = Styled.Image`
+ width: ${wp('8%')};
+ height: ${wp('8%')};
+`;
+
+const RemoveDescripContainer = Styled.View`
+align-items: center;
+justify-content: center;
+padding-left: 12px;
+padding-right: 12px;
+`;
+
+const FinishDescripContainer = Styled.View`
+align-items: center;
+justify-content: center;
+padding-right: 12px;
+padding-left: 12px;
+
+`;
+
+const DisabledFinishDescripText = Styled.Text`
+ color: #cccccc;
+ font-size: 17px;
+`;
+
+const AbledFinishDescripText = Styled.Text`
+color: #3384FF;
+ font-size: 17px;
+`;
 
 interface Props {
     navigation: any,
@@ -403,6 +534,7 @@ const NewUploadScreen = ({navigation, route}: Props) => {
     const [subTag2Width, setsubTag2Width] = useState<number>();
     const [keyboardHeight, setKeyboardHeight] = useState<number>(0);
     const [MetaContainerHeight, setMetaContainerHeight] = useState<number>(0);
+    const [visibleBottomMenuBar, setVisibleBottomMenuBar] = useState<boolean>(true);
 
    
     //후기 정보 관련 state
@@ -416,21 +548,34 @@ const NewUploadScreen = ({navigation, route}: Props) => {
     const [latitude, setLatitude] = useState<number>();
     const [expanse, setExpanse] = useState<string>();
     const [tagList, setTagList] = useState<Array<string>>();
+    const [allTagText, setAllTagText] = useState<string>();
+
+    // toggle input expanse
+    const [visibleExpanseInput, setVisibleExpanseInput] = useState<boolean>(false);
+    const [inputingExpanseText, setInputingExpanseText] = useState<number>();
+    const [moneyText, setMoneyText] = useState();
+    const [completePrice, setCompletePrice] = useState();
     
-
-
     // Paragraph 관련 state
     const [paragraphData, setParagraphData] = useState<Array<object>>([]);
     const [inputingNewDescripBool, setInputingNewDescripBool] = useState<boolean>(false);
     const [paragraphHeight, setParagraphHeight] = useState<number>(0);
+    const [modifingDescripIndex, setModifingDescripIndex] = useState<number>(-1);
+
+    // Inputing Descript Paragraph Modal
+    const [visibleDescripModal, setVisibleDescripModal] = useState<boolean>(false);
+
+    const [descripModalInputText, setDescripModalInputText] = useState<boolean>(false);
 
     // useRef
     const newDescripInput = useRef(null);
     const scrollViewRef = useRef(null);
     const draggableFlatListRef = useRef(null);
+    const expanseInput = useRef(null);
 
      var focusingNewDescripInput = false;
      var inputingNewDescripText = "";
+
 
 
     useEffect(() => {
@@ -457,13 +602,17 @@ const NewUploadScreen = ({navigation, route}: Props) => {
     }, [route.params?.selectTagName])
 
     useEffect(() => {
-        if(route.params?.mainTag && !route.params?.subTag1) {
+        if(route.params?.mainTag && !route.params?.subTag1 && !route.params?.subTag2) {
             if(route.params?.mainTag !== mainTag) {
                 setMainTagProcess(true);
                 setIncompleteMainTag(route.params.mainTag)
                 setMainTagWidth(route.params.mainTagWidth);
+                setAllTagText(route.params.mainTag);
             }
-        } else if(route.params?.subTag1 && !route.params?.subTag2) { 
+        } else if(route.params?.mainTag && route.params?.subTag1 && !route.params?.subTag2) { 
+
+            console.log("메인태그 존재22", route.params.mainTag);
+            console.log("서브태그1 존재", route.params.subTag1);
 
             setSubTag1(route.params.subTag1)
             setSubTag1Width(route.params.subTag1Width);
@@ -472,7 +621,8 @@ const NewUploadScreen = ({navigation, route}: Props) => {
             if(route.params?.mainTag !== mainTag) {
                 setMainTagProcess(true);
             }
-        } else if(route.params?.subTag2) {
+            setAllTagText(route.params.mainTag + " " + route.params.subTag1);
+        } else if(route.params?.mainTag && route.params?.subTag1 && route.params?.subTag2) {
 
             setSubTag1(route.params.subTag1)
             setSubTag1Width(route.params.subTag1Width);
@@ -483,6 +633,8 @@ const NewUploadScreen = ({navigation, route}: Props) => {
             if(route.params?.mainTag !== mainTag) {
                 setMainTagProcess(true);
             }
+
+            setAllTagText(route.params.mainTag + " " + route.params.subTag1 + " " + route.params.subTag2);
             
         }
     }, [route.params?.mainTag, route.params?.subTag1, route.params?.subTag2])
@@ -495,28 +647,39 @@ const NewUploadScreen = ({navigation, route}: Props) => {
 
     }, [paragraphData])
 
-    /*
+    
     useEffect(() => {
         Keyboard.addListener('keyboardDidShow', onKeyboardDidShow);
         Keyboard.addListener('keyboardDidHide', onKeyboardDidHide);
-    }, [paragraphData])
-    
-    */
-    
-    useEffect(() => {
-        
-        console.log("paragraphData", paragraphData)
 
-    }, [paragraphData])
+        return ():void => {
+            Keyboard.removeListener("keyboardDidShow", onKeyboardDidShow);
+            Keyboard.removeListener("keyboardDidHide", onKeyboardDidHide);
+        }
+    }, [])
 
     function onKeyboardDidShow(e: KeyboardEvent): void {
-        setKeyboardHeight(e.endCoordinates.height);
-        //keyboardHeight = e.endCoordinates.height;
+        console.log("onKeyboardDidHide visibleExpanseInput11", visibleExpanseInput)
+
+        if(expanseInput.current !== null) {
+            console.log("expanseInput.current.isFocused()", expanseInput.current.isFocused())
+        }
     }
 
     function onKeyboardDidHide(): void {
-       setKeyboardHeight(0);
-      //keyboardHeight = 0;
+        console.log("onKeyboardDIdhide");
+        console.log("onKeyboardDidHide visibleExpanseInput22", visibleExpanseInput);
+
+
+        if(expanseInput.current !== null) {
+            console.log("expanseInput.current.isFocused()", expanseInput.current.isFocused())
+            if(expanseInput.current.isFocused() === false) {
+                setVisibleExpanseInput(false);
+                setVisibleBottomMenuBar(true)
+            }
+        }
+
+       
     }
 
     /*
@@ -655,17 +818,11 @@ const moveTagSearch = (tagType: string, inputedTagName: string) => {
     }
 }
 
-const clickLocationIcon = () => {
-    if(focusingNewDescripInput) {
-        addNewDescripParagraph()
-    }
-    navigation.navigate("LocationSearch")
-}
-
-const addNewDescripParagraph = () => {
-
+const showDescripModal = () => {
+    setVisibleDescripModal(true)
+    
+    /*
      console.log("not state inputingNewDescripText", inputingNewDescripText)
-
     var tmpParagraphData = paragraphData;
         var newDescripPara = {
             index: paragraphData.length,
@@ -684,6 +841,7 @@ const addNewDescripParagraph = () => {
         
         // draggableFlatListRef.current.scrollToEnd();
         // scrollViewRef.current.scrollTo();
+    */
 }
 
 const onFocusNewDescripInput = (nativeEvent: any) => {
@@ -692,9 +850,39 @@ const onFocusNewDescripInput = (nativeEvent: any) => {
     focusingNewDescripInput = true;
 }
 
+const onFocusExpanseInput = () => {
+    console.log("visibleExpanseInput", visibleExpanseInput)
+}
+
 const onChangeNewDescripInput = (text: string) => {
     // setInputingNewDescripText(text);
     inputingNewDescripText = text;
+}
+
+
+const onChangeDescripModalInput = (text: string) => {
+    if(text === "") {
+        setDescripModalInputText(null)
+    } else {
+        setDescripModalInputText(text);
+    }
+
+}
+
+const onChangeExpanseInput = (text: string) => {
+    if(text === "") {
+        setInputingExpanseText(null);
+        setMoneyText(null);
+    } else {
+    text = Number(text);
+    var money = text.toLocaleString();
+    console.log("money", money);
+    console.log("text", text);
+    setMoneyText(money);
+    setInputingExpanseText(text);
+    }
+    
+
 }
 
 const changeParagraphOrder = (data: any) => {
@@ -702,12 +890,72 @@ const changeParagraphOrder = (data: any) => {
     setParagraphData(data);
 }
 
-const clickParagraphContent = () => {
-    console.log("clickParagraphContent");
+const clickParagraphContent = (item) => {
+    setVisibleDescripModal(true);
+    console.log("clickParagraphContent item", item.description);
+    console.log("clickParagraphContent index", item.index);
+    setDescripModalInputText(item.description);
+    setModifingDescripIndex(item.index);
 }
 
 const onEnableScroll = (value: boolean) => {
     setEnableScrollViewScroll(value)
+}
+
+const DismissKeyboard = ({ children }) => (
+    <TouchableWithoutFeedback 
+    onPress={() => Keyboard.dismiss()}> {children}
+    </TouchableWithoutFeedback>
+);
+
+const moveGallery = () => {
+    navigation.navigate("Gallery");
+}
+
+const moveLocationSearch = () => {
+    navigation.navigate("LocationSearch")
+}
+
+const toggleInputExpanse = (bool: boolean) => {
+    console.log("toggleInputExpanse")
+    setVisibleExpanseInput(!visibleExpanseInput)
+    setVisibleBottomMenuBar(false);
+}
+
+const touchBackground = () => {
+    if(visibleExpanseInput) {
+    setVisibleExpanseInput(false)
+    setVisibleBottomMenuBar(true)
+    Keyboard.dismiss();
+    }
+}
+
+const addExpanse = () => {
+    setCompletePrice(moneyText);
+    setInputingExpanseText(null);
+}
+
+const finishModifyParagraph = () => {
+    console.log("finishModifyParagraph inputingDescripModal", descripModalInputText);
+    var tmpParagraphData = paragraphData;
+
+    if(modifingDescripIndex !== -1) {
+        console.log("finishModifyParagraoh index", modifingDescripIndex);
+        setModifingDescripIndex(-1);
+        tmpParagraphData[modifingDescripIndex].description = descripModalInputText;
+        setParagraphData(tmpParagraphData);
+
+    } else {
+        var newDescripPara = {
+            index: paragraphData.length,
+            type: "description",
+            description: descripModalInputText
+        }
+        tmpParagraphData.push(newDescripPara);
+        setParagraphData(tmpParagraphData);
+    }
+        setVisibleDescripModal(false);
+        setDescripModalInputText(null);
 }
 
 
@@ -715,7 +963,7 @@ const renderDraggableItem = ({item, index, drag, isActive}) => {
     if(item.type === 'description') {
         return (
             <DescripParagraphContainer style={isActive && styles.shadow}>
-                <TouchableWithoutFeedback onPress={() => clickParagraphContent()}>
+                <TouchableWithoutFeedback onPress={() => clickParagraphContent(item)}>
                 <ParagraphContentContainer>
                     <DescripParaText>{item.description}</DescripParaText>
                 </ParagraphContentContainer>
@@ -733,15 +981,20 @@ const renderDraggableItem = ({item, index, drag, isActive}) => {
 
 const renderAddNewDescripInput = () => {
     var footer =  (
+        <TouchableWithoutFeedback onPress={() => showDescripModal()}>
         <AddDescripContainer>
+        {/*
         <NewDescripInput
         ref={newDescripInput}
         placeholder={!paragraphData[0] ? "나의 소비에 이야기를 담아주세요" : ""}
         multiline={true}
         onFocus={(nativeEvent) => onFocusNewDescripInput(nativeEvent)}
         onChangeText={(text:string) => onChangeNewDescripInput(text)}
-        />
+        editable={false}
+        />*/}
+        <DescripPlaceholder>나의 소비에 이야기를 담아주세요</DescripPlaceholder>
     </AddDescripContainer>
+    </TouchableWithoutFeedback>
     )
 
     return footer;
@@ -776,59 +1029,35 @@ const renderAddNewDescripInput = () => {
                 </TagInputPlaceholder>
                 )}
                 {incompleteMainTag && !mainTag && (
-                    <TouchableWithoutFeedback onPress={() => moveTagSearch("main", incompleteMainTag)}>
-                    <MainTagText>{"#" + incompleteMainTag}</MainTagText>
-                    </TouchableWithoutFeedback>
+                    <MainTagText>
+                        {"#" + incompleteMainTag}
+                        { subTag1 && (
+                            <SubTagText>{" #" + subTag1}</SubTagText>
+                        )}
+                        {subTag2 && (
+                            <SubTagText>{' #' + subTag2}</SubTagText>
+                        )}
+                        </MainTagText>
                 )}    
-            {mainTag && !subTag1 && !subTag2 && (
-                <InputedTagRowContainer>
-                <MainTagText>{"#" + mainTag}</MainTagText>
-                </InputedTagRowContainer>
-            )}
-            {mainTag && subTag1 && !subTag2 && (mainTagWidth + subTag1Width < wp('87%')) && (
-                <InputedTagRowContainer>
-                <MainTagText>{"#" + mainTag}</MainTagText>
-                <SubTagText>{"#" + subTag1}</SubTagText>
-                </InputedTagRowContainer>
-            )}
-            {mainTag && subTag1 && !subTag2 && (mainTagWidth + subTag1Width > wp('87%')) && (
-                <InputedTagColumnContainer>
-                <MainTagText>{"#" + mainTag}</MainTagText>
-                <SubTagText>{"#" + subTag1}</SubTagText>
-                </InputedTagColumnContainer>
-            )}
-            {mainTag && subTag1 && subTag2 && (mainTagWidth + subTag1Width + subTag2Width < wp('87%')) && (
-                <InputedTagRowContainer>
-                <MainTagText>{"#" + mainTag}</MainTagText>
-                <SubTagText>{"#" + subTag1}</SubTagText>
-                <SubTagText>{"#" + subTag2}</SubTagText>
-                </InputedTagRowContainer>
-            )}
-            {mainTag && subTag1 && subTag2 && (mainTagWidth + subTag1Width > wp('87%')) && (subTag1Width + subTag2Width < wp('87%')) && (
-                <InputedTagColumnContainer>
-                <MainTagText>{"#" + mainTag}</MainTagText>
-                <InputedTagRowContainer>
-                <SubTagText>{"#" + subTag1}</SubTagText>
-                <SubTagText>{"#" + subTag2}</SubTagText>
-                </InputedTagRowContainer>
-                </InputedTagColumnContainer>
-            )}
-            {mainTag && subTag1 && subTag2 && (mainTagWidth + subTag1Width > wp('87%')) && (subTag1Width + subTag2Width > wp('87%')) && (
-                <InputedTagColumnContainer>
-                <MainTagText>{"#" + mainTag}</MainTagText>
-                <SubTagText>{"#" + subTag1}</SubTagText>
-                <SubTagText>{"#" + subTag2}</SubTagText>
-                </InputedTagColumnContainer>
-            )}
-            {mainTag && subTag1 && subTag2 && (mainTagWidth + subTag1Width < wp('87%')) && (mainTagWidth + subTag1Width + subTag2Width > wp('87%')) && (
-                <InputedTagColumnContainer>
-                <InputedTagRowContainer>
-                <MainTagText>{"#" + mainTag}</MainTagText>
-                <SubTagText>{"#" + subTag1}</SubTagText>
-                </InputedTagRowContainer>
-                <SubTagText>{"#" + subTag2}</SubTagText>
-                </InputedTagColumnContainer>
-            )}
+                 {mainTag && (
+                    <MainTagText>
+                        {"#" + mainTag}
+                        { subTag1 && (
+                            <SubTagText>{" #" + subTag1}</SubTagText>
+                        )}
+                        { !subTag1 && (
+                            <SubTagText>{" #태그추가"}</SubTagText>
+
+                        )}
+                        {subTag2 && (
+                            <SubTagText>{' #' + subTag2}</SubTagText>
+                        )}
+                        {subTag1 && !subTag2 && (
+                            <SubTagText>{" #태그추가"}</SubTagText>
+
+                        )}
+                        </MainTagText>
+                 )}  
                 </TagListContainer>
                 </TouchableWithoutFeedback>
                 
@@ -882,12 +1111,12 @@ const renderAddNewDescripInput = () => {
                     <InputedExpanseContainer>
                     <InputedExpanseIcon
                     source={require('~/Assets/Images/ic_expanse_outline.png')}/>
-                    <InputedExpanseText>{expanse || "소비금액"}</InputedExpanseText>
+                    <InputedExpanseText>{completePrice ? completePrice + "원" : "소비금액"}</InputedExpanseText>
                     </InputedExpanseContainer>
                     </MetaInfoContainer>
                 )}
                 </AdditionInfoContainer>
-                {mainTag && !mainTagProcess && (
+                {mainTag && !mainTagProcess && !visibleDescripModal && (
                     <KeyboardAwareScrollView
                     scrollEnabled={enableScrollViewScroll}
                     ref={scrollViewRef}
@@ -912,25 +1141,40 @@ const renderAddNewDescripInput = () => {
                 </ContentContainer>
                 </KeyboardAwareScrollView>
                 )}
+                {visibleDescripModal && (
+                <DescripModalContainer>
+                    <DescripInput
+                    autoFocus={true}
+                    onChangeText={(text: string) => onChangeDescripModalInput(text)}
+                    autoCapitalize={false}
+                    value={descripModalInputText}
+                    />
+                </DescripModalContainer>
+                
+                )}
             </BodyContainer>
-            {mainTag && !mainTagProcess && (
+            {mainTag && !mainTagProcess && visibleBottomMenuBar && !visibleDescripModal && (
                 <BottomMenuBarContainer>
                 <AboveKeyboard>
                 <BottomMenuBar>
+                <TouchableWithoutFeedback onPress={() => moveGallery()}>
                 <BottomMenuIconContainer>
                     <BottomMenuAlbumIcon
                     source={require('~/Assets/Images/ic_bottomMenu_album.png')}/>
                     </BottomMenuIconContainer>
-                    <TouchableWithoutFeedback onPress={() => clickLocationIcon()}>
+                    </TouchableWithoutFeedback>
+                    <TouchableWithoutFeedback onPress={() => moveLocationSearch()}>
                     <BottomMenuIconContainer>
                     <BottomMenuLocationIcon
                     source={require('~/Assets/Images/ic_bottomMenu_location.png')}/>
                     </BottomMenuIconContainer>
                     </TouchableWithoutFeedback>
+                    <TouchableWithoutFeedback onPress={() => toggleInputExpanse(true)}>
                     <BottomMenuIconContainer>
                     <BottomMenuExpanseIcon
                     source={require('~/Assets/Images/ic_bottomMenu_expanse.png')}/>
                     </BottomMenuIconContainer>
+                    </TouchableWithoutFeedback>
                     <BottomMenuIconContainer>
                     <BottomMenuCalendarIcon
                     source={require('~/Assets/Images/ic_bottomMenu_calendar.png')}/>
@@ -942,6 +1186,58 @@ const renderAddNewDescripInput = () => {
                 </BottomMenuBar>
                 </AboveKeyboard>
                 </BottomMenuBarContainer>
+            )}
+           
+            {(visibleExpanseInput === true) && !visibleBottomMenuBar && (
+                <ExpanseInputContainer>
+                    <AboveKeyboard>
+                    <ExpanseInputKeyboardContainer>
+                    <ExpanseInputWonContainer>
+                    <ExpanseInput
+                    ref={expanseInput}
+                    style={{paddingLeft:20}}
+                    keyboardType={"number-pad"}
+                    placeholder={"소비금액(원)"}
+                    caretHidden={true}
+                    placeholderTextColor="#CCCCCC"
+                    onChangeText={(text:string) => onChangeExpanseInput(text)}
+                    value={inputingExpanseText}
+                    onFocus={() => onFocusExpanseInput()}
+                    autoFocus={true}/>
+                    <MoneyText>{moneyText ? moneyText+"원" : ""}</MoneyText>
+                    </ExpanseInputWonContainer>
+                    <TouchableWithoutFeedback onPress={() => addExpanse()}>
+                    <ExpanseInputTextContainer>
+                        <ExpanseInputText>확인</ExpanseInputText>
+                    </ExpanseInputTextContainer>
+                    </TouchableWithoutFeedback>
+                    </ExpanseInputKeyboardContainer>
+                    </AboveKeyboard>
+                </ExpanseInputContainer>
+            )}
+            {visibleDescripModal && (
+                <DescripModalBottomBarContainer>
+                    <AboveKeyboard>
+                        <DescripModalBottomBar>
+                        <RemoveDescripContainer>
+                            <RemoveDescripIcon
+                            source={require('~/Assets/Images/ic_removeDescrip.png')}/>   
+                        </RemoveDescripContainer>
+                             {descripModalInputText !== null && (
+                        <TouchableWithoutFeedback onPress={() => finishModifyParagraph()}>
+                        <FinishDescripContainer>
+                        <AbledFinishDescripText>완료</AbledFinishDescripText>
+                        </FinishDescripContainer>
+                        </TouchableWithoutFeedback>
+                            )}
+                            {descripModalInputText === null && (
+                                <FinishDescripContainer>
+                                <DisabledFinishDescripText>완료</DisabledFinishDescripText>
+                                </FinishDescripContainer>
+                            )}
+                        </DescripModalBottomBar>
+                    </AboveKeyboard>
+                </DescripModalBottomBarContainer>
             )}
             </Container>
     )

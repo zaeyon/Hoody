@@ -169,14 +169,14 @@ align-items: center;
 const SubTagNameContainer = Styled.View`
  align-items: center;
  justify-content: center;
- padding: 9px 6px 9px 16px;
+ padding: 9px 0px 9px 16px;
 `;
 
 const TagRemoveContainer = Styled.View`
  right: 7;
  position: absolute;
  justify-content: center;
- padding: 9px 0px 9px 4px
+ padding: 9px 0px 9px 0px
 `;
 const TagRemoveIcon = Styled.Image`
 width: ${wp('4.5%')};
@@ -348,8 +348,7 @@ const TagSearchScreen = ({navigation, route}: Props) => {
         }
     }, [route.params?.mainTag, route.params?.subTag1, route.params?.subTag2])
 
-
-
+    
     const useMainTagComponentSize = () => {
         const [mainTagSize, setMainTagSize] = useState(null);
       
@@ -658,7 +657,7 @@ const TagSearchScreen = ({navigation, route}: Props) => {
             {inputMainTag && !inputSubTag1 && !inputSubTag2 && (
                 <InputedTagRowContainer>
                 <TouchableWithoutFeedback onPress={() => modifyTag("mainTag")}>
-                <MainTagBackground>
+                <MainTagBackground style={{width: mainTagWidth+ 30}}>
                 <MainTagText>{"#" + inputMainTag}</MainTagText>
                 </MainTagBackground>
                 </TouchableWithoutFeedback>
@@ -667,11 +666,11 @@ const TagSearchScreen = ({navigation, route}: Props) => {
             {inputMainTag && inputSubTag1 && !inputSubTag2 && ((mainTagWidth+40) + (subTag1Width+(32 + wp('4.5%'))) < wp('87%')) && (
                 <InputedTagRowContainer>
                 <TouchableWithoutFeedback onPress={() => modifyTag("mainTag")}>
-                <MainTagBackground>
+                <MainTagBackground  style={{width: mainTagWidth+30}}>
                 <MainTagText>{"#" + inputMainTag}</MainTagText>
                 </MainTagBackground>
                 </TouchableWithoutFeedback>
-                <SubTagBackground style={{width: subTag1Width+(32+wp('4.5%'))}}>
+                <SubTagBackground style={{width: subTag1Width+(27+wp('4.5%'))}}>
                 <TouchableWithoutFeedback onPress={() => modifyTag("subTag1")}>
                 <SubTagNameContainer>
                 <SubTagText>{"#" + inputSubTag1}</SubTagText>
@@ -689,11 +688,11 @@ const TagSearchScreen = ({navigation, route}: Props) => {
             {inputMainTag && inputSubTag1 && !inputSubTag2 && ((mainTagWidth+40) + (subTag1Width+(32 + wp('4.5%'))) > wp('87%')) && (
                 <InputedTagColumnContainer>
                 <TouchableWithoutFeedback onPress={() => modifyTag("mainTag")}>
-                <MainTagBackground>
+                <MainTagBackground  style={{width: mainTagWidth+30}}>
                 <MainTagText>{"#" + inputMainTag}</MainTagText>
                 </MainTagBackground>
                 </TouchableWithoutFeedback>
-                <SubTagBackground style={{width: subTag1Width+(32+wp('4.5%'))}}>
+                <SubTagBackground style={{width: subTag1Width+(27+wp('4.5%'))}}>
                 <TouchableWithoutFeedback onPress={() => modifyTag("subTag1")}>
                 <SubTagNameContainer>
                 <SubTagText>{"#" + inputSubTag1}</SubTagText>
@@ -711,11 +710,11 @@ const TagSearchScreen = ({navigation, route}: Props) => {
             {inputMainTag && inputSubTag1 && inputSubTag2 && ((mainTagWidth+40) + (subTag1Width+(32 + wp('4.5%'))) + (subTag2Width+(32 + wp('4.5%'))) < wp('87%')) && (
                 <InputedTagRowContainer>
                 <TouchableWithoutFeedback onPress={() => modifyTag("mainTag")}>
-                <MainTagBackground>
+                <MainTagBackground  style={{width: mainTagWidth+30}}>
                 <MainTagText>{"#" + inputMainTag}</MainTagText>
                 </MainTagBackground>
                 </TouchableWithoutFeedback>
-                <SubTagBackground style={{width: subTag1Width+(32+wp('4.5%'))}}>
+                <SubTagBackground style={{width: subTag1Width+(27+wp('4.5%'))}}>
                 <TouchableWithoutFeedback onPress={() => modifyTag("subTag1")}>
                 <SubTagNameContainer>
                 <SubTagText>{"#" + inputSubTag1}</SubTagText>
@@ -728,7 +727,7 @@ const TagSearchScreen = ({navigation, route}: Props) => {
                 </TagRemoveContainer>
                 </TouchableWithoutFeedback>
                 </SubTagBackground>
-                <SubTagBackground style={{width: subTag2Width+(32+wp('4.5%'))}}>
+                <SubTagBackground style={{width: subTag2Width+(27+wp('4.5%'))}}>
                 <TouchableWithoutFeedback onPress={() => modifyTag("subTag2")}>
                 <SubTagNameContainer>
                 <SubTagText>{"#" + inputSubTag2}</SubTagText>
@@ -746,12 +745,12 @@ const TagSearchScreen = ({navigation, route}: Props) => {
             {inputMainTag && inputSubTag1 && inputSubTag2 && ((mainTagWidth+40) + (subTag1Width+(32 + wp('4.5%')))  > wp('87%')) && ((subTag1Width+(32 + wp('4.5%'))) + (subTag2Width+(32 + wp('4.5%'))) < wp('87%')) && (
                 <InputedTagColumnContainer>
                 <TouchableWithoutFeedback onPress={() => modifyTag("mainTag")}>
-                <MainTagBackground>
+                <MainTagBackground  style={{width: mainTagWidth+30}}>
                 <MainTagText>{"#" + inputMainTag}</MainTagText>
                 </MainTagBackground>
                 </TouchableWithoutFeedback>
                 <InputedTagRowContainer>
-                <SubTagBackground style={{width: subTag1Width+(32+wp('4.5%'))}}>
+                <SubTagBackground style={{width: subTag1Width+(27+wp('4.5%'))}}>
                 <TouchableWithoutFeedback onPress={() => modifyTag("subTag1")}>
                 <SubTagNameContainer>
                 <SubTagText>{"#" + inputSubTag1}</SubTagText>
@@ -764,7 +763,7 @@ const TagSearchScreen = ({navigation, route}: Props) => {
                 </TagRemoveContainer>
                 </TouchableWithoutFeedback>
                 </SubTagBackground>
-                <SubTagBackground style={{width: subTag2Width+(32+wp('4.5%'))}}>
+                <SubTagBackground style={{width: subTag2Width+(27+wp('4.5%'))}}>
                     <TouchableWithoutFeedback onPress={() => modifyTag("subTag2")}>
                     <SubTagNameContainer>
                 <SubTagText>{"#" + inputSubTag2}</SubTagText>
@@ -783,11 +782,11 @@ const TagSearchScreen = ({navigation, route}: Props) => {
             {inputMainTag && inputSubTag1 && inputSubTag2 && ((mainTagWidth+40) + (subTag1Width+(32 + wp('4.5%'))) > wp('87%')) && ((subTag1Width+(32 + wp('4.5%'))) + (subTag2Width+(32 + wp('4.5%'))) > wp('87%')) && (
                 <InputedTagColumnContainer>
                 <TouchableWithoutFeedback onPress={() => modifyTag("mainTag")}>
-                <MainTagBackground>
+                <MainTagBackground  style={{width: mainTagWidth+30}}>
                 <MainTagText>{"#" + inputMainTag}</MainTagText>
                 </MainTagBackground>
                 </TouchableWithoutFeedback>
-                <SubTagBackground style={{width: subTag1Width+(32+wp('4.5%'))}}>
+                <SubTagBackground style={{width: subTag1Width+(27+wp('4.5%'))}}>
                 <TouchableWithoutFeedback onPress={() => modifyTag("subTag1")}>
                 <SubTagNameContainer>
                 <SubTagText>{"#" + inputSubTag1}</SubTagText>
@@ -800,7 +799,7 @@ const TagSearchScreen = ({navigation, route}: Props) => {
                 </TagRemoveContainer>
                 </TouchableWithoutFeedback>
                 </SubTagBackground>
-                <SubTagBackground style={{width: subTag2Width+(32+wp('4.5%'))}}>
+                <SubTagBackground style={{width: subTag2Width+(27+wp('4.5%'))}}>
                 <TouchableWithoutFeedback onPress={() => modifyTag("subTag2")}>
                 <SubTagNameContainer>
                 <SubTagText>{"#" + inputSubTag2}</SubTagText>
@@ -819,11 +818,11 @@ const TagSearchScreen = ({navigation, route}: Props) => {
                 <InputedTagColumnContainer>
                 <InputedTagRowContainer>
                 <TouchableWithoutFeedback onPress={() => modifyTag("mainTag")}> 
-                <MainTagBackground>
+                <MainTagBackground  style={{width: mainTagWidth+30}}>
                 <MainTagText>{"#" + inputMainTag}</MainTagText>
                 </MainTagBackground>
                 </TouchableWithoutFeedback>
-                <SubTagBackground style={{width: subTag1Width+(32+wp('4.5%'))}}>
+                <SubTagBackground style={{width: subTag1Width+(27+wp('4.5%'))}}>
                 <TouchableWithoutFeedback onPress={() => modifyTag("subTag1")}>
                 <SubTagNameContainer>
                 <SubTagText>{"#" + inputSubTag1}</SubTagText>
@@ -837,7 +836,7 @@ const TagSearchScreen = ({navigation, route}: Props) => {
                 </TouchableWithoutFeedback>
                 </SubTagBackground>
                 </InputedTagRowContainer>
-                <SubTagBackground style={{width: subTag2Width+(32+wp('4.5%'))}}>
+                <SubTagBackground style={{width: subTag2Width+(27+wp('4.5%'))}}>
                 <TouchableWithoutFeedback onPress={() => modifyTag("subTag2")}>
                 <SubTagNameContainer>
                 <SubTagText>{"#" + inputSubTag2}</SubTagText>

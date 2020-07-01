@@ -39,7 +39,7 @@ position: absolute;
 width: ${wp('100%')};
 height: ${hp('100%')};
 background-color: #000000;
-opacity: 0.2;
+opacity: 0.25;
 `;
 
 const HeaderLeftContainer = Styled.View`
@@ -108,21 +108,6 @@ flex-shrink: 1;
 margin-right: 5px;
 `;
 
-const TagAutoCompleteContainer = Styled.View`
- width: ${wp('100%')};
-`;
-
-const TAG_AUTO_COMPLETE_DATA = [
-    {
-        name:'리뷰테스트',
-        reviewNum: '3'
-    },
-    {
-        name:'리뷰테스트2',
-        reviewNum: '333'
-    }
-]
-
 
 const TagListContainer = Styled.View`
  flex-direction: row;
@@ -168,6 +153,7 @@ const RatingContainer = Styled.View`
 
 const AdditionInfoContainer = Styled.View`
  padding : 10px 15px 10px 15px;
+ height: ${hp('10%')};
 `;
 
 const ContentContainer = Styled.View`
@@ -177,9 +163,19 @@ const ContentContainer = Styled.View`
 `;
 
 const MetaInfoContainer = Styled.View`
+ width: ${wp('100%')};
  margin-top: 12px;
  flex-direction: row;
  align-items: center;
+`;
+
+const AdditionInfoContainerCover = Styled.View`
+position: absolute;
+width: ${wp('100%')};
+height: ${hp('10%')};
+flex: 1;
+background-color: #000000;
+opacity: 0.25;
 `;
 
 const InputedRatingContainer = Styled.View`
@@ -306,6 +302,8 @@ const BottomMenuAlbumIcon = Styled.Image`
 `;
 
 const AddDescripContainer = Styled.View`
+ border-top-width: 0.2px;
+ border-color: #eeeeee;
  padding: 10px 15px 100px 15px;
 `;
 
@@ -335,6 +333,15 @@ border-top-width: 0.2px;
 border-color: #eeeeee;
 flex-direction: row;
 justify-content: space-between;
+`;
+
+const ParagraphContainer = Styled.View`
+`;
+
+
+const ParagraphBottomBorder = Styled.View`
+ border-bottom-width: 0.3px;
+ border-color: #eeeeee;
 `;
 
 const ScrollEnabledContainer = Styled.View`
@@ -510,6 +517,16 @@ const DisabledFinishDescripText = Styled.Text`
 const AbledFinishDescripText = Styled.Text`
 color: #3384FF;
  font-size: 17px;
+`;
+
+const CancleModifyDescripText = Styled.Text`
+ color: #707070;
+ font-size: 17px;
+`;
+
+const CancleModifyDescripContainer = Styled.View`
+ justify-content: center;
+ align-items: center;
 `;
 
 interface Props {
@@ -936,32 +953,67 @@ const addExpanse = () => {
 }
 
 const finishModifyParagraph = () => {
-    console.log("finishModifyParagraph inputingDescripModal", descripModalInputText);
+
+    if(descripModalInputText !== null)
+    {
+        var spaceRemovedText = descripModalInputText.replace(/ /g,"")
     var tmpParagraphData = paragraphData;
 
-    if(modifingDescripIndex !== -1) {
+    if(spaceRemovedText !== "") {
+        if(modifingDescripIndex !== -1) {
         console.log("finishModifyParagraoh index", modifingDescripIndex);
-        setModifingDescripIndex(-1);
         tmpParagraphData[modifingDescripIndex].description = descripModalInputText;
         setParagraphData(tmpParagraphData);
-
-    } else {
+        setModifingDescripIndex(-1);
+        } else {
         var newDescripPara = {
             index: paragraphData.length,
             type: "description",
             description: descripModalInputText
-        }
-        tmpParagraphData.push(newDescripPara);
-        setParagraphData(tmpParagraphData);
-    }
+            }
+            tmpParagraphData.push(newDescripPara);
+            setParagraphData(tmpParagraphData);
+            }
         setVisibleDescripModal(false);
         setDescripModalInputText(null);
+    } else {
+        setVisibleDescripModal(false);
+        setDescripModalInputText(null);    
+    }
+    } else {
+        setVisibleDescripModal(false);
+        setDescripModalInputText(null);
+    }
+}
+
+const removeDescripParagraph = () => {
+    if(modifingDescripIndex !== -1) {
+        var tmpParagraphData = paragraphData;
+        tmpParagraphData.splice(modifingDescripIndex, 1);
+        setParagraphData(tmpParagraphData);
+    setVisibleDescripModal(false);
+    setDescripModalInputText(null);
+    setModifingDescripIndex(-1)
+    } else {
+        setDescripModalInputText(null);
+        setVisibleDescripModal(false);
+    }
+
+}
+
+const cancleModifyDescrip = () => {
+    setDescripModalInputText(null);
+    setVisibleDescripModal(false);
+    setModifingDescripIndex(-1);
 }
 
 
 const renderDraggableItem = ({item, index, drag, isActive}) => {
     if(item.type === 'description') {
+        console.log("renderDraggableItem index", index);
+        console.log("renderDraggableItem paragraphData.length", paragraphData.length-1);
         return (
+            <ParagraphContainer>
             <DescripParagraphContainer style={isActive && styles.shadow}>
                 <TouchableWithoutFeedback onPress={() => clickParagraphContent(item)}>
                 <ParagraphContentContainer>
@@ -975,6 +1027,7 @@ const renderDraggableItem = ({item, index, drag, isActive}) => {
                     </ParagraphIconContainer>
                 </TouchableWithoutFeedback>
             </DescripParagraphContainer>
+            </ParagraphContainer>
         )
     }
 }
@@ -1015,6 +1068,10 @@ const renderAddNewDescripInput = () => {
                     </FinishContainer>
                 </HeaderRightContainer>
             </HeaderBar>
+            {visibleDescripModal && (
+<HeaderBarCover>     
+</HeaderBarCover>
+            )}
             <BodyContainer>
                 <AdditionInfoContainer
                 onLayout={(event) => {
@@ -1116,6 +1173,10 @@ const renderAddNewDescripInput = () => {
                     </MetaInfoContainer>
                 )}
                 </AdditionInfoContainer>
+                {visibleDescripModal && (
+                <AdditionInfoContainerCover>
+                </AdditionInfoContainerCover>
+                )}
                 {mainTag && !mainTagProcess && !visibleDescripModal && (
                     <KeyboardAwareScrollView
                     scrollEnabled={enableScrollViewScroll}
@@ -1144,6 +1205,7 @@ const renderAddNewDescripInput = () => {
                 {visibleDescripModal && (
                 <DescripModalContainer>
                     <DescripInput
+                    multiline={true}
                     autoFocus={true}
                     onChangeText={(text: string) => onChangeDescripModalInput(text)}
                     autoCapitalize={false}
@@ -1219,22 +1281,32 @@ const renderAddNewDescripInput = () => {
                 <DescripModalBottomBarContainer>
                     <AboveKeyboard>
                         <DescripModalBottomBar>
+                            <View style={{flexDirection: "row"}}>
+                                {/*
+                            <TouchableWithoutFeedback onPress={() => cancleModifyDescrip()}>
+                                <CancleModifyDescripContainer>
+                                    <CancleModifyDescripText>취소</CancleModifyDescripText>
+                                </CancleModifyDescripContainer>
+                            </TouchableWithoutFeedback>
+                                */}
+                            <TouchableWithoutFeedback onPress={() => removeDescripParagraph()}>
                         <RemoveDescripContainer>
                             <RemoveDescripIcon
                             source={require('~/Assets/Images/ic_removeDescrip.png')}/>   
                         </RemoveDescripContainer>
-                             {descripModalInputText !== null && (
+                        </TouchableWithoutFeedback>
+                        </View>
                         <TouchableWithoutFeedback onPress={() => finishModifyParagraph()}>
                         <FinishDescripContainer>
                         <AbledFinishDescripText>완료</AbledFinishDescripText>
                         </FinishDescripContainer>
                         </TouchableWithoutFeedback>
-                            )}
-                            {descripModalInputText === null && (
+                            
+                            {/*descripModalInputText === null && (
                                 <FinishDescripContainer>
                                 <DisabledFinishDescripText>완료</DisabledFinishDescripText>
                                 </FinishDescripContainer>
-                            )}
+                            )*/}
                         </DescripModalBottomBar>
                     </AboveKeyboard>
                 </DescripModalBottomBarContainer>

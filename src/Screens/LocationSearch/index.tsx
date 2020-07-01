@@ -289,7 +289,7 @@ const LocationSearch = ({navigation}) => {
                 </TouchableWithoutFeedback>
                 <HeaderTitle>위치</HeaderTitle>
                 <HeaderRightContainer>
-                        <FinishText>완료</FinishText>
+                        <FinishText>확인</FinishText>
                 </HeaderRightContainer>
             </HeaderBar>
             <SearchContainer>

@@ -8,6 +8,7 @@ import {Text, ScrollView, View, FlatList, TouchableWithoutFeedback, Alert, Style
 import DraggableFlatList from 'react-native-draggable-flatlist';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import AboveKeyboard from 'react-native-above-keyboard';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 // Local Components
 import SlidingUpPanel from '~/Components/Presentational/UploadScreen/TagSearchSlidingUp';
@@ -112,10 +113,13 @@ margin-right: 5px;
 
 const TagListContainer = Styled.View`
  flex-direction: row;
+ 
+ padding : 10px 15px 0px 15px;
 `;
 
 const MainTagProcessContainer = Styled.View`
-margin-top: 15px;
+margin-top: 5px;
+padding: 0px 15px 0px 15px;
 `;
 
 const RatingInductionText = Styled.Text`
@@ -153,27 +157,43 @@ const RatingContainer = Styled.View`
 `;
 
 const AdditionInfoContainer = Styled.View`
- padding : 10px 15px 10px 15px;
- height: ${hp('10%')};
+`;
+
+const AdditionInfoBottomBorder = Styled.View`
+ width: ${wp('100%')};
+ height: 0.8px;
+ border-color: #f1f1f1;
 `;
 
 const ContentContainer = Styled.View`
- margin-top: 15px;
  width:${wp('100%')};
  padding-bottom: 10px;
 `;
 
 const MetaInfoContainer = Styled.View`
  width: ${wp('100%')};
- margin-top: 12px;
- flex-direction: row;
- align-items: center;
+ margin-top: 7px;
+ padding: 0px 15px 10px 15px;
+ flex-direction: column;
+ border-bottom-width: 0.8px;
+ border-color: #f1f1f1;
 `;
+
+const RatingLocationExpanseContainer = Styled.View`
+width:${wp('92%')};
+flex-direction: row;
+`;
+
+const ConsumptionDateContainer = Styled.View`
+padding-top: 10px;
+padding-bottom: 0px;
+`;
+
 
 const AdditionInfoContainerCover = Styled.View`
 position: absolute;
 width: ${wp('100%')};
-height: ${hp('10%')};
+height: ${hp('13%')};
 flex: 1;
 background-color: #000000;
 opacity: 0.25;
@@ -181,7 +201,6 @@ opacity: 0.25;
 
 const InputedRatingContainer = Styled.View`
  flex-direction: row;
- align-items: center;
  justify-content: center;
 `;
 
@@ -192,13 +211,28 @@ const InputedRatingText = Styled.Text`
  margin-top: 2px;
 `;
 
+const RatingInner = Styled.View`
+ flex-direction: row;
+ align-items: center;
+`;
+
+const LocationInner = Styled.View`
+flex-direction: row;
+align-items: center;
+`;
+
+const ExpanseInner = Styled.View`
+flex-direction: row;
+align-items: center;
+padding-right: 20px;
+`;
+
 const InputedRatingImage = Styled.Text`
 `;
 
 const InputedLocationContainer = Styled.View`
  margin-left: 15px;
  flex-direction: row;
- align-items: center;
 `;
 
 const InputedLocationIcon = Styled.Image`
@@ -215,7 +249,7 @@ font-size: ${wp('4%')};
 const InputedExpanseContainer = Styled.View`
  margin-left: 15px;
  flex-direction: row;
- align-items: center;
+ flex-shrink: 1;
 `;
 
 const InputedExpanseIcon = Styled.Image`
@@ -227,6 +261,7 @@ const InputedExpanseText = Styled.Text`
 font-size: ${wp('4%')};
  font-weight: 600;
  color: #8E8E8E;
+ flex-shrink: 1;
 `;
 
 const ContentPlaceholderText = Styled.Text`
@@ -303,9 +338,8 @@ const BottomMenuAlbumIcon = Styled.Image`
 `;
 
 const AddDescripContainer = Styled.View`
- border-top-width: 0.2px;
  border-color: #eeeeee;
- padding: 10px 15px 100px 15px;
+ padding: 10px 15px 150px 15px;
 `;
 
 const NewDescripInput = Styled.TextInput`
@@ -330,8 +364,6 @@ const BottomMenuIconContainer = Styled.View`
 
 const DescripParagraphContainer = Styled.View`
 width: ${wp('100%')};
-border-top-width: 0.2px;
-border-color: #eeeeee;
 flex-direction: row;
 justify-content: space-between;
 `;
@@ -342,6 +374,9 @@ justify-content: space-between;
 `;
 
 const ParagraphContainer = Styled.View`
+border-bottom-width: 0.2px;
+border-top-width: 0.2px;
+border-color: #eeeeee;
 `;
 
 
@@ -420,7 +455,6 @@ const ExpanseInput = Styled.TextInput`
  height: ${hp('5%')};
  background-color: #ffffff;
  border-radius: 5px;
- color: #ffffff;
  font-size: 24px;
  font-weight: 600;
 `;
@@ -535,6 +569,65 @@ const CancleModifyDescripContainer = Styled.View`
  align-items: center;
 `;
 
+const ConsumptionDatePickerContainer = Styled.View`
+ width: ${wp('100%')};
+ position: absolute;
+ bottom: 0;
+`;
+
+const ConsumptionDatePickerHeaderBar = Styled.View`
+width: ${wp('100%')};
+height: ${hp('5.3%')};
+background-color: #FAFAFA;
+flex-direction: row;
+justify-content: space-between;
+`;
+
+const DatePickerHeaderBarRightContainer = Styled.View`
+ flex-direction: row;
+`;
+
+
+const FinishDatePickerText = Styled.Text`
+color: #3384FF;
+ font-size: 17px;
+`;
+
+const FinishDatePickerContainer = Styled.View`
+justify-content: center;
+align-items: center;
+padding-right: 12px;
+`;
+
+const RemoveDatePickerContainer = Styled.View`
+ justify-content: center;
+ align-items: center;
+ margin-right: 10px;
+`;
+
+const CancleDatePickerContainer = Styled.View`
+justify-content: center;
+align-items: center;
+padding-left: 12px;
+`;
+
+
+const CancleDatePickerText = Styled.Text`
+font-size: 17px;
+color: #cccccc;
+`;
+
+const RemoveDatePickerText = Styled.Text`
+font-size: 17px;
+color: #E90000;
+`;
+
+const ConsumptionDateText = Styled.Text`
+font-size: ${wp('3.9%')};
+ color: #c4c4c4;
+`;
+
+
 interface Props {
     navigation: any,
     route: any,
@@ -577,9 +670,14 @@ const NewUploadScreen = ({navigation, route}: Props) => {
 
     // toggle input expanse
     const [visibleExpanseInput, setVisibleExpanseInput] = useState<boolean>(false);
-    const [inputingExpanseText, setInputingExpanseText] = useState<number>();
+    const [inputingExpanseText, setInputingExpanseText] = useState<string>();
     const [moneyText, setMoneyText] = useState();
     const [completePrice, setCompletePrice] = useState();
+
+    // toggle Consumption date picker
+    const [visibleConsumptionDatePicker, setVisibleConsumptionDatePicker] = useState<boolean>(false);
+    const [consumptionDate, setConsumptionDate] = useState(new Date(1598051730000));
+    const [consumptionDateStr, setConsumptionDateStr] = useState<string>();
     
     // Paragraph 관련 state
     const [paragraphData, setParagraphData] = useState<Array<object>>([]);
@@ -597,8 +695,17 @@ const NewUploadScreen = ({navigation, route}: Props) => {
     const draggableFlatListRef = useRef(null);
     const expanseInput = useRef(null);
 
+    const [AdditionInfoContainerHeight, setAdditionInfoContainerHeight] = useState<number>();
+
      var focusingNewDescripInput = false;
      var inputingNewDescripText = "";
+
+
+     useEffect(() => {
+         if(route.params?.removeLocation) {
+             setLocation(null)
+         }
+     }, [route.params?.removeLocation])
 
 
      useEffect(() => {
@@ -704,7 +811,6 @@ const NewUploadScreen = ({navigation, route}: Props) => {
     useEffect(() => {
         Keyboard.addListener('keyboardDidShow', onKeyboardDidShow);
         Keyboard.addListener('keyboardDidHide', onKeyboardDidHide);
-
         return ():void => {
             Keyboard.removeListener("keyboardDidShow", onKeyboardDidShow);
             Keyboard.removeListener("keyboardDidHide", onKeyboardDidHide);
@@ -940,13 +1046,37 @@ const onChangeExpanseInput = (text: string) => {
     setMoneyText(money);
     setInputingExpanseText(text);
     }
-    
+}
 
+const onChangeConsumptionDatePicker = (event, date) => {
+    console.log("comsumption date picker date", date)
+    setConsumptionDate(date);
 }
 
 const changeParagraphOrder = (data: any) => {
     console.log("changed paragraph", data);
     setParagraphData(data);
+}
+
+const addConsumptionDate = () => {
+    var tmpDate = convertDateFormat(consumptionDate)
+    console.log('tmpDate', tmpDate);
+    setConsumptionDateStr(tmpDate);
+    setVisibleConsumptionDatePicker(false)
+    setVisibleBottomMenuBar(true);
+}
+
+const convertDateFormat = (date) => {
+    var tmpDate = new Date(date),
+    month = '' + (tmpDate.getMonth() + 1),
+    day = '' + (tmpDate.getDate()-1),
+    year = tmpDate.getFullYear();
+
+    if(month.length < 2) month = '0' + month;
+    if(day.length < 2) day = '0' + day;
+
+    return [year, month, day].join('. ');
+
 }
 
 const clickParagraphContent = (item) => {
@@ -972,17 +1102,29 @@ const moveGallery = () => {
 }
 
 const moveLocationSearch = () => {
-    navigation.navigate("LocationSearch")
+    navigation.navigate("LocationSearch", {
+        inputedLocation: location,
+    })
 }
 
 const moveProductUrlSearch = () => {
     navigation.navigate("ProductUrlSearchScreen")
 }
 
-const toggleInputExpanse = (bool: boolean) => {
+const toggleInputExpanse = () => {
     console.log("toggleInputExpanse")
+    console.log("inputingExpanseInput", inputingExpanseText)
+    console.log("typeof", typeof(inputingExpanseText))
     setVisibleExpanseInput(!visibleExpanseInput)
     setVisibleBottomMenuBar(false);
+}
+
+const toggleConsumptionDatePicker = () => {
+    console.log("toggleConsumptionDatePicker")
+    setVisibleConsumptionDatePicker(!visibleConsumptionDatePicker);
+    setVisibleBottomMenuBar(false);
+    setVisibleExpanseInput(false);
+    setVisibleDescripModal(false);
 }
 
 const touchBackground = () => {
@@ -995,8 +1137,8 @@ const touchBackground = () => {
 
 const addExpanse = () => {
     setCompletePrice(moneyText);
-    setInputingExpanseText(null);
-    setMoneyText(null);
+    //setInputingExpanseText(null);
+    console.log("inputingExpanseText", inputingExpanseText)
     expanseInput.current.blur();
 }
 
@@ -1059,6 +1201,13 @@ const modifyRating = () => {
     setMainTagProcess(true);
 }
 
+const removeConsumptionDate = () => {
+    setConsumptionDateStr(null);
+    setVisibleConsumptionDatePicker(false);
+    setVisibleBottomMenuBar(true)
+}
+
+
 
 const renderDraggableItem = ({item, index, drag, isActive}) => {
     if(item.type === 'description') {
@@ -1066,7 +1215,7 @@ const renderDraggableItem = ({item, index, drag, isActive}) => {
         console.log("renderDraggableItem paragraphData.length", paragraphData.length-1);
         return (
             <ParagraphContainer>
-            <DescripParagraphContainer style={isActive && styles.shadow}>
+            <DescripParagraphContainer>
                 <TouchableWithoutFeedback onPress={() => clickParagraphContent(item)}>
                 <ParagraphContentContainer>
                     <DescripParaText>{item.description}</DescripParaText>
@@ -1225,8 +1374,10 @@ const renderAddNewDescripInput = () => {
                 )} 
                 {mainTagInserted && !mainTagProcess && (
                     <MetaInfoContainer>
+                    <RatingLocationExpanseContainer>
                     <TouchableWithoutFeedback onPress={() => modifyRating()}>
                     <InputedRatingContainer>
+                    <RatingInner>
                     <InputedRatingText>{rating+"점"}</InputedRatingText>
                       <Rating
                       style={{marginLeft: 5}}
@@ -1236,28 +1387,41 @@ const renderAddNewDescripInput = () => {
                             startingValue={rating}
                             readonly={true}
                             />
+                        </RatingInner>
                     </InputedRatingContainer>
                     </TouchableWithoutFeedback>
                     <TouchableWithoutFeedback onPress={() => moveLocationSearch()}>
                     <InputedLocationContainer>
+                    <LocationInner>
                     <InputedLocationIcon
                     source={require('~/Assets/Images/ic_location_outline.png')}/>
                     <InputedLocationText>
                     {location || "위치"}</InputedLocationText>
+                    </LocationInner>
                     </InputedLocationContainer>
                     </TouchableWithoutFeedback>
                     <TouchableWithoutFeedback onPress={() => toggleInputExpanse()}>
                     <InputedExpanseContainer>
+                    <ExpanseInner>
                     <InputedExpanseIcon
                     source={require('~/Assets/Images/ic_expanse_outline.png')}/>
                     <InputedExpanseText>{completePrice ? completePrice + "원" : "소비금액"}</InputedExpanseText>
+                    </ExpanseInner>
                     </InputedExpanseContainer>
                     </TouchableWithoutFeedback>
+                    </RatingLocationExpanseContainer>
+                    {consumptionDateStr && (
+                <TouchableWithoutFeedback onPress={() => toggleConsumptionDatePicker()}>
+                    <ConsumptionDateContainer>
+                    <ConsumptionDateText>{"소비날짜 " + consumptionDateStr}</ConsumptionDateText>
+                </ConsumptionDateContainer>
+                </TouchableWithoutFeedback>
+                    )}
                     </MetaInfoContainer>
                 )}
                 </AdditionInfoContainer>
                 {visibleDescripModal && (
-                <AdditionInfoContainerCover>
+                <AdditionInfoContainerCover style={{height: MetaContainerHeight}}>
                 </AdditionInfoContainerCover>
                 )}
                 {mainTag && !mainTagProcess && !visibleDescripModal && (
@@ -1314,16 +1478,18 @@ const renderAddNewDescripInput = () => {
                     source={require('~/Assets/Images/ic_bottomMenu_location.png')}/>
                     </BottomMenuIconContainer>
                     </TouchableWithoutFeedback>
-                    <TouchableWithoutFeedback onPress={() => toggleInputExpanse(true)}>
+                    <TouchableWithoutFeedback onPress={() => toggleInputExpanse()}>
                     <BottomMenuIconContainer>
                     <BottomMenuExpanseIcon
                     source={require('~/Assets/Images/ic_bottomMenu_expanse.png')}/>
                     </BottomMenuIconContainer>
                     </TouchableWithoutFeedback>
+                    <TouchableWithoutFeedback onPress={() => toggleConsumptionDatePicker()}>
                     <BottomMenuIconContainer>
                     <BottomMenuCalendarIcon
                     source={require('~/Assets/Images/ic_bottomMenu_calendar.png')}/>
                     </BottomMenuIconContainer>
+                    </TouchableWithoutFeedback>
                     <TouchableWithoutFeedback onPress={() => moveProductUrlSearch()}>
                     <BottomMenuIconContainer>
                     <BottomMenuUrlIcon
@@ -1344,8 +1510,8 @@ const renderAddNewDescripInput = () => {
                     ref={expanseInput}
                     style={{paddingLeft:20}}
                     keyboardType={"number-pad"}
-                    placeholder={"소비금액(원)"}
-                    caretHidden={true}
+                    placeholder={ !moneyText ? "소비금액(원)" : ""}
+                    caretHidden={false}
                     placeholderTextColor="#CCCCCC"
                     onChangeText={(text:string) => onChangeExpanseInput(text)}
                     value={inputingExpanseText}
@@ -1395,6 +1561,37 @@ const renderAddNewDescripInput = () => {
                         </DescripModalBottomBar>
                     </AboveKeyboard>
                 </DescripModalBottomBarContainer>
+            )}
+            {visibleConsumptionDatePicker && (
+                <ConsumptionDatePickerContainer>
+                <ConsumptionDatePickerHeaderBar>
+                    <CancleDatePickerContainer>
+                    <CancleDatePickerText>취소</CancleDatePickerText>
+                    </CancleDatePickerContainer>
+                    <DatePickerHeaderBarRightContainer>
+                    <TouchableWithoutFeedback onPress={() => removeConsumptionDate()}>
+                    <RemoveDatePickerContainer>
+                        <RemoveDatePickerText>삭제</RemoveDatePickerText>
+                    </RemoveDatePickerContainer>
+                    </TouchableWithoutFeedback>
+                    <TouchableWithoutFeedback onPress={() => addConsumptionDate()}>
+                    <FinishDatePickerContainer>
+                    <FinishDatePickerText>등록</FinishDatePickerText>
+                    </FinishDatePickerContainer>
+                    </TouchableWithoutFeedback>
+                    </DatePickerHeaderBarRightContainer>
+                </ConsumptionDatePickerHeaderBar>
+                <DateTimePicker
+                style={{flex:1}}
+                testID="dateTimePicker"
+                value={consumptionDate}
+                onChange={(event,date) => onChangeConsumptionDatePicker(event,date)}
+                mode={'date'}
+                display="default"
+                is24Hour={true}
+                maximumDate={new Date(2020, 12, 31)}
+              />
+                </ConsumptionDatePickerContainer>
             )}
             </Container>
     )

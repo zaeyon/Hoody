@@ -13,6 +13,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import { BaseRouter } from '@react-navigation/native';
 
 const Container = Styled.SafeAreaView`
   flex: 1;
@@ -115,7 +116,7 @@ const SearchText = Styled.Text`
 
 const MyLocationContainer = Styled.View`
 width: ${wp('100%')};
- padding: 17px 15px 17px 15px;
+ padding: 17px 10px 3px 14px;
  flex-direction: row;
  align-items: center;
 `;
@@ -135,10 +136,39 @@ const CurrentLocationText = Styled.Text`
 `;
 
 const MyLocationText = Styled.Text`
- font-size: 17px;
+ font-size: 16px;
  color: #3384FF;
  margin-left: 3px;
- 
+`;
+
+const InputedLocationContainer = Styled.View`
+padding: 3px 15px 10px 15px;
+ flex-direction: row;
+ justify-content: space-between;
+ align-items: center;
+`;
+
+const InputedLocationIcon = Styled.Image`
+width: ${wp('5%')};
+height: ${wp('5%')};
+`;
+
+const InputedLocationLeftContainer = Styled.View`
+ flex-direction:row;
+`;
+
+const InputedLocationRightContainer = Styled.View`
+`;
+
+const RemoveInputedLocationText = Styled.Text`
+font-size: 16px;
+color: #E90000;
+`;
+
+
+const InputedLocationText = Styled.Text`
+ font-size: 16px;
+ color: #707070;
 `;
 
 const UseSavedButton = Styled.Text`
@@ -180,8 +210,8 @@ const SearchButton = Styled.TouchableOpacity`
 
 
 const SearchIcon = Styled.Image`
- width: ${wp('6.4%')};
- height: ${wp('6.4%')};
+ width: ${wp('6.0%')};
+ height: ${wp('6.0%')};
 `;
 
 const LocationItemCon = Styled.View`
@@ -191,24 +221,20 @@ const LocationItemCon = Styled.View`
 `;
 
 const MyLocationIcon = Styled.Image`
- width: ${wp('6.4%')};
- height: ${wp('6.4%')};
+ width: ${wp('5%')};
+ height: ${wp('5%')};
 `;
 
-const LocationItem = ({location, address}) => {
-  return (
-    <>
-      <View style={styles.item}>
-        <Text style={styles.location}>{location}</Text>
-        <Text style={styles.address}>{address}</Text>
-      </View>
-    </>
-  );
-};
+interface Props {
+  navigation: any,
+  route: any,
+}
 
-const LocationSearch = ({navigation}) => {
+
+const LocationSearch = ({navigation, route}: Props) => {
   const [location, setLocation] = useState();
   const [searchResult_arr, setSearchResult_arr] = useState([]);
+  const [registeredLocation, setRegisteredLocation] = useState<string>();
   const API_KEY = 'd824d5c645bfeafcb06f24db24be7238';
 
   useEffect(() => {
@@ -224,6 +250,16 @@ const LocationSearch = ({navigation}) => {
 
     return () => backHandler.remove();
   }, []);
+
+  useEffect(() => {
+    if(route.params?.inputedLocation) {
+      setRegisteredLocation(route.params?.inputedLocation)
+      setLocation(route.params.inputedLocation)
+    }
+    
+  }, [route.params?.inputedLocation])
+
+
   
   const SearchLocation = (location) => {
     fetch(
@@ -268,6 +304,7 @@ const LocationSearch = ({navigation}) => {
 
   const changeSearchInput = (text: string) => {
     SearchLocation(text)
+    setLocation(text)
   }
 
   const clickLocationItem = (item: object) => {
@@ -277,6 +314,24 @@ const LocationSearch = ({navigation}) => {
       latitude: item.y,
     })
   }
+
+  const removeRegisteredLocation = () => {
+    navigation.navigate('UploadScreen', {
+      removeLocation: true
+    })
+  }
+
+  
+const LocationItem = ({location, address}) => {
+  return (
+    <>
+      <View style={styles.item}>
+        <Text style={styles.location}>{location}</Text>
+        <Text style={styles.address}>{address}</Text>
+      </View>
+    </>
+  );
+};
 
 
   return (
@@ -298,6 +353,7 @@ const LocationSearch = ({navigation}) => {
                 placeholder="위치"
                 onChangeText={(text: string) => changeSearchInput(text)}
                 placeholderTextColor="#979797"
+                value={location}
               />
               <SearchButton onPress={() => SearchLocation(location)}>
                 <SearchIcon
@@ -313,6 +369,21 @@ const LocationSearch = ({navigation}) => {
                   내 위치 : 을지로 3가역 사랑방 칼국수
                 </MyLocationText>
             </MyLocationContainer>
+            {registeredLocation && (
+                          <InputedLocationContainer>
+                          <InputedLocationLeftContainer>
+                          <InputedLocationIcon
+                          source={require('~/Assets/Images/ic_location.png')}/>
+                          <InputedLocationText>{"등록된 위치 : " + registeredLocation}</InputedLocationText>
+                          </InputedLocationLeftContainer>
+                          <TouchableWithoutFeedback onPress={() => removeRegisteredLocation()}>
+                          <InputedLocationRightContainer>
+                          <RemoveInputedLocationText>삭제</RemoveInputedLocationText>
+                          </InputedLocationRightContainer>
+                          </TouchableWithoutFeedback>
+                          
+                          </InputedLocationContainer>
+            )}
             <SearchResultContainer>
             <LocationListContainer>
               <FlatList
@@ -342,17 +413,18 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   item: {
-    width: wp('95%'),
-    paddingTop: 10,
-    paddingBottom: 10,
+    width: wp('100%'),
+    paddingLeft:14,
+    paddingTop: 12,
+    paddingBottom: 12,
     borderBottomWidth: 0.3,
     borderColor: '#CCCCCC',
   },
   location: {
-    fontSize: 13,
+    fontSize: 15,
   },
   address: {
-    fontSize: 11,
+    fontSize: 14,
     color: '#707070',
   },
 });

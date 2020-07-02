@@ -375,7 +375,7 @@ justify-content: center;
 align-items: center;
 padding-top: 12px;
 padding-bottom: 12px;
-padding-right: 10px;
+padding-right: 5px;
 `;
 
 
@@ -558,6 +558,7 @@ const NewUploadScreen = ({navigation, route}: Props) => {
     const [keyboardHeight, setKeyboardHeight] = useState<number>(0);
     const [MetaContainerHeight, setMetaContainerHeight] = useState<number>(0);
     const [visibleBottomMenuBar, setVisibleBottomMenuBar] = useState<boolean>(true);
+    const [registerProductBool, setRegisterProductBool] = useState<boolean>(false);
 
    
     //후기 정보 관련 state
@@ -588,7 +589,7 @@ const NewUploadScreen = ({navigation, route}: Props) => {
 
     // Inputing Descript Paragraph Modal
     const [visibleDescripModal, setVisibleDescripModal] = useState<boolean>(false);
-    const [descripModalInputText, setDescripModalInputText] = useState<boolean>(false);
+    const [descripModalInputText, setDescripModalInputText] = useState<string>(null);
 
     // useRef
     const newDescripInput = useRef(null);
@@ -614,8 +615,9 @@ const NewUploadScreen = ({navigation, route}: Props) => {
                 shopName: route.params.product.shopName,  
                 }
 
+                setRegisterProductBool(!registerProductBool);
                 tmpParagraphData.push(newProductPara);
-                setParagraphData(newProductPara);
+                setParagraphData(tmpParagraphData);
            }
      }, [route.params?.product])
  
@@ -644,12 +646,20 @@ const NewUploadScreen = ({navigation, route}: Props) => {
     }, [route.params?.selectTagName])
 
     useEffect(() => {
+ console.log("입력된 태그 변경!!")
         if(route.params?.mainTag && !route.params?.subTag1 && !route.params?.subTag2) {
             if(route.params?.mainTag !== mainTag) {
+                console.log("메인태그만존재")
                 setMainTagProcess(true);
                 setIncompleteMainTag(route.params.mainTag)
                 setMainTagWidth(route.params.mainTagWidth);
                 setAllTagText(route.params.mainTag);
+                setSubTag1(undefined)
+                setSubTag2(undefined)
+            } else {
+                console.log("메인태그 일치")
+                setSubTag1(undefined)
+                setSubTag2(undefined)
             }
         } else if(route.params?.mainTag && route.params?.subTag1 && !route.params?.subTag2) { 
 
@@ -664,6 +674,7 @@ const NewUploadScreen = ({navigation, route}: Props) => {
                 setMainTagProcess(true);
             }
             setAllTagText(route.params.mainTag + " " + route.params.subTag1);
+            setSubTag2(undefined)
         } else if(route.params?.mainTag && route.params?.subTag1 && route.params?.subTag2) {
 
             setSubTag1(route.params.subTag1)
@@ -985,7 +996,7 @@ const finishModifyParagraph = () => {
 
     if(descripModalInputText !== null)
     {
-        var spaceRemovedText = descripModalInputText.replace(/ /g,"")
+    var spaceRemovedText = descripModalInputText.replace(/ /g,"")
     var tmpParagraphData = paragraphData;
 
     if(spaceRemovedText !== "") {

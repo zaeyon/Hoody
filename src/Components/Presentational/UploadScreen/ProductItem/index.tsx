@@ -7,8 +7,8 @@ import {
 import { unstable_enableLogBox } from 'react-native';
 
 const Container = Styled.View`
-width: ${wp('87.7%')};
-height: ${wp('43.85%')};
+width: ${wp('84%')};
+height: ${wp('38%')};
 background-color: #ffffff;
 flex-direction: row;
 border-width: 1px;
@@ -33,15 +33,15 @@ flex-shrink: 1;
 
 
 const ProductImage = Styled.Image`
- width: ${wp('43.3%')};
- height: ${wp('43.3%')};
+ width: ${wp('40%')};
+ height: ${wp('37%')};
  background-color: #c3c3c3;
  border-radius: 15px;
 `;
 
 const Divider = Styled.View`
  width: 1px;
- height: ${wp('43.85%')};
+ height: ${wp('37%')};
  background-color: #EFEFEF;
 `;
 

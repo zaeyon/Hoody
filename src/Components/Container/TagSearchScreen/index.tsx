@@ -317,15 +317,21 @@ const TagSearchScreen = ({navigation, route}: Props) => {
     const [modifingTagBool, setModifingTagBool] = useState<boolean>(false);
     const [modifingTagText, setModifingTagText] = useState<string>();
 
+    const [changingInputedTag, setChangingInputedTag] = useState<boolean>(false);
+
     useEffect(() => {
-        if(route.params?.mainTag && !route.params?.subTag1 && !route.params.subTag1) {
+        setChangingInputedTag(!changingInputedTag)
+    }, [])
+
+    useEffect(() => {
+        if(route.params?.mainTag && !route.params?.subTag1 && !route.params.subTag2) {
             console.log("메인태그 존재")
             console.log("메인태그 길이", route.params.mainTagWidth);
             setInputMainTag(route.params.mainTag);
             setMainTagWidth(route.params.mainTagWidth);
             setInputingMainTag(false);
             setInputingSubTag1(true);
-        } else if(route.params?.mainTag && route.params?.subTag1 && !route.params.subTag1) {
+        } else if(route.params?.mainTag && route.params?.subTag1 && !route.params.subTag2) {
             console.log("서브태그1 존재")
             setInputMainTag(route.params.mainTag);
             setMainTagWidth(route.params.mainTagWidth);
@@ -334,7 +340,7 @@ const TagSearchScreen = ({navigation, route}: Props) => {
             setInputingMainTag(false);
             setInputingSubTag1(false);
             setInputingSubTag2(true);
-        } else if(route.params?.mainTag && route.params?.subTag1 && route.params.subTag1) {
+        } else if(route.params?.mainTag && route.params?.subTag1 && route.params.subTag2) {
             console.log("서브태그2 존재")
             setInputMainTag(route.params.mainTag);
             setMainTagWidth(route.params.mainTagWidth);
@@ -512,9 +518,12 @@ const TagSearchScreen = ({navigation, route}: Props) => {
     // 화살표함수는 현재환경을 따르게할때 유용
     const moveUpload = () => {
         if(inputMainTag && !inputSubTag1 && !inputSubTag2) {
+        console.log("!changingInputedTag", changingInputedTag)
         navigation.navigate('UploadScreen', {
             mainTag: inputMainTag,
             mainTagWidth: mainTagWidth,
+            subTag1: null,
+            subTag2: null,
         })
         } else if (inputMainTag && inputSubTag1 && !inputSubTag2) {
             navigation.navigate('UploadScreen', {
@@ -522,6 +531,7 @@ const TagSearchScreen = ({navigation, route}: Props) => {
                 mainTagWidth: mainTagWidth,
                 subTag1: inputSubTag1,
                 subTag1Width: subTag1Width,
+                subTag2: null
             })
         } else if (inputMainTag && inputSubTag1 && inputSubTag2) {
 

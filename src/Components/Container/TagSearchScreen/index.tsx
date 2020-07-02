@@ -144,6 +144,11 @@ font-weight: bold;
 flex-direction: row;
 `;
 
+const TagInputFinishText = Styled.Text`
+color: #cccccc;
+font-size: 23px;
+font-weight: bold;
+`;;
 
 const MainTagBackground = Styled.View`
 margin-top: 10px;
@@ -659,7 +664,7 @@ const TagSearchScreen = ({navigation, route}: Props) => {
             )}
             {inputMainTag && inputSubTag1 && inputSubTag2 && !inputingMainTag && !inputingSubTag1 && !inputingSubTag2 && (
                 <HashTagInputContainer style={{marginTop:5}}>
-                <SubTagText>태그를 모두 입력했습니다.</SubTagText>
+                    <TagInputFinishText>태그를 모두 입력하셨습니다.</TagInputFinishText>
                 </HashTagInputContainer>
             )}
             </TagInputContainer>

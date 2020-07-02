@@ -817,7 +817,13 @@ const NewUploadScreen = ({navigation, route}: Props) => {
     }
 
     const ratingMovling = (rating) => {
+        console.log("rating changed", rating)
+        if(rating === 0) 
+        {
+            setRating(0.5)
+        } else {
         setRating(rating);
+        }
     }
 
 
@@ -990,6 +996,8 @@ const touchBackground = () => {
 const addExpanse = () => {
     setCompletePrice(moneyText);
     setInputingExpanseText(null);
+    setMoneyText(null);
+    expanseInput.current.blur();
 }
 
 const finishModifyParagraph = () => {
@@ -1045,6 +1053,10 @@ const cancleModifyDescrip = () => {
     setDescripModalInputText(null);
     setVisibleDescripModal(false);
     setModifingDescripIndex(-1);
+}
+
+const modifyRating = () => {
+    setMainTagProcess(true);
 }
 
 
@@ -1164,14 +1176,18 @@ const renderAddNewDescripInput = () => {
                             <SubTagText>{" #" + subTag1}</SubTagText>
                         )}
                         { !subTag1 && (
-                            <SubTagText>{" #태그추가"}</SubTagText>
+                            <SubTagText style={{
+                                opacity:0.3
+                            }}>{" #태그추가"}</SubTagText>
 
                         )}
                         {subTag2 && (
                             <SubTagText>{' #' + subTag2}</SubTagText>
                         )}
                         {subTag1 && !subTag2 && (
-                            <SubTagText>{" #태그추가"}</SubTagText>
+                            <SubTagText style={{
+                                opacity:0.3
+                            }}>{" #태그추가"}</SubTagText>
 
                         )}
                         </MainTagText>
@@ -1200,7 +1216,7 @@ const renderAddNewDescripInput = () => {
                             ratingImage={ratingImage}
                             imageSize={wp('11%')}
                             fractions={2}
-                            startingValue={0}
+                            startingValue={rating || 0}
                             setRatingInMove={ratingMovling}
                             />
                             </RatingContainer>
@@ -1209,6 +1225,7 @@ const renderAddNewDescripInput = () => {
                 )} 
                 {mainTagInserted && !mainTagProcess && (
                     <MetaInfoContainer>
+                    <TouchableWithoutFeedback onPress={() => modifyRating()}>
                     <InputedRatingContainer>
                     <InputedRatingText>{rating+"점"}</InputedRatingText>
                       <Rating
@@ -1220,17 +1237,22 @@ const renderAddNewDescripInput = () => {
                             readonly={true}
                             />
                     </InputedRatingContainer>
+                    </TouchableWithoutFeedback>
+                    <TouchableWithoutFeedback onPress={() => moveLocationSearch()}>
                     <InputedLocationContainer>
                     <InputedLocationIcon
                     source={require('~/Assets/Images/ic_location_outline.png')}/>
                     <InputedLocationText>
                     {location || "위치"}</InputedLocationText>
                     </InputedLocationContainer>
+                    </TouchableWithoutFeedback>
+                    <TouchableWithoutFeedback onPress={() => toggleInputExpanse()}>
                     <InputedExpanseContainer>
                     <InputedExpanseIcon
                     source={require('~/Assets/Images/ic_expanse_outline.png')}/>
                     <InputedExpanseText>{completePrice ? completePrice + "원" : "소비금액"}</InputedExpanseText>
                     </InputedExpanseContainer>
+                    </TouchableWithoutFeedback>
                     </MetaInfoContainer>
                 )}
                 </AdditionInfoContainer>

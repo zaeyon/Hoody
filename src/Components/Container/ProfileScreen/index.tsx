@@ -23,7 +23,10 @@ import {useSelector, useDispatch} from 'react-redux';
 import allActions from '~/action';
 import KakaoLogins from '@react-native-seoul/kakao-login';
 
+import UserIntroduction from '~/Components/Presentational/ProfileScreen/UserIntroduction';
+import UserTopTabNavigator from '~/Components/Presentational/ProfileScreen/UserPostTopTabNavigator';
 import GetUserProfile from '~/Route/User/GetUserProfile';
+import UserPostTopTabNavigator from '~/Components/Presentational/ProfileScreen/UserPostTopTabNavigator';
 
 const Container = Styled.SafeAreaView`
  flex: 1;
@@ -109,8 +112,13 @@ const MyProfileReviewMapText = Styled.Text`
  font-size: 15px;
 `;
 
+interface Props {
+    navigation: any,
+    route: any,
+}
 
-function CertifiedProfile({navigation}) {
+
+function ProfileScreen({navigation, route}: Props) {
   const currentUser = useSelector((state) => state.currentUser);
   console.log("currentUser", currentUser);
   const dispatch = useDispatch();
@@ -181,12 +189,15 @@ function CertifiedProfile({navigation}) {
           </MyProfileReviewMapContainer>
         </HeaderRightContainer>
       </HeaderBar>
-
+      <UserIntroduction/>
+      <UserPostTopTabNavigator
+      navigation={navigation}
+      />
     </Container>
   );
 }
 
-export default CertifiedProfile;
+export default ProfileScreen;
 
 /*
 <PinterMapContainer>

@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useEffect, useState, useRef, createRef} from 'react';
 import Styled from 'styled-components/native';
 import {
     widthPercentageToDP as wp,
@@ -9,6 +9,7 @@ import DraggableFlatList from 'react-native-draggable-flatlist';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import AboveKeyboard from 'react-native-above-keyboard';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import ActionSheet from 'react-native-actionsheet'
 
 // Local Components
 import SlidingUpPanel from '~/Components/Presentational/UploadScreen/TagSearchSlidingUp';
@@ -18,6 +19,8 @@ import {Rating} from '~/Components/Presentational/UploadScreen/Rating';
 import ProductItem from '~/Components/Presentational/UploadScreen/ProductItem';
 
 const ratingImage = require('~/Assets/Images/ic_star4.png');
+
+const actionSheetRef = createRef();
 
 
 const Container = Styled.SafeAreaView`
@@ -369,9 +372,23 @@ justify-content: space-between;
 `;
 
 const ProductParagraphContainer = Styled.View`
+width: ${wp('100%')};
 flex-direction: row;
 justify-content: space-between;
 `;
+
+const ImageParagraphContainer = Styled.View`
+width: ${wp('100%')};
+flex-direction: row;
+justify-content: space-between;
+`;
+
+const ParagraphImage = Styled.Image`
+width: ${wp('87%')};
+height: ${wp('87%')};
+`;
+
+
 
 const ParagraphContainer = Styled.View`
 border-bottom-width: 0.2px;
@@ -627,6 +644,11 @@ font-size: ${wp('3.9%')};
  color: #c4c4c4;
 `;
 
+const bottomActionOptions = [
+    '취소',
+    <Text style={{color: 'red'}}>삭제</Text>
+]
+
 
 interface Props {
     navigation: any,
@@ -688,6 +710,7 @@ const NewUploadScreen = ({navigation, route}: Props) => {
     // Inputing Descript Paragraph Modal
     const [visibleDescripModal, setVisibleDescripModal] = useState<boolean>(false);
     const [descripModalInputText, setDescripModalInputText] = useState<string>(null);
+    const [paragraphChange, setParagraphChange] = useState<boolean>(false);
 
     // useRef
     const newDescripInput = useRef(null);
@@ -699,6 +722,29 @@ const NewUploadScreen = ({navigation, route}: Props) => {
 
      var focusingNewDescripInput = false;
      var inputingNewDescripText = "";
+     var selectingParagraphIndex : number;
+
+     useEffect(() => {
+         if(route.params?.selectedImages) {
+             console.log("route.params?.selecteddddd", route.params.selectedImages)
+             var tmpParagraphData = paragraphData;
+
+             for(var i = 0; i < route.params.selectedImages.length; i++) {
+                 const newImagePara = {
+                    index: tmpParagraphData.length,  
+                    type: 'image',
+                    uri: route.params.selectedImages[i].uri,
+                 }
+
+                 tmpParagraphData.push(newImagePara);
+             }
+
+             setTimeout(() => {
+                 setParagraphData(tmpParagraphData);
+                 setParagraphChange(!paragraphChange)
+             }, 100)
+         }
+     }, [route.params?.selectedImages])
 
 
      useEffect(() => {
@@ -1079,12 +1125,12 @@ const convertDateFormat = (date) => {
 
 }
 
-const clickParagraphContent = (item) => {
+const clickParagraphContent = (item, index) => {
     setVisibleDescripModal(true);
     console.log("clickParagraphContent item", item.description);
-    console.log("clickParagraphContent index", item.index);
+    console.log("clickParagraphContent index", index);
     setDescripModalInputText(item.description);
-    setModifingDescripIndex(item.index);
+    setModifingDescripIndex(index);
 }
 
 const onEnableScroll = (value: boolean) => {
@@ -1207,6 +1253,24 @@ const removeConsumptionDate = () => {
     setVisibleBottomMenuBar(true)
 }
 
+const showBottomActionSheet = (index) => {
+    console.log("showBottomActionSheet index", index);
+    selectingParagraphIndex = index;
+    actionSheetRef.current.show()
+}
+
+const removeParagraphIndex = (index) => {
+    if(index === 1) {
+        console.log("selectingParagraphIndex", selectingParagraphIndex);
+        var tmpParagraphData = paragraphData;
+        tmpParagraphData.splice(selectingParagraphIndex, 1);
+
+        setParagraphData(tmpParagraphData);
+        setParagraphChange(!paragraphChange)
+    }
+
+}
+
 
 
 const renderDraggableItem = ({item, index, drag, isActive}) => {
@@ -1216,7 +1280,7 @@ const renderDraggableItem = ({item, index, drag, isActive}) => {
         return (
             <ParagraphContainer>
             <DescripParagraphContainer>
-                <TouchableWithoutFeedback onPress={() => clickParagraphContent(item)}>
+                <TouchableWithoutFeedback onPress={() => clickParagraphContent(item, index)}>
                 <ParagraphContentContainer>
                     <DescripParaText>{item.description}</DescripParaText>
                 </ParagraphContentContainer>
@@ -1234,6 +1298,7 @@ const renderDraggableItem = ({item, index, drag, isActive}) => {
         return (
             <ParagraphContainer>
                 <ProductParagraphContainer>
+                    <TouchableWithoutFeedback onPress={() => showBottomActionSheet(index)}>
                     <ParagraphContentContainer>
                         <ProductItem
                         productImage={item.productImage}
@@ -1242,6 +1307,7 @@ const renderDraggableItem = ({item, index, drag, isActive}) => {
                         shopIcon={item.shopIcon}
                         shopName={item.shopName}/>
                     </ParagraphContentContainer>
+                    </TouchableWithoutFeedback>
                     <TouchableWithoutFeedback onLongPress={drag} delayLongPress={0.2}>
                     <ParagraphIconContainer>
                         <ParagraphIcon
@@ -1249,6 +1315,25 @@ const renderDraggableItem = ({item, index, drag, isActive}) => {
                     </ParagraphIconContainer>
                 </TouchableWithoutFeedback>
                 </ProductParagraphContainer>
+            </ParagraphContainer>
+        )
+    } else if(item.type === 'image') {
+        return (
+            <ParagraphContainer>
+                <ImageParagraphContainer>
+                    <TouchableWithoutFeedback onPress={() => showBottomActionSheet(index)}>
+                        <ParagraphContentContainer>
+                            <ParagraphImage
+                            source={{uri:item.uri}}/>
+                        </ParagraphContentContainer>
+                    </TouchableWithoutFeedback>
+                    <TouchableWithoutFeedback onLongPress={drag} delayLongPress={0.2}>
+                    <ParagraphIconContainer>
+                        <ParagraphIcon
+                        source={require('~/Assets/Images/ic_paragraph.png')}/>
+                    </ParagraphIconContainer>
+                </TouchableWithoutFeedback>
+                </ImageParagraphContainer>
             </ParagraphContainer>
         )
     }
@@ -1593,6 +1678,12 @@ const renderAddNewDescripInput = () => {
               />
                 </ConsumptionDatePickerContainer>
             )}
+            <ActionSheet
+            ref={actionSheetRef}
+            options={['취소', '삭제']}
+            cancelButtonIndex={0}
+            destructiveButtonIndex={1}
+            onPress={(index) => removeParagraphIndex(index)}/>
             </Container>
     )
 }

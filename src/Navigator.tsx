@@ -45,6 +45,7 @@ import TagSearchScreen from '~/Components/Container/TagSearchScreen';
 import TestTextWidth from '~/Components/Container/TestTextWidth';
 import UploadDescripInputScreen from '~/Screens/UploadDescripInputScreen';
 import ProductUrlSearchScreen from '~/Components/Container/ProductUrlSearchScreen';
+import ProfileScreen from '~/Components/Container/ProfileScreen';
 
 import getCurrentUser from '~/AsyncStorage/User';
 
@@ -275,8 +276,8 @@ function ProfileStackScreen() {
         headerTitleAlign: 'center',
       }}>
       <ProfileStack.Screen
-        name="Profile"
-        component={Profile}
+        name="ProfileScreen"
+        component={ProfileScreen}
         options={({navigation, route}) => ({
           headerTitle: (props) => <ProfileTitle {...props} />,
         })}
@@ -553,7 +554,7 @@ function BottomTab() {
       />
       <Tab.Screen 
       name="Profile" 
-      component={UploadScreen}
+      component={ProfileStackScreen}
       options={{
         tabBarIcon: ({focused}: {focused: boolean}) => (
           <Image

@@ -34,9 +34,9 @@ padding: 10px 15px 10px 15px;
  justify-content: center;
 `;
 
-const CancleText = Styled.Text`
- font-size: 17px;
- color: #cccccc;
+const MyProfileSettingButton = Styled.Image`
+ width: ${wp('8%')};
+ height: ${wp('8%')};
 `;
 
 const HeaderRightContainer = Styled.View`
@@ -46,23 +46,49 @@ padding: 10px 15px 10px 15px;
  flex-direction: row;
 `;
 
-const TempoSaveText = Styled.Text`
- font-size: 17px;
- color: #cccccc;
+const MyProfileReportContainer = Styled.View`
+ width: ${wp('24%')};
+ height: ${wp('9.6')};
+ background-color: #FAFAFA;
+ border-radius: 22px;
+ border-width: 0.6px;
+ border-color: #EFEFEF;
 `;
 
-const FinishContainer = Styled.View`
-padding: 20px 20px 15px 20px;
- align-items: center;
- justify-content: center;
- flex-direction: row;
+const MyProfileReportImage = Styled.Image`
+ width: ${wp('8%')};
+ height: ${wp('8%')};
 `;
 
-const FinishText = Styled.Text`
- font-size: 17px
+const MyProfileReportText = Styled.Text`
+ color: #505866;
  font-weight: 600;
- color: #ffffff;
+ font-size: 15px;
 `;
+
+const MyProfileReviewMapContainer = Styled.View`
+width: ${wp('24%')};
+ height: ${wp('9.6')};
+ background-color: #FAFAFA;
+ border-radius: 22px;
+ border-width: 0.6px;
+ border-color: #EFEFEF;
+`;
+
+
+const MyProfileReviewMapImage = Styled.Image`
+ width: ${wp('8%')};
+ height: ${wp('8%')};
+`;
+
+
+const MyProfileReviewMapText = Styled.Text`
+ color: #505866;
+ font-weight: 600;
+ font-size: 15px;
+`;
+
+
 
 const HeaderTitle = Styled.Text`
  font-size: 17px;

@@ -213,7 +213,6 @@ const DescriptionText = Styled.Text`
 `;
 
 const ImageParagraphContainer = Styled.View`
-
  border-top-width: 0.2px;
  border-color: #eeeeee;
  flex-direction: row;

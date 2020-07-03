@@ -248,6 +248,7 @@ const ProductUrlSearchScreen = ({navigation, route}: Props) => {
 
             )}
             {productResult !== null && (
+            <TouchableWithoutFeedback onPress={() => registerProduct()}>
             <ProductResultContainer>
             <ProductItem
             productImage={PRODUCT_TEST_DATA.productImage}
@@ -256,6 +257,7 @@ const ProductUrlSearchScreen = ({navigation, route}: Props) => {
             shopIcon={PRODUCT_TEST_DATA.shopIcon}
             shopName={PRODUCT_TEST_DATA.shopName}/>
         </ProductResultContainer>
+        </TouchableWithoutFeedback>
             )}
 
         </Container>

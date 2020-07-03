@@ -143,10 +143,14 @@ class Gallery extends Component {
         albumName: dataTitle,
       });
       console.log('22 albumName', this.state.albumName);
+      console.log("this.state.selected mount", this.state.selected);
     });
   }
 
   UNSAFE_componentWillMount() {
+    this.setState({
+      selected: []
+    })
     this.fetch();
     const backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
@@ -164,6 +168,7 @@ class Gallery extends Component {
       selected: []
     })
   }
+  /*
 
   UNSAFE_componentWillReceiveProps(nextProps) {
     this.setState({
@@ -301,6 +306,9 @@ class Gallery extends Component {
     this.setState({
       selected: [],
     })
+
+    console.log("this.state.image pressFinish", this.state.images)
+    console.log("this.state.selected", this.state.selected);
   }
 
   renderImage(item) {

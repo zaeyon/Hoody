@@ -327,7 +327,7 @@ const SearchAutoComplete = ({navigation, resultCategory,changeSearchCategory, au
         tabBarOptions={{
           indicatorStyle: {backgroundColor: '#ffffff'},
           style: {elevation: 0.5},
-          labelStyle: {fontSize: 13, },
+          labelStyle: {fontSize: 13},
         }}>
         <AutoCompleteTab.Screen 
         name="인기" 

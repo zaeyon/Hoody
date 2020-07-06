@@ -323,7 +323,7 @@ interface Props {
   mediaFiles: Array<objevt>;
 }
 
-const ProfileFeedItem = ({
+const ProfileListFeedItem = ({
   id,
   profile_image,
   nickname,
@@ -538,4 +538,4 @@ const ProfileFeedItem = ({
   );
 };
 
-export default ProfileFeedItem;
+export default ProfileListFeedItem;

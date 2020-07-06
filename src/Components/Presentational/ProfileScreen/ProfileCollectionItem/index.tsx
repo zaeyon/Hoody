@@ -4,10 +4,11 @@ import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import {TouchableWithoutFeedback} from 'react-native'
 
 const CollectionContainer = Styled.View`
- flex: 1;
  flex-direction: column;
+ align-items: center;
 `;
 
 const CollectionCoverImage = Styled.Image`
@@ -16,10 +17,15 @@ const CollectionCoverImage = Styled.Image`
  border-radius: 10px;
 `;
 
+const CollectionNameContainer = Styled.View`
+padding-top:6px;
+ width: ${wp('43.7%')};
+`;
+
 const CollectionNameText = Styled.Text`
  font-weight: 600;
  color: #333333;
- font-size: 15px;
+ font-size: 17px;
 `;
 
 interface Props {
@@ -28,14 +34,18 @@ interface Props {
     name: string
 }
 
-const ProfileCollectionItem = ({coverImage, name}: Props) => {
+const ProfileCollectionItem = ({coverImage, name, navigation}: Props) => {
     return (
+    <TouchableWithoutFeedback onPress={() => navigation.navigate("CollectionDetailScreen")}>
         <CollectionContainer>
         <CollectionCoverImage
         source={{uri:coverImage}}
         />
+        <CollectionNameContainer>
         <CollectionNameText>{name}</CollectionNameText>
+        </CollectionNameContainer>
         </CollectionContainer>
+        </TouchableWithoutFeedback>
     )
 }
 

@@ -24,7 +24,6 @@ import LocationSearch from '~/Screens/LocationSearch';
 import ImagesPullScreen from '~/Screens/ImagesPullScreen';
 import Gallery from '~/Screens/Gallery';
 import Gallery_ProfileImage from '~/Screens/Gallery_ProfileImage';
-import ImageItem from '~/Screens/Gallery_ProfileImage/ImageItem';
 import Unauthorized from '~/Screens/Unauthorized';
 import BasicInput from '~/Screens/SignUp/BasicInput';
 import ProfileInput from '~/Screens/SignUp/ProfileInput';
@@ -45,18 +44,26 @@ import TagSearchScreen from '~/Components/Container/TagSearchScreen';
 import TestTextWidth from '~/Components/Container/TestTextWidth';
 import UploadDescripInputScreen from '~/Screens/UploadDescripInputScreen';
 import ProductUrlSearchScreen from '~/Components/Container/ProductUrlSearchScreen';
-import ProfileScreen from '~/Components/Container/ProfileScreen';
-
 import getCurrentUser from '~/AsyncStorage/User';
+
+// Profile Screen
+import ProfileScreen from '~/Components/Container/ProfileScreen';
+import SettingScreen from '~/Components/Container/SettingScreen';
+import CollectionDetailScreen from '~/Components/Container/CollectionDetailScreen';
+
+// Collection Upload Screen
+import CollectionUploadScreen from '~/Components/Container/CollectionUploadScreen';
+import AddCollectionFeedScreen from '~/Components/Container/AddCollectionFeedScreen';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
+const SearchStack = createStackNavigator();
 const FeedStack = createStackNavigator();
 const UploadStack = createStackNavigator();
 const AlarmStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
 const UnauthStack = createStackNavigator();
-const Stack = createStackNavigator();
+const NoBottomBarStack = createStackNavigator();
 
 function FeedTitle() {
   return (
@@ -303,16 +310,15 @@ function ProfileStackScreen() {
         }}
       />
       <ProfileStack.Screen
-        name="ImageItem"
-        component={ImageItem}
-        options={{
-          transitionSpec: {
-            open: config,
-            close: config,
-          },
-          headerShown: false,
-        }}
+      name="SettingScreen"
+      component={SettingScreen}
       />
+      <ProfileStack.Screen
+      name="CollectionUploadScreen"
+      component={CollectionUploadScreen}/>
+      <ProfileStack.Screen
+      name="AddCollectionFeedScreen"
+      component={AddCollectionFeedScreen}/>
     </ProfileStack.Navigator>
   );
 }
@@ -504,17 +510,38 @@ function BottomTab() {
       options={{
         tabBarIcon: ({focused}: {focused: boolean}) => (
           <Image
-            style={{width: 22, height: 22}}
+            style={{width: 30, height: 30}}
             source={
               /*
           focused
             ? require('~/Assets/Images/Tabs/ic_home.png')
             : require('~/Assets/Images/Tabs/ic_home_outline.png')
         */
-              require('~/Assets/Images/Tabs/ic_feedTap.png')
+              require('~/Assets/Images/NewTabs/ic_home_outline.png')
             }
           />
         ),
+      }}
+      />
+      <Tab.Screen
+      name="Search"
+      component={UploadStackScreen}
+      options={{
+        tabBarIcon: ({focused}: {focused: boolean}) => (
+          <Image
+            style={{width: 30, height: 30}}
+            source={
+              /*
+          focused
+            ? require('~/Assets/Images/Tabs/ic_home.png')
+            : require('~/Assets/Images/Tabs/ic_home_outline.png')
+        */
+              require('~/Assets/Images/NewTabs/ic_search_outline.png')
+            }
+          />
+        ),
+        unmountOnBlur: true,
+        tabBarVisible: false,
       }}
       />
       <Tab.Screen 
@@ -523,14 +550,14 @@ function BottomTab() {
       options={{
         tabBarIcon: ({focused}: {focused: boolean}) => (
           <Image
-            style={{width: 22, height: 22}}
+            style={{width: 30, height: 30}}
             source={
               /*
           focused
             ? require('~/Assets/Images/Tabs/ic_home.png')
             : require('~/Assets/Images/Tabs/ic_home_outline.png')
         */
-              require('~/Assets/Images/Tabs/ic_uploadTap.png')
+              require('~/Assets/Images/NewTabs/ic_upload_outline.png')
             }
           />
         ),
@@ -544,9 +571,9 @@ function BottomTab() {
       options={{
         tabBarIcon: ({focused}: {focused: boolean}) => (
           <Image
-            style={{width: 22, height: 22}}
+            style={{width: 30, height: 30}}
             source={
-              require('~/Assets/Images/Tabs/ic_alarmTap.png')
+              require('~/Assets/Images/NewTabs/ic_alarm_outline.png')
             }
           />
         ),
@@ -558,9 +585,9 @@ function BottomTab() {
       options={{
         tabBarIcon: ({focused}: {focused: boolean}) => (
           <Image
-            style={{width: 22, height: 22}}
+            style={{width: 30, height: 30}}
             source={
-              require('~/Assets/Images/Tabs/ic_profileTap.png')
+              require('~/Assets/Images/Tabs/ic_profile_outline.png')
             }
           />
         ),
@@ -585,15 +612,16 @@ function AppNavigator() {
   return (
     <NavigationContainer>
     {!currentUserState.loggedIn  ? (  
-    <Stack.Navigator
+    <NoBottomBarStack.Navigator
     headerMode="none"
     >
-      <Stack.Screen name="BottomTab" component={BottomTab}/>
-      <Stack.Screen name="FeedDetailScreen" component={FeedDetailScreen}/>
-      <Stack.Screen name="CommentListScreen" component={CommentListScreen}/>
-      <Stack.Screen name="LikeListScreen" component={LikeListScreen}/>
-      <Stack.Screen name="NearFeedMapScreen" component={NearFeedMapScreen}/>
-    </Stack.Navigator>
+      <NoBottomBarStack.Screen name="BottomTab" component={BottomTab}/>
+      <NoBottomBarStack.Screen name="FeedDetailScreen" component={FeedDetailScreen}/>
+      <NoBottomBarStack.Screen name="CommentListScreen" component={CommentListScreen}/>
+      <NoBottomBarStack.Screen name="LikeListScreen" component={LikeListScreen}/>
+      <NoBottomBarStack.Screen name="NearFeedMapScreen" component={NearFeedMapScreen}/>
+      <NoBottomBarStack.Screen name="CollectionDetailScreen" component={CollectionDetailScreen}/>
+    </NoBottomBarStack.Navigator>
     ) : (
       <UnauthStackScreen/>
     )}
@@ -603,8 +631,8 @@ function AppNavigator() {
 
 const styles = StyleSheet.create({
   tabBar: {
-    paddingTop: 20,
-    height: hp('7.5%'),
+    paddingTop: 10,
+    height: hp('8.5%'),
     position: 'absolute',
   },
 });

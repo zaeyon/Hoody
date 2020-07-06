@@ -1340,7 +1340,7 @@ const renderDraggableItem = ({item, index, drag, isActive}) => {
 }
 
 const renderAddNewDescripInput = () => {
-    var footer =  (
+    return (
         <TouchableWithoutFeedback onPress={() => showDescripModal()}>
         <AddDescripContainer>
         {/*
@@ -1357,7 +1357,7 @@ const renderAddNewDescripInput = () => {
     </TouchableWithoutFeedback>
     )
 
-    return footer;
+    //return footer;
 }
 
     return (

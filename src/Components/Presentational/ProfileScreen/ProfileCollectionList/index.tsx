@@ -61,17 +61,6 @@ const ProfileCollectionList = ({collectionList, navigation}: Props) => {
     }, [])
 
     const renderProfileCollectionItem = ({item, index}) => {
-        if(index === collectionList.length-1){
-          return (
-           <TouchableWithoutFeedback onPress={() => navigation.navigate("CollectionUploadScreen")}>
-           <AddCollectionButton>
-               <AddCollectionIcon
-               source={require('~/Assets/Images/ic_bluePlus.png')}
-               />
-           </AddCollectionButton>
-           </TouchableWithoutFeedback>
-        )
-        } else {
            return (
             <ProfileCollectionItem
             coverImage={item.coverImage}
@@ -79,7 +68,6 @@ const ProfileCollectionList = ({collectionList, navigation}: Props) => {
             navigation={navigation}
             />
            )
-        }
     }
 
     if(!collectionList[0]) {

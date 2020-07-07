@@ -4,6 +4,7 @@ import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import {TouchableWithoutFeedback} from 'react-native'
 
 const ProfileTileFeedItemContainer = Styled.View`
  width: ${wp('47.8%')};
@@ -62,9 +63,53 @@ color: #898A8D;
 `;
 
 
+const SelectCircleContainer = Styled.View`
+ position: absolute;
+ top: 8px;
+ right: ${wp('3.6%')+8}
+`;
 
-const ProfileTileFeedItem = ({}) => {
+const UnselectCircle = Styled.View`
+ width: ${wp('5.8%')};
+ height: ${wp('5.8%')};
+ border-radius: 100px;
+ background-color: #ffffff60;
+ border-width: 1.5px;
+ border-color: #ffffff90;
+`;
+
+const SelectCircle = Styled.View`
+width: ${wp('5.8%')};
+height: ${wp('5.8%')};
+border-radius: 100px;
+background-color: #3384FF;
+border-width: 1.5px;
+border-color: #ffffff
+justify-content: center;
+align-items: center;
+`;
+
+const SelectFeedContainer = Styled.View`
+`;
+
+const SelectOrderCount = Styled.Text`
+ font-weight: 600;
+ font-size: 16px;
+ color: #ffffff;
+`;
+
+interface Props {
+    index: number,
+    selected: boolean,
+    selectOrder: number,
+    onSelectCircle: (index:number) => void,
+}
+
+
+const SelectFeedItem = ({selected, index, onSelectCircle, selectOrder}: Props) => {
+
     return (
+        <SelectFeedContainer>
         <ProfileTileFeedItemContainer>
             <TileFeedImage
             source={{uri:'https://img.maisonkorea.com/2019/05/msk_5ce1e0ac196ee-1200x800.jpg'}}/>
@@ -81,7 +126,26 @@ const ProfileTileFeedItem = ({}) => {
                 <LocationText>종로구 종로동</LocationText>
             </LocationContainer>
         </ProfileTileFeedItemContainer>
+        <SelectCircleContainer>
+            {!selected && (
+                <TouchableWithoutFeedback onPress={() => onSelectCircle(index)}>
+                <UnselectCircle></UnselectCircle>
+                </TouchableWithoutFeedback>
+            )}
+            {selected && (
+                <TouchableWithoutFeedback onPress={() => onSelectCircle(index)}>
+                <SelectCircle>
+                    <SelectOrderCount>{selectOrder}</SelectOrderCount>
+                </SelectCircle>
+                </TouchableWithoutFeedback>
+            )}
+        </SelectCircleContainer>
+        </SelectFeedContainer>
     )
 }
 
-export default ProfileTileFeedItem;
+SelectFeedItem.defaultProps = {
+    selected: false,
+}
+
+export default SelectFeedItem;

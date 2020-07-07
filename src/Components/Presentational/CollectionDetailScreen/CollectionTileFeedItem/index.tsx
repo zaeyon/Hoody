@@ -63,7 +63,7 @@ color: #898A8D;
 
 
 
-const ProfileTileFeedItem = ({}) => {
+const CollectionTileFeedItem = ({}) => {
     return (
         <ProfileTileFeedItemContainer>
             <TileFeedImage
@@ -84,4 +84,4 @@ const ProfileTileFeedItem = ({}) => {
     )
 }
 
-export default ProfileTileFeedItem;
+export default CollectionTileFeedItem;

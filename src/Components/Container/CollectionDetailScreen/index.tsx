@@ -1,13 +1,16 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import Styled from 'styled-components/native';
 import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import {TouchableWithoutFeedback, FlatList} from 'react-native'
+import {TouchableWithoutFeedback, FlatList, ScrollView, Animated, Image} from 'react-native'
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
+import { getStatusBarHeight } from 'react-native-status-bar-height';
 
 import CollectionFeedItem from '~/Components/Presentational/CollectionDetailScreen/CollectionFeedItem';
+import CollectionTileFeedItem from '~/Components/Presentational/CollectionDetailScreen/CollectionTileFeedItem';
+import { statusBarHeight } from '~/Components/Presentational/UploadScreen/TagSearchSlidingUp/libs/layout';
 
 const Container = Styled.SafeAreaView`
  flex: 1;
@@ -15,13 +18,13 @@ const Container = Styled.SafeAreaView`
 `;
 
 
-const HeaderBar = Styled.View`
+const HeaderBar = Styled.SafeAreaView`
  width: ${wp('100%')};
- height: ${hp('6.5%')};
+ height: ${hp('6.5%')}
  flex-direction: row;
  align-items: center;
  justify-content: space-between;
- background-color:#ffffff;
+ position: absolute;
 `;
 
 const HeaderLeftContainer = Styled.View`
@@ -36,9 +39,10 @@ padding: 10px 15px 10px 15px;
 const BackButton = Styled.Image`
  width: ${wp('8%')};
  height: ${wp('8%')};
+ tint-color: #ffffff;
 `;
 
-const CollectionTitleText = Styled.Text`
+const HeaderCollectionTitleText = Styled.Text`
  font-weight: 500;
  font-size: 17px;
  color: #333333;
@@ -54,15 +58,36 @@ padding: 10px 15px 10px 15px;
 const HeaderRightView = Styled.View`
 width: ${wp('8%')};
 height: ${wp('8%')};
-background-color: #ffffff;
 `;
 
 const LocationMapContainer = Styled.View`
+margin-top: 30px;
 width: ${wp('100%')};
-height: ${wp('49%')};
-background-color:#c3c3c3;
+height: ${wp('80%')};
 `;
 
+const LocationMapHeaderBar = Styled.View`
+ width: ${wp('100%')};
+ height: ${wp('12.8%')};
+ flex-direction: row;
+ align-items: center;
+ background-color: #ffffff;
+ justify-content: space-between;
+ padding-left: 16px;
+ padding-right: 16px;
+`;
+
+const LocationMapText = Styled.Text`
+font-size: 18px;
+font-weight: 600;
+color: #333333;
+`;
+
+const LocationMapNextIcon = Styled.Image`
+ width: ${wp('4.5%')};
+ height: ${wp('4.5%')};
+`;
+ 
 const CollectionFeedListContainer = Styled.View`
  flex: 1;
  background-color: #ffffff;
@@ -103,6 +128,87 @@ const MarkerFeedImage = Styled.Image`
  margin-left: 3px;
 `;
 
+const CollectionInfoContainer = Styled.View`
+ width: ${wp('100%')};
+ background-color: #ffffff;
+ padding: 0px 16px 15px 16px;
+`;
+
+const CollectionInfoHeader = Styled.View`
+ flex-direction: row;
+ align-items: center;
+ justify-content: space-between;
+`;
+
+const CollectionIconContainer = Styled.View`
+ flex-direction: row;
+`;
+
+const CollectionLikeIcon = Styled.Image`
+ width: ${wp('6.4%')};
+ height: ${wp('6.4%')};
+`;
+
+const CollectionScrapIcon = Styled.Image`
+margin-left: 12px;
+width: ${wp('6.4%')};
+height: ${wp('6.4%')};
+`;
+
+const CollectionTitleText = Styled.Text`
+ font-weight: 600;
+ font-size: 21px;
+ color: #333333;
+`;
+
+const CollectionDescripText = Styled.Text`
+ margin-top: 12px;
+ font-weight: 300;
+ font-size: 15px;
+ color: #50555C;
+`;
+
+const CollectionInfoFooter = Styled.View`
+padding-top: 20px;
+ flex-direction: row
+ justify-content: space-between;
+ align-items: center;
+`;
+
+const CollectionSocialContainer = Styled.View`
+flex-direction: row;
+align-items: center;
+`;
+
+const CollectionFeedLabelText = Styled.Text`
+ font-size: 13px;
+ color: #000000;
+`;
+
+
+const CollectionLikeLabelText = Styled.Text`
+ margin-left: 12px;
+ font-size: 13px;
+ color: #000000;
+`;
+
+const CollectionScrapLabelText = Styled.Text`
+margin-left: 12px;
+ font-size: 13px;
+ color: #000000;
+`;
+
+const CollectionInfoCountText = Styled.Text`
+font-size: 13px;
+color: #000000;
+font-weight: bold;
+margin-left: 3px;
+`;
+
+const CollectionCoverImage = Styled.Image`
+ flex:1;
+`;
+
 const TEST_COLLECTION_DATA = {
         title: '컬렉션 테스트1',
         feedCount: 13,
@@ -140,16 +246,67 @@ const LatLng = {
 }
 
 const CollectionDetailScreen = ({navigation, route}: Props) => {
+    const [headerBlur, setHeaderBlur] = useState<boolean>(false);
+
+    const H_MAX_HEIGHT = wp('100%')
+    const H_MIN_HEIGHT = wp('25.6%');
+    const H_SCROLL_DISTANCE = H_MAX_HEIGHT - H_MIN_HEIGHT;
+
+    const scrollOffsetY = useRef(new Animated.Value(0)).current;
+
+    const headerScrollHeight = scrollOffsetY.interpolate({
+        inputRange: [0, H_SCROLL_DISTANCE],
+        outputRange: [H_MAX_HEIGHT, H_MIN_HEIGHT],
+        extrapolate: "clamp"
+    })
+
+    
 
     const renderCollectionFeedItem = ({item, index}) => {
         return (
-            <CollectionFeedItem/>
+            <CollectionTileFeedItem/>
         )
     }
 
+    const onScroll = () => {
+        console.log("headerScrollHeight", headerScrollHeight);
+
+        console.log("String(headerScrollHeight)", headerScrollHeight)
+        if(headerScrollHeight == 106) {
+            console.log("헤더 최소")
+        }
+    }
+
+    const onChangeHeaderHeight = (event) => {
+        if(event.nativeEvent.layout.height < 120) {
+            console.log("헤더 블러 처리")
+            setHeaderBlur(true);
+        } else {
+            setHeaderBlur(false);
+
+        }
+    }
+
+
     return (
         <Container>
-            <HeaderBar>
+           <Animated.View
+            onLayout={(event) => onChangeHeaderHeight(event)}
+            style={{
+            position: "absolute",
+            left: 0,
+            right: 0,
+            top: 0,
+            height: headerScrollHeight,
+            width: "100%",
+            overflow: "hidden",
+            zIndex: 10,
+            // STYLE
+            }}>    
+            <CollectionCoverImage
+            blurRadius={headerBlur ? 40: 0}
+            source={{uri:'https://d2uh4olaxaj5eq.cloudfront.net/fit-in/1080x0/b10f0e26-105a-49b9-9593-b70b69c2e611.jpg'}}/>
+<HeaderBar style={{marginTop: getStatusBarHeight()}}>
                 <HeaderLeftContainer>
                     <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
                     <BackButtonContainer>
@@ -158,12 +315,57 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
                     </BackButtonContainer>
                     </TouchableWithoutFeedback>
                 </HeaderLeftContainer>
-                <CollectionTitleText>컬렉션 이름</CollectionTitleText>
+                <HeaderCollectionTitleText></HeaderCollectionTitleText>
                 <HeaderRightContainer>
                     <HeaderRightView/>
                 </HeaderRightContainer>
             </HeaderBar>
+            
+            </Animated.View>
+            <ScrollView
+            onScroll={Animated.event([
+                {nativeEvent: { contentOffset: {y: scrollOffsetY}}}])}
+            scrollEventThrottle={5}
+            showsVerticalScrollIndicator={false}
+            >
+            <CollectionInfoContainer style={{paddingTop:H_MAX_HEIGHT-20}}>
+            <CollectionInfoHeader>
+            <CollectionTitleText>컬렉션1</CollectionTitleText>
+            <CollectionIconContainer>
+            <CollectionLikeIcon
+            source={require('~/Assets/Images/ic_heart_outline.png')}/>
+            <CollectionScrapIcon
+            source={require('~/Assets/Images/ic_scrap_outline.png')}/>
+            </CollectionIconContainer>
+            </CollectionInfoHeader>
+            <CollectionDescripText>
+            핫플 카페만 조진지 12년
+            나에게 유의미한 맛을 줬던 카페만 모아봄 ...
+            </CollectionDescripText>
+            <CollectionInfoFooter>
+            <CollectionSocialContainer>
+            <CollectionFeedLabelText>게시글</CollectionFeedLabelText>
+            <CollectionInfoCountText>45</CollectionInfoCountText>
+            <CollectionLikeLabelText>좋아요</CollectionLikeLabelText>
+            <CollectionInfoCountText>4K</CollectionInfoCountText>
+            <CollectionScrapLabelText>스크랩</CollectionScrapLabelText>
+            <CollectionInfoCountText>4K</CollectionInfoCountText>
+
+            </CollectionSocialContainer>
+            </CollectionInfoFooter>
+            </CollectionInfoContainer>
+            <FlatList
+            columnWrapperStyle={{justifyContent:'space-between', paddingLeft:15, paddingRight:15, paddingTop:17, paddingBottom:0}}
+            numColumns={2}
+            data={TEST_COLLECTION_DATA.feed}
+            renderItem={renderCollectionFeedItem}
+            />
             <LocationMapContainer>
+            <LocationMapHeaderBar>
+                <LocationMapText>지도</LocationMapText>
+                <LocationMapNextIcon
+                source={require('~/Assets/Images/ic_mapNext.png')}/>
+            </LocationMapHeaderBar>
             <MapView
             style={{flex:1}}
             provider={PROVIDER_GOOGLE}
@@ -181,18 +383,7 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
                 </Marker>
             </MapView>
             </LocationMapContainer>
-            <CollectionFeedListContainer>
-            <FeedListHeaderBar>
-                <CollectionFeedCountText>게시글 33</CollectionFeedCountText>
-                <CollectionEditText>편집</CollectionEditText>
-            </FeedListHeaderBar>
-            <CollectionFeedFlatListContainer>
-            <FlatList
-            data={TEST_COLLECTION_DATA.feed}
-            renderItem={renderCollectionFeedItem}
-            />
-            </CollectionFeedFlatListContainer>
-            </CollectionFeedListContainer>
+            </ScrollView>
         </Container>
     )
 }

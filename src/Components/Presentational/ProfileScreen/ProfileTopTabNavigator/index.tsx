@@ -5,10 +5,12 @@ import {
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
+import {useIsFocused} from '@react-navigation/native';
 import {Text, FlatList, StyleSheet, TouchableWithoutFeedback} from 'react-native';
 
 import ProfileFeedList from '~/Components/Presentational/ProfileScreen/ProfileFeedList';
 import ProfileCollectionList from '../ProfileCollectionList';
+
 
 
 const Container = Styled.View`
@@ -22,11 +24,21 @@ background-color: #ffffff;
 flex:1;
 `;
 
-const SortTypeContainer = Styled.View`
+const TopTabMenuContainer = Styled.View`
 flex-direction: row;
 position: absolute;
 right: 8;
 top: 8;
+`;
+
+const SortTypeContainer = Styled.View`
+flex-direction: row;
+`;
+
+const TypeContainer = Styled.View`
+padding-bottom: 8px;
+padding-left: 1px;
+padding-right: 1px;
 `;
 
 const ListTypeIcon = Styled.Image`
@@ -39,6 +51,30 @@ width: ${(wp('8%'))};
 height: ${wp('8%')};
 `;
 
+const AddCollectionIcon = Styled.Image`
+width: ${wp('6.4%')};
+height: ${wp('6.4%')};
+`;
+
+const AddCollectionContainer = Styled.View`
+ padding-bottom: 8px;
+ padding-top: 2px;
+ padding-left: 5px;
+ padding-right: 8px;
+`;
+
+const AddScrapIcon = Styled.Image`
+width: ${wp('6.4%')};
+height: ${wp('6.4%')};
+`;
+
+
+const AddScrapContainer = Styled.View`
+ padding-bottom: 8px;
+ padding-top: 2px;
+ padding-left: 5px;
+ padding-right: 8px;
+`;
 
 
 
@@ -51,9 +87,16 @@ height: ${wp('8%')};
 
 const ProfileTopTabNavigator = ({navigation, route, collectionList, feedList}: Props) => {
     const [currentSortType, setCurrentSortType] = useState<string>("list");
+    const [currentFocusTab, setCurrentFocusTab] = useState<string>("");
     const PostTopTab = createMaterialTopTabNavigator();
 
     function UserFeedList() {
+        const isFocused = useIsFocused();
+        if(isFocused) {
+            console.log("User Feed List");
+            setCurrentFocusTab("FeedList")
+        }
+
         return (
           <ProfileFeedList
           navigation={navigation}
@@ -64,6 +107,12 @@ const ProfileTopTabNavigator = ({navigation, route, collectionList, feedList}: P
     }
 
     function UserCollectionList() { 
+        const isFocused = useIsFocused();
+        if(isFocused) {
+            console.log("User Collection List");
+            setCurrentFocusTab("CollectionList");
+        }
+
         return (
             <ProfileCollectionList
             navigation={navigation}
@@ -73,11 +122,20 @@ const ProfileTopTabNavigator = ({navigation, route, collectionList, feedList}: P
     }
 
     function ScrapList() {
+        const isFocused = useIsFocused();
+        if(isFocused) {
+            console.log("Scrap List");
+            setCurrentFocusTab("ScrapList");
+        }
         return (
             <UserScrapListContainer>
                 <Text>Scrap List</Text>
             </UserScrapListContainer>
         )
+    }
+
+    const uploadCollection = () => {
+        navigation.navigate("CollectionUploadScreen");
     }
 
 
@@ -107,18 +165,45 @@ const ProfileTopTabNavigator = ({navigation, route, collectionList, feedList}: P
                 component={ScrapList}
                 />
             </PostTopTab.Navigator>
+            {currentFocusTab === "FeedList" && (
+            <TopTabMenuContainer>
             <SortTypeContainer>
             <TouchableWithoutFeedback onPress={() => setCurrentSortType("list")}>
+            <TypeContainer>
             <ListTypeIcon
             style={(currentSortType !== "list") && styles.unselectingListType}
             source={require('~/Assets/Images/ic_listType.png')}/>
+            </TypeContainer>
             </TouchableWithoutFeedback>
             <TouchableWithoutFeedback onPress={() => setCurrentSortType("tile")}>
+            <TypeContainer>
             <TileTypeIcon
             style={(currentSortType !== 'tile') && styles.unselectingListType}
             source={require('~/Assets/Images/ic_tileType.png')}/>
+            </TypeContainer>
             </TouchableWithoutFeedback>
             </SortTypeContainer>
+            </TopTabMenuContainer>
+            )}
+            {currentFocusTab === "CollectionList" && (
+                <TopTabMenuContainer>
+                    <TouchableWithoutFeedback onPress={() => uploadCollection()}>
+                    <AddCollectionContainer>
+                        <AddCollectionIcon
+                        source={require('~/Assets/Images/ic_addCollection.png')}/>
+                    </AddCollectionContainer>
+                    </TouchableWithoutFeedback>
+                </TopTabMenuContainer>
+            )}
+            {currentFocusTab === 'ScrapList' && (
+                <TopTabMenuContainer>
+                    <AddScrapContainer>
+                        <AddScrapIcon
+                        source={require('~/Assets/Images/ic_addCollection.png')}/>
+                    </AddScrapContainer>
+                </TopTabMenuContainer>
+
+            )}
         </Container>
     )
 }

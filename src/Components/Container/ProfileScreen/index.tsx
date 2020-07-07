@@ -8,7 +8,7 @@ import {
   Text,
   View,
   Platform,
-  SafeAreaView
+  SafeAreaView,
 } from 'react-native';
 import Styled from 'styled-components/native';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
@@ -102,12 +102,10 @@ width: ${wp('22%')};
  align-items: center;
 `;
 
-
 const MyProfileReviewMapImage = Styled.Image`
  width: ${wp('6.6%')};
  height: ${wp('6.6%')};
 `;
-
 
 const MyProfileReviewMapText = Styled.Text`
  margin-left: 5px;
@@ -115,7 +113,6 @@ const MyProfileReviewMapText = Styled.Text`
  font-weight: 600;
  font-size: 15px;
 `;
-
 
 const TEST_FEED_DATA = [
   {
@@ -313,31 +310,11 @@ interface Props {
     route: any,
 }
 
-
 function ProfileScreen({navigation, route}: Props) {
   const currentUser = useSelector((state) => state.currentUser);
   console.log("currentUser", currentUser);
   const dispatch = useDispatch();
   
-  /*
-  useEffect(() => {
-    GetUserProfile(currentUser.user.nickname)
-    .then(function(response) {
-      console.log("유저프로필", response)
-    })
-    .catch(function(error) {
-      console.log("유저프로필 불러오기실패", error);
-    })
-
-  },[])
-  */
-
-  useEffect(() => {
-    TEST_COLLECTION_DATA.push({
-      addNewCollection: true
-    })
-  }, [])
-
   const isBottom = ({
     layoutMeasurement,
     contentOffset,
@@ -361,8 +338,6 @@ function ProfileScreen({navigation, route}: Props) {
       dispatch(allActions.userActions.logOut());
     }
   }
-
-
 
   return (
     <Container>
@@ -391,6 +366,7 @@ function ProfileScreen({navigation, route}: Props) {
       </HeaderBar>
       <UserIntroduction/>
       <ProfileTopTabNavigator
+
       navigation={navigation}
       feedList={TEST_FEED_DATA}
       collectionList={TEST_COLLECTION_DATA}

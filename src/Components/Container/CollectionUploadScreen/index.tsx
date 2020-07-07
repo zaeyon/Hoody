@@ -199,6 +199,15 @@ const CollectionUploadScreen = ({navigation, route}: Props) => {
     const onChangeDescrip = (text: string) => {
         setCollectionDescripText(text);
     }
+
+    const moveToAddFeed = () => {
+        navigation.navigate("AddCollectionFeedScreen", {
+            title: collectionTitleText,
+            description: collectionDescripText,
+            private: enabledPrivate,
+            includeLocation: enabledIncludeLocation,
+        })
+    }
     
     return (
         <Container>

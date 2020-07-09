@@ -124,15 +124,23 @@ const AddCollectionFeedScreen = ({navigation, route}: Props) => {
     const [selectableFeedList, setSelectableFeedList] = useState<Array<object>>([]);
     const [selectingFeedList, setSelectingFeedList] = useState<Array<object>>([]);
     const [changeFeedList, setChangeFeedList] = useState<boolean>(false);
+    var triggerScreen = "";
 
     useEffect(() => {
         var tmpSelectableFeedList = TEST_MY_TILE_FEED.map(function(obj) {
             obj.selected = false;
-
             return obj;
         })
-
         setSelectableFeedList(tmpSelectableFeedList)
+    }, [])
+
+    useEffect(() => {
+       if(route.params?.triggerScreen) {
+           if(route.params?.triggerScreen === "CollectionEditScreen")
+           {
+               triggerScreen = "CollectionEditScreen"
+           }
+       } 
     }, [])
 
     const onSelectCircle = (index:number) => {
@@ -160,7 +168,11 @@ const AddCollectionFeedScreen = ({navigation, route}: Props) => {
     }
 
     const finishAddCollection = () => {
-        navigation.navigate("ProfileScreen");
+        if(triggerScreen = "CollectionEditScreen") {
+            navigation.navigate("CollectionFeedEditScreen")
+        } else {
+            navigation.navigate("ProfileScreen");
+        }
     }
 
     const renderMyFeedTileItem = ({item, index}:any) => {

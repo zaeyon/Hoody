@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect, useRef, createRef} from 'react';
 import Styled from 'styled-components/native';
 import {
     widthPercentageToDP as wp,
@@ -11,6 +11,9 @@ import { getStatusBarHeight } from 'react-native-status-bar-height';
 import CollectionFeedItem from '~/Components/Presentational/CollectionDetailScreen/CollectionFeedItem';
 import CollectionTileFeedItem from '~/Components/Presentational/CollectionDetailScreen/CollectionTileFeedItem';
 import { statusBarHeight } from '~/Components/Presentational/UploadScreen/TagSearchSlidingUp/libs/layout';
+import ActionSheet from 'react-native-actionsheet';
+
+const actionSheetRef = createRef();
 
 const Container = Styled.SafeAreaView`
  flex: 1;
@@ -45,7 +48,7 @@ const BackButton = Styled.Image`
 const HeaderCollectionTitleText = Styled.Text`
  font-weight: 500;
  font-size: 17px;
- color: #333333;
+ color: #ffffff;
 `;
 
 const HeaderRightContainer = Styled.View`
@@ -209,6 +212,13 @@ const CollectionCoverImage = Styled.Image`
  flex:1;
 `;
 
+const CollectionMoreIcon = Styled.Image`
+ width: ${wp('9%')};
+ height: ${wp('9%')};
+ tint-color: #ffffff;
+`;
+
+
 const TEST_COLLECTION_DATA = {
         title: '컬렉션 테스트1',
         feedCount: 13,
@@ -232,7 +242,6 @@ const TEST_COLLECTION_DATA = {
                 index:6,
             }
         ]
-        
 }
 
 interface Props {
@@ -287,6 +296,19 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
         }
     }
 
+    const showActionSheet = (index) => {
+        actionSheetRef.current.show()
+    }
+
+    const onPressActionSheet = (index) => {
+        console.log("actionsheet press index", index);
+        if(index === 2) {
+            navigation.navigate("CollectionModifyScreen");
+        } else if(index === 3) {
+            navigation.navigate("CollectionFeedEditScreen")
+        }
+    }
+
 
     return (
         <Container>
@@ -315,10 +337,15 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
                     </BackButtonContainer>
                     </TouchableWithoutFeedback>
                 </HeaderLeftContainer>
-                <HeaderCollectionTitleText></HeaderCollectionTitleText>
+                {headerBlur && (
+                <HeaderCollectionTitleText>컬렉션1</HeaderCollectionTitleText>
+                )}
+                <TouchableWithoutFeedback onPress={() => showActionSheet()}>
                 <HeaderRightContainer>
-                    <HeaderRightView/>
+                    <CollectionMoreIcon
+                    source={require('~/Assets/Images/ic_more.png')}/>
                 </HeaderRightContainer>
+                </TouchableWithoutFeedback>
             </HeaderBar>
             
             </Animated.View>
@@ -350,7 +377,6 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
             <CollectionInfoCountText>4K</CollectionInfoCountText>
             <CollectionScrapLabelText>스크랩</CollectionScrapLabelText>
             <CollectionInfoCountText>4K</CollectionInfoCountText>
-
             </CollectionSocialContainer>
             </CollectionInfoFooter>
             </CollectionInfoContainer>
@@ -384,6 +410,12 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
             </MapView>
             </LocationMapContainer>
             </ScrollView>
+            <ActionSheet
+            ref={actionSheetRef}
+            options={['취소', '컬렉션 삭제', '컬렉션 수정', '게시글 추가 및 편집']}
+            cancelButtonIndex={0}
+            destructiveButtonIndex={1}
+            onPress={(index) => onPressActionSheet(index)}/>
         </Container>
     )
 }

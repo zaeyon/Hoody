@@ -4,21 +4,17 @@ import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import {TouchableWithoutFeedback} from 'react-native'
 
-const ProfileTileFeedItemContainer = Styled.View`
+const SelectScrapItemContainer = Styled.View`
  width: ${wp('47.8%')};
  height: ${wp('51.1%')};
- align-items: center;
 `;
 
 const TileFeedImage = Styled.Image`
  width: ${wp('44.2%')};
  height: ${wp('35.1%')};
  border-radius: 5px;
-`;
-
-const FeedInfoContainer = Styled.View`
-width: ${wp('44.2%')}
 `;
 
 const TagListContainer = Styled.View`
@@ -67,13 +63,49 @@ color: #898A8D;
 `;
 
 
+const SelectCircleContainer = Styled.View`
+ position: absolute;
+ top: 8px;
+ right: ${wp('3.6%')+8}
+`;
 
-const CollectionTileFeedItem = ({}) => {
+const UnselectCircle = Styled.View`
+ width: ${wp('5.8%')};
+ height: ${wp('5.8%')};
+ border-radius: 100px;
+ background-color: #ffffff60;
+ border-width: 1.5px;
+ border-color: #ffffff90;
+`;
+
+const SelectCircle = Styled.Image`
+width: ${wp('5.8%')};
+height: ${wp('5.8%')};
+`;
+
+const SelectFeedContainer = Styled.View`
+`;
+
+const SelectOrderCount = Styled.Text`
+ font-weight: 600;
+ font-size: 16px;
+ color: #ffffff;
+`;
+
+interface Props {
+    index: number,
+    selected: boolean,
+    onSelectCircle: (index:number) => void,
+}
+
+
+const SelectFeedItem = ({selected, index, onSelectCircle}: Props) => {
+
     return (
-        <ProfileTileFeedItemContainer>
+        <SelectFeedContainer>
+        <SelectScrapItemContainer>
             <TileFeedImage
             source={{uri:'https://img.maisonkorea.com/2019/05/msk_5ce1e0ac196ee-1200x800.jpg'}}/>
-            <FeedInfoContainer>
             <TagListContainer>
                 <TagText>#아씨에뜨앤</TagText>
             </TagListContainer>
@@ -86,9 +118,26 @@ const CollectionTileFeedItem = ({}) => {
             <LocationContainer>
                 <LocationText>종로구 종로동</LocationText>
             </LocationContainer>
-            </FeedInfoContainer>
-        </ProfileTileFeedItemContainer>
+        </SelectScrapItemContainer>
+        <SelectCircleContainer>
+            {!selected && (
+                <TouchableWithoutFeedback onPress={() => onSelectCircle(index)}>
+                <UnselectCircle></UnselectCircle>
+                </TouchableWithoutFeedback>
+            )}
+            {selected && (
+                <TouchableWithoutFeedback onPress={() => onSelectCircle(index)}>
+                <SelectCircle
+                source={require('~/Assets/Images/ic_photoCheck.png')}/>
+                </TouchableWithoutFeedback>
+            )}
+        </SelectCircleContainer>
+        </SelectFeedContainer>
     )
 }
 
-export default CollectionTileFeedItem;
+SelectFeedItem.defaultProps = {
+    selected: false,
+}
+
+export default SelectFeedItem;

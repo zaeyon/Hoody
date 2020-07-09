@@ -7,7 +7,7 @@ import {
 
 const ProfileTileFeedItemContainer = Styled.View`
  width: ${wp('47.8%')};
- height: ${wp('51.1%')};
+ height: ${wp('')}
  align-items: center;
 `;
 
@@ -19,6 +19,7 @@ const TileFeedImage = Styled.Image`
 
 const FeedInfoContainer = Styled.View`
 width: ${wp('44.2%')}
+height: 200;
 `;
 
 const TagListContainer = Styled.View`
@@ -68,7 +69,7 @@ color: #898A8D;
 
 
 
-const CollectionTileFeedItem = ({}) => {
+const CollectionDraggableFeedItem = ({}) => {
     return (
         <ProfileTileFeedItemContainer>
             <TileFeedImage
@@ -91,4 +92,4 @@ const CollectionTileFeedItem = ({}) => {
     )
 }
 
-export default CollectionTileFeedItem;
+export default CollectionDraggableFeedItem;

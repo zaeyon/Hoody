@@ -138,6 +138,10 @@ const ProfileTopTabNavigator = ({navigation, route, collectionList, feedList}: P
         navigation.navigate("CollectionUploadScreen");
     }
 
+    const addScrapAlbum = () => {
+        navigation.navigate("AddScrapAlbumScreen");
+    }
+
 
     return (
         <Container>
@@ -197,10 +201,12 @@ const ProfileTopTabNavigator = ({navigation, route, collectionList, feedList}: P
             )}
             {currentFocusTab === 'ScrapList' && (
                 <TopTabMenuContainer>
+                    <TouchableWithoutFeedback onPress={() => addScrapAlbum()}>
                     <AddScrapContainer>
                         <AddScrapIcon
                         source={require('~/Assets/Images/ic_addCollection.png')}/>
                     </AddScrapContainer>
+                    </TouchableWithoutFeedback>
                 </TopTabMenuContainer>
 
             )}

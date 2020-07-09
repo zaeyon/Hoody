@@ -1,0 +1,94 @@
+{
+  "_from": "react-native-draggable-grid",
+  "_id": "react-native-draggable-grid@2.1.2",
+  "_inBundle": false,
+  "_integrity": "sha512-jQ6DLzlcQWknOUvZTi8+zLqMZBoTJTcXPzVU4GHJa696JSoabSbXbMqMlSfGGPu9yzvsauVIOuE25ytksY07/w==",
+  "_location": "/react-native-draggable-grid",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "react-native-draggable-grid",
+    "name": "react-native-draggable-grid",
+    "escapedName": "react-native-draggable-grid",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/react-native-draggable-grid/-/react-native-draggable-grid-2.1.2.tgz",
+  "_shasum": "422c66570f73eae8b7a1c378a30f82929f0abae4",
+  "_spec": "react-native-draggable-grid",
+  "_where": "/Users/jaeyeon/Desktop/Hooging",
+  "author": {
+    "name": "shisme"
+  },
+  "bugs": {
+    "url": "https://github.com/SHISME/react-native-draggable-grid/issues"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "A draggable grid for react native",
+  "devDependencies": {
+    "@types/jest": "^24.0.18",
+    "@types/react": "^16.0.0",
+    "@types/react-native": "*",
+    "babel-jest": "^24.9.0",
+    "jest": "^24.9.0",
+    "jest-react-native": "^18.0.0",
+    "pre-commit": "^1.2.2",
+    "prettier": "^1.18.2",
+    "react": "^16.0.0",
+    "react-native": "*",
+    "ts-jest": "^24.0.2",
+    "typescript": "^3.0.3"
+  },
+  "homepage": "https://github.com/SHISME/react-native-draggable-grid#readme",
+  "jest": {
+    "verbose": true,
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ],
+    "testPathIgnorePatterns": [
+      "<rootDir>/node_modules/"
+    ],
+    "transform": {
+      "^.+\\.(js)$": "<rootDir>/node_modules/babel-jest",
+      "\\.(ts|tsx)$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "testMatch": [
+      "<rootDir>/test/**/?(*.)(spec|test).ts?(x)"
+    ]
+  },
+  "keywords": [
+    "drag",
+    "sortable",
+    "grid"
+  ],
+  "license": "ISC",
+  "main": "built/src/index.js",
+  "name": "react-native-draggable-grid",
+  "peerDependencies": {
+    "react": "^16.0.0",
+    "react-native": "*"
+  },
+  "pre-commit": [
+    "test"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SHISME/react-native-draggable-grid.git"
+  },
+  "scripts": {
+    "built": "rm -rf built && tsc",
+    "test": "jest",
+    "watch": "tsc -w --outDir demo/built"
+  },
+  "types": "src/index.ts",
+  "version": "2.1.2"
+}

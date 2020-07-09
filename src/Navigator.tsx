@@ -51,9 +51,14 @@ import ProfileScreen from '~/Components/Container/ProfileScreen';
 import SettingScreen from '~/Components/Container/SettingScreen';
 import CollectionDetailScreen from '~/Components/Container/CollectionDetailScreen';
 
-// Collection Upload Screen
+// Collection Screen
 import CollectionUploadScreen from '~/Components/Container/CollectionUploadScreen';
 import AddCollectionFeedScreen from '~/Components/Container/AddCollectionFeedScreen';
+import CollectionModifyScreen from '~/Components/Container/CollectionModifyScreen';
+import CollectionFeedEditScreen from '~/Components/Container/CollectionFeedEditScreen';
+
+// Scrap Screen
+import AddScrapAlbumScreen from '~/Components/Container/AddScrapAlbumScreen';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
@@ -313,12 +318,6 @@ function ProfileStackScreen() {
       name="SettingScreen"
       component={SettingScreen}
       />
-      <ProfileStack.Screen
-      name="CollectionUploadScreen"
-      component={CollectionUploadScreen}/>
-      <ProfileStack.Screen
-      name="AddCollectionFeedScreen"
-      component={AddCollectionFeedScreen}/>
     </ProfileStack.Navigator>
   );
 }
@@ -621,6 +620,11 @@ function AppNavigator() {
       <NoBottomBarStack.Screen name="LikeListScreen" component={LikeListScreen}/>
       <NoBottomBarStack.Screen name="NearFeedMapScreen" component={NearFeedMapScreen}/>
       <NoBottomBarStack.Screen name="CollectionDetailScreen" component={CollectionDetailScreen}/>
+      <NoBottomBarStack.Screen name="CollectionUploadScreen" component={CollectionUploadScreen}/>
+      <NoBottomBarStack.Screen name="CollectionModifyScreen" component={CollectionModifyScreen}/>
+      <NoBottomBarStack.Screen name="CollectionFeedEditScreen" component={CollectionFeedEditScreen}/>
+      <NoBottomBarStack.Screen name="AddCollectionFeedScreen" component={AddCollectionFeedScreen}/>
+      <NoBottomBarStack.Screen name="AddScrapAlbumScreen" component={AddScrapAlbumScreen}/>
     </NoBottomBarStack.Navigator>
     ) : (
       <UnauthStackScreen/>

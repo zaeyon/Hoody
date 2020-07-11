@@ -13,7 +13,7 @@ const UserIntroductionContainer = Styled.View`
  background-color:#ffffff;
  flex-direction: column;
  padding-top: 20px;
- padding-bottom: 25px;
+ padding-bottom: 10px;
  padding-left: 16px;
  padding-right: 16px;
 `;

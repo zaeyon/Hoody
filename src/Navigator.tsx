@@ -51,6 +51,7 @@ import ProfileScreen from '~/Components/Container/ProfileScreen';
 import SettingScreen from '~/Components/Container/SettingScreen';
 import CollectionDetailScreen from '~/Components/Container/CollectionDetailScreen';
 import ProfileScreenTest from '~/Components/Container/ProfileScreenTest'
+import ProfileTestScreen from '~/Components/Container/ProfileTestScreen';
 
 // Collection Screen
 import CollectionUploadScreen from '~/Components/Container/CollectionUploadScreen';
@@ -526,7 +527,7 @@ function BottomTab() {
       />
       <Tab.Screen
       name="Search"
-      component={ProfileScreenTest}
+      component={ProfileTestScreen}
       options={{
         tabBarIcon: ({focused}: {focused: boolean}) => (
           <Image

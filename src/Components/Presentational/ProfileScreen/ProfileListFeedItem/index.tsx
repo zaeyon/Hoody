@@ -10,7 +10,6 @@ import {
 import GetFeedDetail from '~/Route/Post/GetFeedDetail';
 
 const Container = Styled.View`
-
  `;
 
 const FeedItemContainer = Styled.View`

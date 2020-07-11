@@ -52,6 +52,7 @@ import SettingScreen from '~/Components/Container/SettingScreen';
 import CollectionDetailScreen from '~/Components/Container/CollectionDetailScreen';
 import ProfileScreenTest from '~/Components/Container/ProfileScreenTest'
 import ProfileTestScreen from '~/Components/Container/ProfileTestScreen';
+import FollowListScreen from '~/Components/Container/FollowListScreen';
 
 // Collection Screen
 import CollectionUploadScreen from '~/Components/Container/CollectionUploadScreen';
@@ -292,7 +293,7 @@ function ProfileStackScreen() {
       }}>
       <ProfileStack.Screen
         name="ProfileScreen"
-        component={ProfileScreenTest}
+        component={ProfileScreen}
         options={({navigation, route}) => ({
           headerTitle: (props) => <ProfileTitle {...props} />,
         })}
@@ -321,6 +322,9 @@ function ProfileStackScreen() {
       name="SettingScreen"
       component={SettingScreen}
       />
+      <ProfileStack.Screen
+      name="FollowListScreen"
+      component={FollowListScreen}/>
     </ProfileStack.Navigator>
   );
 }

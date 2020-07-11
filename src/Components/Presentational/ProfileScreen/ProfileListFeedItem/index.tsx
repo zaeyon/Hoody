@@ -9,14 +9,10 @@ import {
 
 import GetFeedDetail from '~/Route/Post/GetFeedDetail';
 
-const Container = Styled.View`
- `;
-
 const FeedItemContainer = Styled.View`
  width: ${wp('100%')};
  flex-direction: column;
- padding-top:15px;
- padding-right:10px;
+ padding: 15px;
 `;
 
 const RightContainer = Styled.View`
@@ -105,7 +101,6 @@ const RatingContainer = Styled.View`
  flex-direction: row;
  align-items: center;
  margin-left: 10px;
- padding-right: 10px;
 `;
 
 const RatingStarImage = Styled.Image`
@@ -148,8 +143,8 @@ const FirstImage = Styled.Image`
  border-top-left-radius: 10px;
  border-bottom-left-radius: 10px;
 resize-mode:cover;
-width: ${wp('47%')};
-height: ${wp('47%')};
+width: ${wp('46%')};
+height: ${wp('46%')};
 `;
 
 const SecondImage = Styled.Image`
@@ -157,20 +152,19 @@ const SecondImage = Styled.Image`
  border-top-right-radius: 10px;
  border-bottom-right-radius: 10px;
 resize-mode:cover;
- width: ${wp('47%')};
- height: ${wp('47%')};
+ width: ${wp('46%')};
+ height: ${wp('46%')};
 `;
 
 const ReviewImageContainer = Styled.View`
 padding-top: 10px;
-height: ${wp('44%')};
 `;
 
 const ReviewImage = Styled.Image`
 resize-mode:cover;
 border-radius: 10px; 
-height: ${wp('44%')};
-width: ${wp('95%')};
+height: ${wp('93%')};
+width: ${wp('93%')};
 `;
 
 const TagContainer = Styled.View`
@@ -244,7 +238,6 @@ const DescriptionText = Styled.Text`
 `;
 
 const AdditionalInfoContainer = Styled.View`
-padding-right: 10px;
  padding-top: 10px;
  flex-direction: row;
  justify-content: center;
@@ -418,7 +411,6 @@ const ProfileListFeedItem = ({
   }
 
   return (
-    <Container>
       <FeedItemContainer>
         <HeaderContainer>
               <HeaderTopContainer>
@@ -529,9 +521,8 @@ const ProfileListFeedItem = ({
         </FooterContainer>
         </View>
         </TouchableWithoutFeedback>
-      </FeedItemContainer>
       <ItemBottomBorder/>
-    </Container>
+      </FeedItemContainer>
   );
 };
 

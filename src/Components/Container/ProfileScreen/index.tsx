@@ -1,39 +1,32 @@
-import React, {useState, useContext, useEffect, createRef, useRef} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
-  NativeScrollEvent,
-  Dimensions,
-  NativeSyntheticEvent,
-  ScrollView,
-  TouchableWithoutFeedback,
-  Text,
-  View,
-  Platform,
-  SafeAreaView,
-  Animated,
+  FlatList, View, Text, Dimensions, TouchableOpacity, TouchableWithoutFeedback
 } from 'react-native';
 import Styled from 'styled-components/native';
-import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
-import ProfileHeader from '~/Screens/ProfileHeader';
-import PinterMap from '~/Screens/PinterMap';
-import {FlatGrid} from 'react-native-super-grid';
 import {
-  widthPercentageToDP as wp,
+  widthPercentageToDP as wp, 
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import {useSelector, useDispatch} from 'react-redux';
-import allActions from '~/action';
-import KakaoLogins from '@react-native-seoul/kakao-login';
-import { getStatusBarHeight } from 'react-native-status-bar-height';
+
+import ScrollableTabView, { DefaultTabBar,} from 'rn-collapsing-tab-bar';
 
 import UserIntroduction from '~/Components/Presentational/ProfileScreen/UserIntroduction';
-import GetUserProfile from '~/Route/User/GetUserProfile';
-import ProfileTopTabNavigator from '~/Components/Presentational/ProfileScreen/ProfileTopTabNavigator';
+import ProfileTabBar from '~/Components/Presentational/ProfileScreen/ProfileTabBar';
+import ProfileFeedList from '~/Components/Presentational/ProfileScreen/ProfileFeedList';
+import ProfileCollectionList from '~/Components/Presentational/ProfileScreen/ProfileCollectionList';
 
 const Container = Styled.SafeAreaView`
  flex: 1;
  background-color: #ffffff;
 `;
 
+const FeedListTabContainer = Styled.View`
+ background-color: #ffffff;
+`;
+
+const CollectionListTabContainer = Styled.View`
+ background-color: #ffffff;
+`;
 
 const HeaderBar = Styled.View`
  width: ${wp('100%')};
@@ -117,11 +110,7 @@ const MyProfileReviewMapText = Styled.Text`
  font-size: 15px;
 `;
 
-const ProfileTopTabContainer = Styled.View`
-`;
-
-const CollapsibleHeaderContainer = Styled.View`
-`;
+ 
 
 const TEST_FEED_DATA = [
   {
@@ -314,100 +303,55 @@ const TEST_COLLECTION_DATA = [
   }
 ]
 
-const TEST_SCRAP_DATA = [
-  {
-    name: '스크랩 앨범1',
-    coverImage: 'https://img.theqoo.net/img/lwsBV.jpg'
-  },
-  {
-    name: '앨범2',
-    coverImage: 'https://t1.daumcdn.net/cfile/tistory/9966FB475D739E5017'
-  }
-]
+const deviceWidth = Dimensions.get("window").width;
+const containerHeight = Dimensions.get("window").height;
 
 interface Props {
-    navigation: any,
-    route: any,
+  navigation: any,
+  route: any,
 }
 
-function ProfileScreen({navigation, route}: Props) {
-  const [headerMaxHeight, setHeaderMaxHeight] = useState(312);
-  const [minHeaderHeight, setMinHeaderHeight] = useState<boolean>(false);
-  const currentUser = useSelector((state) => state.currentUser);
-  console.log("currentUser", currentUser);
-  const dispatch = useDispatch();
+const ProfileScreen = ({navigation, route}: Props) => {
+  const [feedListTabHeight, setFeedListTabHeight] = useState<number>(containerHeight);
+  const [collectionListTabHeight, setCollectionListTabHeight] = useState<number>(containerHeight);
+  const [selectedFeedSortType, setSelectedFeedSortType] = useState<string>("list");
 
-  var H_MAX_HEIGHT = 0;
-  const H_MIN_HEIGHT = hp('6.5%') + getStatusBarHeight();
-  const H_SCROLL_DISTANCE = headerMaxHeight - H_MIN_HEIGHT;
-
-  const scrollOffsetY = useRef(new Animated.Value(0)).current;
-
-  const headerScrollHeight = scrollOffsetY.interpolate({
-    inputRange: [0, H_SCROLL_DISTANCE],
-    outputRange: [headerMaxHeight, H_MIN_HEIGHT],
-    extrapolate: "clamp"
-  })
-  
-  const isBottom = ({
-    layoutMeasurement,
-    contentOffset,
-    contentSize,
-  }: NativeScrollEvent) => {
-    return layoutMeasurement.height + contentOffset.y >= contentSize.height;
-  };
-
-  function Logout() {
-    console.log('접속 사용자 정보', currentUser);
-    if (currentUser.user.provider === 'kakao') {
-      KakaoLogins.logout()
-        .then((result) => {
-          console.log('로그아웃성공', result);
-          dispatch(allActions.userActions.logOut());
-        })
-        .catch((err) => {
-          console.log('에러 발생', err.code, err.message);
-        });
-    } else {
-      dispatch(allActions.userActions.logOut());
-    }
+  const measureFeedListTab = (event) => {
+    setFeedListTabHeight(event.nativeEvent.layout.height);
   }
 
-  const onChangeHeaderHeight = (event) => {
-    console.log("onchange")
-    console.log("event.nativeEvent.layoutheight", event.nativeEvent.layout.height);
-}
+  const measureCollectionListTab = (event) => {
+    setCollectionListTabHeight(event.nativeEvent.layout.height);
+  }
+
+  const changeInFeedSortType = (sortType: string) => {
+    setSelectedFeedSortType(sortType);
+  }
+
+  const addNewCollection = () => {
+    navigation.navigate("CollectionUploadScreen")
+  }
+
+  const moveToFollowListScreen = (requestedType: string) => {
+    navigation.navigate("FollowListScreen", {
+      requestedType: requestedType,
+      followerCount: 132,
+      followingCount: 50,
+    });
+  }
 
 
-  const onScrollPostList = (nativeEvent) => {
-    console.log("onScrollPostList nativeEvent", nativeEvent.nativeEvent.contentOffset.y);
-
-    Animated.event([
-      {nativeEvent: { contentOffset: {y: scrollOffsetY}}}
-    ])
+  const userIntroComponent = () => {
+    return (
+      <UserIntroduction
+      moveToFollowListScreen={moveToFollowListScreen}
+      />
+    )
   }
 
   return (
-    <Container> 
-      <Animated.View
-      onLayout={(event) => onChangeHeaderHeight(event)}
-      style={{
-        position: "absolute",
-        left: 0,
-        right: 0,
-         top: 0,
-         height: headerScrollHeight,
-         overflow: "hidden",
-         zIndex: 10,
-      }}>
-      <CollapsibleHeaderContainer
-      onLayout={(event) => {
-        const height = event.nativeEvent.layout.height;
-        console.log("CollapsibleHeader Height", height);
-        setHeaderMaxHeight(height);
-      }}
-      >
-      <HeaderBar style={{marginTop: getStatusBarHeight()}}>
+    <Container>
+       <HeaderBar>
         <HeaderLeftContainer>
           <TouchableWithoutFeedback onPress={() => navigation.navigate("SettingScreen")}>
           <MyProfileSettingContainer>
@@ -430,49 +374,38 @@ function ProfileScreen({navigation, route}: Props) {
           </MyProfileReviewMapContainer>
         </HeaderRightContainer>
       </HeaderBar>
-      <UserIntroduction/>
-      </CollapsibleHeaderContainer>
-      </Animated.View>
-      <ScrollView
-      onScroll={Animated.event([
-        {nativeEvent: {contentOffset: {y: scrollOffsetY}}}
-      ])}
-      scrollEventThrottle={5}
-      >
-      <ProfileTopTabContainer style={{marginTop:290}}>
-      <ProfileTopTabNavigator
-      navigation={navigation}
-      feedList={TEST_FEED_DATA}
-      collectionList={TEST_COLLECTION_DATA}
-      scrapListData={TEST_SCRAP_DATA}
-      onScrollPostList={onScrollPostList}
-      scrollOffsetY={scrollOffsetY}
-      />
-      </ProfileTopTabContainer>
-      </ScrollView>
+      <ScrollableTabView
+      collapsableBar={userIntroComponent()}
+      initialPage={0}
+      tabContentHeights={[feedListTabHeight, collectionListTabHeight]}
+      scrollEnabled={true}
+      showsVerticalScrollIndicator={false}
+      prerenderingSiblingsNumber={Infinity}
+      renderTabBar={() => <ProfileTabBar 
+      changeInFeedSortType={changeInFeedSortType}
+      selectedFeedSortType={selectedFeedSortType}
+      addNewCollection={addNewCollection}
+      />}>
+      <FeedListTabContainer onLayout={(event) => measureFeedListTab(event)}
+      tabLabel='게시글'>
+       <ProfileFeedList
+       feedListData={TEST_FEED_DATA}
+       currentSortType={selectedFeedSortType}
+       />
+      </FeedListTabContainer>
+
+      <CollectionListTabContainer onLayout={(event) => measureCollectionListTab(event)}
+      tabLabel="컬렉션">
+       <ProfileCollectionList
+       collectionListData={TEST_COLLECTION_DATA}
+       navigation={navigation}
+       /> 
+      </CollectionListTabContainer>
+      </ScrollableTabView>
     </Container>
-  );
+  )
+  
+  
 }
 
 export default ProfileScreen;
-
-/*
-<PinterMapContainer>
-          <PinterMapHeaderContainer>
-            <PinterMapText>핀터맵</PinterMapText>
-            <ViewAllText>View All</ViewAllText>
-          </PinterMapHeaderContainer>
-          <MapViewContainer>
-            <MapView
-              style={{height: 200}}
-              provider={PROVIDER_GOOGLE}
-              initialRegion={{
-                latitude: 37.78825,
-                longitude: -122.4324,
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421,
-              }}
-            />
-          </MapViewContainer>
-        </PinterMapContainer>
-        */

@@ -230,9 +230,9 @@ const CollectionFeedEditScreen = ({navigation, route}: Props) => {
     }, 100)
   }
 
-  const moveAddFeedScreen = () => {
+  const moveToAddFeedScreen = () => {
     navigation.navigate("AddCollectionFeedScreen", {
-      triggerScreen: "CollectionFeedEditScreen"
+      triggerType: "modifyCollection"
     })
   }
 
@@ -270,7 +270,7 @@ const CollectionFeedEditScreen = ({navigation, route}: Props) => {
         </TouchableWithoutFeedback>
         <HeaderTitleText>게시글 편집</HeaderTitleText>
             <HeaderRightContainer>
-              <TouchableWithoutFeedback onPress={() => moveAddFeedScreen()}>
+              <TouchableWithoutFeedback onPress={() => moveToAddFeedScreen()}>
                 <HeaderFinishText>추가</HeaderFinishText>
                 </TouchableWithoutFeedback>
                <AbledHeaderNextText>완료</AbledHeaderNextText>

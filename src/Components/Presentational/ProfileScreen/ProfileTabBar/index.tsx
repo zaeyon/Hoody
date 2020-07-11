@@ -1,27 +1,67 @@
-const React = require('react');
-const PropTypes = require('prop-types');
-const createReactClass = require('create-react-class');
+import React from 'react';
 import {
   StyleSheet,
   Text,
   View,
   Animated,
-  ViewPropTypes
+  ViewPropTypes,
+  TouchableWithoutFeedback,
 } from 'react-native'
 import Styled from 'styled-components/native';
-
 import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 
+const PropTypes = require('prop-types');
+const createReactClass = require('create-react-class');
+const Button = require('./Button');
 
 const ProfileTabBarContainer = Styled.View`
  width: ${wp('100%')};
  background-color:#ffffff;
+ border-bottom-width: 1px;
+ border-color: #F4F4F4;
 `;
 
-const Button = require('./Button');
+const TabIconContainer = Styled.View`
+ flex-direction: row;
+ position: absolute;
+ padding-top: 15px;
+ top:0;
+ right: 8;
+`;
+
+const TypeIconContainer = Styled.View`
+ padding-bottom: 8px;
+ padding-left: 1px;
+ padding-right: 1px;
+`;
+
+const ListTypeIcon = Styled.Image`
+width: ${wp('7%')};
+height: ${wp('7%')};
+`;
+
+const TileTypeIcon = Styled.Image`
+width: ${(wp('7%'))};
+height: ${wp('7%')};
+`;
+
+const AddCollectionIcon = Styled.Image`
+width: ${wp('5.8%')};
+height: ${wp('5.8%')};
+`;
+
+const AddCollectionContainer = Styled.View`
+ padding-bottom: 5px;
+ padding-top: 5px;
+ padding-left: 5px;
+ padding-right: 8px;
+`;
+
+
+
 const ProfileTabBar = createReactClass({
   propTypes: {
     goToPage: PropTypes.func,
@@ -34,6 +74,9 @@ const ProfileTabBar = createReactClass({
     tabStyle: ViewPropTypes.style,
     renderTab: PropTypes.func,
     underlineStyle: ViewPropTypes.style,
+    changeInFeedSortType: PropTypes.func,
+    selectedFeedSortType: PropTypes.string,
+    addNewCollection: PropTypes.func,
   },
 
   getDefaultProps() {
@@ -85,6 +128,16 @@ const ProfileTabBar = createReactClass({
       inputRange: [0, 1],
       outputRange: [16, wp('20%')],
     });
+
+    const changeInFeedSortType = (sortType: string) => {
+      this.props.changeInFeedSortType(sortType);
+      this.props.goToPage(0);
+    }
+
+    const clickToAddCollection = () => {
+      this.props.addNewCollection()
+    }
+
     return (
         <ProfileTabBarContainer>
       <View pointerEvents='box-none' style={[styles.tabs, { backgroundColor: this.props.backgroundColor, }, this.props.style,]}>
@@ -104,6 +157,43 @@ const ProfileTabBar = createReactClass({
           ]}
         />
       </View>
+      {this.props.activeTab === 0 && (
+        <TabIconContainer>
+          <TouchableWithoutFeedback onPress={() => changeInFeedSortType("list")}>
+          <TypeIconContainer>
+            <ListTypeIcon
+            style={this.props.selectedFeedSortType !== "list" && styles.transparentIcon}
+            source={require('~/Assets/Images/ic_listType.png')}/>
+          </TypeIconContainer>
+          </TouchableWithoutFeedback>
+            {this.props.selectedFeedSortType === "tile" && (
+            <TypeIconContainer>
+            <TileTypeIcon
+            source={require('~/Assets/Images/ic_tileType.png')}/>
+            </TypeIconContainer>
+            )}
+            {this.props.selectedFeedSortType !== "tile" && (
+              <TouchableWithoutFeedback onPress={() => changeInFeedSortType("tile")}>
+              <TypeIconContainer>
+              <TileTypeIcon
+              style={styles.transparentIcon}
+              source={require('~/Assets/Images/ic_tileType.png')}/>
+              </TypeIconContainer>
+              </TouchableWithoutFeedback>
+            )}
+        </TabIconContainer>
+      )}
+      {this.props.activeTab === 1 && (
+        <TabIconContainer>
+          <TouchableWithoutFeedback onPress={() => clickToAddCollection()}>
+            <AddCollectionContainer>
+              <AddCollectionIcon
+              source={require('~/Assets/Images/ic_addCollection.png')}/>
+            </AddCollectionContainer>
+          </TouchableWithoutFeedback>
+        </TabIconContainer>
+
+      )}
       </ProfileTabBarContainer>
     );
   },
@@ -117,6 +207,7 @@ const styles = StyleSheet.create({
     paddingTop: 13,
     paddingLeft:15,
     width: wp('35%'),
+    height: wp('12%'),
   },
   tabs: {
     height: wp('12%'),
@@ -128,6 +219,9 @@ const styles = StyleSheet.create({
     borderRightWidth: 0,
     borderColor: '#ccc',
   },
+  transparentIcon : {
+    opacity: 0.25
+  }
 });
 
-module.exports = ProfileTabBar;
+export default ProfileTabBar;

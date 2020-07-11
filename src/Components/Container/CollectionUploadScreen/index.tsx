@@ -200,12 +200,13 @@ const CollectionUploadScreen = ({navigation, route}: Props) => {
         setCollectionDescripText(text);
     }
 
-    const moveToAddFeed = () => {
+    const moveToAddFeedScreen = () => {
         navigation.navigate("AddCollectionFeedScreen", {
             title: collectionTitleText,
             description: collectionDescripText,
             private: enabledPrivate,
             includeLocation: enabledIncludeLocation,
+            triggerType: "addCollection"
         })
     }
     
@@ -219,7 +220,7 @@ const CollectionUploadScreen = ({navigation, route}: Props) => {
                 </TouchableWithoutFeedback>
                 <HeaderTitleText>새 컬렉션</HeaderTitleText>
                 {collectionTitleText !== "" && collectionDescripText !== "" && (
-                <TouchableWithoutFeedback onPress={() => navigation.navigate("AddCollectionFeedScreen")}>
+                <TouchableWithoutFeedback onPress={() => moveToAddFeedScreen()}>
                     <HeaderRightContainer>
                        <AbledHeaderNextText>다음</AbledHeaderNextText>
                     </HeaderRightContainer>

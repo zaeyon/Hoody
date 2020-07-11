@@ -1,30 +1,40 @@
-import React, {useState, useEffect} from 'react';
+
+import React, {useState, useContext, useEffect, createRef, useRef} from 'react';
 import {
-  FlatList, View, Text, Dimensions, TouchableOpacity, TouchableWithoutFeedback
+  NativeScrollEvent,
+  Dimensions,
+  NativeSyntheticEvent,
+  ScrollView,
+  TouchableWithoutFeedback,
+  Text,
+  View,
+  Platform,
+  SafeAreaView,
+  Animated,
 } from 'react-native';
 import Styled from 'styled-components/native';
+import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
+import ProfileHeader from '~/Screens/ProfileHeader';
+import PinterMap from '~/Screens/PinterMap';
+import {FlatGrid} from 'react-native-super-grid';
 import {
-  widthPercentageToDP as wp, 
+  widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-
-import ScrollableTabView, { DefaultTabBar,} from 'rn-collapsing-tab-bar';
+import {useSelector, useDispatch} from 'react-redux';
+import allActions from '~/action';
+import KakaoLogins from '@react-native-seoul/kakao-login';
+import { getStatusBarHeight } from 'react-native-status-bar-height';
 
 import UserIntroduction from '~/Components/Presentational/ProfileScreen/UserIntroduction';
-import ProfileTabBar from '~/Components/Presentational/ProfileScreen/ProfileTabBar';
+import GetUserProfile from '~/Route/User/GetUserProfile';
+import ProfileTopTabNavigator from '~/Components/Presentational/ProfileScreen/ProfileTopTabNavigator';
 
 const Container = Styled.SafeAreaView`
  flex: 1;
  background-color: #ffffff;
 `;
 
-const FeedListTabContainer = Styled.View`
- background-color: #ffffff;
-`;
-
-const CollectionListTabContainer = Styled.View`
- background-color: #ffffff;
-`;
 
 const HeaderBar = Styled.View`
  width: ${wp('100%')};
@@ -108,7 +118,11 @@ const MyProfileReviewMapText = Styled.Text`
  font-size: 15px;
 `;
 
- 
+const ProfileTopTabContainer = Styled.View`
+`;
+
+const CollapsibleHeaderContainer = Styled.View`
+`;
 
 const TEST_FEED_DATA = [
   {
@@ -286,35 +300,116 @@ const TEST_FEED_DATA = [
   },
 ];
 
-const deviceWidth = Dimensions.get("window").width;
-const containerHeight = Dimensions.get("window").height;
+
+const TEST_COLLECTION_DATA = [
+  {
+    name: '컬렉션1',
+    coverImage: 'https://usercontents-c.styleshare.io/images/24756885/640x640',
+  },
+  {
+    name: '컬렉션2',
+    coverImage: 'https://img.sbs.co.kr/newimg/news/20190627/201328633_1280.jpg'
+  },
+  {
+    name: '컬렉션3',
+    coverImage: 'https://blogsimages.adobe.com/creativedialogue/files/2019/05/AdobeOnColour-Campaign_Creator-Deliverable-2-1350x1350.jpg'
+  }
+]
+
+const TEST_SCRAP_DATA = [
+  {
+    name: '스크랩 앨범1',
+    coverImage: 'https://img.theqoo.net/img/lwsBV.jpg'
+  },
+  {
+    name: '앨범2',
+    coverImage: 'https://t1.daumcdn.net/cfile/tistory/9966FB475D739E5017'
+  }
+]
 
 interface Props {
-  navigation: any,
-  route: any,
+    navigation: any,
+    route: any,
 }
 
-const ProfileScreenTest = ({navigation, route}: Props) => {
-  const [feedListTabHeight, setFeedListTabHeight] = useState<number>(containerHeight);
-  const [collectionListTabHeight, setCollectionListTabHeight] = useState<number>(containerHeight);
+function ProfileScreenTest({navigation, route}: Props) {
+  const [headerMaxHeight, setHeaderMaxHeight] = useState(312);
+  const [minHeaderHeight, setMinHeaderHeight] = useState<boolean>(false);
+  const currentUser = useSelector((state) => state.currentUser);
+  console.log("currentUser", currentUser);
+  const dispatch = useDispatch();
 
-  const measureFeedListTab = (event) => {
-    setFeedListTabHeight(event.nativeEvent.layout.height);
+  var H_MAX_HEIGHT = 0;
+  const H_MIN_HEIGHT = hp('6.5%') + getStatusBarHeight();
+  const H_SCROLL_DISTANCE = headerMaxHeight - H_MIN_HEIGHT;
+
+  const scrollOffsetY = useRef(new Animated.Value(0)).current;
+
+  const headerScrollHeight = scrollOffsetY.interpolate({
+    inputRange: [0, H_SCROLL_DISTANCE],
+    outputRange: [headerMaxHeight, H_MIN_HEIGHT],
+    extrapolate: "clamp"
+  })
+  
+  const isBottom = ({
+    layoutMeasurement,
+    contentOffset,
+    contentSize,
+  }: NativeScrollEvent) => {
+    return layoutMeasurement.height + contentOffset.y >= contentSize.height;
+  };
+
+  function Logout() {
+    console.log('접속 사용자 정보', currentUser);
+    if (currentUser.user.provider === 'kakao') {
+      KakaoLogins.logout()
+        .then((result) => {
+          console.log('로그아웃성공', result);
+          dispatch(allActions.userActions.logOut());
+        })
+        .catch((err) => {
+          console.log('에러 발생', err.code, err.message);
+        });
+    } else {
+      dispatch(allActions.userActions.logOut());
+    }
   }
 
-  const measureCollectionListTab = (event) => {
-    setCollectionListTabHeight(event.nativeEvent.layout.height);
-  }
+  const onChangeHeaderHeight = (event) => {
+    console.log("onchange")
+    console.log("event.nativeEvent.layoutheight", event.nativeEvent.layout.height);
+}
 
-  const userIntroComponent = () => {
-    return (
-      <UserIntroduction/>
-    )
+
+  const onScrollPostList = (nativeEvent) => {
+    console.log("onScrollPostList nativeEvent", nativeEvent.nativeEvent.contentOffset.y);
+
+    Animated.event([
+      {nativeEvent: { contentOffset: {y: scrollOffsetY}}}
+    ])
   }
 
   return (
-    <Container>
-       <HeaderBar>
+    <Container> 
+      <Animated.View
+      onLayout={(event) => onChangeHeaderHeight(event)}
+      style={{
+        position: "absolute",
+        left: 0,
+        right: 0,
+         top: 0,
+         height: headerScrollHeight,
+         overflow: "hidden",
+         zIndex: 10,
+      }}>
+      <CollapsibleHeaderContainer
+      onLayout={(event) => {
+        const height = event.nativeEvent.layout.height;
+        console.log("CollapsibleHeader Height", height);
+        setHeaderMaxHeight(height);
+      }}
+      >
+      <HeaderBar style={{marginTop: getStatusBarHeight()}}>
         <HeaderLeftContainer>
           <TouchableWithoutFeedback onPress={() => navigation.navigate("SettingScreen")}>
           <MyProfileSettingContainer>
@@ -337,56 +432,50 @@ const ProfileScreenTest = ({navigation, route}: Props) => {
           </MyProfileReviewMapContainer>
         </HeaderRightContainer>
       </HeaderBar>
-      <ScrollableTabView
-      collapsableBar={userIntroComponent()}
-      initialPage={0}
-      tabContentHeights={[feedListTabHeight, collectionListTabHeight]}
-      scrollEnabled={true}
-      showsVerticalScrollIndicator={false}
-      prerenderingSiblingsNumber={Infinity}
-      renderTabBar={() => <ProfileTabBar/>}>
-      <FeedListTabContainer onLayout={(event) => measureFeedListTab(event)}
-      tabLabel='게시글'>
-        <View style={{ height: 2000, backgroundColor: "cyan" }}>
-                    <TouchableOpacity onPress={() => { alert('Alert') }}>
-                        <Text>Alert</Text>
-                    </TouchableOpacity>
-                    <Text >My</Text>
-                    <FlatList
-                        scrollEnabled={false}
-                        bounces={true}
-                        data={[{ key: 'a' }, { key: 'b' }]}
-                        renderItem={({ item }) => <View style={{ height: 400 }}>
-                            <Text>{item.key}</Text>
-                        </View>}
-                    />
-                </View>
-      </FeedListTabContainer>
-
-      <CollectionListTabContainer onLayout={(event) => measureCollectionListTab(event)}
-      tabLabel="컬렉션">
-         <View style={{ height: 2000, backgroundColor: "cyan" }}>
-                    <TouchableOpacity onPress={() => { alert('Alert') }}>
-                        <Text>Alert</Text>
-                    </TouchableOpacity>
-                    <Text >My</Text>
-                    <FlatList
-                        scrollEnabled={false}
-                        bounces={true}
-                        data={[{ key: 'a' }, { key: 'b' }]}
-                        renderItem={({ item }) => <View style={{ height: 400 }}>
-                            <Text>{item.key}</Text>
-                        </View>}
-                    />
-                </View>
-
-      </CollectionListTabContainer>
-      </ScrollableTabView>
+      <UserIntroduction/>
+      </CollapsibleHeaderContainer>
+      </Animated.View>
+      <ScrollView
+      onScroll={Animated.event([
+        {nativeEvent: {contentOffset: {y: scrollOffsetY}}}
+      ])}
+      scrollEventThrottle={5}
+      >
+      <ProfileTopTabContainer style={{marginTop:290}}>
+      <ProfileTopTabNavigator
+      navigation={navigation}
+      feedListData={TEST_FEED_DATA}
+      collectionListData={TEST_COLLECTION_DATA}
+      scrapListData={TEST_SCRAP_DATA}
+      onScrollPostList={onScrollPostList}
+      scrollOffsetY={scrollOffsetY}
+      />
+      </ProfileTopTabContainer>
+      </ScrollView>
     </Container>
-  )
-  
-  
+  );
 }
 
-export default ProfileScreenTest
+export default ProfileScreenTest;
+
+/*
+<PinterMapContainer>
+          <PinterMapHeaderContainer>
+            <PinterMapText>핀터맵</PinterMapText>
+            <ViewAllText>View All</ViewAllText>
+          </PinterMapHeaderContainer>
+          <MapViewContainer>
+            <MapView
+              style={{height: 200}}
+              provider={PROVIDER_GOOGLE}
+              initialRegion={{
+                latitude: 37.78825,
+                longitude: -122.4324,
+                latitudeDelta: 0.0922,
+                longitudeDelta: 0.0421,
+              }}
+            />
+          </MapViewContainer>
+        </PinterMapContainer>
+        */
 

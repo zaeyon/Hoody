@@ -228,7 +228,7 @@ const CloseButton = Styled.Image`
 `;
 
 
-const SearchButton = Styled.TouchableOpacity`
+const SearchIconContainer = Styled.View`
  position: absolute;
  justify-content: center;
  left: 10px;
@@ -381,11 +381,11 @@ const LocationItem = ({location, address}) => {
                 placeholderTextColor="#979797"
                 value={location}
               />
-              <SearchButton onPress={() => SearchLocation(location)}>
+              <SearchIconContainer>
                 <SearchIcon
                   source={require('~/Assets/Images/ic_search.png')}
-                />
-                </SearchButton>
+                />searchIconContainer
+                </SearchIconContainer>
                 </SearchInputContainer>
             </SearchContainer>
             <MyLocationContainer>

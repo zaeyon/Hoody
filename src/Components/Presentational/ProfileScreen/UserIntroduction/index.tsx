@@ -1,9 +1,13 @@
 import React from 'react';
+import {
+    TouchableWithoutFeedback
+} from 'react-native';
 import Styled from 'styled-components/native';
 import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import { NavigationContainer } from '@react-navigation/native';
 
 const Container = Styled.View`
  background-color: #707070;
@@ -14,8 +18,8 @@ const UserIntroductionContainer = Styled.View`
  flex-direction: column;
  padding-top: 20px;
  padding-bottom: 10px;
- padding-left: 16px;
- padding-right: 16px;
+ padding-left: 15px;
+ padding-right: 15px;
 `;
 
 const ProfileImage = Styled.Image`
@@ -67,6 +71,7 @@ align-items: center;
 `;
 
 const UserInfoLabelText = Styled.Text`
+margin-top: 2px;
 font-size: 15px;
 color: #8E8E8E;
 `;
@@ -78,7 +83,11 @@ font-size: 15px;
 color: #8E8E8E;
 `;
 
-const UserIntroduction = () => {
+interface Props {
+    moveToFollowListScreen: (requestedType: string) => void,
+}
+
+const UserIntroduction = ({moveToFollowListScreen}: Props) => {
     
     return (
         <Container>
@@ -91,14 +100,18 @@ const UserIntroduction = () => {
                         <UserInfoLabelText>게시물</UserInfoLabelText>
                         <UserInfoCountText>544</UserInfoCountText>
                     </UserFeedContainer>
+                    <TouchableWithoutFeedback onPress={() => moveToFollowListScreen("follower")}>
                     <UserFollowerContainer>
-                        <UserInfoLabelText>팔로우</UserInfoLabelText>
+                        <UserInfoLabelText>팔로워</UserInfoLabelText>
                         <UserInfoCountText>45</UserInfoCountText>
                     </UserFollowerContainer>
+                    </TouchableWithoutFeedback>
+                    <TouchableWithoutFeedback onPress={() => moveToFollowListScreen("following")}>
                     <UserFollowingContainer>
                         <UserInfoLabelText>팔로잉</UserInfoLabelText>
                         <UserInfoCountText>354</UserInfoCountText>
                     </UserFollowingContainer>
+                    </TouchableWithoutFeedback>
                 </ProfileUserInfoContainer>
             </UserIntroductionContainer>
         </Container>

@@ -105,7 +105,7 @@ const ProfileTopTabNavigator = ({navigation, route, collectionList, feedList, sc
           <ProfileFeedList
           onScrollPostList={onScrollPostList}
           navigation={navigation}
-          feedList={feedList}
+          feedListData={feedList}
           currentSortType={currentSortType}
           scrollOffsetY={scrollOffsetY}
           />
@@ -122,7 +122,7 @@ const ProfileTopTabNavigator = ({navigation, route, collectionList, feedList, sc
         return (
             <ProfileCollectionList
             navigation={navigation}
-            collectionList={collectionList}
+            collectionListData={collectionList}
             />
         )
     }
@@ -213,7 +213,6 @@ const ProfileTopTabNavigator = ({navigation, route, collectionList, feedList, sc
                     </AddScrapContainer>
                     </TouchableWithoutFeedback>
                 </TopTabMenuContainer>
-
             )}
         </Container>
     )

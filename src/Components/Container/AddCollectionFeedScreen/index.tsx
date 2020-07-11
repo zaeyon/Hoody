@@ -124,7 +124,7 @@ const AddCollectionFeedScreen = ({navigation, route}: Props) => {
     const [selectableFeedList, setSelectableFeedList] = useState<Array<object>>([]);
     const [selectingFeedList, setSelectingFeedList] = useState<Array<object>>([]);
     const [changeFeedList, setChangeFeedList] = useState<boolean>(false);
-    var triggerScreen = "";
+    const [triggerType, setTriggerType] = useState<string>("");
 
     useEffect(() => {
         var tmpSelectableFeedList = TEST_MY_TILE_FEED.map(function(obj) {
@@ -135,13 +135,20 @@ const AddCollectionFeedScreen = ({navigation, route}: Props) => {
     }, [])
 
     useEffect(() => {
-       if(route.params?.triggerScreen) {
-           if(route.params?.triggerScreen === "CollectionEditScreen")
+       if(route.params?.triggerType) {
+           console.log("route.params.triggerType", route.params.triggerType);
+
+           if(route.params?.triggerType === "modifyCollection")
            {
-               triggerScreen = "CollectionEditScreen"
+               setTriggerType("modifyCollection");
+
+           } else if(route.params.triggerType === "addCollection")
+           {
+               console.log("애드콜랙션")
+               setTriggerType("addCollection");
            }
-       } 
-    }, [])
+        } 
+    }, [route.params?.triggerType])
 
     const onSelectCircle = (index:number) => {
         var tmpFeedList = selectableFeedList;
@@ -168,9 +175,10 @@ const AddCollectionFeedScreen = ({navigation, route}: Props) => {
     }
 
     const finishAddCollection = () => {
-        if(triggerScreen = "CollectionEditScreen") {
+        console.log("triggerType", triggerType);
+        if(triggerType === "modifyCollection") {
             navigation.navigate("CollectionFeedEditScreen")
-        } else {
+        } else if(triggerType === "addCollection") {
             navigation.navigate("ProfileScreen");
         }
     }

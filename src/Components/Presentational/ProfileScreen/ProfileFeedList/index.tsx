@@ -14,15 +14,13 @@ import ProfileTileFeedItem from '~/Components/Presentational/ProfileScreen/Profi
 const UserFeedListContainer = Styled.View`
  width: ${wp('100%')};
  background-color: #ffffff;
- flex:1;
+ padding-bottom: 20px;
 `;
 
 const ListTypeFeedContainer = Styled.View`
-flex:1;
 `;
 
 const TileTypeFeedContainer = Styled.View`
-flex:1;
 `;
 
 const MonthSelectContainer = Styled.View`
@@ -48,7 +46,7 @@ padding: 15px 16px ${hp('8.5%')}px 16px;
   interface Props {
     navigation: any,
     route: any,
-    feedList: Array<object>,
+    feedListData: Array<object>,
     currentSortType: string
     onScrollPostList: () => void,
     scrollOffsetY: any,
@@ -73,7 +71,7 @@ padding: 15px 16px ${hp('8.5%')}px 16px;
     }
   ]
 
-const ProfileFeedList = ({navigation, route, feedList, currentSortType, onScrollPostList, scrollOffsetY}: Props) => {
+const ProfileFeedList = ({navigation, route, feedListData, currentSortType, onScrollPostList, scrollOffsetY}: Props) => {
 
     const renderProfileListFeedItem = ({item, index}) => {
         return (
@@ -134,7 +132,7 @@ const ProfileFeedList = ({navigation, route, feedList, currentSortType, onScroll
         <ListTypeFeedContainer>
         <FlatList
 scrollEventThrottle={5}
-        data={feedList}
+        data={feedListData}
         renderItem={renderProfileListFeedItem}
         />
         </ListTypeFeedContainer>

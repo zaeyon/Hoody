@@ -5,20 +5,19 @@ import {
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import {Text, FlatList, TouchableWithoutFeedback} from 'react-native';
-import ProfileCollectionItem from '~/Components/Presentational/ProfileScreen/ProfileCollectionItem';
-import { add } from 'react-native-reanimated';
 
+import ProfileCollectionItem from '~/Components/Presentational/ProfileScreen/ProfileCollectionItem';
 
 const UserCollectionListContainer = Styled.View`
 background-color: #ffffff;
-flex: 1;
+padding-bottom: 350px;
+
 `;
 
 const NoCollectionContainer = Styled.View`
  background-color: #ffffff;
  align-items: center;
  justify-content: center;
- flex:1;
 `;
 
 const AddCollectionButton = Styled.View`
@@ -49,15 +48,15 @@ color: #4b4b4b;
 `;
 
 interface Props {
-    collectionList: Array<object>;
+    collectionListData: Array<object>;
     navigation: any,
 }
 
-const ProfileCollectionList = ({collectionList, navigation}: Props) => {
+const ProfileCollectionList = ({collectionListData, navigation}: Props) => {
     const [addNewCollection, setAddNewCollection] = useState<boolean>(true);
     
     useEffect(() => {
-        console.log("collectionList", collectionList)  
+        console.log("collectionList", collectionListData)  
     }, [])
 
     const renderProfileCollectionItem = ({item, index}) => {
@@ -70,7 +69,7 @@ const ProfileCollectionList = ({collectionList, navigation}: Props) => {
            )
     }
 
-    if(!collectionList[0]) {
+    if(!collectionListData[0]) {
     return (
         <NoCollectionContainer>
         <TouchableWithoutFeedback onPress={() => navigation.navigate("CollectionUploadScreen")}>
@@ -90,7 +89,7 @@ const ProfileCollectionList = ({collectionList, navigation}: Props) => {
                 <FlatList
                 columnWrapperStyle={{justifyContent:'space-between', paddingLeft:15, paddingRight:15, paddingTop:17, paddingBottom:0}}
                 numColumns={2}
-                data={collectionList}
+                data={collectionListData}
                 renderItem={renderProfileCollectionItem}
                 />
             </UserCollectionListContainer>

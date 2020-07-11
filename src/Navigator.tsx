@@ -64,6 +64,9 @@ import CollectionFeedEditScreen from '~/Components/Container/CollectionFeedEditS
 import AddScrapAlbumScreen from '~/Components/Container/AddScrapAlbumScreen';
 import CollapsibleTabBarTest from '~/Components/Container/CollapsibleTabBarTest';
 
+// Location Feed Map Screen
+import LocationFeedMapScreen from '~/Components/Container/LocationFeedMapScreen';
+
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
 const SearchStack = createStackNavigator();
@@ -632,6 +635,7 @@ function AppNavigator() {
       <NoBottomBarStack.Screen name="CollectionFeedEditScreen" component={CollectionFeedEditScreen}/>
       <NoBottomBarStack.Screen name="AddCollectionFeedScreen" component={AddCollectionFeedScreen}/>
       <NoBottomBarStack.Screen name="AddScrapAlbumScreen" component={AddScrapAlbumScreen}/>
+      <NoBottomBarStack.Screen name="LocationFeedMapScreen" component={LocationFeedMapScreen}/>
     </NoBottomBarStack.Navigator>
     ) : (
       <UnauthStackScreen/>

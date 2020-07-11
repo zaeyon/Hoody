@@ -316,6 +316,10 @@ const ProfileScreen = ({navigation, route}: Props) => {
   const [collectionListTabHeight, setCollectionListTabHeight] = useState<number>(containerHeight);
   const [selectedFeedSortType, setSelectedFeedSortType] = useState<string>("list");
 
+  const moveToLocationFeedMap = () => {
+    navigation.navigate("LocationFeedMapScreen");
+  }
+
   const measureFeedListTab = (event) => {
     setFeedListTabHeight(event.nativeEvent.layout.height);
   }
@@ -339,6 +343,7 @@ const ProfileScreen = ({navigation, route}: Props) => {
       followingCount: 50,
     });
   }
+
 
 
   const userIntroComponent = () => {
@@ -367,11 +372,13 @@ const ProfileScreen = ({navigation, route}: Props) => {
             source={require('~/Assets/Images/ic_report.png')}/>
             <MyProfileReportText>리포트</MyProfileReportText>
           </MyProfileReportContainer>
+          <TouchableWithoutFeedback onPress={() => moveToLocationFeedMap()}>
           <MyProfileReviewMapContainer>
             <MyProfileReviewMapImage
             source={require('~/Assets/Images/ic_reviewMap.png')}/>
             <MyProfileReviewMapText>299</MyProfileReviewMapText>
           </MyProfileReviewMapContainer>
+          </TouchableWithoutFeedback>
         </HeaderRightContainer>
       </HeaderBar>
       <ScrollableTabView
@@ -389,6 +396,7 @@ const ProfileScreen = ({navigation, route}: Props) => {
       <FeedListTabContainer onLayout={(event) => measureFeedListTab(event)}
       tabLabel='게시글'>
        <ProfileFeedList
+       navigation={navigation}
        feedListData={TEST_FEED_DATA}
        currentSortType={selectedFeedSortType}
        />

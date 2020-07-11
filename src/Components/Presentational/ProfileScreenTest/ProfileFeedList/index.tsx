@@ -5,7 +5,7 @@ import {
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import {Text, FlatList, SectionList, View, Animated} from 'react-native';
+import {Text, FlatList, SectionList, View, Animated, Dimensions} from 'react-native';
 
 import ProfileListFeedItem from '~/Components/Presentational/ProfileScreen/ProfileListFeedItem';
 import ProfileTileFeedItem from '~/Components/Presentational/ProfileScreen/ProfileTileFeedItem';
@@ -52,6 +52,12 @@ padding: 15px 16px ${hp('8.5%')}px 16px;
     currentSortType: string
     onScrollPostList: () => void,
     scrollOffsetY: any,
+    onGetRef: any,
+    scrollY: any,
+    onScrollEndDrag: any,
+    onMomentumScrollEnd: any,
+    onMomentumScrollBegin: any,
+    onChangeHeaderHeight: any,
   }
 
   const TEST_SECTION_DATA = [
@@ -73,7 +79,21 @@ padding: 15px 16px ${hp('8.5%')}px 16px;
     }
   ]
 
-const ProfileFeedList = ({navigation, route, feedList, currentSortType, onScrollPostList, scrollOffsetY}: Props) => {
+const HeaderHeight = 400;
+const TabBarHeight = 48;
+const HeaderMinHeight = hp('6.5%');
+const ScrollDistance = HeaderHeight - HeaderMinHeight;
+
+const ProfileFeedList = ({navigation, route, feedList, currentSortType, scrollOffsetY, onGetRef, scrollY, onScrollEndDrag, onMomentumScrollBegin, onMomentumScrollEnd, onChangeHeaderHeight}: Props) => {
+
+
+    const windowHeight = Dimensions.get('window').height;
+
+  const headerScrollHeight = scrollY.interpolate({
+    inputRange: [0, ScrollDistance],
+    outputRange: [HeaderHeight, HeaderMinHeight],
+    extrapolate: "clamp"
+ });
 
     const renderProfileListFeedItem = ({item, index}) => {
         return (
@@ -99,19 +119,6 @@ const ProfileFeedList = ({navigation, route, feedList, currentSortType, onScroll
         )
     }
 
-    const renderProfileTileFeedItem = ({item, index}) => {
-      return (
-        <FlatList
-        data={item}
-        numColumns={2}
-        renderItem={({item, index}) => {
-          return (
-            <ProfileTileFeedItem/>
-          )
-        }}/>
-      )
-    }
-
     const renderProfileTileSectionItem = ({item, index}) => {
       console.log("sectionItem item", item);
       return (
@@ -132,10 +139,34 @@ const ProfileFeedList = ({navigation, route, feedList, currentSortType, onScroll
         <UserFeedListContainer>
         {(currentSortType === 'list') && (
         <ListTypeFeedContainer>
-        <FlatList
-scrollEventThrottle={5}
+        <Animated.FlatList
+        showsVerticalScrollIndicator={false}
+        scrollToOverflowEnabled={true}
+        ref={onGetRef}
+        scrollEventThrottle={16}
         data={feedList}
         renderItem={renderProfileListFeedItem}
+        onMomentumScrollBegin={onMomentumScrollBegin}
+        onMomentumScrollEnd={onMomentumScrollEnd}
+        onScrollEndDrag={onScrollEndDrag}
+        contentContainerStyle={{
+          marginTop: HeaderHeight + TabBarHeight,
+          paddingHorizontal: 10,
+          minHeight: windowHeight - (TabBarHeight),
+          paddingBottom: HeaderHeight+50,
+        }}
+        keyExtractor={(item, index) => index.toString()}
+        onScroll={Animated.event(
+            [{nativeEvent: {contentOffset: {y: scrollY}}}],
+            {
+                useNativeDriver: false,
+                listener: event => {
+                    console.log("headerScrollHeight", headerScrollHeight);
+                    onChangeHeaderHeight(headerScrollHeight);
+                }
+            },
+            
+        )}
         />
         </ListTypeFeedContainer>
         )}

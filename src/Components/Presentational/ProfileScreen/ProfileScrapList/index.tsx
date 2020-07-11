@@ -4,6 +4,9 @@ import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import {FlatList} from 'react-native';
+
+import ProfileScrapItem from '~/Components/Presentational/ProfileScreen/ProfileScrapItem';
 
 const Container = Styled.View`
  flex: 1;
@@ -30,9 +33,30 @@ const AllScrapContainer = Styled.View`
   font-weight: 600;
  `;
 
- const ProfileScrapList = ({}) => {
+ interface Props {
+     scrapListData: Array<object>;
+ }
+
+
+
+ const ProfileScrapList = ({scrapListData}: Props) => {
+
+    const renderProfileScrapItem = ({item, index}) => {
+        return (
+            <ProfileScrapItem
+            coverImage={item.coverImage}
+            name={item.name}
+            />
+        )
+    }
+
      return (
          <Container>
+             <FlatList
+columnWrapperStyle={{justifyContent:'space-between', paddingLeft:15, paddingRight:15, paddingTop:17, paddingBottom:0}}
+             numColumns={2}
+             data={scrapListData}
+             renderItem={renderProfileScrapItem}/>
          </Container>
      )
  }

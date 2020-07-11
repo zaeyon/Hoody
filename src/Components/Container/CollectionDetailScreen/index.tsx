@@ -277,15 +277,6 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
         )
     }
 
-    const onScroll = () => {
-        console.log("headerScrollHeight", headerScrollHeight);
-
-        console.log("String(headerScrollHeight)", headerScrollHeight)
-        if(headerScrollHeight == 106) {
-            console.log("헤더 최소")
-        }
-    }
-
     const onChangeHeaderHeight = (event) => {
         if(event.nativeEvent.layout.height < 120) {
             console.log("헤더 블러 처리")
@@ -381,7 +372,7 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
             </CollectionInfoFooter>
             </CollectionInfoContainer>
             <FlatList
-            columnWrapperStyle={{justifyContent:'space-between', paddingLeft:15, paddingRight:15, paddingTop:17, paddingBottom:0}}
+            columnWrapperStyle={{justifyContent:'space-between', paddingLeft:16, paddingRight:15, paddingTop:17, paddingBottom:0}}
             numColumns={2}
             data={TEST_COLLECTION_DATA.feed}
             renderItem={renderCollectionFeedItem}

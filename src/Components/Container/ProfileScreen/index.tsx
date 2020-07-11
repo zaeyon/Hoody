@@ -1,4 +1,4 @@
-import React, {useState, useContext, useEffect} from 'react';
+import React, {useState, useContext, useEffect, createRef, useRef} from 'react';
 import {
   NativeScrollEvent,
   Dimensions,
@@ -9,6 +9,7 @@ import {
   View,
   Platform,
   SafeAreaView,
+  Animated,
 } from 'react-native';
 import Styled from 'styled-components/native';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
@@ -22,6 +23,7 @@ import {
 import {useSelector, useDispatch} from 'react-redux';
 import allActions from '~/action';
 import KakaoLogins from '@react-native-seoul/kakao-login';
+import { getStatusBarHeight } from 'react-native-status-bar-height';
 
 import UserIntroduction from '~/Components/Presentational/ProfileScreen/UserIntroduction';
 import GetUserProfile from '~/Route/User/GetUserProfile';
@@ -39,6 +41,7 @@ const HeaderBar = Styled.View`
  flex-direction: row;
  align-items: center;
  justify-content: space-between;
+ background-color:#ffffff;
 `;
 
 const HeaderLeftContainer = Styled.View`
@@ -112,6 +115,12 @@ const MyProfileReviewMapText = Styled.Text`
  color: #505866;
  font-weight: 600;
  font-size: 15px;
+`;
+
+const ProfileTopTabContainer = Styled.View`
+`;
+
+const CollapsibleHeaderContainer = Styled.View`
 `;
 
 const TEST_FEED_DATA = [
@@ -305,15 +314,40 @@ const TEST_COLLECTION_DATA = [
   }
 ]
 
+const TEST_SCRAP_DATA = [
+  {
+    name: '스크랩 앨범1',
+    coverImage: 'https://img.theqoo.net/img/lwsBV.jpg'
+  },
+  {
+    name: '앨범2',
+    coverImage: 'https://t1.daumcdn.net/cfile/tistory/9966FB475D739E5017'
+  }
+]
+
 interface Props {
     navigation: any,
     route: any,
 }
 
 function ProfileScreen({navigation, route}: Props) {
+  const [headerMaxHeight, setHeaderMaxHeight] = useState(312);
+  const [minHeaderHeight, setMinHeaderHeight] = useState<boolean>(false);
   const currentUser = useSelector((state) => state.currentUser);
   console.log("currentUser", currentUser);
   const dispatch = useDispatch();
+
+  var H_MAX_HEIGHT = 0;
+  const H_MIN_HEIGHT = hp('6.5%') + getStatusBarHeight();
+  const H_SCROLL_DISTANCE = headerMaxHeight - H_MIN_HEIGHT;
+
+  const scrollOffsetY = useRef(new Animated.Value(0)).current;
+
+  const headerScrollHeight = scrollOffsetY.interpolate({
+    inputRange: [0, H_SCROLL_DISTANCE],
+    outputRange: [headerMaxHeight, H_MIN_HEIGHT],
+    extrapolate: "clamp"
+  })
   
   const isBottom = ({
     layoutMeasurement,
@@ -339,9 +373,41 @@ function ProfileScreen({navigation, route}: Props) {
     }
   }
 
+  const onChangeHeaderHeight = (event) => {
+    console.log("onchange")
+    console.log("event.nativeEvent.layoutheight", event.nativeEvent.layout.height);
+}
+
+
+  const onScrollPostList = (nativeEvent) => {
+    console.log("onScrollPostList nativeEvent", nativeEvent.nativeEvent.contentOffset.y);
+
+    Animated.event([
+      {nativeEvent: { contentOffset: {y: scrollOffsetY}}}
+    ])
+  }
+
   return (
-    <Container>
-      <HeaderBar>
+    <Container> 
+      <Animated.View
+      onLayout={(event) => onChangeHeaderHeight(event)}
+      style={{
+        position: "absolute",
+        left: 0,
+        right: 0,
+         top: 0,
+         height: headerScrollHeight,
+         overflow: "hidden",
+         zIndex: 10,
+      }}>
+      <CollapsibleHeaderContainer
+      onLayout={(event) => {
+        const height = event.nativeEvent.layout.height;
+        console.log("CollapsibleHeader Height", height);
+        setHeaderMaxHeight(height);
+      }}
+      >
+      <HeaderBar style={{marginTop: getStatusBarHeight()}}>
         <HeaderLeftContainer>
           <TouchableWithoutFeedback onPress={() => navigation.navigate("SettingScreen")}>
           <MyProfileSettingContainer>
@@ -365,12 +431,25 @@ function ProfileScreen({navigation, route}: Props) {
         </HeaderRightContainer>
       </HeaderBar>
       <UserIntroduction/>
+      </CollapsibleHeaderContainer>
+      </Animated.View>
+      <ScrollView
+      onScroll={Animated.event([
+        {nativeEvent: {contentOffset: {y: scrollOffsetY}}}
+      ])}
+      scrollEventThrottle={5}
+      >
+      <ProfileTopTabContainer style={{marginTop:290}}>
       <ProfileTopTabNavigator
-
       navigation={navigation}
       feedList={TEST_FEED_DATA}
       collectionList={TEST_COLLECTION_DATA}
+      scrapListData={TEST_SCRAP_DATA}
+      onScrollPostList={onScrollPostList}
+      scrollOffsetY={scrollOffsetY}
       />
+      </ProfileTopTabContainer>
+      </ScrollView>
     </Container>
   );
 }

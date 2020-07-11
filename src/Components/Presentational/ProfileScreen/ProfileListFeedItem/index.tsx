@@ -15,13 +15,9 @@ const Container = Styled.View`
 
 const FeedItemContainer = Styled.View`
  width: ${wp('100%')};
- background-color:#ffffff;
  flex-direction: column;
- padding-top: 15px;
- padding-left: 16px;
- padding-right: 16px;
-
- 
+ padding-top:15px;
+ padding-right:10px;
 `;
 
 const RightContainer = Styled.View`
@@ -110,6 +106,7 @@ const RatingContainer = Styled.View`
  flex-direction: row;
  align-items: center;
  margin-left: 10px;
+ padding-right: 10px;
 `;
 
 const RatingStarImage = Styled.Image`
@@ -134,7 +131,7 @@ padding-top: 10px;
 
 const ImageCountBackground = Styled.View`
  top: 15px;
- right: 5px;
+ right: 15px;
  padding: 5px 9px 5px 9px;
  position: absolute;
  border-radius: 26px;
@@ -152,17 +149,17 @@ const FirstImage = Styled.Image`
  border-top-left-radius: 10px;
  border-bottom-left-radius: 10px;
 resize-mode:cover;
-width: ${wp('46%')};
-height: ${wp('46%')};
+width: ${wp('47%')};
+height: ${wp('47%')};
 `;
 
 const SecondImage = Styled.Image`
- margin-left: 2.5px;
+ margin-left: 3.0px;
  border-top-right-radius: 10px;
  border-bottom-right-radius: 10px;
 resize-mode:cover;
- width: ${wp('46%')};
- height: ${wp('46%')};
+ width: ${wp('47%')};
+ height: ${wp('47%')};
 `;
 
 const ReviewImageContainer = Styled.View`
@@ -174,6 +171,7 @@ const ReviewImage = Styled.Image`
 resize-mode:cover;
 border-radius: 10px; 
 height: ${wp('44%')};
+width: ${wp('95%')};
 `;
 
 const TagContainer = Styled.View`
@@ -233,7 +231,6 @@ const PriceIcon = Styled.Image`
 `;
 
 const PriceText = Styled.Text`
- margin-left: 2px;
  font-size: 14px;
  color: #707070;
 `;
@@ -248,6 +245,7 @@ const DescriptionText = Styled.Text`
 `;
 
 const AdditionalInfoContainer = Styled.View`
+padding-right: 10px;
  padding-top: 10px;
  flex-direction: row;
  justify-content: center;

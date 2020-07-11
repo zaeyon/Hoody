@@ -50,6 +50,7 @@ import getCurrentUser from '~/AsyncStorage/User';
 import ProfileScreen from '~/Components/Container/ProfileScreen';
 import SettingScreen from '~/Components/Container/SettingScreen';
 import CollectionDetailScreen from '~/Components/Container/CollectionDetailScreen';
+import ProfileScreenTest from '~/Components/Container/ProfileScreenTest'
 
 // Collection Screen
 import CollectionUploadScreen from '~/Components/Container/CollectionUploadScreen';
@@ -59,6 +60,7 @@ import CollectionFeedEditScreen from '~/Components/Container/CollectionFeedEditS
 
 // Scrap Screen
 import AddScrapAlbumScreen from '~/Components/Container/AddScrapAlbumScreen';
+import CollapsibleTabBarTest from '~/Components/Container/CollapsibleTabBarTest';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
@@ -289,7 +291,7 @@ function ProfileStackScreen() {
       }}>
       <ProfileStack.Screen
         name="ProfileScreen"
-        component={ProfileScreen}
+        component={ProfileScreenTest}
         options={({navigation, route}) => ({
           headerTitle: (props) => <ProfileTitle {...props} />,
         })}
@@ -524,7 +526,7 @@ function BottomTab() {
       />
       <Tab.Screen
       name="Search"
-      component={UploadStackScreen}
+      component={ProfileScreenTest}
       options={{
         tabBarIcon: ({focused}: {focused: boolean}) => (
           <Image

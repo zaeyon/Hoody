@@ -119,6 +119,8 @@ const AddScrapAlbumScreen = ({navigation, route}: Props) => {
         }
     ]);
     const [selectingScrapList, setSelectingScrapList] = useState<Array<object>>([]);
+    const [changeSelectScrapData, setChangeSelectScrapData] = useState<boolean>(false);
+    const [scrapAlbumName, setScrapAlbumName] = useState<string>("");
 
     useEffect(() => {
         var tmpSelectableScrapList = allScrapData.map(function(obj) {
@@ -131,12 +133,33 @@ const AddScrapAlbumScreen = ({navigation, route}: Props) => {
     const onSelectCircle = (index:number) => {
         var tmpAllScrapData = allScrapData;
         if(tmpAllScrapData[index].selected === false) {
-            
-        }
+            var tmpSelectingScrapList = selectingScrapList;
+            tmpSelectingScrapList.push(tmpAllScrapData[index]);
+            tmpAllScrapData[index].selected = !tmpAllScrapData[index].selected;
 
+            console.log("selectingScrapList", selectingScrapList);
+            setSelectingScrapList(tmpSelectingScrapList);
+            setAllScrapData(tmpAllScrapData);
+            setChangeSelectScrapData(!changeSelectScrapData);
+        } else {
+            var tmpSelectingScrapList = selectingScrapList;
+            var selectingIndex = tmpSelectingScrapList.indexOf(tmpAllScrapData[index]);
+            tmpAllScrapData[index].selected  = !tmpAllScrapData[index].selected;
+            tmpSelectingScrapList.splice(selectingIndex, 1);
+
+            console.log("selectingScrapList", selectingScrapList);
+
+            setSelectingScrapList(tmpSelectingScrapList);
+            setAllScrapData(tmpAllScrapData);
+            setChangeSelectScrapData(!changeSelectScrapData);
+        }
     }
 
-    const renderSelectAlbumItem = ({item, index}) => {
+    const onChangeScrapAlbumName = (text: string) => {
+        setScrapAlbumName(text);
+    }
+
+    const renderSelectAlbumItem = ({item, index}: any) => {
         return (
             <SelectScrapItem
             index={index}
@@ -156,9 +179,18 @@ const AddScrapAlbumScreen = ({navigation, route}: Props) => {
                 </HeaderCancelContainer>
                 </TouchableWithoutFeedback>
                 <HeaderTitleText>새 스크랩 앨범</HeaderTitleText>
-                <HeaderFinishContainer>
+                    {scrapAlbumName !== "" && selectingScrapList.length > 0 && (
+                        <TouchableWithoutFeedback onPress={() => navigation.navigate("ProfileScreen")}>
+                        <HeaderFinishContainer>
+                        <AbledHeaderFinishText>완료</AbledHeaderFinishText>
+                        </HeaderFinishContainer>
+                        </TouchableWithoutFeedback>
+                    )}
+                    {(scrapAlbumName === "" || selectingScrapList.length === 0) && (
+                        <HeaderFinishContainer>
                         <DisabledHeaderFinishText>완료</DisabledHeaderFinishText>
-                </HeaderFinishContainer>
+                        </HeaderFinishContainer>
+                    )}
             </HeaderBar>
             <BodyContainer>
             <AlbumNameInputContainer>
@@ -167,11 +199,14 @@ const AddScrapAlbumScreen = ({navigation, route}: Props) => {
                 placeholder={"앨범의 이름을 적어주세요."}
                 placeholderTextColor="#979797"
                 clearButtonMode={"while-editing"}
+                value={scrapAlbumName}
+                onChangeText={(text:string) => onChangeScrapAlbumName(text)}
                 />
             </AlbumNameInputContainer>
             <SelectAllScrapContainer>
             <AllScrapText>모든 스크랩</AllScrapText>
             <FlatList
+            style={{marginTop:12}}
             numColumns={2}
             data={allScrapData}
             renderItem={renderSelectAlbumItem}/>

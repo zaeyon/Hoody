@@ -9,7 +9,8 @@ import {useIsFocused} from '@react-navigation/native';
 import {Text, FlatList, StyleSheet, TouchableWithoutFeedback} from 'react-native';
 
 import ProfileFeedList from '~/Components/Presentational/ProfileScreen/ProfileFeedList';
-import ProfileCollectionList from '../ProfileCollectionList';
+import ProfileCollectionList from '~/Components/Presentational/ProfileScreen/ProfileCollectionList';
+import ProfileScrapList from '~/Components/Presentational/ProfileScreen/ProfileScrapList';
 
 
 
@@ -83,9 +84,12 @@ const AddScrapContainer = Styled.View`
       route: any
       collectionList: Array<object>,
       feedList: Array<object>,
+      scrapListData: Array<object>,
+      onScrollPostList: () => void,
+      scrollOffsetY: any
   }
 
-const ProfileTopTabNavigator = ({navigation, route, collectionList, feedList}: Props) => {
+const ProfileTopTabNavigator = ({navigation, route, collectionList, feedList, scrapListData, onScrollPostList, scrollOffsetY}: Props) => {
     const [currentSortType, setCurrentSortType] = useState<string>("list");
     const [currentFocusTab, setCurrentFocusTab] = useState<string>("");
     const PostTopTab = createMaterialTopTabNavigator();
@@ -99,9 +103,11 @@ const ProfileTopTabNavigator = ({navigation, route, collectionList, feedList}: P
 
         return (
           <ProfileFeedList
+          onScrollPostList={onScrollPostList}
           navigation={navigation}
           feedList={feedList}
           currentSortType={currentSortType}
+          scrollOffsetY={scrollOffsetY}
           />
         )
     }
@@ -121,16 +127,15 @@ const ProfileTopTabNavigator = ({navigation, route, collectionList, feedList}: P
         )
     }
 
-    function ScrapList() {
+    function UserScrapList() {
         const isFocused = useIsFocused();
         if(isFocused) {
             console.log("Scrap List");
             setCurrentFocusTab("ScrapList");
         }
         return (
-            <UserScrapListContainer>
-                <Text>Scrap List</Text>
-            </UserScrapListContainer>
+            <ProfileScrapList
+            scrapListData={scrapListData}/>
         )
     }
 
@@ -166,7 +171,7 @@ const ProfileTopTabNavigator = ({navigation, route, collectionList, feedList}: P
                 />
                 <PostTopTab.Screen
                 name="스크랩"
-                component={ScrapList}
+                component={UserScrapList}
                 />
             </PostTopTab.Navigator>
             {currentFocusTab === "FeedList" && (

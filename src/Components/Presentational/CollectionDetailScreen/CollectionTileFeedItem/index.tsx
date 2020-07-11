@@ -8,7 +8,6 @@ import {
 const ProfileTileFeedItemContainer = Styled.View`
  width: ${wp('47.8%')};
  height: ${wp('51.1%')};
- align-items: center;
 `;
 
 const TileFeedImage = Styled.Image`

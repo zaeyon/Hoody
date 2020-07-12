@@ -67,9 +67,15 @@ import CollapsibleTabBarTest from '~/Components/Container/CollapsibleTabBarTest'
 // Location Feed Map Screen
 import LocationFeedMapScreen from '~/Components/Container/LocationFeedMapScreen';
 
+// Alarm Screen
+import AlarmScreen from '~/Components/Container/AlarmScreen';
+
+// Explore Screen
+import ExploreScreen from '~/Components/Container/ExploreScreen';
+
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
-const SearchStack = createStackNavigator();
+const ExploreStack = createStackNavigator();
 const FeedStack = createStackNavigator();
 const UploadStack = createStackNavigator();
 const AlarmStack = createStackNavigator();
@@ -150,6 +156,14 @@ function HomeStackScreen() {
       />
     </HomeStack.Navigator>
   );
+}
+
+function ExploreStackScreen() {
+  return (
+    <ExploreStack.Navigator headerMode="none">
+      <ExploreStack.Screen name="ExploreScreen" component={ExploreScreen}/>
+    </ExploreStack.Navigator>
+  )
 }
 
 function FeedStackScreen() {
@@ -265,16 +279,10 @@ function UploadStackScreen() {
 function AlarmStackScreen() {
   return (
     <AlarmStack.Navigator
-      screenOptions={{
-        headerStyle: {
-          height: 47,
-          elevation: 1.5,
-        },
-        headerTitleAlign: 'left',
-      }}>
+      headerMode="none">
       <AlarmStack.Screen
-        name="Alarm"
-        component={Alarm}
+        name="AlarmScreen"
+        component={AlarmScreen}
         options={{
           headerTitle: (props) => <AlarmTitle {...props} />,
         }}
@@ -533,8 +541,8 @@ function BottomTab() {
       }}
       />
       <Tab.Screen
-      name="Search"
-      component={ProfileTestScreen}
+      name="Explore"
+      component={ExploreStackScreen}
       options={{
         tabBarIcon: ({focused}: {focused: boolean}) => (
           <Image
@@ -550,7 +558,6 @@ function BottomTab() {
           />
         ),
         unmountOnBlur: true,
-        tabBarVisible: false,
       }}
       />
       <Tab.Screen 

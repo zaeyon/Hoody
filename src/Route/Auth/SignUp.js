@@ -1,9 +1,9 @@
 import axios from 'axios';
 import allActions from '~/action';
 import AsyncStorage from '@react-native-community/async-storage';
-import setCurrentUser from '~/AsyncStorage/User';
+import {setCurrentUser} from '~/AsyncStorage/User';
 
-const baseUrl = 'https://a63b85bce587.ngrok.io';
+const baseUrl = 'https://0eaa45438b40.ngrok.io';
 
 const SignUp = (email, password, nickname, birthdate, gender, socialId, provider) => {
     const url = baseUrl + '/auth/signUp';
@@ -32,7 +32,8 @@ const SignUp = (email, password, nickname, birthdate, gender, socialId, provider
             resolve(response);
             if (response.status === 201) {
               console.log('회원가입 성공');
-              setCurrentUser(email, "login");
+              console.log("회원가입성공 닉네임", response.data.user.nickname)
+              setCurrentUser(email, response.data.user.nickname, "login");
             } else if(response.status === 400) {
               console.log("response", response);
             }

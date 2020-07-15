@@ -18,6 +18,9 @@ import GetAutoComplete from '~/Route/Search/GetAutoComplete';
 import {Rating} from '~/Components/Presentational/UploadScreen/Rating';
 import ProductItem from '~/Components/Presentational/UploadScreen/ProductItem';
 
+// Route
+import PostUpload from '~/Route/Post/Upload';
+
 const ratingImage = require('~/Assets/Images/ic_star4.png');
 
 const actionSheetRef = createRef();
@@ -675,6 +678,10 @@ const NewUploadScreen = ({navigation, route}: Props) => {
     const [visibleBottomMenuBar, setVisibleBottomMenuBar] = useState<boolean>(true);
     const [registerProductBool, setRegisterProductBool] = useState<boolean>(false);
 
+    
+    const [certifiedLocation, setCertifiedLocation] = useState<boolean>(false);
+    const [temporarySave, setTemporarySave] = useState<boolean>(false);
+
    
     //후기 정보 관련 state
     const [rating, setRating] = useState<string>();
@@ -689,6 +696,8 @@ const NewUploadScreen = ({navigation, route}: Props) => {
     const [tagList, setTagList] = useState<Array<string>>();
     const [allTagText, setAllTagText] = useState<string>();
     const [product, setProduct] = useState<object>();
+    const [mediaArray, setMediaArray] = useState<Array<object>>([]);
+
 
     // toggle input expanse
     const [visibleExpanseInput, setVisibleExpanseInput] = useState<boolean>(false);
@@ -734,6 +743,7 @@ const NewUploadScreen = ({navigation, route}: Props) => {
                     index: tmpParagraphData.length,  
                     type: 'image',
                     uri: route.params.selectedImages[i].uri,
+                    image: route.params.selectedImages[i],
                  }
 
                  tmpParagraphData.push(newImagePara);
@@ -1271,6 +1281,47 @@ const removeParagraphIndex = (index) => {
 
 }
 
+const clickToUploadFinish = () => {
+  console.log("업로드할 paragraphData", paragraphData);
+  var sequence = "";
+  var descriptionStr = "";
+  var mediaFileArray = new Array();
+  var productArray = new Array();
+
+  for(var i = 0; i < paragraphData.length; i++) {
+      if(paragraphData[i].type === 'description') {
+          sequence = sequence + "D";
+          descriptionStr = descriptionStr + '"' + paragraphData[i].description + '"' +",";
+      } else if(paragraphData[i].type === 'image') {
+          sequence = sequence + "M";
+          mediaFileArray.push(paragraphData[i].image);
+      } else if(paragraphData[i].type === 'product') {
+          sequence = sequence + "P";
+          productArray.push(paragraphData[i]);
+      } 
+  }
+
+  setTimeout(() => {
+      descriptionStr = "[" + descriptionStr + "]";
+      console.log("descriptionStr", descriptionStr);
+      console.log("sequence", sequence);
+      console.log("mediaFileArray", mediafileArray);
+      console.log("productArray", productArray);
+
+      PostUpload(descriptionStr, mediaFileArray, mainTag, subTag1, subTag2, rating, location, longitude, latitude, certifiedLocation, temporarySave, sequence, productArray)
+      .then(function(response) {
+          if(response.status === 201) {
+              console.log("후기 업로드 성공", response);
+          }
+      })
+      .catch(function(error) {
+          console.log("후기 업로드 실패", error);
+      });
+
+
+  }, 100)
+}
+
 
 
 const renderDraggableItem = ({item, index, drag, isActive}) => {
@@ -1370,9 +1421,11 @@ const renderAddNewDescripInput = () => {
                 </TouchableWithoutFeedback>
                 <HeaderRightContainer>
                     <TempoSaveText>임시저장</TempoSaveText>
+                    <TouchableWithoutFeedback onPress={() => clickToUploadFinish()}>
                     <FinishContainer>
                         <FinishText>완료</FinishText>
                     </FinishContainer>
+                    </TouchableWithoutFeedback>
                 </HeaderRightContainer>
             </HeaderBar>
             {visibleDescripModal && (

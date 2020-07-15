@@ -19,7 +19,7 @@ import GetAutoComplete from '~/Route/Search/GetAutoComplete';
 import Geolocation from 'react-native-geolocation-service';
 
 const BottomTabHeight = Styled.View`
- width: ${wp('100%')};
+ width: ${wp('100%')}px;
  height: 45px;
  background-color: #F4F8FB;
 `;
@@ -31,7 +31,7 @@ const Container = Styled.SafeAreaView`
 `;
 
 const HeaderBar = Styled.View`
- width: ${wp('100%')};
+ width: ${wp('100%')}px;
  padding: 20px 20px 10px 20px;
  flex-direction: row;
  align-items: center;
@@ -45,19 +45,19 @@ const HeaderTitleText = Styled.Text`
 
 
 const ReviewMapIcon = Styled.Image`
- width: ${wp('8%')}
- height: ${wp('8%')};
+ width: ${wp('8%')}px;
+ height: ${wp('8%')}px;
 `;
 
 const NoFeedListContainer = Styled.View`
- width: ${wp('100%')};
- height: ${hp('87%')};
+ width: ${wp('100%')}px;
+ height: ${hp('87%')}px;
  justify-content: center;
  align-items: center;
 `;
 
 const FeedListContainer = Styled.View`
- width: ${wp('100%')};
+ width: ${wp('100%')}px;
  justify-content: center;
  align-items: center;
 `;
@@ -73,7 +73,7 @@ const BodyContainer = Styled.ScrollView`
 
 
 const TagAutoCompleteContainer = Styled.View`
-width: ${wp('100%')};
+width: ${wp('100%')}px;
 top: 0px;
 position: absolute;
 background-color: #ffffff;
@@ -359,6 +359,7 @@ function FeedListScreen({navigation, route}: Props) {
   return (
     <TouchableWithoutFeedback onPress={() => onBlurSearch()}>
     <Container>
+      
       <HeaderBar>
           {/*
         <SearchBar
@@ -376,7 +377,7 @@ function FeedListScreen({navigation, route}: Props) {
       {feedListData[0] && (
       <FeedListContainer>
       <FlatList
-        data={feedListData}
+        data={TEST_FEED_DATA}
         renderItem={({item}) => (
                 <FeedItem
                   id={item.id}
@@ -407,6 +408,7 @@ function FeedListScreen({navigation, route}: Props) {
 
         </NoFeedListContainer>
       )}
+      {/*
       {searchFocus && (
         <TagAutoCompleteContainer>
         <SearchAutoComplete
@@ -418,6 +420,7 @@ function FeedListScreen({navigation, route}: Props) {
         </SearchAutoComplete>
         </TagAutoCompleteContainer>
       )}
+      */}
       </BodyContainer>
     </Container>
     </TouchableWithoutFeedback>

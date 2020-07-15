@@ -18,6 +18,7 @@ const UserFeedListContainer = Styled.View`
 `;
 
 const ListTypeFeedContainer = Styled.View`
+
 `;
 
 const TileTypeFeedContainer = Styled.View`
@@ -30,6 +31,17 @@ padding: 15px 16px 0px 16px;
 const SelectingMonthText = Styled.Text`
 font-weight: bold;
 font-size: 22px;
+`;
+
+const NoFeedContainer = Styled.View`
+ width:${wp('100%')};
+ margin-top: 200px;
+ align-items: center;
+`;
+
+const NoFeedText = Styled.Text`
+ font-size: 16px;
+ color: #4B4B4B;
 `;
 
 const ExpanseDayText = Styled.Text`
@@ -128,16 +140,24 @@ const ProfileFeedList = ({navigation, route, feedListData, currentSortType, onSc
 
     return (
         <UserFeedListContainer>
-        {(currentSortType === 'list') && (
+          {!feedListData[0] && (
+        <NoFeedContainer>
+        <NoFeedText>
+          등록된 후기가 없어요.
+        </NoFeedText>
+      </NoFeedContainer>
+          )}
+         {(currentSortType === 'list') && feedListData[0] && (
         <ListTypeFeedContainer>
         <FlatList
+        scrollEnabled={false}
 scrollEventThrottle={5}
         data={feedListData}
         renderItem={renderProfileListFeedItem}
         />
         </ListTypeFeedContainer>
-        )}
-        {(currentSortType === 'tile') && (
+         )}
+        {(currentSortType === 'tile')  && feedListData[0] && (
         <TileTypeFeedContainer>
           <MonthSelectContainer>
             <SelectingMonthText>7월</SelectingMonthText>

@@ -1,14 +1,14 @@
 import axios from 'axios';
 import allActions from '~/action';
-import setCurrentUser from '~/AsyncStorage/User';
+import {setCurrentUser} from '~/AsyncStorage/User';
 
-const baseUrl = 'https://a63b85bce587.ngrok.io';
+const baseUrl = 'https://0eaa45438b40.ngrok.io';
 
 
 const Login = (email, password) => {
     const url = baseUrl + '/auth/login';
-    console.log("email", email);
-    console.log("password", password)
+    console.log("email11", email);
+    console.log("password11", password)
 
     let form = new FormData();
     form.append('email', email);
@@ -24,7 +24,7 @@ const Login = (email, password) => {
         })
         .then(function (response) {
           resolve(response);
-          setCurrentUser(email, "login");
+          setCurrentUser(email, response.data.user.nickname, "login");
         })
         .catch(function (error) {
           console.log('error : ', error);

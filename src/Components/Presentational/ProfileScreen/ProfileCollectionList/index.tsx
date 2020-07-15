@@ -9,12 +9,14 @@ import {Text, FlatList, TouchableWithoutFeedback} from 'react-native';
 import ProfileCollectionItem from '~/Components/Presentational/ProfileScreen/ProfileCollectionItem';
 
 const UserCollectionListContainer = Styled.View`
+width: ${wp('100%')};
 background-color: #ffffff;
 padding-bottom: 350px;
 
 `;
 
 const NoCollectionContainer = Styled.View`
+ padding-top: 76px;
  background-color: #ffffff;
  align-items: center;
  justify-content: center;

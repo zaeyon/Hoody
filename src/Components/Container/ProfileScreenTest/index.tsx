@@ -27,7 +27,7 @@ import KakaoLogins from '@react-native-seoul/kakao-login';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 
 import UserIntroduction from '~/Components/Presentational/ProfileScreen/UserIntroduction';
-import GetUserProfile from '~/Route/User/GetUserProfile';
+import GetUserProfile from '~/Route/Profile/GetProfileFeedByList';
 import ProfileTopTabNavigator from '~/Components/Presentational/ProfileScreen/ProfileTopTabNavigator';
 
 const Container = Styled.SafeAreaView`

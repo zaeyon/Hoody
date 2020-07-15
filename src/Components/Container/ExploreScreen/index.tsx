@@ -8,6 +8,7 @@ import {
 
 import RecommandUser from '~/Components/Presentational/ExploreScreen/RecommandUser';
 import RecommandTagBanner from '~/Components/Presentational/ExploreScreen/RecommandTagBanner';
+import PopularTagByAgeGroup from '~/Components/Presentational/ExploreScreen/PopularTagByAgeGroup';
 
 const Container = Styled.SafeAreaView`
  flex: 1;
@@ -76,6 +77,10 @@ const RecommandTagBannerContainer = Styled.View`
  margin-top: 10px;
 `;
 
+const PopularTagByAgeGroupContainer = Styled.View`
+margin-top: 10px;
+`;
+
 interface Props {
     navigation: any,
     route: any,
@@ -107,6 +112,9 @@ const ExploreScreen = ({navigation, route}: Props) => {
             <RecommandTagBannerContainer>
             <RecommandTagBanner/>
             </RecommandTagBannerContainer>
+            <PopularTagByAgeGroupContainer>
+                <PopularTagByAgeGroup/>
+            </PopularTagByAgeGroupContainer>
             </BodyContainer>
         </Container>
     )

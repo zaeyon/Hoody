@@ -1,12 +1,15 @@
 import AsyncStorage from '@react-native-community/async-storage';
 
-const setCurrentUser = async(email, state) => {
+const setCurrentUser = async(email,nickname, state) => {
     try { 
         const loginedUser = {
             email: email,
+            nickname: nickname,
             state: state
         }
-        await AsyncStorage.setItem("currnt_user", JSON.stringify(loginedUser))
+        console.log("setCurrentUser email", email);
+        console.log("SetCurrentUSer nickname", nickname);
+        await AsyncStorage.setItem('current_user', JSON.stringify(loginedUser))
 
     } catch (e) {
         console.log("AsynckStorage 저장 실패", e);
@@ -22,11 +25,11 @@ const getCurrentUser = async() => {
             console.log("로그인된사용자 없음")
             return "NoLogined"
         } else {
-            return currentUser
+            return JSON.parse(currentUser)
         }
     } catch(e) {
         console.log("getCurrentUser error", e);
     }
 }
 
-export default getCurrentUser;
+export {getCurrentUser, setCurrentUser};

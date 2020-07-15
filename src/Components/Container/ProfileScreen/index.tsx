@@ -8,12 +8,18 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 
+import {useSelector} from 'react-redux';
+
 import ScrollableTabView, { DefaultTabBar,} from 'rn-collapsing-tab-bar';
 
+import {getCurrentUser} from '~/AsyncStorage/User';
 import UserIntroduction from '~/Components/Presentational/ProfileScreen/UserIntroduction';
 import ProfileTabBar from '~/Components/Presentational/ProfileScreen/ProfileTabBar';
 import ProfileFeedList from '~/Components/Presentational/ProfileScreen/ProfileFeedList';
 import ProfileCollectionList from '~/Components/Presentational/ProfileScreen/ProfileCollectionList';
+
+import GetProfileFeedByList from '~/Route/Profile/GetProfileFeedByList';
+import GetProfileCollection from '~/Route/Profile/GetProfileCollection';
 
 const Container = Styled.SafeAreaView`
  flex: 1;
@@ -314,7 +320,40 @@ interface Props {
 const ProfileScreen = ({navigation, route}: Props) => {
   const [feedListTabHeight, setFeedListTabHeight] = useState<number>(containerHeight);
   const [collectionListTabHeight, setCollectionListTabHeight] = useState<number>(containerHeight);
+  const [userInfoData, setUserInfoData] = useState<object>({});
+  const [feedListData, setFeedListData] = useState<Array<object>>([]);
+  const [collectionListData, setCollectionListData] = useState<Array<object>>([]);
   const [selectedFeedSortType, setSelectedFeedSortType] = useState<string>("list");
+  const currentUser = useSelector((state) => state.currentUser);
+
+
+  useEffect(() => {
+    getCurrentUser().then(function(response) {
+      console.log("로그인된 사용자 존재", response);
+      GetProfileFeedByList(response.nickname)
+      .then(function(response) {
+        console.log(
+        "GetProfileFeedByList response", response)
+        setUserInfoData(response);
+        setFeedListData(JSON.parse(response.posts));
+      }).catch(function(error) {
+        console.log("GetUserProfile error", error);
+      })
+      
+      GetProfileCollection(response.nickname)
+      .then(function(response) {
+        console.log("GetProfileCollection response", response);
+        setCollectionListData(JSON.parse(response.collections));
+      })
+      .catch(function(error) {
+        console.log("GetProfileCollection error", error);
+      })
+    })
+    .catch(function(error) {
+      console.log("error");
+    })
+
+  }, [])
 
   const moveToLocationFeedMap = () => {
     navigation.navigate("LocationFeedMapScreen");
@@ -349,6 +388,12 @@ const ProfileScreen = ({navigation, route}: Props) => {
   const userIntroComponent = () => {
     return (
       <UserIntroduction
+      profileImage={currentUser.user.profileImage}
+      nickname={currentUser.user.nickname}
+      description={currentUser.user.description}
+      followerCount={userInfoData.followersCount}
+      followingCount={userInfoData.followingsCount}
+      feedCount={feedListData.length}
       moveToFollowListScreen={moveToFollowListScreen}
       />
     )
@@ -397,15 +442,14 @@ const ProfileScreen = ({navigation, route}: Props) => {
       tabLabel='게시글'>
        <ProfileFeedList
        navigation={navigation}
-       feedListData={TEST_FEED_DATA}
+       feedListData={feedListData}
        currentSortType={selectedFeedSortType}
        />
       </FeedListTabContainer>
-
       <CollectionListTabContainer onLayout={(event) => measureCollectionListTab(event)}
       tabLabel="컬렉션">
        <ProfileCollectionList
-       collectionListData={TEST_COLLECTION_DATA}
+       collectionListData={collectionListData}
        navigation={navigation}
        /> 
       </CollectionListTabContainer>

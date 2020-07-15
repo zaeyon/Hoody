@@ -23,7 +23,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import allActions from '~/action';
 import KakaoLogins from '@react-native-seoul/kakao-login';
 
-import GetUserProfile from '~/Route/User/GetUserProfile';
+import GetUserProfile from '~/Route/Profile/GetProfileFeedByList';
 
 const Container = Styled.SafeAreaView`
  flex: 1;

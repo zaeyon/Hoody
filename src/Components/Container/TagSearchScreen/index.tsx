@@ -129,6 +129,7 @@ const SubHashText = Styled.Text`
 `;
 
 const MainTagText = Styled.Text`
+margin-right: 8px;
 color: #3384FF;
 font-size: 20px;
 font-weight: bold;
@@ -144,6 +145,11 @@ font-weight: bold;
 flex-direction: row;
 `;
 
+const EmptyRemainderContainer = Styled.View`
+flex: 1;
+background-color: #ffffff;
+`;
+
 const TagInputFinishText = Styled.Text`
 color: #cccccc;
 font-size: 23px;
@@ -152,7 +158,7 @@ font-weight: bold;
 
 const MainTagBackground = Styled.View`
 margin-top: 10px;
- padding: 9px 16px 9px 16px;
+ padding: 9px 10px 9px 16px;
  background-color: #FCFCFE;
  border-width: 1px;
  border-color: #EFEFEF;
@@ -161,6 +167,7 @@ margin-top: 10px;
 `;
 
 const SubTagBackground = Styled.View`
+flex-shrink: 1;
 flex-direction: row;
 margin-top: 10px;
 margin-right: 8px;
@@ -178,11 +185,10 @@ const SubTagNameContainer = Styled.View`
 `;
 
 const TagRemoveContainer = Styled.View`
- right: 7;
- position: absolute;
  justify-content: center;
- padding: 9px 0px 9px 0px
+ padding: 9px 10px 9px 10px
 `;
+
 const TagRemoveIcon = Styled.Image`
 width: ${wp('4.5%')};
 height: ${wp('4.5%')};
@@ -294,12 +300,12 @@ const RESULT_DATA_TEST = [
 ]
 
 const TagSearchScreen = ({navigation, route}: Props) => {
-    const [tagAutoCompleteArray, setTagAutoCompleteArray] = useState([]);
     const [inputMainTag, setInputMainTag] = useState<string>();
     const [inputSubTag1, setInputSubTag1] = useState<string>();
     const [inputSubTag2, setInputSubTag2] = useState<string>();
     const [firstTagResult, setFirstTagResult] = useState([]);
     const [tagList, setTagList] = useState<Array<string>>([]);
+    const [tagAutoCompletedList, setTagAutoCompletedList] = useState<Array<object>>();
 
     const [mainTagExis, setMainTagExis] = useState<boolean>(false);
     const [subTag1Exis, setSubTag1Exis] = useState<boolean>(false);
@@ -314,9 +320,9 @@ const TagSearchScreen = ({navigation, route}: Props) => {
     const [inputingSubTag1Text, setInputingSubTag1Text] = useState<string>();
     const [inputingSubTag2Text, setInputingSubTag2Text] = useState<string>();
 
-    const [mainTagWidth, setMainTagWidth] = useState<number>();
-    const [subTag1Width, setSubTag1Width] = useState<number>();
-    const [subTag2Width, setSubTag2Width] = useState<number>();
+    const [mainTagWidth, setMainTagWidth] = useState<number>(0);
+    const [subTag1Width, setSubTag1Width] = useState<number>(0);
+    const [subTag2Width, setSubTag2Width] = useState<number>(0);
     const [tagSort, setTagSort] = useState<string>();
 
     const [modifingTagBool, setModifingTagBool] = useState<boolean>(false);
@@ -365,10 +371,9 @@ const TagSearchScreen = ({navigation, route}: Props) => {
       
         const onMainTagLayout = useCallback(event => {
           const { width, height } = event.nativeEvent.layout;
+          console.log("mainTagSize", width);
           setMainTagSize({ width, height });
         }, []);
-
-        console.log("mainTagSize", mainTagSize);
 
         return [mainTagSize, onMainTagLayout];
       };
@@ -382,8 +387,6 @@ const TagSearchScreen = ({navigation, route}: Props) => {
           setSubTag1Size({ width, height });
         }, []);
 
-        console.log("subTag1Size", subTag1Size);
-
         return [subTag1Size, onSubTag1Layout];
       };
 
@@ -394,8 +397,6 @@ const TagSearchScreen = ({navigation, route}: Props) => {
           const { width, height } = event.nativeEvent.layout;
           setSubTag2Size({ width, height });
         }, []);
-
-        console.log("subTag2Size", subTag2Size);
 
         return [subTag2Size, onSubTag2Layout];
       };  
@@ -410,8 +411,22 @@ const TagSearchScreen = ({navigation, route}: Props) => {
    // const [subTag2Size, subTag2OnLayout] = useTagComponentSize();
   
 
-    const selectTag = (item) => {
+    const selectMainTag = (item) => {
         console.log("item", item);
+        setInputingMainTagText(item.name);
+
+        setTimeout(() => {
+        setInputMainTag("test");
+        setMainTagExis(true);
+        setInputingMainTag(false);
+        if(!inputSubTag1) {
+            setInputingSubTag1(true)
+        }
+        var tmpTagList = tagList;
+        tmpTagList[0] = item.name;
+        setTagList(tmpTagList);
+        setMainTagWidth(52);
+        }, 10)
     }
 
     const changeMainTagInput = (query) => {
@@ -436,16 +451,21 @@ const TagSearchScreen = ({navigation, route}: Props) => {
 
             console.log("메인태그 길이", mainTagSize.width)
             setMainTagWidth(mainTagSize.width);
-            
         } else {
-        GetAutoComplete(query, "tag")
+
+        if(tmpTag != "") {
+        console.log("태그자동완성 tmpTag", tmpTag);
+        GetAutoComplete(tmpTag, "tag")
         .then(function(response) {
-            console.log("태그 자동완성", response.result[0])
-            setFirstTagResult(response.result[0]);
+            console.log("태그 자동완성", response)
+            setTagAutoCompletedList(response);
         })
         .catch(function(error) {
             console.log("태그 자동완성 실패", error);
         })
+        } else if(tmpTag === "") {
+            setTagAutoCompletedList([]);
+        }
         }
     
     }
@@ -603,6 +623,18 @@ const TagSearchScreen = ({navigation, route}: Props) => {
         }
     }
 
+    const renderAutoCompletedTagItem = ({item , index}: any) => {
+        return (
+            <TouchableWithoutFeedback onPress={() => selectMainTag(item)}>
+            <TagResultItemContainer>
+            <TagNameText
+            >{'#' + item.name}</TagNameText>
+            <TagReviewNum>{item.reviewNum + "개"}</TagReviewNum>
+            </TagResultItemContainer>
+            </TouchableWithoutFeedback>
+        )
+    }
+
     return (
     <Container>
               <HeaderBar>
@@ -672,7 +704,7 @@ const TagSearchScreen = ({navigation, route}: Props) => {
             {inputMainTag && !inputSubTag1 && !inputSubTag2 && (
                 <InputedTagRowContainer>
                 <TouchableWithoutFeedback onPress={() => modifyTag("mainTag")}>
-                <MainTagBackground style={{width: mainTagWidth+ 30}}>
+                <MainTagBackground>
                 <MainTagText>{"#" + inputMainTag}</MainTagText>
                 </MainTagBackground>
                 </TouchableWithoutFeedback>
@@ -681,16 +713,15 @@ const TagSearchScreen = ({navigation, route}: Props) => {
             {inputMainTag && inputSubTag1 && !inputSubTag2 && ((mainTagWidth+40) + (subTag1Width+(32 + wp('4.5%'))) < wp('87%')) && (
                 <InputedTagRowContainer>
                 <TouchableWithoutFeedback onPress={() => modifyTag("mainTag")}>
-                <MainTagBackground  style={{width: mainTagWidth+30}}>
+                <MainTagBackground>
                 <MainTagText>{"#" + inputMainTag}</MainTagText>
                 </MainTagBackground>
                 </TouchableWithoutFeedback>
-                <SubTagBackground style={{width: subTag1Width+(27+wp('4.5%'))}}>
                 <TouchableWithoutFeedback onPress={() => modifyTag("subTag1")}>
+                <SubTagBackground>
                 <SubTagNameContainer>
                 <SubTagText>{"#" + inputSubTag1}</SubTagText>
                 </SubTagNameContainer>
-                </TouchableWithoutFeedback>
                 <TouchableWithoutFeedback onPress={() => removeTag("subTag1")}>
                 <TagRemoveContainer>
                 <TagRemoveIcon
@@ -698,21 +729,26 @@ const TagSearchScreen = ({navigation, route}: Props) => {
                 </TagRemoveContainer>
                 </TouchableWithoutFeedback>
                 </SubTagBackground>
+                </TouchableWithoutFeedback>
                 </InputedTagRowContainer>
             )}
             {inputMainTag && inputSubTag1 && !inputSubTag2 && ((mainTagWidth+40) + (subTag1Width+(32 + wp('4.5%'))) > wp('87%')) && (
                 <InputedTagColumnContainer>
+                <InputedTagRowContainer>
                 <TouchableWithoutFeedback onPress={() => modifyTag("mainTag")}>
-                <MainTagBackground  style={{width: mainTagWidth+30}}>
+                <MainTagBackground>
                 <MainTagText>{"#" + inputMainTag}</MainTagText>
                 </MainTagBackground>
                 </TouchableWithoutFeedback>
-                <SubTagBackground style={{width: subTag1Width+(27+wp('4.5%'))}}>
-                <TouchableWithoutFeedback onPress={() => modifyTag("subTag1")}>
+                <EmptyRemainderContainer>
+                </EmptyRemainderContainer>
+                </InputedTagRowContainer>
+                <InputedTagRowContainer>
+                 <TouchableWithoutFeedback onPress={() => modifyTag("subTag1")}>
+                <SubTagBackground>
                 <SubTagNameContainer>
                 <SubTagText>{"#" + inputSubTag1}</SubTagText>
                 </SubTagNameContainer>
-                </TouchableWithoutFeedback>
                 <TouchableWithoutFeedback onPress={() => removeTag("subTag1")}>
                 <TagRemoveContainer>
                 <TagRemoveIcon
@@ -720,21 +756,24 @@ const TagSearchScreen = ({navigation, route}: Props) => {
                 </TagRemoveContainer>
                 </TouchableWithoutFeedback>
                 </SubTagBackground>
+                </TouchableWithoutFeedback>
+                <EmptyRemainderContainer>
+                </EmptyRemainderContainer>
+                </InputedTagRowContainer>
                 </InputedTagColumnContainer>
             )}
             {inputMainTag && inputSubTag1 && inputSubTag2 && ((mainTagWidth+40) + (subTag1Width+(32 + wp('4.5%'))) + (subTag2Width+(32 + wp('4.5%'))) < wp('87%')) && (
                 <InputedTagRowContainer>
                 <TouchableWithoutFeedback onPress={() => modifyTag("mainTag")}>
-                <MainTagBackground  style={{width: mainTagWidth+30}}>
+                <MainTagBackground>
                 <MainTagText>{"#" + inputMainTag}</MainTagText>
                 </MainTagBackground>
                 </TouchableWithoutFeedback>
-                <SubTagBackground style={{width: subTag1Width+(27+wp('4.5%'))}}>
                 <TouchableWithoutFeedback onPress={() => modifyTag("subTag1")}>
+                <SubTagBackground>
                 <SubTagNameContainer>
                 <SubTagText>{"#" + inputSubTag1}</SubTagText>
                 </SubTagNameContainer>
-                </TouchableWithoutFeedback>
                 <TouchableWithoutFeedback onPress={() => removeTag("subTag1")}>
                 <TagRemoveContainer>
                 <TagRemoveIcon
@@ -742,12 +781,12 @@ const TagSearchScreen = ({navigation, route}: Props) => {
                 </TagRemoveContainer>
                 </TouchableWithoutFeedback>
                 </SubTagBackground>
-                <SubTagBackground style={{width: subTag2Width+(27+wp('4.5%'))}}>
+                </TouchableWithoutFeedback>
                 <TouchableWithoutFeedback onPress={() => modifyTag("subTag2")}>
+                <SubTagBackground>
                 <SubTagNameContainer>
                 <SubTagText>{"#" + inputSubTag2}</SubTagText>
                 </SubTagNameContainer>
-                </TouchableWithoutFeedback>
                 <TouchableWithoutFeedback onPress={() => removeTag("subTag2")}>
                 <TagRemoveContainer>
                 <TagRemoveIcon
@@ -755,22 +794,26 @@ const TagSearchScreen = ({navigation, route}: Props) => {
                 </TagRemoveContainer>
                 </TouchableWithoutFeedback>
                 </SubTagBackground>
+                </TouchableWithoutFeedback>
                 </InputedTagRowContainer>
             )}
             {inputMainTag && inputSubTag1 && inputSubTag2 && ((mainTagWidth+40) + (subTag1Width+(32 + wp('4.5%')))  > wp('87%')) && ((subTag1Width+(32 + wp('4.5%'))) + (subTag2Width+(32 + wp('4.5%'))) < wp('87%')) && (
                 <InputedTagColumnContainer>
+                <InputedTagRowContainer>
                 <TouchableWithoutFeedback onPress={() => modifyTag("mainTag")}>
-                <MainTagBackground  style={{width: mainTagWidth+30}}>
+                <MainTagBackground>
                 <MainTagText>{"#" + inputMainTag}</MainTagText>
                 </MainTagBackground>
                 </TouchableWithoutFeedback>
+                <EmptyRemainderContainer>
+                </EmptyRemainderContainer>
+                </InputedTagRowContainer>
                 <InputedTagRowContainer>
-                <SubTagBackground style={{width: subTag1Width+(27+wp('4.5%'))}}>
                 <TouchableWithoutFeedback onPress={() => modifyTag("subTag1")}>
+                <SubTagBackground>
                 <SubTagNameContainer>
                 <SubTagText>{"#" + inputSubTag1}</SubTagText>
                 </SubTagNameContainer>
-                </TouchableWithoutFeedback>
                 <TouchableWithoutFeedback onPress={() => removeTag("subTag1")}>
                 <TagRemoveContainer>
                 <TagRemoveIcon
@@ -778,12 +821,12 @@ const TagSearchScreen = ({navigation, route}: Props) => {
                 </TagRemoveContainer>
                 </TouchableWithoutFeedback>
                 </SubTagBackground>
-                <SubTagBackground style={{width: subTag2Width+(27+wp('4.5%'))}}>
-                    <TouchableWithoutFeedback onPress={() => modifyTag("subTag2")}>
-                    <SubTagNameContainer>
+                </TouchableWithoutFeedback>
+                <TouchableWithoutFeedback onPress={() => modifyTag("subTag2")}>
+                <SubTagBackground>
+                <SubTagNameContainer>
                 <SubTagText>{"#" + inputSubTag2}</SubTagText>
                 </SubTagNameContainer>
-                </TouchableWithoutFeedback>
                 <TouchableWithoutFeedback onPress={() => removeTag("subTag2")}>
                 <TagRemoveContainer>
                 <TagRemoveIcon
@@ -791,22 +834,27 @@ const TagSearchScreen = ({navigation, route}: Props) => {
                 </TagRemoveContainer>
                 </TouchableWithoutFeedback>
                 </SubTagBackground>
+                </TouchableWithoutFeedback>
                 </InputedTagRowContainer>
                 </InputedTagColumnContainer>
             )}
             {inputMainTag && inputSubTag1 && inputSubTag2 && ((mainTagWidth+40) + (subTag1Width+(32 + wp('4.5%'))) > wp('87%')) && ((subTag1Width+(32 + wp('4.5%'))) + (subTag2Width+(32 + wp('4.5%'))) > wp('87%')) && (
                 <InputedTagColumnContainer>
+                <InputedTagRowContainer>
                 <TouchableWithoutFeedback onPress={() => modifyTag("mainTag")}>
-                <MainTagBackground  style={{width: mainTagWidth+30}}>
+                <MainTagBackground>
                 <MainTagText>{"#" + inputMainTag}</MainTagText>
                 </MainTagBackground>
                 </TouchableWithoutFeedback>
-                <SubTagBackground style={{width: subTag1Width+(27+wp('4.5%'))}}>
+                <EmptyRemainderContainer>
+                </EmptyRemainderContainer>
+                </InputedTagRowContainer>
+                <InputedTagRowContainer>
                 <TouchableWithoutFeedback onPress={() => modifyTag("subTag1")}>
+                <SubTagBackground>
                 <SubTagNameContainer>
                 <SubTagText>{"#" + inputSubTag1}</SubTagText>
                 </SubTagNameContainer>
-                </TouchableWithoutFeedback>
                 <TouchableWithoutFeedback onPress={() => removeTag("subTag1")}>
                 <TagRemoveContainer>
                 <TagRemoveIcon
@@ -814,12 +862,16 @@ const TagSearchScreen = ({navigation, route}: Props) => {
                 </TagRemoveContainer>
                 </TouchableWithoutFeedback>
                 </SubTagBackground>
-                <SubTagBackground style={{width: subTag2Width+(27+wp('4.5%'))}}>
+                </TouchableWithoutFeedback>
+                <EmptyRemainderContainer>
+                </EmptyRemainderContainer>
+                </InputedTagRowContainer>
+                <InputedTagRowContainer>
                 <TouchableWithoutFeedback onPress={() => modifyTag("subTag2")}>
+                <SubTagBackground>
                 <SubTagNameContainer>
                 <SubTagText>{"#" + inputSubTag2}</SubTagText>
                 </SubTagNameContainer>
-                </TouchableWithoutFeedback>
                 <TouchableWithoutFeedback onPress={() => removeTag("subTag2")}>
                 <TagRemoveContainer>
                 <TagRemoveIcon
@@ -827,22 +879,25 @@ const TagSearchScreen = ({navigation, route}: Props) => {
                 </TagRemoveContainer>
                 </TouchableWithoutFeedback>
                 </SubTagBackground>
+                </TouchableWithoutFeedback>
+                <EmptyRemainderContainer>
+                </EmptyRemainderContainer>
+                </InputedTagRowContainer>
                 </InputedTagColumnContainer>
             )}
             {inputMainTag && inputSubTag1 && inputSubTag2 && ((mainTagWidth+40) + (subTag1Width+(32 + wp('4.5%'))) < wp('87%')) && ((mainTagWidth+40) + (subTag1Width+(32 + wp('4.5%'))) + (subTag2Width+(32 + wp('4.5%'))) > wp('87%')) && (
                 <InputedTagColumnContainer>
                 <InputedTagRowContainer>
                 <TouchableWithoutFeedback onPress={() => modifyTag("mainTag")}> 
-                <MainTagBackground  style={{width: mainTagWidth+30}}>
+                <MainTagBackground>
                 <MainTagText>{"#" + inputMainTag}</MainTagText>
                 </MainTagBackground>
                 </TouchableWithoutFeedback>
-                <SubTagBackground style={{width: subTag1Width+(27+wp('4.5%'))}}>
                 <TouchableWithoutFeedback onPress={() => modifyTag("subTag1")}>
+                <SubTagBackground>
                 <SubTagNameContainer>
                 <SubTagText>{"#" + inputSubTag1}</SubTagText>
                 </SubTagNameContainer>
-                </TouchableWithoutFeedback>
                 <TouchableWithoutFeedback onPress={() => removeTag("subTag1")}>
                 <TagRemoveContainer>
                 <TagRemoveIcon
@@ -850,13 +905,14 @@ const TagSearchScreen = ({navigation, route}: Props) => {
                 </TagRemoveContainer>
                 </TouchableWithoutFeedback>
                 </SubTagBackground>
+                </TouchableWithoutFeedback>
                 </InputedTagRowContainer>
-                <SubTagBackground style={{width: subTag2Width+(27+wp('4.5%'))}}>
-                <TouchableWithoutFeedback onPress={() => modifyTag("subTag2")}>
+                <InputedTagRowContainer>
+               <TouchableWithoutFeedback onPress={() => modifyTag("subTag2")}>
+                <SubTagBackground>
                 <SubTagNameContainer>
                 <SubTagText>{"#" + inputSubTag2}</SubTagText>
                 </SubTagNameContainer>
-                </TouchableWithoutFeedback>
                 <TouchableWithoutFeedback onPress={() => removeTag("subTag2")}>
                 <TagRemoveContainer>
                 <TagRemoveIcon
@@ -864,6 +920,10 @@ const TagSearchScreen = ({navigation, route}: Props) => {
                 </TagRemoveContainer>
                 </TouchableWithoutFeedback>
                 </SubTagBackground>
+                </TouchableWithoutFeedback>
+                <EmptyRemainderContainer>
+                </EmptyRemainderContainer>
+                </InputedTagRowContainer>
                 </InputedTagColumnContainer>
             )}
             </InputedTagListContainer>
@@ -901,17 +961,8 @@ const TagSearchScreen = ({navigation, route}: Props) => {
         <TagResultContainer>
             <FlatList
             keyboardShouldPersistTaps="handled"
-            data={RESULT_DATA_TEST}
-            renderItem={({item, index}) => {
-            return (
-            <TouchableWithoutFeedback onPress={() => selectTag(item)}>
-            <TagResultItemContainer>
-            <TagNameText>{'#' + item.name}</TagNameText>
-            <TagReviewNum>{item.reviewNum + "개"}</TagReviewNum>
-            </TagResultItemContainer>
-            </TouchableWithoutFeedback>
-            )
-            }}/>
+            data={tagAutoCompletedList}
+            renderItem={renderAutoCompletedTagItem}/>
         </TagResultContainer>
         
     </Container>

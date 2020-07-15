@@ -138,23 +138,6 @@ const LoginScreen = ({navigation}) => {
     });
   }, []);
 
-  function checkLogin(email, password) {
-    const userData = {
-      email: email,
-      pw: password,
-    };
-    console.log('userData: ', userData);
-
-    console.log('로그인 전 currentUser.loggedIn', currentUser.loggedIn);
-    restHTTPPost(baseUrl + '/signIn', userData).then(function (data) {
-      console.log('data.success', data.success);
-      if (data.success === true) {
-        dispatch(allActions.userActions.setUser(user));
-        console.log('로그인 후 currentUser.loggedIn', currentUser.loggedIn);
-      } else {
-      }
-    });
-  }
 
   function restHTTPPost(url, data) {
     console.log('data: ', data);
@@ -184,9 +167,8 @@ const LoginScreen = ({navigation}) => {
   const clickFinish = () => {
      submitingEmail = email;
     submitingPassword = password;
-    console.log('로그인 요청 email', submitingEmail);
-    console.log('로그인 요청 password', submitingPassword);
-
+    console.log('로그인 요청!! email', submitingEmail);
+    console.log('로그인 요청!! password', submitingPassword);
     Login(submitingEmail, submitingPassword)
     .then(function(response) {
       console.log('로그인성공 유저 정보@@', response.data.user);
@@ -195,7 +177,9 @@ const LoginScreen = ({navigation}) => {
           allActions.userActions.setUser({
             email: submitingEmail,
             password: submitingPassword,
+            profileImage: response.data.user.profileImg,
             nickname: response.data.user.nickname,
+            description: response.data.user.description,
           })
         )
       }
@@ -244,7 +228,7 @@ const LoginScreen = ({navigation}) => {
           비밀번호 재설정
         </PasswordReset>
         <LoginButton
-          label="로그인"
+          label="로그인하기"
           style={{marginBottom: 24}}
           onPress={() => clickFinish()}
         />

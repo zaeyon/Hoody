@@ -8,6 +8,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import {getCurrentUser} from '~/AsyncStorage/User';
 
 import Home from '~/Tab/Home';
 import Feed from '~/Tab/Feed';
@@ -44,8 +45,6 @@ import TagSearchScreen from '~/Components/Container/TagSearchScreen';
 import TestTextWidth from '~/Components/Container/TestTextWidth';
 import UploadDescripInputScreen from '~/Screens/UploadDescripInputScreen';
 import ProductUrlSearchScreen from '~/Components/Container/ProductUrlSearchScreen';
-import getCurrentUser from '~/AsyncStorage/User';
-
 // Profile Screen
 import ProfileScreen from '~/Components/Container/ProfileScreen';
 import SettingScreen from '~/Components/Container/SettingScreen';
@@ -523,7 +522,7 @@ function BottomTab() {
       }}>
       <Tab.Screen 
       name="FeedListScreen" 
-      component={FeedListScreen}
+      component={ExploreStackScreen}
       options={{
         tabBarIcon: ({focused}: {focused: boolean}) => (
           <Image
@@ -614,20 +613,29 @@ function BottomTab() {
 }
 
 function AppNavigator() {
-  const [currentUser, setCurrentUser] = useState();
+  const [currentUser, setCurrentUser] = useState({
+    email:"",
+    state:"logout",
+  });
+  const [changeUserState, setChangeUserState] = useState<boolean>(false);
   const currentUserState = useSelector((state) => state.currentUser)
   
+  useEffect(() => {
   getCurrentUser().then(function(response) {
-    console.log("response", response);
+    console.log("responsegggg", response);
+    console.log("자동로그인 response.nickname", response.nickname);
+    console.log("자동로그인 response.state", response.state);
     setCurrentUser(response);
+    setChangeUserState(!changeUserState);
   })
   .catch(function(error) {
     console.log("error");
   })
+  }, [])
 
   return (
     <NavigationContainer>
-    {!currentUserState.loggedIn  ? (  
+    {(!currentUserState.loggedIn) ? (  
     <NoBottomBarStack.Navigator
     headerMode="none"
     >

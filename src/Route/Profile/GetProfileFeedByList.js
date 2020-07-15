@@ -1,0 +1,22 @@
+import axios from 'axios';
+const baseUrl = 'https://0eaa45438b40.ngrok.io';
+
+const GetProfileFeedByList = (nickname) => {
+ const url = baseUrl + '/user/profile?nickname=' + nickname + "&type=post&view=feed";
+ 
+ console.log("nickname", nickname)
+
+ return new Promise(function(resolve, reject) {
+     axios
+     .get(url)
+     .then(function(response) {
+         resolve(response.data)
+         console.log("사용자 프로필 정보", response.nickname)
+     })
+     .catch(function(error) {
+         reject(error);
+     });
+ })
+}
+
+export default GetProfileFeedByList;

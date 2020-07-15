@@ -14,26 +14,26 @@ const Container = Styled.View`
  `;
 
 const FeedItemContainer = Styled.View`
- width: ${wp('100%')};
+ width: ${wp('100%')}px;
  background-color:#ffffff;
  flex-direction: row;
  padding-top: 10px;
 `;
 
 const LeftContainer = Styled.View`
- width: ${wp('12%')};
+ width: ${wp('12%')}px;
  padding: 5px 0px 0px 55px;
  align-items: flex-end;
 `;
 
 const RightContainer = Styled.View`
- width: ${wp('88%')}
+ width: ${wp('88%')}px;
  padding: 5px 20px 0px 7px;
 `;
 
 const HeaderContainer = Styled.View`
  flex: 1.2;
-height: ${wp('9.6%')};
+height: ${wp('9.6%')}px;
  flex-direction: row;
  justify-content: space-between;
  `;
@@ -72,8 +72,8 @@ const CreatedAtText = Styled.Text`
 
 const WriterProfileImage = Styled.Image`
 border-radius: 100px;
-width: ${wp('9.6%')};
-height: ${wp('9.6%')};
+width: ${wp('9.6%')}px;
+height: ${wp('9.6%')}px;
 `;
 
 const WriterNickname = Styled.Text`
@@ -94,8 +94,8 @@ const RatingContainer = Styled.View`
 
 const RatingStarImage = Styled.Image`
 margin-right: 3px;
-width: ${wp('3.2%')};
-height: ${wp('3.2%')};
+width: ${wp('3.2%')}px;
+height: ${wp('3.2%')}px;
 `;
 
 const HalfRatingStarImage = Styled.Image`
@@ -132,8 +132,8 @@ const FirstImage = Styled.Image`
  border-top-left-radius: 10px;
  border-bottom-left-radius: 10px;
 resize-mode:cover;
-width: ${wp('40.5%')};
-height: ${wp('44%')};
+width: ${wp('40.5%')}px;
+height: ${wp('44%')}px;
 `;
 
 const SecondImage = Styled.Image`
@@ -141,19 +141,19 @@ const SecondImage = Styled.Image`
  border-top-right-radius: 10px;
  border-bottom-right-radius: 10px;
 resize-mode:cover;
- width: ${wp('40.5%')};
- height: ${wp('44%')};
+ width: ${wp('40.5%')}px;
+ height: ${wp('44%')}px;
 `;
 
 const ReviewImageContainer = Styled.View`
 padding-top: 10px;
-height: ${wp('44%')};
+height: ${wp('44%')}px;
 `;
 
 const ReviewImage = Styled.Image`
 resize-mode:cover;
 border-radius: 10px; 
-height: ${wp('44%')};
+height: ${wp('44%')}px;
 `;
 
 const TagContainer = Styled.View`
@@ -259,23 +259,23 @@ const InfoContainer = Styled.View`
 
 const ItemBottomBorder = Styled.View`
  background-color: #F1F1F1;
- width: ${wp('100%')};
+ width: ${wp('100%')}px;
  height: 1px;
 `;
 
 const LikeIcon = Styled.Image`
-width: ${wp('4.0%')};
-height: ${wp('3.5%')};
+width: ${wp('4.0%')}px;
+height: ${wp('3.5%')}px;
 `;
 
 const CommentIcon = Styled.Image`
-width: ${wp('4%')};
-height: ${wp('4%')};
+width: ${wp('4%')}px;
+height: ${wp('4%')}px;
 `;
 
 const ScrapIcon = Styled.Image`
-width: ${wp('3.5%')};
-height: ${wp('4.0%')};
+width: ${wp('3.5%')}px;
+height: ${wp('4.0%')}px;
 `;
 
 

@@ -622,6 +622,7 @@ const UploadScreen = ({navigation, route}:Props) => {
            description = description + '"' + desArray[i] + '"';
              description = "[" + description + "]"
              console.log("description", description);
+             
             PostUpload(description, mediaArray, mainTag, subTag1, subTag2, rating, location, longitude, latitude, certifiedLocation, dump, tmpSequence, productArray)
             .then(function(response) {
               if(response.status === 201) {

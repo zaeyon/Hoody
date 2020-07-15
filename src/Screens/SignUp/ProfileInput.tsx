@@ -384,11 +384,14 @@ const ProfileInput = ({navigation, route}) => {
         allActions.userActions.setUser({
           email: submitingEmail,
           password: submitingPassword,
-          nickname: submitingNickname,
           birthDate: Date.parse(submitingBirthDate),
           gender: submitingGender,
           socialId: submitingSocialId,
           provider: submitingProvider,
+          profileImage: response.data.user.profileImg,
+          nickname: response.data.user.nickname,
+          followers: response.data.user.Followers,
+          followings: response.data.user.Followings,
         }),
       );
       }

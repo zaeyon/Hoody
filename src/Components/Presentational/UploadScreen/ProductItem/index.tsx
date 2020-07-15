@@ -29,19 +29,21 @@ background-color: #fafafa;
 border-top-right-radius: 15px;
 border-bottom-right-radius: 15px;
 flex-shrink: 1;
+flex: 1;
 `;
 
 
 const ProductImage = Styled.Image`
  width: ${wp('40%')};
- height: ${wp('37%')};
+ height: ${wp('37.7%')};
  background-color: #c3c3c3;
- border-radius: 15px;
+ border-top-left-radius: 15px;
+ border-bottom-left-radius: 15px;
 `;
 
 const Divider = Styled.View`
  width: 1px;
- height: ${wp('37%')};
+ height: ${wp('37.8%')};
  background-color: #EFEFEF;
 `;
 
@@ -84,45 +86,7 @@ const ProductItem = ({productImage, productName, productDescription, shopIcon, s
     const [productTitle, setProductTitle] = useState<string>();
 
 
-    useEffect(() => {
-        getDesLength(productDescription);
-        getTitleLength(productName);
-        console.log("productUrl", productImage);
-        console.log("shopIcon", shopIcon);
-    })
 
-    const getDesLength = (str) => {
-        var len = 0;
-        for (var i = 0; i < str.length; i++) {
-            if(escape(str.charAt(i)).length == 6) {
-                len++;
-            }
-            len++;
-        }
-        if(len > 130) {
-            setSubDescription(productDescription.substr(0, 30) + "...")
-        } else {
-            setSubDescription(productDescription)
-        }     
-    }
-
-    const getTitleLength = (str) => {
-
-        /*
-        var len = 0;
-        for (var i = 0; i < str.length; i++) {
-            if(escape(str.charAt(i)).length == 6) {
-                len++;
-            }
-            len++;
-        }
-        if(len > 12) {
-            setSubTitle(productName.substr(0, 12) + "...")
-        } else {
-            setSubTitle(productName)
-        }*/
-       setProductTitle(str)   
-    }
 
 
     return (
@@ -134,7 +98,7 @@ const ProductItem = ({productImage, productName, productDescription, shopIcon, s
             </ProductImageContainer>
             <Divider/>
             <ProductContentContainer>
-    <ProductName>{productTitle}</ProductName>
+    <ProductName>{productName}</ProductName>
     <ShopContainer>
         <ShopIcon
         source={{uri: shopIcon}}

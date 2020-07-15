@@ -20,6 +20,7 @@ import ProductItem from '~/Components/Presentational/UploadScreen/ProductItem';
 
 // Route
 import PostUpload from '~/Route/Post/Upload';
+import POSTProductUrl from '~/Route/Post/POSTProductUrl';
 
 const ratingImage = require('~/Assets/Images/ic_star4.png');
 
@@ -771,11 +772,7 @@ const NewUploadScreen = ({navigation, route}: Props) => {
              var newProductPara = {
                 index: paragraphData.length,
                 type: "product",
-                productImage: route.params.product.productImage,
-                productName: route.params.product.productName,
-                productDescription: route.params.product.productDescription,
-                shopIcon: route.params.product.shopIcon,
-                shopName: route.params.product.shopName,  
+                product: route.params.product
                 }
 
                 setRegisterProductBool(!registerProductBool);
@@ -1278,7 +1275,6 @@ const removeParagraphIndex = (index) => {
         setParagraphData(tmpParagraphData);
         setParagraphChange(!paragraphChange)
     }
-
 }
 
 const clickToUploadFinish = () => {
@@ -1287,17 +1283,20 @@ const clickToUploadFinish = () => {
   var descriptionStr = "";
   var mediaFileArray = new Array();
   var productArray = new Array();
+  var descriptionArray = new Array();
+  var JSONstringify_productArray;
+  var JSONstirngify_descriptionArray;
 
   for(var i = 0; i < paragraphData.length; i++) {
       if(paragraphData[i].type === 'description') {
           sequence = sequence + "D";
-          descriptionStr = descriptionStr + '"' + paragraphData[i].description + '"' +",";
+          descriptionArray.push(paragraphData[i].description);
       } else if(paragraphData[i].type === 'image') {
           sequence = sequence + "M";
           mediaFileArray.push(paragraphData[i].image);
       } else if(paragraphData[i].type === 'product') {
           sequence = sequence + "P";
-          productArray.push(paragraphData[i]);
+          productArray.push(paragraphData[i].product);
       } 
   }
 
@@ -1305,10 +1304,20 @@ const clickToUploadFinish = () => {
       descriptionStr = "[" + descriptionStr + "]";
       console.log("descriptionStr", descriptionStr);
       console.log("sequence", sequence);
-      console.log("mediaFileArray", mediafileArray);
+      console.log("mediaFileArray", mediaFileArray);
       console.log("productArray", productArray);
+      console.log("productArray.toString()", productArray.toString());
+      var productArrayStr = productArray.toString();
+      console.log("productArrayStr", productArrayStr);
+      console.log("JSON.stringify(productArray)", JSON.stringify(productArray));
 
-      PostUpload(descriptionStr, mediaFileArray, mainTag, subTag1, subTag2, rating, location, longitude, latitude, certifiedLocation, temporarySave, sequence, productArray)
+      JSONstirngify_descriptionArray = JSON.stringify(descriptionArray);
+      JSONstringify_productArray = JSON.stringify(productArray);
+
+      console.log("JSONstringify_descriptionArray", JSONstirngify_descriptionArray);
+      console.log("JSONstringify_productoArray", JSONstringify_productArray);
+
+      PostUpload(JSONstirngify_descriptionArray, mediaFileArray, mainTag, subTag1, subTag2, rating, location, longitude, latitude, certifiedLocation, temporarySave, sequence, JSONstringify_productArray)
       .then(function(response) {
           if(response.status === 201) {
               console.log("후기 업로드 성공", response);
@@ -1317,8 +1326,6 @@ const clickToUploadFinish = () => {
       .catch(function(error) {
           console.log("후기 업로드 실패", error);
       });
-
-
   }, 100)
 }
 
@@ -1352,11 +1359,11 @@ const renderDraggableItem = ({item, index, drag, isActive}) => {
                     <TouchableWithoutFeedback onPress={() => showBottomActionSheet(index)}>
                     <ParagraphContentContainer>
                         <ProductItem
-                        productImage={item.productImage}
-                        productName={item.productName}
-                        productDescription={item.productDescription}
-                        shopIcon={item.shopIcon}
-                        shopName={item.shopName}/>
+                        productImage={item.product.image}
+                        productName={item.product.title}
+                        productDescription={item.product.description}
+                        shopIcon={item.product.favicon}
+                        shopName={item.product.site}/>
                     </ParagraphContentContainer>
                     </TouchableWithoutFeedback>
                     <TouchableWithoutFeedback onLongPress={drag} delayLongPress={0.2}>

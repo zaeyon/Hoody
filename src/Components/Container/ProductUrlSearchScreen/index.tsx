@@ -14,7 +14,7 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import ProductItem from '~/Components/Presentational/UploadScreen/ProductItem';
-import SearchProductUrlRoute from '~/Route/Post/SearchProductUrlRoute';
+import POSTProductUrl from '~/Route/Post/POSTProductUrl';
 
 const Container = Styled.SafeAreaView`
   flex: 1;
@@ -146,6 +146,12 @@ const NoProductResultText = Styled.Text`
  color: #979797;
 `;
 
+const NoInputedUrlContainer = Styled.View`
+ flex: 1;
+ align-items: center;
+ justify-content: center;
+`;
+
 interface Props {
     navigation: any,
     route: any,
@@ -162,20 +168,22 @@ const PRODUCT_TEST_DATA = {
 
 const ProductUrlSearchScreen = ({navigation, route}: Props) => {
     const [searchedProductExis, setSearchedProductExis] = useState<boolean>(false);
-    const [productResult, setProductResult] = useState(null);
+    const [searchedProduct, setSearchedProduct] = useState<object>({});
+    const [inputedUrlExis, setInputedUrlExis] = useState<boolean>(false);
 
     const onChangeUrlInput = (text: string) => {
         var spaceRemovedText = text.replace(/ /g,"");
         if(spaceRemovedText !== "") {
            searchProductUrl(text);
+           setInputedUrlExis(true);
         } else {
-            setProductResult(null)
+            setSearchedProduct(null)
+            setInputedUrlExis(false);
         }
     }
     
     const searchProductUrl = (url: string) => {
-        /*
-        SearchProductUrlRoute(productUrl).then(function(response) {
+        POSTProductUrl(url).then(function(response) {
             console.log("검색된 상품 정보", response)
             const product = {
               productImage: response.image,
@@ -185,19 +193,17 @@ const ProductUrlSearchScreen = ({navigation, route}: Props) => {
               shopName: response.site,
               url: response.url
             }
-
-          setProductResult(product);
+          setSearchedProduct(response);
+          setSearchedProductExis(true);
           }).catch(function(error) {
             console.log("상품 검색 실패", error);
+            setSearchedProductExis(false)
           }) 
-          */
-
-        setProductResult(1);
     }
 
     const registerProduct = () => {
       navigation.navigate("UploadScreen", {
-        product: PRODUCT_TEST_DATA,
+        product: searchedProduct,
       })
     }
     
@@ -210,12 +216,12 @@ const ProductUrlSearchScreen = ({navigation, route}: Props) => {
                 </HeaderLeftContainer>
                 </TouchableWithoutFeedback>
                 <HeaderTitle>URL 첨부</HeaderTitle>
-                {productResult === null && (
+                {!searchedProductExis && (
                 <HeaderRightContainer>
                 <DisabledFinishText>등록</DisabledFinishText>
                 </HeaderRightContainer>
                 )}
-                {productResult !== null && (
+                {searchedProductExis && (
                 <TouchableWithoutFeedback onPress={() => registerProduct()}>
                 <HeaderRightContainer>
                 <AbledFinishText>등록</AbledFinishText>
@@ -240,22 +246,25 @@ const ProductUrlSearchScreen = ({navigation, route}: Props) => {
                 </SearchButton>
                 </SearchInputContainer>
             </SearchContainer>
-            {productResult === null && (
+            {!inputedUrlExis && (
+              <NoInputedUrlContainer>
+              </NoInputedUrlContainer>
+            )}
+            {!searchedProductExis && inputedUrlExis && (
             <NoProductResultContainer>
                 <NoProductResultText>해당 링크의 정보를 불러올 수 없습니다.</NoProductResultText>
                 <NoProductResultText>링크를 다시 확인해주세요.</NoProductResultText>
             </NoProductResultContainer>
-
             )}
-            {productResult !== null && (
+            {searchedProductExis && inputedUrlExis && (
             <TouchableWithoutFeedback onPress={() => registerProduct()}>
             <ProductResultContainer>
             <ProductItem
-            productImage={PRODUCT_TEST_DATA.productImage}
-            productName={PRODUCT_TEST_DATA.productName}
-            productDescription={PRODUCT_TEST_DATA.productDescription}
-            shopIcon={PRODUCT_TEST_DATA.shopIcon}
-            shopName={PRODUCT_TEST_DATA.shopName}/>
+            productImage={searchedProduct.image}
+            productName={searchedProduct.title}
+            productDescription={searchedProduct.description}
+            shopIcon={searchedProduct.favicon}
+            shopName={searchedProduct.site}/>
         </ProductResultContainer>
         </TouchableWithoutFeedback>
             )}

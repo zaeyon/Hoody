@@ -11,7 +11,7 @@ import UploadHeader from '~/Components/Presentational/UploadScreen/UploadHeader'
 import { BaseRouter } from '@react-navigation/native';
 import PostUpload from '~/Route/Post/Upload';
 import ProductItem from '~/Components/Presentational/UploadScreen/ProductItem';
-import SearchProductUrl from '~/Route/Post/SearchProductUrlRoute';
+import SearchProductUrl from '~/Route/Post/POSTProductUrl';
 
 const Container = Styled.SafeAreaView`
  flex: 1;

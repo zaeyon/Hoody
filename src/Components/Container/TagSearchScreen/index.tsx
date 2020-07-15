@@ -288,6 +288,11 @@ const InputedTagColumnContainer = Styled.View`
  flex-direction: column;
 `;
 
+const NoAutoCompletedTagResultContainer = Styled.View`
+ flex: 1;
+ background-color:#c3c3c3;
+`;
+
 const RESULT_DATA_TEST = [
     {
         name: '리뷰테스트1',
@@ -305,7 +310,7 @@ const TagSearchScreen = ({navigation, route}: Props) => {
     const [inputSubTag2, setInputSubTag2] = useState<string>();
     const [firstTagResult, setFirstTagResult] = useState([]);
     const [tagList, setTagList] = useState<Array<string>>([]);
-    const [tagAutoCompletedList, setTagAutoCompletedList] = useState<Array<object>>();
+    const [tagAutoCompletedList, setTagAutoCompletedList] = useState<Array<object>>([]);
 
     const [mainTagExis, setMainTagExis] = useState<boolean>(false);
     const [subTag1Exis, setSubTag1Exis] = useState<boolean>(false);
@@ -411,12 +416,11 @@ const TagSearchScreen = ({navigation, route}: Props) => {
    // const [subTag2Size, subTag2OnLayout] = useTagComponentSize();
   
 
-    const selectMainTag = (item) => {
+    const selectTag = (item) => {
+        if(inputingMainTag) {
         console.log("item", item);
         setInputingMainTagText(item.name);
-
-        setTimeout(() => {
-        setInputMainTag("test");
+        setInputMainTag(item.name);
         setMainTagExis(true);
         setInputingMainTag(false);
         if(!inputSubTag1) {
@@ -425,17 +429,47 @@ const TagSearchScreen = ({navigation, route}: Props) => {
         var tmpTagList = tagList;
         tmpTagList[0] = item.name;
         setTagList(tmpTagList);
-        setMainTagWidth(52);
-        }, 10)
+        setMainTagWidth(mainTagSize.width);
+        setTagAutoCompletedList([]);
+
+        } else if(inputingSubTag1) {
+        setInputingSubTag1Text(item.name);
+        setInputSubTag1(item.name)
+        setSubTag1Exis(true)
+        setInputingSubTag1(false)
+        if(!inputSubTag2) {
+            setInputingSubTag2(true)
+        }
+        var tmpTagList = tagList;
+        tmpTagList[1] = item.name;
+        setTagList(tmpTagList);
+        setSubTag1Width(subTag1Size.width);
+        setTagAutoCompletedList([])
+        } else if(inputingSubTag2) {
+        setInputingSubTag2Text(item.name);
+        setInputSubTag2(item.name)
+        setSubTag2Exis(true)
+        setInputingSubTag2(false)
+        var tmpTagList = tagList;
+        tmpTagList[2] = item.name;
+        setTagList(tmpTagList);
+        setSubTag2Width(subTag2Size.width);
+        setTagAutoCompletedList([])
+        }
     }
 
     const changeMainTagInput = (query) => {
 
         var tmpTag = query.trim();
         setInputingMainTagText(tmpTag);
-        
-        if(query.search(/\s/) != -1) {
 
+        if(query === "") {
+            console.log("입력된 검색어 없음");
+            setTagAutoCompletedList([]);
+
+            return;
+        } else {
+          if(query.search(/\s/) != -1) {
             var tag = query.trim();
             console.log("공백 존재")
             console.log("query", query)       
@@ -452,22 +486,17 @@ const TagSearchScreen = ({navigation, route}: Props) => {
             console.log("메인태그 길이", mainTagSize.width)
             setMainTagWidth(mainTagSize.width);
         } else {
-
-        if(tmpTag != "") {
         console.log("태그자동완성 tmpTag", tmpTag);
         GetAutoComplete(tmpTag, "tag")
         .then(function(response) {
-            console.log("태그 자동완성", response)
+            console.log("메인태그 자동완성", response)
             setTagAutoCompletedList(response);
         })
         .catch(function(error) {
             console.log("태그 자동완성 실패", error);
         })
-        } else if(tmpTag === "") {
-            setTagAutoCompletedList([]);
-        }
-        }
-    
+       }
+    }
     }
 
 
@@ -498,14 +527,20 @@ const TagSearchScreen = ({navigation, route}: Props) => {
             //console.log("서브태그1 길이", subTag1Width);
         
         } else {
-        GetAutoComplete(query, "tag")
-        .then(function(response) {
-            console.log("태그 자동완성", response.result[0])
-            setFirstTagResult(response.result[0]);
-        })
-        .catch(function(error) {
-            console.log("태그 자동완성 실패", error);
-        })
+        if(tmpTag != "") {
+            console.log("태그자동완성 tmpTag", tmpTag);
+            GetAutoComplete(tmpTag, "tag")
+            .then(function(response) {
+                console.log("서브태그1 자동완성", response)
+                setTagAutoCompletedList(response);
+            })
+            .catch(function(error) {
+                console.log("태그 자동완성 실패", error);
+            })
+            } else if(tmpTag === "") {
+                console.log("입력된거 없음")
+                setTagAutoCompletedList([]);
+            }
         }   
     }
 
@@ -529,14 +564,19 @@ const TagSearchScreen = ({navigation, route}: Props) => {
             setSubTag2Width(subTag2Size.width);
         
         } else {
-        GetAutoComplete(query, "tag")
-        .then(function(response) {
-            console.log("태그 자동완성", response.result[0])
-            setFirstTagResult(response.result[0]);
-        })
-        .catch(function(error) {
-            console.log("태그 자동완성 실패", error);
-        })
+            if(tmpTag != "") {
+                console.log("태그자동완성 tmpTag", tmpTag);
+                GetAutoComplete(tmpTag, "tag")
+                .then(function(response) {
+                    console.log("서브태그2 자동완성", response)
+                    setTagAutoCompletedList(response);
+                })
+                .catch(function(error) {
+                    console.log("태그 자동완성 실패", error);
+                })
+                } else if(tmpTag === "") {
+                    setTagAutoCompletedList([]);
+            }
         }  
     }
 
@@ -625,7 +665,7 @@ const TagSearchScreen = ({navigation, route}: Props) => {
 
     const renderAutoCompletedTagItem = ({item , index}: any) => {
         return (
-            <TouchableWithoutFeedback onPress={() => selectMainTag(item)}>
+            <TouchableWithoutFeedback onPress={() => selectTag(item)}>
             <TagResultItemContainer>
             <TagNameText
             >{'#' + item.name}</TagNameText>
@@ -958,12 +998,14 @@ const TagSearchScreen = ({navigation, route}: Props) => {
         </View>
         </View>
         <DivideBorder/>
+        {tagAutoCompletedList !== null && (
         <TagResultContainer>
-            <FlatList
-            keyboardShouldPersistTaps="handled"
-            data={tagAutoCompletedList}
-            renderItem={renderAutoCompletedTagItem}/>
-        </TagResultContainer>
+        <FlatList
+        keyboardShouldPersistTaps="handled"
+        data={tagAutoCompletedList}
+        renderItem={renderAutoCompletedTagItem}/>
+    </TagResultContainer>
+        )}
         
     </Container>
     );

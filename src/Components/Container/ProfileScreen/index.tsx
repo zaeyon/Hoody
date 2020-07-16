@@ -324,6 +324,7 @@ const ProfileScreen = ({navigation, route}: Props) => {
   const [feedListData, setFeedListData] = useState<Array<object>>([]);
   const [collectionListData, setCollectionListData] = useState<Array<object>>([]);
   const [selectedFeedSortType, setSelectedFeedSortType] = useState<string>("list");
+  const [changeProfileData, setChangeProfileData] = useState<boolean>(false);
   const currentUser = useSelector((state) => state.currentUser);
 
 
@@ -333,9 +334,10 @@ const ProfileScreen = ({navigation, route}: Props) => {
       GetProfileFeedByList(response.nickname)
       .then(function(response) {
         console.log(
-        "GetProfileFeedByList response", response)
+        "GetProfileFeedByList response", response.posts)
         setUserInfoData(response);
-        setFeedListData(JSON.parse(response.posts));
+        setFeedListData(response.posts);
+        setChangeProfileData(!changeProfileData);
       }).catch(function(error) {
         console.log("GetUserProfile error", error);
       })
@@ -344,6 +346,7 @@ const ProfileScreen = ({navigation, route}: Props) => {
       .then(function(response) {
         console.log("GetProfileCollection response", response);
         setCollectionListData(JSON.parse(response.collections));
+        setChangeProfileData(!changeProfileData);
       })
       .catch(function(error) {
         console.log("GetProfileCollection error", error);

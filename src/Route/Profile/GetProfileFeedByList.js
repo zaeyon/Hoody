@@ -1,5 +1,5 @@
 import axios from 'axios';
-const baseUrl = 'https://6b20b97b47e3.ngrok.io';
+const baseUrl = 'https://d071a92d862d.ngrok.io';
 
 const GetProfileFeedByList = (nickname) => {
  const url = baseUrl + '/user/profile?nickname=' + nickname + "&type=post&view=feed";
@@ -11,7 +11,7 @@ const GetProfileFeedByList = (nickname) => {
      .get(url)
      .then(function(response) {
          resolve(response.data)
-         console.log("사용자 프로필 정보", response.nickname)
+         console.log("사용자 프로필 정보", response.data)
      })
      .catch(function(error) {
          reject(error);

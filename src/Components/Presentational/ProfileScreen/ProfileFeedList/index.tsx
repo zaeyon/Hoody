@@ -14,7 +14,7 @@ import ProfileTileFeedItem from '~/Components/Presentational/ProfileScreen/Profi
 const UserFeedListContainer = Styled.View`
  width: ${wp('100%')};
  background-color: #ffffff;
- padding-bottom: 20px;
+ padding-bottom: 40px;
 `;
 
 const ListTypeFeedContainer = Styled.View`
@@ -85,6 +85,11 @@ padding: 15px 16px ${hp('8.5%')}px 16px;
 
 const ProfileFeedList = ({navigation, route, feedListData, currentSortType, onScrollPostList, scrollOffsetY}: Props) => {
 
+  useEffect(() => {
+    console.log("ProfileFeedList feedListData", feedListData)
+
+  }, [feedListData])
+
     const renderProfileListFeedItem = ({item, index}) => {
         return (
             <ProfileListFeedItem
@@ -94,16 +99,16 @@ const ProfileFeedList = ({navigation, route, feedListData, currentSortType, onSc
             createdAt={item.createdAt}
             rating={item.starRate}
             main_tag={item.mainTags.name}
-            sub_tag1={item.subTagOnes.name}
-            sub_tag2={item.subTagTwos.name}
-            like_count={item.likes}
-            comment_count={12}
-            scrap_count={23}
+            sub_tag1={item.subTagOnes?item.subTagOnes.name:null}
+            sub_tag2={item.subTagTwos?item.subTagTwos.name:null}
+            like_count={item.Likers.length}
+            comment_count={item.comments.length}
+            scrap_count={item.Scraps.length}
             mediaFiles={item.mediaFiles}
             image_count={item.mediaFiles.length}
-            location={item.address.address}
-            expanse={item.expanse}
-            desArray={item.descriptions}
+            location={item.address?item.address.address:null}
+            expanse={item.expanse?item.expanse:null}
+            descripArray={item.descriptions}
             navigation={navigation}
           />
         )

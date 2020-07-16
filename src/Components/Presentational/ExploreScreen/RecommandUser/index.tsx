@@ -8,8 +8,6 @@ import {
 
 const Container = Styled.View`
  background-color: #ffffff;
- border-bottom-width: 0.6px;
- border-color: #eeeeee;
 `;
 
 const HeaderContainer = Styled.View`

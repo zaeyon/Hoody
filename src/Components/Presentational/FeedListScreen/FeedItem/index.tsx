@@ -32,14 +32,11 @@ const RightContainer = Styled.View`
 `;
 
 const HeaderContainer = Styled.View`
- flex: 1.2;
-height: ${wp('9.6%')}px;
  flex-direction: row;
  justify-content: space-between;
  `;
 
 const BodyContainer = Styled.View`
- flex: 10;
  padding-top: 5px;
 `;
 
@@ -47,7 +44,6 @@ const FooterContainer = Styled.View`
 padding-top: 15px;
 padding-bottom: 20px;
 align-items: flex-end;
- flex: 3;
 `;
 
 const WriterContainer = Styled.View`
@@ -77,7 +73,7 @@ height: ${wp('9.6%')}px;
 `;
 
 const WriterNickname = Styled.Text`
-font-size: 15px;
+font-size: 16px;
 font-weight: 600;
 `;
 
@@ -147,13 +143,14 @@ resize-mode:cover;
 
 const ReviewImageContainer = Styled.View`
 padding-top: 10px;
-height: ${wp('44%')}px;
+height: ${wp('82%')}px;
 `;
 
 const ReviewImage = Styled.Image`
 resize-mode:cover;
 border-radius: 10px; 
-height: ${wp('44%')}px;
+width: ${wp('82%')}px
+height: ${wp('82%')}px;
 `;
 
 const TagContainer = Styled.View`
@@ -335,6 +332,7 @@ const FeedItem = ({
   const [feedDetailInfo, setFeedDetailInfo] = useState('');
   const [paragraphData, setParagraphData] = useState();
   const [createdDate, setCreatedDate] = useState();
+  const [changeState, setChangeState] = useState<boolean>(false);
 
   const tmpRatingArr = ['empty', 'empty', 'empty', 'empty', 'empty'];
 
@@ -360,16 +358,18 @@ const FeedItem = ({
     
     let tmpTagList = new Array();
     tmpTagList.push(main_tag);
-    if (sub_tag1 !== "undefined") tmpTagList.push(sub_tag1);
-    if (sub_tag2 !== "undefined") tmpTagList.push(sub_tag2);
+    if (sub_tag1 !== null) tmpTagList.push(sub_tag1);
+    if (sub_tag2 !== null) tmpTagList.push(sub_tag2);
     setTagList(tmpTagList);
 
     const tmpCreatedDate = getDateFormat(createdAt);
     setCreatedDate(tmpCreatedDate);
     console.log("description", desArray);
     console.log("feedId", id);
-    console.log("피드 상세 미디어파일",mediaFiles )
+    console.log("피드 상세 미디어파일",mediaFiles)
+    console.log("피드 닉네임", nickname)
 
+    setChangeState(!changeState);
   }, []);
 
   function getDateFormat(date) {
@@ -397,7 +397,6 @@ const FeedItem = ({
     }).catch(function(error) {
       console.log("error", error);
     })
-    
   }
 
   return (
@@ -415,7 +414,7 @@ const FeedItem = ({
             <WriterNickname>{nickname}</WriterNickname>
   <CreatedAtText>{createdDate}</CreatedAtText>
             </NicknameCreatedAtContainer>
-            {location && (
+            {location !== null && (
               <LocationText>{location}</LocationText>
             )}
             </HeaderCenterContainer>

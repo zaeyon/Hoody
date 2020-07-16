@@ -522,7 +522,7 @@ function BottomTab() {
       }}>
       <Tab.Screen 
       name="FeedListScreen" 
-      component={ExploreStackScreen}
+      component={FeedListScreen}
       options={{
         tabBarIcon: ({focused}: {focused: boolean}) => (
           <Image

@@ -9,10 +9,15 @@ import {
 
 import GetFeedDetail from '~/Route/Post/GetFeedDetail';
 
+const Container = Styled.View`
+`;
+
 const FeedItemContainer = Styled.View`
  width: ${wp('100%')};
  flex-direction: column;
- padding: 15px;
+ padding-top: 13px;
+ padding-left: 13px;
+ padding-right: 13px;
 `;
 
 const RightContainer = Styled.View`
@@ -21,21 +26,17 @@ const RightContainer = Styled.View`
 `;
 
 const HeaderContainer = Styled.View`
- flex: 1.2;
-height: ${wp('9.6%')};
  flex-direction: column;
  `;
 
 const BodyContainer = Styled.View`
- flex: 10;
- padding-top: 13px;
+ padding-top: 3px;
 `;
 
 const FooterContainer = Styled.View`
 padding-top: 15px;
-padding-bottom: 20px;
+padding-bottom: 10px;
 align-items: flex-end;
- flex: 3;
 `;
 
 const WriterContainer = Styled.View`
@@ -308,7 +309,7 @@ interface Props {
   scrap_count: number;
   location: string;
   expanse: number;
-  desArray: Array<object>;
+  descripArray: Array<object>;
   navigation: any;
   mediaFiles: Array<objevt>;
 }
@@ -333,6 +334,7 @@ const ProfileListFeedItem = ({
   desArray,
   navigation,
   mediaFiles,
+  descripArray,
 }: Props) => {
   const [ratingArray, setRatingArray] = useState([
     'empty',
@@ -370,8 +372,8 @@ const ProfileListFeedItem = ({
     
     let tmpTagList = new Array();
     tmpTagList.push(main_tag);
-    if (sub_tag1 !== "undefined") tmpTagList.push(sub_tag1);
-    if (sub_tag2 !== "undefined") tmpTagList.push(sub_tag2);
+    if (sub_tag1 !== null) tmpTagList.push(sub_tag1);
+    if (sub_tag2 !== null) tmpTagList.push(sub_tag2);
     setTagList(tmpTagList);
 
     const tmpCreatedDate = getDateFormat(createdAt);
@@ -379,6 +381,7 @@ const ProfileListFeedItem = ({
     console.log("description", desArray);
     console.log("feedId", id);
     console.log("피드 상세 미디어파일",mediaFiles )
+    console.log("피드 descripArray", descripArray)
 
   }, []);
 
@@ -411,6 +414,7 @@ const ProfileListFeedItem = ({
   }
 
   return (
+    <Container>
       <FeedItemContainer>
         <HeaderContainer>
               <HeaderTopContainer>
@@ -419,7 +423,7 @@ const ProfileListFeedItem = ({
   </NicknameCreatedAtContainer>
   <HeaderTopRightContainer>
     <ExpanseContainer>
-    <ExpanseText>{expanse+"원"}</ExpanseText>
+    <ExpanseText>{expanse ? expanse+"원" : null}</ExpanseText>
     </ExpanseContainer>
   <RatingContainer>
     {/*
@@ -451,7 +455,7 @@ const ProfileListFeedItem = ({
           </RatingContainer>
           </HeaderTopRightContainer>
             </HeaderTopContainer>
-            {location && (
+            {location !== null && (
               <LocationText>{location}</LocationText>
             )}
         </HeaderContainer>
@@ -481,7 +485,7 @@ const ProfileListFeedItem = ({
             />
           </TagContainer>
         <DescriptionContainer>
-            <DescriptionText>{desArray[0].description}</DescriptionText>
+            <DescriptionText>{descripArray[0]?descripArray[0].description:null}</DescriptionText>
           </DescriptionContainer>
           {mediaFiles.length === 1 && (
           <ReviewImageContainer>
@@ -521,8 +525,9 @@ const ProfileListFeedItem = ({
         </FooterContainer>
         </View>
         </TouchableWithoutFeedback>
-      <ItemBottomBorder/>
       </FeedItemContainer>
+<ItemBottomBorder/>
+</Container>
   );
 };
 

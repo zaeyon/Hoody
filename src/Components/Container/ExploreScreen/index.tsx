@@ -1,5 +1,9 @@
 import React from 'react';
-import {TouchableWithoutFeedback, FlatList} from 'react-native';
+import {
+    TouchableWithoutFeedback,
+     FlatList,
+     ScrollView,
+    } from 'react-native';
 import Styled from 'styled-components/native';
 import {
     widthPercentageToDP as wp,
@@ -15,9 +19,8 @@ const Container = Styled.SafeAreaView`
  background-color: #ffffff;
 `;
 
-const BodyContainer = Styled.View`
- flex: 1;
- background-color: #eeeeee;
+const BodyContainer = Styled.ScrollView`
+ background-color: #ffffff;
 `;
 
 
@@ -105,7 +108,9 @@ const ExploreScreen = ({navigation, route}: Props) => {
                 </HeaderLocationContainer>
             </HeaderRightContainer>
             </HeaderBar>
-            <BodyContainer>
+            <BodyContainer
+            showsVerticalScrollIndicator={false}
+            >
             <RecommandUserContainer>
             <RecommandUser/>
             </RecommandUserContainer>

@@ -1,7 +1,7 @@
 import axios from 'axios';
-const baseUrl = 'https://6b20b97b47e3.ngrok.io'; 
+const baseUrl = 'https://d071a92d862d.ngrok.io'; 
 
-const PostUpload = (desArray, mediaArray,mainTag, subTag1, subTag2, rating, location, longitude, latitude, certifiedLocation, dump, sequence, products) => {
+const PostUpload = (desArray, mediaArray,mainTag, subTag1, subTag2, rating, location, longitude, latitude, certifiedLocation, dump, sequence, products, openState, subTag1Exis, subTag2Exis) => {
     const url = baseUrl + "/post/upload"
 
     console.log("업로드할 사진", mediaArray);
@@ -23,12 +23,15 @@ const PostUpload = (desArray, mediaArray,mainTag, subTag1, subTag2, rating, loca
     form.append('subTagOne', subTag1);
     form.append('subTagTwo', subTag2);
     form.append('temporary', dump);
-    //form.append('sequence', sequence);
-    // ios simulator 테스트용
     form.append('sequences', sequence);
     form.append('products', products);
-    console.log("FormData", form);
+    form.append('open', openState);
 
+    form.append('subTagOneExistence', subTag1Exis);
+    form.append('subTagTwoExistence', subTag2Exis);
+    
+    console.log("FormData", form);
+    
     return new Promise(function(resolve, reject) {
         axios
         .post(url, form, {

@@ -679,11 +679,12 @@ const NewUploadScreen = ({navigation, route}: Props) => {
     const [visibleBottomMenuBar, setVisibleBottomMenuBar] = useState<boolean>(true);
     const [registerProductBool, setRegisterProductBool] = useState<boolean>(false);
 
-    
+
+    // 후기 설정 관련 state
     const [certifiedLocation, setCertifiedLocation] = useState<boolean>(false);
+    const [openState, setOpenState] = useState<boolean>(true);
     const [temporarySave, setTemporarySave] = useState<boolean>(false);
 
-   
     //후기 정보 관련 state
     const [rating, setRating] = useState<string>();
     const [incompleteMainTag, setIncompleteMainTag] = useState<string>();
@@ -698,6 +699,10 @@ const NewUploadScreen = ({navigation, route}: Props) => {
     const [allTagText, setAllTagText] = useState<string>();
     const [product, setProduct] = useState<object>();
     const [mediaArray, setMediaArray] = useState<Array<object>>([]);
+
+    var mainTagExis = false;
+    var subTag1Exis = false;
+    var subTag2Exis = false;
 
 
     // toggle input expanse
@@ -808,6 +813,11 @@ const NewUploadScreen = ({navigation, route}: Props) => {
     useEffect(() => {
  console.log("입력된 태그 변경!!")
         if(route.params?.mainTag && !route.params?.subTag1 && !route.params?.subTag2) {
+
+            mainTagExis = true;
+            subTag1Exis = false;
+            subTag2Exis = false;
+
             if(route.params?.mainTag !== mainTag) {
                 console.log("메인태그만존재")
                 setMainTagProcess(true);
@@ -823,6 +833,10 @@ const NewUploadScreen = ({navigation, route}: Props) => {
             }
         } else if(route.params?.mainTag && route.params?.subTag1 && !route.params?.subTag2) { 
 
+            mainTagExis = true;
+            subTag1Exis = true;
+            subTag2Exis = false;
+
             console.log("메인태그 존재22", route.params.mainTag);
             console.log("서브태그1 존재", route.params.subTag1);
 
@@ -836,6 +850,10 @@ const NewUploadScreen = ({navigation, route}: Props) => {
             setAllTagText(route.params.mainTag + " " + route.params.subTag1);
             setSubTag2(undefined)
         } else if(route.params?.mainTag && route.params?.subTag1 && route.params?.subTag2) {
+
+            mainTagExis = true;
+            subTag1Exis = true;
+            subTag2Exis = true;
 
             setSubTag1(route.params.subTag1)
             setSubTag1Width(route.params.subTag1Width);
@@ -1317,10 +1335,11 @@ const clickToUploadFinish = () => {
       console.log("JSONstringify_descriptionArray", JSONstirngify_descriptionArray);
       console.log("JSONstringify_productoArray", JSONstringify_productArray);
 
-      PostUpload(JSONstirngify_descriptionArray, mediaFileArray, mainTag, subTag1, subTag2, rating, location, longitude, latitude, certifiedLocation, temporarySave, sequence, JSONstringify_productArray)
+      PostUpload(JSONstirngify_descriptionArray, mediaFileArray, mainTag, subTag1, subTag2, rating, location, longitude, latitude, certifiedLocation, temporarySave, sequence, JSONstringify_productArray, openState, subTag1Exis, subTag2Exis)
       .then(function(response) {
           if(response.status === 201) {
               console.log("후기 업로드 성공", response);
+              navigation.goBack();
           }
       })
       .catch(function(error) {

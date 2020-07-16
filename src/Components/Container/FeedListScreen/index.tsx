@@ -31,18 +31,32 @@ const Container = Styled.SafeAreaView`
 `;
 
 const HeaderBar = Styled.View`
- width: ${wp('100%')}px;
- padding: 20px 20px 10px 20px;
+ width: ${wp('100%')};
+ height: ${hp('6.5%')};
  flex-direction: row;
  align-items: center;
  justify-content: space-between;
+ background-color:#ffffff;
+`;
+
+
+const HeaderLeftContainer = Styled.View`
+padding: 10px 15px 10px 15px;
+align-items: center;
+justify-content: center;
 `;
 
 const HeaderTitleText = Styled.Text`
+ font-weight: 600;
  font-size: 24px;
- font-family: 'SFProDisplay-Regular';
+ color: #333333;
 `;
 
+const HeaderRightContainer = Styled.View`
+padding: 10px 8px 10px 15px
+ align-items: center;
+ justify-content: center;
+`;
 
 const ReviewMapIcon = Styled.Image`
  width: ${wp('8%')}px;
@@ -60,6 +74,7 @@ const FeedListContainer = Styled.View`
  width: ${wp('100%')}px;
  justify-content: center;
  align-items: center;
+ padding-bottom: 94px;
 `;
 
 const NoFeedText = Styled.Text`
@@ -67,7 +82,7 @@ const NoFeedText = Styled.Text`
  color: #c3c3c3;
 `;
 
-const BodyContainer = Styled.ScrollView`
+const BodyContainer = Styled.View`
  background-color: #ffffff;
 `;
 
@@ -97,7 +112,6 @@ const TEST_FEED_DATA = [
     subTagTwos: {
       name: '서브태그2'
     },
-    likes: 233,
     address : {
       address: '블루문 스터디 카페'
     },
@@ -283,6 +297,8 @@ function FeedListScreen({navigation, route}: Props) {
   const [autoComplete, setAutoComplete] = useState();
   const [resultCategory, setResultCategory] = useState();
   const [currentLocation, setCurrentLocation] = useState();
+  const [refreshing, setRefreshing] = useState<boolean>(false);
+  const [onRefreshFeedList, setOnRefreshFeedList] = useState<boolean>(false);
   
   useEffect(() => {
     getFeedData();
@@ -320,6 +336,8 @@ function FeedListScreen({navigation, route}: Props) {
   const getFeedData = () => {
     GetAllFeed().then(function(response) {
       setFeedListData(response);
+      setRefreshing(false)
+      setOnRefreshFeedList(!onRefreshFeedList)
       console.log("파드 목록 가져오기 성공", response);
     })
     .catch(function(error) {
@@ -354,6 +372,14 @@ function FeedListScreen({navigation, route}: Props) {
         currentLongitude: currentLocation.longitude,
     })
   }
+
+  const onRefreshFeedListData = () => {
+    console.log("onRefreshFeedListData")
+    setRefreshing(true)
+    setTimeout(() => {
+      getFeedData()
+    }, 10)
+  }
   
 
   return (
@@ -361,23 +387,25 @@ function FeedListScreen({navigation, route}: Props) {
     <Container>
       
       <HeaderBar>
-          {/*
-        <SearchBar
-        onFocusSearch={onFocusSearch}
-        changingSearchInput={changingSearchInput}
-        />
-          */}
+          <HeaderLeftContainer>
           <HeaderTitleText>피드</HeaderTitleText>
+          </HeaderLeftContainer>
           <TouchableWithoutFeedback onPress={() => moveNearFeedMap()}>
+         <HeaderRightContainer>
           <ReviewMapIcon
           source={require('~/Assets/Images/ic_map.png')}/>
+          </HeaderRightContainer>
           </TouchableWithoutFeedback>
       </HeaderBar>
-      <BodyContainer>
+      <BodyContainer
+      >
       {feedListData[0] && (
       <FeedListContainer>
       <FlatList
-        data={TEST_FEED_DATA}
+        onRefresh={onRefreshFeedListData}
+        refreshing={refreshing}
+        showsVerticalScrollIndicator={false}
+        data={feedListData}
         renderItem={({item}) => (
                 <FeedItem
                   id={item.id}
@@ -386,15 +414,15 @@ function FeedListScreen({navigation, route}: Props) {
                   createdAt={item.createdAt}
                   rating={item.starRate}
                   main_tag={item.mainTags.name}
-                  sub_tag1={item.subTagOnes.name}
-                  sub_tag2={item.subTagTwos.name}
+                  sub_tag1={item.subTagOnes?item.subTagOnes.name:null}
+                  sub_tag2={item.subTagTwos?item.subTagTwos.name:null}
                   like_count={item.Likers.length}
                   comment_count={item.comments.length}
                   scrap_count={item.Scraps.length}
                   mediaFiles={item.mediaFiles}
                   image_count={item.mediaFiles.length}
-                  location={item.address.address}
-                  expanse={item.expanse}
+                  location={item.address?item.address.address:null}
+                  expanse={item.expanse?item.expanse:null}
                   desArray={item.descriptions}
                   navigation={navigation}
                 />
@@ -405,7 +433,6 @@ function FeedListScreen({navigation, route}: Props) {
       {!feedListData[0] && (
         <NoFeedListContainer>
           <NoFeedText>등록된 피드가 없어요</NoFeedText>
-
         </NoFeedListContainer>
       )}
       {/*

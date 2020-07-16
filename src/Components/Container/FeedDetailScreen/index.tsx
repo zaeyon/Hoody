@@ -17,11 +17,10 @@ background-color: #ffffff;
 
 const HeaderContainer = Styled.View`
  width: ${wp('100%')};
- height: ${hp('6%')};
+ height: ${hp('6.5%')};
  flex-direction: row;
  align-items: center;
  justify-content:space-between;
- padding: 0px 0px 0px 0px;
 `;
 
 
@@ -56,14 +55,14 @@ flex: 1;
 
 const WriterProfileImage = Styled.Image`
 border-radius: 100px;
- width: ${wp('7%')};
- height: ${wp('7%')};
+ width: ${wp('8.5%')};
+ height: ${wp('8.5%')};
 `;
 
 const WriterNicknameText = Styled.Text`
-margin-left: 7px;
+margin-left: 9px;
 font-weight: 600;
-font-size: 15px;
+font-size: 16px;
 color: #333333;
 `;
 
@@ -73,8 +72,8 @@ const HeaderTitleText = Styled.Text`
 `;
 
 const BackButton = Styled.Image`
-width: ${wp('4%')};
-height: ${wp('4%')};
+width: ${wp('7%')};
+height: ${wp('7%')};
 `;
 
 const ButtonText = Styled.Text`
@@ -83,8 +82,8 @@ const ButtonText = Styled.Text`
 `;
 
 const ViewMoreIcon = Styled.Image`
- width: ${wp('8%')};
- height: ${wp('8%')};
+ width: ${wp('8.5%')};
+ height: ${wp('8.5%')};
 `;
 
 
@@ -97,6 +96,11 @@ const HeaderBorder = Styled.View`
 const InformationContainer = Styled.View`
 padding: 20px 20px 20px 20px;
 background-color: #ffffff;
+`;
+
+const CreatedAtContainer = Styled.View`
+ flex:1;
+ align-items: flex-end;
 `;
 
 const CreatedAtText = Styled.Text`
@@ -199,7 +203,7 @@ color: #C4C4C4;
 
 const BottomBar = Styled.SafeAreaView`
  width: ${wp('100%')};
- height: ${hp('5%')};
+ height: ${hp('7%')};
  position: absolute;
  bottom: 0;
  right: 15px;
@@ -213,54 +217,55 @@ const LikeContainer = Styled.View`
  flex: 1;
  justify-content: center;
  align-items: center;
- height: ${hp('6%')};
+ height: ${hp('5.5%')};
 `;
 
 const CommentContainer = Styled.View`
  flex:1;
  justify-content: center;
  align-items: center;
- height: ${hp('6%')};
+ height: ${hp('5.5%')};
 `;
 
 const ScrapContainer = Styled.View`
  flex:1;
  justify-content: center;
  align-items: center;
- height: ${hp('6%')};
+ height: ${hp('5.5%')};
 `;
 
 const InfoContainer = Styled.View`
  flex-direction: row;
  align-items: center;
  margin-left: 15px;
+ margin-bottom: 15px;
 `;
 
 
 const InfoCountText = Styled.Text`
  margin-left: 5px;
- font-size: 13px;
- color: #c3c3c3;
+ font-size: 15px;
+ color: #333333;
 `;
 
 const LikeIcon = Styled.Image`
-width: ${wp('4.0%')};
-height: ${wp('3.5%')};
-tint-color: #c3c3c3;
+width: ${wp('5.7%')};
+height: ${wp('5.7%')};
+tint-color: #333333;
 `;
 
 const CommentIcon = Styled.Image`
-width: ${wp('4%')};
-height: ${wp('4%')};
+width: ${wp('5.7%')};
+height: ${wp('5.7%')};
 
-tint-color: #c3c3c3;
+tint-color: #333333;
 `;
 
 const ScrapIcon = Styled.Image`
-width: ${wp('3.5%')};
-height: ${wp('4.0%')};
+width: ${wp('5.7%')};
+height: ${wp('5.7%')};
 
-tint-color: #c3c3c3;
+tint-color: #333333;
 `;
 
 
@@ -426,7 +431,9 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
       <HeaderBorder/>
       <ScrollView>
       <InformationContainer>
-   <CreatedAtText>{createdDate}</CreatedAtText>
+    <CreatedAtContainer>
+   <CreatedAtText>{"게시일 "+createdDate}</CreatedAtText>
+   </CreatedAtContainer>
    <TagListContainer>
             <FlatList
               horizontal={true}
@@ -484,7 +491,7 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
       <BottomBar>
           <InfoContainer>
             <LikeIcon
-            source={require('~/Assets/Images/ic_like.png')}/>
+            source={require('~/Assets/Images/ic_heart_outline.png')}/>
           <TouchableWithoutFeedback onPress={() => navigation.navigate("LikeListScreen")}>
               <InfoCountText>122</InfoCountText>
           </TouchableWithoutFeedback>
@@ -492,13 +499,13 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
           <TouchableWithoutFeedback onPress={() => moveCommentList()}>
           <InfoContainer>
           <CommentIcon
-            source={require('~/Assets/Images/ic_comment.png')}/>
+            source={require('~/Assets/Images/ic_comment_outline.png')}/>
             <InfoCountText>124</InfoCountText>
           </InfoContainer>
           </TouchableWithoutFeedback>
           <InfoContainer>
             <ScrapIcon
-            source={require('~/Assets/Images/ic_scrap.png')}/>
+            source={require('~/Assets/Images/ic_scrap_outline.png')}/>
             <InfoCountText>32</InfoCountText>
           </InfoContainer>
       </BottomBar>

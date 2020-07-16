@@ -392,6 +392,7 @@ const ProfileInput = ({navigation, route}) => {
           nickname: response.data.user.nickname,
           followers: response.data.user.Followers,
           followings: response.data.user.Followings,
+          userId: response.data.user.id,
         }),
       );
       }

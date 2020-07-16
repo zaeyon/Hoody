@@ -118,13 +118,13 @@ const UserIntroduction = ({moveToFollowListScreen, profileImage, nickname, descr
                         <UserInfoLabelText>게시물</UserInfoLabelText>
                         <UserInfoCountText>{feedCount}</UserInfoCountText>
                     </UserFeedContainer>
-                    <TouchableWithoutFeedback onPress={() => moveToFollowListScreen("follower")}>
+                    <TouchableWithoutFeedback onPress={() => moveToFollowListScreen("followers")}>
                     <UserFollowerContainer>
                         <UserInfoLabelText>팔로워</UserInfoLabelText>
                         <UserInfoCountText>{followerCount}</UserInfoCountText>
                     </UserFollowerContainer>
                     </TouchableWithoutFeedback>
-                    <TouchableWithoutFeedback onPress={() => moveToFollowListScreen("following")}>
+                    <TouchableWithoutFeedback onPress={() => moveToFollowListScreen("followings")}>
                     <UserFollowingContainer>
                         <UserInfoLabelText>팔로잉</UserInfoLabelText>
                         <UserInfoCountText>{followingCount}</UserInfoCountText>

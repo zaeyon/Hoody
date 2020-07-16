@@ -326,8 +326,7 @@ const ProfileScreen = ({navigation, route}: Props) => {
   const [selectedFeedSortType, setSelectedFeedSortType] = useState<string>("list");
   const [changeProfileData, setChangeProfileData] = useState<boolean>(false);
   const currentUser = useSelector((state) => state.currentUser);
-
-
+  
   useEffect(() => {
     getCurrentUser().then(function(response) {
       console.log("로그인된 사용자 존재", response);
@@ -379,10 +378,12 @@ const ProfileScreen = ({navigation, route}: Props) => {
   }
 
   const moveToFollowListScreen = (requestedType: string) => {
+    console.log("requestedType", requestedType);
     navigation.navigate("FollowListScreen", {
       requestedType: requestedType,
-      followerCount: 132,
-      followingCount: 50,
+      nickname: currentUser.user.nickname,
+      followerCount: userInfoData.followersCount,
+      followingCount: userInfoData.followingsCount,
     });
   }
 

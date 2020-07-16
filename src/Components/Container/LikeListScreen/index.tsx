@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import Styled from 'styled-components/native';
 import {
     widthPercentageToDP as wp,
@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 
 import LikeItem from '~/Components/Presentational/LikeListScreen/LikeItem';
+import { BaseRouter } from '@react-navigation/native';
 
 const Container = Styled.SafeAreaView`
  flex: 1;
@@ -91,7 +92,22 @@ const LIKE_USER_DATA = [
     },
 ]
 
-const LikeListScreen = ({navigation}) => {
+interface Props {
+    navigation: any,
+    route: any,
+}
+
+const LikeListScreen = ({navigation, route}: Props) => {
+
+    const [likersListData, setLikersListData] = useState<Array<object>>([]);
+
+    useEffect(() => {
+        if(route.params?.likersList) {
+            console.log("route.params?.likersList", route.params.likersList);
+            setLikersListData(route.params.likersList);
+        }
+    }, [route.params?.likersList])
+
     const renderLikeItem = ({item,index}) => (
         <LikeItem
         nickname={item.nickname}
@@ -120,7 +136,7 @@ const LikeListScreen = ({navigation}) => {
       <HeaderBorder/>
       <LikeListContainer>
      <FlatList
-     data={LIKE_USER_DATA}
+     data={likersListData}
      renderItem={renderLikeItem}/>
      </LikeListContainer>
  </Container>

@@ -5,9 +5,11 @@ import {
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import {TouchableWithoutFeedback, Text, FlatList, ScrollView} from 'react-native';
-
+import {useSelector} from 'react-redux';
 import GetFeedDetail from '~/Route/Post/GetFeedDetail';
 import FeedContent from '~/Components/Presentational/FeedDetailScreen/FeedContent';
+
+import POSTLike from '~/Route/Post/Like';
 
 const Container = Styled.SafeAreaView`
 width: ${wp('100%')};
@@ -94,7 +96,7 @@ const HeaderBorder = Styled.View`
 `;
 
 const InformationContainer = Styled.View`
-padding: 20px 20px 20px 20px;
+padding: 20px 20px 5px 20px;
 background-color: #ffffff;
 `;
 
@@ -112,7 +114,6 @@ const TagListContainer = Styled.View`
 flex-direction: row;
 padding-top: 10px;
 `;
-
 
 const MainTagText = Styled.Text`
  font-size: 20px;
@@ -213,11 +214,10 @@ const BottomBar = Styled.SafeAreaView`
  flex-direction: row;
 `;
 
-const LikeContainer = Styled.View`
- flex: 1;
+const LikeIconContainer = Styled.View`
+ padding: 5px;
  justify-content: center;
  align-items: center;
- height: ${hp('5.5%')};
 `;
 
 const CommentContainer = Styled.View`
@@ -239,6 +239,12 @@ const InfoContainer = Styled.View`
  align-items: center;
  margin-left: 15px;
  margin-bottom: 15px;
+`;
+
+const LikeCountText = Styled.Text`
+ margin-left: 0px;
+ font-size: 15px;
+ color: #333333;
 `;
 
 
@@ -331,43 +337,51 @@ interface Props {
 
 const FeedDetailScreen = ({navigation, route}: Props) => {
     const [mainTag, setMainTag] = useState("메인태그");
-    const [paragraphData, setParagraphData] = useState();
+    const [paragraphData, setParagraphData] = useState<Array<object>>([]);
     const [postId, setPostId] = useState();
     const [feedDetailInfo, setFeedDetailInfo] = useState({
-      post: {
         user : {
           profileImg: "",
         },
         address : {
           address : ""
         }
-
-      }
     });
     const [ratingArray, setRatingArray] = useState<Array<string>>();
     const [tagList, setTagList] = useState<Array<string>>();
     const [createdDate, setCreatedDate] = useState();
+    const [spendDate, setSpendDate] = useState();
+    const currentUser = useSelector((state) => state.currentUser);
 
     // 서버 연결 코드
     useLayoutEffect(() => {
         if(route.params?.feedId) {
        GetFeedDetail(route.params.feedId).then(function(response) {
            console.log("GetFeedDetail Success:", response.data)
-           console.log("response.data.post!!!", response.data.post.comments);
+           console.log("response.data.post", response.data.post);
+           response.data.post.spendDate = getDateFormat(response.data.post.spendDate)
            setParagraphData(response.data.postBody);
            setPostId(route.params.feedId);
-           setFeedDetailInfo(response.data)
+           setFeedDetailInfo(response.data.post);
            setTagList(route.params.tagList);
            setRatingArray(route.params.ratingArray);
-           setCreatedDate(route.params.createdAt)
-
-           console.log("response.datagg", response.data);
+           setCreatedDate(route.params.createdAt);
        })
        .catch(function(error) {
            console.log("error", error);
        })
     }
     }, [route.params.feedId])
+
+    function getDateFormat(date) {
+      var tmpDate = new Date(date);
+      var year = tmpDate.getFullYear();
+      var month = tmpDate.getMonth() + 1;
+      month = month >= 10 ? month : '0' + month;
+      var day = tmpDate.getDate();
+      day = day >= 10 ? day : '0' + day;
+      return year + '. ' + month + '. ' + day
+    }
 
 
     /*
@@ -382,12 +396,32 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
     }, [route.params.feedId])
     */
 
-    const moveCommentList = () => {
+    const moveToCommentList = () => {
         console.log("postId", postId);
 
         navigation.navigate("CommentListScreen", {
             postId: postId,
         })
+    }
+
+    const moveToLikersList = () => {
+      navigation.navigate("LikeListScreen",{
+        likersList: feedDetailInfo.Likers,
+      })
+    }
+
+    const clickToLikeIcon = () => {
+      console.log("currentUser", currentUser);
+      console.log("postId", postId);
+
+      POSTLike(currentUser.user.userId, postId)
+      .then(function(response) {
+        console.log("response", response)
+      })
+      .catch(function(error) {
+        console.log("error", error)
+      })
+
     }
 
     const renderTagItem = ({item, index}) => {
@@ -415,9 +449,9 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
           <CenterContainer>
               <WriterContainer>
                   <WriterProfileImage
-                  source={{uri: feedDetailInfo.post.user.profileImg}}
+                  source={{uri: feedDetailInfo.user.profileImg}}
                   />
-                  <WriterNicknameText>{feedDetailInfo.post.user.nickname}</WriterNicknameText>
+                  <WriterNicknameText>{feedDetailInfo.user.nickname}</WriterNicknameText>
               </WriterContainer>
         </CenterContainer>
         </TouchableWithoutFeedback>
@@ -443,7 +477,7 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
    </TagListContainer>
    <MetadataContainer>
    <RatingContainer>
-   <FlatList
+              <FlatList
               horizontal={true}
               data={ratingArray}
               renderItem={({item, index}) => {
@@ -463,25 +497,25 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
                 
                 }
               }}
-            />
+              />
    </RatingContainer>
    <IconDivider/>
    <ExpanseContainer>
        <ExpanseIcon
        source={require('~/Assets/Images/ic_expanse.png')}/>
-       <ExpanseText>{TEST_FEED_DETAIL.expanse}원</ExpanseText>
+       <ExpanseText>{feedDetailInfo.expanse? feedDetailInfo.expanse + "원" : "금액정보 없음"}</ExpanseText>
    </ExpanseContainer>
    <IconDivider/>
    <LocationContainer>
        <LocationIcon
        source={require('~/Assets/Images/ic_location.png')}/>
-       <LocationText>{feedDetailInfo.post.address.address}</LocationText>
+       <LocationText>{feedDetailInfo.address ? feedDetailInfo.address.address:"위치정보 없음"}</LocationText>
    </LocationContainer>
    </MetadataContainer>
    <ExpanseDateContainer>
        <ExpanseDateText>소비날짜</ExpanseDateText>
        <IconDivider/>
-       <ExpanseDateText>2020.01.29</ExpanseDateText>
+       <ExpanseDateText>{feedDetailInfo.spendDate}</ExpanseDateText>
    </ExpanseDateContainer>
       </InformationContainer>
           <FeedContent
@@ -490,23 +524,27 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
           </ScrollView>
       <BottomBar>
           <InfoContainer>
+            <TouchableWithoutFeedback onPress={() => clickToLikeIcon()}>
+            <LikeIconContainer>
             <LikeIcon
             source={require('~/Assets/Images/ic_heart_outline.png')}/>
-          <TouchableWithoutFeedback onPress={() => navigation.navigate("LikeListScreen")}>
-              <InfoCountText>122</InfoCountText>
+            </LikeIconContainer>
+            </TouchableWithoutFeedback>
+               <TouchableWithoutFeedback onPress={() => moveToLikersList()}>
+              <LikeCountText>{feedDetailInfo.likes}</LikeCountText>
           </TouchableWithoutFeedback>
           </InfoContainer>
-          <TouchableWithoutFeedback onPress={() => moveCommentList()}>
+          <TouchableWithoutFeedback onPress={() => moveToCommentList()}>
           <InfoContainer>
           <CommentIcon
             source={require('~/Assets/Images/ic_comment_outline.png')}/>
-            <InfoCountText>124</InfoCountText>
+            <InfoCountText>{feedDetailInfo.commentsCount}</InfoCountText>
           </InfoContainer>
           </TouchableWithoutFeedback>
           <InfoContainer>
             <ScrapIcon
             source={require('~/Assets/Images/ic_scrap_outline.png')}/>
-            <InfoCountText>32</InfoCountText>
+            <InfoCountText>{feedDetailInfo.Scraps ? feedDetailInfo.Scraps.length : null}</InfoCountText>
           </InfoContainer>
       </BottomBar>
 

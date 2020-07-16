@@ -14,6 +14,7 @@ import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs
 import {useIsFocused} from '@react-navigation/native';
 
 import FollowItem from '~/Components/Presentational/FollowListScreen/FollowItem';
+import GETProfileFriends from '~/Route/Profile/GETProfileFriends';
 
 const Container = Styled.SafeAreaView`
  flex: 1;
@@ -132,8 +133,6 @@ const TEST_FOLLOWER_DATA = [
     },
 ]
 
-
-
 const TEST_FOLLOWING_DATA = [
     {
         nickname: "세브틴짱",
@@ -156,20 +155,25 @@ interface Props {
 }
 
 const FollowListScreen = ({navigation, route}:Props) => {
-    const [requestedType, setRequestedType] = useState<string>("follower");
+    const [requestedType, setRequestedType] = useState<string>("followers");
+    const [inputedNickname, setInputedNickname] = useState<string>("");
     const [followerCount, setFollowerCount] = useState<number>(0);
     const [followingCount, setFollowingCount] = useState<number>(0);
-
+    const [followerListData, setFollowerListData] = useState<Array<object>>([]);
+    const [followingListData, setFollowingListData] = useState<Array<object>>([]);
     const FollowTopTab = createMaterialTopTabNavigator();
+    var requestedOffset = 0;
+    var requestedLimit = 20;
 
     useEffect(() => {
-        if(route.params?.followerCount) {
+        if(route.params?.followerCount || route.params?.followerCount === 0) {
             setFollowerCount(route.params.followerCount)
         }
-        if(route.params?.followingCount) {
+        if(route.params?.followingCount || route.params?.followingCount === 0) {
             setFollowingCount(route.params.followingCount);
-
-            if(route.params?.requestedType === "following") {
+            console.log("route.params?.requestedType11", route.params.requestedType);
+            console.log("typeof(route.params.requestedType11", typeof(route.params.requestedType));
+            if(route.params?.requestedType === "followings") {
                 console.log("팔로잉 누름")
 
                 setTimeout(() => {
@@ -177,7 +181,23 @@ const FollowListScreen = ({navigation, route}:Props) => {
                 }, 10)
             }
         }
-    }, [route.params?.followerCount, route.params?.followingCount])
+        
+        if(route.params?.nickname) {
+            console.log("닉네임 존재")
+            GETProfileFriends(requestedType, inputedNickname, requestedOffset, requestedLimit, route.params.nickname)
+            .then(function(response) {
+                console.log("GETProfileFriends response", response)
+                if(requestedType === "followers") {
+                    setFollowerListData(response);
+                } else if(requestedType === 'followings') {
+                    setFollowingListData(response);
+                }
+            })
+            .catch(function(error) {
+                console.log("GETProfileFriends error", error);
+            })
+        }
+    }, [route.params?.followerCount, route.params?.followingCount, route.params?.nickname])
 
 
     useEffect(() => {
@@ -188,8 +208,10 @@ const FollowListScreen = ({navigation, route}:Props) => {
         }
     }, [route.params?.requestedType])
 
+    const onChangeSearchInput = (text: string) => {
+    }
 
-    const renderFollowItem = ({item, index}) => {
+    const renderFollowItem = ({item, index}: any) => {
         return (
             <FollowItem
             profileImageUri={item.profileImg}
@@ -210,6 +232,8 @@ const FollowListScreen = ({navigation, route}:Props) => {
               <SearchInput
                 placeholder="검색"
                 placeholderTextColor="#979797"
+                autoCapitalize={"none"}
+                onChangeText={(text:string) => onChangeSearchInput(text)}
               />
               <SearchIconContainer>
                 <SearchIcon
@@ -220,7 +244,7 @@ const FollowListScreen = ({navigation, route}:Props) => {
             </SearchContainer>
             <FollowerListContainer>
                 <FlatList
-                data={TEST_FOLLOWER_DATA}
+                data={followerListData}
                 renderItem={renderFollowItem}
                 />
             </FollowerListContainer>
@@ -236,6 +260,8 @@ const FollowListScreen = ({navigation, route}:Props) => {
               <SearchInput
                 placeholder="검색"
                 placeholderTextColor="#979797"
+                onChangeText={(text:string) => onChangeSearchInput(text)}
+                autoCapitalize={"none"}
               />
               <SearchIconContainer>
                 <SearchIcon
@@ -246,7 +272,7 @@ const FollowListScreen = ({navigation, route}:Props) => {
             </SearchContainer>
             <FollowingListContainer>
                 <FlatList
-                data={TEST_FOLLOWING_DATA}
+                data={followingListData}
                 renderItem={renderFollowItem}
                 />
             </FollowingListContainer>

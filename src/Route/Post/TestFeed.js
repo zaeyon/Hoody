@@ -1,5 +1,5 @@
 import axios from 'axios';
-const baseUrl = 'https://d071a92d862d.ngrok.io'; 
+const baseUrl = 'https://94abb4de22fd.ngrok.io'; 
 
 const GetAllFeed = () => {
     url = baseUrl + "/feed/testFeed";

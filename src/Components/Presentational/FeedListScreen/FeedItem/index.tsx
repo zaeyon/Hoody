@@ -379,7 +379,7 @@ const FeedItem = ({
     month = month >= 10 ? month : '0' + month;
     var day = tmpDate.getDate();
     day = day >= 10 ? day : '0' + day;
-    return year + '/' + month + '/' + day;
+    return year + '년 ' + month + '월 ' + day + '일 '
 }
 
   const onClickFeedItem = () => {

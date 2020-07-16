@@ -172,6 +172,7 @@ const LoginScreen = ({navigation}) => {
     Login(submitingEmail, submitingPassword)
     .then(function(response) {
       console.log('로그인성공 유저 정보@@', response.data.user);
+      console.log("로그인성공 user.id", response.data.user.id);
       if(response.status === 200) {
         dispatch(
           allActions.userActions.setUser({
@@ -180,6 +181,7 @@ const LoginScreen = ({navigation}) => {
             profileImage: response.data.user.profileImg,
             nickname: response.data.user.nickname,
             description: response.data.user.description,
+            userId: response.data.user.id,
           })
         )
       }

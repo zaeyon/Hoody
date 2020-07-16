@@ -14,8 +14,10 @@ const Container = Styled.View`
 
 const DescriptionContainer = Styled.View`
 width: ${wp('100%')};
-padding: 20px;
-align-items: center;
+padding-top: 16px;
+padding-left: 18px;
+padding-right: 18px;
+padding-bottom: 15px;
 justify-content: center;
 `;
 
@@ -40,13 +42,12 @@ interface Props {
 const FeedContent = ({paragraphData}: Props) => {
     const [paragraph, setParagraph] = useState();
 
-    
     useEffect(() => {
         console.log("paragraph", paragraphData);
     }, [paragraphData])
     
 
-const renderItem = ({item, index}) => {
+const renderItem = ({item, index}: any) => {
     if(item.type === "description") {
         return (
             <DescriptionContainer>

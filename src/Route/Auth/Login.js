@@ -2,7 +2,7 @@ import axios from 'axios';
 import allActions from '~/action';
 import {setCurrentUser} from '~/AsyncStorage/User';
 
-const baseUrl = 'https://94abb4de22fd.ngrok.io';
+const baseUrl = 'https://d4a0bb860164.ngrok.io';
 
 
 const Login = (email, password) => {
@@ -24,6 +24,7 @@ const Login = (email, password) => {
         })
         .then(function (response) {
           resolve(response);
+          console.log("response.data", response)
           setCurrentUser(email, response.data.user.nickname, "login");
         })
         .catch(function (error) {

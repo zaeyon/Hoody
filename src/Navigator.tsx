@@ -45,6 +45,7 @@ import TagSearchScreen from '~/Components/Container/TagSearchScreen';
 import TestTextWidth from '~/Components/Container/TestTextWidth';
 import UploadDescripInputScreen from '~/Screens/UploadDescripInputScreen';
 import ProductUrlSearchScreen from '~/Components/Container/ProductUrlSearchScreen';
+
 // Profile Screen
 import ProfileScreen from '~/Components/Container/ProfileScreen';
 import SettingScreen from '~/Components/Container/SettingScreen';
@@ -52,6 +53,7 @@ import CollectionDetailScreen from '~/Components/Container/CollectionDetailScree
 import ProfileScreenTest from '~/Components/Container/ProfileScreenTest'
 import ProfileTestScreen from '~/Components/Container/ProfileTestScreen';
 import FollowListScreen from '~/Components/Container/FollowListScreen';
+import AnotherUserProfileScreen from '~/Components/Container/AnotherUserProfileScreen';
 
 // Collection Screen
 import CollectionUploadScreen from '~/Components/Container/CollectionUploadScreen';
@@ -308,7 +310,9 @@ function ProfileStackScreen() {
           headerTitle: (props) => <ProfileTitle {...props} />,
         })}
       />
-      <ProfileStack.Screen name="PinterMap" component={PinterMap} />
+      <ProfileStack.Screen 
+      name="PinterMap"
+       component={PinterMap} />
       <ProfileStack.Screen
         name="UncertifiedProfile"
         component={UncertifiedProfile}
@@ -335,6 +339,9 @@ function ProfileStackScreen() {
       <ProfileStack.Screen
       name="FollowListScreen"
       component={FollowListScreen}/>
+      <ProfileStack.Screen
+      name="AnotherUserProfileScreen"
+      component={AnotherUserProfileScreen}/>
     </ProfileStack.Navigator>
   );
 }

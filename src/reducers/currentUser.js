@@ -12,6 +12,17 @@ const currentUser = (state = {}, action) => {
         user: {},
         loggedIn: false,
       };
+    case 'SET_LIKE_FEEDS':
+      return {
+        ...state,
+        likeFeeds: action.payload,
+      }
+    case 'ADD_LIKE':
+      return {
+        ...state,
+        user: action.payload,
+        loggedIn: true
+      }
     default:
       return state;
   }

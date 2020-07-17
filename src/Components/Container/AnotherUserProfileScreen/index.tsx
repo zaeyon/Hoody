@@ -317,7 +317,7 @@ interface Props {
   route: any,
 }
 
-const ProfileScreen = ({navigation, route}: Props) => {
+const AnotherUserProfileScreen = ({navigation, route}: Props) => {
   const [feedListTabHeight, setFeedListTabHeight] = useState<number>(containerHeight);
   const [collectionListTabHeight, setCollectionListTabHeight] = useState<number>(containerHeight);
   const [userInfoData, setUserInfoData] = useState<object>({});
@@ -328,10 +328,6 @@ const ProfileScreen = ({navigation, route}: Props) => {
   const currentUser = useSelector((state) => state.currentUser);
   
   useEffect(() => {
-    if(route.params?.requestedNickname) {
-      console.log("프로필 요청된 route.params.requestedNickname", route.params.requestedNickname)
-    }
-    
     getCurrentUser().then(function(response) {
       console.log("로그인된 사용자 존재", response);
       GetProfileFeedByList(response.nickname)
@@ -359,7 +355,7 @@ const ProfileScreen = ({navigation, route}: Props) => {
       console.log("error");
     })
 
-  }, [route.params?.requestedNickname])
+  }, [])
 
   const moveToLocationFeedMap = () => {
     navigation.navigate("LocationFeedMapScreen");
@@ -420,11 +416,6 @@ const ProfileScreen = ({navigation, route}: Props) => {
           </TouchableWithoutFeedback>
         </HeaderLeftContainer>
         <HeaderRightContainer>
-          <MyProfileReportContainer>
-            <MyProfileReportImage
-            source={require('~/Assets/Images/ic_report.png')}/>
-            <MyProfileReportText>리포트</MyProfileReportText>
-          </MyProfileReportContainer>
           <TouchableWithoutFeedback onPress={() => moveToLocationFeedMap()}>
           <MyProfileReviewMapContainer>
             <MyProfileReviewMapImage
@@ -468,4 +459,4 @@ const ProfileScreen = ({navigation, route}: Props) => {
   
 }
 
-export default ProfileScreen;
+export default AnotherUserProfileScreen;

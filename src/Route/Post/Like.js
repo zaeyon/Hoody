@@ -1,5 +1,5 @@
 import axios from 'axios';
-const baseUrl = 'https://94abb4de22fd.ngrok.io';
+const baseUrl = 'https://d4a0bb860164.ngrok.io';
 
 const POSTLike = (userId, postId) => {
     const url = baseUrl + '/like?userId=' + userId + "&postId=" + postId;
@@ -18,4 +18,25 @@ const POSTLike = (userId, postId) => {
     })
 }
 
-export default POSTLike;
+const DELETELike = (userId, postId) => {
+    const url = baseUrl + '/like?userId=' + userId + '&postId=' + postId;
+
+    return new Promise(function(resolve, reject) {
+        axios
+        .delete(url)
+        .then(function(response) {
+            console.log("DELETELike response", response)
+            resolve(response);
+        })
+        .catch(function(error) {
+            console.log("DELETELike error", error);
+            reject(error);
+        })
+    })
+}
+
+
+
+
+
+export {POSTLike, DELETELike};

@@ -1,13 +1,15 @@
 import React, {useEffect, useState} from 'react';
 import Styled from 'styled-components/native';
-import {FlatList, TouchableWithoutFeedback, View} from 'react-native';
-
+import {FlatList, TouchableWithoutFeedback, View, StyleSheet} from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-
+import {useSelector, useDispatch} from 'react-redux';
+import allActions from '~/action';
 import GetFeedDetail from '~/Route/Post/GetFeedDetail';
+import {POSTLike, DELETELike} from '~/Route/Post/Like';
+
 
 const Container = Styled.View`
 
@@ -41,9 +43,17 @@ const BodyContainer = Styled.View`
 `;
 
 const FooterContainer = Styled.View`
-padding-top: 15px;
-padding-bottom: 20px;
-align-items: flex-end;
+padding-top: 10px;
+padding-bottom: 13px;
+padding-left: 5px;
+padding-right: 5px;
+`;
+
+const FooterLeftContainer = Styled.View`
+flex-direction: row;
+`;
+
+const FooterRightContainer = Styled.View`
 `;
 
 const WriterContainer = Styled.View`
@@ -105,6 +115,7 @@ tint-color: #23E5D2;
 
 const ManyReviewImageContainer = Styled.View`
 padding-top: 10px;
+margin-bottom: 5px;
  flex-direction: row;
 `;
 
@@ -144,6 +155,7 @@ resize-mode:cover;
 const ReviewImageContainer = Styled.View`
 padding-top: 10px;
 height: ${wp('82%')}px;
+margin-bottom: 10px;
 `;
 
 const ReviewImage = Styled.Image`
@@ -225,9 +237,11 @@ const DescriptionText = Styled.Text`
 `;
 
 const AdditionalInfoContainer = Styled.View`
- padding-top: 10px;
+ padding-top: 0px;
  flex-direction: row;
- justify-content: center;
+ align-items: center;
+ justify-content: space-between;
+ 
 `;
 
 const InfoLabelText = Styled.Text`
@@ -236,6 +250,8 @@ const InfoLabelText = Styled.Text`
 `;
 
 const InfoCountText = Styled.Text`
+ position: absolute;
+ left: ${wp('3.5%')}
  margin-left: 5px;
  font-size: 13px;
  color: #cccccc;
@@ -251,7 +267,6 @@ const InfoDivider = Styled.Text`
 const InfoContainer = Styled.View`
  flex-direction: row;
  align-items: center;
- margin-left: 15px;
 `;
 
 const ItemBottomBorder = Styled.View`
@@ -333,7 +348,11 @@ const FeedItem = ({
   const [paragraphData, setParagraphData] = useState();
   const [createdDate, setCreatedDate] = useState();
   const [changeState, setChangeState] = useState<boolean>(false);
-
+  const [currentUserLike, setCurrentUserLike] = useState<boolean>(false);
+  const [likeCount, setLikeCount] = useState<number>(like_count);
+  const currentUser = useSelector((state) => state.currentUser);
+  const dispatch = useDispatch();
+  var likeFeedsIndex: any;
   const tmpRatingArr = ['empty', 'empty', 'empty', 'empty', 'empty'];
 
   useEffect(() => {
@@ -368,9 +387,20 @@ const FeedItem = ({
     console.log("feedId", id);
     console.log("피드 상세 미디어파일",mediaFiles)
     console.log("피드 닉네임", nickname)
-
     setChangeState(!changeState);
+
+    console.log("feedITem currentUser", currentUser);
+
+    var index = currentUser.likeFeeds.findIndex(obj => obj.id === id);
+    if(index !== -1) {
+      setCurrentUserLike(true);
+      likeFeedsIndex = index;
+    } else if(index === -1) {
+      setCurrentUserLike(false);
+    }
+    console.log("해당 피드가 사용자가 좋아요한 피드목록에 있음", index);    
   }, []);
+
 
   function getDateFormat(date) {
     var tmpDate = new Date(date);
@@ -399,19 +429,63 @@ const FeedItem = ({
     })
   }
 
+  const deleteLike = () => {
+    var removedLikeFeeds = currentUser.likeFeeds;
+    removedLikeFeeds.splice(likeFeedsIndex, 1);
+    console.log("deletedLike", removedLikeFeeds);
+    dispatch(allActions.userActions.setLikeFeeds(removedLikeFeeds))
+    setCurrentUserLike(false);
+    setLikeCount(likeCount-1);
+    console.log("deleteLike currentUser.user.userId", currentUser.user.userId);
+    console.log("deleteLike id", id);
+    DELETELike(currentUser.user.userId, id)
+    .then(function(response) {
+    })
+    .catch(function(error) {
+      console.log("좋아요 삭제 error", error)
+    })
+  }
+
+  const addLike = () => {
+    var addedLikeFeeds = currentUser.likeFeeds;
+    const likeObj = {
+      id: id,
+    }
+    addedLikeFeeds.push(likeObj);
+    dispatch(allActions.userActions.setLikeFeeds(addedLikeFeeds))
+    setCurrentUserLike(true);
+    setLikeCount(likeCount+1);
+    POSTLike(currentUser.user.userId, id)
+    .then(function(response) {
+    })
+    .catch(function(error) {
+      console.log("좋아요 추가 error", error);
+    })
+  
+    
+  }
+
   return (
     <Container>
       <FeedItemContainer>
         <LeftContainer>
+        <TouchableWithoutFeedback onPress={() => navigation.navigate("Profile", {
+          requestedNickname: nickname,
+        })}>
         <WriterProfileImage
               source={{uri: profile_image}}></WriterProfileImage>
+         </TouchableWithoutFeedback>
         </LeftContainer>
         <RightContainer>
         <HeaderContainer>
           <WriterContainer>
               <HeaderCenterContainer>
              <NicknameCreatedAtContainer>
+            <TouchableWithoutFeedback onPress={() => navigation.navigate("Profile", {
+              requestedNickname: nickname
+            })}>
             <WriterNickname>{nickname}</WriterNickname>
+            </TouchableWithoutFeedback>
   <CreatedAtText>{createdDate}</CreatedAtText>
             </NicknameCreatedAtContainer>
             {location !== null && (
@@ -490,21 +564,37 @@ const FeedItem = ({
         </BodyContainer>
         <FooterContainer>
           <AdditionalInfoContainer>
+            <FooterLeftContainer>
+            {currentUserLike && (
+            <TouchableWithoutFeedback onPress={() => deleteLike()}>
+            <InfoContainer>
+            <LikeIcon
+            source={require('~/Assets/Images/ic_pressedLike.png')}/>
+            <InfoCountText style={currentUserLike && styles.pressedLikeText}>{likeCount}</InfoCountText>
+            </InfoContainer>
+            </TouchableWithoutFeedback>
+            )}
+            {!currentUserLike && (
+            <TouchableWithoutFeedback onPress={() => addLike()}>
             <InfoContainer>
             <LikeIcon
             source={require('~/Assets/Images/ic_like.png')}/>
-            <InfoCountText>{like_count}</InfoCountText>
+            <InfoCountText>{likeCount}</InfoCountText>
             </InfoContainer>
-            <InfoContainer>
+            </TouchableWithoutFeedback>
+            )}
+            <InfoContainer style={{marginLeft: 50}}> 
             <CommentIcon
             source={require('~/Assets/Images/ic_comment.png')}/>
             <InfoCountText>{comment_count}</InfoCountText>
             </InfoContainer>
+            </FooterLeftContainer>
+            <FooterRightContainer>
             <InfoContainer>
             <ScrapIcon
             source={require('~/Assets/Images/ic_scrap.png')}/>
-            <InfoCountText>{scrap_count}</InfoCountText>
             </InfoContainer>
+            </FooterRightContainer>
           </AdditionalInfoContainer>
         </FooterContainer>
         </View>
@@ -515,5 +605,14 @@ const FeedItem = ({
     </Container>
   );
 };
+
+const styles = StyleSheet.create({
+  pressedLikeIcon : {
+    tintColor: '#F86C57'
+  }, 
+  pressedLikeText : {
+    color: '#F86C57'
+  }
+})
 
 export default FeedItem;

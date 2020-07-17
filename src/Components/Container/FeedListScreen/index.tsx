@@ -299,12 +299,12 @@ function FeedListScreen({navigation, route}: Props) {
   const [currentLocation, setCurrentLocation] = useState();
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [onRefreshFeedList, setOnRefreshFeedList] = useState<boolean>(false);
+  const currentUser = useSelector((state) => state.currentUser);
   
   useEffect(() => {
     getFeedData();
-
+    console.log("currentUser.user.likeFeeds@@", currentUser.user.likeFeeds);
     var hasLocationPermission = true;
-
     if (hasLocationPermission) {
         Geolocation.getCurrentPosition(
             (position) => {
@@ -416,7 +416,7 @@ function FeedListScreen({navigation, route}: Props) {
                   main_tag={item.mainTags.name}
                   sub_tag1={item.subTagOnes?item.subTagOnes.name:null}
                   sub_tag2={item.subTagTwos?item.subTagTwos.name:null}
-                  like_count={item.Likers.length}
+                  like_count={item.likes}
                   comment_count={item.comments.length}
                   scrap_count={item.Scraps.length}
                   mediaFiles={item.mediaFiles}

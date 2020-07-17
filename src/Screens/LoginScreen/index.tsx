@@ -182,7 +182,12 @@ const LoginScreen = ({navigation}) => {
             nickname: response.data.user.nickname,
             description: response.data.user.description,
             userId: response.data.user.id,
+            likeCollections: response.data.user.LikeCollections,
+            likeFeeds: response.data.user.LikePosts,
           })
+        )
+        dispatch(
+          allActions.userActions.setLikeFeeds(response.data.user.LikePosts)
         )
       }
     })

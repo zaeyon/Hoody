@@ -1,5 +1,5 @@
 import axios from 'axios';
-const baseUrl = 'https://94abb4de22fd.ngrok.io'; 
+const baseUrl = 'https://d4a0bb860164.ngrok.io'; 
 
 const GetFeedDetail = (postId) => {
     console.log("postId", postId);

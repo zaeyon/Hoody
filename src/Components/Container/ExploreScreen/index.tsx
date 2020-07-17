@@ -13,6 +13,7 @@ import {
 import RecommandUser from '~/Components/Presentational/ExploreScreen/RecommandUser';
 import RecommandTagBanner from '~/Components/Presentational/ExploreScreen/RecommandTagBanner';
 import PopularTagByAgeGroup from '~/Components/Presentational/ExploreScreen/PopularTagByAgeGroup';
+import PopularFeedList from '~/Components/Presentational/ExploreScreen/PopularFeedList';
 
 const Container = Styled.SafeAreaView`
  flex: 1;
@@ -84,6 +85,9 @@ const PopularTagByAgeGroupContainer = Styled.View`
 margin-top: 10px;
 `;
 
+const PopularFeedListContainer = Styled.View`
+`;
+
 interface Props {
     navigation: any,
     route: any,
@@ -120,6 +124,9 @@ const ExploreScreen = ({navigation, route}: Props) => {
             <PopularTagByAgeGroupContainer>
                 <PopularTagByAgeGroup/>
             </PopularTagByAgeGroupContainer>
+            <PopularFeedListContainer>
+                <PopularFeedList/>
+            </PopularFeedListContainer>
             </BodyContainer>
         </Container>
     )

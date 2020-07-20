@@ -169,6 +169,7 @@ scrollEventThrottle={5}
           </MonthSelectContainer>
           <ExpanseDaySectionListContainer>
           <SectionList
+          scrollEnabled={false}
           onScroll={onScrollPostList}
           sections={TEST_SECTION_DATA}
           renderItem={renderProfileTileSectionItem}

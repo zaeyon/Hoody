@@ -31,7 +31,7 @@ const TagFeedCountText = Styled.Text`
 font-weight: 600;
 `;
 
-const RecommandTagBanner = ({}) => {
+const RecommendTagBanner = ({}) => {
     return (
         <Container>
             <BannerImage
@@ -41,4 +41,4 @@ const RecommandTagBanner = ({}) => {
     )
 }
 
-export default RecommandTagBanner;
+export default RecommendTagBanner;

@@ -16,17 +16,17 @@ padding-left: 16px;
 padding-right: 16px;
 `;
 
-const RecommandUserText = Styled.Text`
+const RecommendUserText = Styled.Text`
  font-weight: 600;
  font-size: 18px;
  color: #333333;
 `;
 
-const RecommandUserListContainer = Styled.View`
+const RecommendUserListContainer = Styled.View`
 padding-bottom: 10px;
 `;
 
-const RecommandUserItemContainer = Styled.View`
+const RecommendUserItemContainer = Styled.View`
 padding-left: 12px;
 padding-top: 12px;
 padding-right: 12px;
@@ -47,7 +47,7 @@ font-size: 13px;
 color: #333333;
 `;
 
-const TEST_RECOMMAND_USER = [
+const TEST_Recommend_USER = [
     {
         index: 1,
     },
@@ -71,15 +71,21 @@ const TEST_RECOMMAND_USER = [
     }
 ]
 
-const RecommandUser = () => {
+interface Props {
+    navigation: any,
+}
 
-    const renderRecommandUserItem = ({item, index}) => {
+const RecommendUser = ({navigation}: Props) => {
+
+    const renderRecommendUserItem = ({item, index}: any) => {
         return (
-            <RecommandUserItemContainer style={index === 0 && styles.firstUserItem || index === TEST_RECOMMAND_USER.length-1 && styles.lastUserItem}>
+            <TouchableWithoutFeedback onPress={() => navigation.navigate("Profile")}>
+            <RecommendUserItemContainer style={index === 0 && styles.firstUserItem || index === TEST_Recommend_USER.length-1 && styles.lastUserItem}>
                 <UserProfileImage
                 source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQosaN09yAK9bRLHqPmgL2OlTVWJIH1z8oddA&usqp=CAU'}}/>
                 <UserNicknameText>하하핳</UserNicknameText>
-            </RecommandUserItemContainer>
+            </RecommendUserItemContainer>
+            </TouchableWithoutFeedback>
             
         )
     }
@@ -88,15 +94,15 @@ const RecommandUser = () => {
     return (
         <Container>
             <HeaderContainer>
-            <RecommandUserText>추천 친구</RecommandUserText>
+            <RecommendUserText>추천 친구</RecommendUserText>
             </HeaderContainer>
-            <RecommandUserListContainer>
+            <RecommendUserListContainer>
                 <FlatList
                 showsHorizontalScrollIndicator={false}
                 horizontal={true}
-                data={TEST_RECOMMAND_USER}
-                renderItem={renderRecommandUserItem}/>
-            </RecommandUserListContainer>
+                data={TEST_Recommend_USER}
+                renderItem={renderRecommendUserItem}/>
+            </RecommendUserListContainer>
         </Container>
     )
 }
@@ -110,4 +116,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default RecommandUser;
+export default RecommendUser;

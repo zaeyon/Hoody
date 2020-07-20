@@ -1,5 +1,6 @@
 import React from 'react';
 import Styled from 'styled-components/native';
+import {TouchableWithoutFeedback} from 'react-native';
 import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
@@ -66,8 +67,13 @@ const FeedRatingText = Styled.Text`
  font-weight: 500;
 `;
 
-const MainPopularFeedItem = () => {
+interface Props {
+    navigation: any,
+}
+
+const MainPopularFeedItem = ({navigation}: Props) => {
     return (
+    <TouchableWithoutFeedback onPress={() => navigation.navigate("FeedDetailScreen")}>
         <Container>
             <FeedBackgroundImage
             source={{uri:'https://travelblog.expedia.co.kr/wp-content/uploads/2016/12/010.jpg'}}/>
@@ -79,9 +85,9 @@ const MainPopularFeedItem = () => {
                 <FeedRatingStarImage
                 source={require('~/Assets/Images/ic_newStar.png')}/>
                 <FeedRatingText>3.5</FeedRatingText>
-
             </FeedRatingBackground>
         </Container>
+    </TouchableWithoutFeedback>
 
     )
 }

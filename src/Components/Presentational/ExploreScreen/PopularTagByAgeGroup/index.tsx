@@ -328,7 +328,11 @@ const TEST_FEED_DATA = [
       },
   ];
 
-const PopularTagByAgeGroup = () => {
+  interface Props {
+    navigation: any,
+  }
+
+const PopularTagByAgeGroup = ({navigation}: Props) => {
     const [popularTagListData, setPopularTagListData] = useState<Array<object>>();
     const [changeSelectedTag, setChangeSelectedTag] = useState<boolean>(false);
     const [selectedTagFeedListData, setSelectedTagFeedListData] = useState<Array<object>>([]);
@@ -367,7 +371,9 @@ const PopularTagByAgeGroup = () => {
 
     const renderSelectTagFeedItem = ({item, index}: any) => {
         return (
-            <TileFeedItem/>
+            <TileFeedItem
+            navigation={navigation}
+            />
         )
     }
 

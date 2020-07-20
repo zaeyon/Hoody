@@ -94,14 +94,21 @@ const LocationText = Styled.Text`
  color: #8e8e8e;
 `;
 
-const RatingContainer = Styled.View`
+const ExpanseRatingContainer = Styled.View`
  flex-direction: row;
 `;
 
 const RatingStarImage = Styled.Image`
+margin-left: 5px;
 margin-right: 3px;
 width: ${wp('3.2%')}px;
 height: ${wp('3.2%')}px;
+`;
+
+const RatingText = Styled.Text`
+font-weight: 500;
+font-size: 13px;
+color: #1D1E1F;
 `;
 
 const HalfRatingStarImage = Styled.Image`
@@ -290,6 +297,12 @@ width: ${wp('3.5%')}px;
 height: ${wp('4.0%')}px;
 `;
 
+const ExpanseText = Styled.Text`
+ font-weight: 500;
+ font-size: 13px;
+ color: #1D1E1F;
+`;
+
 
 
 
@@ -461,17 +474,22 @@ const FeedItem = ({
     .catch(function(error) {
       console.log("좋아요 추가 error", error);
     })
-  
-    
+  }
+
+  const moveToWriterProfile = () => {
+    navigation.navigate("Profile", {
+      screen: "ProfileScreen",
+      params: {
+        requestedUserNickname: nickname,
+      }
+    });
   }
 
   return (
     <Container>
       <FeedItemContainer>
         <LeftContainer>
-        <TouchableWithoutFeedback onPress={() => navigation.navigate("Profile", {
-          requestedNickname: nickname,
-        })}>
+        <TouchableWithoutFeedback onPress={() => moveToWriterProfile()}>
         <WriterProfileImage
               source={{uri: profile_image}}></WriterProfileImage>
          </TouchableWithoutFeedback>
@@ -481,41 +499,22 @@ const FeedItem = ({
           <WriterContainer>
               <HeaderCenterContainer>
              <NicknameCreatedAtContainer>
-            <TouchableWithoutFeedback onPress={() => navigation.navigate("Profile", {
-              requestedNickname: nickname
-            })}>
+            <TouchableWithoutFeedback onPress={() => moveToWriterProfile()}>
             <WriterNickname>{nickname}</WriterNickname>
             </TouchableWithoutFeedback>
-  <CreatedAtText>{createdDate}</CreatedAtText>
             </NicknameCreatedAtContainer>
             {location !== null && (
               <LocationText>{location}</LocationText>
             )}
             </HeaderCenterContainer>
           </WriterContainer>
-          <RatingContainer>
-            <FlatList
-              horizontal={true}
-              data={ratingArray}
-              renderItem={({item, index}) => {
-                if (item === 'full') {
-                  return (
-                    <RatingStarImage
-                      source={require('~/Assets/Images/ic_newStar.png')}
-                    />
-                  );
-                } else if (item === 'half') {
-                  return (
-                    <RatingStarImage
-                      source={require('~/Assets/Images/ic_newHalfStar.png')}
-                    />
-                  );
-                } else if (item === 'empty') {
-                  
-                }
-              }}
+          <ExpanseRatingContainer>
+            <ExpanseText>{"300원"}</ExpanseText>
+            <RatingStarImage
+            source={require('~/Assets/Images/ic_newStar.png')}
             />
-          </RatingContainer>
+            <RatingText>{rating}</RatingText>
+          </ExpanseRatingContainer>
         </HeaderContainer>
         <TouchableWithoutFeedback onPress={() => navigation.navigate("FeedDetailScreen", {
           feedId:id,

@@ -1,6 +1,7 @@
 import React from 'react';
 import {
-    FlatList
+    FlatList,
+    TouchableWithoutFeedback
 } from 'react-native';
 import Styled from 'styled-components/native';
 import {
@@ -56,19 +57,27 @@ const TEST_POPULAR_FEED_DATA = [
     }
 ]
 
-const PopularFeedList = ({}) => {
+interface Props {
+    navigation: any,
+}
+
+const PopularFeedList = ({navigation}: Props) => {
 
     const renderPopularFeedItem = ({item, index}: any) => {
         if(index === 0) {
             return (
             <MainPopularFeedItemContainer>
-            <MainPopularFeedItem/>
+            <MainPopularFeedItem
+            navigation={navigation}
+            />
             </MainPopularFeedItemContainer>
             )
         } else {
             return (
             <SubPopularFeedItemContainer>
-            <SubPopularFeedItem/>
+            <SubPopularFeedItem
+            navigation={navigation}
+            />
             </SubPopularFeedItemContainer>
             )
         }

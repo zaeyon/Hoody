@@ -1,5 +1,6 @@
 import React from 'react';
 import Styled from 'styled-components/native';
+import {TouchableWithoutFeedback} from 'react-native'
 import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
@@ -66,8 +67,13 @@ const FeedLocationText = Styled.Text`
  color: #8E9199;
 `;
 
-const SubPopularFeedItem = () => {
+interface Props {
+    navigation: any,
+}
+
+const SubPopularFeedItem = ({navigation}: Props) => {
     return (
+        <TouchableWithoutFeedback onPress={() => navigation.navigate("FeedDetailScreen")}>
         <Container>
             <FeedImageContainer>
                 <FeedMainImage
@@ -84,6 +90,7 @@ const SubPopularFeedItem = () => {
                 <FeedLocationText>하이데어</FeedLocationText>
             </FeedInfoContainer>
         </Container>
+        </TouchableWithoutFeedback>
     )
 }
 

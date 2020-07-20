@@ -1,4 +1,5 @@
 import React from 'react';
+import {TouchableWithoutFeedback} from 'react-native';
 import Styled from 'styled-components/native';
 import {
     widthPercentageToDP as wp,
@@ -61,10 +62,15 @@ font-size: 13px;
 color: #898A8D;
 `;
 
+interface Props {
+    navigation: any,
+}
 
 
-const TileFeedItem = ({}) => {
+
+const TileFeedItem = ({navigation}: Props) => {
     return (
+        <TouchableWithoutFeedback onPress={() => navigation.navigate("FeedDetailScreen")}>
         <TileFeedItemContainer>
             <TileFeedImage
             source={{uri:'https://img.maisonkorea.com/2019/05/msk_5ce1e0ac196ee-1200x800.jpg'}}/>
@@ -81,6 +87,7 @@ const TileFeedItem = ({}) => {
                 <LocationText>종로구 종로동</LocationText>
             </LocationContainer>
         </TileFeedItemContainer>
+        </TouchableWithoutFeedback>
     )
 }
 

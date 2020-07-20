@@ -90,7 +90,6 @@ const SearchResultContainer = Styled.View`
 const SearchInputContainer = Styled.View`
 justify-content: center;
 align-items: center;
-
 width: ${wp('91%')};
 height: 36px;
 border-radius: 40px;

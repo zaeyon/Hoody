@@ -371,7 +371,7 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
            console.log("error", error);
        })
     }
-    }, [route.params.feedId])
+    }, [route.params?.feedId])
 
     function getDateFormat(date) {
       var tmpDate = new Date(date);

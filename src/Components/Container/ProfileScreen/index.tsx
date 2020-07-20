@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {
-  FlatList, View, Text, Dimensions, TouchableOpacity, TouchableWithoutFeedback
+  FlatList, View, Text, Dimensions, TouchableOpacity, TouchableWithoutFeedback, SafeAreaView,
 } from 'react-native';
 import Styled from 'styled-components/native';
 import {
@@ -325,27 +325,35 @@ const ProfileScreen = ({navigation, route}: Props) => {
   const [collectionListData, setCollectionListData] = useState<Array<object>>([]);
   const [selectedFeedSortType, setSelectedFeedSortType] = useState<string>("list");
   const [changeProfileData, setChangeProfileData] = useState<boolean>(false);
+  const [myProfileScreen, setMyProfileScreen] = useState<boolean>(true);
   const currentUser = useSelector((state) => state.currentUser);
   
   useEffect(() => {
-    if(route.params?.requestedNickname) {
-      console.log("프로필 요청된 route.params.requestedNickname", route.params.requestedNickname)
+    if(route.params?.requestedUserNickname) { 
+    console.log("profile route.params", route.params?.requestedUserNickname)
+    console.log("currentUser.user.profileImage", currentUser.user.profileImage);
+
+    if(route.params.requestedUserNickname != currentUser.user.nickname) {
+      console.log("요청된닉네임이랑 사용자 닉네임@@ 다름");
+      setMyProfileScreen(false);
+    } else {
+      console.log("요청된닉네임이랑 사용자 닉네임@@ 같음")
+      setMyProfileScreen(true);
     }
-    
-    getCurrentUser().then(function(response) {
-      console.log("로그인된 사용자 존재", response);
-      GetProfileFeedByList(response.nickname)
+      
+      GetProfileFeedByList(route.params.requestedUserNickname)
       .then(function(response) {
         console.log(
-        "GetProfileFeedByList response", response.posts)
+        "GetProfileFeedByList response@@", response.posts)
         setUserInfoData(response);
         setFeedListData(response.posts);
         setChangeProfileData(!changeProfileData);
+        console.log("요청된 프로필 정보", response)
       }).catch(function(error) {
         console.log("GetUserProfile error", error);
       })
-      
-      GetProfileCollection(response.nickname)
+
+      GetProfileCollection(route.params.requestedUserNickname)
       .then(function(response) {
         console.log("GetProfileCollection response", response);
         setCollectionListData(JSON.parse(response.collections));
@@ -354,12 +362,9 @@ const ProfileScreen = ({navigation, route}: Props) => {
       .catch(function(error) {
         console.log("GetProfileCollection error", error);
       })
-    })
-    .catch(function(error) {
-      console.log("error");
-    })
+    }
 
-  }, [route.params?.requestedNickname])
+  }, [route.params?.requestedUserNickname])
 
   const moveToLocationFeedMap = () => {
     navigation.navigate("LocationFeedMapScreen");
@@ -394,17 +399,43 @@ const ProfileScreen = ({navigation, route}: Props) => {
 
 
   const userIntroComponent = () => {
+    /*
+    if(myProfileScreen === true) { 
     return (
       <UserIntroduction
-      profileImage={currentUser.user.profileImage}
-      nickname={currentUser.user.nickname}
-      description={currentUser.user.description}
+      profileImage={currentUser.user ? currentUser.user.profileImage : ''}
+      nickname={currentUser.user ? currentUser.user.nickname : ''}
+      description={currentUser.user ? currentUser.user.description : ''}
       followerCount={userInfoData.followersCount}
       followingCount={userInfoData.followingsCount}
-      feedCount={feedListData.length}
+      feedCount={userInfoData.postsCount}
       moveToFollowListScreen={moveToFollowListScreen}
       />
     )
+    } else if(myProfileScreen === false) {
+      return (
+        <UserIntroduction
+        profileImage={route.params.requestedUserProfileImage}
+        nickname={route.params.requestedUserNickname}
+        description={userInfoData.description}
+        followerCount={userInfoData.followersCount}
+        followingCount={userInfoData.followingsCount}
+        feedCount={userInfoData.postsCount}
+        moveToFollowListScreen={moveToFollowListScreen}
+        />
+      )
+    }
+    */
+   return (
+     <UserIntroduction
+     profileImage={userInfoData ? userInfoData.profileImg: ""}
+     nickname={userInfoData ? userInfoData.nickname : ""}
+     description={userInfoData ? userInfoData.description : ""}
+     followerCount={userInfoData ? userInfoData.followersCount : ""}
+     followingCount={userInfoData ? userInfoData.followingsCount : ""}
+     feedCount={userInfoData ? userInfoData.postsCount : 0}
+     moveToFollowListScreen={moveToFollowListScreen}/>
+   )
   }
 
   return (
@@ -445,7 +476,8 @@ const ProfileScreen = ({navigation, route}: Props) => {
       changeInFeedSortType={changeInFeedSortType}
       selectedFeedSortType={selectedFeedSortType}
       addNewCollection={addNewCollection}
-      />}>
+      />}
+      >
       <FeedListTabContainer onLayout={(event) => measureFeedListTab(event)}
       tabLabel='게시글'>
        <ProfileFeedList
@@ -454,7 +486,8 @@ const ProfileScreen = ({navigation, route}: Props) => {
        currentSortType={selectedFeedSortType}
        />
       </FeedListTabContainer>
-      <CollectionListTabContainer onLayout={(event) => measureCollectionListTab(event)}
+      <CollectionListTabContainer 
+      onLayout={(event) => measureCollectionListTab(event)}
       tabLabel="컬렉션">
        <ProfileCollectionList
        collectionListData={collectionListData}

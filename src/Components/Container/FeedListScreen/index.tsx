@@ -303,7 +303,10 @@ function FeedListScreen({navigation, route}: Props) {
   
   useEffect(() => {
     getFeedData();
+    
+    if(currentUser.user) {
     console.log("currentUser.user.likeFeeds@@", currentUser.user.likeFeeds);
+    }
     var hasLocationPermission = true;
     if (hasLocationPermission) {
         Geolocation.getCurrentPosition(

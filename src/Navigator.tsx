@@ -73,6 +73,8 @@ import AlarmScreen from '~/Components/Container/AlarmScreen';
 
 // Explore Screen
 import ExploreScreen from '~/Components/Container/ExploreScreen';
+import SearchScreen from '~/Components/Container/SearchScreen';
+
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
@@ -162,7 +164,9 @@ function HomeStackScreen() {
 function ExploreStackScreen() {
   return (
     <ExploreStack.Navigator headerMode="none">
-      <ExploreStack.Screen name="ExploreScreen" component={ExploreScreen}/>
+      <ExploreStack.Screen 
+      name="ExploreScreen"
+      component={ExploreScreen}/>
     </ExploreStack.Navigator>
   )
 }
@@ -293,6 +297,7 @@ function AlarmStackScreen() {
 }
 
 function ProfileStackScreen() {
+  const currentUser = useSelector((state) => state.currentUser)
   return (
     <ProfileStack.Navigator
       headerMode="none"
@@ -306,9 +311,13 @@ function ProfileStackScreen() {
       <ProfileStack.Screen
         name="ProfileScreen"
         component={ProfileScreen}
-        options={({navigation, route}) => ({
+        initialParams={{requestedUserNickname: currentUser.user.nickname }}
+        options={({navigation, route}) => (
+          {
           headerTitle: (props) => <ProfileTitle {...props} />,
-        })}
+        }
+        )
+       }
       />
       <ProfileStack.Screen 
       name="PinterMap"
@@ -521,6 +530,7 @@ function Navigator() {
 }
 
 function BottomTab() {
+  const currentUser = useSelector((state: any) => state.currentUser)
   return (
     <Tab.Navigator
       tabBarOptions={{
@@ -614,6 +624,20 @@ function BottomTab() {
           />
         ),
       }}
+      listeners={({navigation, route}) => ({
+        tabPress: e => {
+          // Prevent default action
+          e.preventDefault();
+
+          // Do someting with the 'navigation' object
+          navigation.navigate('Profile', {
+            screen:'ProfileScreen',
+            params: {
+              requestedUserNickname: currentUser.user.nickname
+            }
+          })
+        }
+      })}
       />
     </Tab.Navigator>
   )
@@ -658,6 +682,7 @@ function AppNavigator() {
       <NoBottomBarStack.Screen name="AddCollectionFeedScreen" component={AddCollectionFeedScreen}/>
       <NoBottomBarStack.Screen name="AddScrapAlbumScreen" component={AddScrapAlbumScreen}/>
       <NoBottomBarStack.Screen name="LocationFeedMapScreen" component={LocationFeedMapScreen}/>
+      <NoBottomBarStack.Screen name="SearchScreen" component={SearchScreen}/>
     </NoBottomBarStack.Navigator>
     ) : (
       <UnauthStackScreen/>

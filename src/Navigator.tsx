@@ -623,6 +623,7 @@ function BottomTab() {
             }
           />
         ),
+        unmountOnBlur: true,
       }}
       listeners={({navigation, route}) => ({
         tabPress: e => {

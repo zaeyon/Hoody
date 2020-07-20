@@ -1,42 +1,39 @@
 import axios from 'axios';
 const baseUrl = 'https://56a952a6ea9b.ngrok.io';
 
-const POSTLike = (userId, postId) => {
-    const url = baseUrl + '/like?userId=' + userId + "&postId=" + postId;
+const POSTFollowUser = (targetUserId) => {
+    const url = baseUrl + '/user/follow?userId=' + targetUserId;
 
     return new Promise(function(resolve, reject) {
         axios
         .post(url)
         .then(function(response) {
-            console.log("POSTLike response", response)
+            console.log("POSTFollow response", response)
             resolve(response);
         })
         .catch(function(error) {
-            console.log("POSTLike error", error)
+            console.log("POSTFollow error", error)
             reject(error);
         })
     })
 }
 
-const DELETELike = (userId, postId) => {
-    const url = baseUrl + '/like?userId=' + userId + '&postId=' + postId;
+const DELETEUnfollowUser = (targetUserId) => {
+    const url = baseUrl + '/user/follow?userId=' + targetUserId;
 
     return new Promise(function(resolve, reject) {
         axios
         .delete(url)
         .then(function(response) {
-            console.log("DELETELike response", response)
-            resolve(response);
+             console.log("DELETEUnfollowUser response", response)
+             resolve(response);
         })
         .catch(function(error) {
-            console.log("DELETELike error", error);
+            console.log("DELETEUnfollowUser error", error);
             reject(error);
         })
     })
 }
 
+export {POSTFollowUser, DELETEUnfollowUser};
 
-
-
-
-export {POSTLike, DELETELike};

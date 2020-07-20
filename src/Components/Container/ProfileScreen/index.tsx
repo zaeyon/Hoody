@@ -21,6 +21,8 @@ import ProfileCollectionList from '~/Components/Presentational/ProfileScreen/Pro
 import GetProfileFeedByList from '~/Route/Profile/GetProfileFeedByList';
 import GetProfileCollection from '~/Route/Profile/GetProfileCollection';
 
+import {getStatusBarHeight} from 'react-native-status-bar-height';
+
 const Container = Styled.SafeAreaView`
  flex: 1;
  background-color: #ffffff;
@@ -55,9 +57,21 @@ align-items: center;
 `;
 
 const MyProfileSettingButton = Styled.Image`
- width: ${wp('8%')};
- height: ${wp('8%')};
+ width: ${wp('6.4%')};
+ height: ${wp('6.4%')};
 `;
+
+const HeaderBackIcon = Styled.Image`
+width: ${wp('6.4%')};
+height: ${wp('6.4%')}; 
+`;
+
+const HeaderBackContainer = Styled.View`
+padding: 10px 15px 10px 15px;
+align-items: center;
+ justify-content: center;
+`;
+
 
 const HeaderRightContainer = Styled.View`
 padding: 10px 15px 10px 15px;
@@ -325,8 +339,11 @@ const ProfileScreen = ({navigation, route}: Props) => {
   const [collectionListData, setCollectionListData] = useState<Array<object>>([]);
   const [selectedFeedSortType, setSelectedFeedSortType] = useState<string>("list");
   const [changeProfileData, setChangeProfileData] = useState<boolean>(false);
-  const [myProfileScreen, setMyProfileScreen] = useState<boolean>(true);
+  const [currentUserProfileBool, setCurrentUserProfileBool] = useState<boolean>(true);
+  const [followed, setFollowed] = useState<boolean>(false);
+
   const currentUser = useSelector((state) => state.currentUser);
+
   
   useEffect(() => {
     if(route.params?.requestedUserNickname) { 
@@ -335,10 +352,10 @@ const ProfileScreen = ({navigation, route}: Props) => {
 
     if(route.params.requestedUserNickname != currentUser.user.nickname) {
       console.log("요청된닉네임이랑 사용자 닉네임@@ 다름");
-      setMyProfileScreen(false);
+      setCurrentUserProfileBool(false);
     } else {
       console.log("요청된닉네임이랑 사용자 닉네임@@ 같음")
-      setMyProfileScreen(true);
+      setCurrentUserProfileBool(true);
     }
       
       GetProfileFeedByList(route.params.requestedUserNickname)
@@ -346,9 +363,15 @@ const ProfileScreen = ({navigation, route}: Props) => {
         console.log(
         "GetProfileFeedByList response@@", response.posts)
         setUserInfoData(response);
+        if(response.followed == true) {
+          setFollowed(true)
+        } else {
+          setFollowed(false)
+        }
         setFeedListData(response.posts);
         setChangeProfileData(!changeProfileData);
-        console.log("요청된 프로필 정보", response)
+        console.log("요청된 프로필 정보@@@", response)
+        console.log("response.followed", response.followed)
       }).catch(function(error) {
         console.log("GetUserProfile error", error);
       })
@@ -396,6 +419,14 @@ const ProfileScreen = ({navigation, route}: Props) => {
     });
   }
 
+  const followUser = () => {
+    setFollowed(true);
+  }
+
+  const unfollowUser = () => {
+    setFollowed(false);
+  }
+
 
 
   const userIntroComponent = () => {
@@ -428,12 +459,17 @@ const ProfileScreen = ({navigation, route}: Props) => {
     */
    return (
      <UserIntroduction
+     userId={userInfoData ? userInfoData.id: ""}
+     followed={followed} 
+     followUserProp={followUser}
+     unfollowUserProp={unfollowUser}
      profileImage={userInfoData ? userInfoData.profileImg: ""}
      nickname={userInfoData ? userInfoData.nickname : ""}
      description={userInfoData ? userInfoData.description : ""}
      followerCount={userInfoData ? userInfoData.followersCount : ""}
      followingCount={userInfoData ? userInfoData.followingsCount : ""}
      feedCount={userInfoData ? userInfoData.postsCount : 0}
+     currentUserProfileBool={currentUserProfileBool}
      moveToFollowListScreen={moveToFollowListScreen}/>
    )
   }
@@ -442,20 +478,33 @@ const ProfileScreen = ({navigation, route}: Props) => {
     <Container>
        <HeaderBar>
         <HeaderLeftContainer>
+          {currentUserProfileBool && (
           <TouchableWithoutFeedback onPress={() => navigation.navigate("SettingScreen")}>
           <MyProfileSettingContainer>
           <MyProfileSettingButton
-          source={require('~/Assets/Images/ic_hamburger.png')}
+          source={require('~/Assets/Images/HeaderBar/ic_hamburger.png')}
           />
           </MyProfileSettingContainer>
           </TouchableWithoutFeedback>
+          )}
+          {!currentUserProfileBool && (
+          <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
+            <HeaderBackContainer>
+            <HeaderBackIcon
+            source={require('~/Assets/Images/HeaderBar/ic_back.png')}/>
+            </HeaderBackContainer>
+          </TouchableWithoutFeedback>
+          )}
+
         </HeaderLeftContainer>
         <HeaderRightContainer>
+          {currentUserProfileBool && (
           <MyProfileReportContainer>
-            <MyProfileReportImage
-            source={require('~/Assets/Images/ic_report.png')}/>
-            <MyProfileReportText>리포트</MyProfileReportText>
-          </MyProfileReportContainer>
+          <MyProfileReportImage
+          source={require('~/Assets/Images/ic_report.png')}/>
+          <MyProfileReportText>리포트</MyProfileReportText>
+        </MyProfileReportContainer>
+          )}
           <TouchableWithoutFeedback onPress={() => moveToLocationFeedMap()}>
           <MyProfileReviewMapContainer>
             <MyProfileReviewMapImage
@@ -482,7 +531,7 @@ const ProfileScreen = ({navigation, route}: Props) => {
       tabLabel='게시글'>
        <ProfileFeedList
        navigation={navigation}
-       feedListData={feedListData}
+       feedListData={feedListData ? feedListData : ""}
        currentSortType={selectedFeedSortType}
        />
       </FeedListTabContainer>
@@ -497,8 +546,6 @@ const ProfileScreen = ({navigation, route}: Props) => {
       </ScrollableTabView>
     </Container>
   )
-  
-  
 }
 
 export default ProfileScreen;

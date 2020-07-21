@@ -14,61 +14,65 @@ const Container = Styled.SafeAreaView`
  background-color: #ffffff;
 `;
 
-const HeaderContainer = Styled.View`
+const HeaderBar = Styled.View`
  width: ${wp('100%')};
- height: ${hp('6%')};
+ height: ${wp('11.7%')};
  flex-direction: row;
  align-items: center;
  justify-content:space-between;
- padding: 0px 0px 0px 0px;
 `;
 
-const LeftContainer = Styled.View`
+
+const HeaderLeftContainer = Styled.View`
 background-color: #ffffff;
-height: ${hp('6%')};
-flex: 1;
 justify-content: center;
 align-items: center;
+padding-top: 7px;
+padding-left: 16px;
+padding-bottom: 13px;
 `;
 
-const CenterContainer = Styled.View`
+const HeaderCenterContainer = Styled.View`
 justify-content: center;
 align-items: center;
 background-color: #ffffff;
-height: ${hp('6%')};
-flex: 7;
 `;
 
-const RightContainer = Styled.View`
+const HeaderRightContainer = Styled.View`
 justify-content: center;
+align-items: center;
 background-color: #ffffff;
-height: ${hp('6%')};
-flex: 1;
+padding-top: 7px;
+padding-right: 16px;
+padding-bottom: 13px;
 `;
 
 const HeaderTitleText = Styled.Text`
- font-size: 20px;
- margin-left: 6px;
+ font-weight: 600;
+ font-size: 18px;
+ color: #1D1E1F;
 `;
 
-const BackButton = Styled.Image`
-width: 11px;
-height: 19px;
+const HeaderCancelIcon = Styled.Image`
+ width: ${wp('6.4%')}
+ height: ${wp('6.4%')};
 `;
 
-const ButtonText = Styled.Text`
- font-size: 20px;
- color: #338EFC;
+const HeaderEmptyView = Styled.View`
+background-color: #ffffff;
+width: ${wp('6.4%')}
+height: ${wp('6.4%')};
 `;
 
 const HeaderBorder = Styled.View`
  width: ${wp('100%')};
- height: 0.3px;
- background-color: #c3c3c3;
+ height: 0.6px;
+ background-color: #ECECEE;
 `;
 
 const CommentListContainer = Styled.View`
  margin-top: 5px;
+ flex: 1;
 `;
 
 const ProfileImage = Styled.Image`
@@ -123,23 +127,110 @@ padding-top: 10px;
 padding-bottom: 10px;
 `;
 
-const COMMENT_DATA = [
-    {
-    user: {
-        profileImage: 'https://t1.daumcdn.net/thumb/R1280x0/?fname=http://t1.daumcdn.net/brunch/service/user/2JVJ/image/VkxFbnXm8s7Vhw3ydyfo4f2YOa4.jpg',
-        nickname: '비타화장해석쟁'
+const COMMENT_DATA = 
+[
+  {
+    "id": 6,
+    "description": "하하하",
+    "Like": 0,
+    "createdAt": "2020-06-19T07:02:28.000Z",
+    "updatedAt": "2020-06-19T07:02:28.000Z",
+    "deletedAt": null,
+    "userId": "43430460-b1f9-11ea-adb1-11494bb1448b",
+    "postId": 1,
+    "replyId": null,
+    "user": {
+      "id": "43430460-b1f9-11ea-adb1-11494bb1448b",
+      "nickname": "카카카카ㅏ",
+      "profileImg": "https://s.gravatar.com/avatar/39333a72e7d0c0deb714d292ba6b2198?s=80&r=x&d=mp"
     },
-    comment: '여긴 또 가봐야겠네요! 너무 좋은정보인거 같아요!',
-    createAt: '5/22 22:12'
+    "replys": []
+  },
+  {
+    "id": 5,
+    "description": "Zzq",
+    "Like": 0,
+    "createdAt": "2020-06-19T06:57:22.000Z",
+    "updatedAt": "2020-06-19T06:57:22.000Z",
+    "deletedAt": null,
+    "userId": "43430460-b1f9-11ea-adb1-11494bb1448b",
+    "postId": 1,
+    "replyId": null,
+    "user": {
+      "id": "43430460-b1f9-11ea-adb1-11494bb1448b",
+      "nickname": "카카카카ㅏ",
+      "profileImg": "https://s.gravatar.com/avatar/39333a72e7d0c0deb714d292ba6b2198?s=80&r=x&d=mp"
     },
-    {
-    user: {
-        profileImage: 'https://t1.daumcdn.net/thumb/R600x0/?fname=https%3A%2F%2Ft1.daumcdn.net%2Fqna%2Fimage%2F1542632018000000528',
-        nickname: '사용자닉네임'
+    "replys": []
+  },
+  {
+    "id": 4,
+    "description": "Zz",
+    "Like": 0,
+    "createdAt": "2020-06-19T06:56:57.000Z",
+    "updatedAt": "2020-06-19T06:56:57.000Z",
+    "deletedAt": null,
+    "userId": "43430460-b1f9-11ea-adb1-11494bb1448b",
+    "postId": 1,
+    "replyId": null,
+    "user": {
+      "id": "43430460-b1f9-11ea-adb1-11494bb1448b",
+      "nickname": "카카카카ㅏ",
+      "profileImg": "https://s.gravatar.com/avatar/39333a72e7d0c0deb714d292ba6b2198?s=80&r=x&d=mp"
     },
-    comment: '댓글내용',
-    createAt: '6/11 05:25',
-    }
+    "replys": []
+  },
+  {
+    "id": 3,
+    "description": "Ddddd",
+    "Like": 0,
+    "createdAt": "2020-06-19T06:55:14.000Z",
+    "updatedAt": "2020-06-19T06:55:14.000Z",
+    "deletedAt": null,
+    "userId": "43430460-b1f9-11ea-adb1-11494bb1448b",
+    "postId": 1,
+    "replyId": null,
+    "user": {
+      "id": "43430460-b1f9-11ea-adb1-11494bb1448b",
+      "nickname": "카카카카ㅏ",
+      "profileImg": "https://s.gravatar.com/avatar/39333a72e7d0c0deb714d292ba6b2198?s=80&r=x&d=mp"
+    },
+    "replys": []
+  },
+  {
+    "id": 2,
+    "description": "Ddddd",
+    "Like": 0,
+    "createdAt": "2020-06-19T06:55:09.000Z",
+    "updatedAt": "2020-06-19T06:55:09.000Z",
+    "deletedAt": null,
+    "userId": "43430460-b1f9-11ea-adb1-11494bb1448b",
+    "postId": 1,
+    "replyId": null,
+    "user": {
+      "id": "43430460-b1f9-11ea-adb1-11494bb1448b",
+      "nickname": "카카카카ㅏ",
+      "profileImg": "https://s.gravatar.com/avatar/39333a72e7d0c0deb714d292ba6b2198?s=80&r=x&d=mp"
+    },
+    "replys": []
+  },
+  {
+    "id": 1,
+    "description": "testing comment",
+    "Like": 0,
+    "createdAt": "2020-06-19T05:45:56.000Z",
+    "updatedAt": "2020-06-19T05:45:56.000Z",
+    "deletedAt": null,
+    "userId": "77be8000-b1e2-11ea-a9ed-a1269359ec27",
+    "postId": 1,
+    "replyId": null,
+    "user": {
+      "id": "77be8000-b1e2-11ea-a9ed-a1269359ec27",
+      "nickname": "jiwon11",
+      "profileImg": "https://s.gravatar.com/avatar/2770f6d3995b48fffe01fe6b5c368adf?s=80&r=x&d=mp"
+    },
+    "replys": []
+  }
 ]
 
 interface Props {
@@ -268,28 +359,31 @@ const CommentListScreen = ({navigation, route}: Props) => {
 
     return (
     <Container>
-        <HeaderContainer>
-        <LeftContainer>
-          <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
-          <BackButton source={require('~/Assets/Images/ic_back2.png')}/>
-          </TouchableWithoutFeedback>
-        </LeftContainer>
-        <TouchableWithoutFeedback onPress={() => 0}>
-          <CenterContainer>
-          <HeaderTitleText>댓글</HeaderTitleText>
-        </CenterContainer>
-        </TouchableWithoutFeedback>
-        <RightContainer>
-              <TouchableWithoutFeedback onPress = {() => 0}>
-              <ButtonText></ButtonText>
-              </TouchableWithoutFeedback>
-        </RightContainer>
-      </HeaderContainer>
-      <HeaderBorder/>
+    <HeaderBar>
+        <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
+       <HeaderLeftContainer>
+           <HeaderCancelIcon
+           source={require('~/Assets/Images/HeaderBar/ic_X.png')}/>
+       </HeaderLeftContainer>
+       </TouchableWithoutFeedback>
+       <TouchableWithoutFeedback onPress={() => 0}>
+         <HeaderCenterContainer>
+         <HeaderTitleText>댓글</HeaderTitleText>
+       </HeaderCenterContainer>
+       </TouchableWithoutFeedback>
+       <HeaderRightContainer>
+             <TouchableWithoutFeedback onPress = {() => 0}>
+                 <HeaderEmptyView>
+                 </HeaderEmptyView>
+             </TouchableWithoutFeedback>
+       </HeaderRightContainer>
+     </HeaderBar>
+     <HeaderBorder/>
       <CommentListContainer
       style={{marginBottom:inputHeight+keyboardHeight}}>
          <FlatList
-        data={commentList}
+        refreshing={false}
+        data={COMMENT_DATA}
         renderItem={renderCommentItem}
         />
         </CommentListContainer>

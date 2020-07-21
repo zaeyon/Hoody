@@ -17,42 +17,54 @@ const Container = Styled.SafeAreaView`
  background-color: #ffffff;
 `;
 
-const HeaderContainer = Styled.View`
+const HeaderBar = Styled.View`
  width: ${wp('100%')};
- height: ${hp('6.%')};
+ height: ${wp('11.7%')};
  flex-direction: row;
  align-items: center;
  justify-content:space-between;
- padding: 0px 0px 0px 0px;
 `;
 
 
-const LeftContainer = Styled.View`
+const HeaderLeftContainer = Styled.View`
 background-color: #ffffff;
-height: ${hp('6%')};
-flex: 1;
 justify-content: center;
 align-items: center;
+padding-top: 7px;
+padding-left: 16px;
+padding-bottom: 13px;
 `;
 
-const CenterContainer = Styled.View`
+const HeaderCenterContainer = Styled.View`
 justify-content: center;
 align-items: center;
 background-color: #ffffff;
-height: ${hp('6%')};
-flex: 7;
 `;
 
-const RightContainer = Styled.View`
+const HeaderRightContainer = Styled.View`
 justify-content: center;
+align-items: center;
 background-color: #ffffff;
-height: ${hp('6%')};
-flex: 1;
+padding-top: 7px;
+padding-right: 16px;
+padding-bottom: 13px;
 `;
 
 const HeaderTitleText = Styled.Text`
- font-size: 20px;
- margin-left: 6px;
+ font-weight: 600;
+ font-size: 18px;
+ color: #1D1E1F;
+`;
+
+const HeaderCancelIcon = Styled.Image`
+ width: ${wp('6.4%')}
+ height: ${wp('6.4%')};
+`;
+
+const HeaderEmptyView = Styled.View`
+background-color: #ffffff;
+width: ${wp('6.4%')}
+height: ${wp('6.4%')};
 `;
 
 const BackButton = Styled.Image`
@@ -67,8 +79,8 @@ const ButtonText = Styled.Text`
 
 const HeaderBorder = Styled.View`
  width: ${wp('100%')};
- height: 0.3px;
- background-color: #c3c3c3;
+ height: 0.6px;
+ background-color: #ECECEE;
 `;
 
 const LikeListContainer = Styled.View`
@@ -116,23 +128,25 @@ const LikeListScreen = ({navigation, route}: Props) => {
     )
 
  return <Container>
-     <HeaderContainer>
-        <LeftContainer>
-          <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
-          <BackButton source={require('~/Assets/Images/ic_back2.png')} />
-          </TouchableWithoutFeedback>
-        </LeftContainer>
-        <TouchableWithoutFeedback onPress={() => 0}>
-          <CenterContainer>
-          <HeaderTitleText>좋아요</HeaderTitleText>
-        </CenterContainer>
+     <HeaderBar>
+         <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
+        <HeaderLeftContainer>
+            <HeaderCancelIcon
+            source={require('~/Assets/Images/HeaderBar/ic_X.png')}/>
+        </HeaderLeftContainer>
         </TouchableWithoutFeedback>
-        <RightContainer>
+        <TouchableWithoutFeedback onPress={() => 0}>
+          <HeaderCenterContainer>
+          <HeaderTitleText>좋아요</HeaderTitleText>
+        </HeaderCenterContainer>
+        </TouchableWithoutFeedback>
+        <HeaderRightContainer>
               <TouchableWithoutFeedback onPress = {() => 0}>
-              <ButtonText></ButtonText>
+                  <HeaderEmptyView>
+                  </HeaderEmptyView>
               </TouchableWithoutFeedback>
-        </RightContainer>
-      </HeaderContainer>
+        </HeaderRightContainer>
+      </HeaderBar>
       <HeaderBorder/>
       <LikeListContainer>
      <FlatList

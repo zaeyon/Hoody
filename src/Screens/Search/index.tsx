@@ -39,7 +39,7 @@ const InputBoxContainer = Styled.View`
 
 const InputBox = Styled.TextInput`
  width: ${wp('85%')};
- height: ${hp('6.5%')};
+ height: ${wp('11.7%')};
  border-radius: 25px;
  background-color: #FFFFFF;
  justify-content: center;

@@ -7,11 +7,14 @@ import {
 import {TouchableWithoutFeedback, Text, FlatList, ScrollView} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import allActions from '~/action';
-import GetFeedDetail from '~/Route/Post/GetFeedDetail';
+
+// location component
 import FeedContent from '~/Components/Presentational/FeedDetailScreen/FeedContent';
+import FeedInformation from '~/Components/Presentational/FeedDetailScreen/FeedInformation';
 
+// Route
 import {POSTLike, DELETELike} from '~/Route/Post/Like';
-
+import GetFeedDetail from '~/Route/Post/GetFeedDetail';
 const Container = Styled.SafeAreaView`
 width: ${wp('100%')};
 height:${hp('100%')};
@@ -20,7 +23,7 @@ background-color: #ffffff;
 
 const HeaderContainer = Styled.View`
  width: ${wp('100%')};
- height: ${hp('6.5%')};
+ height: ${wp('11.7%')};
  flex-direction: row;
  align-items: center;
  justify-content:space-between;
@@ -29,10 +32,11 @@ const HeaderContainer = Styled.View`
 
 const LeftContainer = Styled.View`
 background-color: #ffffff;
-height: ${hp('6%')};
-flex: 1;
 justify-content: center;
 align-items: center;
+padding-top: 7px;
+padding-left: 16px;
+padding-bottom: 13px;
 `;
 
 const CenterContainer = Styled.View`
@@ -51,9 +55,11 @@ const WriterContainer = Styled.View`
 
 const RightContainer = Styled.View`
 justify-content: center;
+align-items: center;
 background-color: #ffffff;
-height: ${hp('6%')};
-flex: 1;
+padding-right: 16px;
+padding-top: 7px;
+padding-bottom: 13px;
 `;
 
 const WriterProfileImage = Styled.Image`
@@ -75,8 +81,8 @@ const HeaderTitleText = Styled.Text`
 `;
 
 const BackButton = Styled.Image`
-width: ${wp('7%')};
-height: ${wp('7%')};
+width: ${wp('6.4%')};
+height: ${wp('6.4%')};
 `;
 
 const ButtonText = Styled.Text`
@@ -97,7 +103,6 @@ const HeaderBorder = Styled.View`
 `;
 
 const InformationContainer = Styled.View`
-padding: 20px 20px 5px 20px;
 background-color: #ffffff;
 `;
 
@@ -342,7 +347,6 @@ interface Props {
 }
 
 const FeedDetailScreen = ({navigation, route}: Props) => {
-    const [mainTag, setMainTag] = useState("메인태그");
     const [paragraphData, setParagraphData] = useState<Array<object>>([]);
     const [postId, setPostId] = useState();
     const [feedDetailInfo, setFeedDetailInfo] = useState({
@@ -353,26 +357,28 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
           address : ""
         }
     });
+
     const [ratingArray, setRatingArray] = useState<Array<string>>();
     const [tagList, setTagList] = useState<Array<string>>();
-    const [createdDate, setCreatedDate] = useState();
+    const [createdDate, setCreatedDate] = useState<string>("");
     const [spendDate, setSpendDate] = useState();
     const [currentUserLike, setCurrentUserLike] = useState<boolean>(false);
     const [likeCount, setLikeCount] = useState<number>();
     const currentUser = useSelector((state) => state.currentUser);
     const dispatch = useDispatch();
-    
     // 서버 연결 코드
     useLayoutEffect(() => {
         if(route.params?.feedId) {
        GetFeedDetail(route.params.feedId).then(function(response) {
            console.log("GetFeedDetail Success:", response.data)
            console.log("response.data.post", response.data.post);
+           console.log("response.data.post.mainTags", response.data.post.mainTags);
            response.data.post.spendDate = getDateFormat(response.data.post.spendDate)
            setParagraphData(response.data.postBody);
            setPostId(route.params.feedId);
            setFeedDetailInfo(response.data.post);
-           setLikeCount(response.data.post.likes)
+           setLikeCount(response.data.post.likes);
+
            setTagList(route.params.tagList);
            setRatingArray(route.params.ratingArray);
            setCreatedDate(route.params.createdAt);
@@ -393,19 +399,6 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
       day = day >= 10 ? day : '0' + day;
       return year + '. ' + month + '. ' + day
     }
-
-
-    /*
-    // 서버연결X 테스트용 코드
-    useLayoutEffect(() => {
-        if(route.params?.feedId) {
-           setPostId(route.params.feedId);
-           setFeedDetailInfo(TEST_FEED_DETAIL);
-           setTagList(route.params.tagList);
-           setRatingArray(route.params.ratingArray);
-    }
-    }, [route.params.feedId])
-    */
 
     const moveToCommentList = () => {
         console.log("postId", postId);
@@ -500,81 +493,31 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
         <HeaderContainer>
         <LeftContainer>
           <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
-          <BackButton source={require('~/Assets/Images/ic_back.png')} />
+          <BackButton source={require('~/Assets/Images/HeaderBar/ic_back.png')} />
           </TouchableWithoutFeedback>
         </LeftContainer>
-        <TouchableWithoutFeedback onPress={() => moveToWriterProfile()}>
-          <CenterContainer>
-              <WriterContainer>
-                  <WriterProfileImage
-                  source={{uri: feedDetailInfo.user.profileImg}}
-                  />
-                  <WriterNicknameText>{feedDetailInfo.user.nickname}</WriterNicknameText>
-              </WriterContainer>
-        </CenterContainer>
-        </TouchableWithoutFeedback>
         <RightContainer>
               <TouchableWithoutFeedback onPress = {() => 0}>
                   <ViewMoreIcon
-                  source={require('~/Assets/Images/ic_more.png')}/>
+                  source={require('~/Assets/Images/HeaderBar/ic_more.png')}/>
               </TouchableWithoutFeedback>
         </RightContainer>
       </HeaderContainer>
-      <HeaderBorder/>
       <ScrollView>
       <InformationContainer>
-    <CreatedAtContainer>
-   <CreatedAtText>{"게시일 "+createdDate}</CreatedAtText>
-   </CreatedAtContainer>
-   <TagListContainer>
-            <FlatList
-              horizontal={true}
-              data={tagList}
-              renderItem={renderTagItem}
-            />
-   </TagListContainer>
-   <MetadataContainer>
-   <RatingContainer>
-              <FlatList
-              horizontal={true}
-              data={ratingArray}
-              renderItem={({item, index}) => {
-                if (item === 'full') {
-                  return (
-                    <RatingStarImage
-                      source={require('~/Assets/Images/ic_newStar.png')}
-                    />
-                  );
-                } else if (item === 'half') {
-                  return (
-                    <RatingStarImage
-                      source={require('~/Assets/Images/ic_newHalfStar.png')}
-                    />
-                  );
-                } else if (item === 'empty') {
-                
-                }
-              }}
-              />
-   </RatingContainer>
-   <IconDivider/>
-   <ExpanseContainer>
-       <ExpanseIcon
-       source={require('~/Assets/Images/ic_expanse.png')}/>
-       <ExpanseText>{feedDetailInfo.expanse? feedDetailInfo.expanse + "원" : "금액정보 없음"}</ExpanseText>
-   </ExpanseContainer>
-   <IconDivider/>
-   <LocationContainer>
-       <LocationIcon
-       source={require('~/Assets/Images/ic_location.png')}/>
-       <LocationText>{feedDetailInfo.address ? feedDetailInfo.address.address:"위치정보 없음"}</LocationText>
-   </LocationContainer>
-   </MetadataContainer>
-   <ExpanseDateContainer>
-       <ExpanseDateText>소비날짜</ExpanseDateText>
-       <IconDivider/>
-       <ExpanseDateText>{feedDetailInfo.spendDate}</ExpanseDateText>
-   </ExpanseDateContainer>
+   <FeedInformation
+   profileImage={feedDetailInfo.user.profileImg}
+   profileNickname={feedDetailInfo.user.nickname}
+   createdAt={createdDate}
+   mainTag={feedDetailInfo.mainTags ? feedDetailInfo.mainTags.name : null}
+   subTag1={feedDetailInfo.subTagOnes ? feedDetailInfo.subTagOnes.name : null}
+   subTag2={feedDetailInfo.subTagTwos ? feedDetailInfo.subTagTwos.name : null}
+   rating={feedDetailInfo.starRate}
+   expansePrice={feedDetailInfo.expanse ? feedDetailInfo.expanse + "원" : "금액정보 없음"}
+   location={feedDetailInfo.address ? feedDetailInfo.address.address : "위치정보 없음"}
+   expanseDate={feedDetailInfo.spendDate ? feedDetailInfo.spendDate : null}
+   moveToWriterProfile={moveToWriterProfile}
+   />
       </InformationContainer>
           <FeedContent
           paragraphData={paragraphData}

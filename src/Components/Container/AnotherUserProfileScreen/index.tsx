@@ -38,7 +38,7 @@ const CollectionListTabContainer = Styled.View`
 
 const HeaderBar = Styled.View`
  width: ${wp('100%')};
- height: ${hp('6.5%')};
+ height: ${wp('11.7%')};
  flex-direction: row;
  align-items: center;
  justify-content: space-between;

@@ -31,7 +31,7 @@ const Container = Styled.SafeAreaView`
 
 const HeaderBar = Styled.View`
  width: ${wp('100%')};
- height: ${hp('6.5%')};
+ height: ${wp('11.7%')};
  background-color: #ffffff;
  padding: 5px;
  border-bottom-width: 0.4px;

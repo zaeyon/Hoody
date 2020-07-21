@@ -10,7 +10,7 @@ import ReplyItem from '~/Components/Presentational/CommentListScreen/ReplyItem';
 
 const Container = Styled.View`
  width: ${wp('100%')};
- height: ${hp('6.5%')};
+ height: ${wp('11.7%')};
  margin-bottom: 2px;
 `;
 

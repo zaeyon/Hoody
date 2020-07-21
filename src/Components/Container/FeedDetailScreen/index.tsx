@@ -155,16 +155,16 @@ width: ${wp('3.5%')};
 height: ${wp('3.5%')};
 `;
 
-const ExpanseContainer = Styled.View`
+const ExpenseContainer = Styled.View`
 flex-direction: row;
 `;
 
-const ExpanseIcon = Styled.Image`
+const ExpenseIcon = Styled.Image`
 width: ${wp('4.5%')};
 height: ${wp('4.5%')};
 `;
 
-const ExpanseText = Styled.Text`
+const ExpenseText = Styled.Text`
 font-weight: 500;
 font-size: 13px;
 color: #C4C4C4;
@@ -194,14 +194,14 @@ const IconDivider = Styled.View`
  margin-right: 7px;
 `;
 
-const ExpanseDateContainer = Styled.View`
+const ExpenseDateContainer = Styled.View`
  margin-top: 7px;
  flex-direction: row;
  align-items: center;
 `;
 
 
-const ExpanseDateText = Styled.Text`
+const ExpenseDateText = Styled.Text`
 font-size: 13px;
 color: #C4C4C4;
 `;
@@ -308,7 +308,7 @@ const TEST_FEED_DETAIL =
       address : {
         address: '블루문 스터디 카페'
       },
-      expanse: 2000,
+      expense: 2000,
       descriptions: [
         {
           description: "이번 남자친구가 선물해준 키엘 수분 크림을 사용해 봤는데 너무 좋은거 같아요 이번에 남자 ..."
@@ -364,6 +364,8 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
     const [spendDate, setSpendDate] = useState();
     const [currentUserLike, setCurrentUserLike] = useState<boolean>(false);
     const [likeCount, setLikeCount] = useState<number>();
+    const [commentCount, setCommentCount] = useState<number>();
+
     const currentUser = useSelector((state) => state.currentUser);
     const dispatch = useDispatch();
     // 서버 연결 코드
@@ -378,7 +380,8 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
            setPostId(route.params.feedId);
            setFeedDetailInfo(response.data.post);
            setLikeCount(response.data.post.likes);
-
+           setCommentCount(response.data.post.commentsCount);
+  
            setTagList(route.params.tagList);
            setRatingArray(route.params.ratingArray);
            setCreatedDate(route.params.createdAt);
@@ -389,6 +392,12 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
        })
     }
     }, [route.params?.feedId])
+
+    useEffect(() => {
+      if(route.params?.commentList) {
+        setCommentCount(route.params.commentList.length);
+      }
+    }, [route.params?.commentList])
 
     function getDateFormat(date) {
       var tmpDate = new Date(date);
@@ -405,6 +414,8 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
 
         navigation.navigate("CommentListScreen", {
             postId: postId,
+            feedDetailInfo: feedDetailInfo,
+            createdAt: createdDate,
         })
     }
 
@@ -513,9 +524,9 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
    subTag1={feedDetailInfo.subTagOnes ? feedDetailInfo.subTagOnes.name : null}
    subTag2={feedDetailInfo.subTagTwos ? feedDetailInfo.subTagTwos.name : null}
    rating={feedDetailInfo.starRate}
-   expansePrice={feedDetailInfo.expanse ? feedDetailInfo.expanse + "원" : "금액정보 없음"}
+   expensePrice={feedDetailInfo.expense ? feedDetailInfo.expense + "원" : "금액정보 없음"}
    location={feedDetailInfo.address ? feedDetailInfo.address.address : "위치정보 없음"}
-   expanseDate={feedDetailInfo.spendDate ? feedDetailInfo.spendDate : null}
+   expenseDate={feedDetailInfo.spendDate ? feedDetailInfo.spendDate : null}
    moveToWriterProfile={moveToWriterProfile}
    />
       </InformationContainer>
@@ -549,7 +560,7 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
           <InfoContainer>
           <CommentIcon
             source={require('~/Assets/Images/ic_comment_outline.png')}/>
-            <InfoCountText>{feedDetailInfo.commentsCount}</InfoCountText>
+            <InfoCountText>{commentCount}</InfoCountText>
           </InfoContainer>
           </TouchableWithoutFeedback>
           <InfoContainer>

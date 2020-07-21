@@ -40,7 +40,7 @@ const SubTagText = Styled.Text`
  color: #cccccc;
 `;
 
-const RatingExpanseContainer = Styled.View`
+const RatingExpenseContainer = Styled.View`
  margin-top: 8px;
  flex-direction: row;
 `;
@@ -57,7 +57,7 @@ const RatingText = Styled.Text`
  color: #333333;
 `;
 
-const ExpanseText = Styled.Text`
+const ExpenseText = Styled.Text`
 font-size: 13px;
 font-weight: 500;
 color: #333333;
@@ -123,12 +123,12 @@ const CollectionFeedItem = ({}) => {
             <MainTagText>#아씨앤뜨앤</MainTagText>
             <SubTagText>#을지로카페</SubTagText>
         </TagListContainer>
-        <RatingExpanseContainer>
+        <RatingExpenseContainer>
             <RatingImage
             source={require('~/Assets/Images/ic_newStar.png')}/>
             <RatingText>3.5 · </RatingText>
-            <ExpanseText>420.000원</ExpanseText>
-        </RatingExpanseContainer>
+            <ExpenseText>420.000원</ExpenseText>
+        </RatingExpenseContainer>
         <LocationContainer>
             <LocationText>하이데어</LocationText>
         </LocationContainer>

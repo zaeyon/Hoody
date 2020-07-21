@@ -38,7 +38,7 @@ const FeedTagText = Styled.Text`
  color: #1D1E1F;
 `;
 
-const FeedRatingExpanseContainer = Styled.View`
+const FeedRatingExpenseContainer = Styled.View`
  margin-top: 4px;
  flex-direction: row;
 `;
@@ -54,7 +54,7 @@ const FeedRatingText = Styled.Text`
  color: #56575C;
 `;
 
-const FeedExpanseText = Styled.Text`
+const FeedExpenseText = Styled.Text`
 font-weight: 500;
 font-size: 13px;
 color: #56575C;
@@ -81,12 +81,12 @@ const SubPopularFeedItem = ({navigation}: Props) => {
             </FeedImageContainer>
             <FeedInfoContainer>
                 <FeedTagText>#Tag</FeedTagText>
-                <FeedRatingExpanseContainer>
+                <FeedRatingExpenseContainer>
                     <FeedRatingImage
                     source={require('~/Assets/Images/ic_newStar.png')}/>
                     <FeedRatingText>3.5 · </FeedRatingText>
-                    <FeedExpanseText>420.000원</FeedExpanseText>
-                </FeedRatingExpanseContainer>
+                    <FeedExpenseText>420.000원</FeedExpenseText>
+                </FeedRatingExpenseContainer>
                 <FeedLocationText>하이데어</FeedLocationText>
             </FeedInfoContainer>
         </Container>

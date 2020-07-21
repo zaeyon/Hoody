@@ -202,7 +202,7 @@ const UploadAdditionInfo = ({navigation, route}: Props) => {
   const [rating, setRating] = useState<number>();
   const [subTag1, setSubTag1] = useState<string>("");
   const [subTag2, setSubTag2] = useState<string>("");
-  const [expanse, setExpanse] = useState<string>("");
+  const [expense, setExpense] = useState<string>("");
   const [location, setLocation] = useState<string>("");
   const [locationLong, setLocationLong] = useState<number>();
   const [locationLat, setLocationLat] = useState<number>();
@@ -291,7 +291,7 @@ const UploadAdditionInfo = ({navigation, route}: Props) => {
         rating: rating,
         subTag1: subTag1,
         subTag2: subTag2,
-        expanse: expanse,
+        expense: expense,
         location: location,
         longitude: locationLong,
         latitude: locationLat,
@@ -392,9 +392,9 @@ const UploadAdditionInfo = ({navigation, route}: Props) => {
                 <InputText
                 textAlign="right"
                 keyboardType="number-pad"
-                value={expanse}
+                value={expense}
                 onChangeText={(text: string) => {
-                  setExpanse(text)
+                  setExpense(text)
                 }}
                 />
                 <WonText>원</WonText>

@@ -34,14 +34,14 @@ font-weight: bold;
 font-size: 22px;
 `;
 
-const ExpanseDayText = Styled.Text`
+const ExpenseDayText = Styled.Text`
 font-weight: 600;
 color: #333333;
 background-color: #ffffff;
 font-size: 18px;
 `;
 
-const ExpanseDaySectionListContainer = Styled.View`
+const ExpenseDaySectionListContainer = Styled.View`
 padding: 15px 16px ${hp('8.5%')}px 16px;
 `;
 
@@ -112,7 +112,7 @@ const ProfileFeedList = ({navigation, route, feedList, currentSortType, scrollOf
             mediaFiles={item.mediaFiles}
             image_count={item.mediaFiles.length}
             location={item.address.address}
-            expanse={item.expanse}
+            expense={item.expense}
             desArray={item.descriptions}
             navigation={navigation}
           />
@@ -175,16 +175,16 @@ const ProfileFeedList = ({navigation, route, feedList, currentSortType, scrollOf
           <MonthSelectContainer>
             <SelectingMonthText>7월</SelectingMonthText>
           </MonthSelectContainer>
-          <ExpanseDaySectionListContainer>
+          <ExpenseDaySectionListContainer>
           <SectionList
           onScroll={onScrollPostList}
           sections={TEST_SECTION_DATA}
           renderItem={renderProfileTileSectionItem}
           renderSectionHeader={({ section: {title}}) => (
-            <ExpanseDayText>{title}</ExpanseDayText>
+            <ExpenseDayText>{title}</ExpenseDayText>
           )}
           />
-          </ExpanseDaySectionListContainer>
+          </ExpenseDaySectionListContainer>
         </TileTypeFeedContainer>
         )}
        </UserFeedListContainer>

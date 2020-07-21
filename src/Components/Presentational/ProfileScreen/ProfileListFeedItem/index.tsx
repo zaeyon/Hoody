@@ -54,10 +54,10 @@ const HeaderTopRightContainer = Styled.View`
  flex-direction: row;
 `;
 
-const ExpanseContainer = Styled.View`
+const ExpenseContainer = Styled.View`
  justify-content: center;
 `;
-const ExpanseText = Styled.Text`
+const ExpenseText = Styled.Text`
  font-weight: 500;
  font-size: 13px;
  color: #333333;
@@ -308,7 +308,7 @@ interface Props {
   comment_count: number;
   scrap_count: number;
   location: string;
-  expanse: number;
+  expense: number;
   descripArray: Array<object>;
   navigation: any;
   mediaFiles: Array<objevt>;
@@ -330,7 +330,7 @@ const ProfileListFeedItem = ({
   comment_count,
   scrap_count,
   location,
-  expanse,
+  expense,
   desArray,
   navigation,
   mediaFiles,
@@ -422,9 +422,9 @@ const ProfileListFeedItem = ({
   <CreatedAtText>{createdDate}</CreatedAtText>
   </NicknameCreatedAtContainer>
   <HeaderTopRightContainer>
-    <ExpanseContainer>
-    <ExpanseText>{expanse ? expanse+"원" : null}</ExpanseText>
-    </ExpanseContainer>
+    <ExpenseContainer>
+    <ExpenseText>{expense ? expense+"원" : null}</ExpenseText>
+    </ExpenseContainer>
   <RatingContainer>
     {/*
             <FlatList

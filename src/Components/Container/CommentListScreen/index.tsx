@@ -7,7 +7,8 @@ import {
 import {FlatList, TouchableWithoutFeedback, Keyboard, ScrollView, Text} from 'react-native';
 
 import CommentItem from '~/Components/Presentational/CommentListScreen/CommentItem';
-import {PostComment, GetComment, PostReply} from '~/Route/Post/Comment';
+import {POSTComment, GetComment, PostReply} from '~/Route/Post/Comment';
+import FeedInformation from '~/Components/Presentational/FeedDetailScreen/FeedInformation';
 
 const Container = Styled.SafeAreaView`
  flex: 1;
@@ -70,16 +71,19 @@ const HeaderBorder = Styled.View`
  background-color: #ECECEE;
 `;
 
+const FeedInformationContainer = Styled.View`
+ padding-top: 10px;
+`;
+
 const CommentListContainer = Styled.View`
- margin-top: 5px;
- flex: 1;
+
 `;
 
 const ProfileImage = Styled.Image`
- width: ${hp('4.5%')};
- height: ${hp('4.5%')};
+ width: ${wp('9.6%')};
+ height: ${wp('9.6%')};
  border-radius: 100px;
- margin-left: 5px;
+ margin-left: 16px;
 `;
 
 const CommentInputContainer = Styled.View`
@@ -90,8 +94,6 @@ const CommentInputContainer = Styled.View`
  background-color: #ffffff;
  align-items: center;
  justify-content: space-around;
- border-top-width: 0.2px;
- border-color: #c3c3c3;
  flex-direction: row;
 `;
 
@@ -105,23 +107,23 @@ const CommentInputLeftContainer = Styled.View`
 
 const CommentInput = Styled.TextInput`
  margin-left: 5px;
- width: ${wp('75%')};
+ width: ${wp('70%')};
  border-radius: 35px;
- border-width: 0.3px;
- border-color: #707070;
+ border-width: 1px;
+ border-color: #efefef;
  padding-left: 12px;
  padding-top: 10px;
  padding-bottom: 10px;
  padding-right: 5px;
 `;
 
-const PostCommentButtonText = Styled.Text`
+const POSTCommentButtonText = Styled.Text`
  font-size: 16px;
  color: #338EFC;
  margin-right: 10px;
 `;
 
-const PostCommentButtonContainer = Styled.View`
+const POSTCommentButtonContainer = Styled.View`
 padding-left: 25px;
 padding-top: 10px;
 padding-bottom: 10px;
@@ -298,31 +300,10 @@ const CommentListScreen = ({navigation, route}: Props) => {
         return year + '/' + month + '/' + day;
     }
 
-    const renderCommentItem = ({item, index}) => {
-    var date = new Date(item.createdAt);
-    date = getDateFormat(date);
-      
-    return (
-    <CommentItemContainer>
-    <CommentItem
-    commentId={item.id}
-    setTarget={setTarget}
-    profileImage={item.user.profileImg}
-    nickname={item.user.nickname}
-    comment={item.description}
-    replys={item.replys}
-    createAt={date.toString()}
-    />
-    {item.replys[0] && (
-        <Text>답글존재</Text>
-    )}
-    </CommentItemContainer>
-    )
-   }
 
    const postComment = () => {
    if(inputType === "comment") {
-    PostComment(postId, inputComment)
+    POSTComment(postId, inputComment)
     .then(function(response) {
         console.log("response", response);
         GetComment(route.params.postId)
@@ -357,10 +338,51 @@ const CommentListScreen = ({navigation, route}: Props) => {
        })
    }}
 
+   const navigateGoBack = () => {
+       navigation.navigate("FeedDetailScreen", {
+           commentList: commentList,
+       })
+   }
+
+
+   const moveToWriterProfile = () => {
+    navigation.navigate("AnotherUserProfileStack", {
+      screen: "AnotherUserProfileScreen",
+      params: {requestedUserNickname: route.params?.feedDetailInfo.user.nickname}
+    });
+  }
+
+   const onChangeCommentInput = (text:string) => {
+       setInputComment(text)
+   }
+
+
+  const renderCommentItem = ({item, index}) => {
+    var date = new Date(item.createdAt);
+    date = getDateFormat(date);
+    return (
+    <CommentItemContainer style={index === 0 && {marginTop:14}}>
+    <CommentItem
+    commentId={item.id}
+    setTarget={setTarget}
+    profileImage={item.user.profileImg}
+    nickname={item.user.nickname}
+    comment={item.description}
+    replys={item.replys}
+    createAt={date.toString()}
+    />
+    {item.replys[0] && (
+        <Text>답글존재</Text>
+    )}
+    </CommentItemContainer>
+    )
+   }
+
+
     return (
     <Container>
     <HeaderBar>
-        <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
+        <TouchableWithoutFeedback onPress={() => navigateGoBack()}>
        <HeaderLeftContainer>
            <HeaderCancelIcon
            source={require('~/Assets/Images/HeaderBar/ic_X.png')}/>
@@ -379,11 +401,27 @@ const CommentListScreen = ({navigation, route}: Props) => {
        </HeaderRightContainer>
      </HeaderBar>
      <HeaderBorder/>
+     <FeedInformationContainer>
+
+     <FeedInformation
+     profileImage={route.params?.feedDetailInfo.user.profileImg}
+     profileNickname={route.params?.feedDetailInfo.user.nickname}
+     createdAt={route.params?.createdAt}
+     mainTag={route.params?.feedDetailInfo.mainTags.name}
+     subTag1={route.params?.feedDetailInfo.subTagOnes ? route.params.feedDetailInfo.subTagOnes.name : null}
+     subTag2={route.params?.feedDetailInfo.subTagTwos ? route.params.feedDetailInfo.subTagTwos.name : null}
+     rating={route.params?.feedDetailInfo.starRate}
+     expensePrice={route.params?.feedDetailInfo.expense ? route.params.feedDetailInfo.expense + "원" : "금액정보 없음"}
+     location={route.params?.feedDetailInfo.address ? route.params.feedDetailInfo.address.address : "위치정보 없음"}
+     expenseDate={route.params?.feedDetailInfo.spendDate ? route.params.feedDetailInfo.spendDate : null}
+     moveToWriterProfile={moveToWriterProfile}
+     />
+     </FeedInformationContainer>
       <CommentListContainer
       style={{marginBottom:inputHeight+keyboardHeight}}>
          <FlatList
         refreshing={false}
-        data={COMMENT_DATA}
+        data={commentList}
         renderItem={renderCommentItem}
         />
         </CommentListContainer>
@@ -397,16 +435,17 @@ const CommentListScreen = ({navigation, route}: Props) => {
             <ProfileImage
             source={{uri:"https://clip-instagram.com/wp-content/uploads/2017/12/%EA%B9%80%EC%97%B0%EC%95%84-%ED%8F%89%EC%B0%BD%EB%8F%99%EA%B3%84%EC%98%AC%EB%A6%BC%ED%94%BD-%EC%9D%B8%EC%8A%A4%ED%83%80%EA%B7%B8%EB%9E%A8-%EC%82%AC%EC%A7%84.jpg"}}/>
             <CommentInput
+            autoCapitalize={false}
             multiline={true}
             placeholder={"댓글 달기"}
-            onChangeText={(text: string) => setInputComment(text)}
+            onChangeText={(text: string) => onChangeCommentInput(text)}
             value={inputComment}
             />
             </CommentInputLeftContainer>
             <TouchableWithoutFeedback onPress={() => postComment()}>
-            <PostCommentButtonContainer>
-            <PostCommentButtonText>작성</PostCommentButtonText>
-            </PostCommentButtonContainer>
+            <POSTCommentButtonContainer>
+            <POSTCommentButtonText>작성</POSTCommentButtonText>
+            </POSTCommentButtonContainer>
             </TouchableWithoutFeedback>
         </CommentInputContainer>
     </Container>

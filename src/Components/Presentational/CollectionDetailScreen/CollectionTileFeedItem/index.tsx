@@ -31,7 +31,7 @@ const TagText = Styled.Text`
  color: #333333;
 `;
 
-const RatingExpanseContainer = Styled.View`
+const RatingExpenseContainer = Styled.View`
  margin-top: 1px;
  flex-direction: row;
  align-items: center;
@@ -49,7 +49,7 @@ const RatingText = Styled.Text`
  color: #50555C;
 `;
 
-const ExpanseText = Styled.Text`
+const ExpenseText = Styled.Text`
 font-weight: 500;
 font-size: 13px;
 color: #50555C;
@@ -76,12 +76,12 @@ const CollectionTileFeedItem = ({}) => {
             <TagListContainer>
                 <TagText>#아씨에뜨앤</TagText>
             </TagListContainer>
-            <RatingExpanseContainer>
+            <RatingExpenseContainer>
                 <RatingImage
                 source={require('~/Assets/Images/ic_newStar.png')}/>
                 <RatingText>5 · </RatingText>
-                <ExpanseText>13,000원</ExpanseText>
-            </RatingExpanseContainer>
+                <ExpenseText>13,000원</ExpenseText>
+            </RatingExpenseContainer>
             <LocationContainer>
                 <LocationText>종로구 종로동</LocationText>
             </LocationContainer>

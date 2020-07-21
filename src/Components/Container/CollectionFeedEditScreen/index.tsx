@@ -105,7 +105,7 @@ const TagText = Styled.Text`
  color: #333333;
 `;
 
-const RatingExpanseContainer = Styled.View`
+const RatingExpenseContainer = Styled.View`
  margin-top: 1px;
  flex-direction: row;
  align-items: center;
@@ -123,7 +123,7 @@ const RatingText = Styled.Text`
  color: #50555C;
 `;
 
-const ExpanseText = Styled.Text`
+const ExpenseText = Styled.Text`
 font-weight: 500;
 font-size: 13px;
 color: #50555C;

@@ -1,7 +1,7 @@
 import axios from 'axios';
 const baseUrl = "https://c7b5dbfd05b9.ngrok.io";
 
-const PostComment = (postId, comment) => {
+const POSTComment = (postId, comment) => {
     console.log("댓글 입력 postId", postId);
     console.log("댓글 입력 comment", comment);
 
@@ -58,4 +58,4 @@ const PostReply = (commentId, reply) => {
     })
 }
 
-export {PostComment, GetComment, PostReply};
+export {POSTComment, GetComment, PostReply};

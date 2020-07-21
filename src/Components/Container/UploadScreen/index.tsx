@@ -359,7 +359,7 @@ const UploadScreen = ({navigation, route}:Props) => {
   const [rating, setRating] = useState(0);
   const [subTag1, setSubTag1] = useState();
   const [subTag2, setSubTag2] = useState();
-  const [expanse, setExpanse] = useState();
+  const [expense, setExpense] = useState();
   const [location, setLocation] = useState();
   const [longitude, setLongitude] = useState();
   const [latitude, setLatitude] = useState();
@@ -459,8 +459,8 @@ const UploadScreen = ({navigation, route}:Props) => {
     if(route.params?.subTag2) {
       setSubTag2(route.params.subTag2);
     }
-    if(route.params?.expanse) {
-      setExpanse(route.params.expanse);
+    if(route.params?.expense) {
+      setExpense(route.params.expense);
     }
     if(route.params?.location) {
       setLocation(route.params.location);
@@ -471,7 +471,7 @@ const UploadScreen = ({navigation, route}:Props) => {
     if(route.params?.latitude) {
       setLatitude(route.params.latitude);
     }
-  }, [route.params?.mainTag, route.params?.rating, route.params?.subTag1, route.params?.subTag2, route.params?.expanse, route.params?.location, route.params?.longitude, route.params?.latitude]);
+  }, [route.params?.mainTag, route.params?.rating, route.params?.subTag1, route.params?.subTag2, route.params?.expense, route.params?.location, route.params?.longitude, route.params?.latitude]);
 
   useEffect(() => {
     console.log('사진 선택');
@@ -1032,7 +1032,7 @@ const UploadScreen = ({navigation, route}:Props) => {
         <TouchableWithoutFeedback onPress={() => navigation.navigate('UploadAdditionInfo')}>
         <ExpenseContainer>
           <ExpenseIcon source={require('~/Assets/Images/price.png')} />
-          <ExpenseText>{expanse || "소비 금액 입력"}</ExpenseText>
+          <ExpenseText>{expense || "소비 금액 입력"}</ExpenseText>
         </ExpenseContainer>
         </TouchableWithoutFeedback>
       </LocationPriceContainer>      

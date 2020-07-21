@@ -65,7 +65,7 @@ font-size: 22px;
 font-weight: 600;
 `;
 
-const RatingExpansePriceInfoContainer = Styled.View`
+const RatingExpensePriceInfoContainer = Styled.View`
 padding-top: 4px;
 padding-bottom: 4px;
 padding-left: 16px;
@@ -93,15 +93,14 @@ const InfoHorizontalBorder = Styled.View`
  margin-right: 8px;
 `;
 
-const ExpansePriceText = Styled.Text`
+const ExpensePriceText = Styled.Text`
 color: #56575C;
 font-size: 15px;
 font-weight: 500;
 `;
 
-const LocationExpanseDateInfoContainer = Styled.View`
+const LocationExpenseDateInfoContainer = Styled.View`
 padding-top: 4px;
-padding-bottom: 4px;
 padding-left: 16px;
 padding-right: 16px;
 `;
@@ -111,7 +110,7 @@ font-size: 15px;
 color: #8E9199;
 `;
 
-const ExpanseDateText = Styled.Text`
+const ExpenseDateText = Styled.Text`
  font-size: 15px;
  color: #8E9199;
 `;
@@ -124,13 +123,13 @@ interface Props {
     subTag1: string,
     subTag2: string,
     rating: number,
-    expansePrice: string,
+    expensePrice: string,
     location: string,
-    expanseDate: string,
+    expenseDate: string,
     moveToWriterProfile: () => void,
 }
 
-const FeedInformation = ({profileImage, profileNickname, createdAt, mainTag, subTag1, subTag2, rating, expansePrice, location, expanseDate, moveToWriterProfile}: Props) => {
+const FeedInformation = ({profileImage, profileNickname, createdAt, mainTag, subTag1, subTag2, rating, expensePrice, location, expenseDate, moveToWriterProfile}: Props) => {
     return (
         <Container>
             <ProfileInfoContainer>
@@ -155,21 +154,21 @@ const FeedInformation = ({profileImage, profileNickname, createdAt, mainTag, sub
                     </SubTagText>
                 </MainTagText>
             </TagListContainer>
-            <RatingExpansePriceInfoContainer>
+            <RatingExpensePriceInfoContainer>
                 <RatingStarImage
                 source={require('~/Assets/Images/ic_newStar.png')}/>
                 <RatingText>{rating}</RatingText>
                 <InfoHorizontalBorder/>
-                <ExpansePriceText>{expansePrice}</ExpansePriceText>
-            </RatingExpansePriceInfoContainer>
-            <LocationExpanseDateInfoContainer>
+                <ExpensePriceText>{expensePrice}</ExpensePriceText>
+            </RatingExpensePriceInfoContainer>
+            <LocationExpenseDateInfoContainer>
                 <LocationText>
                     {location + " · "}
-                    <ExpanseDateText>
-                        {"소비날짜 " + expanseDate}
-                    </ExpanseDateText>
+                    <ExpenseDateText>
+                        {"소비날짜 " + expenseDate}
+                    </ExpenseDateText>
                 </LocationText>
-            </LocationExpanseDateInfoContainer>
+            </LocationExpenseDateInfoContainer>
         </Container>
     )
 }

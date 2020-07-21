@@ -10,14 +10,25 @@ import ReplyItem from '~/Components/Presentational/CommentListScreen/ReplyItem';
 
 const Container = Styled.View`
  width: ${wp('100%')};
- height: ${wp('11.7%')};
  margin-bottom: 2px;
+ flex-direction: row;
 `;
 
 const ProfileImageContainer = Styled.View`
-padding: 10px;
+padding-top: 12px;
+padding-left: 16px;
+padding-right: 12px;
  align-items: center;
- justify-content: center;
+`;
+
+const CommentRightContainer = Styled.View`
+`;
+
+const HeaderContainer = Styled.View`
+padding-top: 14px;
+padding-right: 16px;
+flex-direction: row;
+align-items: center;
 `;
 
 const NicknameContentContainer = Styled.View`
@@ -32,43 +43,49 @@ const BodyContainer = Styled.View`
 `;
 
 const FooterContainer = Styled.View`
- position: absolute;
- bottom: -5px;
- right: 3px;
- padding-right: 10px;
  flex-direction: row;
- justify-content: flex-end;
+ padding-top: 8px;
+ padding-bottom: 10px;
+ align-items: center;
 `;
 
 const ProfileImage = Styled.Image`
- width: ${wp('8.3%')};
- height: ${wp('8.3%')};
+ width: ${wp('9.6%')};
+ height: ${wp('9.6%')};
  border-radius: 100px;
 `;
 
 const NicknameText = Styled.Text`
- font-size: 13px;
- font-weight: bold;
+ font-size: 15px;
+ font-weight: 600;
 `;
 
-const CommentText = Styled.Text`
- margin-top: 3px;
- font-size: 13px;
+const CommentDescripText = Styled.Text`
+ margin-top: 5px;
+ font-size: 16px;
 `;
 
 const CreateAtText = Styled.Text`
- font-size: 12px;
- color: #9b9b9b;
- margin-right: 10px;
+ font-size: 15px;
+ color: #cccccc;
+ margin-left: 6px;
 `;
 
 const ReplyText = Styled.Text`
- font-size: 12px;
- color: #9b9b9b;
+margin-left: 15px;
+font-size: 14px;
+font-weight: 600;
+color: #979797;
 `;
 
 const ReplyContainer = Styled.View`
 `;
+
+const ReportText = Styled.Text`
+font-size: 14px;
+font-weight: 600;
+color: #979797;
+`
 
 
 
@@ -108,22 +125,21 @@ const CommentItem = ({profileImage, nickname, comment, createAt, replys, setTarg
 
     return (
         <Container>
-            <BodyContainer>
-                <ProfileImageContainer>
+            <ProfileImageContainer>
                 <ProfileImage
-                 source={{uri:profileImage}}/>
-                 </ProfileImageContainer>
-                <NicknameContentContainer>
-    <NicknameText>{nickname}</NicknameText>   
-    <CommentText>{comment}</CommentText>
-                </NicknameContentContainer>
-            </BodyContainer>
-            <FooterContainer>
-    <CreateAtText>{createAt}</CreateAtText>
-    <TouchableWithoutFeedback onPress={() => setTarget(nickname, commentId)}>
-    <ReplyText>{"답글 달기"}</ReplyText>
-    </TouchableWithoutFeedback>
-            </FooterContainer>
+                source={{uri:profileImage}}/>
+            </ProfileImageContainer>
+            <CommentRightContainer>
+                <HeaderContainer>
+                    <NicknameText>{nickname}</NicknameText>
+                    <CreateAtText>{createAt}</CreateAtText>
+                </HeaderContainer>
+                <CommentDescripText>{comment}</CommentDescripText>
+                <FooterContainer>
+                    <ReportText>신고</ReportText>
+                    <ReplyText>답글달기</ReplyText>
+                </FooterContainer>
+            </CommentRightContainer>
         </Container>
     )
 }

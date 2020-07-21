@@ -94,7 +94,7 @@ const LocationText = Styled.Text`
  color: #8e8e8e;
 `;
 
-const ExpanseRatingContainer = Styled.View`
+const ExpenseRatingContainer = Styled.View`
  flex-direction: row;
 `;
 
@@ -297,7 +297,7 @@ width: ${wp('3.5%')}px;
 height: ${wp('4.0%')}px;
 `;
 
-const ExpanseText = Styled.Text`
+const ExpenseText = Styled.Text`
  font-weight: 500;
  font-size: 13px;
  color: #1D1E1F;
@@ -322,7 +322,7 @@ interface Props {
   comment_count: number;
   scrap_count: number;
   location: string;
-  expanse: number;
+  expense: number;
   desArray: Array<object>;
   navigation: any;
   mediaFiles: Array<objevt>;
@@ -344,7 +344,7 @@ const FeedItem = ({
   comment_count,
   scrap_count,
   location,
-  expanse,
+  expense,
   desArray,
   navigation,
   mediaFiles,
@@ -523,13 +523,13 @@ const FeedItem = ({
             )}
             </HeaderCenterContainer>
           </WriterContainer>
-          <ExpanseRatingContainer>
-            <ExpanseText>{"300원"}</ExpanseText>
+          <ExpenseRatingContainer>
+            <ExpenseText>{"300원"}</ExpenseText>
             <RatingStarImage
             source={require('~/Assets/Images/ic_newStar.png')}
             />
             <RatingText>{rating}</RatingText>
-          </ExpanseRatingContainer>
+          </ExpenseRatingContainer>
         </HeaderContainer>
         <TouchableWithoutFeedback onPress={() => moveToFeedDetail()}>
         <View>

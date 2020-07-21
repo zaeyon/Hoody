@@ -186,7 +186,7 @@ const MetaInfoContainer = Styled.View`
  border-color: #f1f1f1;
 `;
 
-const RatingLocationExpanseContainer = Styled.View`
+const RatingLocationExpenseContainer = Styled.View`
 width:${wp('92%')};
 flex-direction: row;
 `;
@@ -228,7 +228,7 @@ flex-direction: row;
 align-items: center;
 `;
 
-const ExpanseInner = Styled.View`
+const ExpenseInner = Styled.View`
 flex-direction: row;
 align-items: center;
 padding-right: 20px;
@@ -253,18 +253,18 @@ font-size: ${wp('4%')};
  color: #8E8E8E;
 `;
 
-const InputedExpanseContainer = Styled.View`
+const InputedExpenseContainer = Styled.View`
  margin-left: 15px;
  flex-direction: row;
  flex-shrink: 1;
 `;
 
-const InputedExpanseIcon = Styled.Image`
+const InputedExpenseIcon = Styled.Image`
  width: ${wp('6%')};
  height: ${wp('6%')};
 `;
 
-const InputedExpanseText = Styled.Text`
+const InputedExpenseText = Styled.Text`
 font-size: ${wp('4%')};
  font-weight: 600;
  color: #8E8E8E;
@@ -327,7 +327,7 @@ const BottomMenuLocationIcon = Styled.Image`
 `;
 
 
-const BottomMenuExpanseIcon = Styled.Image`
+const BottomMenuExpenseIcon = Styled.Image`
  width: ${wp('8%')};
  height: ${wp('8%')};
 `;
@@ -450,7 +450,7 @@ const InputedTagColumnContainer = Styled.View`
  flex-direction: column;
 `;
 
-const ExpanseInputContainer = Styled.View`
+const ExpenseInputContainer = Styled.View`
  position: absolute;
  width: ${wp('100%')}
  height: ${hp('5.4%')};
@@ -458,7 +458,7 @@ const ExpanseInputContainer = Styled.View`
  background-color: #EFEFEF;
 `;
 
-const ExpanseInputKeyboardContainer = Styled.View`
+const ExpenseInputKeyboardContainer = Styled.View`
  flex-direction: row;
  position: absolute;
  bottom: 0px;
@@ -471,7 +471,7 @@ const ExpanseInputKeyboardContainer = Styled.View`
  padding-right: 9px;
 `;
 
-const ExpanseInput = Styled.TextInput`
+const ExpenseInput = Styled.TextInput`
  width: ${wp('78.5%')};
  height: ${hp('5%')};
  background-color: #ffffff;
@@ -493,17 +493,17 @@ left: 0;
 margin-left: 15px;
 `;
 
-const ExpanseInputTextContainer = Styled.View`
+const ExpenseInputTextContainer = Styled.View`
  align-items: center;
  justify-content: center;
 `;
 
-const ExpanseInputWonContainer = Styled.View`
+const ExpenseInputWonContainer = Styled.View`
 align-items: center;
 justify-content: center;
 `;
 
-const ExpanseInputText = Styled.Text`
+const ExpenseInputText = Styled.Text`
 font-size: 20px;
 font-weight: 600;
 color: #7e7e7e;
@@ -694,7 +694,7 @@ const NewUploadScreen = ({navigation, route}: Props) => {
     const [location, setLocation] = useState<string>();
     const [longitude, setLongitude] = useState<number>();
     const [latitude, setLatitude] = useState<number>();
-    const [expanse, setExpanse] = useState<string>();
+    const [expense, setExpense] = useState<string>();
     const [tagList, setTagList] = useState<Array<string>>();
     const [allTagText, setAllTagText] = useState<string>();
     const [product, setProduct] = useState<object>();
@@ -705,9 +705,9 @@ const NewUploadScreen = ({navigation, route}: Props) => {
     var subTag2Exis = false;
 
 
-    // toggle input expanse
-    const [visibleExpanseInput, setVisibleExpanseInput] = useState<boolean>(false);
-    const [inputingExpanseText, setInputingExpanseText] = useState<string>();
+    // toggle input expense
+    const [visibleExpenseInput, setVisibleExpenseInput] = useState<boolean>(false);
+    const [inputingExpenseText, setInputingExpenseText] = useState<string>();
     const [moneyText, setMoneyText] = useState();
     const [completePrice, setCompletePrice] = useState();
 
@@ -731,7 +731,7 @@ const NewUploadScreen = ({navigation, route}: Props) => {
     const newDescripInput = useRef(null);
     const scrollViewRef = useRef(null);
     const draggableFlatListRef = useRef(null);
-    const expanseInput = useRef(null);
+    const expenseInput = useRef(null);
 
     const [AdditionInfoContainerHeight, setAdditionInfoContainerHeight] = useState<number>();
 
@@ -889,22 +889,22 @@ const NewUploadScreen = ({navigation, route}: Props) => {
     }, [])
 
     function onKeyboardDidShow(e: KeyboardEvent): void {
-        console.log("onKeyboardDidHide visibleExpanseInput11", visibleExpanseInput)
+        console.log("onKeyboardDidHide visibleExpenseInput11", visibleExpenseInput)
 
-        if(expanseInput.current !== null) {
-            console.log("expanseInput.current.isFocused()", expanseInput.current.isFocused())
+        if(expenseInput.current !== null) {
+            console.log("expenseInput.current.isFocused()", expenseInput.current.isFocused())
         }
     }
 
     function onKeyboardDidHide(): void {
         console.log("onKeyboardDIdhide");
-        console.log("onKeyboardDidHide visibleExpanseInput22", visibleExpanseInput);
+        console.log("onKeyboardDidHide visibleExpenseInput22", visibleExpenseInput);
 
 
-        if(expanseInput.current !== null) {
-            console.log("expanseInput.current.isFocused()", expanseInput.current.isFocused())
-            if(expanseInput.current.isFocused() === false) {
-                setVisibleExpanseInput(false);
+        if(expenseInput.current !== null) {
+            console.log("expenseInput.current.isFocused()", expenseInput.current.isFocused())
+            if(expenseInput.current.isFocused() === false) {
+                setVisibleExpenseInput(false);
                 setVisibleBottomMenuBar(true)
             }
         }
@@ -1086,8 +1086,8 @@ const onFocusNewDescripInput = (nativeEvent: any) => {
     focusingNewDescripInput = true;
 }
 
-const onFocusExpanseInput = () => {
-    console.log("visibleExpanseInput", visibleExpanseInput)
+const onFocusExpenseInput = () => {
+    console.log("visibleExpenseInput", visibleExpenseInput)
 }
 
 const onChangeNewDescripInput = (text: string) => {
@@ -1105,9 +1105,9 @@ const onChangeDescripModalInput = (text: string) => {
 
 }
 
-const onChangeExpanseInput = (text: string) => {
+const onChangeExpenseInput = (text: string) => {
     if(text === "") {
-        setInputingExpanseText(null);
+        setInputingExpenseText(null);
         setMoneyText(null);
     } else {
     text = Number(text);
@@ -1115,7 +1115,7 @@ const onChangeExpanseInput = (text: string) => {
     console.log("money", money);
     console.log("text", text);
     setMoneyText(money);
-    setInputingExpanseText(text);
+    setInputingExpenseText(text);
     }
 }
 
@@ -1182,11 +1182,11 @@ const moveProductUrlSearch = () => {
     navigation.navigate("ProductUrlSearchScreen")
 }
 
-const toggleInputExpanse = () => {
-    console.log("toggleInputExpanse")
-    console.log("inputingExpanseInput", inputingExpanseText)
-    console.log("typeof", typeof(inputingExpanseText))
-    setVisibleExpanseInput(!visibleExpanseInput)
+const toggleInputExpense = () => {
+    console.log("toggleInputExpense")
+    console.log("inputingExpenseInput", inputingExpenseText)
+    console.log("typeof", typeof(inputingExpenseText))
+    setVisibleExpenseInput(!visibleExpenseInput)
     setVisibleBottomMenuBar(false);
 }
 
@@ -1194,23 +1194,23 @@ const toggleConsumptionDatePicker = () => {
     console.log("toggleConsumptionDatePicker")
     setVisibleConsumptionDatePicker(!visibleConsumptionDatePicker);
     setVisibleBottomMenuBar(false);
-    setVisibleExpanseInput(false);
+    setVisibleExpenseInput(false);
     setVisibleDescripModal(false);
 }
 
 const touchBackground = () => {
-    if(visibleExpanseInput) {
-    setVisibleExpanseInput(false)
+    if(visibleExpenseInput) {
+    setVisibleExpenseInput(false)
     setVisibleBottomMenuBar(true)
     Keyboard.dismiss();
     }
 }
 
-const addExpanse = () => {
+const addExpense = () => {
     setCompletePrice(moneyText);
-    //setInputingExpanseText(null);
-    console.log("inputingExpanseText", inputingExpanseText)
-    expanseInput.current.blur();
+    //setInputingExpenseText(null);
+    console.log("inputingExpenseText", inputingExpenseText)
+    expenseInput.current.blur();
 }
 
 const finishModifyParagraph = () => {
@@ -1538,7 +1538,7 @@ const renderAddNewDescripInput = () => {
                 )} 
                 {mainTagInserted && !mainTagProcess && (
                     <MetaInfoContainer>
-                    <RatingLocationExpanseContainer>
+                    <RatingLocationExpenseContainer>
                     <TouchableWithoutFeedback onPress={() => modifyRating()}>
                     <InputedRatingContainer>
                     <RatingInner>
@@ -1564,16 +1564,16 @@ const renderAddNewDescripInput = () => {
                     </LocationInner>
                     </InputedLocationContainer>
                     </TouchableWithoutFeedback>
-                    <TouchableWithoutFeedback onPress={() => toggleInputExpanse()}>
-                    <InputedExpanseContainer>
-                    <ExpanseInner>
-                    <InputedExpanseIcon
-                    source={require('~/Assets/Images/ic_expanse_outline.png')}/>
-                    <InputedExpanseText>{completePrice ? completePrice + "원" : "소비금액"}</InputedExpanseText>
-                    </ExpanseInner>
-                    </InputedExpanseContainer>
+                    <TouchableWithoutFeedback onPress={() => toggleInputExpense()}>
+                    <InputedExpenseContainer>
+                    <ExpenseInner>
+                    <InputedExpenseIcon
+                    source={require('~/Assets/Images/ic_expense_outline.png')}/>
+                    <InputedExpenseText>{completePrice ? completePrice + "원" : "소비금액"}</InputedExpenseText>
+                    </ExpenseInner>
+                    </InputedExpenseContainer>
                     </TouchableWithoutFeedback>
-                    </RatingLocationExpanseContainer>
+                    </RatingLocationExpenseContainer>
                     {consumptionDateStr && (
                 <TouchableWithoutFeedback onPress={() => toggleConsumptionDatePicker()}>
                     <ConsumptionDateContainer>
@@ -1642,10 +1642,10 @@ const renderAddNewDescripInput = () => {
                     source={require('~/Assets/Images/ic_bottomMenu_location.png')}/>
                     </BottomMenuIconContainer>
                     </TouchableWithoutFeedback>
-                    <TouchableWithoutFeedback onPress={() => toggleInputExpanse()}>
+                    <TouchableWithoutFeedback onPress={() => toggleInputExpense()}>
                     <BottomMenuIconContainer>
-                    <BottomMenuExpanseIcon
-                    source={require('~/Assets/Images/ic_bottomMenu_expanse.png')}/>
+                    <BottomMenuExpenseIcon
+                    source={require('~/Assets/Images/ic_bottomMenu_expense.png')}/>
                     </BottomMenuIconContainer>
                     </TouchableWithoutFeedback>
                     <TouchableWithoutFeedback onPress={() => toggleConsumptionDatePicker()}>
@@ -1665,32 +1665,32 @@ const renderAddNewDescripInput = () => {
                 </BottomMenuBarContainer>
             )}
            
-            {(visibleExpanseInput === true) && !visibleBottomMenuBar && (
-                <ExpanseInputContainer>
+            {(visibleExpenseInput === true) && !visibleBottomMenuBar && (
+                <ExpenseInputContainer>
                     <AboveKeyboard>
-                    <ExpanseInputKeyboardContainer>
-                    <ExpanseInputWonContainer>
-                    <ExpanseInput
-                    ref={expanseInput}
+                    <ExpenseInputKeyboardContainer>
+                    <ExpenseInputWonContainer>
+                    <ExpenseInput
+                    ref={expenseInput}
                     style={{paddingLeft:20}}
                     keyboardType={"number-pad"}
                     placeholder={ !moneyText ? "소비금액(원)" : ""}
                     caretHidden={false}
                     placeholderTextColor="#CCCCCC"
-                    onChangeText={(text:string) => onChangeExpanseInput(text)}
-                    value={inputingExpanseText}
-                    onFocus={() => onFocusExpanseInput()}
+                    onChangeText={(text:string) => onChangeExpenseInput(text)}
+                    value={inputingExpenseText}
+                    onFocus={() => onFocusExpenseInput()}
                     autoFocus={true}/>
                     <MoneyText>{moneyText ? moneyText+"원" : ""}</MoneyText>
-                    </ExpanseInputWonContainer>
-                    <TouchableWithoutFeedback onPress={() => addExpanse()}>
-                    <ExpanseInputTextContainer>
-                        <ExpanseInputText>확인</ExpanseInputText>
-                    </ExpanseInputTextContainer>
+                    </ExpenseInputWonContainer>
+                    <TouchableWithoutFeedback onPress={() => addExpense()}>
+                    <ExpenseInputTextContainer>
+                        <ExpenseInputText>확인</ExpenseInputText>
+                    </ExpenseInputTextContainer>
                     </TouchableWithoutFeedback>
-                    </ExpanseInputKeyboardContainer>
+                    </ExpenseInputKeyboardContainer>
                     </AboveKeyboard>
-                </ExpanseInputContainer>
+                </ExpenseInputContainer>
             )}
             {visibleDescripModal && (
                 <DescripModalBottomBarContainer>

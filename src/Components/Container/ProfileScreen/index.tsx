@@ -154,7 +154,7 @@ const TEST_FEED_DATA = [
     address : {
       address: '블루문 스터디 카페'
     },
-    expanse: 2000,
+    expense: 2000,
     descriptions: [
       {
         description: "이번 남자친구가 선물해준 키엘 수분 크림을 사용해 봤는데 너무 좋은거 같아요 이번에 남자 ..."
@@ -213,7 +213,7 @@ const TEST_FEED_DATA = [
     address : {
       address: '범계역 스타벅스'
     },
-    expanse: 2000,
+    expense: 2000,
     descriptions: [
       {
         description: "범계역 스타벅스에서 BLT 샌드위치를 먹었다."
@@ -264,7 +264,7 @@ const TEST_FEED_DATA = [
     address : {
       address: '블루문 스터디 카페'
     },
-    expanse: 2000,
+    expense: 2000,
     descriptions: [
       {
         description: "이번 남자친구가 선물해준 키엘 수분 크림을 사용해 봤는데 너무 좋은거 같아요 이번에 남자 ..."

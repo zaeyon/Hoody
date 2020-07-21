@@ -5,11 +5,12 @@ import {
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import {TouchableWithoutFeedback, Text, FlatList, ScrollView} from 'react-native';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
+import allActions from '~/action';
 import GetFeedDetail from '~/Route/Post/GetFeedDetail';
 import FeedContent from '~/Components/Presentational/FeedDetailScreen/FeedContent';
 
-import POSTLike from '~/Route/Post/Like';
+import {POSTLike, DELETELike} from '~/Route/Post/Like';
 
 const Container = Styled.SafeAreaView`
 width: ${wp('100%')};
@@ -260,6 +261,11 @@ height: ${wp('5.7%')};
 tint-color: #333333;
 `;
 
+const PressedLikeIcon = Styled.Image`
+width: ${wp('5.7%')};
+height: ${wp('5.7%')};
+`;
+
 const CommentIcon = Styled.Image`
 width: ${wp('5.7%')};
 height: ${wp('5.7%')};
@@ -351,8 +357,11 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
     const [tagList, setTagList] = useState<Array<string>>();
     const [createdDate, setCreatedDate] = useState();
     const [spendDate, setSpendDate] = useState();
+    const [currentUserLike, setCurrentUserLike] = useState<boolean>(false);
+    const [likeCount, setLikeCount] = useState<number>();
     const currentUser = useSelector((state) => state.currentUser);
-
+    const dispatch = useDispatch();
+    
     // 서버 연결 코드
     useLayoutEffect(() => {
         if(route.params?.feedId) {
@@ -363,9 +372,11 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
            setParagraphData(response.data.postBody);
            setPostId(route.params.feedId);
            setFeedDetailInfo(response.data.post);
+           setLikeCount(response.data.post.likes)
            setTagList(route.params.tagList);
            setRatingArray(route.params.ratingArray);
            setCreatedDate(route.params.createdAt);
+           setCurrentUserLike(route.params.currentUserLike)
        })
        .catch(function(error) {
            console.log("error", error);
@@ -421,7 +432,6 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
       .catch(function(error) {
         console.log("error", error)
       })
-
     }
 
     const renderTagItem = ({item, index}) => {
@@ -434,6 +444,47 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
           <SubTagText>#{item}</SubTagText>
             )
         }
+    }
+
+    const addLike = () => {
+      var addedLikeFeeds = currentUser.likeFeeds;
+      var tmpLikeCount = likeCount + 1;
+      setLikeCount(tmpLikeCount);
+      setCurrentUserLike(true);
+      const likeObj = {
+        id: route.params.feedId,
+      }
+
+      addedLikeFeeds.push(likeObj);
+      dispatch(allActions.userActions.setLikeFeeds(addedLikeFeeds))
+
+      POSTLike(currentUser.user.userId, postId)
+      .then(function(response) {
+        console.log("response", response)
+      })
+      .catch(function(error) {
+        console.log("error", error);
+      })
+    }
+
+    const deleteLike = () => {
+      var deletedLikeFeeds = currentUser.likeFeeds;
+      console.log("FeedDetailScreen currentUser", currentUser);
+      var index = deletedLikeFeeds.indexOf(postId);
+      deletedLikeFeeds.splice(index, 1);
+      dispatch(allActions.userActions.setLikeFeeds(deletedLikeFeeds));
+
+      var tmpLikeCount = likeCount - 1;
+      setLikeCount(tmpLikeCount);
+      setCurrentUserLike(false);
+
+      DELETELike(currentUser.user.userId, postId)
+      .then(function(response) {
+        console.log("response", response)
+      })
+      .catch(function(error) {
+        console.log("error", error)
+      })
     }
   
 
@@ -524,14 +575,24 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
           </ScrollView>
       <BottomBar>
           <InfoContainer>
-            <TouchableWithoutFeedback onPress={() => clickToLikeIcon()}>
+            {!currentUserLike && (
+            <TouchableWithoutFeedback onPress={() => addLike()}>
             <LikeIconContainer>
             <LikeIcon
             source={require('~/Assets/Images/ic_heart_outline.png')}/>
             </LikeIconContainer>
             </TouchableWithoutFeedback>
+            )}
+            {currentUserLike && (
+            <TouchableWithoutFeedback onPress={() => deleteLike()}>
+            <LikeIconContainer>
+            <PressedLikeIcon
+            source={require('~/Assets/Images/ic_pressedLike.png')}/>
+            </LikeIconContainer>
+            </TouchableWithoutFeedback>
+            )}
                <TouchableWithoutFeedback onPress={() => moveToLikersList()}>
-              <LikeCountText>{feedDetailInfo.likes}</LikeCountText>
+              <LikeCountText style={currentUserLike && {color:'#FF453A'}}>{likeCount}</LikeCountText>
           </TouchableWithoutFeedback>
           </InfoContainer>
           <TouchableWithoutFeedback onPress={() => moveToCommentList()}>

@@ -411,8 +411,25 @@ const FeedItem = ({
     } else if(index === -1) {
       setCurrentUserLike(false);
     }
-    console.log("해당 피드가 사용자가 좋아요한 피드목록에 있음", index);    
+    console.log("해당 피드가 사용자가 좋아요한 피드목록에 있음", index);   
+    
   }, []);
+
+  useEffect(() => {
+    console.log("currentUser.likeFeeds[0].Like", currentUser.likeFeeds[0].Like)
+    var index = currentUser.likeFeeds.findIndex(obj => obj.id === id);
+    if(index !== -1) {
+      if(!currentUserLike) {
+        setLikeCount(likeCount+1)
+        setCurrentUserLike(true);
+      } 
+    } else if(index === -1) {
+      if(currentUserLike) {
+        setLikeCount(likeCount-1)
+        setCurrentUserLike(false);
+      }
+    }
+  }, [currentUser])
 
 
   function getDateFormat(date) {
@@ -463,7 +480,9 @@ const FeedItem = ({
     var addedLikeFeeds = currentUser.likeFeeds;
     const likeObj = {
       id: id,
+      likeCount: likeCount+1
     }
+
     addedLikeFeeds.push(likeObj);
     dispatch(allActions.userActions.setLikeFeeds(addedLikeFeeds))
     setCurrentUserLike(true);
@@ -520,7 +539,8 @@ const FeedItem = ({
           feedId:id,
           tagList: tagList,
           ratingArray: ratingArray,
-          createdAt: createdDate
+          createdAt: createdDate,
+          currentUserLike: currentUserLike,
         })}>
         <View>
         <BodyContainer>

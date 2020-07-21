@@ -486,6 +486,13 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
         console.log("error", error)
       })
     }
+
+    const moveToWriterProfile = () => {
+      navigation.navigate("AnotherUserProfileStack", {
+        screen: "AnotherUserProfileScreen",
+        params: {requestedUserNickname: feedDetailInfo.user.nickname}
+      });
+    }
   
 
    return (
@@ -496,7 +503,7 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
           <BackButton source={require('~/Assets/Images/ic_back.png')} />
           </TouchableWithoutFeedback>
         </LeftContainer>
-        <TouchableWithoutFeedback onPress={() => 0}>
+        <TouchableWithoutFeedback onPress={() => moveToWriterProfile()}>
           <CenterContainer>
               <WriterContainer>
                   <WriterProfileImage

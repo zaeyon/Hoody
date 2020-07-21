@@ -416,7 +416,7 @@ const FeedItem = ({
   }, []);
 
   useEffect(() => {
-    console.log("currentUser.likeFeeds[0].Like", currentUser.likeFeeds[0].Like)
+    //console.log("currentUser.likeFeeds[0].Like", currentUser.likeFeeds[0].Like)
     var index = currentUser.likeFeeds.findIndex(obj => obj.id === id);
     if(index !== -1) {
       if(!currentUserLike) {
@@ -460,8 +460,10 @@ const FeedItem = ({
   }
 
   const deleteLike = () => {
+    console.log("currentUser.likeFeeds", currentUser.likeFeeds);
     var removedLikeFeeds = currentUser.likeFeeds;
-    removedLikeFeeds.splice(likeFeedsIndex, 1);
+    var deletedIndex = currentUser.likeFeeds.findIndex(obj => obj.id === id);
+    removedLikeFeeds.splice(deletedIndex, 1);
     console.log("deletedLike", removedLikeFeeds);
     dispatch(allActions.userActions.setLikeFeeds(removedLikeFeeds))
     setCurrentUserLike(false);
@@ -496,11 +498,9 @@ const FeedItem = ({
   }
 
   const moveToWriterProfile = () => {
-    navigation.navigate("Profile", {
-      screen: "ProfileScreen",
-      params: {
-        requestedUserNickname: nickname,
-      }
+    navigation.navigate("AnotherUserProfileStack", {
+      screen: 'AnotherUserProfileScreen',
+      params: {requestedUserNickname: nickname}
     });
   }
 

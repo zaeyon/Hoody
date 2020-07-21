@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {
-  FlatList, View, Text, Dimensions, TouchableOpacity, TouchableWithoutFeedback
+  FlatList, View, Text, Dimensions, TouchableOpacity, TouchableWithoutFeedback, SafeAreaView,
 } from 'react-native';
 import Styled from 'styled-components/native';
 import {
@@ -20,6 +20,8 @@ import ProfileCollectionList from '~/Components/Presentational/ProfileScreen/Pro
 
 import GetProfileFeedByList from '~/Route/Profile/GetProfileFeedByList';
 import GetProfileCollection from '~/Route/Profile/GetProfileCollection';
+
+import {getStatusBarHeight} from 'react-native-status-bar-height';
 
 const Container = Styled.SafeAreaView`
  flex: 1;
@@ -55,9 +57,21 @@ align-items: center;
 `;
 
 const MyProfileSettingButton = Styled.Image`
- width: ${wp('8%')};
- height: ${wp('8%')};
+ width: ${wp('6.4%')};
+ height: ${wp('6.4%')};
 `;
+
+const HeaderBackIcon = Styled.Image`
+width: ${wp('6.4%')};
+height: ${wp('6.4%')}; 
+`;
+
+const HeaderBackContainer = Styled.View`
+padding: 10px 15px 10px 15px;
+align-items: center;
+ justify-content: center;
+`;
+
 
 const HeaderRightContainer = Styled.View`
 padding: 10px 15px 10px 15px;
@@ -325,23 +339,36 @@ const AnotherUserProfileScreen = ({navigation, route}: Props) => {
   const [collectionListData, setCollectionListData] = useState<Array<object>>([]);
   const [selectedFeedSortType, setSelectedFeedSortType] = useState<string>("list");
   const [changeProfileData, setChangeProfileData] = useState<boolean>(false);
+   const [followed, setFollowed] = useState<boolean>(false);
+
   const currentUser = useSelector((state) => state.currentUser);
+
   
   useEffect(() => {
-    getCurrentUser().then(function(response) {
-      console.log("로그인된 사용자 존재", response);
-      GetProfileFeedByList(response.nickname)
+    if(route.params?.requestedUserNickname) { 
+    console.log("profile route.params", route.params?.requestedUserNickname)
+    console.log("currentUser.user.profileImage", currentUser.user.profileImage);
+
+  
+      GetProfileFeedByList(route.params.requestedUserNickname)
       .then(function(response) {
         console.log(
-        "GetProfileFeedByList response", response.posts)
+        "GetProfileFeedByList response@@", response.posts)
         setUserInfoData(response);
+        if(response.followed == true) {
+          setFollowed(true)
+        } else {
+          setFollowed(false)
+        }
         setFeedListData(response.posts);
         setChangeProfileData(!changeProfileData);
+        console.log("요청된 프로필 정보@@@", response)
+        console.log("response.followed", response.followed)
       }).catch(function(error) {
         console.log("GetUserProfile error", error);
       })
-      
-      GetProfileCollection(response.nickname)
+
+      GetProfileCollection(route.params.requestedUserNickname)
       .then(function(response) {
         console.log("GetProfileCollection response", response);
         setCollectionListData(JSON.parse(response.collections));
@@ -350,12 +377,15 @@ const AnotherUserProfileScreen = ({navigation, route}: Props) => {
       .catch(function(error) {
         console.log("GetProfileCollection error", error);
       })
-    })
-    .catch(function(error) {
-      console.log("error");
-    })
+    }
 
-  }, [])
+  }, [route.params?.requestedUserNickname])
+
+  useEffect(() => {
+    console.log("Profile route", route);
+    console.log("Profile navigation", navigation);
+    
+  }, [route.params?.requestedUserNickname])
 
   const moveToLocationFeedMap = () => {
     navigation.navigate("LocationFeedMapScreen");
@@ -387,32 +417,73 @@ const AnotherUserProfileScreen = ({navigation, route}: Props) => {
     });
   }
 
+  const navigateGoBack = () => {
+      navigation.goBack();
+  }
+
+  const followUser = () => {
+    setFollowed(true);
+  }
+
+  const unfollowUser = () => {
+    setFollowed(false);
+  }
+
 
 
   const userIntroComponent = () => {
+    /*
+    if(myProfileScreen === true) { 
     return (
       <UserIntroduction
-      profileImage={currentUser.user.profileImage}
-      nickname={currentUser.user.nickname}
-      description={currentUser.user.description}
+      profileImage={currentUser.user ? currentUser.user.profileImage : ''}
+      nickname={currentUser.user ? currentUser.user.nickname : ''}
+      description={currentUser.user ? currentUser.user.description : ''}
       followerCount={userInfoData.followersCount}
       followingCount={userInfoData.followingsCount}
-      feedCount={feedListData.length}
+      feedCount={userInfoData.postsCount}
       moveToFollowListScreen={moveToFollowListScreen}
       />
     )
+    } else if(myProfileScreen === false) {
+      return (
+        <UserIntroduction
+        profileImage={route.params.requestedUserProfileImage}
+        nickname={route.params.requestedUserNickname}
+        description={userInfoData.description}
+        followerCount={userInfoData.followersCount}
+        followingCount={userInfoData.followingsCount}
+        feedCount={userInfoData.postsCount}
+        moveToFollowListScreen={moveToFollowListScreen}
+        />
+      )
+    }
+    */
+   return (
+     <UserIntroduction
+     userId={userInfoData ? userInfoData.id: ""}
+     followed={followed} 
+     followUserProp={followUser}
+     unfollowUserProp={unfollowUser}
+     profileImage={userInfoData ? userInfoData.profileImg: ""}
+     nickname={userInfoData ? userInfoData.nickname : ""}
+     description={userInfoData ? userInfoData.description : ""}
+     followerCount={userInfoData ? userInfoData.followersCount : ""}
+     followingCount={userInfoData ? userInfoData.followingsCount : ""}
+     feedCount={userInfoData ? userInfoData.postsCount : 0}
+     moveToFollowListScreen={moveToFollowListScreen}/>
+   )
   }
 
-  return (
+  return ( 
     <Container>
        <HeaderBar>
         <HeaderLeftContainer>
-          <TouchableWithoutFeedback onPress={() => navigation.navigate("SettingScreen")}>
-          <MyProfileSettingContainer>
-          <MyProfileSettingButton
-          source={require('~/Assets/Images/ic_hamburger.png')}
-          />
-          </MyProfileSettingContainer>
+          <TouchableWithoutFeedback onPress={() => navigateGoBack()}>
+            <HeaderBackContainer>
+            <HeaderBackIcon
+            source={require('~/Assets/Images/HeaderBar/ic_back.png')}/>
+            </HeaderBackContainer>
           </TouchableWithoutFeedback>
         </HeaderLeftContainer>
         <HeaderRightContainer>
@@ -436,16 +507,18 @@ const AnotherUserProfileScreen = ({navigation, route}: Props) => {
       changeInFeedSortType={changeInFeedSortType}
       selectedFeedSortType={selectedFeedSortType}
       addNewCollection={addNewCollection}
-      />}>
+      />}
+      >
       <FeedListTabContainer onLayout={(event) => measureFeedListTab(event)}
       tabLabel='게시글'>
        <ProfileFeedList
        navigation={navigation}
-       feedListData={feedListData}
+       feedListData={feedListData ? feedListData : ""}
        currentSortType={selectedFeedSortType}
        />
       </FeedListTabContainer>
-      <CollectionListTabContainer onLayout={(event) => measureCollectionListTab(event)}
+      <CollectionListTabContainer 
+      onLayout={(event) => measureCollectionListTab(event)}
       tabLabel="컬렉션">
        <ProfileCollectionList
        collectionListData={collectionListData}
@@ -455,8 +528,6 @@ const AnotherUserProfileScreen = ({navigation, route}: Props) => {
       </ScrollableTabView>
     </Container>
   )
-  
-  
 }
 
 export default AnotherUserProfileScreen;

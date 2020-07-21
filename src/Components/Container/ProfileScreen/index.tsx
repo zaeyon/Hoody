@@ -389,6 +389,12 @@ const ProfileScreen = ({navigation, route}: Props) => {
 
   }, [route.params?.requestedUserNickname])
 
+  useEffect(() => {
+    console.log("Profile route", route);
+    console.log("Profile navigation", navigation);
+    
+  }, [route.params?.requestedUserNickname])
+
   const moveToLocationFeedMap = () => {
     navigation.navigate("LocationFeedMapScreen");
   }
@@ -417,6 +423,10 @@ const ProfileScreen = ({navigation, route}: Props) => {
       followerCount: userInfoData.followersCount,
       followingCount: userInfoData.followingsCount,
     });
+  }
+
+  const navigateGoBack = () => {
+      navigation.goBack();
   }
 
   const followUser = () => {
@@ -488,7 +498,7 @@ const ProfileScreen = ({navigation, route}: Props) => {
           </TouchableWithoutFeedback>
           )}
           {!currentUserProfileBool && (
-          <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
+          <TouchableWithoutFeedback onPress={() => navigateGoBack()}>
             <HeaderBackContainer>
             <HeaderBackIcon
             source={require('~/Assets/Images/HeaderBar/ic_back.png')}/>

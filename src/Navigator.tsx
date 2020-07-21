@@ -135,21 +135,26 @@ const config = {
 
 function HomeStackScreen() {
   return (
-    <HomeStack.Navigator headerMode="none">
-      <HomeStack.Screen name="Home" component={Home} />
+    <HomeStack.Navigator 
+    headerMode="none">
       <HomeStack.Screen
-        name="Search"
-        component={Search}
+        name="FeedListScreen"
+        component={FeedListScreen}
         options={{
           transitionSpec: {
             open: config,
             close: config,
           },
+          
         }}
       />
       <HomeStack.Screen
-        name="SearchResult"
-        component={SearchResult}
+      name="FeedDetailScreen"
+      component={FeedDetailScreen}
+      />
+      <HomeStack.Screen
+        name="AnotherUserProfileStack"
+        component={AnotherUserProfileStackScreen}
         options={{
           transitionSpec: {
             open: config,
@@ -355,6 +360,33 @@ function ProfileStackScreen() {
   );
 }
 
+
+function AnotherUserProfileStackScreen() {
+  const currentUser = useSelector((state) => state.currentUser)
+  return (
+    <ProfileStack.Navigator
+      headerMode="none"
+      screenOptions={{
+        headerStyle: {
+          height: 47,
+          elevation: 1.5,
+        },
+        headerTitleAlign: 'center',
+      }}>
+      <ProfileStack.Screen
+        name="AnotherUserProfileScreen"
+        component={AnotherUserProfileScreen}
+      />
+      <ProfileStack.Screen 
+      name="PinterMap"
+       component={PinterMap} />
+      <ProfileStack.Screen
+      name="FollowListScreen"
+      component={FollowListScreen}/>
+    </ProfileStack.Navigator>
+  );
+}
+
 function UnauthStackScreen() {
   return (
     <UnauthStack.Navigator headerMode="none">
@@ -531,6 +563,19 @@ function Navigator() {
 
 function BottomTab() {
   const currentUser = useSelector((state: any) => state.currentUser)
+
+  const getTabBarVisibility = (route: any) => {
+    const routeName = route.state
+    ? route.state.routes[route.state.index].name
+    : '';
+
+    if(routeName === 'FeedDetailScreen') {
+      return false;
+    }
+
+    return true;
+  }
+
   return (
     <Tab.Navigator
       tabBarOptions={{
@@ -538,9 +583,9 @@ function BottomTab() {
         style: styles.tabBar
       }}>
       <Tab.Screen 
-      name="FeedListScreen" 
-      component={FeedListScreen}
-      options={{
+      name="Home" 
+      component={HomeStackScreen}
+      options={({route}) => ({
         tabBarIcon: ({focused}: {focused: boolean}) => (
           <Image
             style={{width: 30, height: 30}}
@@ -554,7 +599,8 @@ function BottomTab() {
             }
           />
         ),
-      }}
+        tabBarVisible: getTabBarVisibility(route)
+      })}
       />
       <Tab.Screen
       name="Explore"
@@ -672,7 +718,6 @@ function AppNavigator() {
     headerMode="none"
     >
       <NoBottomBarStack.Screen name="BottomTab" component={BottomTab}/>
-      <NoBottomBarStack.Screen name="FeedDetailScreen" component={FeedDetailScreen}/>
       <NoBottomBarStack.Screen name="CommentListScreen" component={CommentListScreen}/>
       <NoBottomBarStack.Screen name="LikeListScreen" component={LikeListScreen}/>
       <NoBottomBarStack.Screen name="NearFeedMapScreen" component={NearFeedMapScreen}/>

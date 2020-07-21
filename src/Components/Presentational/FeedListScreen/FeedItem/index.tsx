@@ -442,23 +442,6 @@ const FeedItem = ({
     return year + '년 ' + month + '월 ' + day + '일 '
 }
 
-  const onClickFeedItem = () => {
-    GetFeedDetail(id)
-    .then(function(response) {
-      setParagraphData(response.data.postBody)
-      setFeedDetailInfo(response.data);
-
-      navigation.navigate("FeedDetailScreen", {
-        paragraphData: response.data.postBody,
-        feedDetailInfo: response.data,
-        tagList: tagList,
-        ratingArray: ratingArray,
-      })
-    }).catch(function(error) {
-      console.log("error", error);
-    })
-  }
-
   const deleteLike = () => {
     console.log("currentUser.likeFeeds", currentUser.likeFeeds);
     var removedLikeFeeds = currentUser.likeFeeds;
@@ -504,6 +487,19 @@ const FeedItem = ({
     });
   }
 
+  const moveToFeedDetail = () => {
+    navigation.navigate("FeedStack", {
+      screen: "FeedDetailScreen",
+      params: {
+      feedId:id,
+      tagList: tagList,
+      ratingArray: ratingArray,
+      createdAt: createdDate,
+      currentUserLike: currentUserLike,
+      }
+    })
+  }
+
   return (
     <Container>
       <FeedItemContainer>
@@ -535,13 +531,7 @@ const FeedItem = ({
             <RatingText>{rating}</RatingText>
           </ExpanseRatingContainer>
         </HeaderContainer>
-        <TouchableWithoutFeedback onPress={() => navigation.navigate("FeedDetailScreen", {
-          feedId:id,
-          tagList: tagList,
-          ratingArray: ratingArray,
-          createdAt: createdDate,
-          currentUserLike: currentUserLike,
-        })}>
+        <TouchableWithoutFeedback onPress={() => moveToFeedDetail()}>
         <View>
         <BodyContainer>
         <TagContainer>

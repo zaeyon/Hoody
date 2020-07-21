@@ -149,18 +149,12 @@ function HomeStackScreen() {
         }}
       />
       <HomeStack.Screen
-      name="FeedDetailScreen"
-      component={FeedDetailScreen}
+      name="FeedStack"
+      component={FeedStackScreen}
       />
       <HomeStack.Screen
         name="AnotherUserProfileStack"
         component={AnotherUserProfileStackScreen}
-        options={{
-          transitionSpec: {
-            open: config,
-            close: config,
-          },
-        }}
       />
     </HomeStack.Navigator>
   );
@@ -179,28 +173,19 @@ function ExploreStackScreen() {
 function FeedStackScreen() {
   return (
     <FeedStack.Navigator
-      screenOptions={{
-        headerStyle: {
-          height: 47,
-          elevation: 1.5,
-        },
-        headerTitleAlign: 'left',
-      }}>
-      <FeedStack.Screen
-        name="Feed"
-        component={Feed}
-        options={{
-          headerTitle: (props) => <FeedTitle {...props} />,
-          headerShown: false,
-        }}
-      />
+      headerMode={"none"}
+      >
       <FeedStack.Screen
         name="FeedDetailScreen"
         component={FeedDetailScreen}
-        options={{
-          headerShown: false,
-        }}
       />
+      <FeedStack.Screen
+       name="LikeListScreen"
+       component={LikeListScreen}
+       />
+       <FeedStack.Screen
+       name="CommentListScreen"
+       component={CommentListScreen}/>
     </FeedStack.Navigator>
   );
 }
@@ -387,6 +372,7 @@ function AnotherUserProfileStackScreen() {
   );
 }
 
+
 function UnauthStackScreen() {
   return (
     <UnauthStack.Navigator headerMode="none">
@@ -569,7 +555,7 @@ function BottomTab() {
     ? route.state.routes[route.state.index].name
     : '';
 
-    if(routeName === 'FeedDetailScreen') {
+    if(routeName === 'FeedStack') {
       return false;
     }
 
@@ -718,8 +704,6 @@ function AppNavigator() {
     headerMode="none"
     >
       <NoBottomBarStack.Screen name="BottomTab" component={BottomTab}/>
-      <NoBottomBarStack.Screen name="CommentListScreen" component={CommentListScreen}/>
-      <NoBottomBarStack.Screen name="LikeListScreen" component={LikeListScreen}/>
       <NoBottomBarStack.Screen name="NearFeedMapScreen" component={NearFeedMapScreen}/>
       <NoBottomBarStack.Screen name="CollectionDetailScreen" component={CollectionDetailScreen}/>
       <NoBottomBarStack.Screen name="CollectionUploadScreen" component={CollectionUploadScreen}/>

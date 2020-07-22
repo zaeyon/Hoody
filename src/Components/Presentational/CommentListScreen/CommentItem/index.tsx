@@ -68,7 +68,7 @@ const CommentDescripText = Styled.Text`
 const CreateAtText = Styled.Text`
  font-size: 15px;
  color: #cccccc;
- margin-left: 6px;
+ margin-left: 10px;
 `;
 
 const ReplyText = Styled.Text`
@@ -96,10 +96,10 @@ interface Props {
     comment: string,
     createAt: string,
     replys: Array<Object>,
-    setTarget: (target:string) => void,
+    clickToReply: (target:string, commentId: number) => void,
 }
 
-const CommentItem = ({profileImage, nickname, comment, createAt, replys, setTarget, commentId}: Props) => {
+const CommentItem = ({profileImage, nickname, comment, createAt, replys, clickToReply, commentId}: Props) => {
 
     function getDateFormat(date) {
         var year = date.getFullYear();
@@ -132,12 +132,14 @@ const CommentItem = ({profileImage, nickname, comment, createAt, replys, setTarg
             <CommentRightContainer>
                 <HeaderContainer>
                     <NicknameText>{nickname}</NicknameText>
-                    <CreateAtText>{createAt}</CreateAtText>
                 </HeaderContainer>
                 <CommentDescripText>{comment}</CommentDescripText>
                 <FooterContainer>
                     <ReportText>신고</ReportText>
+                    <TouchableWithoutFeedback onPress={() => clickToReply(nickname, commentId)}>
                     <ReplyText>답글달기</ReplyText>
+                    </TouchableWithoutFeedback>
+                    <CreateAtText>{createAt}</CreateAtText>
                 </FooterContainer>
             </CommentRightContainer>
         </Container>

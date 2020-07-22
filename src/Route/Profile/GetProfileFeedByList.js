@@ -1,5 +1,5 @@
 import axios from 'axios';
-const baseUrl = 'https://c7b5dbfd05b9.ngrok.io';
+const baseUrl = 'https://00f9d79a32e1.ngrok.io';
 
 const GetProfileFeedByList = (nickname) => {
  const url = baseUrl + '/user/profile?nickname=' + nickname + "&type=post&view=feed";

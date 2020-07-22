@@ -5,6 +5,7 @@ import {
     heightPercentageToDP as hp
 } from 'react-native-responsive-screen';
 import {FlatList, TouchableWithoutFeedback, Keyboard, ScrollView, Text} from 'react-native';
+import {useSelector} from 'react-redux';
 
 import CommentItem from '~/Components/Presentational/CommentListScreen/CommentItem';
 import {POSTComment, GetComment, PostReply} from '~/Route/Post/Comment';
@@ -76,6 +77,7 @@ const FeedInformationContainer = Styled.View`
 `;
 
 const CommentListContainer = Styled.View`
+padding-bottom: ${wp('20%')};
 
 `;
 
@@ -83,18 +85,23 @@ const ProfileImage = Styled.Image`
  width: ${wp('9.6%')};
  height: ${wp('9.6%')};
  border-radius: 100px;
- margin-left: 16px;
+ margin-top: 3px;
+ margin-bottom: 3px;
 `;
 
-const CommentInputContainer = Styled.View`
+const FooterContainer = Styled.View`
  width: ${wp('100%')};
- padding: 10px;
  position: absolute;
  bottom: 0px;
  background-color: #ffffff;
  align-items: center;
- justify-content: space-around;
- flex-direction: row;
+`;
+
+const CommentContainer = Styled.View`
+align-items: center;
+flex-direction: row;
+padding-bottom: 8px;
+padding-top: 8px;
 `;
 
 const CommentItemContainer = Styled.View`
@@ -105,29 +112,62 @@ const CommentInputLeftContainer = Styled.View`
  align-items: center; 
 `;
 
+const CommentInputContainer = Styled.View`
+margin-left: 11px;
+padding-top: 8px;
+padding-bottom: 8px;
+width: ${wp('79.5%')};
+border-radius: 23px;
+border-width: 1px;
+border-color: #efefef;
+flex-direction: row;
+padding-left: 18px;
+
+align-items: center;
+`;
+
 const CommentInput = Styled.TextInput`
- margin-left: 5px;
- width: ${wp('70%')};
- border-radius: 35px;
- border-width: 1px;
- border-color: #efefef;
- padding-left: 12px;
- padding-top: 10px;
- padding-bottom: 10px;
- padding-right: 5px;
-`;
-
-const POSTCommentButtonText = Styled.Text`
+ width: ${wp('61%')};
  font-size: 16px;
- color: #338EFC;
- margin-right: 10px;
+ color: #000000;
+ padding-bottom: 5px;
 `;
 
-const POSTCommentButtonContainer = Styled.View`
-padding-left: 25px;
-padding-top: 10px;
-padding-bottom: 10px;
+const CommentRegisterText = Styled.Text`
+ font-size: 17px;
+ color: #267DFF;
+ font-weight: 500;
 `;
+
+const CommentRegisterContainer = Styled.View`
+padding-left: 10px;
+padding-right: 18px;
+justify-content: center;
+`;
+
+const InputingReplyContainer = Styled.View`
+ width:${wp('100%')};
+ align-items: center;
+ padding-top: 12px;
+ padding-bottom: 12px;
+ padding-left: 16px;
+ padding-right: 16px;
+ background-color: #ECECEE;
+ flex-direction: row;
+ justify-content: space-between;
+`;
+
+const InputingReplyText = Styled.Text`
+ font-size: 14px;
+ color: #8E9199;
+`;
+
+const InputingReplyCancelIcon = Styled.Image`
+ width: ${wp('2.6%')};
+ height: ${wp('2.6%')};
+`;
+
+
 
 const COMMENT_DATA = 
 [
@@ -241,7 +281,7 @@ interface Props {
 }
 
 const CommentListScreen = ({navigation, route}: Props) => {
-    const [commentList, setCommentList] = useState();
+    const [commentList, setCommentList] = useState<Array<object>>([]);
     const [keyboardHeight, setKeyboardHeight] = useState<number>(0);
     const [postId, setPostId] = useState<number>();
     const [inputComment, setInputComment] = useState<string>("");
@@ -249,6 +289,8 @@ const CommentListScreen = ({navigation, route}: Props) => {
     const [inputHeight, setInputHeight] = useState<number>(0);
     const [inputType, setInputType] = useState<string>("comment");
     const [replyCommentId, setReplyCommentId] = useState<number>();
+
+    const currentUser = useSelector((state) => state.currentUser);
 
     const onKeyboardDidShow = (e: KeyboardEvent) => {
         setKeyboardHeight(e.endCoordinates.height);
@@ -282,7 +324,7 @@ const CommentListScreen = ({navigation, route}: Props) => {
         }
     }, [route.params?.postId])
 
-    const setTarget = (target: string, commentId: number) => {
+    const clickToReply = (target: string, commentId: number) => {
         console.log("답글 달기", target);
         console.log("commentId", commentId);
         setReplyTarget(target)
@@ -364,7 +406,7 @@ const CommentListScreen = ({navigation, route}: Props) => {
     <CommentItemContainer style={index === 0 && {marginTop:14}}>
     <CommentItem
     commentId={item.id}
-    setTarget={setTarget}
+    clickToReply={clickToReply}
     profileImage={item.user.profileImg}
     nickname={item.user.nickname}
     comment={item.description}
@@ -390,7 +432,7 @@ const CommentListScreen = ({navigation, route}: Props) => {
        </TouchableWithoutFeedback>
        <TouchableWithoutFeedback onPress={() => 0}>
          <HeaderCenterContainer>
-         <HeaderTitleText>댓글</HeaderTitleText>
+         <HeaderTitleText>{"댓글 " + commentList?.length+"개"}</HeaderTitleText>
        </HeaderCenterContainer>
        </TouchableWithoutFeedback>
        <HeaderRightContainer>
@@ -420,34 +462,47 @@ const CommentListScreen = ({navigation, route}: Props) => {
       <CommentListContainer
       style={{marginBottom:inputHeight+keyboardHeight}}>
          <FlatList
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{paddingBottom: wp('13.5%')}}
         refreshing={false}
         data={commentList}
         renderItem={renderCommentItem}
         />
         </CommentListContainer>
-        <CommentInputContainer 
+        <FooterContainer
         style={{marginBottom:keyboardHeight}}
         onLayout={(event) => {
             const layout = event.nativeEvent.layout;
             setInputHeight(layout.height+30);
         }}>
-            <CommentInputLeftContainer>
-            <ProfileImage
-            source={{uri:"https://clip-instagram.com/wp-content/uploads/2017/12/%EA%B9%80%EC%97%B0%EC%95%84-%ED%8F%89%EC%B0%BD%EB%8F%99%EA%B3%84%EC%98%AC%EB%A6%BC%ED%94%BD-%EC%9D%B8%EC%8A%A4%ED%83%80%EA%B7%B8%EB%9E%A8-%EC%82%AC%EC%A7%84.jpg"}}/>
+          {inputType === "reply" && (
+            <InputingReplyContainer>
+            <InputingReplyText>{replyTarget+"님에게 답글 남기는 중"}</InputingReplyText>
+            <InputingReplyCancelIcon
+            source={require('~/Assets/Images/ic_replyCancel.png')}
+            />
+            </InputingReplyContainer>
+
+          )}
+        <CommentContainer>
+        <ProfileImage
+            source={{uri:currentUser.user.profileImage}}/>
+        <CommentInputContainer>
             <CommentInput
             autoCapitalize={false}
             multiline={true}
-            placeholder={"댓글 달기"}
+            placeholder={inputType==="comment" ? "댓글 달기" : "답글 달기"}
             onChangeText={(text: string) => onChangeCommentInput(text)}
             value={inputComment}
             />
-            </CommentInputLeftContainer>
             <TouchableWithoutFeedback onPress={() => postComment()}>
-            <POSTCommentButtonContainer>
-            <POSTCommentButtonText>작성</POSTCommentButtonText>
-            </POSTCommentButtonContainer>
+            <CommentRegisterContainer>
+            <CommentRegisterText>입력</CommentRegisterText>
+            </CommentRegisterContainer>
             </TouchableWithoutFeedback>
         </CommentInputContainer>
+        </CommentContainer>
+        </FooterContainer>
     </Container>
     )
 }

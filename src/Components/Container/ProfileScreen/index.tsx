@@ -350,6 +350,8 @@ const ProfileScreen = ({navigation, route}: Props) => {
     console.log("profile route.params", route.params?.requestedUserNickname)
     console.log("currentUser.user.profileImage", currentUser.user.profileImage);
 
+
+    /*
     if(route.params.requestedUserNickname != currentUser.user.nickname) {
       console.log("요청된닉네임이랑 사용자 닉네임@@ 다름");
       setCurrentUserProfileBool(false);
@@ -357,6 +359,7 @@ const ProfileScreen = ({navigation, route}: Props) => {
       console.log("요청된닉네임이랑 사용자 닉네임@@ 같음")
       setCurrentUserProfileBool(true);
     }
+    */
       
       GetProfileFeedByList(route.params.requestedUserNickname)
       .then(function(response) {
@@ -419,7 +422,7 @@ const ProfileScreen = ({navigation, route}: Props) => {
     console.log("requestedType", requestedType);
     navigation.navigate("FollowListScreen", {
       requestedType: requestedType,
-      nickname: currentUser.user.nickname,
+      nickname: currentUser.user ? currentUser.user.nickname : null,
       followerCount: userInfoData.followersCount,
       followingCount: userInfoData.followingsCount,
     });

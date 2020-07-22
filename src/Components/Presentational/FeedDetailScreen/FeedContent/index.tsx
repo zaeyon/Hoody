@@ -27,11 +27,15 @@ const ReviewDescription = Styled.Text`
 `;
 
 const ImageContainer = Styled.View`
+ justify-content: center;
+ align-items: center;
 `;
 
 const ReviewImage = Styled.Image`
- width: ${wp('100%')};
- height: ${wp('100%')};
+ width: ${wp('92%%')};
+ height: ${wp('92%')};
+ border-radius: 15px;
+
 `;
 
 interface Props {

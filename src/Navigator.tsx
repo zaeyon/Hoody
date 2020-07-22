@@ -301,7 +301,6 @@ function ProfileStackScreen() {
       <ProfileStack.Screen
         name="ProfileScreen"
         component={ProfileScreen}
-        initialParams={{requestedUserNickname: currentUser.user.nickname }}
         options={({navigation, route}) => (
           {
           headerTitle: (props) => <ProfileTitle {...props} />,
@@ -665,9 +664,6 @@ function BottomTab() {
           // Do someting with the 'navigation' object
           navigation.navigate('Profile', {
             screen:'ProfileScreen',
-            params: {
-              requestedUserNickname: currentUser.user.nickname
-            }
           })
         }
       })}

@@ -4,20 +4,30 @@ import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp 
 } from 'react-native-responsive-screen';
-import {TouchableWithoutFeedback} from 'react-native';
+import {TouchableWithoutFeedback, FlatList} from 'react-native';
+
 
 const Container = Styled.View`
- margin-left: 20px;
  width: ${wp('100%')};
- height: ${hp('5.5%')};
  margin-bottom: 2px;
- background-color:#c3c3c3;
+ flex-direction: row;
 `;
 
 const ProfileImageContainer = Styled.View`
-padding: 10px;
+padding-top: 12px;
+padding-left: 70px;
+padding-right: 12px;
  align-items: center;
- justify-content: center;
+`;
+
+const CommentRightContainer = Styled.View`
+`;
+
+const HeaderContainer = Styled.View`
+padding-top: 14px;
+padding-right: 16px;
+flex-direction: row;
+align-items: center;
 `;
 
 const NicknameContentContainer = Styled.View`
@@ -32,65 +42,85 @@ const BodyContainer = Styled.View`
 `;
 
 const FooterContainer = Styled.View`
- position: absolute;
- bottom: -5px;
- right: 3px;
- padding-right: 10px;
  flex-direction: row;
- justify-content: flex-end;
+ padding-top: 8px;
+ padding-bottom: 10px;
+ align-items: center;
 `;
 
 const ProfileImage = Styled.Image`
- width: ${wp('7.3%')};
- height: ${wp('7.3%')};
+ width: ${wp('6.4%')};
+ height: ${wp('6.4%')};
  border-radius: 100px;
 `;
 
 const NicknameText = Styled.Text`
- font-size: 13px;
- font-weight: bold;
+ font-size: 15px;
+ font-weight: 600;
 `;
 
-const CommentText = Styled.Text`
- margin-top: 3px;
- font-size: 13px;
+const CommentDescripText = Styled.Text`
+ margin-top: 5px;
+ font-size: 16px;
 `;
 
 const CreateAtText = Styled.Text`
- font-size: 12px;
- color: #9b9b9b;
- margin-right: 10px;
+ font-size: 15px;
+ color: #cccccc;
+ margin-left: 10px;
 `;
 
 const ReplyText = Styled.Text`
- font-size: 12px;
- color: #9b9b9b;
+margin-left: 15px;
+font-size: 14px;
+font-weight: 600;
+color: #979797;
+`;
+
+const ReplyContainer = Styled.View`
+`;
+
+const ReportText = Styled.Text`
+font-size: 14px;
+font-weight: 600;
+color: #979797;
 `;
 
 interface Props {
+    replyId: number,
     profileImage: string,
     nickname: string,
-    comment: string,
+    description: string,
     createAt: string,
 }
 
-const ReplyItem = ({profileImage, nickname, comment, createAt}: Props) => {
+const ReplyItem = ({profileImage, nickname, description, createAt, replyId}: Props) => {
+
+    function getDateFormat(date) {
+        var year = date.getFullYear();
+        var month = (1+ date.getMonth());
+        month = month >= 10 ? month : '0' + month;
+        var day = date.getDate();
+        day = day >= 10 ? day : '0' + day;
+        return year + '/' + month + '/' + day;
+    }
+
     return (
         <Container>
-            <BodyContainer>
-                <ProfileImageContainer>
+            <ProfileImageContainer>
                 <ProfileImage
-                 source={{uri:profileImage}}/>
-                 </ProfileImageContainer>
-                <NicknameContentContainer>
-    <NicknameText>{nickname}</NicknameText>   
-    <CommentText>{comment}</CommentText>
-                </NicknameContentContainer>
-            </BodyContainer>
-            <FooterContainer>
-    <CreateAtText>{createAt}</CreateAtText>
-    <ReplyText>{"답글 달기"}</ReplyText>
-            </FooterContainer>
+                source={{uri:profileImage}}/>
+            </ProfileImageContainer>
+            <CommentRightContainer>
+                <HeaderContainer>
+                    <NicknameText>{nickname}</NicknameText>
+                </HeaderContainer>
+                <CommentDescripText>{description}</CommentDescripText>
+                <FooterContainer>
+                    <ReportText>신고</ReportText>
+                    <CreateAtText>{createAt}</CreateAtText>
+                </FooterContainer>
+            </CommentRightContainer>
         </Container>
     )
 }

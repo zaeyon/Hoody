@@ -85,9 +85,7 @@ const ReportText = Styled.Text`
 font-size: 14px;
 font-weight: 600;
 color: #979797;
-`
-
-
+`;
 
 interface Props {
     commentId: number,
@@ -110,18 +108,6 @@ const CommentItem = ({profileImage, nickname, comment, createAt, replys, clickTo
         return year + '/' + month + '/' + day;
     }
 
-    const renderReplyItem = ({item, index}) => {
-    var date = new Date(item.createdAt);
-    date = getDateFormat(date);   
-    
-    return (
-        <ReplyItem
-        profileImage={item.user.profileImg}
-        nickname={item.user.nickname}
-        comment={item.description}
-        createAt={date.toString()}/>
-    )
-    }
 
     return (
         <Container>

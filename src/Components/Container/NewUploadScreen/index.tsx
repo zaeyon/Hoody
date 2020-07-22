@@ -12,15 +12,13 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import ActionSheet from 'react-native-actionsheet'
 
 // Local Components
-import SlidingUpPanel from '~/Components/Presentational/UploadScreen/TagSearchSlidingUp';
-import LatelySearchItem from '~/Components/Presentational/TagSearch/LatelySearchItem';
-import GetAutoComplete from '~/Route/Search/GetAutoComplete';
 import {Rating} from '~/Components/Presentational/UploadScreen/Rating';
 import ProductItem from '~/Components/Presentational/UploadScreen/ProductItem';
 
 // Route
 import PostUpload from '~/Route/Post/Upload';
 import POSTProductUrl from '~/Route/Post/POSTProductUrl';
+import GetAutoComplete from '~/Route/Search/GetAutoComplete';
 
 const ratingImage = require('~/Assets/Images/ic_star4.png');
 

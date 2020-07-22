@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import Styled from 'styled-components/native';
 import {
     widthPercentageToDP as wp,
@@ -6,8 +6,11 @@ import {
 } from 'react-native-responsive-screen';
 import {FlatList, TouchableWithoutFeedback, Keyboard, ScrollView, Text} from 'react-native';
 import {useSelector} from 'react-redux';
+import AboveKeyboard from 'react-native-above-keyboard';
+import {KeyboardAwareScrollView, KeyboardAwareFlatList} from 'react-native-keyboard-aware-scroll-view';
 
 import CommentItem from '~/Components/Presentational/CommentListScreen/CommentItem';
+import ReplyItem from '~/Components/Presentational/CommentListScreen/ReplyItem';
 import {POSTComment, GetComment, PostReply} from '~/Route/Post/Comment';
 import FeedInformation from '~/Components/Presentational/FeedDetailScreen/FeedInformation';
 
@@ -77,7 +80,7 @@ const FeedInformationContainer = Styled.View`
 `;
 
 const CommentListContainer = Styled.View`
-padding-bottom: ${wp('20%')};
+padding-bottom: ${wp('5%')};
 
 `;
 
@@ -94,14 +97,15 @@ const FooterContainer = Styled.View`
  position: absolute;
  bottom: 0px;
  background-color: #ffffff;
- align-items: center;
 `;
 
 const CommentContainer = Styled.View`
 align-items: center;
 flex-direction: row;
+padding-left: ${wp('4.2%')}px;
 padding-bottom: 8px;
 padding-top: 8px;
+background-color: #ffffff;
 `;
 
 const CommentItemContainer = Styled.View`
@@ -151,7 +155,6 @@ const InputingReplyContainer = Styled.View`
  padding-top: 12px;
  padding-bottom: 12px;
  padding-left: 16px;
- padding-right: 16px;
  background-color: #ECECEE;
  flex-direction: row;
  justify-content: space-between;
@@ -160,6 +163,13 @@ const InputingReplyContainer = Styled.View`
 const InputingReplyText = Styled.Text`
  font-size: 14px;
  color: #8E9199;
+`;
+
+const InputingReplyCancelContainer = Styled.View`
+padding-left: 16px;
+padding-right: 16px;
+align-items: center;
+justify-content: center;
 `;
 
 const InputingReplyCancelIcon = Styled.Image`
@@ -289,8 +299,8 @@ const CommentListScreen = ({navigation, route}: Props) => {
     const [inputHeight, setInputHeight] = useState<number>(0);
     const [inputType, setInputType] = useState<string>("comment");
     const [replyCommentId, setReplyCommentId] = useState<number>();
-
     const currentUser = useSelector((state) => state.currentUser);
+    const commentInputRef = useRef(null);
 
     const onKeyboardDidShow = (e: KeyboardEvent) => {
         setKeyboardHeight(e.endCoordinates.height);
@@ -330,6 +340,7 @@ const CommentListScreen = ({navigation, route}: Props) => {
         setReplyTarget(target)
         setInputType("reply");
         setReplyCommentId(commentId);
+        commentInputRef.current.focus();
     }
 
 
@@ -398,10 +409,34 @@ const CommentListScreen = ({navigation, route}: Props) => {
        setInputComment(text)
    }
 
+   const cancelReply = () => {
+     setInputType("comment");
+     setInputComment("")
+     commentInputRef.current.blur()
+   }
+
+   const renderReplyItem = ({item, index}) => {
+     var date = new Date(item.createdAt);
+     date = getDateFormat(date);
+
+     return (
+       <ReplyItem
+       replyId={item.replyId}
+       profileImage={item.user.profileImg}
+       nickname={item.user.nickname}
+       description={item.description}
+       createAt={date.toString()}
+       />
+     )
+   }
+
 
   const renderCommentItem = ({item, index}) => {
     var date = new Date(item.createdAt);
     date = getDateFormat(date);
+    if(item.replys[0]) {
+      console.log("item.replys[0]", item.replys[0])
+    }
     return (
     <CommentItemContainer style={index === 0 && {marginTop:14}}>
     <CommentItem
@@ -414,7 +449,9 @@ const CommentListScreen = ({navigation, route}: Props) => {
     createAt={date.toString()}
     />
     {item.replys[0] && (
-        <Text>답글존재</Text>
+      <FlatList
+      data={item.replys}
+      renderItem={renderReplyItem}/>
     )}
     </CommentItemContainer>
     )
@@ -459,28 +496,32 @@ const CommentListScreen = ({navigation, route}: Props) => {
      moveToWriterProfile={moveToWriterProfile}
      />
      </FeedInformationContainer>
-      <CommentListContainer
-      style={{marginBottom:inputHeight+keyboardHeight}}>
+     <KeyboardAwareScrollView
+     showsVerticalScrollIndicator={false}
+     >
+      <CommentListContainer>
          <FlatList
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{paddingBottom: wp('13.5%')}}
         refreshing={false}
         data={commentList}
         renderItem={renderCommentItem}
         />
         </CommentListContainer>
-        <FooterContainer
-        style={{marginBottom:keyboardHeight}}
-        onLayout={(event) => {
-            const layout = event.nativeEvent.layout;
-            setInputHeight(layout.height+30);
-        }}>
+        </KeyboardAwareScrollView>
+        <FooterContainer>
+          <AboveKeyboard
+          style={{backgroundColor:'#ffffff'}}
+          >
           {inputType === "reply" && (
             <InputingReplyContainer>
             <InputingReplyText>{replyTarget+"님에게 답글 남기는 중"}</InputingReplyText>
+            <TouchableWithoutFeedback onPress={() => cancelReply()}>
+            <InputingReplyCancelContainer>
             <InputingReplyCancelIcon
             source={require('~/Assets/Images/ic_replyCancel.png')}
             />
+            </InputingReplyCancelContainer>
+            </TouchableWithoutFeedback>
             </InputingReplyContainer>
 
           )}
@@ -489,6 +530,7 @@ const CommentListScreen = ({navigation, route}: Props) => {
             source={{uri:currentUser.user.profileImage}}/>
         <CommentInputContainer>
             <CommentInput
+            ref={commentInputRef}
             autoCapitalize={false}
             multiline={true}
             placeholder={inputType==="comment" ? "댓글 달기" : "답글 달기"}
@@ -502,6 +544,7 @@ const CommentListScreen = ({navigation, route}: Props) => {
             </TouchableWithoutFeedback>
         </CommentInputContainer>
         </CommentContainer>
+        </AboveKeyboard>
         </FooterContainer>
     </Container>
     )

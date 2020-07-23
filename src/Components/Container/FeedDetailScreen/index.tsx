@@ -364,7 +364,7 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
     const [spendDate, setSpendDate] = useState();
     const [currentUserLike, setCurrentUserLike] = useState<boolean>(false);
     const [likeCount, setLikeCount] = useState<number>();
-    const [commentCount, setCommentCount] = useState<number>();
+    const [allCommentCount, setAllCommentCount] = useState<number>();
 
     const currentUser = useSelector((state) => state.currentUser);
     const dispatch = useDispatch();
@@ -380,8 +380,7 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
            setPostId(route.params.feedId);
            setFeedDetailInfo(response.data.post);
            setLikeCount(response.data.post.likes);
-           setCommentCount(response.data.post.commentsCount);
-  
+           setAllCommentCount(response.data.post.commentsCount+response.data.post.replysCount);
            setTagList(route.params.tagList);
            setRatingArray(route.params.ratingArray);
            setCreatedDate(route.params.createdAt);
@@ -395,7 +394,7 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
 
     useEffect(() => {
       if(route.params?.commentList) {
-        setCommentCount(route.params.commentList.length);
+        setAllCommentCount(route.params.commentList.length);
       }
     }, [route.params?.commentList])
 
@@ -560,13 +559,12 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
           <InfoContainer>
           <CommentIcon
             source={require('~/Assets/Images/ic_comment_outline.png')}/>
-            <InfoCountText>{commentCount}</InfoCountText>
+            <InfoCountText>{allCommentCount}</InfoCountText>
           </InfoContainer>
           </TouchableWithoutFeedback>
           <InfoContainer>
             <ScrapIcon
             source={require('~/Assets/Images/ic_scrap_outline.png')}/>
-            <InfoCountText>{feedDetailInfo.Scraps ? feedDetailInfo.Scraps.length : null}</InfoCountText>
           </InfoContainer>
       </BottomBar>
 

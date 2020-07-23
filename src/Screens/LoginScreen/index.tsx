@@ -139,31 +139,6 @@ const LoginScreen = ({navigation}) => {
   }, []);
 
 
-  function restHTTPPost(url, data) {
-    console.log('data: ', data);
-    let form = new FormData();
-    form.append('email', data.email);
-    form.append('pw', data.pw);
-    return new Promise(function (resolve, reject) {
-      axios
-        .post(url, form, {
-          //withCredentials: true,
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            Accept: 'application/json',
-          },
-        })
-        .then(function (response) {
-          console.log('response : ', response);
-          resolve(response.data);
-        })
-        .catch(function (error) {
-          console.log('error : ', error);
-          reject(error);
-        });
-    });
-  }
-
   const clickFinish = () => {
      submitingEmail = email;
     submitingPassword = password;
@@ -173,6 +148,7 @@ const LoginScreen = ({navigation}) => {
     .then(function(response) {
       console.log('로그인성공 유저 정보@@', response.data.user);
       console.log("로그인성공 user.id", response.data.user.id);
+      console.log("유저스크랩정보", response.data.user.scraps[0].Posts);
       if(response.status === 200) {
         dispatch(
           allActions.userActions.setUser({
@@ -188,6 +164,9 @@ const LoginScreen = ({navigation}) => {
         )
         dispatch(
           allActions.userActions.setLikeFeeds(response.data.user.LikePosts)
+        )
+        dispatch(
+          allActions.userActions.setScrapFeeds(response.data.user.scraps[0].Posts)
         )
       }
     })

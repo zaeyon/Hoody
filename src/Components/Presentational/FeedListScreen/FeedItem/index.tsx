@@ -7,9 +7,12 @@ import {
 } from 'react-native-responsive-screen';
 import {useSelector, useDispatch} from 'react-redux';
 import allActions from '~/action';
+
+// Route
 import GetFeedDetail from '~/Route/Post/GetFeedDetail';
 import {POSTLike, DELETELike} from '~/Route/Post/Like';
-
+import POSTScrapFeed from '~/Route/Post/Scrap/POSTScrapFeed';
+import DELETEScrapFeed from '~/Route/Post/Scrap/DELETEScrapFeed';
 
 const Container = Styled.View`
 
@@ -261,7 +264,7 @@ const InfoCountText = Styled.Text`
  left: ${wp('3.5%')}
  margin-left: 5px;
  font-size: 13px;
- color: #cccccc;
+ color: #8E9199;
 `;
 
 const InfoDivider = Styled.Text`
@@ -293,8 +296,8 @@ height: ${wp('4%')}px;
 `;
 
 const ScrapIcon = Styled.Image`
-width: ${wp('3.5%')}px;
-height: ${wp('4.0%')}px;
+width: ${wp('5%')}px;
+height: ${wp('5%')}px;
 `;
 
 const ExpenseText = Styled.Text`
@@ -302,9 +305,6 @@ const ExpenseText = Styled.Text`
  font-size: 13px;
  color: #1D1E1F;
 `;
-
-
-
 
 interface Props {
   id: number;
@@ -320,6 +320,7 @@ interface Props {
   image_count: number;
   like_count: number;
   comment_count: number;
+  reply_count: number;
   scrap_count: number;
   location: string;
   expense: number;
@@ -342,6 +343,7 @@ const FeedItem = ({
   image_count,
   like_count,
   comment_count,
+  reply_count,
   scrap_count,
   location,
   expense,
@@ -362,7 +364,9 @@ const FeedItem = ({
   const [createdDate, setCreatedDate] = useState();
   const [changeState, setChangeState] = useState<boolean>(false);
   const [currentUserLike, setCurrentUserLike] = useState<boolean>(false);
+  const [currentUserScrap, setCurrentUserScrap] = useState<boolean>(false);
   const [likeCount, setLikeCount] = useState<number>(like_count);
+  const [allCommentCount, setAllCommentCount] = useState<number>(comment_count+reply_count);
   const currentUser = useSelector((state) => state.currentUser);
   const dispatch = useDispatch();
   var likeFeedsIndex: any;
@@ -411,8 +415,14 @@ const FeedItem = ({
     } else if(index === -1) {
       setCurrentUserLike(false);
     }
-    console.log("해당 피드가 사용자가 좋아요한 피드목록에 있음", index);   
-    
+    console.log("해당 피드가 사용자가 좋아요한 피드목록에 있음", index); 
+
+    var scrapFeedIndex = currentUser.scrapFeeds.findIndex(obj => obj.id === id);
+    if(scrapFeedIndex !== -1) {
+      setCurrentUserScrap(true);
+    } else if(scrapFeedIndex === -1) {
+      setCurrentUserScrap(false);
+    }
   }, []);
 
   useEffect(() => {
@@ -427,6 +437,21 @@ const FeedItem = ({
       if(currentUserLike) {
         setLikeCount(likeCount-1)
         setCurrentUserLike(false);
+      }
+    }
+
+  }, [currentUser])
+
+  useEffect(() => {
+    var scrapFeedIndex = currentUser.scrapFeeds.findIndex(obj => obj.id === id);
+    if(scrapFeedIndex !== -1) {
+      if(!currentUserScrap)
+      {
+      setCurrentUserScrap(true);
+      }
+    } else if(scrapFeedIndex === -1) {
+      if(currentUserLike) {
+        setCurrentUserScrap(false);
       }
     }
   }, [currentUser])
@@ -477,6 +502,46 @@ const FeedItem = ({
     })
     .catch(function(error) {
       console.log("좋아요 추가 error", error);
+    })
+  }
+
+  const addScrapFeed = () => {
+    var scrapFeedArray = new Array();
+    scrapFeedArray.push(id);
+    setCurrentUserScrap(true);
+
+    var addedScrapFeeds = currentUser.scrapFeeds;
+    const scrapObj = {
+      id: id,
+    }
+    addedScrapFeeds.push(scrapObj);
+    dispatch(allActions.userActions.setScrapFeeds(addedScrapFeeds))
+    POSTScrapFeed(scrapFeedArray)
+    .then(function(response: any) {
+      console.log("스크랩성공", response)
+    })
+    .catch(function(error: any) {
+      console.log("스크랩실패", error);
+    })
+  }
+
+  const deleteScrapFeed = () => {
+    setCurrentUserScrap(false);
+    var tmpFeedIds = new Array();
+    tmpFeedIds.push(id);
+
+    console.log("tmpFeedIds", tmpFeedIds)
+    var deletedScrapFeeds = currentUser.scrapFeeds;
+    var deleteIndex = currentUser.scrapFeeds.findIndex(obj => obj.id === id);
+    deletedScrapFeeds.splice(deleteIndex, 1);
+    
+    dispatch(allActions.userActions.setScrapFeeds(deletedScrapFeeds));
+    DELETEScrapFeed(tmpFeedIds)
+    .then(function(response) {
+      console.log("스크랩삭제", response);
+    })
+    .catch(function(error) {
+      console.log("스크랩삭제 실패", error);
     })
   }
 
@@ -587,6 +652,7 @@ const FeedItem = ({
             <TouchableWithoutFeedback onPress={() => addLike()}>
             <InfoContainer>
             <LikeIcon
+style={{tintColor:'#8E9199'}}
             source={require('~/Assets/Images/ic_like.png')}/>
             <InfoCountText>{likeCount}</InfoCountText>
             </InfoContainer>
@@ -594,15 +660,29 @@ const FeedItem = ({
             )}
             <InfoContainer style={{marginLeft: 50}}> 
             <CommentIcon
+style={{tintColor:'#8E9199'}}
             source={require('~/Assets/Images/ic_comment.png')}/>
-            <InfoCountText>{comment_count}</InfoCountText>
+            <InfoCountText>{allCommentCount}</InfoCountText>
             </InfoContainer>
             </FooterLeftContainer>
             <FooterRightContainer>
+              {!currentUserScrap && (
+            <TouchableWithoutFeedback onPress={() => addScrapFeed()}>
             <InfoContainer>
             <ScrapIcon
-            source={require('~/Assets/Images/ic_scrap.png')}/>
+            style={{tintColor:'#8E9199'}}
+            source={require('~/Assets/Images/Feed/ic_emptyScrap.png')}/>
             </InfoContainer>
+            </TouchableWithoutFeedback>
+              )}
+              {currentUserScrap && (
+              <TouchableWithoutFeedback onPress={() => deleteScrapFeed()}>
+                <InfoContainer>
+                  <ScrapIcon
+                  source={require('~/Assets/Images/Feed/ic_pressedScrap.png')}/>
+                </InfoContainer>
+              </TouchableWithoutFeedback>
+              )}
             </FooterRightContainer>
           </AdditionalInfoContainer>
         </FooterContainer>

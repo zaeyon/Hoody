@@ -24,22 +24,73 @@ const HeaderLeftContainer = Styled.View`
 `;
 
 const BackButtonContainer = Styled.View`
-padding: 10px 15px 10px 15px;
+padding: 7px 15px 13px 16px;
  align-items: center;
  justify-content: center;
 `;
 
 const BackButton = Styled.Image`
- width: ${wp('8%')};
- height: ${wp('8%')};
+ width: ${wp('6.4%')};
+ height: ${wp('6.4%')};
 `;
 
+const HeaderTitleText = Styled.Text`
+font-weight: 600;
+font-size: 18px;
+color: #1D1E1F;
+`;
+
+
 const HeaderRightContainer = Styled.View`
-padding: 10px 15px 10px 15px;
+padding: 7px 16px 13px 15px;
  align-items: center;
  justify-content: center;
  flex-direction: row;
 `;
+
+const HeaderEmptyContainer = Styled.View`
+ width: ${wp('6.4%')};
+ height: ${wp('6.4%')};
+`;
+
+
+const TabItemContainer = Styled.View`
+ width: ${wp('100%')};
+ height: ${wp('17%')};
+ background-color: #ffffff;
+ justify-content: center;
+ padding-left: 16px;
+ padding-right: 16px;
+`;
+
+const TabItemInnerContainer = Styled.View`
+flex: 1;
+ flex-direction: row;
+ align-items: center;
+ border-bottom-width: 0.6px;
+ border-color: #ECECEE;
+`;
+
+const SettingTabIconImage = Styled.Image`
+ width: ${wp('6.4%')};
+ height: ${wp('6.4%')};
+`;
+
+const SettingTabLabelText = Styled.Text`
+ margin-left: 11px;
+ font-size: 18px;
+ color: #1D1E1F;
+`;
+
+const SettingTabListContainer = Styled.View`
+
+`;
+
+const EmptyContaienr = Styled.View`
+ flex: 1;
+ background-color: #eeeeee80;
+`;
+
 
 interface Props {
     navigation: any,
@@ -54,14 +105,56 @@ const SettingScreen = ({navigation, route}: Props) => {
                     <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
                     <BackButtonContainer>
                     <BackButton
-                    source={require('~/Assets/Images/ic_back.png')}/>
+                    source={require('~/Assets/Images/HeaderBar/ic_back.png')}/>
                     </BackButtonContainer>
                     </TouchableWithoutFeedback>
                 </HeaderLeftContainer>
+                <HeaderTitleText>설정</HeaderTitleText>
                 <HeaderRightContainer>
-
+                    <HeaderEmptyContainer>
+                    </HeaderEmptyContainer>
                 </HeaderRightContainer>
             </HeaderBar>
+            <SettingTabListContainer>
+                <TabItemContainer>
+                    <TabItemInnerContainer>
+                        <SettingTabIconImage
+                        source={require("~/Assets/Images/Profile/Setting/ic_profile.png")}/>
+                        <SettingTabLabelText>계정 및 보안</SettingTabLabelText>
+                    </TabItemInnerContainer>
+                </TabItemContainer>
+                <TabItemContainer>
+                    <TabItemInnerContainer>
+                        <SettingTabIconImage
+                        source={require("~/Assets/Images/Profile/Setting/ic_alarm.png")}/>
+                        <SettingTabLabelText>알림</SettingTabLabelText>
+                    </TabItemInnerContainer>
+                </TabItemContainer>
+                <TabItemContainer>
+                    <TabItemInnerContainer>
+                        <SettingTabIconImage
+                        source={require("~/Assets/Images/Profile/Setting/ic_help.png")}/>
+                        <SettingTabLabelText>고객센터</SettingTabLabelText>
+                    </TabItemInnerContainer>
+                </TabItemContainer>
+                <TabItemContainer>
+                    <TabItemInnerContainer>
+                        <SettingTabIconImage
+                        source={require("~/Assets/Images/Profile/Setting/ic_information.png")}/>
+                        <SettingTabLabelText>정보</SettingTabLabelText>
+                    </TabItemInnerContainer>
+                </TabItemContainer>
+                <TabItemContainer>
+                    <TabItemInnerContainer>
+                        <SettingTabIconImage
+                        source={require("~/Assets/Images/Profile/Setting/ic_information.png")}/>
+                        <SettingTabLabelText>의견 전달하기</SettingTabLabelText>
+                    </TabItemInnerContainer>
+                </TabItemContainer>
+            </SettingTabListContainer>
+            <EmptyContaienr>
+
+            </EmptyContaienr>
         </Container>
     )
 }

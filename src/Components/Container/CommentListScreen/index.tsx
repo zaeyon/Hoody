@@ -298,6 +298,7 @@ const CommentListScreen = ({navigation, route}: Props) => {
     const [replyTarget, setReplyTarget] = useState<string>();
     const [inputHeight, setInputHeight] = useState<number>(0);
     const [inputType, setInputType] = useState<string>("comment");
+    const [allCommentCount, setAllCommentCount] = useState<number>(0);
     const [replyCommentId, setReplyCommentId] = useState<number>();
     const currentUser = useSelector((state) => state.currentUser);
     const commentInputRef = useRef(null);
@@ -325,8 +326,9 @@ const CommentListScreen = ({navigation, route}: Props) => {
             setPostId(route.params.postId);
             GetComment(route.params.postId)
             .then(function(response) {
-                console.log("댓글 불러오기 성공", response)
-                setCommentList(response);
+                console.log("댓글 불러오기 성공", response.allComment)
+                setCommentList(response.allComment);
+                setAllCommentCount(response.allCommentCount)
             })
             .catch(function(error) {
                 console.log("댓글 불러오기 실패", error);
@@ -469,7 +471,7 @@ const CommentListScreen = ({navigation, route}: Props) => {
        </TouchableWithoutFeedback>
        <TouchableWithoutFeedback onPress={() => 0}>
          <HeaderCenterContainer>
-         <HeaderTitleText>{"댓글 " + commentList?.length+"개"}</HeaderTitleText>
+         <HeaderTitleText>{"댓글 " + allCommentCount+"개"}</HeaderTitleText>
        </HeaderCenterContainer>
        </TouchableWithoutFeedback>
        <HeaderRightContainer>

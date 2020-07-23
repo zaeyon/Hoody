@@ -433,7 +433,7 @@ function Navigator() {
   const currentUser = useSelector((state) => state.currentUser);
   return (
     <NavigationContainer>
-      {!currentUser.loggedIn ? (
+      {currentUser.loggedIn ? (
         <Tab.Navigator
           tabBarOptions={{
             showLabel: false,

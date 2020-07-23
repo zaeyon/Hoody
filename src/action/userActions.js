@@ -18,15 +18,10 @@ const setLikeFeeds = (likeFeeds) => {
   };
 };
 
-const addLike = () => {
+const setScrapFeeds = (scrapFeeds) => {
   return {
-    type: 'ADD_LIKE',
-  };
-};
-
-const deleteLike = () => {
-  return {
-    type: 'DELETE_LIKE',
+    type: 'SET_SCRAP_FEEDS',
+    payload: scrapFeeds
   }
 }
 
@@ -34,6 +29,5 @@ export default {
   setUser,
   logOut,
   setLikeFeeds,
-  addLike,
-  deleteLike,
+  setScrapFeeds,
 };

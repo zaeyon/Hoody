@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {
-  FlatList, View, Text, Dimensions, TouchableOpacity, TouchableWithoutFeedback, SafeAreaView,
+  FlatList, View, Text, Dimensions, TouchableOpacity, TouchableWithoutFeedback, SafeAreaView, StyleSheet
 } from 'react-native';
 import Styled from 'styled-components/native';
 import {
@@ -9,7 +9,7 @@ import {
 } from 'react-native-responsive-screen';
 
 import {useSelector} from 'react-redux';
-
+import Modal from 'react-native-modal';
 import ScrollableTabView, { DefaultTabBar,} from 'rn-collapsing-tab-bar';
 
 import {getCurrentUser} from '~/AsyncStorage/User';
@@ -17,10 +17,8 @@ import UserIntroduction from '~/Components/Presentational/ProfileScreen/UserIntr
 import ProfileTabBar from '~/Components/Presentational/ProfileScreen/ProfileTabBar';
 import ProfileFeedList from '~/Components/Presentational/ProfileScreen/ProfileFeedList';
 import ProfileCollectionList from '~/Components/Presentational/ProfileScreen/ProfileCollectionList';
-
 import GetProfileFeedByList from '~/Route/Profile/GetProfileFeedByList';
 import GetProfileCollection from '~/Route/Profile/GetProfileCollection';
-
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 
 const Container = Styled.SafeAreaView`
@@ -128,6 +126,51 @@ const MyProfileReviewMapText = Styled.Text`
  color: #505866;
  font-weight: 600;
  font-size: 15px;
+`;
+
+const HeaderContainer = Styled.View`
+ padding-top: 4px;
+ width: ${wp('100%')};
+ padding-bottom: 10px;
+ align-items: center;
+`;
+
+const ProfileModalContainer = Styled.View`
+ width: ${wp('100%')};
+ height: ${wp('76%')};
+ background-color: #ffffff;
+ border-top-left-radius: 10px;
+ border-top-right-radius: 10px;
+ padding-bottom: 30px;
+`;
+
+const ModalToggleButton = Styled.View`
+ width: ${wp('11.7%')};
+ height: ${wp('1.4%')};
+ background-color: #F4F4F7;
+ border-radius: 5px;
+`;
+
+const ModalTabItemContainer = Styled.View`
+ height: ${wp('17%')};
+ flex-direction: row;
+ align-items: center;
+ padding-left: 16px;
+ padding-right: 16px;
+ border-bottom-width: 0.6px;
+ border-color: #ECECEE;
+`;
+
+const ModalTabItemIconImage = Styled.Image`
+width: ${wp('6.4%')};
+height: ${wp('6.4%')};
+tint-color: #1D1E1F;
+`;
+
+const ModalTabItemLabelText = Styled.Text`
+ margin-left: 11px;
+ font-size: 18px;
+ color: #1D1E1F;
 `;
 
  
@@ -341,27 +384,16 @@ const ProfileScreen = ({navigation, route}: Props) => {
   const [changeProfileData, setChangeProfileData] = useState<boolean>(false);
   const [currentUserProfileBool, setCurrentUserProfileBool] = useState<boolean>(true);
   const [followed, setFollowed] = useState<boolean>(false);
+  const [profileModalVisible, setProfileModalVisible] = useState<boolean>(false);
 
   const currentUser = useSelector((state) => state.currentUser);
 
   
   useEffect(() => {
-    if(route.params?.requestedUserNickname) { 
-    console.log("profile route.params", route.params?.requestedUserNickname)
+    if(currentUser.user) { 
     console.log("currentUser.user.profileImage", currentUser.user.profileImage);
 
-
-    /*
-    if(route.params.requestedUserNickname != currentUser.user.nickname) {
-      console.log("요청된닉네임이랑 사용자 닉네임@@ 다름");
-      setCurrentUserProfileBool(false);
-    } else {
-      console.log("요청된닉네임이랑 사용자 닉네임@@ 같음")
-      setCurrentUserProfileBool(true);
-    }
-    */
-      
-      GetProfileFeedByList(route.params.requestedUserNickname)
+      GetProfileFeedByList(currentUser.user.nickname)
       .then(function(response) {
         console.log(
         "GetProfileFeedByList response@@", response.posts)
@@ -379,7 +411,7 @@ const ProfileScreen = ({navigation, route}: Props) => {
         console.log("GetUserProfile error", error);
       })
 
-      GetProfileCollection(route.params.requestedUserNickname)
+      GetProfileCollection(currentUser.user.nickname)
       .then(function(response) {
         console.log("GetProfileCollection response", response);
         setCollectionListData(JSON.parse(response.collections));
@@ -428,6 +460,11 @@ const ProfileScreen = ({navigation, route}: Props) => {
     });
   }
 
+  const moveToSettingScreen = () => {
+    navigation.navigate("SettingScreen");
+    setProfileModalVisible(false)
+  }
+
   const navigateGoBack = () => {
       navigation.goBack();
   }
@@ -438,6 +475,10 @@ const ProfileScreen = ({navigation, route}: Props) => {
 
   const unfollowUser = () => {
     setFollowed(false);
+  }
+
+  const clickToHamburger = () => {
+    setProfileModalVisible(true)
   }
 
 
@@ -492,7 +533,7 @@ const ProfileScreen = ({navigation, route}: Props) => {
        <HeaderBar>
         <HeaderLeftContainer>
           {currentUserProfileBool && (
-          <TouchableWithoutFeedback onPress={() => navigation.navigate("SettingScreen")}>
+          <TouchableWithoutFeedback onPress={() => clickToHamburger()}>
           <MyProfileSettingContainer>
           <MyProfileSettingButton
           source={require('~/Assets/Images/HeaderBar/ic_hamburger.png')}
@@ -557,8 +598,47 @@ const ProfileScreen = ({navigation, route}: Props) => {
        /> 
       </CollectionListTabContainer>
       </ScrollableTabView>
+      <Modal
+      testID={'modal'}
+      onBackdropPress={() => setProfileModalVisible(false)}
+      isVisible={profileModalVisible}
+      backdropOpacity={0.25}
+      onSwipeComplete={() => setProfileModalVisible(false)}
+      swipeDirection={['down']}
+      style={styles.modalView}>
+      <ProfileModalContainer>
+        <HeaderContainer>
+        <ModalToggleButton/>
+        </HeaderContainer>
+        <TouchableWithoutFeedback onPress={() => moveToSettingScreen()}>
+        <ModalTabItemContainer>
+          <ModalTabItemIconImage
+          source={require('~/Assets/Images/Profile/BottomModal/ic_setting.png')}/>
+          <ModalTabItemLabelText>설정</ModalTabItemLabelText>
+        </ModalTabItemContainer>
+        </TouchableWithoutFeedback>
+        <ModalTabItemContainer>
+          <ModalTabItemIconImage
+          source={require('~/Assets/Images/Profile/BottomModal/ic_scrap.png')}/>
+          <ModalTabItemLabelText>스크랩</ModalTabItemLabelText>
+        </ModalTabItemContainer>
+        <ModalTabItemContainer>
+          <ModalTabItemIconImage
+          source={require('~/Assets/Images/Profile/BottomModal/ic_profile.png')}/>
+          <ModalTabItemLabelText>프로필 편집</ModalTabItemLabelText>
+        </ModalTabItemContainer>
+      </ProfileModalContainer>
+      </Modal>
+
     </Container>
   )
 }
+
+const styles = StyleSheet.create({
+  modalView: {
+    justifyContent: 'flex-end',
+    margin: 0,
+  },
+});
 
 export default ProfileScreen;

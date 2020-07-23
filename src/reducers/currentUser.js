@@ -17,11 +17,10 @@ const currentUser = (state = {}, action) => {
         ...state,
         likeFeeds: action.payload,
       }
-    case 'ADD_LIKE':
+    case 'SET_SCRAP_FEEDS':
       return {
         ...state,
-        user: action.payload,
-        loggedIn: true
+        scrapFeeds: action.payload,
       }
     default:
       return state;

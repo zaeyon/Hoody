@@ -420,7 +420,8 @@ function FeedListScreen({navigation, route}: Props) {
                   sub_tag1={item.subTagOnes?item.subTagOnes.name:null}
                   sub_tag2={item.subTagTwos?item.subTagTwos.name:null}
                   like_count={item.likes}
-                  comment_count={item.comments.length}
+                  comment_count={item.commentsCount}
+                  reply_count={item.replysCount}
                   scrap_count={item.Scraps.length}
                   mediaFiles={item.mediaFiles}
                   image_count={item.mediaFiles.length}

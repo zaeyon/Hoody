@@ -16,6 +16,13 @@ const TileFeedImage = Styled.Image`
  border-radius: 5px;
 `;
 
+const NoFeedImage = Styled.View`
+width: ${wp('44.2%')};
+height: ${wp('35.1%')};
+border-radius: 5px;
+background-color: #eeeeee;
+`;
+
 const TagListContainer = Styled.View`
  margin-top: 6px;
  flex-direction: row;
@@ -61,24 +68,35 @@ font-size: 13px;
 color: #898A8D;
 `;
 
-
-
-const ProfileTileFeedItem = ({}) => {
+interface Props {
+    mainImage: string,
+    mainTag: string,
+    rating: string,
+    expense: string,
+    location: string,
+}
+const ProfileTileFeedItem = ({mainImage, mainTag, rating, expense, location}: Props) => {
     return (
         <ProfileTileFeedItemContainer>
+            {mainImage && (
             <TileFeedImage
-            source={{uri:'https://img.maisonkorea.com/2019/05/msk_5ce1e0ac196ee-1200x800.jpg'}}/>
+            source={{uri:mainImage}}/>
+            )}
+            {!mainImage && (
+                <NoFeedImage>
+                </NoFeedImage>
+            )}
             <TagListContainer>
-                <TagText>#아씨에뜨앤</TagText>
+                <TagText>{"#"+mainTag}</TagText>
             </TagListContainer>
             <RatingExpenseContainer>
                 <RatingImage
                 source={require('~/Assets/Images/ic_newStar.png')}/>
-                <RatingText>5 · </RatingText>
-                <ExpenseText>13,000원</ExpenseText>
+                <RatingText>{rating}</RatingText>
+                <ExpenseText>{expense ? " · " + expense+"원" : null}</ExpenseText>
             </RatingExpenseContainer>
             <LocationContainer>
-                <LocationText>종로구 종로동</LocationText>
+                <LocationText>{location}</LocationText>
             </LocationContainer>
         </ProfileTileFeedItemContainer>
     )

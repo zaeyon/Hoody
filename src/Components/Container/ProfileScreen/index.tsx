@@ -13,13 +13,19 @@ import Modal from 'react-native-modal';
 import ScrollableTabView, { DefaultTabBar,} from 'rn-collapsing-tab-bar';
 
 import {getCurrentUser} from '~/AsyncStorage/User';
+import {getStatusBarHeight} from 'react-native-status-bar-height';
+
+
+// local component
 import UserIntroduction from '~/Components/Presentational/ProfileScreen/UserIntroduction';
 import ProfileTabBar from '~/Components/Presentational/ProfileScreen/ProfileTabBar';
 import ProfileFeedList from '~/Components/Presentational/ProfileScreen/ProfileFeedList';
 import ProfileCollectionList from '~/Components/Presentational/ProfileScreen/ProfileCollectionList';
+
+// route
 import GetProfileFeedByList from '~/Route/Profile/GetProfileFeedByList';
+import GETProfileFeedByDate from '~/Route/Profile/GETProfileFeedByDate';
 import GetProfileCollection from '~/Route/Profile/GetProfileCollection';
-import {getStatusBarHeight} from 'react-native-status-bar-height';
 
 const Container = Styled.SafeAreaView`
  flex: 1;
@@ -379,6 +385,7 @@ const ProfileScreen = ({navigation, route}: Props) => {
   const [collectionListTabHeight, setCollectionListTabHeight] = useState<number>(containerHeight);
   const [userInfoData, setUserInfoData] = useState<object>({});
   const [feedListData, setFeedListData] = useState<Array<object>>([]);
+  const [feedListDataByDate, setFeedListDataByDate] = useState<Array<object>>([]);
   const [collectionListData, setCollectionListData] = useState<Array<object>>([]);
   const [selectedFeedSortType, setSelectedFeedSortType] = useState<string>("list");
   const [changeProfileData, setChangeProfileData] = useState<boolean>(false);
@@ -409,6 +416,28 @@ const ProfileScreen = ({navigation, route}: Props) => {
         console.log("response.followed", response.followed)
       }).catch(function(error) {
         console.log("GetUserProfile error", error);
+      })
+
+      GETProfileFeedByDate(currentUser.user.nickname, "2020-07")
+      .then(function(response) {
+        console.log("GETProfileFeedByDate response", response)
+        var tmpFeedListByDate = new Array();
+
+        for(const[key, value] of Object.entries(response)) {
+          var date = new Date(key)
+          
+          tmpFeedListByDate.push({
+            title: date.getDate(),
+            data: [value],
+          })
+        }
+
+        setTimeout(() => {
+        setFeedListDataByDate(tmpFeedListByDate);
+        })
+      })
+      .catch(function(error) {
+        console.log("GETProfileFeedByDate error", error);
       })
 
       GetProfileCollection(currentUser.user.nickname)
@@ -585,7 +614,8 @@ const ProfileScreen = ({navigation, route}: Props) => {
       tabLabel='게시글'>
        <ProfileFeedList
        navigation={navigation}
-       feedListData={feedListData ? feedListData : ""}
+       feedListData={feedListData ? feedListData : []}
+       feedListDataByDate={feedListDataByDate ? feedListDataByDate : []}
        currentSortType={selectedFeedSortType}
        />
       </FeedListTabContainer>

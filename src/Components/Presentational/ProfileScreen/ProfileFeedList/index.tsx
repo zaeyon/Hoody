@@ -14,11 +14,10 @@ import ProfileTileFeedItem from '~/Components/Presentational/ProfileScreen/Profi
 const UserFeedListContainer = Styled.View`
  width: ${wp('100%')};
  background-color: #ffffff;
- padding-bottom: 40px;
 `;
 
 const ListTypeFeedContainer = Styled.View`
-
+padding-bottom: 40px;
 `;
 
 const TileTypeFeedContainer = Styled.View`
@@ -59,9 +58,9 @@ padding: 15px 16px ${hp('8.5%')}px 16px;
     navigation: any,
     route: any,
     feedListData: Array<object>,
+    feedListDataByDate: Array<object>,
     currentSortType: string
     onScrollPostList: () => void,
-    scrollOffsetY: any,
   }
 
   const TEST_SECTION_DATA = [
@@ -83,12 +82,14 @@ padding: 15px 16px ${hp('8.5%')}px 16px;
     }
   ]
 
-const ProfileFeedList = ({navigation, route, feedListData, currentSortType, onScrollPostList, scrollOffsetY}: Props) => {
+const ProfileFeedList = ({navigation, route, feedListData, currentSortType, onScrollPostList, feedListDataByDate}: Props) => {
 
   useEffect(() => {
     console.log("ProfileFeedList feedListData", feedListData)
+    console.log("ProfileFeedList feedListDataByDate@@", feedListDataByDate)
 
-  }, [feedListData])
+
+  }, [feedListData, feedListDataByDate])
 
     const renderProfileListFeedItem = ({item, index}) => {
         return (
@@ -115,19 +116,6 @@ const ProfileFeedList = ({navigation, route, feedListData, currentSortType, onSc
     }
 
     const renderProfileTileFeedItem = ({item, index}) => {
-      return (
-        <FlatList
-        data={item}
-        numColumns={2}
-        renderItem={({item, index}) => {
-          return (
-            <ProfileTileFeedItem/>
-          )
-        }}/>
-      )
-    }
-
-    const renderProfileTileSectionItem = ({item, index}) => {
       console.log("sectionItem item", item);
       return (
         <FlatList
@@ -136,7 +124,13 @@ const ProfileFeedList = ({navigation, route, feedListData, currentSortType, onSc
         numColumns={2}
         renderItem={({item, index}) => {
           return (
-            <ProfileTileFeedItem/>
+            <ProfileTileFeedItem
+            mainImage={item.mediaFiles[0] ? item.mediaFiles[0].url : null}
+            mainTag={item.mainTags.name}
+            rating={item.starRate}
+            expense={item.expense ? item.expense +"원" : null}
+            location={item.address ? item.address.address : null}
+            />
           )
         }}/>
       )
@@ -171,10 +165,10 @@ scrollEventThrottle={5}
           <SectionList
           scrollEnabled={false}
           onScroll={onScrollPostList}
-          sections={TEST_SECTION_DATA}
-          renderItem={renderProfileTileSectionItem}
+          sections={feedListDataByDate}
+          renderItem={renderProfileTileFeedItem}
           renderSectionHeader={({ section: {title}}) => (
-            <ExpenseDayText>{title}</ExpenseDayText>
+            <ExpenseDayText>{title+"일"}</ExpenseDayText>
           )}
           />
           </ExpenseDaySectionListContainer>

@@ -440,20 +440,13 @@ const FeedItem = ({
       }
     }
 
-  }, [currentUser])
-
-  useEffect(() => {
     var scrapFeedIndex = currentUser.scrapFeeds.findIndex(obj => obj.id === id);
     if(scrapFeedIndex !== -1) {
-      if(!currentUserScrap)
-      {
       setCurrentUserScrap(true);
-      }
     } else if(scrapFeedIndex === -1) {
-      if(currentUserLike) {
         setCurrentUserScrap(false);
-      }
     }
+
   }, [currentUser])
 
 
@@ -561,6 +554,7 @@ const FeedItem = ({
       ratingArray: ratingArray,
       createdAt: createdDate,
       currentUserLike: currentUserLike,
+      currentUserScrap: currentUserScrap,
       }
     })
   }

@@ -14,6 +14,8 @@ import FeedInformation from '~/Components/Presentational/FeedDetailScreen/FeedIn
 
 // Route
 import {POSTLike, DELETELike} from '~/Route/Post/Like';
+import POSTScrapFeed from '~/Route/Post/Scrap/POSTScrapFeed';
+import DELETEScrapFeed from '~/Route/Post/Scrap/DELETEScrapFeed';
 import GetFeedDetail from '~/Route/Post/GetFeedDetail';
 const Container = Styled.SafeAreaView`
 width: ${wp('100%')};
@@ -286,6 +288,15 @@ tint-color: #333333;
 `;
 
 
+const PressedScrapIcon = Styled.Image`
+width: ${wp('5.7%')};
+height: ${wp('5.7%')};
+
+`;
+
+
+
+
 const TEST_FEED_DETAIL = 
     {
       id: 1,
@@ -363,6 +374,7 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
     const [createdDate, setCreatedDate] = useState<string>("");
     const [spendDate, setSpendDate] = useState();
     const [currentUserLike, setCurrentUserLike] = useState<boolean>(false);
+    const [currentUserScrap, setCurrentUserScrap] = useState<boolean>(false);
     const [likeCount, setLikeCount] = useState<number>();
     const [allCommentCount, setAllCommentCount] = useState<number>();
 
@@ -385,6 +397,7 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
            setRatingArray(route.params.ratingArray);
            setCreatedDate(route.params.createdAt);
            setCurrentUserLike(route.params.currentUserLike)
+           setCurrentUserScrap(route.params.currentUserScrap);
        })
        .catch(function(error) {
            console.log("error", error);
@@ -496,6 +509,45 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
         params: {requestedUserNickname: feedDetailInfo.user.nickname}
       });
     }
+
+    const addScrapFeed = () => {
+    var scrapFeedArray = new Array();
+    scrapFeedArray.push(postId);
+    setCurrentUserScrap(true);
+
+    var addedScrapFeeds = currentUser.scrapFeeds;
+    const scrapObj = {
+      id: postId,
+    }
+    addedScrapFeeds.push(scrapObj);
+    dispatch(allActions.userActions.setScrapFeeds(addedScrapFeeds))
+    POSTScrapFeed(scrapFeedArray)
+    .then(function(response: any) {
+      console.log("스크랩성공", response)
+    })
+    .catch(function(error: any) {
+      console.log("스크랩실패", error);
+    })
+    }
+
+    const deleteScrapFeed = () => {
+      var scrapFeedArray = new Array();
+      scrapFeedArray.push(postId);
+      setCurrentUserScrap(false);
+
+      DELETEScrapFeed(scrapFeedArray)
+      .then(function(response) {
+        console.log("스크랩삭제 성공", response)
+      })
+      .catch(function(error) {
+        console.log("스크랩삭제 실패", error);
+      })
+
+      var deletedScrapFeeds = currentUser.scrapFeeds;
+      var deletedFeedIndex = deletedScrapFeeds.indexOf(postId);
+      deletedScrapFeeds.splice(deletedFeedIndex, 1);
+      dispatch(allActions.userActions.setScrapFeeds(deletedScrapFeeds))
+    }
   
 
    return (
@@ -562,10 +614,23 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
             <InfoCountText>{allCommentCount}</InfoCountText>
           </InfoContainer>
           </TouchableWithoutFeedback>
-          <InfoContainer>
-            <ScrapIcon
-            source={require('~/Assets/Images/ic_scrap_outline.png')}/>
-          </InfoContainer>
+          {!currentUserScrap && (
+            <TouchableWithoutFeedback onPress={() => addScrapFeed()}>
+              <InfoContainer>
+               <ScrapIcon
+            source={require('~/Assets/Images/Feed/ic_emptyScrap.png')}/>
+              </InfoContainer>
+          </TouchableWithoutFeedback>
+          )}
+          {currentUserScrap && (
+            <TouchableWithoutFeedback onPress={() => deleteScrapFeed()}>
+              <InfoContainer>
+                <PressedScrapIcon
+                source={require('~/Assets/Images/Feed/ic_pressedScrap.png')}/>
+              </InfoContainer>
+            </TouchableWithoutFeedback>
+
+          )}
       </BottomBar>
 
        </Container>

@@ -7,14 +7,15 @@ import {
 import {TouchableWithoutFeedback, FlatList, ScrollView, Animated, Image} from 'react-native'
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
-
-import CollectionFeedItem from '~/Components/Presentational/CollectionDetailScreen/CollectionFeedItem';
-import CollectionTileFeedItem from '~/Components/Presentational/CollectionDetailScreen/CollectionTileFeedItem';
-import { statusBarHeight } from '~/Components/Presentational/UploadScreen/TagSearchSlidingUp/libs/layout';
 import ActionSheet from 'react-native-actionsheet';
 
-const actionSheetRef = createRef();
+// Local Component
+import CollectionTileFeedItem from '~/Components/Presentational/CollectionDetailScreen/CollectionTileFeedItem';
 
+// Route
+import GETCollectionDetailInfo from '~/Route/Collection/GETCollectionDetailInfo';
+
+const actionSheetRef = createRef();
 const Container = Styled.SafeAreaView`
  flex: 1;
  background-color: #ffffff;
@@ -134,13 +135,16 @@ const MarkerFeedImage = Styled.Image`
 const CollectionInfoContainer = Styled.View`
  width: ${wp('100%')};
  background-color: #ffffff;
- padding: 0px 16px 15px 16px;
+ padding: 0px 16px 11px 16px;
 `;
 
 const CollectionInfoHeader = Styled.View`
  flex-direction: row;
  align-items: center;
  justify-content: space-between;
+ padding-bottom: 16px;
+ border-bottom-width: 0.6px;
+ border-color: #ececee;
 `;
 
 const CollectionIconContainer = Styled.View`
@@ -166,9 +170,8 @@ const CollectionTitleText = Styled.Text`
 
 const CollectionDescripText = Styled.Text`
  margin-top: 12px;
- font-weight: 300;
- font-size: 15px;
- color: #50555C;
+ font-size: 17px;
+ color: #56575C;
 `;
 
 const CollectionInfoFooter = Styled.View`
@@ -187,7 +190,6 @@ const CollectionFeedLabelText = Styled.Text`
  font-size: 13px;
  color: #000000;
 `;
-
 
 const CollectionLikeLabelText = Styled.Text`
  margin-left: 12px;
@@ -216,6 +218,41 @@ const CollectionMoreIcon = Styled.Image`
  width: ${wp('9%')};
  height: ${wp('9%')};
  tint-color: #ffffff;
+`;
+
+const WriterProfileContainer = Styled.View`
+padding-top: 12px;
+ flex-direction: row;
+ align-items: center;
+ justify-content: space-between;
+`;
+
+const WriterInfoContainer = Styled.View`
+flex-direction: row;
+align-items: center;
+`;
+
+const ProfileImage = Styled.Image`
+ width: ${wp('6.9%')};
+ height: ${wp('6.9%')};
+ border-radius: 100px;
+`;
+
+const ProfileNicknameText = Styled.Text`
+margin-left: 8px;
+color: #1D1E1F;
+font-weight: 600;
+font-size: 15px;
+`;
+
+const FollowText = Styled.Text`
+font-size: 15px;
+color: #007AFF; 
+`;
+
+const FollowingText = Styled.Text`
+font-size: 15px;
+color: #007AFF;
 `;
 
 
@@ -256,6 +293,7 @@ const LatLng = {
 
 const CollectionDetailScreen = ({navigation, route}: Props) => {
     const [headerBlur, setHeaderBlur] = useState<boolean>(false);
+    const [collectionDetailInfo, setCollectionDetailInfo] = useState<Array<object>>([]);
 
     const H_MAX_HEIGHT = wp('100%')
     const H_MIN_HEIGHT = wp('25.6%');
@@ -269,11 +307,32 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
         extrapolate: "clamp"
     })
 
+    useEffect(() => {
+        if(route.params?.collectionId) {
+           GETCollectionDetailInfo(route.params.collectionId)
+           .then(function(response) {
+               console.log("GETCollectionDetailInfo response", response)
+               setCollectionDetailInfo(response.collection);
+           })
+           .catch(function(error) {
+               console.log("GETCollectionDetailInfo error", error)
+           })
+        }
+
+    }, [route.params?.collectionId])
+
     
 
     const renderCollectionFeedItem = ({item, index}) => {
         return (
-            <CollectionTileFeedItem/>
+            <CollectionTileFeedItem
+            mainImage={item.mediaFiles[0] ? item.mediaFiles[0].uri : null}
+            mainTag={item.mainTags.name}
+            rating={item.starRate}
+            expense={item.expense}
+            location={item.address}
+            feedId={item.id}
+            />
         )
     }
 
@@ -329,7 +388,7 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
                     </TouchableWithoutFeedback>
                 </HeaderLeftContainer>
                 {headerBlur && (
-                <HeaderCollectionTitleText>컬렉션1</HeaderCollectionTitleText>
+                <HeaderCollectionTitleText>{collectionDetailInfo.name}</HeaderCollectionTitleText>
                 )}
                 <TouchableWithoutFeedback onPress={() => showActionSheet()}>
                 <HeaderRightContainer>
@@ -346,9 +405,9 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
             scrollEventThrottle={5}
             showsVerticalScrollIndicator={false}
             >
-            <CollectionInfoContainer style={{paddingTop:H_MAX_HEIGHT-20}}>
+            <CollectionInfoContainer style={{paddingTop:H_MAX_HEIGHT-25}}>
             <CollectionInfoHeader>
-            <CollectionTitleText>컬렉션1</CollectionTitleText>
+            <CollectionTitleText>{collectionDetailInfo.name}</CollectionTitleText>
             <CollectionIconContainer>
             <CollectionLikeIcon
             source={require('~/Assets/Images/ic_heart_outline.png')}/>
@@ -356,25 +415,30 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
             source={require('~/Assets/Images/ic_scrap_outline.png')}/>
             </CollectionIconContainer>
             </CollectionInfoHeader>
-            <CollectionDescripText>
-            핫플 카페만 조진지 12년
-            나에게 유의미한 맛을 줬던 카페만 모아봄 ...
+            <WriterProfileContainer>
+                <WriterInfoContainer>
+                <ProfileImage
+                source={{uri:route.params?.profileImage}}
+                />
+                <ProfileNicknameText>{route.params?.profileNickname}</ProfileNicknameText>
+                </WriterInfoContainer>
+                <FollowText>팔로우</FollowText>
+            </WriterProfileContainer>
+            <CollectionDescripText>{collectionDetailInfo.description}
             </CollectionDescripText>
             <CollectionInfoFooter>
             <CollectionSocialContainer>
             <CollectionFeedLabelText>게시글</CollectionFeedLabelText>
-            <CollectionInfoCountText>45</CollectionInfoCountText>
+            <CollectionInfoCountText>{collectionDetailInfo.Posts ? collectionDetailInfo.Posts.length : null}</CollectionInfoCountText>
             <CollectionLikeLabelText>좋아요</CollectionLikeLabelText>
-            <CollectionInfoCountText>4K</CollectionInfoCountText>
-            <CollectionScrapLabelText>스크랩</CollectionScrapLabelText>
-            <CollectionInfoCountText>4K</CollectionInfoCountText>
+            <CollectionInfoCountText>{collectionDetailInfo.Like}</CollectionInfoCountText>
             </CollectionSocialContainer>
             </CollectionInfoFooter>
             </CollectionInfoContainer>
             <FlatList
-            columnWrapperStyle={{justifyContent:'space-between', paddingLeft:16, paddingRight:15, paddingTop:17, paddingBottom:0}}
+            columnWrapperStyle={{justifyContent:'space-between', paddingLeft:16, paddingRight:15, paddingTop:11, paddingBottom:0}}
             numColumns={2}
-            data={TEST_COLLECTION_DATA.feed}
+            data={collectionDetailInfo.Posts}
             renderItem={renderCollectionFeedItem}
             />
             <LocationMapContainer>

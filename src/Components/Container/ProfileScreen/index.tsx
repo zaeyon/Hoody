@@ -31,6 +31,7 @@ import GetProfileCollection from '~/Route/Profile/GetProfileCollection';
 const Container = Styled.SafeAreaView`
  flex: 1;
  background-color: #ffffff;
+ 
 `;
 
 const FeedListTabContainer = Styled.View`
@@ -455,7 +456,7 @@ const ProfileScreen = ({navigation, route}: Props) => {
       })
     }
 
-  }, [route.params?.requestedUserNickname])
+  }, [route.params?.collectionListChange])
 
   useEffect(() => {
     console.log("Profile route", route);
@@ -628,10 +629,12 @@ const ProfileScreen = ({navigation, route}: Props) => {
        currentSortType={selectedFeedSortType}
        />
       </FeedListTabContainer>
-      <CollectionListTabContainer 
+      <CollectionListTabContainer
       onLayout={(event) => measureCollectionListTab(event)}
       tabLabel="컬렉션">
        <ProfileCollectionList
+       profileImage={userInfoData.profileImg ? userInfoData.profileImg : null}
+       profileNickname={userInfoData.nickname ? userInfoData.nickname : null}
        collectionListData={collectionListData}
        navigation={navigation}
        /> 

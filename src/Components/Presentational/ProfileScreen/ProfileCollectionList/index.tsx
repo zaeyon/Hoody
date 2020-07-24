@@ -11,8 +11,6 @@ import ProfileCollectionItem from '~/Components/Presentational/ProfileScreen/Pro
 const UserCollectionListContainer = Styled.View`
 width: ${wp('100%')};
 background-color: #ffffff;
-padding-bottom: 350px;
-
 `;
 
 const NoCollectionContainer = Styled.View`
@@ -49,12 +47,17 @@ font-size: 16px;
 color: #4b4b4b;
 `;
 
+const CollectionItemContainer = Styled.View`
+`;
+
 interface Props {
     collectionListData: Array<object>;
     navigation: any,
+    profileNickname: string,
+    profileImage: string,
 }
 
-const ProfileCollectionList = ({collectionListData, navigation}: Props) => {
+const ProfileCollectionList = ({collectionListData, navigation, profileNickname, profileImage}: Props) => {
     const [addNewCollection, setAddNewCollection] = useState<boolean>(true);
     
     useEffect(() => {
@@ -63,11 +66,17 @@ const ProfileCollectionList = ({collectionListData, navigation}: Props) => {
 
     const renderProfileCollectionItem = ({item, index}) => {
            return (
+            <CollectionItemContainer
+            style={index == collectionListData.length-1}>
             <ProfileCollectionItem
-            coverImage={item.coverImage}
+            collectionId={item.id}
+            coverImage={'https://i.pinimg.com/564x/9a/5f/12/9a5f120317a83632166bb3171d6b5614.jpg'}
             name={item.name}
             navigation={navigation}
+            profileNickname={profileNickname}
+            profileImage={profileImage}
             />
+            </CollectionItemContainer>
            )
     }
 
@@ -89,7 +98,7 @@ const ProfileCollectionList = ({collectionListData, navigation}: Props) => {
         return (
             <UserCollectionListContainer>
                 <FlatList
-                columnWrapperStyle={{justifyContent:'space-between', paddingLeft:15, paddingRight:15, paddingTop:17, paddingBottom:0}}
+                columnWrapperStyle={{justifyContent:'space-between', paddingLeft:15, paddingRight:15, paddingTop:17, paddingBottom:10, backgroundColor:'#ffffff'}}
                 numColumns={2}
                 data={collectionListData}
                 renderItem={renderProfileCollectionItem}

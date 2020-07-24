@@ -210,7 +210,9 @@ const AddCollectionFeedScreen = ({navigation, route}: Props) => {
                 POSTCreateCollection(route.params.coverImage, route.params.title, route.params.description, route.params.private, route.params.includeLocation, selectingFeedIdList)
                 .then(function(response) {
                     console.log("콜렉션 업로드 성공", response);
-                    navigation.navigate("ProfileScreen");
+                    navigation.navigate("ProfileScreen", {
+                        collectionListChange: true,
+                    });
                 })
                 .catch(function(error) {
                     console.log("콜렉션 업로드 실패", error);

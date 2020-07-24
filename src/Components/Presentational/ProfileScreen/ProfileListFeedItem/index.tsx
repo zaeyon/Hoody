@@ -1,42 +1,62 @@
 import React, {useEffect, useState} from 'react';
 import Styled from 'styled-components/native';
-import {FlatList, TouchableWithoutFeedback, View} from 'react-native';
-
+import {FlatList, TouchableWithoutFeedback, View, StyleSheet} from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import {useSelector, useDispatch} from 'react-redux';
+import allActions from '~/action';
 
+// Route
 import GetFeedDetail from '~/Route/Post/GetFeedDetail';
+import {POSTLike, DELETELike} from '~/Route/Post/Like';
+import POSTScrapFeed from '~/Route/Post/Scrap/POSTScrapFeed';
+import DELETEScrapFeed from '~/Route/Post/Scrap/DELETEScrapFeed';
 
 const Container = Styled.View`
-`;
+
+ `;
 
 const FeedItemContainer = Styled.View`
- width: ${wp('100%')};
- flex-direction: column;
- padding-top: 13px;
- padding-left: 13px;
- padding-right: 13px;
+ width: ${wp('100%')}px;
+ background-color:#ffffff;
+ flex-direction: row;
+ padding-top: 10px;
+`;
+
+const LeftContainer = Styled.View`
+ width: ${wp('12%')}px;
+ padding: 5px 0px 0px 55px;
+ align-items: flex-end;
 `;
 
 const RightContainer = Styled.View`
- width: ${wp('100%')}
- padding: 5px 10px 0px 10px;
+ width: ${wp('88%')}px;
+ padding: 5px 20px 0px 7px;
 `;
 
 const HeaderContainer = Styled.View`
- flex-direction: column;
+ flex-direction: row;
+ justify-content: space-between;
  `;
 
 const BodyContainer = Styled.View`
- padding-top: 3px;
+ padding-top: 5px;
 `;
 
 const FooterContainer = Styled.View`
-padding-top: 15px;
-padding-bottom: 10px;
-align-items: flex-end;
+padding-top: 10px;
+padding-bottom: 13px;
+padding-left: 5px;
+padding-right: 5px;
+`;
+
+const FooterLeftContainer = Styled.View`
+flex-direction: row;
+`;
+
+const FooterRightContainer = Styled.View`
 `;
 
 const WriterContainer = Styled.View`
@@ -45,28 +65,7 @@ const WriterContainer = Styled.View`
  align-items: center;
 `;
 
-const HeaderTopContainer = Styled.View`
-flex-direction: row;
-justify-content: space-between;
-`;
-
-const HeaderTopRightContainer = Styled.View`
- flex-direction: row;
-`;
-
-const ExpenseContainer = Styled.View`
- justify-content: center;
-`;
-const ExpenseText = Styled.Text`
- font-weight: 500;
- font-size: 13px;
- color: #333333;
-`;
-
-const RatingText = Styled.Text`
-font-weight: 500;
-font-size: 13px;
-color: #333333;
+const HeaderCenterContainer = Styled.View`
 `;
 
 const NicknameCreatedAtContainer = Styled.View`
@@ -75,39 +74,44 @@ const NicknameCreatedAtContainer = Styled.View`
 `;
 
 const CreatedAtText = Styled.Text`
- color: #333333;
- font-size: 15px;
- font-weight: 600;
+ margin-left: 7px;
+ color: #cccccc;
+ font-size: 12px;
 `;
 
 const WriterProfileImage = Styled.Image`
 border-radius: 100px;
-width: ${wp('9.6%')};
-height: ${wp('9.6%')};
+width: ${wp('9.6%')}px;
+height: ${wp('9.6%')}px;
 `;
 
 const WriterNickname = Styled.Text`
-font-size: 15px;
+font-size: 16px;
 font-weight: 600;
 `;
 
 
 const LocationText = Styled.Text`
- margin-top: 0px;
+ margin-top: 4px;
  font-size: 13px;
  color: #8e8e8e;
 `;
 
-const RatingContainer = Styled.View`
+const ExpenseRatingContainer = Styled.View`
  flex-direction: row;
- align-items: center;
- margin-left: 10px;
 `;
 
 const RatingStarImage = Styled.Image`
+margin-left: 5px;
 margin-right: 3px;
-width: ${wp('3.2%')};
-height: ${wp('3.2%')};
+width: ${wp('3.2%')}px;
+height: ${wp('3.2%')}px;
+`;
+
+const RatingText = Styled.Text`
+font-weight: 500;
+font-size: 13px;
+color: #1D1E1F;
 `;
 
 const HalfRatingStarImage = Styled.Image`
@@ -121,12 +125,13 @@ tint-color: #23E5D2;
 
 const ManyReviewImageContainer = Styled.View`
 padding-top: 10px;
+margin-bottom: 5px;
  flex-direction: row;
 `;
 
 const ImageCountBackground = Styled.View`
  top: 15px;
- right: 15px;
+ right: 5px;
  padding: 5px 9px 5px 9px;
  position: absolute;
  border-radius: 26px;
@@ -144,28 +149,30 @@ const FirstImage = Styled.Image`
  border-top-left-radius: 10px;
  border-bottom-left-radius: 10px;
 resize-mode:cover;
-width: ${wp('46%')};
-height: ${wp('46%')};
+width: ${wp('40.5%')}px;
+height: ${wp('44%')}px;
 `;
 
 const SecondImage = Styled.Image`
- margin-left: 3.0px;
+ margin-left: 2.5px;
  border-top-right-radius: 10px;
  border-bottom-right-radius: 10px;
 resize-mode:cover;
- width: ${wp('46%')};
- height: ${wp('46%')};
+ width: ${wp('40.5%')}px;
+ height: ${wp('44%')}px;
 `;
 
 const ReviewImageContainer = Styled.View`
 padding-top: 10px;
+height: ${wp('82%')}px;
+margin-bottom: 10px;
 `;
 
 const ReviewImage = Styled.Image`
 resize-mode:cover;
 border-radius: 10px; 
-height: ${wp('93%')};
-width: ${wp('93%')};
+width: ${wp('82%')}px
+height: ${wp('82%')}px;
 `;
 
 const TagContainer = Styled.View`
@@ -225,6 +232,7 @@ const PriceIcon = Styled.Image`
 `;
 
 const PriceText = Styled.Text`
+ margin-left: 2px;
  font-size: 14px;
  color: #707070;
 `;
@@ -239,9 +247,11 @@ const DescriptionText = Styled.Text`
 `;
 
 const AdditionalInfoContainer = Styled.View`
- padding-top: 10px;
+ padding-top: 0px;
  flex-direction: row;
- justify-content: center;
+ align-items: center;
+ justify-content: space-between;
+ 
 `;
 
 const InfoLabelText = Styled.Text`
@@ -250,9 +260,11 @@ const InfoLabelText = Styled.Text`
 `;
 
 const InfoCountText = Styled.Text`
+ position: absolute;
+ left: ${wp('3.5%')}
  margin-left: 5px;
  font-size: 13px;
- color: #cccccc;
+ color: #8E9199;
 `;
 
 const InfoDivider = Styled.Text`
@@ -265,32 +277,34 @@ const InfoDivider = Styled.Text`
 const InfoContainer = Styled.View`
  flex-direction: row;
  align-items: center;
- margin-left: 15px;
 `;
 
 const ItemBottomBorder = Styled.View`
  background-color: #F1F1F1;
- width: ${wp('100%')};
+ width: ${wp('100%')}px;
  height: 1px;
 `;
 
 const LikeIcon = Styled.Image`
-width: ${wp('4.0%')};
-height: ${wp('3.5%')};
+width: ${wp('4.0%')}px;
+height: ${wp('3.5%')}px;
 `;
 
 const CommentIcon = Styled.Image`
-width: ${wp('4%')};
-height: ${wp('4%')};
+width: ${wp('4%')}px;
+height: ${wp('4%')}px;
 `;
 
 const ScrapIcon = Styled.Image`
-width: ${wp('3.5%')};
-height: ${wp('4.0%')};
+width: ${wp('4.5%')}px;
+height: ${wp('4.5%')}px;
 `;
 
-
-
+const ExpenseText = Styled.Text`
+ font-weight: 500;
+ font-size: 13px;
+ color: #1D1E1F;
+`;
 
 interface Props {
   id: number;
@@ -306,10 +320,11 @@ interface Props {
   image_count: number;
   like_count: number;
   comment_count: number;
+  reply_count: number;
   scrap_count: number;
   location: string;
   expense: number;
-  descripArray: Array<object>;
+  desArray: Array<object>;
   navigation: any;
   mediaFiles: Array<objevt>;
 }
@@ -328,13 +343,13 @@ const ProfileListFeedItem = ({
   image_count,
   like_count,
   comment_count,
+  reply_count,
   scrap_count,
   location,
   expense,
   desArray,
   navigation,
   mediaFiles,
-  descripArray,
 }: Props) => {
   const [ratingArray, setRatingArray] = useState([
     'empty',
@@ -347,7 +362,14 @@ const ProfileListFeedItem = ({
   const [feedDetailInfo, setFeedDetailInfo] = useState('');
   const [paragraphData, setParagraphData] = useState();
   const [createdDate, setCreatedDate] = useState();
-
+  const [changeState, setChangeState] = useState<boolean>(false);
+  const [currentUserLike, setCurrentUserLike] = useState<boolean>();
+  const [currentUserScrap, setCurrentUserScrap] = useState<boolean>();
+  const [likeCount, setLikeCount] = useState<number>(like_count);
+  const [allCommentCount, setAllCommentCount] = useState<number>(comment_count+reply_count);
+  const currentUser = useSelector((state) => state.currentUser);
+  const dispatch = useDispatch();
+  var likeFeedsIndex: any;
   const tmpRatingArr = ['empty', 'empty', 'empty', 'empty', 'empty'];
 
   useEffect(() => {
@@ -380,10 +402,53 @@ const ProfileListFeedItem = ({
     setCreatedDate(tmpCreatedDate);
     console.log("description", desArray);
     console.log("feedId", id);
-    console.log("피드 상세 미디어파일",mediaFiles )
-    console.log("피드 descripArray", descripArray)
+    console.log("피드 상세 미디어파일",mediaFiles)
+    console.log("피드 닉네임", nickname)
+    setChangeState(!changeState);
 
+    console.log("feedITem currentUser", currentUser);
+
+    var index = currentUser.likeFeeds.findIndex(obj => obj.id === id);
+    if(index !== -1) {
+      setCurrentUserLike(true);
+      likeFeedsIndex = index;
+    } else if(index === -1) {
+      setCurrentUserLike(false);
+    }
+    console.log("해당 피드가 사용자가 좋아요한 피드목록에 있음", index); 
+
+    var scrapFeedIndex = currentUser.scrapFeeds.findIndex(obj => obj.id === id);
+    if(scrapFeedIndex !== -1) {
+      setCurrentUserScrap(true);
+    } else if(scrapFeedIndex === -1) {
+      setCurrentUserScrap(false);
+    }
   }, []);
+
+  useEffect(() => {
+    //console.log("currentUser.likeFeeds[0].Like", currentUser.likeFeeds[0].Like)
+    var index = currentUser.likeFeeds.findIndex(obj => obj.id === id);
+    if(index !== -1) {
+      if(!currentUserLike) {
+        setLikeCount(likeCount+1)
+        setCurrentUserLike(true);
+      } 
+    } else if(index === -1) {
+      if(currentUserLike) {
+        setLikeCount(likeCount-1)
+        setCurrentUserLike(false);
+      }
+    }
+
+    var scrapFeedIndex = currentUser.scrapFeeds.findIndex(obj => obj.id === id);
+    if(scrapFeedIndex !== -1) {
+      setCurrentUserScrap(true);
+    } else if(scrapFeedIndex === -1) {
+        setCurrentUserScrap(false);
+    }
+
+  }, [currentUser])
+
 
   function getDateFormat(date) {
     var tmpDate = new Date(date);
@@ -392,79 +457,140 @@ const ProfileListFeedItem = ({
     month = month >= 10 ? month : '0' + month;
     var day = tmpDate.getDate();
     day = day >= 10 ? day : '0' + day;
-    return year + '/' + month + '/' + day;
+    return year + '년 ' + month + '월 ' + day + '일 '
 }
 
-  const onClickFeedItem = () => {
-    GetFeedDetail(id)
+  const deleteLike = () => {
+    console.log("currentUser.likeFeeds", currentUser.likeFeeds);
+    var removedLikeFeeds = currentUser.likeFeeds;
+    var deletedIndex = currentUser.likeFeeds.findIndex(obj => obj.id === id);
+    removedLikeFeeds.splice(deletedIndex, 1);
+    console.log("deletedLike", removedLikeFeeds);
+    dispatch(allActions.userActions.setLikeFeeds(removedLikeFeeds))
+    setCurrentUserLike(false);
+    setLikeCount(likeCount-1);
+    console.log("deleteLike currentUser.user.userId", currentUser.user.userId);
+    console.log("deleteLike id", id);
+    DELETELike(currentUser.user.userId, id)
     .then(function(response) {
-      setParagraphData(response.data.postBody)
-      setFeedDetailInfo(response.data);
-
-      navigation.navigate("FeedDetailScreen", {
-        paragraphData: response.data.postBody,
-        feedDetailInfo: response.data,
-        tagList: tagList,
-        ratingArray: ratingArray,
-      })
-    }).catch(function(error) {
-      console.log("error", error);
     })
+    .catch(function(error) {
+      console.log("좋아요 삭제 error", error)
+    })
+  }
+
+  const addLike = () => {
+    var addedLikeFeeds = currentUser.likeFeeds;
+    const likeObj = {
+      id: id,
+      likeCount: likeCount+1
+    }
+
+    addedLikeFeeds.push(likeObj);
+    dispatch(allActions.userActions.setLikeFeeds(addedLikeFeeds))
+    setCurrentUserLike(true);
+    setLikeCount(likeCount+1);
+    POSTLike(currentUser.user.userId, id)
+    .then(function(response) {
+    })
+    .catch(function(error) {
+      console.log("좋아요 추가 error", error);
+    })
+  }
+
+  const addScrapFeed = () => {
+    var scrapFeedArray = new Array();
+    scrapFeedArray.push(id);
+    setCurrentUserScrap(true);
+
+    var addedScrapFeeds = currentUser.scrapFeeds;
+    const scrapObj = {
+      id: id,
+    }
+    addedScrapFeeds.push(scrapObj);
+    dispatch(allActions.userActions.setScrapFeeds(addedScrapFeeds))
+    POSTScrapFeed(scrapFeedArray)
+    .then(function(response: any) {
+      console.log("스크랩성공", response)
+    })
+    .catch(function(error: any) {
+      console.log("스크랩실패", error);
+    })
+  }
+
+  const deleteScrapFeed = () => {
+    setCurrentUserScrap(false);
+    var tmpFeedIds = new Array();
+    tmpFeedIds.push(id);
+
+    console.log("tmpFeedIds", tmpFeedIds)
+    var deletedScrapFeeds = currentUser.scrapFeeds;
+    var deleteIndex = currentUser.scrapFeeds.findIndex(obj => obj.id === id);
+    deletedScrapFeeds.splice(deleteIndex, 1);
     
+    dispatch(allActions.userActions.setScrapFeeds(deletedScrapFeeds));
+    DELETEScrapFeed(tmpFeedIds)
+    .then(function(response) {
+      console.log("스크랩삭제", response);
+    })
+    .catch(function(error) {
+      console.log("스크랩삭제 실패", error);
+    })
+  }
+
+  const moveToWriterProfile = () => {
+    navigation.navigate("AnotherUserProfileStack", {
+      screen: 'AnotherUserProfileScreen',
+      params: {requestedUserNickname: nickname}
+    });
+  }
+
+  const moveToFeedDetail = () => {
+    navigation.navigate("FeedStack", {
+      screen: "FeedDetailScreen",
+      params: {
+      feedId:id,
+      tagList: tagList,
+      ratingArray: ratingArray,
+      createdAt: createdDate,
+      currentUserLike: currentUserLike,
+      currentUserScrap: currentUserScrap,
+      }
+    })
   }
 
   return (
     <Container>
       <FeedItemContainer>
+        <LeftContainer>
+        <TouchableWithoutFeedback onPress={() => moveToWriterProfile()}>
+        <WriterProfileImage
+              source={{uri: profile_image}}></WriterProfileImage>
+         </TouchableWithoutFeedback>
+        </LeftContainer>
+        <RightContainer>
         <HeaderContainer>
-              <HeaderTopContainer>
+          <WriterContainer>
+              <HeaderCenterContainer>
              <NicknameCreatedAtContainer>
-  <CreatedAtText>{createdDate}</CreatedAtText>
-  </NicknameCreatedAtContainer>
-  <HeaderTopRightContainer>
-    <ExpenseContainer>
-    <ExpenseText>{expense ? expense+"원" : null}</ExpenseText>
-    </ExpenseContainer>
-  <RatingContainer>
-    {/*
-            <FlatList
-              horizontal={true}
-              data={ratingArray}
-              renderItem={({item, index}) => {
-                if (item === 'full') {
-                  return (
-                    <RatingStarImage
-                      source={require('~/Assets/Images/ic_newStar.png')}
-                    />
-                  );
-                } else if (item === 'half') {
-                  return (
-                    <RatingStarImage
-                      source={require('~/Assets/Images/ic_newHalfStar.png')}
-                    />
-                  );
-                } else if (item === 'empty') {
-                  
-                }
-              }}
-            />
-     */}
-     <RatingStarImage
-     source={require('~/Assets/Images/ic_newStar.png')}/>
-     <RatingText>{rating}</RatingText>
-          </RatingContainer>
-          </HeaderTopRightContainer>
-            </HeaderTopContainer>
+            <TouchableWithoutFeedback onPress={() => moveToWriterProfile()}>
+            <WriterNickname>{nickname}</WriterNickname>
+            </TouchableWithoutFeedback>
+            </NicknameCreatedAtContainer>
             {location !== null && (
               <LocationText>{location}</LocationText>
             )}
+            </HeaderCenterContainer>
+          </WriterContainer>
+          <ExpenseRatingContainer>
+            <ExpenseText>{"300원"}</ExpenseText>
+            <RatingStarImage
+            source={require('~/Assets/Images/ic_newStar.png')}
+            />
+            <RatingText>{rating}</RatingText>
+          </ExpenseRatingContainer>
         </HeaderContainer>
-        <TouchableWithoutFeedback onPress={() => navigation.navigate("FeedDetailScreen", {
-          feedId:id,
-          tagList: tagList,
-          ratingArray: ratingArray,
-          createdAt: createdDate
-        })}>
+        <TouchableWithoutFeedback onPress={() => moveToFeedDetail()}>
         <View>
         <BodyContainer>
         <TagContainer>
@@ -485,7 +611,7 @@ const ProfileListFeedItem = ({
             />
           </TagContainer>
         <DescriptionContainer>
-            <DescriptionText>{descripArray[0]?descripArray[0].description:null}</DescriptionText>
+            <DescriptionText>{desArray[0] ? desArray[0].description : null}</DescriptionText>
           </DescriptionContainer>
           {mediaFiles.length === 1 && (
           <ReviewImageContainer>
@@ -506,29 +632,71 @@ const ProfileListFeedItem = ({
         </BodyContainer>
         <FooterContainer>
           <AdditionalInfoContainer>
+            <FooterLeftContainer>
+            {currentUserLike && (
+            <TouchableWithoutFeedback onPress={() => deleteLike()}>
             <InfoContainer>
             <LikeIcon
+            source={require('~/Assets/Images/ic_pressedLike.png')}/>
+            <InfoCountText style={currentUserLike && styles.pressedLikeText}>{likeCount}</InfoCountText>
+            </InfoContainer>
+            </TouchableWithoutFeedback>
+            )}
+            {!currentUserLike && (
+            <TouchableWithoutFeedback onPress={() => addLike()}>
+            <InfoContainer>
+            <LikeIcon
+style={{tintColor:'#8E9199'}}
             source={require('~/Assets/Images/ic_like.png')}/>
-            <InfoCountText>{like_count}</InfoCountText>
+            <InfoCountText>{likeCount}</InfoCountText>
             </InfoContainer>
-            <InfoContainer>
+            </TouchableWithoutFeedback>
+            )}
+            <InfoContainer style={{marginLeft: 50}}> 
             <CommentIcon
+style={{tintColor:'#8E9199'}}
             source={require('~/Assets/Images/ic_comment.png')}/>
-            <InfoCountText>{comment_count}</InfoCountText>
+            <InfoCountText>{allCommentCount}</InfoCountText>
             </InfoContainer>
-            <InfoContainer>
+            </FooterLeftContainer>
+            <FooterRightContainer>
+              {!currentUserScrap && (
+            <TouchableWithoutFeedback onPress={() => addScrapFeed()}>
+            <InfoContainer style={{paddingTop: 3}}
+            >
             <ScrapIcon
-            source={require('~/Assets/Images/ic_scrap.png')}/>
-            <InfoCountText>{scrap_count}</InfoCountText>
+            style={{tintColor:'#8E9199'}}
+            source={require('~/Assets/Images/Feed/ic_emptyScrap.png')}/>
             </InfoContainer>
+            </TouchableWithoutFeedback>
+              )}
+              {currentUserScrap && (
+              <TouchableWithoutFeedback onPress={() => deleteScrapFeed()}>
+                <InfoContainer style={{paddingTop: 3}}>
+                  <ScrapIcon
+                  source={require('~/Assets/Images/Feed/ic_pressedScrap.png')}/>
+                </InfoContainer>
+              </TouchableWithoutFeedback>
+              )}
+            </FooterRightContainer>
           </AdditionalInfoContainer>
         </FooterContainer>
         </View>
         </TouchableWithoutFeedback>
+        </RightContainer>
       </FeedItemContainer>
-<ItemBottomBorder/>
-</Container>
+      <ItemBottomBorder/>
+    </Container>
   );
 };
+
+const styles = StyleSheet.create({
+  pressedLikeIcon : {
+    tintColor: '#F86C57'
+  }, 
+  pressedLikeText : {
+    color: '#F86C57'
+  }
+})
 
 export default ProfileListFeedItem;

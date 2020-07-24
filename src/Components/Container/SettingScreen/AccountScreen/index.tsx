@@ -55,6 +55,26 @@ const HeaderEmptyContainer = Styled.View`
  height: ${wp('6.4%')};
 `;
 
+const BodyContainer = Styled.View`
+flex: 1;
+background-color: #e5e5e570;
+`;
+
+const ItemTitleContainer = Styled.View`
+padding-top: 19px;
+padding-bottom: 19px;
+padding-left: 16px;
+padding-right: 16px;
+justify-content: center;
+background-color: #ffffff;
+`;
+
+const ItemTitleText = Styled.Text`
+ font-size: 18px;
+ font-weight: 600;
+ color: #1D1E1F;
+`;
+
 interface Props {
     navigation: any,
     route: any,
@@ -78,6 +98,11 @@ const AccountScreen = ({navigation, route}: Props) => {
                     </HeaderEmptyContainer>
                 </HeaderRightContainer>
             </HeaderBar>
+            <BodyContainer>
+                <ItemTitleContainer>
+                    <ItemTitleText>계정 및 개인정보</ItemTitleText>
+                </ItemTitleContainer>
+            </BodyContainer>
         </Container>
         
     )

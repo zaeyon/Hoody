@@ -351,6 +351,9 @@ function ProfileStackScreen() {
       <ProfileStack.Screen
       name="ScrapListScreen"
       component={ScrapListScreen}/>
+    <ProfileStack.Screen
+    name="FeedStack"
+    component={FeedStackScreen}/>
     </ProfileStack.Navigator>
   );
 }
@@ -656,7 +659,7 @@ function BottomTab() {
       <Tab.Screen 
       name="Profile" 
       component={ProfileStackScreen}
-      options={{
+      options={({route}) => ({
         tabBarIcon: ({focused}: {focused: boolean}) => (
           <Image
             style={{width: 30, height: 30}}
@@ -666,7 +669,8 @@ function BottomTab() {
           />
         ),
         unmountOnBlur: true,
-      }}
+        tabBarVisible: getTabBarVisibility(route)
+      })}
       listeners={({navigation, route}) => ({
         tabPress: e => {
           // Prevent default action

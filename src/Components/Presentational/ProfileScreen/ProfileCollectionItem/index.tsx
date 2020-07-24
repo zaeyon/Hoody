@@ -28,15 +28,37 @@ const CollectionNameText = Styled.Text`
  font-size: 17px;
 `;
 
+const WriterContainer = Styled.View`
+margin-top: 2px;
+width: ${wp('43.7%')};
+`;
+
+const CollectionWriterNicknameText = Styled.Text`
+ font-size: 14px;
+ color: #56575C;
+`;
+
 interface Props {
+    collectionId: number,
     navigation: any,
     coverImage: string,
-    name: string
+    name: string,
+    profileImage: string,
+    profileNickname: string,
 }
 
-const ProfileCollectionItem = ({coverImage, name, navigation}: Props) => {
+const ProfileCollectionItem = ({coverImage, name, navigation, collectionId, profileImage, profileNickname}: Props) => {
+
+    const moveToCollectionDetailScreen = () => {
+        navigation.navigate("CollectionDetailScreen", {
+            collectionId: collectionId,
+            profileImage: profileImage,
+            profileNickname: profileNickname,
+        });
+    }
+
     return (
-    <TouchableWithoutFeedback onPress={() => navigation.navigate("CollectionDetailScreen")}>
+    <TouchableWithoutFeedback onPress={() => moveToCollectionDetailScreen()}>
         <CollectionContainer>
         <CollectionCoverImage
         source={{uri:coverImage}}
@@ -44,6 +66,9 @@ const ProfileCollectionItem = ({coverImage, name, navigation}: Props) => {
         <CollectionNameContainer>
         <CollectionNameText>{name}</CollectionNameText>
         </CollectionNameContainer>
+        <WriterContainer>
+        <CollectionWriterNicknameText>{profileNickname}</CollectionWriterNicknameText>
+        </WriterContainer>
         </CollectionContainer>
         </TouchableWithoutFeedback>
     )

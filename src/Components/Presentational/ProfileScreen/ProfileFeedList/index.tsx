@@ -102,14 +102,15 @@ const ProfileFeedList = ({navigation, route, feedListData, currentSortType, onSc
             main_tag={item.mainTags.name}
             sub_tag1={item.subTagOnes?item.subTagOnes.name:null}
             sub_tag2={item.subTagTwos?item.subTagTwos.name:null}
-            like_count={item.Likers.length}
-            comment_count={item.comments.length}
+            like_count={item.likes}
+            comment_count={item.commentsCount}
+            reply_count={item.replysCount}
             scrap_count={item.Scraps.length}
             mediaFiles={item.mediaFiles}
             image_count={item.mediaFiles.length}
             location={item.address?item.address.address:null}
             expense={item.expense?item.expense:null}
-            descripArray={item.descriptions}
+            desArray={item.descriptions}
             navigation={navigation}
           />
         )

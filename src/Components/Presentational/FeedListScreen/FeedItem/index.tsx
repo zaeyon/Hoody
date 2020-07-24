@@ -296,8 +296,8 @@ height: ${wp('4%')}px;
 `;
 
 const ScrapIcon = Styled.Image`
-width: ${wp('5%')}px;
-height: ${wp('5%')}px;
+width: ${wp('4.5%')}px;
+height: ${wp('4.5%')}px;
 `;
 
 const ExpenseText = Styled.Text`
@@ -652,7 +652,7 @@ style={{tintColor:'#8E9199'}}
             </InfoContainer>
             </TouchableWithoutFeedback>
             )}
-            <InfoContainer style={{marginLeft: 50}}> 
+            <InfoContainer style={{marginLeft: 50, backgroundColor:'#ffffff'}}> 
             <CommentIcon
 style={{tintColor:'#8E9199'}}
             source={require('~/Assets/Images/ic_comment.png')}/>
@@ -662,7 +662,8 @@ style={{tintColor:'#8E9199'}}
             <FooterRightContainer>
               {!currentUserScrap && (
             <TouchableWithoutFeedback onPress={() => addScrapFeed()}>
-            <InfoContainer>
+            <InfoContainer
+            style={{backgroundColor:'#ffffff', paddingTop:3}}>
             <ScrapIcon
             style={{tintColor:'#8E9199'}}
             source={require('~/Assets/Images/Feed/ic_emptyScrap.png')}/>
@@ -671,7 +672,8 @@ style={{tintColor:'#8E9199'}}
               )}
               {currentUserScrap && (
               <TouchableWithoutFeedback onPress={() => deleteScrapFeed()}>
-                <InfoContainer>
+                <InfoContainer
+                style={{backgroundColor:'#ffffff', paddingTop:3}}>
                   <ScrapIcon
                   source={require('~/Assets/Images/Feed/ic_pressedScrap.png')}/>
                 </InfoContainer>

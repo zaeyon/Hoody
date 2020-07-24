@@ -22,6 +22,11 @@ const currentUser = (state = {}, action) => {
         ...state,
         scrapFeeds: action.payload,
       }
+    case 'SET_USER_ALL_FEEDS':
+      return {
+        ...state,
+        userAllFeeds: action.payload,
+      }
     default:
       return state;
   }

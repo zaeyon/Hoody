@@ -48,7 +48,6 @@ import ProductUrlSearchScreen from '~/Components/Container/ProductUrlSearchScree
 
 // Profile Screen
 import ProfileScreen from '~/Components/Container/ProfileScreen';
-import SettingScreen from '~/Components/Container/SettingScreen';
 import CollectionDetailScreen from '~/Components/Container/CollectionDetailScreen';
 import ProfileScreenTest from '~/Components/Container/ProfileScreenTest'
 import ProfileTestScreen from '~/Components/Container/ProfileTestScreen';
@@ -75,6 +74,12 @@ import AlarmScreen from '~/Components/Container/AlarmScreen';
 import ExploreScreen from '~/Components/Container/ExploreScreen';
 import SearchScreen from '~/Components/Container/SearchScreen';
 
+// Setting Screen
+import SettingScreen from '~/Components/Container/SettingScreen';
+import AccountScreen from '~/Components/Container/SettingScreen/AccountScreen';
+
+// Scrap Screen
+import ScrapListScreen from '~/Components/Container/ScrapListScreen';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
@@ -335,11 +340,17 @@ function ProfileStackScreen() {
       component={SettingScreen}
       />
       <ProfileStack.Screen
+      name="AccountScreen"
+      component={AccountScreen}/>
+      <ProfileStack.Screen
       name="FollowListScreen"
       component={FollowListScreen}/>
       <ProfileStack.Screen
       name="AnotherUserProfileScreen"
       component={AnotherUserProfileScreen}/>
+      <ProfileStack.Screen
+      name="ScrapListScreen"
+      component={ScrapListScreen}/>
     </ProfileStack.Navigator>
   );
 }

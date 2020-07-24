@@ -9,6 +9,7 @@ import {
   BackHandler,
   TouchableWithoutFeedback,
   Image,
+  SafeAreaView,
 } from 'react-native';
 import {
   widthPercentageToDP as wp,
@@ -26,7 +27,6 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     backgroundColor: '#ffffff',
     alignItems: 'center',
-    justifyContent: 'center',
   },
   loader: {
     flexGrow: 1,
@@ -35,23 +35,49 @@ const styles = StyleSheet.create({
   },
 });
 
-const HeaderContainer = Styled.View`
- width: ${wp('100%')};
- height: ${hp('8%')};
+const Container = Styled.SafeAreaView`
+ flex: 1;
  background-color: #FFFFFF;
- border-bottom-width: 0.5px;
- border-color: #c3c3c3;
+ align-items: center;
+`;
+
+const HeaderBar = Styled.View`
+ width: ${wp('100%')};
+ height: ${wp('11.7%')};
+ background-color: #FFFFFF;
  justify-content: space-between;
  align-items: center;
  flex-direction: row;
- padding-left: 13px;
- padding-right: 13px;
 `;
 
-const HeaderTitleText = Styled.Text`
- font-size: 15px;
- 
+const HeaderCancelContainer = Styled.View`
+ padding-top: 12px;
+ padding-left: 16px;
+ padding-bottom: 15px;
+ align-items: center;
+ justify-content: center;
 `;
+
+const HeaderCancelText = Styled.Text`
+ font-size: 17px;
+ color: #c6c7cc;
+`;
+
+const HeaderFinishContainer = Styled.View`
+ padding-top: 12px;
+ padding-left: 16px;
+ padding-right: 16px;
+ padding-bottom: 15px;
+ align-items: center;
+ justify-content: center;
+`;
+
+const HeaderFinishText = Styled.Text`
+ font-weight: 500;
+ font-size: 17px;
+ color: #267DFF;
+`;
+
 
 const CloseButton = Styled.Image`
  width: ${wp('4%')};
@@ -355,14 +381,16 @@ class Gallery_ProfileImage extends Component {
       );
 
     return (
-      <View style={styles.wrapper}>
-        <HeaderContainer>
+      <Container>
+        <HeaderBar>
+          <HeaderCancelContainer>
           <TouchableWithoutFeedback
             onPress={() => this.props.navigation.goBack()}>
-            <CloseButton source={require('~/Assets/Images/close_gray.png')} />
+              <HeaderCancelText>취소</HeaderCancelText>
           </TouchableWithoutFeedback>
+          </HeaderCancelContainer>
           <Dropdown
-            containerStyle={{width: 90, height: hp('13%')}}
+            containerStyle={{paddingTop: 12, width: 100, height: hp('13%')}}
             data={albumName}
             animationDureation={0}
             rippleOpacity={0}
@@ -372,12 +400,14 @@ class Gallery_ProfileImage extends Component {
             inputContainerStyle={{borderBottomWidth: 0}}
             fontSize={18}
           />
+          <HeaderFinishContainer>
           <TouchableWithoutFeedback onPress={() => this._pressFinish()}>
-            <FinishButton source={require('~/Assets/Images/check.png')} />
+            <HeaderFinishText>첨부</HeaderFinishText>
           </TouchableWithoutFeedback>
-        </HeaderContainer>
+          </HeaderFinishContainer>
+        </HeaderBar>
         {flatListOrEmptyText}
-      </View>
+        </Container>
     );
   }
 }

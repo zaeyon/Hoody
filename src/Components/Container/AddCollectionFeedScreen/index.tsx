@@ -5,9 +5,15 @@ import {
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import {TouchableWithoutFeedback, FlatList} from 'react-native';
+import {useSelector} from 'react-redux';
 
+
+// Local Component
 import ProfileTileFeedItem from '~/Components/Presentational/ProfileScreen/ProfileTileFeedItem';
 import SelectFeedItem from '~/Components/Presentational/AddCollectionFeedScreen/SelectFeedItem';
+
+// Route
+import POSTCreateCollection from '~/Route/Collection/POSTCreateCollection';
 
 const Container = Styled.SafeAreaView`
  flex: 1;
@@ -125,13 +131,18 @@ const AddCollectionFeedScreen = ({navigation, route}: Props) => {
     const [selectingFeedList, setSelectingFeedList] = useState<Array<object>>([]);
     const [changeFeedList, setChangeFeedList] = useState<boolean>(false);
     const [triggerType, setTriggerType] = useState<string>("");
+    const currentUser = useSelector((state) => state.currentUser);
 
     useEffect(() => {
-        var tmpSelectableFeedList = TEST_MY_TILE_FEED.map(function(obj) {
+        if(currentUser.userAllFeeds) {
+        var tmpSelectableFeedList = currentUser.userAllFeeds.map(function(obj) {
             obj.selected = false;
             return obj;
         })
-        setSelectableFeedList(tmpSelectableFeedList)
+        setSelectableFeedList(tmpSelectableFeedList);
+
+        console.log("AddCollectionFeedScreen currentUser", currentUser.userAllFeeds);
+        }
     }, [])
 
     useEffect(() => {
@@ -150,6 +161,17 @@ const AddCollectionFeedScreen = ({navigation, route}: Props) => {
         } 
     }, [route.params?.triggerType])
 
+    useEffect(() => {
+        if(route.params?.coverImage) {
+            console.log("coverImage", route.params.coverImage);
+            console.log("title", route.params.title);
+            console.log("description", route.params.description);
+            console.log("private", route.params.private);
+            console.log("includeLocation", route.params.includeLocation);
+            console.log("triggerType", route.params.triggerType);
+        }
+    }, [route.params?.coverImage, route.params.coverImage, route.params.title, route.params.description, route.params.private, route.params.enabledIncludeLocation, route.params.triggerType])
+
     const onSelectCircle = (index:number) => {
         var tmpFeedList = selectableFeedList;
         if(tmpFeedList[index].selected === false) {
@@ -157,7 +179,6 @@ const AddCollectionFeedScreen = ({navigation, route}: Props) => {
             tmpSelectingFeedList.push(tmpFeedList[index]);
             tmpFeedList[index].selected = !tmpFeedList[index].selected
             //tmpFeedList[index].selectOrder = tmpSelectingFeedList.length;
-
             console.log("선택완료", tmpSelectingFeedList)
             console.log("선택완료 tmpFeedList", tmpFeedList)
             setSelectingFeedList(tmpSelectingFeedList);
@@ -178,10 +199,26 @@ const AddCollectionFeedScreen = ({navigation, route}: Props) => {
         console.log("triggerType", triggerType);
         if(triggerType === "modifyCollection") {
             navigation.navigate("CollectionFeedEditScreen")
+            console.log("selectingFeedList", selectingFeedList);
         } else if(triggerType === "addCollection") {
-            navigation.navigate("ProfileScreen");
-        }
-    }
+            console.log("selectingFeedList", selectingFeedList);
+            var selectingFeedIdList = selectingFeedList.map((obj) => {
+                return obj.id
+            })
+            console.log("selectingFeedIdList", selectingFeedIdList);
+            setTimeout(() => {
+                POSTCreateCollection(route.params.coverImage, route.params.title, route.params.description, route.params.private, route.params.includeLocation, selectingFeedIdList)
+                .then(function(response) {
+                    console.log("콜렉션 업로드 성공", response);
+                    navigation.navigate("ProfileScreen");
+                })
+                .catch(function(error) {
+                    console.log("콜렉션 업로드 실패", error);
+                })  
+            })
+        }   
+     }
+    
 
     const renderMyFeedTileItem = ({item, index}:any) => {
 
@@ -197,6 +234,11 @@ const AddCollectionFeedScreen = ({navigation, route}: Props) => {
             selected={item.selected}
             selectOrder={selectOrder}
             onSelectCircle={onSelectCircle}
+            mainImage={item.mediaFiles[0] ? item.mediaFiles[0].uri : null}
+            mainTag={item.mainTags.name}
+            rating={item.starRate}
+            expense={item.expense ? item.expense : null}
+            location={item.address ? item.address.address : null}
             />
         )
     }

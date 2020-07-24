@@ -4,7 +4,7 @@ import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import {TouchableWithoutFeedback, Switch} from 'react-native'
+import {TouchableWithoutFeedback, Switch, Keyboard} from 'react-native'
 
 const Container = Styled.SafeAreaView`
  flex: 1;
@@ -82,6 +82,12 @@ const CoverImageContainer = Styled.View`
  border-radius: 10px;
  justify-content: center;
  align-items: center;
+`;
+
+const CoverImage = Styled.Image`
+ width: ${wp('43.7%')};
+ height: ${wp('43.7%')};
+ border-radius: 10px;
 `;
 
 const EmptyCoverIcon = Styled.Image`
@@ -183,6 +189,9 @@ const CollectionUploadScreen = ({navigation, route}: Props) => {
     const [enabledIncludeLocation, setEnabledIncludeLocation] = useState<boolean>(false);
     const [collectionTitleText, setCollectionTitleText] = useState<string>("");
     const [collectionDescripText, setCollectionDescripText] = useState<string>("");
+    const [collectionCoverImage, setCollectionCoverImage] = useState<object>({
+        uri:'https://i.pinimg.com/564x/9a/5f/12/9a5f120317a83632166bb3171d6b5614.jpg'
+    });
 
     const togglePrivate = () => {
         setEnabledPrivate(!enabledPrivate);
@@ -202,6 +211,7 @@ const CollectionUploadScreen = ({navigation, route}: Props) => {
 
     const moveToAddFeedScreen = () => {
         navigation.navigate("AddCollectionFeedScreen", {
+            coverImage: collectionCoverImage,
             title: collectionTitleText,
             description: collectionDescripText,
             private: enabledPrivate,
@@ -211,6 +221,7 @@ const CollectionUploadScreen = ({navigation, route}: Props) => {
     }
     
     return (
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <Container>
             <HeaderBar>
                 <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
@@ -235,8 +246,14 @@ const CollectionUploadScreen = ({navigation, route}: Props) => {
             <CoverContainer>
             <TouchableWithoutFeedback onPress={() => navigation.navigate("Gallery_ProfileImage")}>
             <CoverImageContainer>
+                {collectionCoverImage && (
+                    <CoverImage
+                    source={{uri:collectionCoverImage.uri}}/>
+                )}
+                {!collectionCoverImage && (
             <EmptyCoverIcon
             source={require('~/Assets/Images/ic_emptyImage.png')}/>
+                )}
             </CoverImageContainer>
             </TouchableWithoutFeedback>
             <TouchableWithoutFeedback onPress={() => navigation.navigate("Gallery_ProfileImage")}>
@@ -248,6 +265,7 @@ const CollectionUploadScreen = ({navigation, route}: Props) => {
             <TitleInputContainer>
                 <TitleText>이름</TitleText>
                 <TitleInput
+                autoCapitalize={"none"}
                 placeholder={"컬렉션 이름을 적어주세요."}
                 autoFocus={false}
                 value={collectionTitleText}
@@ -257,6 +275,7 @@ const CollectionUploadScreen = ({navigation, route}: Props) => {
             <DescripInputContainer>
                 <DescripText>소개</DescripText>
                 <DescripInput
+                autoCapitalize={"none"}
                 multiline={true}
                 placeholder={"컬렉션에 대한 설명을 적어주세요."}
                 autoFocus={false}
@@ -277,6 +296,7 @@ const CollectionUploadScreen = ({navigation, route}: Props) => {
                 onValueChange={toggleIncludeLocation}/>
             </IncludeLocationContainer>
         </Container>
+        </TouchableWithoutFeedback>
     )
 }
 

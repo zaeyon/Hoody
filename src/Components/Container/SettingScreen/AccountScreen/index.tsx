@@ -1,5 +1,6 @@
 import React from 'react';
 import Styled from 'styled-components/native';
+import {TouchableWithoutFeedback} from 'react-native';
 import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
@@ -17,6 +18,9 @@ const HeaderBar = Styled.View`
  align-items: center;
  justify-content: space-between;
  background-color:#ffffff;
+
+ border-bottom-width: 0.6px;
+ border-color: #ECECEE;
 `;
 
 const HeaderLeftContainer = Styled.View`
@@ -56,16 +60,18 @@ interface Props {
     route: any,
 }
 
-const AccountOrSecuritySettingScreen = ({navigation, route}: Props) => {
+const AccountScreen = ({navigation, route}: Props) => {
     return (
         <Container>
             <HeaderBar>
+                <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
                 <HeaderLeftContainer>
                     <BackButtonContainer>
                         <BackButton
-                        source={require('~/Assets/Image/HeaderBar/ic_back.png')}/>
+                        source={require('~/Assets/Images/HeaderBar/ic_back.png')}/>
                     </BackButtonContainer>
                 </HeaderLeftContainer>
+                </TouchableWithoutFeedback>
                 <HeaderTitleText>계정 및 보안</HeaderTitleText>
                 <HeaderRightContainer>
                     <HeaderEmptyContainer>
@@ -77,7 +83,7 @@ const AccountOrSecuritySettingScreen = ({navigation, route}: Props) => {
     )
 }
 
-export default AccountOrSecuritySettingScreen;
+export default AccountScreen;
 
 
 

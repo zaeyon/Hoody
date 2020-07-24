@@ -8,7 +8,8 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
+import allActions from '~/action';
 import Modal from 'react-native-modal';
 import ScrollableTabView, { DefaultTabBar,} from 'rn-collapsing-tab-bar';
 
@@ -394,6 +395,7 @@ const ProfileScreen = ({navigation, route}: Props) => {
   const [profileModalVisible, setProfileModalVisible] = useState<boolean>(false);
 
   const currentUser = useSelector((state) => state.currentUser);
+  const dispatch = useDispatch();
 
   
   useEffect(() => {
@@ -412,6 +414,7 @@ const ProfileScreen = ({navigation, route}: Props) => {
         }
         setFeedListData(response.posts);
         setChangeProfileData(!changeProfileData);
+        dispatch(allActions.userActions.setUserAllFeeds(response.posts));
         console.log("요청된 프로필 정보@@@", response)
         console.log("response.followed", response.followed)
       }).catch(function(error) {
@@ -443,7 +446,8 @@ const ProfileScreen = ({navigation, route}: Props) => {
       GetProfileCollection(currentUser.user.nickname)
       .then(function(response) {
         console.log("GetProfileCollection response", response);
-        setCollectionListData(JSON.parse(response.collections));
+        console.log("GetProfileCollection response.profileUser.colllections", response.profileUser.collections)
+        setCollectionListData(response.profileUser.collections);
         setChangeProfileData(!changeProfileData);
       })
       .catch(function(error) {
@@ -492,6 +496,11 @@ const ProfileScreen = ({navigation, route}: Props) => {
   const moveToSettingScreen = () => {
     navigation.navigate("SettingScreen");
     setProfileModalVisible(false)
+  }
+
+  const moveToScrapListScreen = () => {
+    navigation.navigate("ScrapListScreen");
+    setProfileModalVisible(false);
   }
 
   const navigateGoBack = () => {
@@ -647,11 +656,13 @@ const ProfileScreen = ({navigation, route}: Props) => {
           <ModalTabItemLabelText>설정</ModalTabItemLabelText>
         </ModalTabItemContainer>
         </TouchableWithoutFeedback>
+        <TouchableWithoutFeedback onPress={() => moveToScrapListScreen()}>
         <ModalTabItemContainer>
           <ModalTabItemIconImage
           source={require('~/Assets/Images/Profile/BottomModal/ic_scrap.png')}/>
           <ModalTabItemLabelText>스크랩</ModalTabItemLabelText>
         </ModalTabItemContainer>
+        </TouchableWithoutFeedback>
         <ModalTabItemContainer>
           <ModalTabItemIconImage
           source={require('~/Assets/Images/Profile/BottomModal/ic_profile.png')}/>

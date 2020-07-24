@@ -25,9 +25,17 @@ const setScrapFeeds = (scrapFeeds) => {
   }
 }
 
+const setUserAllFeeds = (userAllFeeds) => {
+  return {
+    type: 'SET_USER_ALL_FEEDS',
+    payload: userAllFeeds
+  }
+}
+
 export default {
   setUser,
   logOut,
   setLikeFeeds,
   setScrapFeeds,
+  setUserAllFeeds,
 };

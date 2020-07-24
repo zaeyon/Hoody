@@ -18,6 +18,8 @@ const HeaderBar = Styled.View`
  align-items: center;
  justify-content: space-between;
  background-color:#ffffff;
+ border-bottom-width: 0.6px;
+ border-color: #ECECEE;
 `;
 
 const HeaderLeftContainer = Styled.View`
@@ -116,6 +118,7 @@ const SettingScreen = ({navigation, route}: Props) => {
                 </HeaderRightContainer>
             </HeaderBar>
             <SettingTabListContainer>
+                <TouchableWithoutFeedback onPress={() => navigation.navigate("AccountScreen")}>
                 <TabItemContainer>
                     <TabItemInnerContainer>
                         <SettingTabIconImage
@@ -123,6 +126,7 @@ const SettingScreen = ({navigation, route}: Props) => {
                         <SettingTabLabelText>계정 및 보안</SettingTabLabelText>
                     </TabItemInnerContainer>
                 </TabItemContainer>
+                </TouchableWithoutFeedback>
                 <TabItemContainer>
                     <TabItemInnerContainer>
                         <SettingTabIconImage

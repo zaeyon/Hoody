@@ -75,6 +75,64 @@ const ItemTitleText = Styled.Text`
  color: #1D1E1F;
 `;
 
+const TabItemContainer = Styled.View`
+width: ${wp('100%')};
+height: ${wp('15%')};
+padding-top: 19px;
+padding-bottom: 19px;
+padding-left: 16px;
+padding-right: 16px;
+justify-content: center;
+background-color: #ffffff;
+`;
+
+const TabItemInfoContainer = Styled.View`
+background-color: #ffffff;
+flex-direction: row;
+align-items: center;
+height: ${wp('15%')};
+justify-content: space-between;
+border-bottom-width: 0.6px;
+border-color: #ECECEE;
+`;
+
+const TabItemLabelText = Styled.Text`
+ font-size: 16px;
+ color: #1D1E1F;
+`;
+
+const TabItemContentText = Styled.Text`
+ font-size: 16px;
+ color: #333333;
+`;
+
+const TabItemRightContainer = Styled.View`
+ flex-direction: row;
+ align-items: center;
+`;
+
+const TabItemDisclosureIcon = Styled.Image`
+ margin-left: 5px;
+ width: ${wp('3.2%')};
+ height: ${wp('3.2%')};
+`;
+
+
+const TabToggleContainer = Styled.View`
+height: ${wp('15%')};
+align-items: center;
+justify-content: center;
+background-color: #ffffff;
+border-bottom-width: 0.6px;
+border-color: #ECECEE;
+`;
+
+const TabToggleText = Styled.Text`
+color: #267DFF;
+font-size: 16px;
+`;
+
+
 interface Props {
     navigation: any,
     route: any,
@@ -102,6 +160,59 @@ const AccountScreen = ({navigation, route}: Props) => {
                 <ItemTitleContainer>
                     <ItemTitleText>계정 및 개인정보</ItemTitleText>
                 </ItemTitleContainer>
+                <TabItemContainer>
+                    <TabItemInfoContainer>
+                        <TabItemLabelText>이메일</TabItemLabelText>
+                        <TabItemContentText>abcd@gmail.com</TabItemContentText>
+                    </TabItemInfoContainer>
+                </TabItemContainer>
+                <TabItemContainer>
+                    <TabItemInfoContainer>
+                        <TabItemLabelText>생일</TabItemLabelText>
+                        <TabItemRightContainer>
+                        <TabItemContentText>1996년 1월 1일</TabItemContentText>
+                        <TabItemDisclosureIcon
+                        source={require('~/Assets/Images/Setting/ic_disclosure.png')}/>
+                        </TabItemRightContainer>
+                    </TabItemInfoContainer>
+                </TabItemContainer>
+                <TabItemContainer>
+                    <TabItemInfoContainer>
+                        <TabItemLabelText>성별</TabItemLabelText>
+                        <TabItemRightContainer>
+                        <TabItemContentText>여성</TabItemContentText>
+                        <TabItemDisclosureIcon
+                        source={require('~/Assets/Images/Setting/ic_disclosure.png')}/>
+                        </TabItemRightContainer>
+                    </TabItemInfoContainer>
+                </TabItemContainer>
+                <ItemTitleContainer
+                style={{marginTop: 10}}>
+                    <ItemTitleText>보안</ItemTitleText>
+                    </ItemTitleContainer>
+                    <TabItemContainer>
+                    <TabItemInfoContainer>
+                        <TabItemLabelText>비밀번호 설정</TabItemLabelText>
+                        <TabItemRightContainer>
+                        <TabItemDisclosureIcon
+                        source={require('~/Assets/Images/Setting/ic_disclosure.png')}/>
+                        </TabItemRightContainer>
+                    </TabItemInfoContainer>
+                    </TabItemContainer>
+                    <TabItemContainer>
+                        <TabToggleContainer>
+                            <TabToggleText>
+                                로그아웃
+                            </TabToggleText>
+                        </TabToggleContainer>
+                        </TabItemContainer>
+                        <TabItemContainer>
+                        <TabToggleContainer>
+                            <TabToggleText>
+                                회원탈퇴
+                            </TabToggleText>
+                        </TabToggleContainer>
+                        </TabItemContainer>
             </BodyContainer>
         </Container>
         

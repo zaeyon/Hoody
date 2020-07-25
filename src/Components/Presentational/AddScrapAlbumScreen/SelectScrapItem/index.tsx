@@ -128,7 +128,7 @@ const SelectFeedItem = ({selected, index, onSelectCircle}: Props) => {
             {selected && (
                 <TouchableWithoutFeedback onPress={() => onSelectCircle(index)}>
                 <SelectCircle
-                source={require('~/Assets/Images/ic_photoCheck.png')}/>
+                source={require('~/Assets/Images/ic_checked.png')}/>
                 </TouchableWithoutFeedback>
             )}
         </SelectCircleContainer>

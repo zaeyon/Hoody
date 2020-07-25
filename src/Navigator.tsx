@@ -16,7 +16,6 @@ import Upload from '~/Tab/Upload';
 import Alarm from '~/Tab/Alarm';
 import Profile from '~/Tab/Profile';
 import Search from '~/Screens/Search';
-import SearchResult from '~/Screens/SearchResult';
 import FeedDetail from '~/Screens/FeedDetail';
 import PinterMap from '~/Screens/PinterMap';
 import UncertifiedProfile from '~/Screens/UncertifiedProfile';
@@ -73,6 +72,7 @@ import AlarmScreen from '~/Components/Container/AlarmScreen';
 // Explore Screen
 import ExploreScreen from '~/Components/Container/ExploreScreen';
 import SearchScreen from '~/Components/Container/SearchScreen';
+import SearchResultScreen from '~/Components/Container/SearchResultScreen';
 
 // Setting Screen
 import SettingScreen from '~/Components/Container/SettingScreen';
@@ -171,6 +171,12 @@ function ExploreStackScreen() {
       <ExploreStack.Screen 
       name="ExploreScreen"
       component={ExploreScreen}/>
+      <ExploreStack.Screen
+      name="SearchScreen"
+      component={SearchScreen}/>
+      <ExploreStack.Screen
+      name="SearchResultScreen"
+      component={SearchResultScreen}/>
     </ExploreStack.Navigator>
   )
 }
@@ -283,16 +289,13 @@ function AlarmStackScreen() {
       <AlarmStack.Screen
         name="AlarmScreen"
         component={AlarmScreen}
-        options={{
-          headerTitle: (props) => <AlarmTitle {...props} />,
-        }}
       />
     </AlarmStack.Navigator>
   );
 }
 
 function ProfileStackScreen() {
-  const currentUser = useSelector((state) => state.currentUser)
+  const currentUser = useSelector((state: any) => state.currentUser)
   return (
     <ProfileStack.Navigator
       headerMode="none"
@@ -306,12 +309,6 @@ function ProfileStackScreen() {
       <ProfileStack.Screen
         name="ProfileScreen"
         component={ProfileScreen}
-        options={({navigation, route}) => (
-          {
-          headerTitle: (props) => <ProfileTitle {...props} />,
-        }
-        )
-       }
       />
       <ProfileStack.Screen 
       name="PinterMap"
@@ -574,6 +571,18 @@ function BottomTab() {
 
     return true;
   }
+  
+  const getExploreTabBarVisibility = (route: any) => {
+    const routeName = route.state
+    ? route.state.routes[route.state.index].name
+    : '';
+
+    if(routeName === 'SearchScreen') {
+      return false;
+    }
+
+    return true;
+  }
 
   return (
     <Tab.Navigator
@@ -604,7 +613,7 @@ function BottomTab() {
       <Tab.Screen
       name="Explore"
       component={ExploreStackScreen}
-      options={{
+      options={({route}) => ({
         tabBarIcon: ({focused}: {focused: boolean}) => (
           <Image
             style={{width: 30, height: 30}}
@@ -619,7 +628,8 @@ function BottomTab() {
           />
         ),
         unmountOnBlur: true,
-      }}
+        tabBarVisible: getExploreTabBarVisibility(route)
+      })}
       />
       <Tab.Screen 
       name="Upload"
@@ -723,7 +733,6 @@ function AppNavigator() {
       <NoBottomBarStack.Screen name="AddCollectionFeedScreen" component={AddCollectionFeedScreen}/>
       <NoBottomBarStack.Screen name="AddScrapAlbumScreen" component={AddScrapAlbumScreen}/>
       <NoBottomBarStack.Screen name="LocationFeedMapScreen" component={LocationFeedMapScreen}/>
-      <NoBottomBarStack.Screen name="SearchScreen" component={SearchScreen}/>
     </NoBottomBarStack.Navigator>
     ) : (
       <UnauthStackScreen/>

@@ -1,11 +1,10 @@
 import React, {useState, useEffect} from 'react';
 import Styled from 'styled-components/native';
-import {TouchableWithoutFeedback, SectionList} from 'react-native';
+import {TouchableWithoutFeedback, SectionList, FlatList, Alert} from 'react-native';
 import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import { FlatList } from 'react-native-gesture-handler';
 
 const Container = Styled.SafeAreaView`
  flex: 1;
@@ -85,14 +84,13 @@ const SearchResultItemContainer = Styled.View`
  height: ${wp('17%')};
  background-color: #ffffff;
  flex-direction: row;
- align-items: center;
  justify-content: space-between;
- padding-top: 10px;
- padding-bottom: 10px;
  padding-left: 16px;
 `;
 
 const SearchResultItemLeftContainer = Styled.View`
+padding-top: 10px;
+padding-bottom: 10px;
 flex-direction: row;
 align-items: center;
 `;
@@ -115,6 +113,8 @@ padding-top: 20px;
 padding-bottom: 20px;
 padding-left: 16px;
 padding-right: 16px;
+align-items: center;
+justify-content: center;
 `;
 
 const RecentlySearchListContainer = Styled.View`
@@ -180,12 +180,37 @@ padding-left: 16px;
 padding-right: 16px;
 flex-direction: row;
 align-items: center;
+background-color: #ffffff;
 `;
 
 const SearchResultSectionTitleText = Styled.Text`
 font-weight: 600;
 font-size: 17px;
 color: #1D1E1F;
+`;
+
+const SearchResultItemSelectContainer = Styled.View`
+background-color: #ffffff;
+padding-top: 20px;
+padding-bottom: 24px;
+padding-left: 16px;
+padding-right: 16px;
+align-items: center;
+justify-content: center;
+`;
+
+const SearchResultItemSelectText = Styled.Text`
+font-size: 15px;
+color: #C6C7CC;
+`;
+
+const SelectedSearchItemListContainer = Styled.View`
+`;
+
+
+const CheckedIcon = Styled.Image`
+width: ${wp('6.4%')};
+height: ${wp('6.4%')};
 `;
 
 
@@ -257,6 +282,8 @@ const SearchScreen = ({navigation}: Props) => {
     const [inputingSearchText, setInputingSearchText] = useState<string>("");
     const [searchResultListData, setSearchResultListData] = useState<any>([]);
     const [recentlySearchListData, setRecentlySearchListData] = useState<any>([]);
+    const [selectedSearchItemList, setSelectedSearchItemList] = useState<Array<object>>([]);
+    const [changeSelectedSearchItem, setChangeSelectedSearchItem] = useState<boolean>();
     const [noInputSearch, setNoInputSearch] = useState<boolean>(true);
 
     useEffect(() => {
@@ -277,6 +304,7 @@ const SearchScreen = ({navigation}: Props) => {
 
     }, [])
 
+
     const onChangeSearchInput = (text: string) => {
         setInputingSearchText(text);
 
@@ -287,9 +315,92 @@ const SearchScreen = ({navigation}: Props) => {
         }
     }
 
+    const selectSearchItem = (item: object, type: string) => {
+        if(selectedSearchItemList.length === 3) {
+            Alert.alert('검색어는 최대 3개까지 입력 가능합니다.', ' ', [
+                {
+                  text: '확인',
+                  onPress: () => 0,
+                },
+              ]);
+        } else {
+       var tmpSelectedSearchItemList = selectedSearchItemList;
+       tmpSelectedSearchItemList.push({
+           item: item,
+           type: type
+       });
+
+       setTimeout(() => {
+        setSelectedSearchItemList(tmpSelectedSearchItemList);
+        setChangeSelectedSearchItem(!changeSelectedSearchItem);
+       console.log("selectedSearchItemList", selectedSearchItemList);
+       }, 10)
+
+        }
+    }
+
+    const removeSelectedSearchItem = () => {
+
+    }
+
+    const searchToInputedItem = () => {
+        navigation.navigate("SearchResultScreen");
+    }
+
+    const renderSelectedItem = ({item,index}: any) => {
+        if(item.type === "태그") {
+            return (
+            <SearchResultItemContainer>
+            <SearchResultItemLeftContainer>
+                <SearchResultItemIconContainer>
+                <TagSearchItemIcon
+                source={require('~/Assets/Images/SearchResult/ic_hashTag.png')}/>
+                </SearchResultItemIconContainer>
+                <SearchItemText>{"#" + item.item.name}</SearchItemText>
+            </SearchResultItemLeftContainer>
+            <SearchResultItemSelectContainer>
+                <CheckedIcon
+                source={require('~/Assets/Images/SearchResult/ic_checked.png')}/>
+            </SearchResultItemSelectContainer>
+        </SearchResultItemContainer>
+        )} else if(item.type == "계정") {
+            return (
+                <SearchResultItemContainer>
+                    <SearchResultItemLeftContainer>
+                        <SearchResultItemIconContainer>
+                        <ProfileSearchItemImage
+                        source={{uri:item.item.profileImg}}/>
+                        </SearchResultItemIconContainer>
+                        <SearchItemText>{item.item.nickname}</SearchItemText>
+                    </SearchResultItemLeftContainer>
+            <SearchResultItemSelectContainer>
+                <CheckedIcon
+                source={require('~/Assets/Images/SearchResult/ic_checked.png')}/>
+            </SearchResultItemSelectContainer>
+                </SearchResultItemContainer>
+            )} else if(item.type == "장소") {
+                return (
+                <SearchResultItemContainer>
+                <SearchResultItemLeftContainer>
+                    <SearchResultItemIconContainer>
+                    <TagSearchItemIcon
+                    source={require('~/Assets/Images/SearchResult/ic_locationMarker.png')}/>
+                    </SearchResultItemIconContainer>
+                    <SearchItemText>{item.item.address}</SearchItemText>
+                </SearchResultItemLeftContainer>
+            <SearchResultItemSelectContainer>
+                <CheckedIcon
+                source={require('~/Assets/Images/SearchResult/ic_checked.png')}/>
+            </SearchResultItemSelectContainer>
+                </SearchResultItemContainer>
+         )}
+        
+    }
+
     const renderSearchResultItem = ({item, index, section}: any) => {
         console.log("renderSearchResultItem", item)
         console.log("section.title", section.title);
+
         if(section.title == "태그") {
         return (
             <SearchResultItemContainer>
@@ -300,6 +411,11 @@ const SearchScreen = ({navigation}: Props) => {
                     </SearchResultItemIconContainer>
                     <SearchItemText>{"#" + item.name}</SearchItemText>
                 </SearchResultItemLeftContainer>
+                <TouchableWithoutFeedback onPress={() => selectSearchItem(item, section.title)}>
+                <SearchResultItemSelectContainer>
+                    <SearchResultItemSelectText>선택</SearchResultItemSelectText>
+                </SearchResultItemSelectContainer>
+                </TouchableWithoutFeedback>
             </SearchResultItemContainer>
         )} else if(section.title == "계정") {
         return (
@@ -311,6 +427,11 @@ const SearchScreen = ({navigation}: Props) => {
                     </SearchResultItemIconContainer>
                     <SearchItemText>{item.nickname}</SearchItemText>
                 </SearchResultItemLeftContainer>
+                <TouchableWithoutFeedback onPress={() => selectSearchItem(item, section.title)}>
+                <SearchResultItemSelectContainer>
+                    <SearchResultItemSelectText>선택</SearchResultItemSelectText>
+                </SearchResultItemSelectContainer>
+                </TouchableWithoutFeedback>
             </SearchResultItemContainer>
         )} else if(section.title == "장소") {
             return (
@@ -322,6 +443,11 @@ const SearchScreen = ({navigation}: Props) => {
                 </SearchResultItemIconContainer>
                 <SearchItemText>{item.address}</SearchItemText>
             </SearchResultItemLeftContainer>
+            <TouchableWithoutFeedback onPress={() => selectSearchItem(item, section.title)}>
+            <SearchResultItemSelectContainer>
+                    <SearchResultItemSelectText>선택</SearchResultItemSelectText>
+                </SearchResultItemSelectContainer>
+                </TouchableWithoutFeedback>
             </SearchResultItemContainer>
      )}
     }
@@ -401,13 +527,22 @@ const SearchScreen = ({navigation}: Props) => {
                     />
                 </SearchInputContainer>
             </HeaderSearchContainer>
+            <TouchableWithoutFeedback onPress={() => searchToInputedItem()}>
             <HeaderRightContainer>
                 <HeaderSearchText>검색</HeaderSearchText>
             </HeaderRightContainer>
+            </TouchableWithoutFeedback>
             </HeaderBar>
+            <SelectedSearchItemListContainer>
+                <FlatList
+                data={selectedSearchItemList}
+                renderItem={renderSelectedItem}
+                />
+            </SelectedSearchItemListContainer>
             {!noInputSearch && (
             <SearchResultContainer>
             <SectionList
+            keyboardShouldPersistTaps={"handled"}
             sections={searchResultListData}
             keyExtractor={(item, index) => item + index}
             renderItem={renderSearchResultItem}

@@ -138,7 +138,7 @@ interface Props {
     route: any,
 }
 
-const AccountScreen = ({navigation, route}: Props) => {
+const AccountSettingScreen = ({navigation, route}: Props) => {
     return (
         <Container>
             <HeaderBar>
@@ -219,7 +219,7 @@ const AccountScreen = ({navigation, route}: Props) => {
     )
 }
 
-export default AccountScreen;
+export default AccountSettingScreen;
 
 
 

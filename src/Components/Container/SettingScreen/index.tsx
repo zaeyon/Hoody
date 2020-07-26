@@ -100,6 +100,15 @@ interface Props {
 }
 
 const SettingScreen = ({navigation, route}: Props) => {
+
+    const moveToAccountSetting = () => {
+        navigation.navigate("AccountSettingScreen");
+    }
+
+    const moveToAlarmSetting = () => {
+        navigation.navigate("AlarmSettingScreen");
+    }
+
     return (
         <Container>
             <HeaderBar>
@@ -118,7 +127,7 @@ const SettingScreen = ({navigation, route}: Props) => {
                 </HeaderRightContainer>
             </HeaderBar>
             <SettingTabListContainer>
-                <TouchableWithoutFeedback onPress={() => navigation.navigate("AccountScreen")}>
+                <TouchableWithoutFeedback onPress={() => moveToAccountSetting()}>
                 <TabItemContainer>
                     <TabItemInnerContainer>
                         <SettingTabIconImage
@@ -127,6 +136,7 @@ const SettingScreen = ({navigation, route}: Props) => {
                     </TabItemInnerContainer>
                 </TabItemContainer>
                 </TouchableWithoutFeedback>
+                <TouchableWithoutFeedback onPress={() => moveToAlarmSetting()}>
                 <TabItemContainer>
                     <TabItemInnerContainer>
                         <SettingTabIconImage
@@ -134,6 +144,7 @@ const SettingScreen = ({navigation, route}: Props) => {
                         <SettingTabLabelText>알림</SettingTabLabelText>
                     </TabItemInnerContainer>
                 </TabItemContainer>
+                </TouchableWithoutFeedback>
                 <TabItemContainer>
                     <TabItemInnerContainer>
                         <SettingTabIconImage

@@ -58,6 +58,7 @@
     "react-native-screens": "2.4.0",
     "react-native-scrollable-tab-view": "^1.0.0",
     "react-native-shadow": "1.2.2",
+    "react-native-simple-radio-button": "^2.7.4",
     "react-native-snap-carousel": "3.9.0",
     "react-native-sortable-grid": "^2.0.0",
     "react-native-status-bar-height": "^2.5.0",

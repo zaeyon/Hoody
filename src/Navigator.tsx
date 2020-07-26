@@ -76,7 +76,8 @@ import SearchResultScreen from '~/Components/Container/SearchResultScreen';
 
 // Setting Screen
 import SettingScreen from '~/Components/Container/SettingScreen';
-import AccountScreen from '~/Components/Container/SettingScreen/AccountScreen';
+import AccountSettingScreen from '~/Components/Container/SettingScreen/AccountSettingScreen';
+import AlarmSettingScreen from '~/Components/Container/SettingScreen/AlarmSettingScreen';
 
 // Scrap Screen
 import ScrapListScreen from '~/Components/Container/ScrapListScreen';
@@ -333,13 +334,6 @@ function ProfileStackScreen() {
         }}
       />
       <ProfileStack.Screen
-      name="SettingScreen"
-      component={SettingScreen}
-      />
-      <ProfileStack.Screen
-      name="AccountScreen"
-      component={AccountScreen}/>
-      <ProfileStack.Screen
       name="FollowListScreen"
       component={FollowListScreen}/>
       <ProfileStack.Screen
@@ -348,9 +342,19 @@ function ProfileStackScreen() {
       <ProfileStack.Screen
       name="ScrapListScreen"
       component={ScrapListScreen}/>
-    <ProfileStack.Screen
-    name="FeedStack"
-    component={FeedStackScreen}/>
+      <ProfileStack.Screen
+      name="FeedStack"
+      component={FeedStackScreen}/>
+      <ProfileStack.Screen
+      name="SettingScreen"
+      component={SettingScreen}
+      />
+      <ProfileStack.Screen
+      name="AccountSettingScreen"
+      component={AccountSettingScreen}/>
+      <ProfileStack.Screen
+      name="AlarmSettingScreen"
+      component={AlarmSettingScreen}/>
     </ProfileStack.Navigator>
   );
 }

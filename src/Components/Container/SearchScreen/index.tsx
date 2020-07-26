@@ -283,7 +283,7 @@ const SearchScreen = ({navigation}: Props) => {
     const [searchResultListData, setSearchResultListData] = useState<any>([]);
     const [recentlySearchListData, setRecentlySearchListData] = useState<any>([]);
     const [selectedSearchItemList, setSelectedSearchItemList] = useState<Array<object>>([]);
-    const [changeSelectedSearchItem, setChangeSelectedSearchItem] = useState<boolean>();
+    const [changeSelectedSearchItem, setChangeSelectedSearchItem] = useState<boolean>(false);
     const [noInputSearch, setNoInputSearch] = useState<boolean>(true);
 
     useEffect(() => {
@@ -339,12 +339,18 @@ const SearchScreen = ({navigation}: Props) => {
         }
     }
 
-    const removeSelectedSearchItem = () => {
-
+    const removeSelectedSearchItem = (requestedItem: object, index: number) => {
+        console.log("removeSelectedSearchItem requestedItem", requestedItem);
+        var removedSelectedItem = selectedSearchItemList;
+        removedSelectedItem.splice(index, 1);
+        setSelectedSearchItemList(removedSelectedItem);
+        setChangeSelectedSearchItem(!changeSelectedSearchItem);
     }
 
     const searchToInputedItem = () => {
-        navigation.navigate("SearchResultScreen");
+        navigation.navigate("SearchResultScreen", {
+            keywordList: selectedSearchItemList
+        });
     }
 
     const renderSelectedItem = ({item,index}: any) => {
@@ -358,10 +364,12 @@ const SearchScreen = ({navigation}: Props) => {
                 </SearchResultItemIconContainer>
                 <SearchItemText>{"#" + item.item.name}</SearchItemText>
             </SearchResultItemLeftContainer>
+            <TouchableWithoutFeedback onPress={() => removeSelectedSearchItem(item, index)}>
             <SearchResultItemSelectContainer>
                 <CheckedIcon
                 source={require('~/Assets/Images/SearchResult/ic_checked.png')}/>
             </SearchResultItemSelectContainer>
+            </TouchableWithoutFeedback>
         </SearchResultItemContainer>
         )} else if(item.type == "계정") {
             return (
@@ -373,10 +381,12 @@ const SearchScreen = ({navigation}: Props) => {
                         </SearchResultItemIconContainer>
                         <SearchItemText>{item.item.nickname}</SearchItemText>
                     </SearchResultItemLeftContainer>
+            <TouchableWithoutFeedback onPress={() => removeSelectedSearchItem(item, index)}>
             <SearchResultItemSelectContainer>
                 <CheckedIcon
                 source={require('~/Assets/Images/SearchResult/ic_checked.png')}/>
             </SearchResultItemSelectContainer>
+            </TouchableWithoutFeedback>
                 </SearchResultItemContainer>
             )} else if(item.type == "장소") {
                 return (
@@ -388,10 +398,12 @@ const SearchScreen = ({navigation}: Props) => {
                     </SearchResultItemIconContainer>
                     <SearchItemText>{item.item.address}</SearchItemText>
                 </SearchResultItemLeftContainer>
+            <TouchableWithoutFeedback onPress={() => removeSelectedSearchItem(item,index)}>
             <SearchResultItemSelectContainer>
                 <CheckedIcon
                 source={require('~/Assets/Images/SearchResult/ic_checked.png')}/>
             </SearchResultItemSelectContainer>
+            </TouchableWithoutFeedback>
                 </SearchResultItemContainer>
          )}
         
@@ -465,7 +477,7 @@ const SearchScreen = ({navigation}: Props) => {
                 </SearchResultItemLeftContainer>
                 <RecentlySearchItemRemoveContainer>
                     <RecentlySearchItemRemoveIcon
-                    source={require('~/Assets/Images/SearchResult/ic_removeRecentlySearch.png')}
+                    source={require('~/Assets/Images/SearchResult/ic_remove.png')}
                     />
                 </RecentlySearchItemRemoveContainer>
             </SearchResultItemContainer>
@@ -481,7 +493,7 @@ const SearchScreen = ({navigation}: Props) => {
                 </SearchResultItemLeftContainer>
                 <RecentlySearchItemRemoveContainer>
                     <RecentlySearchItemRemoveIcon
-                    source={require('~/Assets/Images/SearchResult/ic_removeRecentlySearch.png')}
+                    source={require('~/Assets/Images/SearchResult/ic_remove.png')}
                     />
                 </RecentlySearchItemRemoveContainer>
             </SearchResultItemContainer>
@@ -498,7 +510,7 @@ const SearchScreen = ({navigation}: Props) => {
                 </SearchResultItemLeftContainer>
                 <RecentlySearchItemRemoveContainer>
                     <RecentlySearchItemRemoveIcon
-                    source={require('~/Assets/Images/SearchResult/ic_removeRecentlySearch.png')}
+                    source={require('~/Assets/Images/SearchResult/ic_remove.png')}
                     />
                 </RecentlySearchItemRemoveContainer>
             </SearchResultItemContainer>
@@ -535,6 +547,7 @@ const SearchScreen = ({navigation}: Props) => {
             </HeaderBar>
             <SelectedSearchItemListContainer>
                 <FlatList
+                keyboardShouldPersistTaps={"handled"}
                 data={selectedSearchItemList}
                 renderItem={renderSelectedItem}
                 />

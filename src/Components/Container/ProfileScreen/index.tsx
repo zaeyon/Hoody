@@ -136,7 +136,7 @@ const MyProfileReviewMapText = Styled.Text`
  font-size: 15px;
 `;
 
-const HeaderContainer = Styled.View`
+const ModalHeaderContainer = Styled.View`
  padding-top: 4px;
  width: ${wp('100%')};
  padding-bottom: 10px;
@@ -649,9 +649,9 @@ const ProfileScreen = ({navigation, route}: Props) => {
       swipeDirection={['down']}
       style={styles.modalView}>
       <ProfileModalContainer>
-        <HeaderContainer>
+        <ModalHeaderContainer>
         <ModalToggleButton/>
-        </HeaderContainer>
+        </ModalHeaderContainer>
         <TouchableWithoutFeedback onPress={() => moveToSettingScreen()}>
         <ModalTabItemContainer>
           <ModalTabItemIconImage

@@ -39,6 +39,13 @@ const setUserRecentSearch = (recentSearchList) => {
   }
 }
 
+const setInputedKeywordList = (inputedKeywordList) => {
+  return {
+    type: 'SET_INPUTED_KEYWORD_LIST',
+    payload: inputedKeywordList,
+  }
+}
+
 export default {
   setUser,
   logOut,
@@ -46,4 +53,5 @@ export default {
   setScrapFeeds,
   setUserAllFeeds,
   setUserRecentSearch,
+  setInputedKeywordList,
 };

@@ -297,9 +297,11 @@ const SearchScreen = ({navigation}: Props) => {
     const [noInputSearch, setNoInputSearch] = useState<boolean>(true);
 
     const currentUser = useSelector((state) => state.currentUser);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         console.log("currentUser.userRecentSearch", currentUser.userRecentSearch)
+        dispatch(allActions.userActions.setInputedKeywordList([]))
        setRecentlySearchListData(currentUser.userRecentSearch);
     }, [])
 
@@ -313,9 +315,34 @@ const SearchScreen = ({navigation}: Props) => {
             setNoInputSearch(false);
             GETSearchAutoComplete(text)
             .then(function(response) {
+                var tmpKeywordList = currentUser.inputedKeywordList;
                 var tmpAutoCompleteListData = new Array();
                 console.log("response", response);
+
                 for(const[key, value] of Object.entries(response)) {
+                    console.log("response value", value);
+                    value.map((obj: any) => {
+                        for(var i = 0; i <tmpKeywordList.length; i++) {
+                            console.log("value obj", obj);
+                            console.log("tmpKeywordList[i]", tmpKeywordList[i].item);
+                            if(key === "tags") {
+                                if(obj.name === tmpKeywordList[i].item.name) {
+                                    console.log("이미 선택한 단어");
+                                    return obj.selected = true;
+                                }  
+                            } else if(key === "users") {
+                                if(obj.nickname === tmpKeywordList[i].item.nickname) {
+                                    return obj.selected = true;
+                                }
+                            } else if(key === "addresses") {
+                                if(obj.address === tmpKeywordList[i].item.address) {
+                                    return obj.selected = true;
+                                }
+                            }
+                        }
+                        return obj;
+                    })
+
                     tmpAutoCompleteListData.push({
                         title: key==="tags" ? "태그" : (key==="users" ? "계정" : (key==="addresses" ? "장소" : null)),
                         data: value,
@@ -354,15 +381,14 @@ const SearchScreen = ({navigation}: Props) => {
            tmpSearchResultListData[2].data[index].selected = true;
            setSearchResultListData(tmpSearchResultListData);
        }
-       var tmpSelectedSearchItemList = selectedSearchItemList;
+       var tmpSelectedSearchItemList = currentUser.inputedKeywordList;
        tmpSelectedSearchItemList.push({
            item: item,
            type: type
        });
        setTimeout(() => {
-        setSelectedSearchItemList(tmpSelectedSearchItemList);
-        setChangeSelectedSearchItem(!changeSelectedSearchItem);
-       console.log("selectedSearchItemList", selectedSearchItemList);
+        dispatch(allActions.userActions.setInputedKeywordList(tmpSelectedSearchItemList))
+        console.log("currentUser.inputedKeywordList", currentUser.inputedKeywordList);
        }, 10)
     } else {
             return 0;
@@ -372,28 +398,37 @@ const SearchScreen = ({navigation}: Props) => {
 
     const removeSelectedSearchItem = (requestedItem: object, index: number) => {
         console.log("removeSelectedSearchItem requestedItem", requestedItem);
-        var removedSelectedItem = selectedSearchItemList;
+        var removedSelectedItem = currentUser.inputedKeywordList;
         removedSelectedItem.splice(index, 1);
-        setSelectedSearchItemList(removedSelectedItem);
-        setChangeSelectedSearchItem(!changeSelectedSearchItem);
+        dispatch(allActions.userActions.setInputedKeywordList(removedSelectedItem))
+        //setChangeSelectedSearchItem(!changeSelectedSearchItem);
 
         var tmpSearchResultListData = searchResultListData;
 
         if(requestedItem.type === "태그") {
             console.log("tmpSearchResultListData[0].data", tmpSearchResultListData[0].data);
             var index2 = tmpSearchResultListData[0].data.indexOf(requestedItem.item);
-            tmpSearchResultListData[0].data[index2].selected = false;
-            setSearchResultListData(tmpSearchResultListData);
-        
-
+            if(index2 !== -1) {
+                tmpSearchResultListData[0].data[index2].selected = false;
+                setSearchResultListData(tmpSearchResultListData);
+            }
+        } else if(requestedItem.type === "계정") {
+            var index2 = tmpSearchResultListData[1].data.indexOf(requestedItem.item);
+            if(index2 !== -1) {
+                tmpSearchResultListData[1].data[index2].selected = false;
+                setSearchResultListData(tmpSearchResultListData);
+            }
+        } else if(requestedItem.type === "장소") {
+            var index2 = tmpSearchResultListData[2].data.indexOf(requestedItem.item);
+            if(index2 !== -1) {
+                tmpSearchResultListData[2].data[index2].selected = false;
+                setSearchResultListData(tmpSearchResultListData);
+            }
         }
-
     }
 
-    const searchToInputedItem = () => {
-        navigation.navigate("SearchResultScreen", {
-            keywordList: selectedSearchItemList
-        });
+    const searchToInputedKeywordList = () => {
+        navigation.navigate("SearchResultScreen");
     }
 
     const renderSelectedItem = ({item,index}: any) => {
@@ -475,7 +510,7 @@ const SearchScreen = ({navigation}: Props) => {
             </SearchResultItemContainer>
         )} else if(section.title == "계정") {
         return (
-            <SearchResultItemContainer>
+            <SearchResultItemContainer style={item.selected && styles.disalbedSearhResultItem}>
                 <SearchResultItemLeftContainer>
                     <SearchResultItemIconContainer>
                     <ProfileSearchItemImage
@@ -491,7 +526,7 @@ const SearchScreen = ({navigation}: Props) => {
             </SearchResultItemContainer>
         )} else if(section.title == "장소") {
             return (
-            <SearchResultItemContainer>
+            <SearchResultItemContainer style={item.selected && styles.disalbedSearhResultItem}>
             <SearchResultItemLeftContainer>
                 <SearchResultItemIconContainer>
                 <TagSearchItemIcon
@@ -583,7 +618,7 @@ const SearchScreen = ({navigation}: Props) => {
                     />
                 </SearchInputContainer>
             </HeaderSearchContainer>
-            <TouchableWithoutFeedback onPress={() => searchToInputedItem()}>
+            <TouchableWithoutFeedback onPress={() => searchToInputedKeywordList()}>
             <HeaderRightContainer>
                 <HeaderSearchText>검색</HeaderSearchText>
             </HeaderRightContainer>
@@ -592,7 +627,7 @@ const SearchScreen = ({navigation}: Props) => {
             <SelectedSearchItemListContainer>
                 <FlatList
                 keyboardShouldPersistTaps={"handled"}
-                data={selectedSearchItemList}
+                data={currentUser.inputedKeywordList}
                 renderItem={renderSelectedItem}
                 />
             </SelectedSearchItemListContainer>

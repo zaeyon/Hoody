@@ -7,7 +7,8 @@ import {
 } from 'react-native-responsive-screen';
 import Modal from 'react-native-modal';
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
-
+import {useSelector, useDispatch} from 'react-redux';
+import allActions from '~/action';
 
 const Container = Styled.SafeAreaView`
  flex: 1;
@@ -189,6 +190,8 @@ const SearchResultScreen = ({navigation, route}: Props) => {
     const [keywordList, setKeywordList] = useState<Array<object>>([]);
     const [filterModalVisible, setFilterModalVisible] = useState<boolean>(false);
     const [selectedRadioIndex, setSelectedRadioIndex] = useState<number>(0);
+    const currentUser = useSelector((state: any) => state.currentUser);
+    const dispatch = useDispatch();
 
 
 var radio_props = [
@@ -279,7 +282,7 @@ var radio_props = [
                 showsHorizontalScrollIndicator={false}
                 keyboardShouldPersistTaps={"handled"}
                 horizontal={true}
-                data={keywordList}
+                data={currentUser.inputedKeywordList}
                 renderItem={renderKeywordItem}
                 />
             </KeywordItemListContainer>

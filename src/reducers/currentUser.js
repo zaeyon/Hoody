@@ -32,6 +32,11 @@ const currentUser = (state = {}, action) => {
         ...state,
         userRecentSearch: action.payload,
       }
+    case 'SET_INPUTED_KEYWORD_LIST':
+      return {
+        ...state,
+        inputedKeywordList: action.payload,
+      }
     default:
       return state;
   }

@@ -52,6 +52,7 @@ import ProfileScreenTest from '~/Components/Container/ProfileScreenTest'
 import ProfileTestScreen from '~/Components/Container/ProfileTestScreen';
 import FollowListScreen from '~/Components/Container/FollowListScreen';
 import AnotherUserProfileScreen from '~/Components/Container/AnotherUserProfileScreen';
+import ProfileEditScreen from '~/Components/Container/ProfileEditScreen';
 
 // Collection Screen
 import CollectionUploadScreen from '~/Components/Container/CollectionUploadScreen';
@@ -342,6 +343,9 @@ function ProfileStackScreen() {
       <ProfileStack.Screen
       name="ScrapListScreen"
       component={ScrapListScreen}/>
+      <ProfileStack.Screen
+      name="ProfileEditScreen"
+      component={ProfileEditScreen}/>
       <ProfileStack.Screen
       name="FeedStack"
       component={FeedStackScreen}/>
@@ -724,7 +728,7 @@ function AppNavigator() {
 
   return (
     <NavigationContainer>
-    {(!currentUserState.loggedIn) ? (  
+    {(currentUserState.loggedIn) ? (  
     <NoBottomBarStack.Navigator
     headerMode="none"
     >

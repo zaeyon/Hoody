@@ -27,6 +27,11 @@ const currentUser = (state = {}, action) => {
         ...state,
         userAllFeeds: action.payload,
       }
+    case 'SET_USER_RECENT_SEARCH':
+      return {
+        ...state,
+        userRecentSearch: action.payload,
+      }
     default:
       return state;
   }

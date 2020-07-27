@@ -5,7 +5,7 @@ import {
     heightPercentageToDP as hp
 } from 'react-native-responsive-screen';
 import {TouchableWithoutFeedback, FlatList, TextInput ,Keyboard, KeyboardAvoidingView, StyleSheet, Text, View} from 'react-native'
-import GetAutoComplete from '~/Route/Search/GetAutoComplete';
+import GETSearchAutoComplete from '~/Route/Search/GETSearchAutoComplete';
 
 const Container = Styled.SafeAreaView`
   flex: 1;
@@ -487,7 +487,7 @@ const TagSearchScreen = ({navigation, route}: Props) => {
             setMainTagWidth(mainTagSize.width);
         } else {
         console.log("태그자동완성 tmpTag", tmpTag);
-        GetAutoComplete(tmpTag, "tag")
+        GETSearchAutoComplete(tmpTag, "tag")
         .then(function(response) {
             console.log("메인태그 자동완성", response)
             setTagAutoCompletedList(response);
@@ -529,7 +529,7 @@ const TagSearchScreen = ({navigation, route}: Props) => {
         } else {
         if(tmpTag != "") {
             console.log("태그자동완성 tmpTag", tmpTag);
-            GetAutoComplete(tmpTag, "tag")
+            GETSearchAutoComplete(tmpTag, "tag")
             .then(function(response) {
                 console.log("서브태그1 자동완성", response)
                 setTagAutoCompletedList(response);
@@ -566,7 +566,7 @@ const TagSearchScreen = ({navigation, route}: Props) => {
         } else {
             if(tmpTag != "") {
                 console.log("태그자동완성 tmpTag", tmpTag);
-                GetAutoComplete(tmpTag, "tag")
+                GETSearchAutoComplete(tmpTag, "tag")
                 .then(function(response) {
                     console.log("서브태그2 자동완성", response)
                     setTagAutoCompletedList(response);

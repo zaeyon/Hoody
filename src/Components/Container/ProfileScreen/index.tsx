@@ -494,13 +494,18 @@ const ProfileScreen = ({navigation, route}: Props) => {
     });
   }
 
-  const moveToSettingScreen = () => {
+  const moveToSetting = () => {
     navigation.navigate("SettingScreen");
     setProfileModalVisible(false)
   }
 
-  const moveToScrapListScreen = () => {
+  const moveToScrapList = () => {
     navigation.navigate("ScrapListScreen");
+    setProfileModalVisible(false);
+  }
+
+  const moveToProfileEdit = () => {
+    navigation.navigate("ProfileEditScreen");
     setProfileModalVisible(false);
   }
 
@@ -652,25 +657,27 @@ const ProfileScreen = ({navigation, route}: Props) => {
         <ModalHeaderContainer>
         <ModalToggleButton/>
         </ModalHeaderContainer>
-        <TouchableWithoutFeedback onPress={() => moveToSettingScreen()}>
+        <TouchableWithoutFeedback onPress={() => moveToSetting()}>
         <ModalTabItemContainer>
           <ModalTabItemIconImage
           source={require('~/Assets/Images/Profile/BottomModal/ic_setting.png')}/>
           <ModalTabItemLabelText>설정</ModalTabItemLabelText>
         </ModalTabItemContainer>
         </TouchableWithoutFeedback>
-        <TouchableWithoutFeedback onPress={() => moveToScrapListScreen()}>
+        <TouchableWithoutFeedback onPress={() => moveToScrapList()}>
         <ModalTabItemContainer>
           <ModalTabItemIconImage
           source={require('~/Assets/Images/Profile/BottomModal/ic_scrap.png')}/>
           <ModalTabItemLabelText>스크랩</ModalTabItemLabelText>
         </ModalTabItemContainer>
         </TouchableWithoutFeedback>
+        <TouchableWithoutFeedback onPress={() => moveToProfileEdit()}>
         <ModalTabItemContainer>
           <ModalTabItemIconImage
           source={require('~/Assets/Images/Profile/BottomModal/ic_profile.png')}/>
           <ModalTabItemLabelText>프로필 편집</ModalTabItemLabelText>
         </ModalTabItemContainer>
+        </TouchableWithoutFeedback>
       </ProfileModalContainer>
       </Modal>
 

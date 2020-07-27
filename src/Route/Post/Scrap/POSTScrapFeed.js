@@ -1,5 +1,5 @@
 import axios from 'axios';
-const baseUrl = 'https://9b4d98a979b6.ngrok.io';
+const baseUrl = 'https://2e0ce7667c8e.ngrok.io';
 
 const POSTScrapFeed = (postIdArray) => {
     const url = baseUrl + '/scrap/folder/posts';

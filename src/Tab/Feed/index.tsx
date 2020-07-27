@@ -15,7 +15,7 @@ import GetAllFeed from '~/Route/Post/TestFeed';
 import SearchBar from '~/Components/Presentational/FeedListScreen/SearchBar'
 import SearchResult from '~/Components/SearchResult';
 import SearchAutoComplete from '~/Components/Presentational/SearchScreen/SearchAutoCompleteItem';
-import GetAutoComplete from '~/Route/Search/GetAutoComplete';
+import GETSearchAutoComplete from '~/Route/Search/GETSearchAutoComplete';
 
 const BottomTabHeight = Styled.View`
  width: ${wp('100%')};
@@ -156,7 +156,7 @@ function Feed({navigation, route}: Props) {
   }, []);
 
   useEffect(() => {
-    GetAutoComplete(query, category)
+    GETSearchAutoComplete(query, category)
     .then(function(response) {
       console.log("검색 자동 완성", response);
       setAutoComplete(response.result);

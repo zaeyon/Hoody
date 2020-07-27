@@ -10,7 +10,10 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+
+// Route
 import Login from '~/Route/Auth/Login';
+import GETRecentSearch from '~/Route/Search/GETRecentSearch';
 
 const Input = Styled.TextInput`
 position: relative;
@@ -169,6 +172,17 @@ const LoginScreen = ({navigation}) => {
           allActions.userActions.setScrapFeeds(response.data.user.scraps[0].Posts)
         )
       }
+
+      GETRecentSearch(0, 20)
+      .then(function(response) {
+        console.log("GETRecentSearch response", response);
+        dispatch(
+          allActions.userActions.setUserRecentSearch(response)
+        )
+      })
+      .catch(function(error) {
+        console.log("GETRecentSearch error", error);
+      })
     })
     .catch(function (error) {
       console.log("error: ", error);

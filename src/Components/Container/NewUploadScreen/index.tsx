@@ -18,7 +18,7 @@ import ProductItem from '~/Components/Presentational/UploadScreen/ProductItem';
 // Route
 import PostUpload from '~/Route/Post/Upload';
 import POSTProductUrl from '~/Route/Post/POSTProductUrl';
-import GetAutoComplete from '~/Route/Search/GetAutoComplete';
+import GETSearchAutoComplete from '~/Route/Search/GETSearchAutoComplete';
 
 const ratingImage = require('~/Assets/Images/ic_star4.png');
 
@@ -963,7 +963,7 @@ const NewUploadScreen = ({navigation, route}: Props) => {
     };
 
     const changeTagInput = (query) => {
-        GetAutoComplete(query, "tag")
+        GETSearchAutoComplete(query, "tag")
         .then(function(response) {
             console.log("태그 자동완성", response.result[0])
             setFirstTagResult(response.result[0]);

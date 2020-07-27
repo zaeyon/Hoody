@@ -6,7 +6,7 @@ import {
 } from 'react-native-responsive-screen';
 import {TouchableWithoutFeedback, FlatList ,Keyboard, KeyboardAvoidingView} from 'react-native'
 
-import GetAutoComplete from '~/Route/Search/GetAutoComplete';
+import GETSearchAutoComplete from '~/Route/Search/GETSearchAutoComplete';
 
 const Container = Styled.SafeAreaView`
   flex: 1;
@@ -204,7 +204,7 @@ const TagSearchScreenTest = ({navigation, route}: Props) => {
     }
 
     const changeTagInput = (query) => {
-        GetAutoComplete(query, "tag")
+        GETSearchAutoComplete(query, "tag")
         .then(function(response) {
             console.log("태그 자동완성", response.result[0])
             setFirstTagResult(response.result[0]);

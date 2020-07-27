@@ -35,7 +35,7 @@ padding: 10px 15px 10px 15px;
  justify-content: center;
 `;
 
-const CancleText = Styled.Text`
+const CancelText = Styled.Text`
  font-size: 17px;
  color: #cccccc;
 `;
@@ -211,7 +211,7 @@ const ProductUrlSearchScreen = ({navigation, route}: Props) => {
        <HeaderBar>
                 <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
                 <HeaderLeftContainer>
-                    <CancleText>취소</CancleText>
+                    <CancelText>취소</CancelText>
                 </HeaderLeftContainer>
                 </TouchableWithoutFeedback>
                 <HeaderTitle>URL 첨부</HeaderTitle>

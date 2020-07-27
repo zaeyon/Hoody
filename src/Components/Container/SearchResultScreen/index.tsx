@@ -10,6 +10,9 @@ import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-
 import {useSelector, useDispatch} from 'react-redux';
 import allActions from '~/action';
 
+// Import Local Component
+import SearchResultTopTabNavigator from '~/Components/Presentational/SearchResultScreen/SearchResultTopTabNavigator';
+
 const Container = Styled.SafeAreaView`
  flex: 1;
  background-color: #ffffff;
@@ -18,7 +21,7 @@ const Container = Styled.SafeAreaView`
 
 const HeaderBar = Styled.View`
  width: ${wp('100%')};
- height: ${wp('13.8%')};
+ height: ${wp('11.7%')};
  flex-direction: row;
  align-items: center;
  justify-content: space-between;
@@ -162,24 +165,222 @@ color: #267DFF;
 `;
 
 const ModalTabContainer = Styled.View`
-height: ${wp('12.2%')};
-padding-left: 16px;
+height: ${wp('12.5%')};
+width: ${wp('100%')};
+padding-left: 8px;
 padding-right: 16px;
+background-color: #ffffff;
+justify-content: center;
 `;
 
 const ModalTabInfoContainer = Styled.View`
-height: ${wp('12.2%')};
+height: ${wp('12.5%')};
 flex-direction: row;
 align-items: center;
 justify-content: space-between;
 border-bottom-width: 0.6px;
 border-color: #ECECEE;
+background-color: #ffffff;
 `;
 
 const ModalTabLabelText = Styled.Text`
 font-size: 16px;
 color: #1D1E1F;
 `;
+
+const SearchResultListContainer = Styled.View`
+ flex: 1;
+ background-color: #ffffff;
+`;
+
+
+const TEST_FEED_DATA = [
+    {
+      id: 1,
+      user : {
+        profileImg: 'https://t1.daumcdn.net/thumb/R600x0/?fname=https%3A%2F%2Ft1.daumcdn.net%2Fqna%2Fimage%2F1542632018000000528',
+        nickname: '테스트닉네임'
+      },
+      createAt: '2020-05-22',
+      starRate: 2.5,
+      scrapsCount: 12,
+      commentsCount: 21,
+      replysCount: 12,
+      likes: 111,
+      mainTags : {
+        name: '메인태그'
+      },
+      subTagOnes: {
+        name: '서브태그1'
+      },
+      subTagTwos: {
+        name: '서브태그2'
+      },
+      address : {
+        address: '블루문 스터디 카페'
+      },
+      expense: 2000,
+      descriptions: [
+        {
+          description: "이번 남자친구가 선물해준 키엘 수분 크림을 사용해 봤는데 너무 좋은거 같아요 이번에 남자 ..."
+        },
+        {
+          description: "내용2"
+        }
+      ],
+      mediaFiles: [
+        {
+          type: 'image',
+          url: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fk.kakaocdn.net%2Fdn%2Fb8lOJh%2FbtqBtL2bmwP%2FkUzXrFiEIRfFUKWowimMRk%2Fimg.jpg'
+        },
+        {
+          type: 'image',
+          url: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fk.kakaocdn.net%2Fdn%2FJUreB%2FbtqCpQUtIUD%2Ff2rOUTYmBhgNc4rDxbreU0%2Fimg.jpg'
+        }
+      ],
+      paragraphData: [
+        {
+          type:"description",
+          description: "내용1"
+        },
+        {
+          type:"image",
+          url: 'https://img1.daumcdn.net/thumb/R720x0/?fname=https%3A%2F%2Ft1.daumcdn.net%2Fliveboard%2Fdailylife%2F6d8abd51eb3644958240a9ca6ddf28bd.JPG',
+        },
+        {
+          type:"description",
+          description: "내용2"
+        },
+        {
+          type: 'image',
+          url: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fk.kakaocdn.net%2Fdn%2Fb8lOJh%2FbtqBtL2bmwP%2FkUzXrFiEIRfFUKWowimMRk%2Fimg.jpg'
+        }
+      ]
+    },
+    {
+      id: 2,
+      user : {
+        profileImg: 'https://t1.daumcdn.net/thumb/R600x0/?fname=https%3A%2F%2Ft1.daumcdn.net%2Fqna%2Fimage%2F1542632018000000528',
+        nickname: '하하'
+      },
+      createAt: '2020-06-22',
+      starRate: 4,
+      scrapsCount: 12,
+      commentsCount: 21,
+      replysCount: 12,
+      likes: 111,
+      mainTags : {
+        name: '스타벅스'
+      },
+      subTagOnes: {
+        name: '아이스아메리카노'
+      },
+      subTagTwos: {
+        name: '아아'
+      },
+      likes: 233,
+      address : {
+        address: '범계역 스타벅스'
+      },
+      expense: 2000,
+      descriptions: [
+        {
+          description: "범계역 스타벅스에서 BLT 샌드위치를 먹었다."
+        },
+        {
+          description: "ㅎ"
+        }
+      ],
+      mediaFiles: [
+        {
+          type: 'image',
+          url: 'https://img1.daumcdn.net/thumb/R720x0/?fname=https%3A%2F%2Ft1.daumcdn.net%2Fliveboard%2Fdailylife%2F6d8abd51eb3644958240a9ca6ddf28bd.JPG'
+        }
+      ],
+      paragraphData: [
+        {
+          type:"description",
+          description: "내용1"
+        },
+        {
+          type:"image",
+          url: 'https://img1.daumcdn.net/thumb/R720x0/?fname=https%3A%2F%2Ft1.daumcdn.net%2Fliveboard%2Fdailylife%2F6d8abd51eb3644958240a9ca6ddf28bd.JPG',
+        },
+        {
+          type:"description",
+          description: "내용2"
+        }
+      ]
+    },
+    {
+      id: 3,
+      user : {
+        profileImg: 'https://t1.daumcdn.net/thumb/R600x0/?fname=https%3A%2F%2Ft1.daumcdn.net%2Fqna%2Fimage%2F1542632018000000528',
+        nickname: '테스트닉네임'
+      },
+      createAt: '2020-05-22',
+      starRate: 2.5,
+      scrapsCount: 12,
+      commentsCount: 21,
+      replysCount: 12,
+      likes: 111,
+      mainTags : {
+        name: '메인태그'
+      },
+      subTagOnes: {
+        name: '서브태그1'
+      },
+      subTagTwos: {
+        name: '서브태그2'
+      },
+      likes: 233,
+      address : {
+        address: '블루문 스터디 카페'
+      },
+      expense: 2000,
+      descriptions: [
+        {
+          description: "이번 남자친구가 선물해준 키엘 수분 크림을 사용해 봤는데 너무 좋은거 같아요 이번에 남자 ..."
+        },
+        {
+          description: "내용2"
+        }
+      ],
+      mediaFiles: [
+        {
+          type: 'image',
+          url: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fk.kakaocdn.net%2Fdn%2Fb8lOJh%2FbtqBtL2bmwP%2FkUzXrFiEIRfFUKWowimMRk%2Fimg.jpg'
+        },
+        {
+          type: 'image',
+          url: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fk.kakaocdn.net%2Fdn%2FJUreB%2FbtqCpQUtIUD%2Ff2rOUTYmBhgNc4rDxbreU0%2Fimg.jpg'
+        },
+        {
+          type: 'image',
+          url: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fk.kakaocdn.net%2Fdn%2FJUreB%2FbtqCpQUtIUD%2Ff2rOUTYmBhgNc4rDxbreU0%2Fimg.jpg'
+        }
+      ],
+      paragraphData: [
+        {
+          type:"description",
+          description: "내용1"
+        },
+        {
+          type:"image",
+          url: 'https://img1.daumcdn.net/thumb/R720x0/?fname=https%3A%2F%2Ft1.daumcdn.net%2Fliveboard%2Fdailylife%2F6d8abd51eb3644958240a9ca6ddf28bd.JPG',
+        },
+        {
+          type:"description",
+          description: "내용2"
+        },
+        {
+          type: 'image',
+          url: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fk.kakaocdn.net%2Fdn%2Fb8lOJh%2FbtqBtL2bmwP%2FkUzXrFiEIRfFUKWowimMRk%2Fimg.jpg'
+        }
+      ]
+    },
+  ];
+  
 
 interface Props {
     navigation: any,
@@ -195,8 +396,8 @@ const SearchResultScreen = ({navigation, route}: Props) => {
 
 
 var radio_props = [
-    {label: 'byPopularity', value: 0 },
-    {label: 'byNewest', value: 1}
+    {label: '인기순', value: 0 },
+    {label: '최신순', value: 1}
   ];
 
     useEffect(() => {
@@ -215,6 +416,16 @@ var radio_props = [
         setSelectedRadioIndex(i)
     }
 
+    const applySearchFilter = () => {
+        setFilterModalVisible(false);
+    }
+
+    const removeKeywordItem = (index:number) => {
+        var removedKeywordList = currentUser.inputedKeywordList;
+        removedKeywordList.splice(index, 1);
+        dispatch(allActions.userActions.setInputedKeywordList(removedKeywordList));
+    }
+
     const renderKeywordItem = ({item, index}: any) => {
         console.log("renderKeywordItem", item);
         if(item.type == "태그") {
@@ -223,10 +434,12 @@ var radio_props = [
                 <KeywordItemContainer>
                     <KeywordItemText>{"#" + item.item.name}</KeywordItemText>
                 </KeywordItemContainer>
+                <TouchableWithoutFeedback onPress={() => removeKeywordItem(index)}>
                 <RemoveKeywordItemContainer>
                     <RemoveKeywordIcon
                     source={require('~/Assets/Images/SearchResult/ic_remove.png')}/>
                 </RemoveKeywordItemContainer>
+                </TouchableWithoutFeedback>
             </KeywordItemBackground>
             )
         } else if(item.type == "계정") {
@@ -239,10 +452,12 @@ var radio_props = [
                     style={{marginLeft: 6}}
                     >{item.item.nickname}</KeywordItemText>
                 </KeywordProfileContainer>
+                <TouchableWithoutFeedback onPress={() => removeKeywordItem(index)}>
                 <RemoveKeywordItemContainer>
                     <RemoveKeywordIcon
                     source={require('~/Assets/Images/SearchResult/ic_remove.png')}/>
                 </RemoveKeywordItemContainer>
+                </TouchableWithoutFeedback>
             </KeywordItemBackground>
             )
         } else if(item.type == "장소") {
@@ -251,10 +466,12 @@ var radio_props = [
                 <KeywordItemContainer>
                     <KeywordItemText>{item.item.address}</KeywordItemText>
                 </KeywordItemContainer>
+                <TouchableWithoutFeedback onPress={() => removeKeywordItem(index)}>
                 <RemoveKeywordItemContainer>
                     <RemoveKeywordIcon
                     source={require('~/Assets/Images/SearchResult/ic_remove.png')}/>
                 </RemoveKeywordItemContainer>
+                </TouchableWithoutFeedback>
             </KeywordItemBackground>
             )
         }
@@ -286,6 +503,12 @@ var radio_props = [
                 renderItem={renderKeywordItem}
                 />
             </KeywordItemListContainer>
+            <SearchResultListContainer>
+                <SearchResultTopTabNavigator
+                navigation={navigation}
+                feedResultListData={TEST_FEED_DATA}
+                />
+            </SearchResultListContainer>
             <Modal
             style={styles.filterModal}
             isVisible={filterModalVisible}
@@ -301,53 +524,44 @@ var radio_props = [
                         <ModalTitleText>
                             검색 필터
                         </ModalTitleText>
+                        <TouchableWithoutFeedback onPress={() => applySearchFilter()}>
                         <ModalApplyText>
                             적용
                         </ModalApplyText>
+                        </TouchableWithoutFeedback>
                     </ModalTitleContainer>
-                    <ModalTabContainer>
-                        <ModalTabInfoContainer>
-                            <ModalTabLabelText>
-                                인기순
-                            </ModalTabLabelText>
                             <RadioForm>
                             {radio_props.map((obj, i) => (
-                            <RadioButton labelHorizontal={true} key={i} >
+                            <ModalTabContainer>
+                                <ModalTabInfoContainer>
+                            <RadioButton 
+                            labelHorizontal={true} 
+                            key={i}>
+                                <RadioButtonLabel
+                                obj={obj}
+                                index={i}
+                                onPress={() => onPressRadioButton(i)}
+                                labelHorizontal={true}
+                                labelStyle={{fontSize: 16, color: '#1D1E1F'}}
+                                labelWrapStyle={{}}/>
+                            </RadioButton>
 
-        <RadioButtonLabel
-          obj={obj}
-          index={i}
-          onPress={() => onPressRadioButton(i)}
-          labelHorizontal={true}
-          labelStyle={{fontSize: 20, color: '#2ecc71'}}
-          labelWrapStyle={{}}
-        />
                             <RadioButtonInput
-                            obj={obj}
-                            index={i}
-                            isSelected={selectedRadioIndex === i}
-                           onPress={() => onPressRadioButton(i)}
-          borderWidth={1}
-          buttonInnerColor={'#e74c3c'}
-          buttonOuterColor={selectedRadioIndex === i ? '#2196f3' : '#000'}
-          buttonSize={20}
-          buttonOuterSize={30}
-          buttonStyle={{}}
-          buttonWrapStyle={{marginLeft: 10}}
-        />
-      </RadioButton>
-    ))}
-
+                                obj={obj}
+                                index={i}
+                                isSelected={selectedRadioIndex === i}
+                                onPress={() => onPressRadioButton(i)}
+                                borderWidth={1.5}
+                                buttonInnerColor={'#267DFF'}
+                                buttonOuterColor={selectedRadioIndex === i ? '#267DFF' : '#00000020'}
+                                buttonSize={wp('3.73%')}
+                                buttonOuterSize={wp('5.86%')}
+                                buttonStyle={{}}
+                                buttonWrapStyle={{marginLeft: 10}}/>
+                            </ModalTabInfoContainer>
+                            </ModalTabContainer>
+                             ))}
                            </RadioForm>
-                        </ModalTabInfoContainer>
-                    </ModalTabContainer>
-                    <ModalTabContainer>
-                        <ModalTabInfoContainer>
-                            <ModalTabLabelText>
-                                최신순
-                            </ModalTabLabelText>
-                        </ModalTabInfoContainer>
-                    </ModalTabContainer>
                 </FilterModalContainer>
             </Modal>
 

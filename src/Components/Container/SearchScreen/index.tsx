@@ -44,6 +44,13 @@ padding-right: 16px;
 justify-content: center;
 `;
 
+const DisabledHeaderSearchText = Styled.Text`
+color: #267DFF;
+font-weight: 500;
+font-size: 17px;
+opacity: 0.5;
+`;
+
 const HeaderSearchText = Styled.Text`
  color: #267DFF;
  font-weight: 500;
@@ -311,6 +318,7 @@ const SearchScreen = ({navigation}: Props) => {
 
         if(text === "") {
             setNoInputSearch(true);
+
         } else {
             setNoInputSearch(false);
             GETSearchAutoComplete(text)
@@ -388,6 +396,7 @@ const SearchScreen = ({navigation}: Props) => {
        });
        setTimeout(() => {
         dispatch(allActions.userActions.setInputedKeywordList(tmpSelectedSearchItemList))
+        setInputingSearchText("")
         console.log("currentUser.inputedKeywordList", currentUser.inputedKeywordList);
        }, 10)
     } else {
@@ -425,9 +434,29 @@ const SearchScreen = ({navigation}: Props) => {
                 setSearchResultListData(tmpSearchResultListData);
             }
         }
+
+        if(inputingSearchText === "") {
+            setNoInputSearch(true);
+        } 
     }
 
     const searchToInputedKeywordList = () => {
+        if(inputingSearchText !== "") {
+            var tmpKeywordList = currentUser.inputedKeywordList;
+            tmpKeywordList.push(
+                {
+                    item: {
+                        name: inputingSearchText 
+                    },
+                    type: "태그"
+                }
+            )
+
+            setTimeout(() => {
+                dispatch(allActions.userActions.setInputedKeywordList(tmpKeywordList));
+                setInputingSearchText("");
+            })
+        }
         navigation.navigate("SearchResultScreen");
     }
 
@@ -609,7 +638,8 @@ const SearchScreen = ({navigation}: Props) => {
             <HeaderSearchContainer>
                 <SearchInputContainer>
                     <SearchInput
-                    placeholder={"검색"}
+                    editable={currentUser.inputedKeywordList.length === 3 ? false : true}
+                    placeholder={currentUser.inputedKeywordList.length === 3 ? "키워드는 3개까지 입력 할 수 있습니다." : "검색"}
                     placeholderTextColor={"C6C7CC"}
                     autoFocus={true}
                     value={inputingSearchText}
@@ -618,11 +648,18 @@ const SearchScreen = ({navigation}: Props) => {
                     />
                 </SearchInputContainer>
             </HeaderSearchContainer>
+            {noInputSearch && !currentUser.inputedKeywordList[0] && (
+                <HeaderRightContainer>
+                <DisabledHeaderSearchText>검색</DisabledHeaderSearchText>
+            </HeaderRightContainer>
+            )}
+            {(currentUser.inputedKeywordList[0] || !noInputSearch) && (
             <TouchableWithoutFeedback onPress={() => searchToInputedKeywordList()}>
             <HeaderRightContainer>
                 <HeaderSearchText>검색</HeaderSearchText>
             </HeaderRightContainer>
             </TouchableWithoutFeedback>
+            )}
             </HeaderBar>
             <SelectedSearchItemListContainer>
                 <FlatList
@@ -631,7 +668,7 @@ const SearchScreen = ({navigation}: Props) => {
                 renderItem={renderSelectedItem}
                 />
             </SelectedSearchItemListContainer>
-            {!noInputSearch && (
+            {(inputingSearchText !== "")&& (
             <SearchResultContainer>
             <SectionList
             keyboardShouldPersistTaps={"handled"}

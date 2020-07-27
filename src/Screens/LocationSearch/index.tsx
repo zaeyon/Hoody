@@ -34,6 +34,13 @@ padding: 10px 15px 10px 15px;
  justify-content: center;
 `;
 
+
+const HeaderCancelText = Styled.Text`
+ font-size: 17px;
+ font-weight: 500;
+ color: #cccccc;
+`;
+
 const MyProfileSettingButton = Styled.Image`
  width: ${wp('8%')};
  height: ${wp('8%')};
@@ -44,6 +51,13 @@ padding: 10px 15px 10px 15px;
  align-items: center;
  justify-content: center;
  flex-direction: row;
+`;
+
+
+const HeaderFinishText = Styled.Text`
+font-size: 17px;
+ font-weight: 500;
+ color: #3384FF;
 `;
 
 const MyProfileReportContainer = Styled.View`
@@ -365,12 +379,12 @@ const LocationItem = ({location, address}) => {
        <HeaderBar>
                 <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
                 <HeaderLeftContainer>
-                    <CancleText>취소</CancleText>
+                    <HeaderCancelText>취소</HeaderCancelText>
                 </HeaderLeftContainer>
                 </TouchableWithoutFeedback>
                 <HeaderTitle>위치</HeaderTitle>
                 <HeaderRightContainer>
-                        <FinishText>확인</FinishText>
+                        <HeaderFinishText>확인</HeaderFinishText>
                 </HeaderRightContainer>
             </HeaderBar>
             <SearchContainer>
@@ -384,7 +398,7 @@ const LocationItem = ({location, address}) => {
               <SearchIconContainer>
                 <SearchIcon
                   source={require('~/Assets/Images/ic_search.png')}
-                />searchIconContainer
+                />
                 </SearchIconContainer>
                 </SearchInputContainer>
             </SearchContainer>

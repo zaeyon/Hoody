@@ -55,7 +55,7 @@ padding: 10px 15px 10px 15px;
  justify-content: center;
 `;
 
-const CancleText = Styled.Text`
+const CancelText = Styled.Text`
  font-size: 17px;
  color: #cccccc;
 `;
@@ -578,12 +578,12 @@ color: #3384FF;
  font-size: 17px;
 `;
 
-const CancleModifyDescripText = Styled.Text`
+const CancelModifyDescripText = Styled.Text`
  color: #707070;
  font-size: 17px;
 `;
 
-const CancleModifyDescripContainer = Styled.View`
+const CancelModifyDescripContainer = Styled.View`
  justify-content: center;
  align-items: center;
 `;
@@ -624,14 +624,14 @@ const RemoveDatePickerContainer = Styled.View`
  margin-right: 10px;
 `;
 
-const CancleDatePickerContainer = Styled.View`
+const CancelDatePickerContainer = Styled.View`
 justify-content: center;
 align-items: center;
 padding-left: 12px;
 `;
 
 
-const CancleDatePickerText = Styled.Text`
+const CancelDatePickerText = Styled.Text`
 font-size: 17px;
 color: #cccccc;
 `;
@@ -1440,7 +1440,7 @@ const renderAddNewDescripInput = () => {
             <HeaderBar>
                 <TouchableWithoutFeedback onPress={() => uploadCancel()}>
                 <HeaderLeftContainer>
-                    <CancleText>취소</CancleText>
+                    <CancelText>취소</CancelText>
                 </HeaderLeftContainer>
                 </TouchableWithoutFeedback>
                 <HeaderRightContainer>
@@ -1697,9 +1697,9 @@ const renderAddNewDescripInput = () => {
                             <View style={{flexDirection: "row"}}>
                                 {/*
                             <TouchableWithoutFeedback onPress={() => cancleModifyDescrip()}>
-                                <CancleModifyDescripContainer>
-                                    <CancleModifyDescripText>취소</CancleModifyDescripText>
-                                </CancleModifyDescripContainer>
+                                <CancelModifyDescripContainer>
+                                    <CancelModifyDescripText>취소</CancelModifyDescripText>
+                                </CancelModifyDescripContainer>
                             </TouchableWithoutFeedback>
                                 */}
                             <TouchableWithoutFeedback onPress={() => removeDescripParagraph()}>
@@ -1727,9 +1727,9 @@ const renderAddNewDescripInput = () => {
             {visibleConsumptionDatePicker && (
                 <ConsumptionDatePickerContainer>
                 <ConsumptionDatePickerHeaderBar>
-                    <CancleDatePickerContainer>
-                    <CancleDatePickerText>취소</CancleDatePickerText>
-                    </CancleDatePickerContainer>
+                    <CancelDatePickerContainer>
+                    <CancelDatePickerText>취소</CancelDatePickerText>
+                    </CancelDatePickerContainer>
                     <DatePickerHeaderBarRightContainer>
                     <TouchableWithoutFeedback onPress={() => removeConsumptionDate()}>
                     <RemoveDatePickerContainer>

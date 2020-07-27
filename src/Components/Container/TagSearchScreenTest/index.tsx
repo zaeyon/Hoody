@@ -29,7 +29,7 @@ padding: 20px 20px 15px 20px;
  justify-content: center;
 `;
 
-const CancleText = Styled.Text`
+const CancelText = Styled.Text`
  font-size: 17px;
  color: #cccccc;
 `;
@@ -220,7 +220,7 @@ const TagSearchScreenTest = ({navigation, route}: Props) => {
               <HeaderBar>
                 <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
                 <HeaderLeftContainer>
-                    <CancleText>취소</CancleText>
+                    <CancelText>취소</CancelText>
                 </HeaderLeftContainer>
                 </TouchableWithoutFeedback>
                 <HeaderRightContainer>

@@ -171,6 +171,9 @@ const LoginScreen = ({navigation}) => {
         dispatch(
           allActions.userActions.setScrapFeeds(response.data.user.scraps[0].Posts)
         )
+        dispatch(
+          allActions.userActions.setInputedKeywordList([])
+        )
       }
 
       GETRecentSearch(0, 20)

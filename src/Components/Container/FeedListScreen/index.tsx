@@ -393,12 +393,6 @@ function FeedListScreen({navigation, route}: Props) {
           <HeaderLeftContainer>
           <HeaderTitleText>피드</HeaderTitleText>
           </HeaderLeftContainer>
-          <TouchableWithoutFeedback onPress={() => moveNearFeedMap()}>
-         <HeaderRightContainer>
-          <ReviewMapIcon
-          source={require('~/Assets/Images/ic_map.png')}/>
-          </HeaderRightContainer>
-          </TouchableWithoutFeedback>
       </HeaderBar>
       <BodyContainer
       >

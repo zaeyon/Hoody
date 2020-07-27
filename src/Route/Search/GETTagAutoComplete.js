@@ -1,11 +1,10 @@
 import axios from 'axios';
 const baseUrl = 'https://8151dd98f053.ngrok.io'
 
-const GETSearchAutoComplete = (offset, limit) => {
-    offset = 0;
-    limit = 20;
+const GETTagAutoComplete = (query) => {
+    console.log("입력된 검색 키워드", query);
 
-    const url = baseUrl + "/search/recentSearch?offset=" + offset +"&limit=" + limit;
+    const url = baseUrl + "/search/tag?q=" + query;
     
     return new Promise(function(resolve, reject) {
         axios
@@ -19,4 +18,4 @@ const GETSearchAutoComplete = (offset, limit) => {
     })
 }
 
-export default GETSearchAutoComplete;
+export default GETTagAutoComplete;

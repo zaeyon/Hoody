@@ -19,6 +19,8 @@ import CollectionItem from '~/Components/Presentational/SearchResultScreen/Colle
 
 // Route
 import GETSearchResult from '~/Route/Search/GETSearchResult';
+import POSTFollowTag from '~/Route/Tag/POSTFollowTag';
+import DELETEUnfollowTag from '~/Route/Tag/DELETEUnfollowTag';
 
 const Container = Styled.SafeAreaView`
  flex: 1;
@@ -268,6 +270,24 @@ const SingleKeywordFollowText = Styled.Text`
 font-weight: 500;
 font-size: 14px;
 color: #FFFFFF;
+`;
+
+
+const SingleKeywordFollowingButton = Styled.View`
+width: ${wp('17%')}
+height: ${wp('8.5%')};
+border-radius: 8px;
+background-color: #ffffff;
+justify-content: center;
+align-items: center;
+border-width: 1px;
+border-color: #77A7F1;
+`;
+
+const SingleKeywordFollowingText = Styled.Text`
+ font-size: 14px;
+ font-weight: 500;
+ color: #77A7F1;
 `;
 
 const TEST_FEED_DATA = [
@@ -1233,6 +1253,9 @@ const SearchResultScreen = ({navigation, route}: Props) => {
     const [selectedOrder, setSelectedOrder] = useState<string>("createdAt");
     const [selectedType, setSelectedType] = useState<string>("post");
     const [searchQuery, setSearchQuery] = useState<string>("");
+
+    const [currentUserFollowing, setCurrentUserFollowing] = useState<boolean>(false);
+
     const currentUser = useSelector((state: any) => state.currentUser);
     const dispatch = useDispatch();
 
@@ -1284,7 +1307,26 @@ const SearchResultScreen = ({navigation, route}: Props) => {
       GETSearchResult("post", query, order, offset, limit)
             .then(function(response) {
             console.log("GETSearchResult response", response);
-            setSearchResultFeedListData(response);
+            setSearchResultFeedListData(response.data);
+
+            var tmpKeywordList = currentUser.inputedKeywordList;
+            if(currentUser.inputedKeywordList.length === 1) {
+              if(currentUser.inputedKeywordList[0].type === "태그") {
+                if(response.tagFollowing[currentUser.inputedKeywordList[0].item.name]) {
+                  console.log("태그 팔로우됌")
+                  setCurrentUserFollowing(true)
+                } else {
+                  setCurrentUserFollowing(false)
+                } 
+              } else if(currentUser.inputedKeywordList[0].type === "계정") {
+                if(response.tagFollowing[currentUser.inputedKeywordList[0].item.nickname]) {
+                  setCurrentUserFollowing(true)
+                } else {
+                  setCurrentUserFollowing(false)
+                }
+              }
+            }
+            //dispatch(allActions.userActions.setInputedKeywordList(tmpKeywordList));
             })
             .catch(function(error) {
             console.log("GETSearchResult error", error);
@@ -1340,6 +1382,29 @@ const SearchResultScreen = ({navigation, route}: Props) => {
         dispatch(allActions.userActions.setInputedKeywordList(removedKeywordList));
     }
 
+    const followKeyword = () => {
+      setCurrentUserFollowing(true)
+      POSTFollowTag(currentUser.inputedKeywordList[0].item.id)
+      .then(function(response) {
+        console.log("followKeyword response", response);
+      })
+      .catch(function(error) {
+        console.log("followKeyword error", error);
+      })
+    }
+
+    const unfollowKeyword = () => {
+      setCurrentUserFollowing(false);
+      DELETEUnfollowTag(currentUser.inputedKeywordList[0].item.id)
+      .then(function(response) {
+        console.log("unfollowKeyword response", response);
+      })
+      .catch(function(error) {
+        console.log("unfollowKeyword error", error);
+      })
+
+    }
+
     const keywordListContainer = () => {
       
       if(!singleKeyword) {
@@ -1363,13 +1428,24 @@ const SearchResultScreen = ({navigation, route}: Props) => {
               <SingleKeywordImage
               source={require('~/Assets/Images/SearchResult/ic_tagImage.png')}/>
               <SingleKeywordTextContainer>
-                <SingleKeywordFeedCountText>{currentUser.inputedKeywordList[0].item.reviewNum + "개의 게시물"}</SingleKeywordFeedCountText>
-                <SingleKeywordDescripText>{"#" + currentUser.inputedKeywordList[0].item.name + "태그를 팔로우해 보세요."}</SingleKeywordDescripText>
+              <SingleKeywordFeedCountText>{((currentUser.inputedKeywordList[0].item.reviewNum != undefined) ? currentUser.inputedKeywordList[0].item.reviewNum : "0")  + "개의 게시물"}</SingleKeywordFeedCountText>
+                <SingleKeywordDescripText>{currentUserFollowing ? "이미 팔로우하신 태그입니다." : "#" + currentUser.inputedKeywordList[0].item.name + "태그를 팔로우해 보세요."}</SingleKeywordDescripText>
               </SingleKeywordTextContainer>
               </SingleKeywordInfoContainer>
+              {currentUserFollowing && (
+              <TouchableWithoutFeedback onPress={() => unfollowKeyword()}>
+                <SingleKeywordFollowingButton>
+                  <SingleKeywordFollowingText>팔로잉</SingleKeywordFollowingText>
+                </SingleKeywordFollowingButton>
+                </TouchableWithoutFeedback>
+              )}
+              {!currentUserFollowing && (
+              <TouchableWithoutFeedback onPress={() => followKeyword()}>
               <SingleKeywordFollowButton>
-                <SingleKeywordFollowText>팔로우</SingleKeywordFollowText>
-              </SingleKeywordFollowButton>
+              <SingleKeywordFollowText>팔로우</SingleKeywordFollowText>
+            </SingleKeywordFollowButton>
+            </TouchableWithoutFeedback>
+              )}
               </SingleKeywordContainer>
             )}
             {currentUser.inputedKeywordList[0].type === "장소" && (
@@ -1378,7 +1454,7 @@ const SearchResultScreen = ({navigation, route}: Props) => {
               <SingleKeywordImage
               source={require('~/Assets/Images/SearchResult/ic_placeImage.png')}/>
               <SingleKeywordTextContainer>
-                <SingleKeywordFeedCountText>{currentUser.inputedKeywordList[0].item.reviewNum + "개의 게시물"}</SingleKeywordFeedCountText>
+                <SingleKeywordFeedCountText>{(currentUser.inputedKeywordList[0].item.reviewNum != undefined) ? currentUser.inputedKeywordList[0].item.reviewNum : "0"  + "개의 게시물"}</SingleKeywordFeedCountText>
                 <SingleKeywordDescripText>{currentUser.inputedKeywordList[0].item.address}</SingleKeywordDescripText>
               </SingleKeywordTextContainer>
               </SingleKeywordInfoContainer>

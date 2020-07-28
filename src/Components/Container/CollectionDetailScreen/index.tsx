@@ -424,12 +424,12 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
                 </WriterInfoContainer>
                 <FollowText>팔로우</FollowText>
             </WriterProfileContainer>
-            <CollectionDescripText>{collectionDetailInfo.description}
+            <CollectionDescripText>{collectionDetailInfo.description? collectionDetailInfo.description: null}
             </CollectionDescripText>
             <CollectionInfoFooter>
             <CollectionSocialContainer>
             <CollectionFeedLabelText>게시글</CollectionFeedLabelText>
-            <CollectionInfoCountText>{collectionDetailInfo.Posts ? collectionDetailInfo.Posts.length : null}</CollectionInfoCountText>
+            <CollectionInfoCountText>{collectionDetailInfo.Posts ? collectionDetailInfo.Posts.length : ""}</CollectionInfoCountText>
             <CollectionLikeLabelText>좋아요</CollectionLikeLabelText>
             <CollectionInfoCountText>{collectionDetailInfo.Like}</CollectionInfoCountText>
             </CollectionSocialContainer>

@@ -456,7 +456,16 @@ const SearchScreen = ({navigation}: Props) => {
                 setInputingSearchText("");
             })
         }
+
+
+        if(currentUser.inputedKeywordList.length === 1 && currentUser.inputedKeywordList[0].type === "계정") {
+        navigation.navigate("AnotherUserProfileStack", {
+            screen: 'AnotherUserProfileScreen',
+            params: {requestedUserNickname: currentUser.inputedKeywordList[0].item.nickname}
+        })    
+        } else {
         navigation.navigate("SearchResultScreen");
+        }
     }
 
     const renderSelectedItem = ({item,index}: any) => {

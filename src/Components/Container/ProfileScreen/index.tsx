@@ -16,7 +16,6 @@ import ScrollableTabView, { DefaultTabBar,} from 'rn-collapsing-tab-bar';
 import {getCurrentUser} from '~/AsyncStorage/User';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 
-
 // local component
 import UserIntroduction from '~/Components/Presentational/ProfileScreen/UserIntroduction';
 import ProfileTabBar from '~/Components/Presentational/ProfileScreen/ProfileTabBar';
@@ -528,33 +527,6 @@ const ProfileScreen = ({navigation, route}: Props) => {
 
 
   const userIntroComponent = () => {
-    /*
-    if(myProfileScreen === true) { 
-    return (
-      <UserIntroduction
-      profileImage={currentUser.user ? currentUser.user.profileImage : ''}
-      nickname={currentUser.user ? currentUser.user.nickname : ''}
-      description={currentUser.user ? currentUser.user.description : ''}
-      followerCount={userInfoData.followersCount}
-      followingCount={userInfoData.followingsCount}
-      feedCount={userInfoData.postsCount}
-      moveToFollowListScreen={moveToFollowListScreen}
-      />
-    )
-    } else if(myProfileScreen === false) {
-      return (
-        <UserIntroduction
-        profileImage={route.params.requestedUserProfileImage}
-        nickname={route.params.requestedUserNickname}
-        description={userInfoData.description}
-        followerCount={userInfoData.followersCount}
-        followingCount={userInfoData.followingsCount}
-        feedCount={userInfoData.postsCount}
-        moveToFollowListScreen={moveToFollowListScreen}
-        />
-      )
-    }
-    */
    return (
      <UserIntroduction
      userId={userInfoData ? userInfoData.id: ""}

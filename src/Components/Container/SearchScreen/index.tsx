@@ -312,7 +312,6 @@ const SearchScreen = ({navigation}: Props) => {
        setRecentlySearchListData(currentUser.userRecentSearch);
     }, [])
 
-
     const onChangeSearchInput = (text: string) => {
         setInputingSearchText(text);
 
@@ -638,8 +637,8 @@ const SearchScreen = ({navigation}: Props) => {
             <HeaderSearchContainer>
                 <SearchInputContainer>
                     <SearchInput
-                    editable={currentUser.inputedKeywordList.length === 3 ? false : true}
-                    placeholder={currentUser.inputedKeywordList.length === 3 ? "키워드는 3개까지 입력 할 수 있습니다." : "검색"}
+                    editable={currentUser.inputedKeywordList ? (currentUser.inputedKeywordList.length === 3 ? false : true) : true}
+                    placeholder={currentUser.inputedKeywordList ? (currentUser.inputedKeywordList.length === 3 ? "키워드는 3개까지 입력 할 수 있습니다." : "검색") : null}
                     placeholderTextColor={"C6C7CC"}
                     autoFocus={true}
                     value={inputingSearchText}
@@ -664,7 +663,7 @@ const SearchScreen = ({navigation}: Props) => {
             <SelectedSearchItemListContainer>
                 <FlatList
                 keyboardShouldPersistTaps={"handled"}
-                data={currentUser.inputedKeywordList}
+                data={currentUser?.inputedKeywordList}
                 renderItem={renderSelectedItem}
                 />
             </SelectedSearchItemListContainer>

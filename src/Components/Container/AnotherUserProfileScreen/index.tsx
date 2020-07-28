@@ -349,7 +349,6 @@ const AnotherUserProfileScreen = ({navigation, route}: Props) => {
     console.log("profile route.params", route.params?.requestedUserNickname)
     console.log("currentUser.user.profileImage", currentUser.user.profileImage);
 
-  
       GetProfileFeedByList(route.params.requestedUserNickname)
       .then(function(response) {
         console.log(
@@ -382,7 +381,7 @@ const AnotherUserProfileScreen = ({navigation, route}: Props) => {
   }, [route.params?.requestedUserNickname])
 
   useEffect(() => {
-    console.log("Profile route", route);
+    console.log("Profile route", route.params.requestedUserProfileImage);
     console.log("Profile navigation", navigation);
     
   }, [route.params?.requestedUserNickname])

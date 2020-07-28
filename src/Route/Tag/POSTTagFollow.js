@@ -1,9 +1,8 @@
 import axios from 'axios';
-const baseUrl = "https://e099b324fe09.ngrok.io";
+const baseUrl = 'https://e099b324fe09.ngrok.io';
 
-const GETCollectionDetailInfo = (collectionId) => {
-    console.log("collectionId", collectionId);
-    const url = baseUrl + "/collection?collectionId=" + collectionId;
+const POSTTagFollow = (tagId) => {
+    const url = baseUrl + "/tag/follow?tagId=" + tagId;
 
     return new Promise(function(resolve, reject) {
         axios
@@ -17,4 +16,4 @@ const GETCollectionDetailInfo = (collectionId) => {
     })
 }
 
-export default GETCollectionDetailInfo;
+export default POSTTagFollow;

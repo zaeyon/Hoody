@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {TouchableWithoutFeedback, FlatList, StyleSheet} from 'react-native';
+import {TouchableWithoutFeedback, FlatList, StyleSheet, Dimensions} from 'react-native';
 import Styled from 'styled-components/native';
 import {
     widthPercentageToDP as wp,
@@ -9,9 +9,16 @@ import Modal from 'react-native-modal';
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 import {useSelector, useDispatch} from 'react-redux';
 import allActions from '~/action';
+import ScrollableTabView, {DefaultTabBar} from 'rn-collapsing-tab-bar';
 
 // Import Local Component
 import SearchResultTopTabNavigator from '~/Components/Presentational/SearchResultScreen/SearchResultTopTabNavigator';
+import SearchResultTabBar from '~/Components/Presentational/SearchResultScreen/SearchResultTabBar';
+import FeedItem from '~/Components/Presentational/SearchResultScreen/FeedItem';
+import CollectionItem from '~/Components/Presentational/SearchResultScreen/CollectionItem';
+
+// Route
+import GETSearchResult from '~/Route/Search/GETSearchResult';
 
 const Container = Styled.SafeAreaView`
  flex: 1;
@@ -40,6 +47,10 @@ const HeaderLeftContainer = Styled.View`
 const HeaderBackIcon = Styled.Image`
  width: ${wp('6.4%')};
  height: ${wp('6.4%')};
+`;
+
+const HeaderTitleContainer = Styled.View`
+ background-color: #707070;
 `;
 
 const HeaderTitleText = Styled.Text`
@@ -193,6 +204,71 @@ const SearchResultListContainer = Styled.View`
  background-color: #ffffff;
 `;
 
+const FeedListTabContainer = Styled.View`
+ background-color: #ffffff;
+ padding-bottom: ${hp('4.5%')};
+`;
+
+const CollectionListTabContainer = Styled.View`
+ background-color: #ffffff;
+ padding-top: 3px;
+ padding-bottom: 25px;
+`;
+
+const SingleKeywordContainer = Styled.View`
+ padding-top: 12px;
+ padding-bottom: 12px;
+ padding-left: 16px;
+ padding-right: 16px;
+ flex-direction: row;
+ justify-content: space-between;
+ align-items: center;
+`;
+
+const SingleKeywordItemContainer = Styled.View`
+`;
+
+const SingleKeywordInfoContainer = Styled.View`
+ flex-direction: row;
+ align-items: center;
+`;
+
+const SingleKeywordImage = Styled.Image`
+ border-radius: 100px;
+ width: ${wp('13.3%')};
+ height: ${wp('13.3%')};
+`;
+
+const SingleKeywordTextContainer = Styled.View`
+ margin-left: 10px;
+`;
+
+const SingleKeywordFeedCountText = Styled.Text`
+ font-weight: 500;
+ font-size: 16px;
+ color: #1D1E1F;
+`;
+
+const SingleKeywordDescripText = Styled.Text`
+ margin-top: 3px;
+ font-size: 15px;
+ color: #8E9199;
+`;
+
+const SingleKeywordFollowButton = Styled.View`
+width: ${wp('17%')};
+height: ${wp('8.5%')};
+background-color: #267DFF;
+border-radius: 8px;
+align-items: center;
+justify-content: center;
+`;
+
+const SingleKeywordFollowText = Styled.Text`
+font-weight: 500;
+font-size: 14px;
+color: #FFFFFF;
+`;
 
 const TEST_FEED_DATA = [
     {
@@ -380,6 +456,764 @@ const TEST_FEED_DATA = [
       ]
     },
   ];
+
+const TEST_COLLECTION_DATA = [
+  {
+    "id": 1,
+    "name": "컬렉션테스트",
+    "coverImg": 'https://usercontents-c.styleshare.io/images/24756885/640x640',
+    "description": "컬렉션설명",
+    "like": 0,
+    "createdAt": "2020-07-10T05:47:43.000Z",
+    "Posts": [
+      {
+        "id": 1,
+        "spendDate": "2020-07-05",
+        "likes": 0,
+        "expense": null,
+        "starRate": 0,
+        "createdAt": "2020-07-05T09:09:38.000Z",
+        "user": {
+          "id": "2b00ed60-be9f-11ea-b113-99f6f65adc3f",
+          "nickname": "jiwon11",
+          "profileImg": "https://s.gravatar.com/avatar/2770f6d3995b48fffe01fe6b5c368adf?s=80&r=x&d=mp"
+        },
+        "mainTags": {
+          "id": 1,
+          "name": "테스트"
+        },
+        "subTagOnes": {
+          "id": 2,
+          "name": "포스트맨"
+        },
+        "subTagTwos": {
+          "id": 3,
+          "name": "nodejs"
+        },
+        "address": {
+          "id": 1,
+          "address": "서울시 성북구 성북동 116-1",
+          "geographLong": 37.5936,
+          "geographLat": 126.998,
+          "region": "서울특별시 성북구"
+        },
+        "collectionPost": {
+          "index": 1,
+          "createdAt": "2020-07-10T05:48:29.000Z",
+          "updatedAt": "2020-07-10T05:48:29.000Z",
+          "collectionId": 1,
+          "postId": 1
+        },
+        "mediaFiles": [
+          {
+            "id": 1,
+            "filename": "original/1593940177599Group274.png",
+            "size": 650574,
+            "mimetype": "image/png",
+            "index": 2,
+            "url": "https://d37gdtxv8z76fx.cloudfront.net/original/1593940177599Group274.png"
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "spendDate": "2020-07-06",
+        "likes": 0,
+        "expense": null,
+        "starRate": 3.5,
+        "createdAt": "2020-07-06T09:22:52.000Z",
+        "user": {
+          "id": "2b00ed60-be9f-11ea-b113-99f6f65adc3f",
+          "nickname": "jiwon11",
+          "profileImg": "https://s.gravatar.com/avatar/2770f6d3995b48fffe01fe6b5c368adf?s=80&r=x&d=mp"
+        },
+        "mainTags": {
+          "id": 4,
+          "name": "test"
+        },
+        "subTagOnes": {
+          "id": 5,
+          "name": "hello"
+        },
+        "subTagTwos": {
+          "id": 6,
+          "name": "world"
+        },
+        "address": {
+          "id": 2,
+          "address": "서울특별시 중구 을지로3가",
+          "geographLong": 37.5658,
+          "geographLat": 126.991,
+          "region": "서울특별시 중구"
+        },
+        "collectionPost": {
+          "index": 2,
+          "createdAt": "2020-07-10T05:48:29.000Z",
+          "updatedAt": "2020-07-10T05:48:29.000Z",
+          "collectionId": 1,
+          "postId": 2
+        },
+        "mediaFiles": [
+          {
+            "id": 3,
+            "filename": "original/15940273704021591866431268IMG_1014.jpg",
+            "size": 1183759,
+            "mimetype": "image/jpeg",
+            "index": 2,
+            "url": "https://d37gdtxv8z76fx.cloudfront.net/original/15940273704021591866431268IMG_1014.jpg"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 1,
+    "name": "컬렉션테스트",
+    "coverImg": 'https://usercontents-c.styleshare.io/images/24756885/640x640',
+    "description": "컬렉션설명",
+    "like": 0,
+    "createdAt": "2020-07-10T05:47:43.000Z",
+    "Posts": [
+      {
+        "id": 1,
+        "spendDate": "2020-07-05",
+        "likes": 0,
+        "expense": null,
+        "starRate": 0,
+        "createdAt": "2020-07-05T09:09:38.000Z",
+        "user": {
+          "id": "2b00ed60-be9f-11ea-b113-99f6f65adc3f",
+          "nickname": "jiwon11",
+          "profileImg": "https://s.gravatar.com/avatar/2770f6d3995b48fffe01fe6b5c368adf?s=80&r=x&d=mp"
+        },
+        "mainTags": {
+          "id": 1,
+          "name": "테스트"
+        },
+        "subTagOnes": {
+          "id": 2,
+          "name": "포스트맨"
+        },
+        "subTagTwos": {
+          "id": 3,
+          "name": "nodejs"
+        },
+        "address": {
+          "id": 1,
+          "address": "서울시 성북구 성북동 116-1",
+          "geographLong": 37.5936,
+          "geographLat": 126.998,
+          "region": "서울특별시 성북구"
+        },
+        "collectionPost": {
+          "index": 1,
+          "createdAt": "2020-07-10T05:48:29.000Z",
+          "updatedAt": "2020-07-10T05:48:29.000Z",
+          "collectionId": 1,
+          "postId": 1
+        },
+        "mediaFiles": [
+          {
+            "id": 1,
+            "filename": "original/1593940177599Group274.png",
+            "size": 650574,
+            "mimetype": "image/png",
+            "index": 2,
+            "url": "https://d37gdtxv8z76fx.cloudfront.net/original/1593940177599Group274.png"
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "spendDate": "2020-07-06",
+        "likes": 0,
+        "expense": null,
+        "starRate": 3.5,
+        "createdAt": "2020-07-06T09:22:52.000Z",
+        "user": {
+          "id": "2b00ed60-be9f-11ea-b113-99f6f65adc3f",
+          "nickname": "jiwon11",
+          "profileImg": "https://s.gravatar.com/avatar/2770f6d3995b48fffe01fe6b5c368adf?s=80&r=x&d=mp"
+        },
+        "mainTags": {
+          "id": 4,
+          "name": "test"
+        },
+        "subTagOnes": {
+          "id": 5,
+          "name": "hello"
+        },
+        "subTagTwos": {
+          "id": 6,
+          "name": "world"
+        },
+        "address": {
+          "id": 2,
+          "address": "서울특별시 중구 을지로3가",
+          "geographLong": 37.5658,
+          "geographLat": 126.991,
+          "region": "서울특별시 중구"
+        },
+        "collectionPost": {
+          "index": 2,
+          "createdAt": "2020-07-10T05:48:29.000Z",
+          "updatedAt": "2020-07-10T05:48:29.000Z",
+          "collectionId": 1,
+          "postId": 2
+        },
+        "mediaFiles": [
+          {
+            "id": 3,
+            "filename": "original/15940273704021591866431268IMG_1014.jpg",
+            "size": 1183759,
+            "mimetype": "image/jpeg",
+            "index": 2,
+            "url": "https://d37gdtxv8z76fx.cloudfront.net/original/15940273704021591866431268IMG_1014.jpg"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 1,
+    "name": "컬렉션테스트",
+    "coverImg": 'https://usercontents-c.styleshare.io/images/24756885/640x640',
+    "description": "컬렉션설명",
+    "like": 0,
+    "createdAt": "2020-07-10T05:47:43.000Z",
+    "Posts": [
+      {
+        "id": 1,
+        "spendDate": "2020-07-05",
+        "likes": 0,
+        "expense": null,
+        "starRate": 0,
+        "createdAt": "2020-07-05T09:09:38.000Z",
+        "user": {
+          "id": "2b00ed60-be9f-11ea-b113-99f6f65adc3f",
+          "nickname": "jiwon11",
+          "profileImg": "https://s.gravatar.com/avatar/2770f6d3995b48fffe01fe6b5c368adf?s=80&r=x&d=mp"
+        },
+        "mainTags": {
+          "id": 1,
+          "name": "테스트"
+        },
+        "subTagOnes": {
+          "id": 2,
+          "name": "포스트맨"
+        },
+        "subTagTwos": {
+          "id": 3,
+          "name": "nodejs"
+        },
+        "address": {
+          "id": 1,
+          "address": "서울시 성북구 성북동 116-1",
+          "geographLong": 37.5936,
+          "geographLat": 126.998,
+          "region": "서울특별시 성북구"
+        },
+        "collectionPost": {
+          "index": 1,
+          "createdAt": "2020-07-10T05:48:29.000Z",
+          "updatedAt": "2020-07-10T05:48:29.000Z",
+          "collectionId": 1,
+          "postId": 1
+        },
+        "mediaFiles": [
+          {
+            "id": 1,
+            "filename": "original/1593940177599Group274.png",
+            "size": 650574,
+            "mimetype": "image/png",
+            "index": 2,
+            "url": "https://d37gdtxv8z76fx.cloudfront.net/original/1593940177599Group274.png"
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "spendDate": "2020-07-06",
+        "likes": 0,
+        "expense": null,
+        "starRate": 3.5,
+        "createdAt": "2020-07-06T09:22:52.000Z",
+        "user": {
+          "id": "2b00ed60-be9f-11ea-b113-99f6f65adc3f",
+          "nickname": "jiwon11",
+          "profileImg": "https://s.gravatar.com/avatar/2770f6d3995b48fffe01fe6b5c368adf?s=80&r=x&d=mp"
+        },
+        "mainTags": {
+          "id": 4,
+          "name": "test"
+        },
+        "subTagOnes": {
+          "id": 5,
+          "name": "hello"
+        },
+        "subTagTwos": {
+          "id": 6,
+          "name": "world"
+        },
+        "address": {
+          "id": 2,
+          "address": "서울특별시 중구 을지로3가",
+          "geographLong": 37.5658,
+          "geographLat": 126.991,
+          "region": "서울특별시 중구"
+        },
+        "collectionPost": {
+          "index": 2,
+          "createdAt": "2020-07-10T05:48:29.000Z",
+          "updatedAt": "2020-07-10T05:48:29.000Z",
+          "collectionId": 1,
+          "postId": 2
+        },
+        "mediaFiles": [
+          {
+            "id": 3,
+            "filename": "original/15940273704021591866431268IMG_1014.jpg",
+            "size": 1183759,
+            "mimetype": "image/jpeg",
+            "index": 2,
+            "url": "https://d37gdtxv8z76fx.cloudfront.net/original/15940273704021591866431268IMG_1014.jpg"
+          }
+        ]
+      }
+    ]
+  },{
+    "id": 1,
+    "name": "컬렉션테스트",
+    "coverImg": 'https://usercontents-c.styleshare.io/images/24756885/640x640',
+    "description": "컬렉션설명",
+    "like": 0,
+    "createdAt": "2020-07-10T05:47:43.000Z",
+    "Posts": [
+      {
+        "id": 1,
+        "spendDate": "2020-07-05",
+        "likes": 0,
+        "expense": null,
+        "starRate": 0,
+        "createdAt": "2020-07-05T09:09:38.000Z",
+        "user": {
+          "id": "2b00ed60-be9f-11ea-b113-99f6f65adc3f",
+          "nickname": "jiwon11",
+          "profileImg": "https://s.gravatar.com/avatar/2770f6d3995b48fffe01fe6b5c368adf?s=80&r=x&d=mp"
+        },
+        "mainTags": {
+          "id": 1,
+          "name": "테스트"
+        },
+        "subTagOnes": {
+          "id": 2,
+          "name": "포스트맨"
+        },
+        "subTagTwos": {
+          "id": 3,
+          "name": "nodejs"
+        },
+        "address": {
+          "id": 1,
+          "address": "서울시 성북구 성북동 116-1",
+          "geographLong": 37.5936,
+          "geographLat": 126.998,
+          "region": "서울특별시 성북구"
+        },
+        "collectionPost": {
+          "index": 1,
+          "createdAt": "2020-07-10T05:48:29.000Z",
+          "updatedAt": "2020-07-10T05:48:29.000Z",
+          "collectionId": 1,
+          "postId": 1
+        },
+        "mediaFiles": [
+          {
+            "id": 1,
+            "filename": "original/1593940177599Group274.png",
+            "size": 650574,
+            "mimetype": "image/png",
+            "index": 2,
+            "url": "https://d37gdtxv8z76fx.cloudfront.net/original/1593940177599Group274.png"
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "spendDate": "2020-07-06",
+        "likes": 0,
+        "expense": null,
+        "starRate": 3.5,
+        "createdAt": "2020-07-06T09:22:52.000Z",
+        "user": {
+          "id": "2b00ed60-be9f-11ea-b113-99f6f65adc3f",
+          "nickname": "jiwon11",
+          "profileImg": "https://s.gravatar.com/avatar/2770f6d3995b48fffe01fe6b5c368adf?s=80&r=x&d=mp"
+        },
+        "mainTags": {
+          "id": 4,
+          "name": "test"
+        },
+        "subTagOnes": {
+          "id": 5,
+          "name": "hello"
+        },
+        "subTagTwos": {
+          "id": 6,
+          "name": "world"
+        },
+        "address": {
+          "id": 2,
+          "address": "서울특별시 중구 을지로3가",
+          "geographLong": 37.5658,
+          "geographLat": 126.991,
+          "region": "서울특별시 중구"
+        },
+        "collectionPost": {
+          "index": 2,
+          "createdAt": "2020-07-10T05:48:29.000Z",
+          "updatedAt": "2020-07-10T05:48:29.000Z",
+          "collectionId": 1,
+          "postId": 2
+        },
+        "mediaFiles": [
+          {
+            "id": 3,
+            "filename": "original/15940273704021591866431268IMG_1014.jpg",
+            "size": 1183759,
+            "mimetype": "image/jpeg",
+            "index": 2,
+            "url": "https://d37gdtxv8z76fx.cloudfront.net/original/15940273704021591866431268IMG_1014.jpg"
+          }
+        ]
+      }
+    ]
+  },{
+    "id": 1,
+    "name": "컬렉션테스트",
+    "coverImg": 'https://usercontents-c.styleshare.io/images/24756885/640x640',
+    "description": "컬렉션설명",
+    "like": 0,
+    "createdAt": "2020-07-10T05:47:43.000Z",
+    "Posts": [
+      {
+        "id": 1,
+        "spendDate": "2020-07-05",
+        "likes": 0,
+        "expense": null,
+        "starRate": 0,
+        "createdAt": "2020-07-05T09:09:38.000Z",
+        "user": {
+          "id": "2b00ed60-be9f-11ea-b113-99f6f65adc3f",
+          "nickname": "jiwon11",
+          "profileImg": "https://s.gravatar.com/avatar/2770f6d3995b48fffe01fe6b5c368adf?s=80&r=x&d=mp"
+        },
+        "mainTags": {
+          "id": 1,
+          "name": "테스트"
+        },
+        "subTagOnes": {
+          "id": 2,
+          "name": "포스트맨"
+        },
+        "subTagTwos": {
+          "id": 3,
+          "name": "nodejs"
+        },
+        "address": {
+          "id": 1,
+          "address": "서울시 성북구 성북동 116-1",
+          "geographLong": 37.5936,
+          "geographLat": 126.998,
+          "region": "서울특별시 성북구"
+        },
+        "collectionPost": {
+          "index": 1,
+          "createdAt": "2020-07-10T05:48:29.000Z",
+          "updatedAt": "2020-07-10T05:48:29.000Z",
+          "collectionId": 1,
+          "postId": 1
+        },
+        "mediaFiles": [
+          {
+            "id": 1,
+            "filename": "original/1593940177599Group274.png",
+            "size": 650574,
+            "mimetype": "image/png",
+            "index": 2,
+            "url": "https://d37gdtxv8z76fx.cloudfront.net/original/1593940177599Group274.png"
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "spendDate": "2020-07-06",
+        "likes": 0,
+        "expense": null,
+        "starRate": 3.5,
+        "createdAt": "2020-07-06T09:22:52.000Z",
+        "user": {
+          "id": "2b00ed60-be9f-11ea-b113-99f6f65adc3f",
+          "nickname": "jiwon11",
+          "profileImg": "https://s.gravatar.com/avatar/2770f6d3995b48fffe01fe6b5c368adf?s=80&r=x&d=mp"
+        },
+        "mainTags": {
+          "id": 4,
+          "name": "test"
+        },
+        "subTagOnes": {
+          "id": 5,
+          "name": "hello"
+        },
+        "subTagTwos": {
+          "id": 6,
+          "name": "world"
+        },
+        "address": {
+          "id": 2,
+          "address": "서울특별시 중구 을지로3가",
+          "geographLong": 37.5658,
+          "geographLat": 126.991,
+          "region": "서울특별시 중구"
+        },
+        "collectionPost": {
+          "index": 2,
+          "createdAt": "2020-07-10T05:48:29.000Z",
+          "updatedAt": "2020-07-10T05:48:29.000Z",
+          "collectionId": 1,
+          "postId": 2
+        },
+        "mediaFiles": [
+          {
+            "id": 3,
+            "filename": "original/15940273704021591866431268IMG_1014.jpg",
+            "size": 1183759,
+            "mimetype": "image/jpeg",
+            "index": 2,
+            "url": "https://d37gdtxv8z76fx.cloudfront.net/original/15940273704021591866431268IMG_1014.jpg"
+          }
+        ]
+      }
+    ]
+  },{
+    "id": 1,
+    "name": "컬렉션테스트",
+    "coverImg": 'https://usercontents-c.styleshare.io/images/24756885/640x640',
+    "description": "컬렉션설명",
+    "like": 0,
+    "createdAt": "2020-07-10T05:47:43.000Z",
+    "Posts": [
+      {
+        "id": 1,
+        "spendDate": "2020-07-05",
+        "likes": 0,
+        "expense": null,
+        "starRate": 0,
+        "createdAt": "2020-07-05T09:09:38.000Z",
+        "user": {
+          "id": "2b00ed60-be9f-11ea-b113-99f6f65adc3f",
+          "nickname": "jiwon11",
+          "profileImg": "https://s.gravatar.com/avatar/2770f6d3995b48fffe01fe6b5c368adf?s=80&r=x&d=mp"
+        },
+        "mainTags": {
+          "id": 1,
+          "name": "테스트"
+        },
+        "subTagOnes": {
+          "id": 2,
+          "name": "포스트맨"
+        },
+        "subTagTwos": {
+          "id": 3,
+          "name": "nodejs"
+        },
+        "address": {
+          "id": 1,
+          "address": "서울시 성북구 성북동 116-1",
+          "geographLong": 37.5936,
+          "geographLat": 126.998,
+          "region": "서울특별시 성북구"
+        },
+        "collectionPost": {
+          "index": 1,
+          "createdAt": "2020-07-10T05:48:29.000Z",
+          "updatedAt": "2020-07-10T05:48:29.000Z",
+          "collectionId": 1,
+          "postId": 1
+        },
+        "mediaFiles": [
+          {
+            "id": 1,
+            "filename": "original/1593940177599Group274.png",
+            "size": 650574,
+            "mimetype": "image/png",
+            "index": 2,
+            "url": "https://d37gdtxv8z76fx.cloudfront.net/original/1593940177599Group274.png"
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "spendDate": "2020-07-06",
+        "likes": 0,
+        "expense": null,
+        "starRate": 3.5,
+        "createdAt": "2020-07-06T09:22:52.000Z",
+        "user": {
+          "id": "2b00ed60-be9f-11ea-b113-99f6f65adc3f",
+          "nickname": "jiwon11",
+          "profileImg": "https://s.gravatar.com/avatar/2770f6d3995b48fffe01fe6b5c368adf?s=80&r=x&d=mp"
+        },
+        "mainTags": {
+          "id": 4,
+          "name": "test"
+        },
+        "subTagOnes": {
+          "id": 5,
+          "name": "hello"
+        },
+        "subTagTwos": {
+          "id": 6,
+          "name": "world"
+        },
+        "address": {
+          "id": 2,
+          "address": "서울특별시 중구 을지로3가",
+          "geographLong": 37.5658,
+          "geographLat": 126.991,
+          "region": "서울특별시 중구"
+        },
+        "collectionPost": {
+          "index": 2,
+          "createdAt": "2020-07-10T05:48:29.000Z",
+          "updatedAt": "2020-07-10T05:48:29.000Z",
+          "collectionId": 1,
+          "postId": 2
+        },
+        "mediaFiles": [
+          {
+            "id": 3,
+            "filename": "original/15940273704021591866431268IMG_1014.jpg",
+            "size": 1183759,
+            "mimetype": "image/jpeg",
+            "index": 2,
+            "url": "https://d37gdtxv8z76fx.cloudfront.net/original/15940273704021591866431268IMG_1014.jpg"
+          }
+        ]
+      }
+    ]
+  },{
+    "id": 1,
+    "name": "컬렉션테스트",
+    "coverImg": 'https://usercontents-c.styleshare.io/images/24756885/640x640',
+    "description": "컬렉션설명",
+    "like": 0,
+    "createdAt": "2020-07-10T05:47:43.000Z",
+    "Posts": [
+      {
+        "id": 1,
+        "spendDate": "2020-07-05",
+        "likes": 0,
+        "expense": null,
+        "starRate": 0,
+        "createdAt": "2020-07-05T09:09:38.000Z",
+        "user": {
+          "id": "2b00ed60-be9f-11ea-b113-99f6f65adc3f",
+          "nickname": "jiwon11",
+          "profileImg": "https://s.gravatar.com/avatar/2770f6d3995b48fffe01fe6b5c368adf?s=80&r=x&d=mp"
+        },
+        "mainTags": {
+          "id": 1,
+          "name": "테스트"
+        },
+        "subTagOnes": {
+          "id": 2,
+          "name": "포스트맨"
+        },
+        "subTagTwos": {
+          "id": 3,
+          "name": "nodejs"
+        },
+        "address": {
+          "id": 1,
+          "address": "서울시 성북구 성북동 116-1",
+          "geographLong": 37.5936,
+          "geographLat": 126.998,
+          "region": "서울특별시 성북구"
+        },
+        "collectionPost": {
+          "index": 1,
+          "createdAt": "2020-07-10T05:48:29.000Z",
+          "updatedAt": "2020-07-10T05:48:29.000Z",
+          "collectionId": 1,
+          "postId": 1
+        },
+        "mediaFiles": [
+          {
+            "id": 1,
+            "filename": "original/1593940177599Group274.png",
+            "size": 650574,
+            "mimetype": "image/png",
+            "index": 2,
+            "url": "https://d37gdtxv8z76fx.cloudfront.net/original/1593940177599Group274.png"
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "spendDate": "2020-07-06",
+        "likes": 0,
+        "expense": null,
+        "starRate": 3.5,
+        "createdAt": "2020-07-06T09:22:52.000Z",
+        "user": {
+          "id": "2b00ed60-be9f-11ea-b113-99f6f65adc3f",
+          "nickname": "jiwon11",
+          "profileImg": "https://s.gravatar.com/avatar/2770f6d3995b48fffe01fe6b5c368adf?s=80&r=x&d=mp"
+        },
+        "mainTags": {
+          "id": 4,
+          "name": "test"
+        },
+        "subTagOnes": {
+          "id": 5,
+          "name": "hello"
+        },
+        "subTagTwos": {
+          "id": 6,
+          "name": "world"
+        },
+        "address": {
+          "id": 2,
+          "address": "서울특별시 중구 을지로3가",
+          "geographLong": 37.5658,
+          "geographLat": 126.991,
+          "region": "서울특별시 중구"
+        },
+        "collectionPost": {
+          "index": 2,
+          "createdAt": "2020-07-10T05:48:29.000Z",
+          "updatedAt": "2020-07-10T05:48:29.000Z",
+          "collectionId": 1,
+          "postId": 2
+        },
+        "mediaFiles": [
+          {
+            "id": 3,
+            "filename": "original/15940273704021591866431268IMG_1014.jpg",
+            "size": 1183759,
+            "mimetype": "image/jpeg",
+            "index": 2,
+            "url": "https://d37gdtxv8z76fx.cloudfront.net/original/15940273704021591866431268IMG_1014.jpg"
+          }
+        ]
+      }
+    ]
+  }
+]
+
+
+  const containerHeight = Dimensions.get("window").height;
   
 
 interface Props {
@@ -391,22 +1225,82 @@ const SearchResultScreen = ({navigation, route}: Props) => {
     const [keywordList, setKeywordList] = useState<Array<object>>([]);
     const [filterModalVisible, setFilterModalVisible] = useState<boolean>(false);
     const [selectedRadioIndex, setSelectedRadioIndex] = useState<number>(0);
+    const [feedListTabHeight, setFeedListTabHeight] = useState<number>(containerHeight);
+    const [collectionListTabHeight, setCollectionListTabHeight] = useState<number>(containerHeight);
+    const [searchResultFeedListData, setSearchResultFeedListData] = useState<Array<object>>([]);
+    const [searchResultCollectionListData, setSearchResultCollectionListData] = useState<Array<object>>([]);
+    const [singleKeyword, setSingleKeyword] = useState<boolean>(false);
+    const [selectedOrder, setSelectedOrder] = useState<string>("createdAt");
+    const [selectedType, setSelectedType] = useState<string>("post");
+    const [searchQuery, setSearchQuery] = useState<string>("");
     const currentUser = useSelector((state: any) => state.currentUser);
     const dispatch = useDispatch();
 
+    var radio_props = [
+      {label: '인기순', value: 0 },
+      {label: '최신순', value: 1}
+    ];
 
-var radio_props = [
-    {label: '인기순', value: 0 },
-    {label: '최신순', value: 1}
-  ];
+    var query = "";
 
     useEffect(() => {
-        if(route.params?.keywordList) {
-            console.log("route.params.keywordList", route.params.keywordList);
-            setKeywordList(route.params.keywordList);
+      if(currentUser?.inputedKeywordList) {
+        console.log("currentUser.inputedKeywordList", currentUser.inputedKeywordList);
+        if(currentUser.inputedKeywordList.length === 1) {
+          setSingleKeyword(true);
         }
+        currentUser.inputedKeywordList.forEach((keyword: any, index: number) => {
+          if(keyword.type === "태그") {
+            if(index === currentUser.inputedKeywordList.length-1) {
+              query = query + "tag:" + keyword.item.name  
+            } else {
+              query = query + "tag:" + keyword.item.name + ","
+            }
+          } else if(keyword.type === "계정") {
+            if(index === currentUser.inputedKeywordList.length-1) {
+              query = query + "user:" + keyword.item.nickname
+            } else {
+              query = query + "user:" + keyword.item.nickname + ","
+            } 
+          } else if(keyword.type === "장소") {
+            if(index === currentUser.inputedKeywordList.length-1) {
+              query = query + "address:" + keyword.item.address
+            } else {
+              query = query + "address:" + keyword.item.address + ","
+            }
+          }
 
-    }, [route.params?.keywordList])
+          setTimeout(() => {
+            setSearchQuery(query);
+            keywordSearchFeedList(query, "createdAt", 0, 20);
+            keywordSearchCollectionList(query, "createdAt", 0, 20);
+          })
+        })
+      }
+
+    }, [currentUser])
+
+    const keywordSearchFeedList = (query: string, order: string, offset: number, limit: number) => {
+      GETSearchResult("post", query, order, offset, limit)
+            .then(function(response) {
+            console.log("GETSearchResult response", response);
+            setSearchResultFeedListData(response);
+            })
+            .catch(function(error) {
+            console.log("GETSearchResult error", error);
+      })
+    }
+
+    const keywordSearchCollectionList = (query: string, order: string, offset: number, limit: number) => {
+      GETSearchResult("collection", query, order, offset, limit)
+      .then(function(response) {
+        console.log("GETSearch Collection response", response);
+        setSearchResultCollectionListData(response);
+      })
+      .catch(function(error) {
+        console.log("GETSearch Collection error", error);
+      })
+    }
 
     const showFilterModal = () => {
         setFilterModalVisible(true);
@@ -414,16 +1308,85 @@ var radio_props = [
 
     const onPressRadioButton = (i: number) => {
         setSelectedRadioIndex(i)
+        console.log("selectedRadioIndex", i);
     }
 
     const applySearchFilter = () => {
         setFilterModalVisible(false);
+        if(selectedRadioIndex == 0 && selectedOrder === "createdAt") {
+          setSelectedOrder("popular");
+          setTimeout(() => {
+          keywordSearchFeedList(searchQuery ,selectedType, "popular", 0, 20);
+          }, 10)
+        } else if(selectedRadioIndex == 1 && selectedOrder === "popular") {
+          setSelectedOrder("createdAt")
+          setTimeout(() => {
+            keywordSearchFeedList(searchQuery ,selectedType, "createdAt", 0, 20);
+          }, 10)
+        }
+    }
+
+    const measureFeedListTab = (event) => {
+        setFeedListTabHeight(event.nativeEvent.layout.height);
+    }
+
+    const measureCollectionListTab = (event) => {
+        setCollectionListTabHeight(event.nativeEvent.layout.height);
     }
 
     const removeKeywordItem = (index:number) => {
         var removedKeywordList = currentUser.inputedKeywordList;
         removedKeywordList.splice(index, 1);
         dispatch(allActions.userActions.setInputedKeywordList(removedKeywordList));
+    }
+
+    const keywordListContainer = () => {
+      
+      if(!singleKeyword) {
+        return (
+          <KeywordItemListContainer>
+              <FlatList
+              showsHorizontalScrollIndicator={false}
+              keyboardShouldPersistTaps={"handled"}
+              horizontal={true}
+              data={currentUser.inputedKeywordList}
+              renderItem={renderKeywordItem}
+              />
+          </KeywordItemListContainer>    
+      )
+      } else {
+        return (
+          <SingleKeywordItemContainer>
+            {currentUser.inputedKeywordList[0].type === "태그" && (
+              <SingleKeywordContainer>
+                <SingleKeywordInfoContainer>
+              <SingleKeywordImage
+              source={require('~/Assets/Images/SearchResult/ic_tagImage.png')}/>
+              <SingleKeywordTextContainer>
+                <SingleKeywordFeedCountText>{currentUser.inputedKeywordList[0].item.reviewNum + "개의 게시물"}</SingleKeywordFeedCountText>
+                <SingleKeywordDescripText>{"#" + currentUser.inputedKeywordList[0].item.name + "태그를 팔로우해 보세요."}</SingleKeywordDescripText>
+              </SingleKeywordTextContainer>
+              </SingleKeywordInfoContainer>
+              <SingleKeywordFollowButton>
+                <SingleKeywordFollowText>팔로우</SingleKeywordFollowText>
+              </SingleKeywordFollowButton>
+              </SingleKeywordContainer>
+            )}
+            {currentUser.inputedKeywordList[0].type === "장소" && (
+              <SingleKeywordContainer>
+                <SingleKeywordInfoContainer>
+              <SingleKeywordImage
+              source={require('~/Assets/Images/SearchResult/ic_placeImage.png')}/>
+              <SingleKeywordTextContainer>
+                <SingleKeywordFeedCountText>{currentUser.inputedKeywordList[0].item.reviewNum + "개의 게시물"}</SingleKeywordFeedCountText>
+                <SingleKeywordDescripText>{currentUser.inputedKeywordList[0].item.address}</SingleKeywordDescripText>
+              </SingleKeywordTextContainer>
+              </SingleKeywordInfoContainer>
+              </SingleKeywordContainer>
+            )}
+          </SingleKeywordItemContainer>
+        )
+      }
     }
 
     const renderKeywordItem = ({item, index}: any) => {
@@ -477,6 +1440,45 @@ var radio_props = [
         }
     }
 
+
+    const renderFeedItem = ({item, index}: any) => {
+        return (
+            <FeedItem
+                  id={item.id}
+                  profile_image={item.user.profileImg}
+                  nickname={item.user.nickname}
+                  createdAt={item.createdAt}
+                  rating={item.starRate}
+                  main_tag={item.mainTags.name}
+                  sub_tag1={item.subTagOnes?item.subTagOnes.name:null}
+                  sub_tag2={item.subTagTwos?item.subTagTwos.name:null}
+                  like_count={item.likes}
+                  comment_count={item.commentsCount}
+                  reply_count={item.replysCount}
+                  mediaFiles={item.mediaFiles}
+                  image_count={item.mediaFiles.length}
+                  location={item.address?item.address.address:null}
+                  expense={item.expense?item.expense:null}
+                  desArray={item.descriptions}
+                  navigation={navigation}
+                />
+        )
+    }
+
+    const renderCollectionItem = ({item, index}: any) => {
+      return (
+        <CollectionItem
+        collectionId={item.id ? item.id : null}
+        coverImage={item.coverImg ? item.coverImg : null}
+        name={item.name ? item.name : null}
+        navigation={navigation}
+        profileNickname={item.Posts[0] ? item.Posts[0].user.nickname : null}
+        profileImage={item.Posts[0] ? item.Posts[0].user.profileImg : null}
+        />
+
+      )
+    }
+
     return (
         <Container>
             <HeaderBar>
@@ -486,7 +1488,27 @@ var radio_props = [
                     source={require('~/Assets/Images/HeaderBar/ic_back.png')}/>
                 </HeaderLeftContainer>
                 </TouchableWithoutFeedback>
-                <HeaderTitleText>검색 결과</HeaderTitleText>
+                <HeaderTitleContainer>
+                <FlatList
+                contentContainerStyle={{backgroundColor:'#ffffff', justifyContent:'center', alignItems:'center'}}
+                horizontal={true}
+                data={currentUser.inputedKeywordList}
+                renderItem={({item, index}) => {
+                  if(item.type === "태그") {
+                  return (
+                    <HeaderTitleText>{index === currentUser.inputedKeywordList.length-1 ?"#" + item.item.name : "#" + item.item.name +", "}</HeaderTitleText>
+                    )
+                  } else if(item.type === "장소") {
+                  return (
+                    <HeaderTitleText>{index === currentUser.inputedKeywordList.length-1 ? item.item.address : item.item.address + ", "}</HeaderTitleText>
+                  )
+                  } else if(item.type === "계정") {
+                  return (
+                    <HeaderTitleText>{index === currentUser.inputedKeywordList.length-1 ? item.item.nickname : item.item.nickname + ", "}</HeaderTitleText>
+                  )
+                  }
+                }}/>
+                </HeaderTitleContainer>
                 <TouchableWithoutFeedback onPress={() => showFilterModal()}>
                     <HeaderRightContainer>
                         <HeaderFilterIcon
@@ -494,28 +1516,53 @@ var radio_props = [
                 </HeaderRightContainer>
                 </TouchableWithoutFeedback>
             </HeaderBar>
-            <KeywordItemListContainer>
+            <ScrollableTabView
+            collapsableBar={keywordListContainer()}
+            initialPage={0}
+            tabContentHeights={[feedListTabHeight, collectionListTabHeight]}
+            scrollEnabled={true}
+            showsVerticalScrollIndicator={false}
+            prerenderingSiblingsNumber={Infinity}
+            renderTabBar={() => <SearchResultTabBar/>}
+            >
+            <FeedListTabContainer
+            onLayout={(event) => measureFeedListTab(event)}
+            tabLabel="게시글" >
                 <FlatList
-                showsHorizontalScrollIndicator={false}
-                keyboardShouldPersistTaps={"handled"}
-                horizontal={true}
-                data={currentUser.inputedKeywordList}
-                renderItem={renderKeywordItem}
-                />
-            </KeywordItemListContainer>
+                scrollEnabled={false}
+                showsVerticalScrollIndicator={false}
+                keyExtractor={(index: any) => index}
+                data={searchResultFeedListData}
+                renderItem={renderFeedItem}/>
+            </FeedListTabContainer>
+            <CollectionListTabContainer
+            onLayout={(event) => measureCollectionListTab(event)}
+            tabLabel="컬렉션"
+            >
+            <CollectionListTabContainer>
+            <FlatList
+columnWrapperStyle={{justifyContent:'space-between', paddingLeft:15, paddingRight:15, paddingTop:10, paddingBottom:10, backgroundColor:'#ffffff'}}
+            numColumns={2}
+            scrollEnabled={false}
+            showsVerticalScrollIndicator={false}
+            keyExtractor={(index: any) => index}
+            data={searchResultCollectionListData}
+            renderItem={renderCollectionItem}/>
+            </CollectionListTabContainer>
+            </CollectionListTabContainer>
+            </ScrollableTabView>
+            {/*
             <SearchResultListContainer>
                 <SearchResultTopTabNavigator
                 navigation={navigation}
                 feedResultListData={TEST_FEED_DATA}
                 />
             </SearchResultListContainer>
+            */}
             <Modal
             style={styles.filterModal}
             isVisible={filterModalVisible}
-            backdropOpacity={0.25}
-            swipeDirection={['down']}
-            onSwipeComplete={() => setFilterModalVisible(false)}
-            onBackdropPress={() => setFilterModalVisible(false)}>
+            backdropOpacity={0.25}>
                 <FilterModalContainer>
                     <ModalHeaderContainer>
                         <ModalToggleButton/>
@@ -529,11 +1576,11 @@ var radio_props = [
                             적용
                         </ModalApplyText>
                         </TouchableWithoutFeedback>
-                    </ModalTitleContainer>
+                         </ModalTitleContainer>
                             <RadioForm>
                             {radio_props.map((obj, i) => (
                             <ModalTabContainer>
-                                <ModalTabInfoContainer>
+                            <ModalTabInfoContainer>
                             <RadioButton 
                             labelHorizontal={true} 
                             key={i}>
@@ -543,9 +1590,8 @@ var radio_props = [
                                 onPress={() => onPressRadioButton(i)}
                                 labelHorizontal={true}
                                 labelStyle={{fontSize: 16, color: '#1D1E1F'}}
-                                labelWrapStyle={{}}/>
+                                labelWrapStyle={{paddingRight: 300, backgroundColor:'#ffffff'}}/>
                             </RadioButton>
-
                             <RadioButtonInput
                                 obj={obj}
                                 index={i}

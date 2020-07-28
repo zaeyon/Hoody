@@ -90,7 +90,6 @@ font-size: 16px;
 font-weight: 600;
 `;
 
-
 const LocationText = Styled.Text`
  margin-top: 4px;
  font-size: 13px;
@@ -321,7 +320,6 @@ interface Props {
   like_count: number;
   comment_count: number;
   reply_count: number;
-  scrap_count: number;
   location: string;
   expense: number;
   desArray: Array<object>;
@@ -344,7 +342,6 @@ const FeedItem = ({
   like_count,
   comment_count,
   reply_count,
-  scrap_count,
   location,
   expense,
   desArray,
@@ -408,6 +405,7 @@ const FeedItem = ({
 
     console.log("feedITem currentUser", currentUser);
 
+    if(currentUser.likeFeeds) {
     var index = currentUser.likeFeeds.findIndex(obj => obj.id === id);
     if(index !== -1) {
       setCurrentUserLike(true);
@@ -416,16 +414,23 @@ const FeedItem = ({
       setCurrentUserLike(false);
     }
     console.log("해당 피드가 사용자가 좋아요한 피드목록에 있음", index); 
+    }
 
+    if(currentUser.scrapFeeds) {
     var scrapFeedIndex = currentUser.scrapFeeds.findIndex(obj => obj.id === id);
     if(scrapFeedIndex !== -1) {
       setCurrentUserScrap(true);
     } else if(scrapFeedIndex === -1) {
       setCurrentUserScrap(false);
     }
+    }
+
+
   }, []);
 
   useEffect(() => {
+    if(currentUser.likeFeeds) {
+
     //console.log("currentUser.likeFeeds[0].Like", currentUser.likeFeeds[0].Like)
     var index = currentUser.likeFeeds.findIndex(obj => obj.id === id);
     if(index !== -1) {
@@ -440,11 +445,17 @@ const FeedItem = ({
       }
     }
 
+    }
+
+    if(currentUser.scrapFeeds) {
+
     var scrapFeedIndex = currentUser.scrapFeeds.findIndex(obj => obj.id === id);
     if(scrapFeedIndex !== -1) {
       setCurrentUserScrap(true);
     } else if(scrapFeedIndex === -1) {
         setCurrentUserScrap(false);
+    }
+
     }
 
   }, [currentUser])

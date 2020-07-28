@@ -179,6 +179,12 @@ function ExploreStackScreen() {
       <ExploreStack.Screen
       name="SearchResultScreen"
       component={SearchResultScreen}/>
+      <ExploreStack.Screen
+      name="FeedStack"
+      component={FeedStackScreen}/>
+      <ExploreStack.Screen
+      name="AnotherUserProfileStack"
+      component={AnotherUserProfileStackScreen}/>
     </ExploreStack.Navigator>
   )
 }
@@ -585,10 +591,9 @@ function BottomTab() {
     ? route.state.routes[route.state.index].name
     : '';
 
-    if(routeName === 'SearchScreen') {
+    if(routeName === 'SearchScreen' || routeName === "FeedStack") {
       return false;
     }
-
     return true;
   }
 

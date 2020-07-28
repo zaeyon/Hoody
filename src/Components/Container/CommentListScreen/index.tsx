@@ -80,8 +80,9 @@ const FeedInformationContainer = Styled.View`
 `;
 
 const CommentListContainer = Styled.View`
+flex: 1;
 padding-bottom: ${wp('5%')};
-
+background-color: #ffffff;
 `;
 
 const ProfileImage = Styled.Image`
@@ -100,6 +101,7 @@ const FooterContainer = Styled.View`
 `;
 
 const CommentContainer = Styled.View`
+width: ${wp('100%')}
 align-items: center;
 flex-direction: row;
 padding-left: ${wp('4.2%')}px;
@@ -120,7 +122,7 @@ const CommentInputContainer = Styled.View`
 margin-left: 11px;
 padding-top: 8px;
 padding-bottom: 8px;
-width: ${wp('79.5%')};
+width: ${wp('80%')};
 border-radius: 23px;
 border-width: 1px;
 border-color: #efefef;
@@ -131,7 +133,7 @@ align-items: center;
 `;
 
 const CommentInput = Styled.TextInput`
- width: ${wp('61%')};
+ width: ${wp('62%')};
  font-size: 16px;
  color: #000000;
  padding-bottom: 5px;
@@ -300,6 +302,7 @@ const CommentListScreen = ({navigation, route}: Props) => {
     const [inputType, setInputType] = useState<string>("comment");
     const [allCommentCount, setAllCommentCount] = useState<number>(0);
     const [replyCommentId, setReplyCommentId] = useState<number>();
+    const [reloadCommentList, setReloadCommentList] = useState<boolean>(false);
     const currentUser = useSelector((state) => state.currentUser);
     const commentInputRef = useRef(null);
 
@@ -364,7 +367,7 @@ const CommentListScreen = ({navigation, route}: Props) => {
         GetComment(route.params.postId)
         .then(function(response) {
             console.log("댓글 불러오기 성공", response)
-            setCommentList(response);
+            setCommentList(response.allComment);
             setInputComment("")
             Keyboard.dismiss();
         })
@@ -382,7 +385,7 @@ const CommentListScreen = ({navigation, route}: Props) => {
            GetComment(route.params.postId)
            .then(function(response) {
                console.log("댓글 불러오기 성공", response)
-               setCommentList(response);
+               setCommentList(response.allComment);
                setInputComment("")
                setInputType("comment")
                Keyboard.dismiss();

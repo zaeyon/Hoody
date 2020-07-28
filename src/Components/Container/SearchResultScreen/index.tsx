@@ -94,13 +94,16 @@ const KeywordItemContainer = Styled.View`
 padding-left: 12px;
 padding-top: 8px;
 padding-bottom: 8px;
+padding-right: 10px;
 align-items: center;
 flex-direction: row;
+background-color: #ffffff;
 `;
 
 const KeywordProfileContainer = Styled.View`
 padding-left: 12px;
 padding-top: 4px;
+padding-right: 10px;
 padding-bottom: 4px;
 align-items: center;
 flex-direction: row;
@@ -124,7 +127,7 @@ font-weight: 500;
 const RemoveKeywordItemContainer = Styled.View`
 align-items: center;
 justify-content: center;
-padding-left: 10px;
+padding-left: 0px;
 padding-right: 12px;
 `;
 
@@ -1405,6 +1408,23 @@ const SearchResultScreen = ({navigation, route}: Props) => {
 
     }
 
+    const selectKeywordListItem = (index: number) => {
+      console.log("index", index);
+      var tmpKeywordList = currentUser.inputedKeywordList;
+      var selectedSingleKeywordList = tmpKeywordList.splice(index, 1);
+      dispatch(allActions.userActions.setInputedKeywordList(selectedSingleKeywordList));
+      console.log("selectedSingleKeywordList", selectedSingleKeywordList);
+      console.log("currentUser.inputedKeywordList", currentUser.inputedKeywordList);
+    }
+
+    const selectProfileKeywordListItem = (index: number, item: object) => {
+      navigation.navigate("AnotherUserProfileStack", {
+        screen: 'AnotherUserProfileScreen',
+        params: {requestedUserNickname: item.item.nickname}
+      })
+      
+    }
+
     const keywordListContainer = () => {
       
       if(!singleKeyword) {
@@ -1470,9 +1490,11 @@ const SearchResultScreen = ({navigation, route}: Props) => {
         if(item.type == "태그") {
             return (
                 <KeywordItemBackground style={(index === 0 && styles.firstKeyword) || (index === keywordList.length -1 && styles.lastKeyword)}>
+                <TouchableWithoutFeedback onPress={() => selectKeywordListItem(index)}>
                 <KeywordItemContainer>
                     <KeywordItemText>{"#" + item.item.name}</KeywordItemText>
                 </KeywordItemContainer>
+                </TouchableWithoutFeedback>
                 <TouchableWithoutFeedback onPress={() => removeKeywordItem(index)}>
                 <RemoveKeywordItemContainer>
                     <RemoveKeywordIcon
@@ -1483,7 +1505,8 @@ const SearchResultScreen = ({navigation, route}: Props) => {
             )
         } else if(item.type == "계정") {
             return (
-                <KeywordItemBackground style={(index === 0 && styles.firstKeyword) || (index === keywordList.length -1 && styles.lastKeyword)}>
+                <KeywordItemBackground style={(index === 0 && styles.firstKeyword) || (index === keywordList.length -1 && styles.lastKeyword)}> 
+                <TouchableWithoutFeedback onPress={() => selectProfileKeywordListItem(index, item)}>
                 <KeywordProfileContainer>
                     <KeywordItemProfileImage
                     source={{uri:item.item.profileImg}}/>
@@ -1491,6 +1514,7 @@ const SearchResultScreen = ({navigation, route}: Props) => {
                     style={{marginLeft: 6}}
                     >{item.item.nickname}</KeywordItemText>
                 </KeywordProfileContainer>
+                </TouchableWithoutFeedback>
                 <TouchableWithoutFeedback onPress={() => removeKeywordItem(index)}>
                 <RemoveKeywordItemContainer>
                     <RemoveKeywordIcon
@@ -1502,9 +1526,11 @@ const SearchResultScreen = ({navigation, route}: Props) => {
         } else if(item.type == "장소") {
             return (
                 <KeywordItemBackground style={(index === 0 && styles.firstKeyword) || (index === keywordList.length -1 && styles.lastKeyword)}>
+                <TouchableWithoutFeedback onPress={() => selectKeywordListItem(index)}>
                 <KeywordItemContainer>
                     <KeywordItemText>{item.item.address}</KeywordItemText>
                 </KeywordItemContainer>
+                </TouchableWithoutFeedback>
                 <TouchableWithoutFeedback onPress={() => removeKeywordItem(index)}>
                 <RemoveKeywordItemContainer>
                     <RemoveKeywordIcon

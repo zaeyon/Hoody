@@ -1340,7 +1340,7 @@ const SearchResultScreen = ({navigation, route}: Props) => {
       GETSearchResult("collection", query, order, offset, limit)
       .then(function(response) {
         console.log("GETSearch Collection response", response);
-        setSearchResultCollectionListData(response);
+        setSearchResultCollectionListData(response.data);
       })
       .catch(function(error) {
         console.log("GETSearch Collection error", error);

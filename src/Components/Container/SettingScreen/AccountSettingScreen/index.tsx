@@ -1,10 +1,15 @@
 import React from 'react';
 import Styled from 'styled-components/native';
-import {TouchableWithoutFeedback} from 'react-native';
+import {TouchableWithoutFeedback, Alert} from 'react-native';
 import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import {useDispatch} from 'react-redux';
+import allActions from '~/action';
+
+// Route
+import GETLogout from '~/Route/Auth/GETLogout';
 
 const Container = Styled.SafeAreaView`
  flex: 1;
@@ -139,6 +144,39 @@ interface Props {
 }
 
 const AccountSettingScreen = ({navigation, route}: Props) => {
+    const dispatch = useDispatch();
+
+    const moveToBirthdateSetting = () => {
+        navigation.navigate("BirthdateSettingScreen");
+    }
+
+    const logout = () => {
+        Alert.alert(
+            '로그아웃 하시겠습니까?', 
+            ' ', 
+            [
+            {
+                text: '확인',
+                onPress: () => {
+                   GETLogout()
+                   .then(function(response) {
+                   console.log("logout response", response);
+                   dispatch(allActions.userActions.logOut())
+                })
+                .catch(function(error) {
+                console.log("logout error", error);
+                })
+            }
+            },
+            {
+                text: '취소',
+                onPress: () => 0,
+                style: 'cancel',
+            }
+        ],      
+      );
+    }
+
     return (
         <Container>
             <HeaderBar>
@@ -167,6 +205,7 @@ const AccountSettingScreen = ({navigation, route}: Props) => {
                     </TabItemInfoContainer>
                 </TabItemContainer>
                 <TabItemContainer>
+                    <TouchableWithoutFeedback onPress={() => moveToBirthdateSetting()}>
                     <TabItemInfoContainer>
                         <TabItemLabelText>생일</TabItemLabelText>
                         <TabItemRightContainer>
@@ -175,6 +214,7 @@ const AccountSettingScreen = ({navigation, route}: Props) => {
                         source={require('~/Assets/Images/Setting/ic_disclosure.png')}/>
                         </TabItemRightContainer>
                     </TabItemInfoContainer>
+                    </TouchableWithoutFeedback>
                 </TabItemContainer>
                 <TabItemContainer>
                     <TabItemInfoContainer>
@@ -200,11 +240,13 @@ const AccountSettingScreen = ({navigation, route}: Props) => {
                     </TabItemInfoContainer>
                     </TabItemContainer>
                     <TabItemContainer>
+                        <TouchableWithoutFeedback onPress={() => logout()}>
                         <TabToggleContainer>
                             <TabToggleText>
                                 로그아웃
                             </TabToggleText>
                         </TabToggleContainer>
+                        </TouchableWithoutFeedback>
                         </TabItemContainer>
                         <TabItemContainer>
                         <TabToggleContainer>

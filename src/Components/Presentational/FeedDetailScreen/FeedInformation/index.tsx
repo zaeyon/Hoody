@@ -146,12 +146,16 @@ const FeedInformation = ({profileImage, profileNickname, createdAt, mainTag, sub
             <TagListContainer>
                 <MainTagText>
                     {"#" + mainTag}
+                    {subTag1 && (
                     <SubTagText>
-                        {" #" + subTag1}
-                        <SubTagText>
-                            {" #" + subTag2}
-                        </SubTagText>
+                    {" #" + subTag1}
+                         {subTag2 && (
+                         <SubTagText>
+                         {" #" + subTag2}
+                         </SubTagText>
+                         )}
                     </SubTagText>
+                    )}
                 </MainTagText>
             </TagListContainer>
             <RatingExpensePriceInfoContainer>

@@ -601,7 +601,7 @@ const ProfileScreen = ({navigation, route}: Props) => {
       tabLabel='게시글'>
        <ProfileFeedList
        navigation={navigation}
-       feedListData={feedListData ? feedListData : []}
+       feedListData={currentUser.userAllFeeds ? currentUser.userAllFeeds : []}
        feedListDataByDate={feedListDataByDate ? feedListDataByDate : []}
        currentSortType={selectedFeedSortType}
        />

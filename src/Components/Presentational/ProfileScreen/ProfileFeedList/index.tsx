@@ -6,6 +6,7 @@ import {
 } from 'react-native-responsive-screen';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {Text, FlatList, SectionList, View, Animated} from 'react-native';
+import {useSelector} from 'react-redux';
 
 import ProfileListFeedItem from '~/Components/Presentational/ProfileScreen/ProfileListFeedItem';
 import ProfileTileFeedItem from '~/Components/Presentational/ProfileScreen/ProfileTileFeedItem';
@@ -83,6 +84,7 @@ padding: 15px 16px ${hp('8.5%')}px 16px;
   ]
 
 const ProfileFeedList = ({navigation, route, feedListData, currentSortType, onScrollPostList, feedListDataByDate}: Props) => {
+  const currentUser = useSelector((state) => state.currentUser);
 
   useEffect(() => {
     console.log("ProfileFeedList feedListData", feedListData)
@@ -90,6 +92,10 @@ const ProfileFeedList = ({navigation, route, feedListData, currentSortType, onSc
 
 
   }, [feedListData, feedListDataByDate])
+
+  useEffect(() => {
+    console.log("profileFeedList currentUser.feedListData", currentUser.userAllFeeds);
+  }, [currentUser]);
 
     const renderProfileListFeedItem = ({item, index}) => {
         return (
@@ -152,7 +158,7 @@ const ProfileFeedList = ({navigation, route, feedListData, currentSortType, onSc
         <FlatList
         scrollEnabled={false}
 scrollEventThrottle={5}
-        data={feedListData}
+        data={currentUser.userAllFeeds}
         renderItem={renderProfileListFeedItem}
         />
         </ListTypeFeedContainer>

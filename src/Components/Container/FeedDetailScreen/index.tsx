@@ -4,7 +4,7 @@ import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import {TouchableWithoutFeedback, Text, FlatList, ScrollView, StyleSheet} from 'react-native';
+import {TouchableWithoutFeedback, Text, FlatList, ScrollView, StyleSheet, Alert} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import allActions from '~/action';
 import Modal from 'react-native-modal';
@@ -620,13 +620,46 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
     }
 
     const deleteFeed = () => {
-      DELETEPost(postId)
-      .then(function(response) {
-        console.log("피드 삭제 성공 response", response);
-      })
-      .catch(function(error) {
-        console.log("피드 삭제 error", error);
-      })
+      Alert.alert(
+        '정말 게시글을 삭제하시겠어요?', 
+        ' ', 
+        [
+        {
+            text: '확인',
+            onPress: () => {
+              var deletedFeedIndex:number;
+              console.log("currentUser.userAllFeeds", currentUser.userAllFeeds)
+              if(currentUser.userAllFeeds) {
+                currentUser.userAllFeeds.forEach((feed: object, index: number) => {
+                   if(feed.id === postId) {
+                     deletedFeedIndex = index;
+                   }
+                })
+              }
+              DELETEPost(postId)
+              .then(function(response) {
+                console.log("피드 삭제 성공 response", response);
+                if(currentUser.userAllFeeds) {
+                  console.log("피드삭제성공deletedFeedIndex", deletedFeedIndex);
+                  var deletedFeeds = currentUser.userAllFeeds;
+                  deletedFeeds.splice(deletedFeedIndex, 1);
+                  dispatch(allActions.userActions.setUserAllFeeds(deletedFeeds));
+                  navigation.goBack();
+                }
+              })
+              .catch(function(error) {
+                console.log("피드 삭제 error", error);
+              })
+        }
+        },
+        {
+            text: '취소',
+            onPress: () => 0,
+            style: 'cancel',
+        }
+    ],      
+  );
+      
     }
   
 
@@ -722,7 +755,7 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
         <ModalHeaderContainer>
         <ModalToggleButton/>
         </ModalHeaderContainer>
-        <TouchableWithoutFeedback onPress={() => 0}>
+        <TouchableWithoutFeedback onPress={() => deleteFeed()}>
         <ModalTabItemContainer>
           <ModalTabItemIconImage
           style={{tintColor:'#FF3B30'}}

@@ -74,7 +74,7 @@ const FeedListContainer = Styled.View`
  width: ${wp('100%')}px;
  justify-content: center;
  align-items: center;
- padding-bottom: 94px;
+ padding-bottom: 80px;
 `;
 
 const NoFeedText = Styled.Text`

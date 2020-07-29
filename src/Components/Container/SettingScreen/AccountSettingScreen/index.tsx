@@ -150,6 +150,10 @@ const AccountSettingScreen = ({navigation, route}: Props) => {
         navigation.navigate("BirthdateSettingScreen");
     }
 
+    const moveToGenderSetting = () => {
+        navigation.navigate("GenderSettingScreen");
+    }
+
     const logout = () => {
         Alert.alert(
             '로그아웃 하시겠습니까?', 
@@ -204,8 +208,8 @@ const AccountSettingScreen = ({navigation, route}: Props) => {
                         <TabItemContentText>abcd@gmail.com</TabItemContentText>
                     </TabItemInfoContainer>
                 </TabItemContainer>
+                <TouchableWithoutFeedback onPress={() => moveToBirthdateSetting()}>
                 <TabItemContainer>
-                    <TouchableWithoutFeedback onPress={() => moveToBirthdateSetting()}>
                     <TabItemInfoContainer>
                         <TabItemLabelText>생일</TabItemLabelText>
                         <TabItemRightContainer>
@@ -214,8 +218,9 @@ const AccountSettingScreen = ({navigation, route}: Props) => {
                         source={require('~/Assets/Images/Setting/ic_disclosure.png')}/>
                         </TabItemRightContainer>
                     </TabItemInfoContainer>
-                    </TouchableWithoutFeedback>
                 </TabItemContainer>
+                </TouchableWithoutFeedback>
+                <TouchableWithoutFeedback onPress={() => moveToGenderSetting()}>
                 <TabItemContainer>
                     <TabItemInfoContainer>
                         <TabItemLabelText>성별</TabItemLabelText>
@@ -226,6 +231,7 @@ const AccountSettingScreen = ({navigation, route}: Props) => {
                         </TabItemRightContainer>
                     </TabItemInfoContainer>
                 </TabItemContainer>
+                </TouchableWithoutFeedback>
                 <ItemTitleContainer
                 style={{marginTop: 10}}>
                     <ItemTitleText>보안</ItemTitleText>

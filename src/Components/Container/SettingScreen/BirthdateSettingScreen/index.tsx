@@ -59,79 +59,55 @@ const HeaderEmptyContainer = Styled.View`
 
 const BodyContainer = Styled.View`
 flex: 1;
-background-color: #e5e5e570;
+background-color: #ffffff;
 `;
 
-const ItemTitleContainer = Styled.View`
-padding-top: 19px;
-padding-bottom: 19px;
+
+const DescripContainer = Styled.View`
+padding-top: 20px;
+padding-bottom: 20px;
 padding-left: 16px;
 padding-right: 16px;
-justify-content: center;
-background-color: #ffffff;
 `;
 
-const ItemTitleText = Styled.Text`
- font-size: 18px;
- font-weight: 600;
- color: #1D1E1F;
-`;
-
-const TabItemContainer = Styled.View`
-width: ${wp('100%')};
-height: ${wp('15%')};
-padding-top: 19px;
-padding-bottom: 19px;
-padding-left: 16px;
-padding-right: 16px;
-justify-content: center;
-background-color: #ffffff;
-`;
-
-const TabItemInfoContainer = Styled.View`
-background-color: #ffffff;
-flex-direction: row;
-align-items: center;
-height: ${wp('15%')};
-justify-content: space-between;
-border-bottom-width: 0.6px;
-border-color: #ECECEE;
-`;
-
-const TabItemLabelText = Styled.Text`
- font-size: 16px;
- color: #1D1E1F;
-`;
-
-const TabItemContentText = Styled.Text`
- font-size: 16px;
- color: #333333;
-`;
-
-const TabItemRightContainer = Styled.View`
- flex-direction: row;
- align-items: center;
-`;
-
-const TabItemDisclosureIcon = Styled.Image`
- margin-left: 5px;
- width: ${wp('3.2%')};
- height: ${wp('3.2%')};
-`;
-
-
-const TabToggleContainer = Styled.View`
-height: ${wp('15%')};
-align-items: center;
-justify-content: center;
-background-color: #ffffff;
-border-bottom-width: 0.6px;
-border-color: #ECECEE;
-`;
-
-const TabToggleText = Styled.Text`
-color: #267DFF;
+const MainDescripText = Styled.Text`
 font-size: 16px;
+color: #1D1E1F;
+`;
+
+const SubDescripText = Styled.Text`
+margin-top: 8px;
+font-size: 14px;
+color: #8E9199;
+`;
+
+const BirthdateContainer = Styled.View`
+padding-top: 10px;
+padding-left: 16px;
+padding-right: 16px;
+padding-bottom: 10px;
+`;
+
+const BirthdateLabelText = Styled.Text`
+font-size: 16px;
+font-weight: 600;
+color: #333333;
+`;
+
+const BirthdateInputContainer = Styled.View`
+margin-top: 10px;
+width: ${wp('91.4%')};
+height: ${wp('12.1%')};
+border-radius: 10px;
+justify-content: center;
+padding-left: 12px;
+background-color: #F7F7F7;
+`;
+
+const BirthdateText = Styled.Text`
+ font-weight: 500;
+ font-size: 16px;
+ color: #1D1E1F;
 `;
 
 
@@ -140,7 +116,7 @@ interface Props {
     route: any,
 }
 
-const BirthDateSettingScreen = ({navigation, route}: Props) => {
+const BirthdateSettingScreen = ({navigation, route}: Props) => {
     const dispatch = useDispatch();
 
     return (
@@ -161,14 +137,27 @@ const BirthDateSettingScreen = ({navigation, route}: Props) => {
                 </HeaderRightContainer>
             </HeaderBar>
             <BodyContainer>
-            
+                <DescripContainer>
+                <MainDescripText>
+                    생일을 알려주세요.
+                </MainDescripText>
+                <SubDescripText>
+                내정보의 생일은 서비스 전체에 적용되며, 맞춤형 컨텐츠 제공에 사용됩니다. 입력한 정보는 언제든 수정, 관리할 수 있습니다.
+                </SubDescripText>
+                </DescripContainer>
+                <BirthdateContainer>
+                    <BirthdateLabelText>생년월일</BirthdateLabelText>
+                    <BirthdateInputContainer>
+                        <BirthdateText>2020년 12월 31일</BirthdateText>
+                    </BirthdateInputContainer>
+                </BirthdateContainer>
             </BodyContainer>
         </Container>
         
     )
 }
 
-export default BirthDateSettingScreen;
+export default BirthdateSettingScreen;
 
 
 

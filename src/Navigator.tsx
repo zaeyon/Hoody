@@ -80,6 +80,7 @@ import SettingScreen from '~/Components/Container/SettingScreen';
 import AccountSettingScreen from '~/Components/Container/SettingScreen/AccountSettingScreen';
 import AlarmSettingScreen from '~/Components/Container/SettingScreen/AlarmSettingScreen';
 import BirthdateSettingScreen from '~/Components/Container/SettingScreen/BirthdateSettingScreen';
+import GenderSettingScreen from '~/Components/Container/SettingScreen/GenderSettingScreen';
 
 // Scrap Screen
 import ScrapListScreen from '~/Components/Container/ScrapListScreen';
@@ -369,6 +370,9 @@ function ProfileStackScreen() {
       <ProfileStack.Screen
       name="BirthdateSettingScreen"
       component={BirthdateSettingScreen}/>
+      <ProfileStack.Screen
+      name="GenderSettingScreen"
+      component={GenderSettingScreen}/>
     </ProfileStack.Navigator>
   );
 }

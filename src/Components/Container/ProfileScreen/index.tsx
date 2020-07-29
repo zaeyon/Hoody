@@ -455,7 +455,7 @@ const ProfileScreen = ({navigation, route}: Props) => {
       })
     }
 
-  }, [route.params?.collectionListChange])
+  }, [route.params?.collectionListChange, route.params?.profileModification])
 
   useEffect(() => {
     console.log("Profile route", route);
@@ -533,9 +533,9 @@ const ProfileScreen = ({navigation, route}: Props) => {
      followed={followed} 
      followUserProp={followUser}
      unfollowUserProp={unfollowUser}
-     profileImage={userInfoData ? userInfoData.profileImg: ""}
-     nickname={userInfoData ? userInfoData.nickname : ""}
-     description={userInfoData ? userInfoData.description : ""}
+     profileImage={currentUser.user ? currentUser.user.profileImage: ""}
+     nickname={currentUser.user ? currentUser.user.nickname : ""}
+     description={currentUser.user ? currentUser.user.description : ""}
      followerCount={userInfoData ? userInfoData.followersCount : ""}
      followingCount={userInfoData ? userInfoData.followingsCount : ""}
      feedCount={userInfoData ? userInfoData.postsCount : 0}

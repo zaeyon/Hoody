@@ -1,16 +1,19 @@
-import React from 'react';
-import {TouchableWithoutFeedback} from 'react-native';
+import React, {useEffect ,useState} from 'react';
+import {TouchableWithoutFeedback, Alert} from 'react-native';
 import Styled from 'styled-components/native';
 import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import {useSelector, useDispatch} from 'react-redux';
+import allActions from '~/action';
+
+import POSTProfileUpdate from '~/Route/User/POSTProfileUpdate';
 
 const Container = Styled.SafeAreaView`
  flex: 1;
  background-color: #FFFFFF;
 `;
-
 
 const HeaderBar = Styled.View`
  width: ${wp('100%')};
@@ -184,6 +187,84 @@ interface Props {
 }
 
 const ProfileEditScreen = ({navigation, route}: Props) => {
+    const currentUser = useSelector((state) => state.currentUser);
+    const dispatch = useDispatch();
+    const [currentUserProfile, setCurrentUserProfile] = useState<object>({});
+    const [nickname ,setNickname] = useState<string>(currentUser.user.nickname);
+    const [description, setDescription] = useState<string>(currentUser.user.description);
+    const [profileImage, setProfileImage] = useState<any>(currentUser.user.profileImage);
+
+    useEffect(() => {
+        console.log("profileEditScreen currentUser", currentUser);
+        setCurrentUserProfile(currentUser.user);
+        setProfileImage(currentUser.user.profileImage);
+    }, [])
+
+    const onChangeNicknameInput = (text: string) => {
+        setNickname(text);
+
+    }
+
+    const onChangeDescripInput = (text: string) => {
+        setDescription(text);
+    }
+
+    const moveToAccountSetting = () => {
+        navigation.navigate("AccountSettingScreen");
+    }
+
+    const completeProfileEdit = () => {
+        if(currentUser.user.nickname !== nickname) {
+        console.log("닉네임 바뀜")
+        POSTProfileUpdate(description, profileImage, nickname)
+        .then(function(response ){
+            console.log("completeProfileEdit response", response);
+            var modifiedProfile = currentUser.user;
+            console.log("modifiedProfile", modifiedProfile);
+            modifiedProfile.nickname = nickname;
+            modifiedProfile.description = description;
+            modifiedProfile.profileImage = profileImage;
+
+            setTimeout(() => {
+            dispatch(allActions.userActions.setUser(modifiedProfile));
+            navigation.navigate("ProfileScreen", {
+                profileModification: true,
+            })
+            })
+        })
+        .catch(function(error) {
+            console.log("completeProfileEdit error", error);
+            if(error.status === 403) {
+                Alert.alert("이미 사용중인 닉네임입니다.", ' ', [
+                   {
+                       text: '확인',
+                       onPress: () => 0,
+                   }, 
+                ]);
+            }
+        })
+        } else if(currentUser.user.nickname === nickname) {
+        console.log("닉네임 안바뀜");
+        POSTProfileUpdate(description, profileImage)
+        .then(function(response ){
+            console.log("completeProfileEdit response", response);
+            var modifiedProfile = currentUser.user;
+            console.log("modifiedProfile", modifiedProfile);
+            modifiedProfile.description = description;
+            modifiedProfile.profileImage = profileImage;
+            setTimeout(() => {
+            dispatch(allActions.userActions.setUser(modifiedProfile));
+            navigation.navigate("ProfileScreen", {
+                profileModification: true,
+            })
+            })
+        })
+        .catch(function(error) {
+            console.log("completeProfileEdit error", error)
+        })  
+        }
+    }
+
     return (
         <Container>
             <HeaderBar>
@@ -195,24 +276,38 @@ const ProfileEditScreen = ({navigation, route}: Props) => {
                 </HeaderCancelContainer>
                 </TouchableWithoutFeedback>
                 <HeaderTitleText>프로필 편집</HeaderTitleText>
+                <TouchableWithoutFeedback onPress={() => completeProfileEdit()}>
                 <HeaderFinishContainer>
                     <HeaderFinishText>완료</HeaderFinishText>
                 </HeaderFinishContainer>
+                </TouchableWithoutFeedback>
             </HeaderBar>
             <BodyContainer>
                 <ProfileImageContainer>
+                    <TouchableWithoutFeedback onPress={() => navigation.navigate("Gallery_ProfileImage")}>
                     <ProfileImageBackground>
-                        <EmptyProfileImage
-                        source={require('~/Assets/Images/ic_emptyImage.png')}/>
+                        {currentUserProfile.profileImage && (
+                            <ProfileImage
+                            source={{uri:currentUserProfile.profileImage}}/>
+                        )}
+                        {!currentUserProfile.profileImage && (
+                            <EmptyProfileImage
+                            source={require('~/Assets/Images/ic_emptyImage.png')}/>
+                        )}
                     </ProfileImageBackground>
+                    </TouchableWithoutFeedback>
+                    <TouchableWithoutFeedback onPress={() => navigation.navigate("Gallery_ProfileImage")}>
                     <ProfileImageChangeText>
                         프로필 사진 바꾸기
                     </ProfileImageChangeText>
+                    </TouchableWithoutFeedback>
                 </ProfileImageContainer>
                 <ProfileNicknameContainer>
-                    <ProfileNicknameLabelText>이름</ProfileNicknameLabelText>
+                    <ProfileNicknameLabelText>닉네임</ProfileNicknameLabelText>
                     <ProfileNicknameInput
                     autoCapitalize={"none"}
+                    value={nickname}
+                    onChangeText={(text:string) => onChangeNicknameInput(text)}
                     />
                 </ProfileNicknameContainer>
                 <ProfileDescripContainer>
@@ -223,13 +318,16 @@ const ProfileEditScreen = ({navigation, route}: Props) => {
                     placeholder={"자기 소개를 적어주세요."}
                     placeholderTextColor="#8e9199"
                     multiline={"true"}
+                    value={description}
+                    onChangeText={(text: string) => onChangeDescripInput(text)}
                     autoCapitalize={"none"}
                     />
                 </ProfileDescripContainer>
+                <TouchableWithoutFeedback onPress={() => moveToAccountSetting()}>
                 <PrivacySettingContainer>
                     <PrivacySettingText>개인정보 설정</PrivacySettingText>
                 </PrivacySettingContainer>
-
+                </TouchableWithoutFeedback>
             </BodyContainer>
         </Container>
 

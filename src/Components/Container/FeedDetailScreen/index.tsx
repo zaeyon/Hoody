@@ -4,9 +4,10 @@ import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import {TouchableWithoutFeedback, Text, FlatList, ScrollView} from 'react-native';
+import {TouchableWithoutFeedback, Text, FlatList, ScrollView, StyleSheet} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import allActions from '~/action';
+import Modal from 'react-native-modal';
 
 // location component
 import FeedContent from '~/Components/Presentational/FeedDetailScreen/FeedContent';
@@ -17,6 +18,8 @@ import {POSTLike, DELETELike} from '~/Route/Post/Like';
 import POSTScrapFeed from '~/Route/Post/Scrap/POSTScrapFeed';
 import DELETEScrapFeed from '~/Route/Post/Scrap/DELETEScrapFeed';
 import GetFeedDetail from '~/Route/Post/GetFeedDetail';
+import DELETEPost from '~/Route/Post/DELETEPost';
+
 const Container = Styled.SafeAreaView`
 width: ${wp('100%')};
 height:${hp('100%')};
@@ -283,16 +286,68 @@ tint-color: #333333;
 const ScrapIcon = Styled.Image`
 width: ${wp('5.7%')};
 height: ${wp('5.7%')};
-
 tint-color: #333333;
 `;
-
 
 const PressedScrapIcon = Styled.Image`
 width: ${wp('5.7%')};
 height: ${wp('5.7%')};
-
 `;
+
+const MyFeedViewMoreModalContainer = Styled.View`
+width: ${wp('100%')};
+height: ${wp('53.86%')};
+border-top-left-radius: 10px;
+border-top-right-radius: 10px;
+background-color: #FFFFFF;
+`;
+
+const OtherUsersFeedViewMoreModalContainer = Styled.View`
+width: ${wp('100%')};
+height: ${wp('36.8%')};
+border-top-left-radius: 10px;
+border-top-right-radius: 10px;
+background-color: #FFFFFF;
+`;
+
+const ModalHeaderContainer = Styled.View`
+ padding-top: 4px;
+ width: ${wp('100%')};
+ padding-bottom: 10px;
+ align-items: center;
+`;
+
+
+const ModalToggleButton = Styled.View`
+ width: ${wp('11.7%')};
+ height: ${wp('1.4%')};
+ background-color: #F4F4F7;
+ border-radius: 5px;
+`;
+
+
+const ModalTabItemContainer = Styled.View`
+ height: ${wp('17%')};
+ flex-direction: row;
+ align-items: center;
+ padding-left: 16px;
+ padding-right: 16px;
+ border-bottom-width: 0.6px;
+ border-color: #ECECEE;
+`;
+
+const ModalTabItemIconImage = Styled.Image`
+width: ${wp('6.4%')};
+height: ${wp('6.4%')};
+tint-color: #1D1E1F;
+`;
+
+const ModalTabItemLabelText = Styled.Text`
+ margin-left: 11px;
+ font-size: 18px;
+ color: #1D1E1F;
+`;
+
 
 
 
@@ -377,6 +432,9 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
     const [currentUserScrap, setCurrentUserScrap] = useState<boolean>(false);
     const [likeCount, setLikeCount] = useState<number>();
     const [allCommentCount, setAllCommentCount] = useState<number>();
+    const [myFeedModalVisible, setMyFeedModalVisible] = useState<boolean>(false);
+    const [otherUsersFeedModalVisible, setOtherUsersFeedModalVisible] = useState<boolean>(false);
+    const [currentUserFeed, setCurrentUserFeed] = useState<boolean>(false);
 
     const currentUser = useSelector((state) => state.currentUser);
     const dispatch = useDispatch();
@@ -384,7 +442,11 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
     useLayoutEffect(() => {
         if(route.params?.feedId) {
        GetFeedDetail(route.params.feedId).then(function(response) {
-           console.log("GetFeedDetail Success:", response.data)
+           console.log("GetFeedDetail Success:", response.data);
+           console.log("currentUser.user", currentUser.user);
+           if(response.data.post.user.id === currentUser.user.userId) {
+             setCurrentUserFeed(true);
+           }
            console.log("response.data.post", response.data.post);
            console.log("response.data.post.mainTags", response.data.post.mainTags);
            response.data.post.spendDate = getDateFormat(response.data.post.spendDate)
@@ -548,6 +610,24 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
       deletedScrapFeeds.splice(deletedFeedIndex, 1);
       dispatch(allActions.userActions.setScrapFeeds(deletedScrapFeeds))
     }
+
+    const clickToViewMore = () => {
+      if(currentUserFeed) {
+        setMyFeedModalVisible(true)
+      } else {
+        setOtherUsersFeedModalVisible(true);
+      }
+    }
+
+    const deleteFeed = () => {
+      DELETEPost(postId)
+      .then(function(response) {
+        console.log("피드 삭제 성공 response", response);
+      })
+      .catch(function(error) {
+        console.log("피드 삭제 error", error);
+      })
+    }
   
 
    return (
@@ -559,7 +639,7 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
           </TouchableWithoutFeedback>
         </LeftContainer>
         <RightContainer>
-              <TouchableWithoutFeedback onPress = {() => 0}>
+              <TouchableWithoutFeedback onPress = {() => clickToViewMore()}>
                   <ViewMoreIcon
                   source={require('~/Assets/Images/HeaderBar/ic_more.png')}/>
               </TouchableWithoutFeedback>
@@ -629,12 +709,77 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
                 source={require('~/Assets/Images/Feed/ic_pressedScrap.png')}/>
               </InfoContainer>
             </TouchableWithoutFeedback>
-
           )}
       </BottomBar>
-
+      <Modal
+      onBackdropPress={() => setMyFeedModalVisible(false)}
+      isVisible={myFeedModalVisible}
+      backdropOpacity={0.25}
+      onSwipeComplete={() => setMyFeedModalVisible(false)}
+      swipeDirection={['down']}
+      style={styles.myFeedModal}>
+        <MyFeedViewMoreModalContainer>
+        <ModalHeaderContainer>
+        <ModalToggleButton/>
+        </ModalHeaderContainer>
+        <TouchableWithoutFeedback onPress={() => 0}>
+        <ModalTabItemContainer>
+          <ModalTabItemIconImage
+          style={{tintColor:'#FF3B30'}}
+          source={require('~/Assets/Images/Feed/ic_remove.png')}/>
+          <ModalTabItemLabelText
+          style={{color:'#FF3B30'}}
+          >삭제하기</ModalTabItemLabelText>
+        </ModalTabItemContainer>
+        </TouchableWithoutFeedback>
+        <TouchableWithoutFeedback onPress={() => 0}>
+        <ModalTabItemContainer>
+          <ModalTabItemIconImage
+          style={{tintColor:'#1D1E1F'}}
+          source={require('~/Assets/Images/Feed/ic_pen.png')}/>
+          <ModalTabItemLabelText
+          style={{color:'#1D1E1F'}}
+          >수정하기</ModalTabItemLabelText>
+        </ModalTabItemContainer>
+        </TouchableWithoutFeedback>
+        </MyFeedViewMoreModalContainer>
+      </Modal>
+      <Modal
+      onBackdropPress={() => setOtherUsersFeedModalVisible(false)}
+      isVisible={otherUsersFeedModalVisible}
+      backdropOpacity={0.25}
+      onSwipeComplete={() => setOtherUsersFeedModalVisible(false)}
+      swipeDirection={['down']}
+      style={styles.otherUsersModal}>
+        <OtherUsersFeedViewMoreModalContainer>
+        <ModalHeaderContainer>
+        <ModalToggleButton/>
+        </ModalHeaderContainer>
+        <TouchableWithoutFeedback onPress={() => 0}>
+        <ModalTabItemContainer>
+          <ModalTabItemIconImage
+          style={{tintColor:'#1D1E1F'}}
+          source={require('~/Assets/Images/Feed/ic_declare.png')}/>
+          <ModalTabItemLabelText
+          style={{color:'#1D1E1F'}}
+          >신고하기</ModalTabItemLabelText>
+        </ModalTabItemContainer>
+        </TouchableWithoutFeedback>
+        </OtherUsersFeedViewMoreModalContainer>
+      </Modal>
        </Container>
    )
 }
+
+const styles = StyleSheet.create({
+  myFeedModal: {
+    justifyContent: 'flex-end',
+    margin: 0,
+  },
+  otherUsersModal: {
+    justifyContent: 'flex-end',
+    margin: 0,
+  }
+})
 
 export default FeedDetailScreen;

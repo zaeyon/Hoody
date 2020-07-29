@@ -1,5 +1,5 @@
 import axios from 'axios';
-const baseUrl = "https://d8e1fd0aa26c.ngrok.io";
+const baseUrl = "https://7697cfa1f65b.ngrok.io";
 
 const POSTComment = (postId, comment) => {
     console.log("댓글 입력 postId", postId);

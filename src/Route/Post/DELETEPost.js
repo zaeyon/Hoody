@@ -1,14 +1,14 @@
 import axios from 'axios';
-const baseUrl = 'https://7697cfa1f65b.ngrok.io';
+const baseUrl = "https://7697cfa1f65b.ngrok.io";
 
-const DELETEUnfollowTag = (tagId) => {
-    const url = baseUrl + '/tag/unfollow?tagId=' + tagId;
+const DELETEPost = (postId) => {
+    const url = baseUrl + '/post/delete?postId=' + postId;
 
     return new Promise(function(resolve, reject) {
         axios
         .delete(url)
         .then(function(response) {
-            resolve(response.data);
+            resolve(response);
         })
         .catch(function(error) {
             reject(error);
@@ -16,4 +16,4 @@ const DELETEUnfollowTag = (tagId) => {
     })
 }
 
-export default DELETEUnfollowTag;
+export default DELETEPost;

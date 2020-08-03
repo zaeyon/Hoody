@@ -8,8 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* hoogingAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* hoogingAppTests.m */; };
+		034F83BA94244348A64D54F2 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 115A288B06824ABDB5FBC4F4 /* Zocial.ttf */; };
+		06556D5375B34BF0AD902990 /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 84A978EE9ABF4EFE8F0A8F2D /* MaterialCommunityIcons.ttf */; };
 		0A32ECC224906FD100A93EC6 /* libreact-native-cameraroll.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0A32ECC124906FD100A93EC6 /* libreact-native-cameraroll.a */; };
-		0A84A5C72499F01F00749D25 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0A84A5BF2499ECE100749D25 /* GoogleService-Info.plist */; };
+		0A914F8124D804A40017DF43 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0A914F8024D804A40017DF43 /* GoogleService-Info.plist */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
@@ -18,32 +20,29 @@
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* hoogingAppTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* hoogingAppTests.m */; };
-		64D7CC1C17B390CBFB55F4C2 /* libPods-hoogingApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 936011DE93AFF44535E70ABB /* libPods-hoogingApp.a */; };
-		7B10D48C7B4CBA3FA0285B5A /* libPods-hoogingApp-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 204702964D8C930995A429B9 /* libPods-hoogingApp-tvOSTests.a */; };
-		8C06D9E813CD0D4CD32ED606 /* libPods-hoogingApp-hoogingAppTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8B01F1B6422912FAB61449A1 /* libPods-hoogingApp-hoogingAppTests.a */; };
-		CAEEFDC57250645DF9A7ACBF /* libPods-hoogingApp-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A0B6F667D08504809466AAD /* libPods-hoogingApp-tvOS.a */; };
-		E66A0AC12487B39A002A5F86 /* libRNGestureHandler.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E66A0AC02487B39A002A5F86 /* libRNGestureHandler.a */; };
-		9577210DF74941ECA7721F13 /* AntDesign.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9D96F68ACE59486A8875B5FE /* AntDesign.ttf */; };
-		7ABA7C67C78F48CFB1769693 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BA86E338A4E2476B8246E71C /* Entypo.ttf */; };
-		F2A57C08230F4175BB21297B /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4D54EFA1984E4EDC9353E778 /* EvilIcons.ttf */; };
-		44EF65A11DBB494AB8BECF24 /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F19CF0DE8DDD4A0CA744AD30 /* Feather.ttf */; };
-		57DA88528BF14D98BDB6D6B4 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4EFBA3D8007844B4B0D2841A /* FontAwesome.ttf */; };
-		D5F4C5421A5A48E5ACA476E7 /* FontAwesome5_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 841A9752B16549B9957A7E76 /* FontAwesome5_Brands.ttf */; };
-		34262F49D5274D0386CCCD24 /* FontAwesome5_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 966C670E1CB94C0DB3D45985 /* FontAwesome5_Regular.ttf */; };
-		EBCC7AE2C3704DF0B04EC857 /* FontAwesome5_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 629949979D0F41D386A9AFBA /* FontAwesome5_Solid.ttf */; };
 		30EC3FD3A57545E6A605396A /* Fontisto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 31EEAE06F7AB48EF87475536 /* Fontisto.ttf */; };
-		C0350847C459423F8B124657 /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5D420BAFB9944294A8DE0E0F /* Foundation.ttf */; };
-		EEDDF0F692594DD48462794F /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7DCA11623FC24F5BAB67D8E3 /* Ionicons.ttf */; };
-		06556D5375B34BF0AD902990 /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 84A978EE9ABF4EFE8F0A8F2D /* MaterialCommunityIcons.ttf */; };
+		34262F49D5274D0386CCCD24 /* FontAwesome5_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 966C670E1CB94C0DB3D45985 /* FontAwesome5_Regular.ttf */; };
+		3D30132491E44B67BB06C7A0 /* Arita4.0_B.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F17BCC1BB955454E8537E3A8 /* Arita4.0_B.ttf */; };
+		44EF65A11DBB494AB8BECF24 /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F19CF0DE8DDD4A0CA744AD30 /* Feather.ttf */; };
+		4F3F55437F7CFAF52F34DC49 /* libPods-hoogingApp.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B3B4B2AB8CD671CC9F40BF2E /* libPods-hoogingApp.a */; };
+		57DA88528BF14D98BDB6D6B4 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4EFBA3D8007844B4B0D2841A /* FontAwesome.ttf */; };
+		7ABA7C67C78F48CFB1769693 /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BA86E338A4E2476B8246E71C /* Entypo.ttf */; };
+		9577210DF74941ECA7721F13 /* AntDesign.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9D96F68ACE59486A8875B5FE /* AntDesign.ttf */; };
+		9B34330CAD8EFEB85FDB2030 /* libPods-hoogingApp-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F2EB4A1BC3B29C29D0440A7B /* libPods-hoogingApp-tvOS.a */; };
 		9CD931BDA1E44374B83DCDBD /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B0C300DEC35A4B8BB436D5AF /* MaterialIcons.ttf */; };
-		E83EDFF5E2ED45F5B7C00401 /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 56D10DFA470449B5AF734A25 /* Octicons.ttf */; };
-		C1991F11CF864FA5981CB2D7 /* Roboto_medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 64EEEFAC6F694A948861CD26 /* Roboto_medium.ttf */; };
 		A415C0650F3A41878B8A9B56 /* Roboto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 900362AFB7314F879544BE63 /* Roboto.ttf */; };
 		B6CDE3642AFB4BA98E7975A8 /* rubicon-icon-font.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 87B072F4F0C2469BB92069E1 /* rubicon-icon-font.ttf */; };
+		C0350847C459423F8B124657 /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5D420BAFB9944294A8DE0E0F /* Foundation.ttf */; };
+		C1991F11CF864FA5981CB2D7 /* Roboto_medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 64EEEFAC6F694A948861CD26 /* Roboto_medium.ttf */; };
+		CAC4473BDFABA8DE86EE3FF7 /* libPods-hoogingApp-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 42169ED0F6248033A6FA89AB /* libPods-hoogingApp-tvOSTests.a */; };
+		D5F4C5421A5A48E5ACA476E7 /* FontAwesome5_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 841A9752B16549B9957A7E76 /* FontAwesome5_Brands.ttf */; };
 		E54F3C9421284788ABA79454 /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 032C49DAFDEF420580E51DDA /* SimpleLineIcons.ttf */; };
-		034F83BA94244348A64D54F2 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 115A288B06824ABDB5FBC4F4 /* Zocial.ttf */; };
+		E7E190DDE6AAF998C476A16D /* libPods-hoogingApp-hoogingAppTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F62E54CA3F072725134676D0 /* libPods-hoogingApp-hoogingAppTests.a */; };
+		E83EDFF5E2ED45F5B7C00401 /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 56D10DFA470449B5AF734A25 /* Octicons.ttf */; };
+		EBCC7AE2C3704DF0B04EC857 /* FontAwesome5_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 629949979D0F41D386A9AFBA /* FontAwesome5_Solid.ttf */; };
+		EEDDF0F692594DD48462794F /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7DCA11623FC24F5BAB67D8E3 /* Ionicons.ttf */; };
+		F2A57C08230F4175BB21297B /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4D54EFA1984E4EDC9353E778 /* EvilIcons.ttf */; };
 		FBDB8FD8163D4AC780851A0C /* SFProDisplay-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1C4E7FA571314CDB9864F3A0 /* SFProDisplay-Regular.ttf */; };
-		3D30132491E44B67BB06C7A0 /* Arita4.0_B.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F17BCC1BB955454E8537E3A8 /* Arita4.0_B.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,31 +67,22 @@
 			remoteGlobalIDString = 2D02E47A1E0B4A5D006451C7;
 			remoteInfo = "hoogingApp-tvOS";
 		};
-		E66A0AB92487B24A002A5F86 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E66A0AB42487B249002A5F86 /* RNGestureHandler.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 134814201AA4EA6300B7C361;
-			remoteInfo = RNGestureHandler;
-		};
-		E66A0ABB2487B24A002A5F86 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = E66A0AB42487B249002A5F86 /* RNGestureHandler.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = B5C32A36220C603B000FFB8D;
-			remoteInfo = "RNGestureHandler-tvOS";
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
+		00E07A760C20C040A7DE2BE7 /* Pods-hoogingApp-hoogingAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hoogingApp-hoogingAppTests.debug.xcconfig"; path = "Target Support Files/Pods-hoogingApp-hoogingAppTests/Pods-hoogingApp-hoogingAppTests.debug.xcconfig"; sourceTree = "<group>"; };
 		00E356EE1AD99517003FC87E /* hoogingAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = hoogingAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* hoogingAppTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = hoogingAppTests.m; sourceTree = "<group>"; };
+		032C49DAFDEF420580E51DDA /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = SimpleLineIcons.ttf; path = "../node_modules/native-base/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; };
+		093E8EC5D82DBB2350AE5C69 /* Pods-hoogingApp-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hoogingApp-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-hoogingApp-tvOSTests/Pods-hoogingApp-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		0A32ECBA24906E5800A93EC6 /* RNCCameraRoll.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNCCameraRoll.xcodeproj; path = "../node_modules/@react-native-community/cameraroll/ios/RNCCameraRoll.xcodeproj"; sourceTree = "<group>"; };
 		0A32ECC124906FD100A93EC6 /* libreact-native-cameraroll.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = "libreact-native-cameraroll.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		0A43A70F247E4C3300CFAF01 /* hoogingApp.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = hoogingApp.entitlements; path = hoogingApp/hoogingApp.entitlements; sourceTree = "<group>"; };
-		0A84A5BF2499ECE100749D25 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		0A914F8024D804A40017DF43 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		115A288B06824ABDB5FBC4F4 /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/native-base/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
+		130366B2BA4FDD80A454E9E0 /* Pods-hoogingApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hoogingApp.release.xcconfig"; path = "Target Support Files/Pods-hoogingApp/Pods-hoogingApp.release.xcconfig"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* hoogingApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = hoogingApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = hoogingApp/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = hoogingApp/AppDelegate.m; sourceTree = "<group>"; };
@@ -100,45 +90,38 @@
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = hoogingApp/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = hoogingApp/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = hoogingApp/main.m; sourceTree = "<group>"; };
-		204702964D8C930995A429B9 /* libPods-hoogingApp-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-hoogingApp-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		26D313A64A16DEEF1137B5CF /* Pods-hoogingApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hoogingApp.release.xcconfig"; path = "Target Support Files/Pods-hoogingApp/Pods-hoogingApp.release.xcconfig"; sourceTree = "<group>"; };
+		1C4E7FA571314CDB9864F3A0 /* SFProDisplay-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SFProDisplay-Regular.ttf"; path = "../assets/fonts/SFProDisplay-Regular.ttf"; sourceTree = "<group>"; };
+		1EB69E59AA1AA58DB2C06A5B /* Pods-hoogingApp-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hoogingApp-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-hoogingApp-tvOSTests/Pods-hoogingApp-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		2D02E47B1E0B4A5D006451C7 /* hoogingApp-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "hoogingApp-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* hoogingApp-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "hoogingApp-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		7CB03E1A36E9C053B7B17587 /* Pods-hoogingApp-hoogingAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hoogingApp-hoogingAppTests.debug.xcconfig"; path = "Target Support Files/Pods-hoogingApp-hoogingAppTests/Pods-hoogingApp-hoogingAppTests.debug.xcconfig"; sourceTree = "<group>"; };
-		8B01F1B6422912FAB61449A1 /* libPods-hoogingApp-hoogingAppTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-hoogingApp-hoogingAppTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		9022F4A0111FC76F52E2297D /* Pods-hoogingApp-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hoogingApp-tvOS.release.xcconfig"; path = "Target Support Files/Pods-hoogingApp-tvOS/Pods-hoogingApp-tvOS.release.xcconfig"; sourceTree = "<group>"; };
-		936011DE93AFF44535E70ABB /* libPods-hoogingApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-hoogingApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		9A0B6F667D08504809466AAD /* libPods-hoogingApp-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-hoogingApp-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		A365A2414BF58C8052B4EB43 /* Pods-hoogingApp-hoogingAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hoogingApp-hoogingAppTests.release.xcconfig"; path = "Target Support Files/Pods-hoogingApp-hoogingAppTests/Pods-hoogingApp-hoogingAppTests.release.xcconfig"; sourceTree = "<group>"; };
-		A945C77207209EA523AA93A4 /* Pods-hoogingApp-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hoogingApp-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-hoogingApp-tvOSTests/Pods-hoogingApp-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
-		AC2C70034B291C638054D103 /* Pods-hoogingApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hoogingApp.debug.xcconfig"; path = "Target Support Files/Pods-hoogingApp/Pods-hoogingApp.debug.xcconfig"; sourceTree = "<group>"; };
-		BA18F9F6A534589601D7B447 /* Pods-hoogingApp-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hoogingApp-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-hoogingApp-tvOS/Pods-hoogingApp-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
-		D65FB9D3FEF16F547D24D8E3 /* Pods-hoogingApp-tvOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hoogingApp-tvOSTests.release.xcconfig"; path = "Target Support Files/Pods-hoogingApp-tvOSTests/Pods-hoogingApp-tvOSTests.release.xcconfig"; sourceTree = "<group>"; };
-		E66A0AB42487B249002A5F86 /* RNGestureHandler.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RNGestureHandler.xcodeproj; path = "../node_modules/react-native-gesture-handler/ios/RNGestureHandler.xcodeproj"; sourceTree = "<group>"; };
-		E66A0AC02487B39A002A5F86 /* libRNGestureHandler.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libRNGestureHandler.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		31EEAE06F7AB48EF87475536 /* Fontisto.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Fontisto.ttf; path = "../node_modules/native-base/Fonts/Fontisto.ttf"; sourceTree = "<group>"; };
+		3B528B06549D8B421E6BE376 /* Pods-hoogingApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hoogingApp.debug.xcconfig"; path = "Target Support Files/Pods-hoogingApp/Pods-hoogingApp.debug.xcconfig"; sourceTree = "<group>"; };
+		42169ED0F6248033A6FA89AB /* libPods-hoogingApp-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-hoogingApp-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4D54EFA1984E4EDC9353E778 /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/native-base/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
+		4EFBA3D8007844B4B0D2841A /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/native-base/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
+		56D10DFA470449B5AF734A25 /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/native-base/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
+		5D420BAFB9944294A8DE0E0F /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/native-base/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
+		629949979D0F41D386A9AFBA /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Solid.ttf; path = "../node_modules/native-base/Fonts/FontAwesome5_Solid.ttf"; sourceTree = "<group>"; };
+		64EEEFAC6F694A948861CD26 /* Roboto_medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Roboto_medium.ttf; path = "../node_modules/native-base/Fonts/Roboto_medium.ttf"; sourceTree = "<group>"; };
+		7DCA11623FC24F5BAB67D8E3 /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/native-base/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
+		841A9752B16549B9957A7E76 /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Brands.ttf; path = "../node_modules/native-base/Fonts/FontAwesome5_Brands.ttf"; sourceTree = "<group>"; };
+		84A978EE9ABF4EFE8F0A8F2D /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialCommunityIcons.ttf; path = "../node_modules/native-base/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; };
+		87B072F4F0C2469BB92069E1 /* rubicon-icon-font.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "rubicon-icon-font.ttf"; path = "../node_modules/native-base/Fonts/rubicon-icon-font.ttf"; sourceTree = "<group>"; };
+		900362AFB7314F879544BE63 /* Roboto.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Roboto.ttf; path = "../node_modules/native-base/Fonts/Roboto.ttf"; sourceTree = "<group>"; };
+		906D9C28B57CE5B3F4C17070 /* Pods-hoogingApp-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hoogingApp-tvOS.release.xcconfig"; path = "Target Support Files/Pods-hoogingApp-tvOS/Pods-hoogingApp-tvOS.release.xcconfig"; sourceTree = "<group>"; };
+		942A0E4E252C49E0A3947EAB /* Pods-hoogingApp-hoogingAppTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hoogingApp-hoogingAppTests.release.xcconfig"; path = "Target Support Files/Pods-hoogingApp-hoogingAppTests/Pods-hoogingApp-hoogingAppTests.release.xcconfig"; sourceTree = "<group>"; };
+		966C670E1CB94C0DB3D45985 /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Regular.ttf; path = "../node_modules/native-base/Fonts/FontAwesome5_Regular.ttf"; sourceTree = "<group>"; };
+		9D96F68ACE59486A8875B5FE /* AntDesign.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = AntDesign.ttf; path = "../node_modules/native-base/Fonts/AntDesign.ttf"; sourceTree = "<group>"; };
+		B0C300DEC35A4B8BB436D5AF /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../node_modules/native-base/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
+		B3B4B2AB8CD671CC9F40BF2E /* libPods-hoogingApp.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-hoogingApp.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		BA86E338A4E2476B8246E71C /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/native-base/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
+		DB39F9E35839A6F142F788E5 /* Pods-hoogingApp-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-hoogingApp-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-hoogingApp-tvOS/Pods-hoogingApp-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
-		9D96F68ACE59486A8875B5FE /* AntDesign.ttf */ = {isa = PBXFileReference; name = "AntDesign.ttf"; path = "../node_modules/native-base/Fonts/AntDesign.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		BA86E338A4E2476B8246E71C /* Entypo.ttf */ = {isa = PBXFileReference; name = "Entypo.ttf"; path = "../node_modules/native-base/Fonts/Entypo.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		4D54EFA1984E4EDC9353E778 /* EvilIcons.ttf */ = {isa = PBXFileReference; name = "EvilIcons.ttf"; path = "../node_modules/native-base/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		F19CF0DE8DDD4A0CA744AD30 /* Feather.ttf */ = {isa = PBXFileReference; name = "Feather.ttf"; path = "../node_modules/native-base/Fonts/Feather.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		4EFBA3D8007844B4B0D2841A /* FontAwesome.ttf */ = {isa = PBXFileReference; name = "FontAwesome.ttf"; path = "../node_modules/native-base/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		841A9752B16549B9957A7E76 /* FontAwesome5_Brands.ttf */ = {isa = PBXFileReference; name = "FontAwesome5_Brands.ttf"; path = "../node_modules/native-base/Fonts/FontAwesome5_Brands.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		966C670E1CB94C0DB3D45985 /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; name = "FontAwesome5_Regular.ttf"; path = "../node_modules/native-base/Fonts/FontAwesome5_Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		629949979D0F41D386A9AFBA /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; name = "FontAwesome5_Solid.ttf"; path = "../node_modules/native-base/Fonts/FontAwesome5_Solid.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		31EEAE06F7AB48EF87475536 /* Fontisto.ttf */ = {isa = PBXFileReference; name = "Fontisto.ttf"; path = "../node_modules/native-base/Fonts/Fontisto.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		5D420BAFB9944294A8DE0E0F /* Foundation.ttf */ = {isa = PBXFileReference; name = "Foundation.ttf"; path = "../node_modules/native-base/Fonts/Foundation.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		7DCA11623FC24F5BAB67D8E3 /* Ionicons.ttf */ = {isa = PBXFileReference; name = "Ionicons.ttf"; path = "../node_modules/native-base/Fonts/Ionicons.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		84A978EE9ABF4EFE8F0A8F2D /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; name = "MaterialCommunityIcons.ttf"; path = "../node_modules/native-base/Fonts/MaterialCommunityIcons.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		B0C300DEC35A4B8BB436D5AF /* MaterialIcons.ttf */ = {isa = PBXFileReference; name = "MaterialIcons.ttf"; path = "../node_modules/native-base/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		56D10DFA470449B5AF734A25 /* Octicons.ttf */ = {isa = PBXFileReference; name = "Octicons.ttf"; path = "../node_modules/native-base/Fonts/Octicons.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		64EEEFAC6F694A948861CD26 /* Roboto_medium.ttf */ = {isa = PBXFileReference; name = "Roboto_medium.ttf"; path = "../node_modules/native-base/Fonts/Roboto_medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		900362AFB7314F879544BE63 /* Roboto.ttf */ = {isa = PBXFileReference; name = "Roboto.ttf"; path = "../node_modules/native-base/Fonts/Roboto.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		87B072F4F0C2469BB92069E1 /* rubicon-icon-font.ttf */ = {isa = PBXFileReference; name = "rubicon-icon-font.ttf"; path = "../node_modules/native-base/Fonts/rubicon-icon-font.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		032C49DAFDEF420580E51DDA /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; name = "SimpleLineIcons.ttf"; path = "../node_modules/native-base/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		115A288B06824ABDB5FBC4F4 /* Zocial.ttf */ = {isa = PBXFileReference; name = "Zocial.ttf"; path = "../node_modules/native-base/Fonts/Zocial.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		1C4E7FA571314CDB9864F3A0 /* SFProDisplay-Regular.ttf */ = {isa = PBXFileReference; name = "SFProDisplay-Regular.ttf"; path = "../assets/fonts/SFProDisplay-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		F17BCC1BB955454E8537E3A8 /* Arita4.0_B.ttf */ = {isa = PBXFileReference; name = "Arita4.0_B.ttf"; path = "../assets/fonts/Arita4.0_B.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		F17BCC1BB955454E8537E3A8 /* Arita4.0_B.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Arita4.0_B.ttf; path = ../assets/fonts/Arita4.0_B.ttf; sourceTree = "<group>"; };
+		F19CF0DE8DDD4A0CA744AD30 /* Feather.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Feather.ttf; path = "../node_modules/native-base/Fonts/Feather.ttf"; sourceTree = "<group>"; };
+		F2EB4A1BC3B29C29D0440A7B /* libPods-hoogingApp-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-hoogingApp-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F62E54CA3F072725134676D0 /* libPods-hoogingApp-hoogingAppTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-hoogingApp-hoogingAppTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -146,7 +129,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8C06D9E813CD0D4CD32ED606 /* libPods-hoogingApp-hoogingAppTests.a in Frameworks */,
+				E7E190DDE6AAF998C476A16D /* libPods-hoogingApp-hoogingAppTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -155,8 +138,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0A32ECC224906FD100A93EC6 /* libreact-native-cameraroll.a in Frameworks */,
-				E66A0AC12487B39A002A5F86 /* libRNGestureHandler.a in Frameworks */,
-				64D7CC1C17B390CBFB55F4C2 /* libPods-hoogingApp.a in Frameworks */,
+				4F3F55437F7CFAF52F34DC49 /* libPods-hoogingApp.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -164,7 +146,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CAEEFDC57250645DF9A7ACBF /* libPods-hoogingApp-tvOS.a in Frameworks */,
+				9B34330CAD8EFEB85FDB2030 /* libPods-hoogingApp-tvOS.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -172,7 +154,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7B10D48C7B4CBA3FA0285B5A /* libPods-hoogingApp-tvOSTests.a in Frameworks */,
+				CAC4473BDFABA8DE86EE3FF7 /* libPods-hoogingApp-tvOSTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -207,7 +189,7 @@
 		13B07FAE1A68108700A75B9A /* hoogingApp */ = {
 			isa = PBXGroup;
 			children = (
-				0A84A5BF2499ECE100749D25 /* GoogleService-Info.plist */,
+				0A914F8024D804A40017DF43 /* GoogleService-Info.plist */,
 				0A43A70F247E4C3300CFAF01 /* hoogingApp.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
@@ -224,28 +206,27 @@
 			isa = PBXGroup;
 			children = (
 				0A32ECC124906FD100A93EC6 /* libreact-native-cameraroll.a */,
-				E66A0AC02487B39A002A5F86 /* libRNGestureHandler.a */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
-				936011DE93AFF44535E70ABB /* libPods-hoogingApp.a */,
-				8B01F1B6422912FAB61449A1 /* libPods-hoogingApp-hoogingAppTests.a */,
-				9A0B6F667D08504809466AAD /* libPods-hoogingApp-tvOS.a */,
-				204702964D8C930995A429B9 /* libPods-hoogingApp-tvOSTests.a */,
+				B3B4B2AB8CD671CC9F40BF2E /* libPods-hoogingApp.a */,
+				F62E54CA3F072725134676D0 /* libPods-hoogingApp-hoogingAppTests.a */,
+				F2EB4A1BC3B29C29D0440A7B /* libPods-hoogingApp-tvOS.a */,
+				42169ED0F6248033A6FA89AB /* libPods-hoogingApp-tvOSTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		3FD32F798230F90296D0666F /* Pods */ = {
+		801F74B215E659C3A29E4CB1 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				AC2C70034B291C638054D103 /* Pods-hoogingApp.debug.xcconfig */,
-				26D313A64A16DEEF1137B5CF /* Pods-hoogingApp.release.xcconfig */,
-				7CB03E1A36E9C053B7B17587 /* Pods-hoogingApp-hoogingAppTests.debug.xcconfig */,
-				A365A2414BF58C8052B4EB43 /* Pods-hoogingApp-hoogingAppTests.release.xcconfig */,
-				BA18F9F6A534589601D7B447 /* Pods-hoogingApp-tvOS.debug.xcconfig */,
-				9022F4A0111FC76F52E2297D /* Pods-hoogingApp-tvOS.release.xcconfig */,
-				A945C77207209EA523AA93A4 /* Pods-hoogingApp-tvOSTests.debug.xcconfig */,
-				D65FB9D3FEF16F547D24D8E3 /* Pods-hoogingApp-tvOSTests.release.xcconfig */,
+				3B528B06549D8B421E6BE376 /* Pods-hoogingApp.debug.xcconfig */,
+				130366B2BA4FDD80A454E9E0 /* Pods-hoogingApp.release.xcconfig */,
+				00E07A760C20C040A7DE2BE7 /* Pods-hoogingApp-hoogingAppTests.debug.xcconfig */,
+				942A0E4E252C49E0A3947EAB /* Pods-hoogingApp-hoogingAppTests.release.xcconfig */,
+				DB39F9E35839A6F142F788E5 /* Pods-hoogingApp-tvOS.debug.xcconfig */,
+				906D9C28B57CE5B3F4C17070 /* Pods-hoogingApp-tvOS.release.xcconfig */,
+				093E8EC5D82DBB2350AE5C69 /* Pods-hoogingApp-tvOSTests.debug.xcconfig */,
+				1EB69E59AA1AA58DB2C06A5B /* Pods-hoogingApp-tvOSTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -254,7 +235,6 @@
 			isa = PBXGroup;
 			children = (
 				0A32ECBA24906E5800A93EC6 /* RNCCameraRoll.xcodeproj */,
-				E66A0AB42487B249002A5F86 /* RNGestureHandler.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -267,8 +247,8 @@
 				00E356EF1AD99517003FC87E /* hoogingAppTests */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
-				3FD32F798230F90296D0666F /* Pods */,
 				B47D572FFA994A7B8E7F9BFE /* Resources */,
+				801F74B215E659C3A29E4CB1 /* Pods */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -286,17 +266,8 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		E66A0AB52487B249002A5F86 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				E66A0ABA2487B24A002A5F86 /* libRNGestureHandler.a */,
-				E66A0ABC2487B24A002A5F86 /* libRNGestureHandler-tvOS.a */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 		B47D572FFA994A7B8E7F9BFE /* Resources */ = {
-			isa = "PBXGroup";
+			isa = PBXGroup;
 			children = (
 				9D96F68ACE59486A8875B5FE /* AntDesign.ttf */,
 				BA86E338A4E2476B8246E71C /* Entypo.ttf */,
@@ -322,7 +293,6 @@
 			);
 			name = Resources;
 			sourceTree = "<group>";
-			path = "";
 		};
 /* End PBXGroup section */
 
@@ -331,11 +301,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "hoogingAppTests" */;
 			buildPhases = (
-				8BB59095385D580E08044DA1 /* [CP] Check Pods Manifest.lock */,
+				C66DABA9C453567A18666D06 /* [CP] Check Pods Manifest.lock */,
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
-				A3DC30AEA4EF90989671CB4C /* [CP] Copy Pods Resources */,
+				50F3E24A13638E9BF36A1850 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -351,13 +321,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "hoogingApp" */;
 			buildPhases = (
-				F018580868170457AE500966 /* [CP] Check Pods Manifest.lock */,
+				0479BF7ED37B6139F447E338 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
-				BB022506CE86039513502692 /* [CP] Copy Pods Resources */,
+				6F417FA1741F572D977321A5 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -372,7 +342,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "hoogingApp-tvOS" */;
 			buildPhases = (
-				12AA83B75E8F7B3E300209F7 /* [CP] Check Pods Manifest.lock */,
+				C7BB49741D72DAEC34D51810 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F122414F3F0027D42C /* Start Packager */,
 				2D02E4771E0B4A5D006451C7 /* Sources */,
 				2D02E4781E0B4A5D006451C7 /* Frameworks */,
@@ -392,7 +362,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "hoogingApp-tvOSTests" */;
 			buildPhases = (
-				93B9D154CA12DC36E0C0F5C4 /* [CP] Check Pods Manifest.lock */,
+				8E3D0144062DBDAA7F148D6C /* [CP] Check Pods Manifest.lock */,
 				2D02E48C1E0B4A5D006451C7 /* Sources */,
 				2D02E48D1E0B4A5D006451C7 /* Frameworks */,
 				2D02E48E1E0B4A5D006451C7 /* Resources */,
@@ -450,10 +420,6 @@
 					ProductGroup = 0A32ECBB24906E5800A93EC6 /* Products */;
 					ProjectRef = 0A32ECBA24906E5800A93EC6 /* RNCCameraRoll.xcodeproj */;
 				},
-				{
-					ProductGroup = E66A0AB52487B249002A5F86 /* Products */;
-					ProjectRef = E66A0AB42487B249002A5F86 /* RNGestureHandler.xcodeproj */;
-				},
 			);
 			projectRoot = "";
 			targets = (
@@ -473,20 +439,6 @@
 			remoteRef = 0A32ECBE24906E5800A93EC6 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		E66A0ABA2487B24A002A5F86 /* libRNGestureHandler.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = libRNGestureHandler.a;
-			remoteRef = E66A0AB92487B24A002A5F86 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		E66A0ABC2487B24A002A5F86 /* libRNGestureHandler-tvOS.a */ = {
-			isa = PBXReferenceProxy;
-			fileType = archive.ar;
-			path = "libRNGestureHandler-tvOS.a";
-			remoteRef = E66A0ABB2487B24A002A5F86 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
 /* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
@@ -501,7 +453,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0A84A5C72499F01F00749D25 /* GoogleService-Info.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 				9577210DF74941ECA7721F13 /* AntDesign.ttf in Resources */,
@@ -519,6 +470,7 @@
 				9CD931BDA1E44374B83DCDBD /* MaterialIcons.ttf in Resources */,
 				E83EDFF5E2ED45F5B7C00401 /* Octicons.ttf in Resources */,
 				C1991F11CF864FA5981CB2D7 /* Roboto_medium.ttf in Resources */,
+				0A914F8124D804A40017DF43 /* GoogleService-Info.plist in Resources */,
 				A415C0650F3A41878B8A9B56 /* Roboto.ttf in Resources */,
 				B6CDE3642AFB4BA98E7975A8 /* rubicon-icon-font.ttf in Resources */,
 				E54F3C9421284788ABA79454 /* SimpleLineIcons.ttf in Resources */,
@@ -560,7 +512,7 @@
 			shellPath = /bin/sh;
 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh\n";
 		};
-		12AA83B75E8F7B3E300209F7 /* [CP] Check Pods Manifest.lock */ = {
+		0479BF7ED37B6139F447E338 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -575,7 +527,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-hoogingApp-tvOS-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-hoogingApp-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -596,51 +548,7 @@
 			shellPath = /bin/sh;
 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
 		};
-		8BB59095385D580E08044DA1 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-hoogingApp-hoogingAppTests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		93B9D154CA12DC36E0C0F5C4 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-hoogingApp-tvOSTests-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		A3DC30AEA4EF90989671CB4C /* [CP] Copy Pods Resources */ = {
+		50F3E24A13638E9BF36A1850 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -664,7 +572,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-hoogingApp-hoogingAppTests/Pods-hoogingApp-hoogingAppTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		BB022506CE86039513502692 /* [CP] Copy Pods Resources */ = {
+		6F417FA1741F572D977321A5 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -688,7 +596,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-hoogingApp/Pods-hoogingApp-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		F018580868170457AE500966 /* [CP] Check Pods Manifest.lock */ = {
+		8E3D0144062DBDAA7F148D6C /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -703,7 +611,51 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-hoogingApp-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-hoogingApp-tvOSTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C66DABA9C453567A18666D06 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-hoogingApp-hoogingAppTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C7BB49741D72DAEC34D51810 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-hoogingApp-tvOS-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -815,7 +767,7 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7CB03E1A36E9C053B7B17587 /* Pods-hoogingApp-hoogingAppTests.debug.xcconfig */;
+			baseConfigurationReference = 00E07A760C20C040A7DE2BE7 /* Pods-hoogingApp-hoogingAppTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -823,6 +775,7 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = hoogingAppTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -839,11 +792,12 @@
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A365A2414BF58C8052B4EB43 /* Pods-hoogingApp-hoogingAppTests.release.xcconfig */;
+			baseConfigurationReference = 942A0E4E252C49E0A3947EAB /* Pods-hoogingApp-hoogingAppTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
+				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = hoogingAppTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -860,7 +814,7 @@
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = AC2C70034B291C638054D103 /* Pods-hoogingApp.debug.xcconfig */;
+			baseConfigurationReference = 3B528B06549D8B421E6BE376 /* Pods-hoogingApp.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -872,6 +826,7 @@
 					"$(inherited)",
 					"FB_SONARKIT_ENABLED=1",
 				);
+				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = hoogingApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -889,13 +844,14 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 26D313A64A16DEEF1137B5CF /* Pods-hoogingApp.release.xcconfig */;
+			baseConfigurationReference = 130366B2BA4FDD80A454E9E0 /* Pods-hoogingApp.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = hoogingApp/hoogingApp.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = HC9LUKBNP4;
+				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = hoogingApp/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -912,7 +868,7 @@
 		};
 		2D02E4971E0B4A5E006451C7 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BA18F9F6A534589601D7B447 /* Pods-hoogingApp-tvOS.debug.xcconfig */;
+			baseConfigurationReference = DB39F9E35839A6F142F788E5 /* Pods-hoogingApp-tvOS.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -923,6 +879,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_TESTABILITY = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
+				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "hoogingApp-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -940,7 +897,7 @@
 		};
 		2D02E4981E0B4A5E006451C7 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9022F4A0111FC76F52E2297D /* Pods-hoogingApp-tvOS.release.xcconfig */;
+			baseConfigurationReference = 906D9C28B57CE5B3F4C17070 /* Pods-hoogingApp-tvOS.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "App Icon & Top Shelf Image";
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -951,6 +908,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_NO_COMMON_BLOCKS = YES;
+				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "hoogingApp-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -968,7 +926,7 @@
 		};
 		2D02E4991E0B4A5E006451C7 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A945C77207209EA523AA93A4 /* Pods-hoogingApp-tvOSTests.debug.xcconfig */;
+			baseConfigurationReference = 093E8EC5D82DBB2350AE5C69 /* Pods-hoogingApp-tvOSTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;
@@ -978,6 +936,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_TESTABILITY = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
+				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "hoogingApp-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -995,7 +954,7 @@
 		};
 		2D02E49A1E0B4A5E006451C7 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D65FB9D3FEF16F547D24D8E3 /* Pods-hoogingApp-tvOSTests.release.xcconfig */;
+			baseConfigurationReference = 1EB69E59AA1AA58DB2C06A5B /* Pods-hoogingApp-tvOSTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CLANG_ANALYZER_NONNULL = YES;
@@ -1005,6 +964,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_NO_COMMON_BLOCKS = YES;
+				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = "hoogingApp-tvOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				OTHER_LDFLAGS = (

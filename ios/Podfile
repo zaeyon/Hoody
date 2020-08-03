@@ -79,7 +79,7 @@ target 'hoogingApp' do
 
   pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
 
-  pod 'RNTextSize', :path => '../node_modules/react-native-text-size'
+  pod 'react-native-location', :path => '../node_modules/react-native-location'
 
   target 'hoogingAppTests' do
     inherit! :complete

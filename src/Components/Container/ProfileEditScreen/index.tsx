@@ -190,14 +190,16 @@ const ProfileEditScreen = ({navigation, route}: Props) => {
     const currentUser = useSelector((state) => state.currentUser);
     const dispatch = useDispatch();
     const [currentUserProfile, setCurrentUserProfile] = useState<object>({});
-    const [nickname ,setNickname] = useState<string>(currentUser.user.nickname);
-    const [description, setDescription] = useState<string>(currentUser.user.description);
-    const [profileImage, setProfileImage] = useState<any>(currentUser.user.profileImage);
+    const [nickname ,setNickname] = useState<string>(currentUser.user?.nickname);
+    const [description, setDescription] = useState<string>(currentUser.user?.description);
+    const [profileImage, setProfileImage] = useState<any>(currentUser.user?.profileImage);
 
     useEffect(() => {
-        console.log("profileEditScreen currentUser", currentUser);
-        setCurrentUserProfile(currentUser.user);
-        setProfileImage(currentUser.user.profileImage);
+        if(currentUser.user) {
+            console.log("profileEditScreen currentUser", currentUser);
+            setCurrentUserProfile(currentUser.user);
+            setProfileImage(currentUser.user.profileImage);
+        }
     }, [])
 
     const onChangeNicknameInput = (text: string) => {

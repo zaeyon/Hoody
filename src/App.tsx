@@ -19,6 +19,7 @@ import Unauthorized from '~/Screens/Unauthorized';
 import AuthUser from '~/Auth';
 import AppNavigator from '~/Navigator';
 import Navigator from '~/Navigator';
+import RNLocation from 'react-native-location';
 
 const Container = Styled.View`
   
@@ -49,6 +50,27 @@ async function requestCameraPermission() {
     console.warn(err);
   }
 }
+
+// 위치 권한 확인
+RNLocation.configure({
+  distanceFilter: 1, // Meters
+  desiredAccuracy: {
+    ios: "best",
+    android: "balancedPowerAccuracy"
+  },
+  // Android only
+  androidProvider: "auto",
+  interval: 5000, // Milliseconds
+  fastestInterval: 10000, // Milliseconds
+  maxWaitTime: 5000, // Milliseconds
+  // iOS Only
+  activityType: "other",
+  allowsBackgroundLocationUpdates: false,
+  headingFilter: 1, // Degrees
+  headingOrientation: "portrait",
+  pausesLocationUpdatesAutomatically: false,
+  showsBackgroundLocationIndicator: false,
+})
 
 function App() {
   requestCameraPermission();

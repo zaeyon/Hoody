@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
     TouchableWithoutFeedback,
      FlatList,
@@ -16,6 +16,11 @@ import PopularTagByAgeGroup from '~/Components/Presentational/ExploreScreen/Popu
 import PopularFeedList from '~/Components/Presentational/ExploreScreen/PopularFeedList';
 import RecommendCollectionList from '~/Components/Presentational/ExploreScreen/RecommendCollectionList'; 
 import PopularFeedListByLocation from '~/Components/Presentational/ExploreScreen/PopularFeedListByLocation';
+import Geolocation from 'react-native-geolocation-service';
+
+
+
+
 
 
 const Container = Styled.SafeAreaView`
@@ -137,7 +142,38 @@ interface Props {
 }
 
 const ExploreScreen = ({navigation, route}: Props) => {
+    const [currentUserLocation, setCurrentUserLocation] = useState<object>({
+        latitude: 0,
+        longitude: 0,
+    });
 
+    useEffect(() => {
+        var hasLocationPermission = true;
+        if (hasLocationPermission) {
+            Geolocation.getCurrentPosition(
+                (position) => {
+                  console.log("탐색화면 현재 위치", position);
+                  setCurrentUserLocation(position.coords);
+                },
+                (error) => {
+                  // See error code charts below.
+                  console.log(error.code, error.message);
+                },
+                { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+            );
+          }
+        
+        
+    }, [])
+
+    const moveToNearFeedMap = () => {
+        console.log("currentLocation", currentUserLocation);
+  
+        navigation.navigate("NearFeedMapScreen", {
+          currentLatitude: 126.991,
+          currentLongitude: 37.5658,
+      })
+    }
     return (
         <Container>
             <HeaderBar>
@@ -151,10 +187,12 @@ const ExploreScreen = ({navigation, route}: Props) => {
                     </SearchInputContainer>
                     </TouchableWithoutFeedback>
                 </HeaderSearchContainer>
+                <TouchableWithoutFeedback onPress={() => moveToNearFeedMap()}>
                 <HeaderLocationContainer>
                     <HeaderLocationIcon
                     source={require('~/Assets/Images/ic_header_location.png')}/>
                 </HeaderLocationContainer>
+                </TouchableWithoutFeedback>
             </HeaderRightContainer>
             </HeaderBar>
             <BodyContainer

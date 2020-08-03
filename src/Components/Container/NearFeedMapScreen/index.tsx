@@ -1,13 +1,17 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, createRef, useRef} from 'react';
 import Styled from 'styled-components/native';
-import {TouchableWithoutFeedback} from 'react-native';
+import {TouchableWithoutFeedback, Text, Dimensions} from 'react-native';
 import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp
 } from 'react-native-responsive-screen';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
+import SlidingUpPanel from 'rn-sliding-up-panel';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
+
+
+const actionSheetRef = createRef();
 
 
 const TEST_NEAR_FEED_DATA = {
@@ -763,6 +767,29 @@ const SmallMarkerThumbnailContainer = Styled.View`
  padding-left: 7px;
 `;
 
+const PanelContainer = Styled.View`
+ background-color: #ffffff;
+ border-top-left-radius: 15px;
+ border-top-right-radius: 15px;
+ flex: 1;
+`;
+
+
+const PanelHeaderContainer = Styled.View`
+ padding-top: 4px;
+ width: ${wp('100%')};
+ padding-bottom: 10px;
+ align-items: center;
+`;
+
+
+const PanelToggleButton = Styled.View`
+ width: ${wp('11.7%')};
+ height: ${wp('1.4%')};
+ background-color: #F4F4F7;
+ border-radius: 5px;
+`;
+
 
 
 
@@ -774,12 +801,17 @@ interface Props {
 const NearFeedMapScreen = ({navigation, route}: Props) => {
     const [nearFeedListData, setNearFeedListData] = useState<Array<object>>([]);
 
+    var panelRef = useRef(null);
+
+const {height} = Dimensions.get('window')
+
     const LatLng = {
       latitude: 37.567859,
       longitude: 126.998215,
     }
 
     useEffect(() => {
+        console.log("getStatusBarHeight", getStatusBarHeight());
         if(route.params?.currentLatitude) {
             console.log("route.params.currentLatitude,", route.params.currentLatitude)
             console.log("route.params.currentLongitude,", route.params.currentLongitude)
@@ -862,6 +894,17 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
           )}
         })}
       </MapView>
+      <SlidingUpPanel
+      ref={(c) => (panelRef=c)}
+      draggableRange={{top: height / 1.75, bottom: 120}}
+      showBackdrop={false}
+      >
+        <PanelContainer>
+          <PanelHeaderContainer>
+            <PanelToggleButton/>
+          </PanelHeaderContainer>
+        </PanelContainer>
+      </SlidingUpPanel>
     </Container>
   );
 }

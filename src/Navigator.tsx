@@ -187,6 +187,16 @@ function ExploreStackScreen() {
       <ExploreStack.Screen
       name="AnotherUserProfileStack"
       component={AnotherUserProfileStackScreen}/>
+      <ExploreStack.Screen
+      name="NearFeedMapScreen"
+      component={NearFeedMapScreen}
+      options={{
+        transitionSpec: {
+          open: config,
+          close: config,
+        }
+      }}
+      />
     </ExploreStack.Navigator>
   )
 }
@@ -746,7 +756,6 @@ function AppNavigator() {
     headerMode="none"
     >
       <NoBottomBarStack.Screen name="BottomTab" component={BottomTab}/>
-      <NoBottomBarStack.Screen name="NearFeedMapScreen" component={NearFeedMapScreen}/>
       <NoBottomBarStack.Screen name="CollectionDetailScreen" component={CollectionDetailScreen}/>
       <NoBottomBarStack.Screen name="CollectionUploadScreen" component={CollectionUploadScreen}/>
       <NoBottomBarStack.Screen name="CollectionModifyScreen" component={CollectionModifyScreen}/>

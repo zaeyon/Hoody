@@ -1,18 +1,17 @@
 import React, {useEffect, useState, createRef, useRef} from 'react';
 import Styled from 'styled-components/native';
-import {TouchableWithoutFeedback, Text, Dimensions} from 'react-native';
+import {TouchableWithoutFeedback, Text, Dimensions, FlatList} from 'react-native';
 import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp
 } from 'react-native-responsive-screen';
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
-import SlidingUpPanel from 'rn-sliding-up-panel';
+import SlidingUpPanel from '~/Components/Presentational/NearFeedMapScreen/SlidingUpPanel';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
+import {BlurView, VibrancyView} from "@react-native-community/blur";
 
-
-const actionSheetRef = createRef();
-
+import NearFeedItem from '~/Components/Presentational/NearFeedMapScreen/NearFeedItem';
 
 const TEST_NEAR_FEED_DATA = {
   "postsNum": 18,
@@ -637,7 +636,7 @@ const TEST_NEAR_FEED_DATA = {
     },
     "114-6 Eulji-ro Jung-gu Seoul": {
       "metaData": {
-        "num": 1,
+        "num": 2,
         "SumStarRate": 3.8,
         "AvgStarRate": 3.8,
         "lat": 37.5658111,
@@ -645,6 +644,32 @@ const TEST_NEAR_FEED_DATA = {
         "coverImg": ""
       },
       "posts": [
+        {
+          "spendDate": "2020-07-06",
+          "likes": 0,
+          "expense": null,
+          "starRate": 3.8,
+          "createdAt": "2020-07-06T09:26:30.000Z",
+          "commentsCount": 0,
+          "replysCount": 0,
+          "id": 3,
+          "mainTags": {
+            "name": "testUpdate"
+          },
+          "subTagOnes": {
+            "name": "hello"
+          },
+          "subTagTwos": {
+            "name": "world"
+          },
+          "address": {
+            "address": "114-6 Eulji-ro Jung-gu Seoul",
+            "geographLong": 37.5658,
+            "geographLat": 126.991,
+            "region": "서울특별시 중구"
+          },
+          "mediaFiles": []
+        },
         {
           "spendDate": "2020-07-06",
           "likes": 0,
@@ -700,8 +725,14 @@ padding-bottom: 13px;
 padding-top: 15px;
 padding-right: 16px;
 background-color: #ffffff;
+flex-direction: row;
 justify-content: center;
 align-items: center;
+`;
+
+const HeaderLogoImage = Styled.Image`
+ width: ${wp('23.3%')};
+ height: ${wp('5.5%')};
 `;
 
 
@@ -713,6 +744,16 @@ padding-right: 16px;
 justify-content: center;
 align-items: center;
 background-color: #ffffff;
+`;
+
+const HeaderMarkerImage = Styled.Image`
+ width: ${wp('6.4%')};
+ height: ${wp('6.4%')};
+`;
+
+const HeaderCancelImage = Styled.Image`
+ width: ${wp('6.4%')};
+ height: ${wp('6.4%')};
 `;
 
 const HeaderTitleText = Styled.Text`
@@ -745,10 +786,14 @@ const MarkerThumbnailImage = Styled.Image`
 
 const MarkerThumbnailContainer = Styled.View`
  flex:1;
+ width: 66px;
+ height: 66px;
  justify-content: center;
  align-items: center;
- padding-top: 4.2px;
- padding-left: 7px;
+ padding-top: 0px;
+ padding-left: 0px;
+ padding-right: 3px;
+ padding-bottom: 6px;
 `;
 
 
@@ -767,15 +812,28 @@ const SmallMarkerThumbnailContainer = Styled.View`
  padding-left: 7px;
 `;
 
+const OneMoreThenMarkerThumbnailContainer = Styled.View`
+flex:1;
+ justify-content: center;
+ align-items: center;
+ padding-top: 4.2px;
+ padding-left: 7px;
+ width: 50px;
+ height: 50px;
+`;
+
 const PanelContainer = Styled.View`
  background-color: #ffffff;
  border-top-left-radius: 15px;
  border-top-right-radius: 15px;
+ padding-bottom: 16px;
  flex: 1;
 `;
 
 
 const PanelHeaderContainer = Styled.View`
+padding-left: 16px;
+padding-right: 16px;
  padding-top: 4px;
  width: ${wp('100%')};
  padding-bottom: 10px;
@@ -790,6 +848,103 @@ const PanelToggleButton = Styled.View`
  border-radius: 5px;
 `;
 
+const FeedCountContainer = Styled.View`
+position: absolute;
+top: 0px;
+right: 0px;
+`;
+
+
+
+const FeedCountBackground = Styled.View`
+padding-top: 4px;
+padding-bottom: 4px;
+padding-left: 6px;
+padding-right: 6px;
+border-radius: 26px;
+background-color: #00000020;
+`;
+
+
+const OneMoreThanFeedCountBackground = Styled.View`
+padding-top: 4px;
+padding-bottom: 4px;
+padding-left: 7.5px;
+padding-right: 7.5px;
+border-radius: 50px;
+background-color: #00000020;
+`;
+
+const FeedCountText = Styled.Text`
+font-weight: 500;
+font-size: 13px;
+color: #FFFFFF;
+`;
+
+
+const FeedCountText2 = Styled.Text`
+top: 3.5px;
+left: 6px;
+position: absolute;
+font-weight: 500;
+font-size: 13px;
+color: #FFFFFF;
+`;
+
+
+const OneMoreThanFeedCountText = Styled.Text`
+font-weight: 500;
+font-size: 13px;
+color: #FFFFFF;
+`;
+
+
+const OneMoreThanFeedCountText2 = Styled.Text`
+top: 3.5px;
+left: 7.5px;
+position: absolute;
+font-weight: 500;
+font-size: 13px;
+color: #FFFFFF;
+`;
+
+const CurrentLocationText = Styled.Text`
+font-weight: 500;
+font-size: 16px;
+color: #333333;
+`;
+
+const RadiusRangeText = Styled.Text`
+margin-left: 4px;
+font-weight: 500;
+font-size: 16px;
+color: #267DFF;
+`;
+
+const DropDownIcon = Styled.Image`
+margin-left: 3px;
+width: ${wp('3.2%')};
+height: ${wp('3.2%')};
+`;
+
+const NoImageMarkerImage = Styled.Image`
+width: 20px;
+height: 20px;
+`;
+
+const NearAllFeedCountContainer = Styled.View`
+padding-left: 16px;
+padding-right: 16px;
+
+`;
+
+const NearAllFeedCountText = Styled.Text`
+font-weight: 500;
+font-size: 16px;
+color: #333333;
+`;
+
+
 
 
 
@@ -799,7 +954,11 @@ interface Props {
 }
 
 const NearFeedMapScreen = ({navigation, route}: Props) => {
-    const [nearFeedListData, setNearFeedListData] = useState<Array<object>>([]);
+    const [nearLocationListData, setNearLocationListData] = useState<Array<object>>([]);
+    const [nearAllFeedListData, setNearAllFeedListData] = useState<Array<object>>([]);
+    const [panelHeight, setPanelHeight] = useState<number>(hp('80%'));
+    const [allowPanelDragging, setAllowPanelDragging] = useState<boolean>(true);
+    const [allowListDragging, setAllowListDragging] = useState<boolean>(true);
 
     var panelRef = useRef(null);
 
@@ -810,6 +969,7 @@ const {height} = Dimensions.get('window')
       longitude: 126.998215,
     }
 
+
     useEffect(() => {
         console.log("getStatusBarHeight", getStatusBarHeight());
         if(route.params?.currentLatitude) {
@@ -819,19 +979,58 @@ const {height} = Dimensions.get('window')
     }, [])
 
     useEffect(() => {
-      var tmpNearFeedListData = new Array();
+      var tmpNearLocationListData = new Array();
+      var tmpNearAllFeedListData = new Array();
       for(const[key, value] of Object.entries(TEST_NEAR_FEED_DATA.postsByAddress)) {
-        tmpNearFeedListData.push({
+        tmpNearLocationListData.push({
           location: key,
           post: value,
         })
+        tmpNearAllFeedListData = tmpNearAllFeedListData.concat(value.posts);
       }
 
       setTimeout(() => {
-        console.log("tmpNearFeedListData", tmpNearFeedListData);
-        setNearFeedListData(tmpNearFeedListData);
+        tmpNearAllFeedListData.sort(function(a, b) {
+          return b["likes"] - a["likes"];
+        })
+        console.log("tmpNearLocationListData", tmpNearLocationListData);
+        console.log("tmpNearAllFeedListData", tmpNearAllFeedListData);
+        setNearLocationListData(tmpNearLocationListData);
+        setTimeout(() => {
+          setNearAllFeedListData(tmpNearAllFeedListData);
+        })
       })
     }, [])
+
+    const onDragEndPanel = (position: any, gestureState: any) => {
+      console.log("onDragEndPanel gestureState", gestureState);
+      console.log("onDragEndPanel position", position);
+
+      if(position < 645) {
+        panelRef.current.hide();
+      }
+    }
+
+    const onMomentumPanelDragEnd = (gestureState) => {
+     console.log("onMomentumPanelDragEnd", gestureState);
+    }
+
+
+    const renderNearFeedItem = ({item, index}: any) => {
+      return (
+        <NearFeedItem
+        mainTag={item.mainTags.name}
+        subTag1={item.subTagOnes ? item.subTagOnes.name : null}
+        subTag2={item.subTagTwos ? item.subTagTwos.name : null}
+        rating={item.starRate}
+        expense={item.expense != null ? item.expense : null}
+        location={item.address ? item.address.address : null}
+        likeCount={item.likes}
+        commentCount={item.commentsCount + item.replysCount}
+        mainImageUri={item.mediaFiles[0] ? item.mediaFiles[0].url: null}
+        />
+      )
+    }
 
 
   return (
@@ -839,12 +1038,17 @@ const {height} = Dimensions.get('window')
 
 <HeaderBar style={{marginTop:getStatusBarHeight()}}>
         <HeaderLeftContainer>
-          <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
-          <BackButton source={require('~/Assets/Images/HeaderBar/ic_X.png')} />
-          </TouchableWithoutFeedback>
+          <CurrentLocationText>을지로동 주변</CurrentLocationText>
+          <RadiusRangeText>1km</RadiusRangeText>
+          <DropDownIcon
+          source={require('~/Assets/Images/HeaderBar/ic_dropDown.png')}/>
         </HeaderLeftContainer>
+        <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
         <HeaderRightContainer>
+          <HeaderCancelImage
+          source={require('~/Assets/Images/HeaderBar/ic_X.png')}/>
         </HeaderRightContainer>
+        </TouchableWithoutFeedback>
       </HeaderBar>
     <MapView
       style={{flex:1}}
@@ -856,7 +1060,7 @@ const {height} = Dimensions.get('window')
         longitudeDelta: 0.0421,
       }}>
 
-        {nearFeedListData?.map(location => {
+        {nearLocationListData?.map(location => {
           if(location.post.metaData.num >= 10) {
             return (
           <Marker
@@ -871,10 +1075,23 @@ const {height} = Dimensions.get('window')
           image={require('~/Assets/Images/Map/ic_marker_big.png')}>
             <MarkerThumbnailContainer>
               <MarkerThumbnailImage
-              source={{uri:location.post.metaData.coverImg}}/>
+                 style={!location.post.metaData.coverImg && {width: 40, height: 40, marginBottom:11, marginRight:8}}
+                 source={
+                 location.post.metaData.coverImg
+                 ? {uri:location.post.metaData.coverImg}
+                 : require('~/Assets/Images/Map/ic_hash.png')
+                   }/>
+              <FeedCountContainer>
+              <VibrancyView blurType={"dark"} style={{borderRadius:13, opacity:0.7}} blurAmount={30} reducedTransparencyFallbackColor={"dark"}>
+              <FeedCountBackground>
+                <FeedCountText style={{opacity:0}} >{location.post.metaData.num}</FeedCountText>
+              </FeedCountBackground>
+              </VibrancyView>
+              <FeedCountText2>{location.post.metaData.num}</FeedCountText2>
+              </FeedCountContainer>
             </MarkerThumbnailContainer>
           </Marker>
-        )} else if(location.post.metaData.num < 10) {
+        )} else if(location.post.metaData.num === 1) {
           return (
             <Marker
           style={{
@@ -888,21 +1105,82 @@ const {height} = Dimensions.get('window')
           image={require('~/Assets/Images/Map/ic_marker_small.png')}>
             <SmallMarkerThumbnailContainer>
               <SmallMarkerThumbnailImage
-              source={{uri:location.post.metaData.coverImg}}/>
+              style={!location.post.metaData.coverImg && {width: 20, height: 20, marginTop:7, marginLeft:7}}
+              source={
+              location.post.metaData.coverImg
+              ? {uri:location.post.metaData.coverImg}
+              : require('~/Assets/Images/Map/ic_hash.png')
+                }/>
             </SmallMarkerThumbnailContainer>
           </Marker>
-          )}
+          )} else if(1 < location.post.metaData.num && location.post.metaData.num < 10) {
+            return (
+              <Marker
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+            coordinate={{
+              latitude: location.post.metaData.lat,
+              longitude: location.post.metaData.long,
+            }}
+            image={require('~/Assets/Images/Map/ic_marker_small.png')}>
+              <OneMoreThenMarkerThumbnailContainer>
+              <SmallMarkerThumbnailImage
+              style={!location.post.metaData.coverImg && {width: 20, height: 20, marginBottom:11, marginRight:8}}
+              source={
+              location.post.metaData.coverImg
+              ? {uri:location.post.metaData.coverImg}
+              : require('~/Assets/Images/Map/ic_hash.png')
+                }/>
+                 <FeedCountContainer>
+              <VibrancyView blurType={"dark"} style={{borderRadius:12, opacity:0.7}} blurAmount={30} reducedTransparencyFallbackColor={"dark"}>
+              <OneMoreThanFeedCountBackground>
+                <OneMoreThanFeedCountText style={{opacity:0}} >{location.post.metaData.num}</OneMoreThanFeedCountText>
+              </OneMoreThanFeedCountBackground>
+              </VibrancyView>
+              <OneMoreThanFeedCountText2>{location.post.metaData.num}</OneMoreThanFeedCountText2>
+              </FeedCountContainer>
+              </OneMoreThenMarkerThumbnailContainer>
+            </Marker>
+            )} 
         })}
       </MapView>
       <SlidingUpPanel
-      ref={(c) => (panelRef=c)}
-      draggableRange={{top: height / 1.75, bottom: 120}}
+      ref={panelRef}
+      allowListDragging={allowListDragging}
+      allowDragging={allowPanelDragging}
+      draggableRange={{top: panelHeight, bottom: 140}}
       showBackdrop={false}
-      >
-        <PanelContainer>
+      onDragEnd={(position:any, gestureState:any) => onDragEndPanel(position, gestureState)}
+      backdropOpacity={0.1}>
+        <PanelContainer onLayout={(event) => {
+          console.log("event.layout.height", event);
+        }}>
           <PanelHeaderContainer>
             <PanelToggleButton/>
           </PanelHeaderContainer>
+          <NearAllFeedCountContainer>
+          <NearAllFeedCountText>{"게시글 " + TEST_NEAR_FEED_DATA.postsNum + "개"}</NearAllFeedCountText>
+          </NearAllFeedCountContainer>
+          <FlatList
+          onScroll={(e) => {
+            let offset = e.nativeEvent.contentOffset.y;
+            let index = parseInt(offset / wp('37.3%'));
+            console.log("now index is " + index);
+            if(index > 0) {
+              setAllowPanelDragging(false);
+            } else if(index == 0) {
+              setAllowPanelDragging(true);
+            }
+          }}
+          style={{marginTop: 15}}
+          contentContainerStyle={{paddingBottom: 210}}
+          showsVerticalScrollIndicator={false}
+          data={nearAllFeedListData}
+          keyExtractor={(item, index) => ""+index}
+          renderItem={renderNearFeedItem}
+          />
         </PanelContainer>
       </SlidingUpPanel>
     </Container>

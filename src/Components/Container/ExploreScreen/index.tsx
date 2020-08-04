@@ -34,7 +34,7 @@ const BodyContainer = Styled.ScrollView`
 
 const HeaderBar = Styled.View`
  width: ${wp('100%')};
- height: ${wp('11.7%')};
+ height: ${wp('13.86%')};
  flex-direction: row;
  align-items: center;
  justify-content: space-between;
@@ -101,13 +101,17 @@ height: ${wp('6.4%')};
 tint-color: #000000;
 `;
 
-const HeaderLocationContainer = Styled.View`
-padding: 10px 15px 10px 8px;
-align-items: center;
+const HeaderMarkerContainer = Styled.View`
+padding-left: 16px;
+padding-bottom: 13px;
+padding-top: 15px;
+padding-right: 16px;
 justify-content: center;
+align-items: center;
+background-color: #ffffff;
 `;
 
-const HeaderLocationIcon = Styled.Image`
+const HeaderMarkerIcon = Styled.Image`
  width: ${wp('6.4%')};
  height: ${wp('6.4%')};
  tint-color: #000000;
@@ -188,10 +192,10 @@ const ExploreScreen = ({navigation, route}: Props) => {
                     </TouchableWithoutFeedback>
                 </HeaderSearchContainer>
                 <TouchableWithoutFeedback onPress={() => moveToNearFeedMap()}>
-                <HeaderLocationContainer>
-                    <HeaderLocationIcon
+                <HeaderMarkerContainer>
+                    <HeaderMarkerIcon
                     source={require('~/Assets/Images/ic_header_location.png')}/>
-                </HeaderLocationContainer>
+                </HeaderMarkerContainer>
                 </TouchableWithoutFeedback>
             </HeaderRightContainer>
             </HeaderBar>

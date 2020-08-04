@@ -1,12 +1,14 @@
 import React, {useEffect, useState, createRef, useRef} from 'react';
 import Styled from 'styled-components/native';
-import {TouchableWithoutFeedback, Text, Dimensions, FlatList} from 'react-native';
+import {TouchableWithoutFeedback, Text, Dimensions, FlatList, StyleSheet, View} from 'react-native';
 import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp
 } from 'react-native-responsive-screen';
-import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
+import MapView, {PROVIDER_GOOGLE, Marker, AnimatedRegion, MapViewAnimated} from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
+import Modal from 'react-native-modal';
+
 import SlidingUpPanel from '~/Components/Presentational/NearFeedMapScreen/SlidingUpPanel';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 import {BlurView, VibrancyView} from "@react-native-community/blur";
@@ -944,6 +946,14 @@ font-size: 16px;
 color: #333333;
 `;
 
+const RadiusSettingModalContainer = Styled.View`
+width: ${wp('100%')}
+height: ${wp('46.9%')};
+background-color: #ffffff;
+border-top-left-radius: 15px;
+border-top-right-radius: 15px;
+`;
+
 
 
 
@@ -953,17 +963,33 @@ interface Props {
     route: any,
 }
 
+interface Region {
+  latitude: number,
+  longitude: number,
+  latitudeDelta: number,
+  longitudeDelta: number,
+}
+
+
 const NearFeedMapScreen = ({navigation, route}: Props) => {
     const [nearLocationListData, setNearLocationListData] = useState<Array<object>>([]);
     const [nearAllFeedListData, setNearAllFeedListData] = useState<Array<object>>([]);
     const [panelHeight, setPanelHeight] = useState<number>(hp('80%'));
     const [allowPanelDragging, setAllowPanelDragging] = useState<boolean>(true);
     const [allowListDragging, setAllowListDragging] = useState<boolean>(true);
+    const [radiusSettingModalVisible, setRadiusSettingModalVisible] = useState<boolean>(false);
+    const [selectLocationMarker, setSelectLocationMarker] = useState<boolean>(false);
+    const [currentMapRegion, setCurrentMapRegion] = useState<Region>({
+      latitude: 37.567859,
+      longitude: 126.998215,
+      latitudeDelta: 0.0022,
+      longitudeDelta: 0.0421,
+    })
 
     var panelRef = useRef(null);
+    var mapRef = useRef(null);
 
-const {height} = Dimensions.get('window')
-
+    const {height} = Dimensions.get('window')
     const LatLng = {
       latitude: 37.567859,
       longitude: 126.998215,
@@ -1015,6 +1041,25 @@ const {height} = Dimensions.get('window')
      console.log("onMomentumPanelDragEnd", gestureState);
     }
 
+    const onPressLocationMarker = (coordinate:any) => {
+      console.log("onPressLocationMarker coordinate", coordinate.nativeEvent);
+      var selectedMarkerRegion = {
+        latitude: coordinate.nativeEvent.coordinate.latitude,
+      longitude: coordinate.nativeEvent.coordinate.longitude,
+      latitudeDelta: 0.0022,
+      longitudeDelta: 0.0421,
+      }
+
+      var selectedMarkerCamera = {
+        center: {
+          latitude: coordinate.nativeEvent.coordinate.latitude,
+          longitude: coordinate.nativeEvent.coordinate.longitude,
+        },
+      }
+      mapRef.current.animateCamera(selectedMarkerCamera, 200)
+      
+    }
+
 
     const renderNearFeedItem = ({item, index}: any) => {
       return (
@@ -1039,9 +1084,13 @@ const {height} = Dimensions.get('window')
 <HeaderBar style={{marginTop:getStatusBarHeight()}}>
         <HeaderLeftContainer>
           <CurrentLocationText>을지로동 주변</CurrentLocationText>
+          <TouchableWithoutFeedback onPress={() => setRadiusSettingModalVisible(true)}>
+          <View style={{flexDirection:'row', alignItems:'center'}}>
           <RadiusRangeText>1km</RadiusRangeText>
           <DropDownIcon
           source={require('~/Assets/Images/HeaderBar/ic_dropDown.png')}/>
+          </View>
+          </TouchableWithoutFeedback>
         </HeaderLeftContainer>
         <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
         <HeaderRightContainer>
@@ -1051,19 +1100,16 @@ const {height} = Dimensions.get('window')
         </TouchableWithoutFeedback>
       </HeaderBar>
     <MapView
+      ref={mapRef}
       style={{flex:1}}
       provider={PROVIDER_GOOGLE}
-      initialRegion={{
-        latitude: 37.567859,
-        longitude: 126.998215,
-        latitudeDelta: 0.0022,
-        longitudeDelta: 0.0421,
-      }}>
+      region={currentMapRegion}>
 
         {nearLocationListData?.map(location => {
           if(location.post.metaData.num >= 10) {
             return (
-          <Marker
+         <Marker
+          onPress={(coordinate:any) => onPressLocationMarker(coordinate)}
           style={{
             justifyContent: 'center',
             alignItems: 'center',
@@ -1094,6 +1140,7 @@ const {height} = Dimensions.get('window')
         )} else if(location.post.metaData.num === 1) {
           return (
             <Marker
+          onPress={(coordinate:any) => onPressLocationMarker(coordinate)}
           style={{
             justifyContent: 'center',
             alignItems: 'center',
@@ -1116,6 +1163,7 @@ const {height} = Dimensions.get('window')
           )} else if(1 < location.post.metaData.num && location.post.metaData.num < 10) {
             return (
               <Marker
+          onPress={(coordinate:any) => onPressLocationMarker(coordinate)}
             style={{
               justifyContent: 'center',
               alignItems: 'center',
@@ -1150,7 +1198,7 @@ const {height} = Dimensions.get('window')
       ref={panelRef}
       allowListDragging={allowListDragging}
       allowDragging={allowPanelDragging}
-      draggableRange={{top: panelHeight, bottom: 140}}
+      draggableRange={{top: panelHeight, bottom: 150}}
       showBackdrop={false}
       onDragEnd={(position:any, gestureState:any) => onDragEndPanel(position, gestureState)}
       backdropOpacity={0.1}>
@@ -1174,7 +1222,6 @@ const {height} = Dimensions.get('window')
               setAllowPanelDragging(true);
             }
           }}
-          style={{marginTop: 15}}
           contentContainerStyle={{paddingBottom: 210}}
           showsVerticalScrollIndicator={false}
           data={nearAllFeedListData}
@@ -1183,8 +1230,25 @@ const {height} = Dimensions.get('window')
           />
         </PanelContainer>
       </SlidingUpPanel>
+      <Modal
+      testID={'modal'}
+      onBackdropPress={() => setRadiusSettingModalVisible(false)}
+      isVisible={radiusSettingModalVisible}
+      backdropOpacity={0.25}
+      style={styles.modalView}>
+        <RadiusSettingModalContainer>
+        </RadiusSettingModalContainer>
+      </Modal>
     </Container>
   );
 }
+
+
+const styles = StyleSheet.create({
+  modalView: {
+    justifyContent: 'flex-end',
+    margin: 0,
+  },
+});
 
 export default NearFeedMapScreen;

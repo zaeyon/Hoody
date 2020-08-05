@@ -1032,6 +1032,8 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
     const [allowListDragging, setAllowListDragging] = useState<boolean>(true);
     const [radiusSettingModalVisible, setRadiusSettingModalVisible] = useState<boolean>(false);
     const [selectLocationMarker, setSelectLocationMarker] = useState<boolean>(false);
+    const [locationInfo, setLocationInfo] = useState<object>({});
+    const [locationFeedList, setLocationFeedList] = useState<Array<object>>([]);
     const [currentMapRegion, setCurrentMapRegion] = useState<Region>({
       latitude: 37.567859,
       longitude: 126.998215,
@@ -1040,7 +1042,6 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
     })
 
     const [completeOpenPanel, setCompleteOpenPanel] = useState<boolean>(false);
-
     var allFeedPanelRef = useRef(null);
     var mapRef = useRef(null);
     var locationPanelRef = useRef(null);
@@ -1067,6 +1068,7 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
         tmpNearLocationListData.push({
           location: key,
           post: value,
+          selected: false,
         })
         tmpNearAllFeedListData = tmpNearAllFeedListData.concat(value.posts);
       }
@@ -1102,13 +1104,22 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
      console.log("onMomentumPanelDragEnd", gestureState);
     }
 
-    const onPressLocationMarker = (coordinate:any) => {
+
+    async function getCamera() {
+      const camera = await mapRef.current.getCamera();
+
+      return camera;
+   }
+
+
+    const onPressLocationMarker = (coordinate:any, index:number, feedList:any) => {
       console.log("onPressLocationMarker coordinate", coordinate.nativeEvent);
-      var selectedMarkerRegion = {
-        latitude: coordinate.nativeEvent.coordinate.latitude,
-      longitude: coordinate.nativeEvent.coordinate.longitude,
-      latitudeDelta: 0.0022,
-      longitudeDelta: 0.0421,
+      console.log("onPressLocationMarker index", index);
+      console.log("onPressLocationMarker feedList", feedList);
+      var tmpLocationInfo = {
+        name: feedList.location,
+        avgRating: feedList.post.metaData.AvgStarRate,
+        feedCount: feedList.post.metaData.num,
       }
 
       var selectedMarkerCamera = {
@@ -1116,10 +1127,24 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
           latitude: coordinate.nativeEvent.coordinate.latitude,
           longitude: coordinate.nativeEvent.coordinate.longitude,
         },
+        pitch: 0,
+        heading: 0,
       }
-      setSelectLocationMarker(true);
-      setTimeout(() => {
-        mapRef.current.setCamera(selectedMarkerCamera, 200)
+
+      getCamera()
+      .then(function(response) {
+        console.log("response",response);
+        setSelectLocationMarker(true);
+        setLocationInfo(tmpLocationInfo);
+      setLocationFeedList(feedList.post.posts);
+
+        selectedMarkerCamera.zoom = response.zoom;
+
+        setTimeout(() => {
+          mapRef.current.setCamera(selectedMarkerCamera, 200)
+        })
+      }).catch(function(error) {
+        console.log("error", error)
       })
     }
 
@@ -1145,7 +1170,6 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
 
   return (
     <Container>
-
 <HeaderBar style={{marginTop:getStatusBarHeight()}}>
         <HeaderLeftContainer>
           <CurrentLocationText>을지로동 주변</CurrentLocationText>
@@ -1169,12 +1193,11 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
       style={{flex:1}}
       provider={PROVIDER_GOOGLE}
       region={currentMapRegion}>
-
-        {nearLocationListData?.map(location => {
+        {nearLocationListData?.map((location, index) => {
           if(location.post.metaData.num >= 10) {
             return (
          <Marker
-          onPress={(coordinate:any) => onPressLocationMarker(coordinate)}
+          onPress={(coordinate:any) => onPressLocationMarker(coordinate, index, location)}
           style={{
             justifyContent: 'center',
             alignItems: 'center',
@@ -1205,7 +1228,7 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
         )} else if(location.post.metaData.num === 1) {
           return (
             <Marker
-          onPress={(coordinate:any) => onPressLocationMarker(coordinate)}
+          onPress={(coordinate:any) => onPressLocationMarker(coordinate, index, location)}
           style={{
             justifyContent: 'center',
             alignItems: 'center',
@@ -1228,7 +1251,7 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
           )} else if(1 < location.post.metaData.num && location.post.metaData.num < 10) {
             return (
               <Marker
-          onPress={(coordinate:any) => onPressLocationMarker(coordinate)}
+          onPress={(coordinate:any) => onPressLocationMarker(coordinate, index, location)}
             style={{
               justifyContent: 'center',
               alignItems: 'center',
@@ -1271,9 +1294,7 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
       onChangePanelState={onChangePanelState}
       completeOpenPanel={completeOpenPanel}
       >
-        <PanelContainer onLayout={(event) => {
-          console.log("event.layout.height", event);
-        }}>
+        <PanelContainer>
           <PanelHeaderContainer>
             <PanelToggleButton/>
           <NearAllFeedCountContainer>
@@ -1322,13 +1343,13 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
                <PanelToggleButton/>
              <SelectedLocationInfoContainer>
                <SelectedLocationNameContainer>
-               <SelectedLocationNameText>세운상가</SelectedLocationNameText>
+               <SelectedLocationNameText>{locationInfo.name}</SelectedLocationNameText>
                </SelectedLocationNameContainer>
                <SelectedLocationRatingFeedCountContainer>
                  <SelectedLocationRatingImage
                  source={require('~/Assets/Images/ic_newStar.png')}/>
-                 <SelectedLocationRatingText>3.5</SelectedLocationRatingText>
-                 <SelectedLocationFeedCountText>게시글 1</SelectedLocationFeedCountText>
+                 <SelectedLocationRatingText>{locationInfo.avgRating}</SelectedLocationRatingText>
+                 <SelectedLocationFeedCountText>{"게시글 "+locationInfo.feedCount+"개"}</SelectedLocationFeedCountText>
                </SelectedLocationRatingFeedCountContainer>
              </SelectedLocationInfoContainer>
              </PanelHeaderContainer>
@@ -1346,7 +1367,7 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
              }}
              contentContainerStyle={{paddingBottom: 210}}
              showsVerticalScrollIndicator={false}
-             data={nearAllFeedListData}
+             data={locationFeedList}
              keyExtractor={(item, index) => ""+index}
              renderItem={renderNearFeedItem}
              />

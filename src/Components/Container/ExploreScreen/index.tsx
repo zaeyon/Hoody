@@ -174,8 +174,8 @@ const ExploreScreen = ({navigation, route}: Props) => {
         console.log("currentLocation", currentUserLocation);
   
         navigation.navigate("NearFeedMapScreen", {
-          currentLatitude: currentUserLocation.latitude,
-          currentLongitude: currentUserLocation.longitude,
+          currentLatitude: 37.567859,
+          currentLongitude: 126.998215,
       })
     }
     return (

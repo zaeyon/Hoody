@@ -117,6 +117,7 @@ border-radius: 10px;
 `;
 
 interface Props {
+    feedId: number,
     mainTag: string,
     subTag1: string,
     subTag2: string,
@@ -128,7 +129,7 @@ interface Props {
     mainImageUri: string
 }
 
-const NearFeedItem = ({mainTag, subTag1, subTag2, rating, expense, location, likeCount, commentCount, mainImageUri}: Props) => {
+const NearFeedItem = ({feedId, mainTag, subTag1, subTag2, rating, expense, location, likeCount, commentCount, mainImageUri}: Props) => {
     return (
         <Container>
             <FeedInfoContainer>
@@ -149,7 +150,7 @@ const NearFeedItem = ({mainTag, subTag1, subTag2, rating, expense, location, lik
                 <FeedMetaDataContainer>
                     <RatingStarImage
                     source={require('~/Assets/Images/ic_newStar.png')}/>
-                    <RatingText>rating</RatingText>
+                    <RatingText>{rating}</RatingText>
                     <ExpenseText>{expense ?  " · " + expense + "원" : ""}</ExpenseText>
                 </FeedMetaDataContainer>
                 <LocationContainer>

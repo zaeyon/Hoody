@@ -838,10 +838,23 @@ const PanelContainer = Styled.View`
 
 
 const PanelHeaderContainer = Styled.View`
+width: ${wp('100%')};
+height: ${wp('15%')};
 padding-left: 16px;
 padding-right: 16px;
  padding-top: 4px;
- width: ${wp('100%')};
+ align-items: center;
+border-bottom-width: 0.6px;
+border-color: #ECECEE;
+`;
+
+
+const LocationPanelHeaderContainer = Styled.View`
+width: ${wp('100%')};
+height: ${wp('23%')};
+padding-left: 16px;
+padding-right: 16px;
+ padding-top: 4px;
  align-items: center;
 border-bottom-width: 0.6px;
 border-color: #ECECEE;
@@ -1025,12 +1038,13 @@ flex-direction: column;
 `;
 
 const SelectedLocationRatingFeedCountContainer = Styled.View`
-width: ${wp('100%')};
-padding-left: 16px;
-padding-right: 16px;
+ width: ${wp('100%')};
+ padding-left: 16px;
+ padding-right: 16px;
  margin-top: 6px;
  flex-direction: row;
  align-items: center;
+ background-color: #FFFFFF;
 `;
 
 const SelectedLocationNameContainer = Styled.View`
@@ -1041,7 +1055,7 @@ padding-right: 16px;
 
 const SelectedLocationNameText = Styled.Text`
 font-weight: 600;
-font-size: 21px;
+font-size: 18px;
 color: #1D1E1F;
 `;
 
@@ -1066,6 +1080,7 @@ color: #56575C;
 
 const LocationFloatingContainer = Styled.View`
  width: ${wp('100%')};
+ height: ${wp('12%')};
  padding-bottom: 13px;
  padding-right: 13px;
  align-items: flex-end;
@@ -1117,30 +1132,34 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
     const [currentUserAddress, setCurrentUserAddress] = useState<string>();
     const [selectedRadius, setSelectedRadius] = useState<object>({
       index: 1,
-      range: "1km",
+      range: 1,
+      unit: "km",
       selected: false,
     });
     const [radiusList, setRadiusList] = useState<Array<object>>([
       {
         index: 0,
-        range: "500m",
+        range: 500,
+        unit: "m",
         selected: false,
       },
       {
         index: 1,
-        range: "1km",
+        range: 1,
+        unit: "km",
         selected: true,
       },
       {
         index: 2,
-        range: "2km",
+        range: 2,
+        unit: "km",
         selected: false,
       },
     ])
     
     const [currentMapRegion, setCurrentMapRegion] = useState<Region>({
-      latitude:  37.567859,
-      longitude: 126.998215,
+      latitude:  route.params?.currentLatitude,
+      longitude: route.params?.currentLongitude,
       latitudeDelta: 0.0022,
       longitudeDelta: 0.0421,
     })
@@ -1181,7 +1200,7 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
 
     useEffect(() => {
       if(route.params?.currentLatitude) {
-        GETSearchSurroundPost(route.params.currentLatitude, route.params.currentLongitude, 1)
+        GETSearchSurroundPost(route.params.currentLatitude, route.params.currentLongitude, selectedRadius.range)
         .then(function(response) {
           console.log("GETSearchSurroundPost response", response);
           var tmpNearLocationListData = new Array();
@@ -1213,7 +1232,7 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
           console.log("GETSearchSurroundPost error", error);
         })
       }
-    }, [])
+    }, [selectedRadius])
 
     
 
@@ -1276,7 +1295,7 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
       console.log("onPressLocationMarker feedList", feedList);
       var tmpLocationInfo = {
         name: feedList.location,
-        avgRating: feedList.post.metaData.AvgStarRate,
+        avgRating: feedList.post.metaData.AvgStarRate.toFixed(1),
         feedCount: feedList.post.metaData.num,
       }
 
@@ -1343,7 +1362,7 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
       return (
         <TouchableWithoutFeedback onPress={() => clickToRadiusItem(item, index)}>
         <RadiusItemBackground style={item.selected && {borderColor:'#267DFF'}}>
-          <RadiusItemRangeText style={item.selected && {color: '#267DFF'}}>{item.range}</RadiusItemRangeText>
+          <RadiusItemRangeText style={item.selected && {color: '#267DFF'}}>{item.range+item.unit}</RadiusItemRangeText>
         </RadiusItemBackground>
         </TouchableWithoutFeedback>
       )
@@ -1359,7 +1378,7 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
           <CurrentLocationText>{currentUserAddress ? currentUserAddress + " 주변" : "내 주변"}</CurrentLocationText>
           <TouchableWithoutFeedback onPress={() => setRadiusSettingModalVisible(true)}>
           <View style={{flexDirection:'row', alignItems:'center'}}>
-          <RadiusRangeText>{selectedRadius.range}</RadiusRangeText>
+          <RadiusRangeText>{selectedRadius.range+selectedRadius.unit}</RadiusRangeText>
           <DropDownIcon
           source={require('~/Assets/Images/HeaderBar/ic_dropDown.png')}/>
           </View>
@@ -1472,7 +1491,7 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
       ref={allFeedPanelRef}
       allowListDragging={allowListDragging}
       allowDragging={allowPanelDragging}
-      draggableRange={{top: panelHeight, bottom: 150}}
+      draggableRange={{top: panelHeight, bottom: wp('13.3%') + wp('37.3%') + wp('12%')}}
       showBackdrop={false}
       onDragEnd={(position:any, gestureState:any) => onDragEndPanel(position, gestureState)}
       backdropOpacity={0.1}
@@ -1518,7 +1537,7 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
          ref={locationPanelRef}
          allowListDragging={allowListDragging}
          allowDragging={allowPanelDragging}
-         draggableRange={{top: panelHeight, bottom: 155 + wp('37.3%')}}
+         draggableRange={{top: panelHeight, bottom:  wp('13.3%') + wp('37.3%') + wp('12%')}}
          showBackdrop={false}
          backdropOpacity={0.1}
          onDragEnd={(position:any, gestureState:any) => onDragEndPanel(position,gestureState)}
@@ -1533,7 +1552,7 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
            <PanelContainer onLayout={(event) => {
              console.log("event.layout.height", event);
            }}>
-             <PanelHeaderContainer
+             <LocationPanelHeaderContainer
              onLayout={(event) => {
                const height = event.nativeEvent.layout.height;
              }}>
@@ -1549,7 +1568,7 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
                  <SelectedLocationFeedCountText>{"게시글 "+locationInfo.feedCount+"개"}</SelectedLocationFeedCountText>
                </SelectedLocationRatingFeedCountContainer>
              </SelectedLocationInfoContainer>
-             </PanelHeaderContainer>
+             </LocationPanelHeaderContainer>
              <FlatList
           keyboardShouldPersistTaps={"handled"}
              onScroll={(e) => {

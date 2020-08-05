@@ -9,6 +9,7 @@ import DraggableFlatList from 'react-native-draggable-flatlist';
 
 import CollectionTileFeedItem from '~/Components/Presentational/CollectionDetailScreen/CollectionTileFeedItem';
 import CollectionDraggableFeedItem from '~/Components/Presentational/CollectionDetailScreen/CollectionDraggableFeedItem';
+import OrderingFeedItem from '~/Components/Presentational/CollectionFeedEditScreen/OrderingFeedItem';
 
 
 const Container = Styled.SafeAreaView`
@@ -260,6 +261,12 @@ const CollectionFeedEditScreen = ({navigation, route}: Props) => {
     )
   }
 
+  const renderOrderingFeedItem = ({item, index}: any) => {
+    return (
+      <OrderingFeedItem/>
+    )
+  }
+
     return (
         <Container> 
         <HeaderBar>
@@ -280,7 +287,7 @@ const CollectionFeedEditScreen = ({navigation, route}: Props) => {
           style={{width:wp('100%'), height:(hp('100%') - hp('6.5%')), flex: 1, backgroundColor:'#ffffff'}}
           data={collectionFeedList}
           extraData={collectionFeedList}
-          renderItem={renderCollectionFeedItem}
+          renderItem={renderOrderingFeedItem}
           onDragEnd={({data}) => changeFeedOrder(data)}
           keyExtractor={(item, index) =>
           `draggable-item-${item.index}`}/>

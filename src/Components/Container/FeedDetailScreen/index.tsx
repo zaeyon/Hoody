@@ -121,10 +121,6 @@ font-size: 12px;
 color: #CCCCCC;
 `;
 
-const TagListContainer = Styled.View`
-flex-direction: row;
-padding-top: 10px;
-`;
 
 const MainTagText = Styled.Text`
  font-size: 20px;
@@ -424,8 +420,6 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
         }
     });
 
-    const [ratingArray, setRatingArray] = useState<Array<string>>();
-    const [tagList, setTagList] = useState<Array<string>>();
     const [createdDate, setCreatedDate] = useState<string>("");
     const [spendDate, setSpendDate] = useState();
     const [currentUserLike, setCurrentUserLike] = useState<boolean>(false);
@@ -455,8 +449,6 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
            setFeedDetailInfo(response.data.post);
            setLikeCount(response.data.post.likes);
            setAllCommentCount(response.data.post.commentsCount+response.data.post.replysCount);
-           setTagList(route.params.tagList);
-           setRatingArray(route.params.ratingArray);
            setCreatedDate(route.params.createdAt);
            setCurrentUserLike(route.params.currentUserLike)
            setCurrentUserScrap(route.params.currentUserScrap);

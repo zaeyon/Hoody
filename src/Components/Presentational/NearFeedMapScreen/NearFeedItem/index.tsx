@@ -126,11 +126,26 @@ interface Props {
     location: string,
     likeCount: number,
     commentCount: number,
-    mainImageUri: string
+    mainImageUri: string,
+    createdAt: string,
+    navigation: any,
 }
 
-const NearFeedItem = ({feedId, mainTag, subTag1, subTag2, rating, expense, location, likeCount, commentCount, mainImageUri}: Props) => {
+const NearFeedItem = ({feedId, mainTag, subTag1, subTag2, rating, expense, location, likeCount, commentCount, mainImageUri, createdAt, navigation}: Props) => {
+
+    const moveToFeedDetail = () => {
+        console.log("feedId", feedId);
+        navigation.navigate("FeedStack", {
+          screen: "FeedDetailScreen",
+          params: {
+            feedId: feedId,
+            createdAt: createdAt,
+          }
+        })
+      }
+
     return (
+    <TouchableWithoutFeedback onPress={() =>  moveToFeedDetail()}>
         <Container>
             <FeedInfoContainer>
                 <FeedTagListContainer>
@@ -182,6 +197,7 @@ source={{uri:mainImageUri}}/>
                 )}
             </FeedImageContainer>
         </Container>    
+        </TouchableWithoutFeedback>
     )
 }
 

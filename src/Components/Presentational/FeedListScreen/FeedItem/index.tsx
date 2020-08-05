@@ -397,6 +397,7 @@ const FeedItem = ({
     if (sub_tag1 !== null) tmpTagList.push(sub_tag1);
     if (sub_tag2 !== null) tmpTagList.push(sub_tag2);
     setTagList(tmpTagList);
+    
 
     const tmpCreatedDate = getDateFormat(createdAt);
     setCreatedDate(tmpCreatedDate);
@@ -550,8 +551,6 @@ const FeedItem = ({
       screen: "FeedDetailScreen",
       params: {
       feedId:id,
-      tagList: tagList,
-      ratingArray: ratingArray,
       createdAt: createdDate,
       currentUserLike: currentUserLike,
       currentUserScrap: currentUserScrap,

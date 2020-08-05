@@ -1263,6 +1263,7 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
     }, [])
     */
 
+
     const onChangePanelState = (panelState: any) => {
       setCompleteOpenPanel(panelState)
     }
@@ -1345,6 +1346,7 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
     const renderNearFeedItem = ({item, index}: any) => {
       return (
         <NearFeedItem
+        feedId={item.id}
         mainTag={item.mainTags.name}
         subTag1={item.subTagOnes ? item.subTagOnes.name : null}
         subTag2={item.subTagTwos ? item.subTagTwos.name : null}
@@ -1354,6 +1356,8 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
         likeCount={item.likes}
         commentCount={item.commentsCount + item.replysCount}
         mainImageUri={item.mediaFiles[0] ? item.mediaFiles[0].url: null}
+        createdAt={item.createdAt}
+        navigation={navigation}
         />
       )
     }

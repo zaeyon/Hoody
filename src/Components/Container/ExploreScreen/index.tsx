@@ -102,7 +102,7 @@ tint-color: #000000;
 `;
 
 const HeaderMarkerContainer = Styled.View`
-padding-left: 16px;
+padding-left: 6px;
 padding-bottom: 13px;
 padding-top: 15px;
 padding-right: 16px;
@@ -114,7 +114,6 @@ background-color: #ffffff;
 const HeaderMarkerIcon = Styled.Image`
  width: ${wp('6.4%')};
  height: ${wp('6.4%')};
- tint-color: #000000;
 `;
 
 const RecommendUserContainer = Styled.View`
@@ -181,7 +180,6 @@ const ExploreScreen = ({navigation, route}: Props) => {
     return (
         <Container>
             <HeaderBar>
-            <HeaderRightContainer>
                 <HeaderSearchContainer>
                     <TouchableWithoutFeedback onPress={() => navigation.navigate("SearchScreen")}>
                     <SearchInputContainer>
@@ -194,10 +192,9 @@ const ExploreScreen = ({navigation, route}: Props) => {
                 <TouchableWithoutFeedback onPress={() => moveToNearFeedMap()}>
                 <HeaderMarkerContainer>
                     <HeaderMarkerIcon
-                    source={require('~/Assets/Images/ic_header_location.png')}/>
+                    source={require('~/Assets/Images/HeaderBar/ic_marker_selected2.png')}/>
                 </HeaderMarkerContainer>
                 </TouchableWithoutFeedback>
-            </HeaderRightContainer>
             </HeaderBar>
             <BodyContainer
             showsVerticalScrollIndicator={false}

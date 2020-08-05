@@ -1,4 +1,4 @@
-import React, {useEffect, useState, createRef, useRef} from 'react';
+import React, {useEffect, useState, createRef, useRef, useMemo} from 'react';
 import Styled from 'styled-components/native';
 import {TouchableWithoutFeedback, Text, Dimensions, FlatList, StyleSheet, View} from 'react-native';
 import {
@@ -14,7 +14,6 @@ import {getStatusBarHeight} from 'react-native-status-bar-height';
 import {BlurView, VibrancyView} from "@react-native-community/blur";
 
 import NearFeedItem from '~/Components/Presentational/NearFeedMapScreen/NearFeedItem';
-import { onChange } from 'react-native-reanimated';
 
 const TEST_NEAR_FEED_DATA = {
   "postsNum": 18,
@@ -840,8 +839,6 @@ padding-right: 16px;
  padding-top: 4px;
  width: ${wp('100%')};
  align-items: center;
-border-bottom-width: 0.6px;
-border-color: #ECECEE;
 `;
 
 
@@ -939,9 +936,6 @@ height: 20px;
 const NearAllFeedCountContainer = Styled.View`
 padding-left: 16px;
 padding-right: 16px;
-width: ${wp('100%')};
-padding-top: 10px;
-padding-bottom:15px;
 
 `;
 
@@ -959,11 +953,12 @@ border-top-left-radius: 15px;
 border-top-right-radius: 15px;
 `;
 
-
 const SelectedLocationInfoContainer = Styled.View`
 margin-top: 12px;
 padding-bottom: 13px;
 flex-direction: column;
+border-bottom-width: 0.6px;
+border-color: #ECECEE;
 `;
 
 const SelectedLocationRatingFeedCountContainer = Styled.View`
@@ -1007,6 +1002,7 @@ color: #56575C;
 `;
 
 
+ 
 
 
 
@@ -1032,6 +1028,8 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
     const [allowListDragging, setAllowListDragging] = useState<boolean>(true);
     const [radiusSettingModalVisible, setRadiusSettingModalVisible] = useState<boolean>(false);
     const [selectLocationMarker, setSelectLocationMarker] = useState<boolean>(false);
+    const [selectedLocationMarkerData, setSelectedLocationMarkerData] = useState<object>({});
+    const [locationPanelHeaderHeight, setLocationPanelHeaderHeight] = useState<number>(0);
     const [currentMapRegion, setCurrentMapRegion] = useState<Region>({
       latitude: 37.567859,
       longitude: 126.998215,
@@ -1039,11 +1037,11 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
       longitudeDelta: 0.0421,
     })
 
-    const [completeOpenPanel, setCompleteOpenPanel] = useState<boolean>(false);
+    const [completeOpenPanel, setCompleteOpenPanem] = useState<boolean>(false);
 
-    var allFeedPanelRef = useRef(null);
+    var allLocationPanelRef = useRef(null);
+    var selectedLocationPanelRef = useRef(null);
     var mapRef = useRef(null);
-    var locationPanelRef = useRef(null);
 
     const {height} = Dimensions.get('window')
     const LatLng = {
@@ -1084,17 +1082,16 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
       })
     }, [])
 
-    const onChangePanelState = (panelState: any) => {
-      setCompleteOpenPanel(panelState)
-    }
-
     const onDragEndPanel = (position: any, gestureState: any) => {
       console.log("onDragEndPanel gestureState", gestureState);
       console.log("onDragEndPanel position", position);
 
       if(position < 645) {
-        if(!selectLocationMarker) allFeedPanelRef.current.hide();
-        else locationPanelRef.current.hide();
+        if(!selectLocationMarker) {
+        allLocationPanelRef.current.hide();
+        } else if(selectLocationMarker) {
+        selectedLocationPanelRef.current.hide();
+        }
       }
     }
 
@@ -1118,9 +1115,10 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
         },
       }
       setSelectLocationMarker(true);
+
       setTimeout(() => {
-        mapRef.current.setCamera(selectedMarkerCamera, 200)
-      })
+      mapRef.current.setCamera(selectedMarkerCamera, 300)
+      }, 10)
     }
 
 
@@ -1140,36 +1138,15 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
       )
     }
 
-    
-
-
-  return (
-    <Container>
-
-<HeaderBar style={{marginTop:getStatusBarHeight()}}>
-        <HeaderLeftContainer>
-          <CurrentLocationText>을지로동 주변</CurrentLocationText>
-          <TouchableWithoutFeedback onPress={() => setRadiusSettingModalVisible(true)}>
-          <View style={{flexDirection:'row', alignItems:'center'}}>
-          <RadiusRangeText>1km</RadiusRangeText>
-          <DropDownIcon
-          source={require('~/Assets/Images/HeaderBar/ic_dropDown.png')}/>
-          </View>
-          </TouchableWithoutFeedback>
-        </HeaderLeftContainer>
-        <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
-        <HeaderRightContainer>
-          <HeaderCancelImage
-          source={require('~/Assets/Images/HeaderBar/ic_X.png')}/>
-        </HeaderRightContainer>
-        </TouchableWithoutFeedback>
-      </HeaderBar>
-    <MapView
+    const NearFeedMapView = React.memo(function NearFeedMapView({completeOpenPanel}:any) {
+      console.log("NearFeedMapView rendering")
+      return (
+      <MapView
       ref={mapRef}
       style={{flex:1}}
       provider={PROVIDER_GOOGLE}
-      region={currentMapRegion}>
-
+      region={currentMapRegion}
+      >
         {nearLocationListData?.map(location => {
           if(location.post.metaData.num >= 10) {
             return (
@@ -1259,27 +1236,53 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
             )} 
         })}
       </MapView>
+      )
+    })
+
+
+  return (
+    <Container>
+
+<HeaderBar style={{marginTop:getStatusBarHeight()}}>
+        <HeaderLeftContainer>
+          <CurrentLocationText>을지로동 주변</CurrentLocationText>
+          <TouchableWithoutFeedback onPress={() => setRadiusSettingModalVisible(true)}>
+          <View style={{flexDirection:'row', alignItems:'center'}}>
+          <RadiusRangeText>1km</RadiusRangeText>
+          <DropDownIcon
+          source={require('~/Assets/Images/HeaderBar/ic_dropDown.png')}/>
+          </View>
+          </TouchableWithoutFeedback>
+        </HeaderLeftContainer>
+        <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
+        <HeaderRightContainer>
+          <HeaderCancelImage
+          source={require('~/Assets/Images/HeaderBar/ic_X.png')}/>
+        </HeaderRightContainer>
+        </TouchableWithoutFeedback>
+      </HeaderBar>
+      <NearFeedMapView
+      nearLocationListData={nearLocationListData}
+      currentMapRegion={currentMapRegion}
+      />
       {!selectLocationMarker && (
       <SlidingUpPanel
-      ref={allFeedPanelRef}
+      ref={allLocationPanelRef}
       allowListDragging={allowListDragging}
       allowDragging={allowPanelDragging}
       draggableRange={{top: panelHeight, bottom: 150}}
       showBackdrop={false}
       onDragEnd={(position:any, gestureState:any) => onDragEndPanel(position, gestureState)}
-      backdropOpacity={0.1}
-      onChangePanelState={onChangePanelState}
-      completeOpenPanel={completeOpenPanel}
-      >
+      backdropOpacity={0.1}>
         <PanelContainer onLayout={(event) => {
           console.log("event.layout.height", event);
         }}>
           <PanelHeaderContainer>
             <PanelToggleButton/>
+          </PanelHeaderContainer>
           <NearAllFeedCountContainer>
           <NearAllFeedCountText>{"게시글 " + TEST_NEAR_FEED_DATA.postsNum + "개"}</NearAllFeedCountText>
           </NearAllFeedCountContainer>
-          </PanelHeaderContainer>
           <FlatList
           onScroll={(e) => {
             let offset = e.nativeEvent.contentOffset.y;
@@ -1300,24 +1303,22 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
         </PanelContainer>
       </SlidingUpPanel>
       )}
-
-{selectLocationMarker && (
+      {selectLocationMarker && (
          <SlidingUpPanel
-         ref={locationPanelRef}
+         ref={selectedLocationPanelRef}
          allowListDragging={allowListDragging}
          allowDragging={allowPanelDragging}
          draggableRange={{top: panelHeight, bottom: 155 + wp('37.3%')}}
          showBackdrop={false}
-         backdropOpacity={0.1}
-         onDragEnd={(position:any, gestureState:any) => onDragEndPanel(position,gestureState)}
-      onChangePanelState={onChangePanelState}
-      completeOpenPanel={completeOpenPanel}>
+         onDragEnd={(position:any, gestureState:any) => onDragEndPanel(position, gestureState)}
+         backdropOpacity={0.1}>
            <PanelContainer onLayout={(event) => {
              console.log("event.layout.height", event);
            }}>
              <PanelHeaderContainer
              onLayout={(event) => {
                const height = event.nativeEvent.layout.height;
+               setLocationPanelHeaderHeight(height);
              }}>
                <PanelToggleButton/>
              <SelectedLocationInfoContainer>

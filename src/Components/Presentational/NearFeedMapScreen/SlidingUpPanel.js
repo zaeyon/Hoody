@@ -20,6 +20,7 @@ import FlickAnimation from './libs/FlickAnimation'
 import {statusBarHeight, visibleHeight} from './libs/layout'
 import * as Constants from './libs/constants'
 import styles from './libs/styles'
+import { onChange } from 'react-native-reanimated'
 
 const keyboardShowEvent = Platform.select({
   android: 'keyboardDidShow',
@@ -60,6 +61,8 @@ class SlidingUpPanel extends React.PureComponent {
     backdropStyle: ViewPropTypes.style,
     children: PropTypes.oneOfType([PropTypes.element, PropTypes.func]),
     allowListDragging: PropTypes.bool,
+    completeOpenPanel: PropTypes.bool,
+    onChangePanelState: PropTypes.func,
   }
 
   static defaultProps = {
@@ -185,19 +188,27 @@ class SlidingUpPanel extends React.PureComponent {
   }
 
   _onMoveShouldSetPanResponder(evt, gestureState) {
-    console.log("onMoveShouldSEtPanResponder evt.nativeEvent",evt.nativeEvent);
+    console.log("onMoveShouldSEtPanResponder evt", evt.nativeEvent);
+    console.log("onMoveShouldSetPanResponder gestureState", gestureState);
     if (!this.props.allowDragging && evt.nativeEvent.locationY < 30) {
       return true
     } else if(!this.props.allowDragging && evt.nativeEvent.locationY > 30) {
       return false
     }
 
-    const animatedValue = this.props.animatedValue.__getValue()
+    if(evt.nativeEvent.pageY < 250 && gestureState.dy > 0) {
+      this.hide();
+      this.props.onChangePanelState(false);
+      return true
+    } 
 
+    if(!this.props.completeOpenPanel) {
+    const animatedValue = this.props.animatedValue.__getValue()
     return (
       this._isInsideDraggableRange(animatedValue, gestureState) &&
       Math.abs(gestureState.dy) > this.props.minimumDistanceThreshold
     )
+    }
   }
 
   _onPanResponderGrant(evt, gestureState) {
@@ -274,8 +285,10 @@ class SlidingUpPanel extends React.PureComponent {
     console.log("onPanResponderRelease", gestureState);
     if(gestureState.dy < 0) {
       this.show();
+      this.props.onChangePanelState(true);
     } else if(gestureState.dy > 0) {
       this.hide();
+      this.props.onChangePanelState(false);
     }
   }
 
@@ -361,6 +374,7 @@ class SlidingUpPanel extends React.PureComponent {
     }
 
     this.hide()
+    this.props.onChangePanelState(false);
 
     return true
   }

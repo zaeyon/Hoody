@@ -1,5 +1,5 @@
 import axios from 'axios';
-const baseUrl = 'https://7697cfa1f65b.ngrok.io';
+const baseUrl = 'https://f5b0c7d7e0a3.ngrok.io';
 
 const POSTFollowUser = (targetUserId) => {
     const url = baseUrl + '/user/follow?userId=' + targetUserId;

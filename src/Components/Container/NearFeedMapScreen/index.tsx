@@ -16,6 +16,9 @@ import {BlurView, VibrancyView} from "@react-native-community/blur";
 import NearFeedItem from '~/Components/Presentational/NearFeedMapScreen/NearFeedItem';
 import { onChange } from 'react-native-reanimated';
 
+// Route
+import GETSearchSurroundPost from '~/Route/Search/GETSearchSurroundPost';
+
 const TEST_NEAR_FEED_DATA = {
   "postsNum": 18,
   "postsByAddress": {
@@ -953,12 +956,67 @@ color: #333333;
 
 const RadiusSettingModalContainer = Styled.View`
 width: ${wp('100%')}
-height: ${wp('46.9%')};
+height: ${wp('40%')};
 background-color: #ffffff;
 border-top-left-radius: 15px;
 border-top-right-radius: 15px;
 `;
 
+
+const RadiusSettingHeaderContainer = Styled.View`
+width: ${wp('100%')};
+background-color: #ffffff;
+padding-top: 14px;
+padding-bottom: 14px;
+padding-left: 16px;
+padding-right: 16px;
+flex-direction: row;
+justify-content: space-between;
+`;
+
+const RadiusSettingText = Styled.Text`
+font-weight: 600;
+color: #1D1E1F;
+font-size: 18px;
+`;
+
+const RadiusSettingCancelText = Styled.Text`
+font-size: 16px;
+color: #C6C7CC;
+`;
+
+const RadiusItemListContainer = Styled.View`
+ padding-top: 0px;
+ flex-direction: row;
+ padding-left: 16px;
+ padding-right: 16px;
+`;
+
+const RadiusItemBackground = Styled.View`
+ border-width: 1px;
+ border-color: #ECECEE;
+ background-color: #FAFAFA;
+ border-radius: 20px;
+ padding-top: 8px;
+ padding-bottom: 8px;
+ padding-left: 12px;
+ padding-right: 12px;
+ flex-direction: row;
+ margin-right: 15px;
+`;
+
+const RadiusItemRangeText = Styled.Text`
+ font-weight: 500;
+ font-size: 18px;
+ color: #8E9199;
+`;
+
+const PanelToggleContainer = Styled.View`
+ width: ${wp('100%')};
+ padding-top: 4px;
+ padding-bottom: 12px;
+ align-items: center;
+`;
 
 const SelectedLocationInfoContainer = Styled.View`
 margin-top: 12px;
@@ -1006,6 +1064,28 @@ font-size: 14px;
 color: #56575C;
 `;
 
+const LocationFloatingContainer = Styled.View`
+ width: ${wp('100%')};
+ padding-bottom: 13px;
+ padding-right: 13px;
+ align-items: flex-end;
+`;
+
+const LocationFloatingButton = Styled.View`
+ border-radius: 100px;
+ width: ${wp('8.5%')};
+ height: ${wp('8.5%')};
+ background-color: #FFFFFF;
+ justify-content: flex-end;
+ align-items: center;
+ justify-content: center;
+`;
+
+const GPSIcon = Styled.Image`
+ width: ${wp('6.4%')};
+ height: ${wp('6.4%')};
+`;
+
 
 
 
@@ -1034,8 +1114,32 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
     const [selectLocationMarker, setSelectLocationMarker] = useState<boolean>(false);
     const [locationInfo, setLocationInfo] = useState<object>({});
     const [locationFeedList, setLocationFeedList] = useState<Array<object>>([]);
+    const [currentUserAddress, setCurrentUserAddress] = useState<string>();
+    const [selectedRadius, setSelectedRadius] = useState<object>({
+      index: 1,
+      range: "1km",
+      selected: false,
+    });
+    const [radiusList, setRadiusList] = useState<Array<object>>([
+      {
+        index: 0,
+        range: "500m",
+        selected: false,
+      },
+      {
+        index: 1,
+        range: "1km",
+        selected: true,
+      },
+      {
+        index: 2,
+        range: "2km",
+        selected: false,
+      },
+    ])
+    
     const [currentMapRegion, setCurrentMapRegion] = useState<Region>({
-      latitude: 37.567859,
+      latitude:  37.567859,
       longitude: 126.998215,
       latitudeDelta: 0.0022,
       longitudeDelta: 0.0421,
@@ -1051,16 +1155,69 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
       latitude: 37.567859,
       longitude: 126.998215,
     }
-
+    
+  const API_KEY = 'd824d5c645bfeafcb06f24db24be7238';
 
     useEffect(() => {
         console.log("getStatusBarHeight", getStatusBarHeight());
         if(route.params?.currentLatitude) {
             console.log("route.params.currentLatitude,", route.params.currentLatitude)
             console.log("route.params.currentLongitude,", route.params.currentLongitude)
+            fetch(
+              `https://dapi.kakao.com/v2/local/geo/coord2regioncode.json?x=${route.params.currentLongitude}&y=${route.params.currentLatitude}`,
+              {
+                headers: {
+                  Authorization: `KakaoAK ${API_KEY}`,
+                },
+              },
+            )
+            .then((response) => response.json())
+            .then((json) => {
+              console.log("현재 사용자의 행정구역정보", json);
+              setCurrentUserAddress(json.documents[1].region_3depth_name)
+            })
         }
+    }, [route.params?.currentLongitude, route.params?.currentLatitude])
+
+    useEffect(() => {
+      if(route.params?.currentLatitude) {
+        GETSearchSurroundPost(route.params.currentLatitude, route.params.currentLongitude, 1)
+        .then(function(response) {
+          console.log("GETSearchSurroundPost response", response);
+          var tmpNearLocationListData = new Array();
+          var tmpNearAllFeedListData = new Array();
+
+          for(const[key, value] of Object.entries(response.postsByAddress)) {
+            console.log("value", value);
+            tmpNearLocationListData.push({
+              location: key,
+              post: value,
+              selected: false,
+            })
+            tmpNearAllFeedListData = tmpNearAllFeedListData.concat(value.posts);
+          }
+
+          setTimeout(() => {
+            tmpNearAllFeedListData.sort(function(a, b) {
+              return b["likes"] - a["likes"];
+            })
+            console.log("tmpNearLocationListData", tmpNearLocationListData);
+            console.log("tmpNearAllFeedListData", tmpNearAllFeedListData);
+            setNearLocationListData(tmpNearLocationListData);
+            setTimeout(() => {
+              setNearAllFeedListData(tmpNearAllFeedListData);
+            })
+          })
+        })
+        .catch(function(error) {
+          console.log("GETSearchSurroundPost error", error);
+        })
+      }
     }, [])
 
+    
+
+    /*
     useEffect(() => {
       var tmpNearLocationListData = new Array();
       var tmpNearAllFeedListData = new Array();
@@ -1085,6 +1242,7 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
         })
       })
     }, [])
+    */
 
     const onChangePanelState = (panelState: any) => {
       setCompleteOpenPanel(panelState)
@@ -1148,6 +1306,22 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
       })
     }
 
+    const clickToRadiusItem = (item:any, index:any) => {
+      var tmpRadiusList = radiusList;
+      tmpRadiusList.forEach((element, index2) => {
+        if(index2 === index) {
+          element.selected = true;
+        } else {
+          element.selected = false;
+        }
+      })
+
+      console.log("tmpRadiusList", tmpRadiusList);
+      setRadiusList(tmpRadiusList);
+      setSelectedRadius(item);      
+      setRadiusSettingModalVisible(false);
+    }
+
 
     const renderNearFeedItem = ({item, index}: any) => {
       return (
@@ -1165,6 +1339,16 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
       )
     }
 
+    const renderRadiusItem = ({item, index}: any) => {
+      return (
+        <TouchableWithoutFeedback onPress={() => clickToRadiusItem(item, index)}>
+        <RadiusItemBackground style={item.selected && {borderColor:'#267DFF'}}>
+          <RadiusItemRangeText style={item.selected && {color: '#267DFF'}}>{item.range}</RadiusItemRangeText>
+        </RadiusItemBackground>
+        </TouchableWithoutFeedback>
+      )
+    }
+
     
 
 
@@ -1172,10 +1356,10 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
     <Container>
 <HeaderBar style={{marginTop:getStatusBarHeight()}}>
         <HeaderLeftContainer>
-          <CurrentLocationText>을지로동 주변</CurrentLocationText>
+          <CurrentLocationText>{currentUserAddress ? currentUserAddress + " 주변" : "내 주변"}</CurrentLocationText>
           <TouchableWithoutFeedback onPress={() => setRadiusSettingModalVisible(true)}>
           <View style={{flexDirection:'row', alignItems:'center'}}>
-          <RadiusRangeText>1km</RadiusRangeText>
+          <RadiusRangeText>{selectedRadius.range}</RadiusRangeText>
           <DropDownIcon
           source={require('~/Assets/Images/HeaderBar/ic_dropDown.png')}/>
           </View>
@@ -1192,7 +1376,8 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
       ref={mapRef}
       style={{flex:1}}
       provider={PROVIDER_GOOGLE}
-      region={currentMapRegion}>
+      region={currentMapRegion}
+      showsUserLocation={true}>
         {nearLocationListData?.map((location, index) => {
           if(location.post.metaData.num >= 10) {
             return (
@@ -1294,11 +1479,17 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
       onChangePanelState={onChangePanelState}
       completeOpenPanel={completeOpenPanel}
       >
+        <LocationFloatingContainer>
+        <LocationFloatingButton>
+          <GPSIcon
+          source={require('~/Assets/Images/Map/ic_gps.png')}/>
+        </LocationFloatingButton>
+        </LocationFloatingContainer>
         <PanelContainer>
           <PanelHeaderContainer>
             <PanelToggleButton/>
           <NearAllFeedCountContainer>
-          <NearAllFeedCountText>{"게시글 " + TEST_NEAR_FEED_DATA.postsNum + "개"}</NearAllFeedCountText>
+          <NearAllFeedCountText>{nearAllFeedListData.length === 0 ? "주변에 등록된 게시글이 없습니다." : "게시글 " + nearAllFeedListData.length+ "개"}</NearAllFeedCountText>
           </NearAllFeedCountContainer>
           </PanelHeaderContainer>
           <FlatList
@@ -1333,6 +1524,12 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
          onDragEnd={(position:any, gestureState:any) => onDragEndPanel(position,gestureState)}
       onChangePanelState={onChangePanelState}
       completeOpenPanel={completeOpenPanel}>
+        <LocationFloatingContainer>
+          <LocationFloatingButton>
+            <GPSIcon
+            source={require('~/Assets/Images/Map/ic_gps.png')}/>
+          </LocationFloatingButton>
+          </LocationFloatingContainer>
            <PanelContainer onLayout={(event) => {
              console.log("event.layout.height", event);
            }}>
@@ -1382,6 +1579,22 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
       backdropOpacity={0.25}
       style={styles.modalView}>
         <RadiusSettingModalContainer>
+          <PanelToggleContainer>
+            <PanelToggleButton/>
+          </PanelToggleContainer>
+          <RadiusSettingHeaderContainer>
+            <RadiusSettingText>검색 반경 설정</RadiusSettingText>
+            <TouchableWithoutFeedback onPress={() => setRadiusSettingModalVisible(false)}>
+            <RadiusSettingCancelText>취소</RadiusSettingCancelText>
+            </TouchableWithoutFeedback>
+          </RadiusSettingHeaderContainer>
+          <RadiusItemListContainer>
+            <FlatList
+            data={radiusList}
+            horizontal={true}
+            keyExtractor={({index}: any) =>  `${index}`}
+            renderItem={renderRadiusItem}/>
+          </RadiusItemListContainer>
         </RadiusSettingModalContainer>
       </Modal>
     </Container>

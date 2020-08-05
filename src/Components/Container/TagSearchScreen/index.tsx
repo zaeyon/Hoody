@@ -16,28 +16,33 @@ const Container = Styled.SafeAreaView`
 
 const HeaderBar = Styled.View`
  width: ${wp('100%')};
- height: ${hp('7.5%')};
+ height: ${wp('11.7%')};
  flex-direction: row;
  align-items: center;
  justify-content: space-between;
 `;
 
 const HeaderLeftContainer = Styled.View`
-padding: 20px 20px 15px 20px;
+padding-top: 7px;
+ padding-left: 16px;
+ padding-right: 16px;
+ padding-bottom: 13px;
  align-items: center;
  justify-content: center;
 `;
 
 const CancelText = Styled.Text`
- font-size: ${wp('4.5%')};
- color: #cccccc;
-`;
+ font-size: 17px;
+ color: #C6C7CC;
+ `;
 
 const HeaderRightContainer = Styled.View`
- padding-right: 20px;
+padding-top: 7px;
+ padding-left: 16px;
+ padding-right: 16px;
+ padding-bottom: 13px;
  align-items: center;
  justify-content: center;
- flex-direction: row;
 `;
 
 const TempoSaveText = Styled.Text`
@@ -68,25 +73,30 @@ const HeaderContainer = Styled.View`
  padding: 10px 20px 0px 20px;
 `;
 
+const HeaderNextText = Styled.Text`
+ 
+`;
+
 const TagContainer = Styled.View`
-width: ${wp('90%')};
+width: ${wp('100%')};
+padding : 6px 15px 0px 15px;
 justify-content: center;
 padding-bottom: 10px;
 `;
 
 const TagInputContainer = Styled.View`
 flex-direction: row;
-padding-top: 10px;
 `;
 
 const InputedTagListContainer = Styled.View`
-width: ${wp('90%')};
-padding-top: 2px;
-padding-bottom: 0px;
+width: ${wp('100%')};
+padding-top: 10px;
+padding-bottom: 20px;
 flex-direction: row;
 `;
 
 const HashTagInputContainer = Styled.View`
+background-color: #ffffff;
 flex-direction: row;
 flex-shrink: 1;
 width: ${wp('90%')};
@@ -99,14 +109,14 @@ background-color:#ffffff;
 `;
 
 const MainTagInput = Styled.TextInput`
-font-size: 23px;
+font-size: 24px;
 font-weight: bold;
 width: ${wp('90%')};
 color: #3384FF;
 `;
 
 const SubTagInput = Styled.TextInput`
-font-size: 23px
+font-size: 24px
 font-weight: bold;
 width: ${wp('90%')};
 color: #cccccc;
@@ -114,18 +124,16 @@ color: #cccccc;
 
 const MainHashText = Styled.Text`
  margin-top: 4px;
- font-size: 23px;
+ font-size: 24px;
  color: #3384FF;
  font-weight: bold;
- opacity: 0.4;
 `;
 
 const SubHashText = Styled.Text`
  margin-top: 4px;
- font-size: 23px;
+ font-size: 24px;
  color: #CCCCCC;
  font-weight: bold;
- opacity: 0.7;
 `;
 
 const MainTagText = Styled.Text`
@@ -151,8 +159,8 @@ background-color: #ffffff;
 `;
 
 const TagInputFinishText = Styled.Text`
-color: #cccccc;
-font-size: 23px;
+color: #cccccc60;
+font-size: 24px;
 font-weight: bold;
 `;;
 
@@ -196,7 +204,7 @@ height: ${wp('4.5%')};
 
 const GetWidthTagText = Styled.Text`
 color: #ffffff;
-font-size: 23px;
+font-size: 24px;
 font-weight: bold;
 background-color:#ffffff;
 
@@ -213,13 +221,14 @@ const InputBottomBorder = Styled.View`
 
 const DivideBorder = Styled.View`
  width: ${wp('100%')};
- height: 5px;
- background-color: #F3F3F3;
+ height: 0.6px;
+ background-color: #ececee;
 `;
 
 const TagResultContainer = Styled.View`
 padding: 15px; 15px 15px 15px;
-border-color: #c3c3c3;
+border-color: #ececee;
+
 `;
 
 const TagResultItemContainer = Styled.View`
@@ -248,12 +257,12 @@ color: #4090FC;
 `;
 
 const DisabledNextText = Styled.Text`
- font-size: ${wp('4.5%')};
+font-size: 17px;
  color: #cccccc;
 `;
 
 const AbledNextText = Styled.Text`
- font-size: ${wp('4.5%')};
+font-size: 17px;
  color: #3384FF;
 `;
 
@@ -291,6 +300,14 @@ const InputedTagColumnContainer = Styled.View`
 const NoAutoCompletedTagResultContainer = Styled.View`
  flex: 1;
  background-color:#c3c3c3;
+`;
+
+const MaximumTagCountText = Styled.Text`
+ font-size: 13px;
+ color: #c6c7cc;
+ position: absolute;
+ bottom: 0;
+ right: 30;
 `;
 
 const RESULT_DATA_TEST = [
@@ -718,6 +735,7 @@ const TagSearchScreen = ({navigation, route}: Props) => {
                 multiline={true}
                 autoCapitalize={false}
                 placeholder={"서브태그 입력"}
+                placeholderTextColor={"#C6C7CC60"}
                 value={inputingSubTag1Text}
                 onChangeText={(text:string) => changeSubTag1Input(text)}
                 />
@@ -730,6 +748,7 @@ const TagSearchScreen = ({navigation, route}: Props) => {
                 multiline={true}
                 autoCapitalize={false}
                 placeholder={"서브태그 입력"}
+                placeholderTextColor={"#C6C7CC60"}
                 value={inputingSubTag2Text}
                 onChangeText={(text:string) => changeSubTag2Input(text)}/>
             </HashTagInputContainer>
@@ -966,6 +985,7 @@ const TagSearchScreen = ({navigation, route}: Props) => {
                 </InputedTagRowContainer>
                 </InputedTagColumnContainer>
             )}
+            <MaximumTagCountText>태그 최대 3개</MaximumTagCountText>
             </InputedTagListContainer>
         </TagContainer>
         <View style={{position:'absolute', bottom:0}}>

@@ -17,6 +17,7 @@ import PopularFeedList from '~/Components/Presentational/ExploreScreen/PopularFe
 import RecommendCollectionList from '~/Components/Presentational/ExploreScreen/RecommendCollectionList'; 
 import PopularFeedListByLocation from '~/Components/Presentational/ExploreScreen/PopularFeedListByLocation';
 import Geolocation from 'react-native-geolocation-service';
+import currentUser from '~/reducers/currentUser';
 
 
 
@@ -173,8 +174,8 @@ const ExploreScreen = ({navigation, route}: Props) => {
         console.log("currentLocation", currentUserLocation);
   
         navigation.navigate("NearFeedMapScreen", {
-          currentLatitude: 126.991,
-          currentLongitude: 37.5658,
+          currentLatitude: currentUserLocation.latitude,
+          currentLongitude: currentUserLocation.longitude,
       })
     }
     return (

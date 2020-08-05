@@ -50,18 +50,24 @@ opacity: 0.25;
 `;
 
 const HeaderLeftContainer = Styled.View`
-padding: 10px 15px 10px 15px;
+padding-top: 7px;
+ padding-left: 16px;
+ padding-right: 16px;
+ padding-bottom: 13px;
  align-items: center;
  justify-content: center;
 `;
 
 const CancelText = Styled.Text`
  font-size: 17px;
- color: #cccccc;
+ color: #C6C7CC;
 `;
 
 const HeaderRightContainer = Styled.View`
-padding: 10px 15px 10px 15px;
+padding-top: 7px;
+ padding-left: 16px;
+ padding-right: 16px;
+ padding-bottom: 8px;
  align-items: center;
  justify-content: center;
  flex-direction: row;
@@ -69,7 +75,7 @@ padding: 10px 15px 10px 15px;
 
 const TempoSaveText = Styled.Text`
  font-size: 17px;
- color: #cccccc;
+ color: #267DFF;
 `;
 
 const FinishContainer = Styled.View`
@@ -77,6 +83,15 @@ const FinishContainer = Styled.View`
  border-radius: 20px;
  background-color: #3384ff;
  padding: 7px 12px 7px 12px;
+`;
+
+
+const DisabledFinishContainer = Styled.View`
+ margin-left: 15px;
+ border-radius: 20px;
+ background-color: #3384ff;
+ padding: 7px 12px 7px 12px;
+ opacity: 0.3;
 `;
 
 const FinishText = Styled.Text`
@@ -118,8 +133,8 @@ margin-right: 5px;
 
 const TagListContainer = Styled.View`
  flex-direction: row;
- 
  padding : 10px 15px 0px 15px;
+ background-color: #ffffff;
 `;
 
 const MainTagProcessContainer = Styled.View`
@@ -1444,12 +1459,19 @@ const renderAddNewDescripInput = () => {
                 </HeaderLeftContainer>
                 </TouchableWithoutFeedback>
                 <HeaderRightContainer>
-                    <TempoSaveText>임시저장</TempoSaveText>
-                    <TouchableWithoutFeedback onPress={() => clickToUploadFinish()}>
-                    <FinishContainer>
-                        <FinishText>완료</FinishText>
-                    </FinishContainer>
-                    </TouchableWithoutFeedback>
+                    <TempoSaveText>임시 보관함</TempoSaveText>
+                        {!mainTag && (
+                    <DisabledFinishContainer>
+                       <FinishText>완료</FinishText>
+                   </DisabledFinishContainer>
+                        )}
+                        {mainTag && (
+                            <TouchableWithoutFeedback onPress={() => clickToUploadFinish()}>
+                            <FinishContainer>
+                                <FinishText>완료</FinishText>
+                            </FinishContainer>
+                            </TouchableWithoutFeedback>
+                        )}
                 </HeaderRightContainer>
             </HeaderBar>
             {visibleDescripModal && (

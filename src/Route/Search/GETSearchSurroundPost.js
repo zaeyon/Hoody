@@ -1,14 +1,14 @@
 import axios from 'axios';
 const baseUrl = 'https://f5b0c7d7e0a3.ngrok.io';
 
-const GETLogout = () => {
-    const url = baseUrl + '/auth/logout';
+const GETSearchSurroundPost = (lat, long, radius) => {
+    const url = baseUrl + "/search/surroundpost?lat=" + lat + "&long=" + long + "&radius=" + radius;
 
     return new Promise(function(resolve, reject) {
         axios
         .get(url)
         .then(function(response) {
-            resolve(response);
+            resolve(response.data);
         })
         .catch(function(error) {
             reject(error);
@@ -16,4 +16,4 @@ const GETLogout = () => {
     })
 }
 
-export default GETLogout;
+export default GETSearchSurroundPost;

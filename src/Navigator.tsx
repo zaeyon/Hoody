@@ -751,7 +751,7 @@ function AppNavigator() {
 
   return (
     <NavigationContainer>
-    {(!currentUserState.loggedIn) ? (  
+    {(currentUserState.loggedIn) ? (  
     <NoBottomBarStack.Navigator
     headerMode="none"
     >

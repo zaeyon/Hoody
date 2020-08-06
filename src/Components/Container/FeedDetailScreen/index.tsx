@@ -349,57 +349,363 @@ const ModalTabItemLabelText = Styled.Text`
 
 
 const TEST_FEED_DETAIL = 
+{
+  "post": {
+    "id": 31,
+    "starRate": 4.5,
+    "expense": "7,000",
+    "certifiedLocation": true,
+    "hits": 0,
+    "likes": 23,
+    "sequence": "DMPLDLDP",
+    "temporary": false,
+    "spendDate": "2020년 07월 14일",
+    "open": true,
+    "createdAt": "3시간전",
+    "updatedAt": "2020-07-21T09:12:56.000Z",
+    "deletedAt": null,
+    "userId": "2b00ed60-be9f-11ea-b113-99f6f65adc3f",
+    "mainTagId": 4,
+    "subTagOneId": 5,
+    "subTagTwoId": 6,
+    "addressId": 2,
+    "commentsCount": 11,
+    "replysCount": 4,
+    "popular": 63,
+    "user": {
+      "id": "2b00ed60-be9f-11ea-b113-99f6f65adc3f",
+      "nickname": "카페인중독자",
+      "profileImg": "https://i.pinimg.com/564x/36/64/bb/3664bbe5c35418ab85850b6314a84366.jpg"
+    },
+    "mainTags": {
+      "id": 4,
+      "name": "을지로",
+      "starRate": 3.74074,
+      "reviewNum": 27
+    },
+    "subTagOnes": {
+      "id": 5,
+      "name": "챔프커피",
+      "starRate": 0,
+      "reviewNum": 23
+    },
+    "subTagTwos": {
+      "id": 6,
+      "name": "카페투어",
+      "starRate": 0,
+      "reviewNum": 23
+    },
+    "Likers": [],
+    "mediaFiles": [
+      {
+        "filename": "original/1594818766512IMG_0652.JPG",
+        "size": 143232,
+        "mimetype": "image/jpeg",
+        "index": 2,
+        "url": "https://d37gdtxv8z76fx.cloudfront.net/original/1594818766512IMG_0652.JPG",
+        "type": "image"
+      }
+    ],
+    "descriptions": [
+      {
+        "description": "test1",
+        "index": 1,
+        "textAlign": "left",
+        "type": "description"
+      },
+      {
+        "description": "test2",
+        "index": 5,
+        "textAlign": "left",
+        "type": "description"
+      },
+      {
+        "description": "test3",
+        "index": 7,
+        "textAlign": "left",
+        "type": "description"
+      }
+    ],
+    "Products": [
+      {
+        "title": "전부였던 사람이 떠나갔을 때 태연히 밥을 먹기도 했다(무지개 리커버 에디션)",
+        "description": "사람을 사랑하고, 사람과 이별하고, 그럼에도 전부였던 ...",
+        "image": "http://image.kyobobook.co.kr/images/book/xlarge/505/x9791188469505.jpg",
+        "url": "http://www.kyobobook.co.kr/redi_book.jsp?b=9791188469505&g=KOR",
+        "site": "KYOBOBOOK",
+        "favicon": "http://image.kyobobook.co.kr/newimages/apps/b2c/kyobo.ICO",
+        "postProduct": {
+          "index": 3,
+          "createdAt": "2020-07-15T13:12:47.000Z",
+          "updatedAt": "2020-07-15T13:12:47.000Z",
+          "productId": 1,
+          "postId": 31
+        },
+        "type": "product"
+      },
+      {
+        "title": "닥터방기원 랩 탈모 증상 완화 샴푸",
+        "description": "COUPANG",
+        "image": "https://thumbnail10.coupangcdn.com/thumbnails/remote/230x230ex/image/product/image/vendoritem/2019/10/11/3070321063/a48a6244-8764-459a-9d6d-b63ffe7e3f79.jpg",
+        "url": "https://www.coupang.com/vp/products/10295034",
+        "site": "coupang",
+        "favicon": "https://image9.coupangcdn.com/image/coupang/favicon/v2/favicon.ico",
+        "postProduct": {
+          "index": 8,
+          "createdAt": "3시간전",
+          "updatedAt": "2020-07-15T13:12:47.000Z",
+          "productId": 2,
+          "postId": 31
+        },
+        "type": "product"
+      }
+    ],
+    "address": {
+      "id": 2,
+      "address": "을지로 세운 대림상가 3층",
+      "geographLong": 37.5658,
+      "geographLat": 126.991,
+      "reviewNum": 22
+    },
+    "comments": [
+      {
+        "id": 2,
+        "description": "안녕ㅇㅇ",
+        "Like": 0,
+        "createdAt": "2020-07-21T13:01:35.000Z",
+        "updatedAt": "2020-07-21T13:01:35.000Z",
+        "deletedAt": null,
+        "userId": "a5fb00f0-c4d5-11ea-aac4-73edfae51b0b",
+        "postId": 31,
+        "replyId": null
+      },
+      {
+        "id": 3,
+        "description": "메롱메롱",
+        "Like": 0,
+        "createdAt": "2020-07-21T13:09:41.000Z",
+        "updatedAt": "2020-07-21T13:09:41.000Z",
+        "deletedAt": null,
+        "userId": "a5fb00f0-c4d5-11ea-aac4-73edfae51b0b",
+        "postId": 31,
+        "replyId": null
+      },
+      {
+        "id": 4,
+        "description": "ㅋㅋㅋㅋ",
+        "Like": 0,
+        "createdAt": "2020-07-21T13:10:56.000Z",
+        "updatedAt": "2020-07-21T13:10:56.000Z",
+        "deletedAt": null,
+        "userId": "a5fb00f0-c4d5-11ea-aac4-73edfae51b0b",
+        "postId": 31,
+        "replyId": null
+      },
+      {
+        "id": 5,
+        "description": "ggggg",
+        "Like": 0,
+        "createdAt": "2020-07-21T13:11:59.000Z",
+        "updatedAt": "2020-07-21T13:11:59.000Z",
+        "deletedAt": null,
+        "userId": "a5fb00f0-c4d5-11ea-aac4-73edfae51b0b",
+        "postId": 31,
+        "replyId": null
+      },
+      {
+        "id": 6,
+        "description": "gkgkggkgkk",
+        "Like": 0,
+        "createdAt": "2020-07-21T13:12:09.000Z",
+        "updatedAt": "2020-07-21T13:12:09.000Z",
+        "deletedAt": null,
+        "userId": "a5fb00f0-c4d5-11ea-aac4-73edfae51b0b",
+        "postId": 31,
+        "replyId": null
+      },
+      {
+        "id": 7,
+        "description": "ssss",
+        "Like": 0,
+        "createdAt": "2020-07-21T13:13:31.000Z",
+        "updatedAt": "2020-07-21T13:13:31.000Z",
+        "deletedAt": null,
+        "userId": "a5fb00f0-c4d5-11ea-aac4-73edfae51b0b",
+        "postId": 31,
+        "replyId": null
+      },
+      {
+        "id": 8,
+        "description": "ffff",
+        "Like": 0,
+        "createdAt": "2020-07-22T02:30:16.000Z",
+        "updatedAt": "2020-07-22T02:30:16.000Z",
+        "deletedAt": null,
+        "userId": "a5fb00f0-c4d5-11ea-aac4-73edfae51b0b",
+        "postId": 31,
+        "replyId": null
+      },
+      {
+        "id": 9,
+        "description": "ㅂㄱㅍ",
+        "Like": 0,
+        "createdAt": "2020-07-22T02:38:12.000Z",
+        "updatedAt": "2020-07-22T02:38:12.000Z",
+        "deletedAt": null,
+        "userId": "a5fb00f0-c4d5-11ea-aac4-73edfae51b0b",
+        "postId": 31,
+        "replyId": null
+      },
+      {
+        "id": 10,
+        "description": "히히힣ㅎ",
+        "Like": 0,
+        "createdAt": "2020-07-22T02:58:46.000Z",
+        "updatedAt": "2020-07-22T02:58:46.000Z",
+        "deletedAt": null,
+        "userId": "a5fb00f0-c4d5-11ea-aac4-73edfae51b0b",
+        "postId": 31,
+        "replyId": null
+      },
+      {
+        "id": 11,
+        "description": "쇼쇼",
+        "Like": 0,
+        "createdAt": "2020-07-22T02:59:45.000Z",
+        "updatedAt": "2020-07-22T02:59:45.000Z",
+        "deletedAt": null,
+        "userId": "a5fb00f0-c4d5-11ea-aac4-73edfae51b0b",
+        "postId": 31,
+        "replyId": null
+      },
+      {
+        "id": 15,
+        "description": "이건댓글",
+        "Like": 0,
+        "createdAt": "2020-07-22T05:02:00.000Z",
+        "updatedAt": "2020-07-22T05:02:00.000Z",
+        "deletedAt": null,
+        "userId": "a5fb00f0-c4d5-11ea-aac4-73edfae51b0b",
+        "postId": 31,
+        "replyId": null
+      }
+    ],
+    "divisonLines": [
+      {
+        "index": 4,
+        "type": "divisonLine"
+      },
+      {
+        "index": 6,
+        "type": "divisonLine"
+      }
+    ],
+    "Scraps": []
+  },
+  "postBody": [
     {
-      id: 1,
-      user : {
-        profileImg: 'https://t1.daumcdn.net/thumb/R600x0/?fname=https%3A%2F%2Ft1.daumcdn.net%2Fqna%2Fimage%2F1542632018000000528',
-        nickname: '테스트닉네임'
+      "description": "이태원에서 이제는 을지로 세운대림상가에 오픈을 한 을지로 '챔프커피' 3호점 입니다. 벌써 3호점이라니 대단합니다.",
+      "index": 1,
+      "textAlign": "left",
+      "type": "description"
+    },
+    {
+      "filename": "original/1594818766512IMG_0652.JPG",
+      "size": 143232,
+      "mimetype": "image/jpeg",
+      "index": 2,
+      "url": "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2F88HeB%2Fbtqvzgs1M1X%2Ftjan249YhEJsAdZPKVSXsK%2Fimg.png",
+      "type": "image"
+    },
+    {
+      "title": "전부였던 사람이 떠나갔을 때 태연히 밥을 먹기도 했다(무지개 리커버 에디션)",
+      "description": "사람을 사랑하고, 사람과 이별하고, 그럼에도 전부였던 ...",
+      "image": "http://image.kyobobook.co.kr/images/book/xlarge/505/x9791188469505.jpg",
+      "url": "http://www.kyobobook.co.kr/redi_book.jsp?b=9791188469505&g=KOR",
+      "site": "KYOBOBOOK",
+      "favicon": "http://image.kyobobook.co.kr/newimages/apps/b2c/kyobo.ICO",
+      "postProduct": {
+        "index": 3,
+        "createdAt": "2020-07-15T13:12:47.000Z",
+        "updatedAt": "2020-07-15T13:12:47.000Z",
+        "productId": 1,
+        "postId": 31
       },
-      createAt: '2020-05-22',
-      starRate: 2.5,
-      mainTags : {
-        name: '메인태그'
-      },
-      subTagOnes: {
-        name: '서브태그1'
-      },
-      subTagTwos: {
-        name: '서브태그2'
-      },
-      likes: 233,
-      address : {
-        address: '블루문 스터디 카페'
-      },
-      expense: 2000,
-      descriptions: [
-        {
-          description: "이번 남자친구가 선물해준 키엘 수분 크림을 사용해 봤는데 너무 좋은거 같아요 이번에 남자 ..."
-        },
-        {
-          description: "내용2"
-        }
-      ],
-      mediaFiles: [
-        {
-          type: 'image',
-          url: 'https://img1.daumcdn.net/thumb/R720x0/?fname=https%3A%2F%2Ft1.daumcdn.net%2Fliveboard%2Fdailylife%2F6d8abd51eb3644958240a9ca6ddf28bd.JPG'
-        }
-      ],
-      paragraphData: [
-        {
-          type:"description",
-          description: "이번 남자친구가 선물해준 키엘 수분 크림을 사용해 봤는데 너무 좋은거 같아요 이번에 남자 ..."
-        },
-        {
-          type:"image",
-          url: 'https://img1.daumcdn.net/thumb/R720x0/?fname=https%3A%2F%2Ft1.daumcdn.net%2Fliveboard%2Fdailylife%2F6d8abd51eb3644958240a9ca6ddf28bd.JPG',
-        },
-        {
-          type:"description",
-          description: "내용2"
-        }
-      ]
-    };
+      "type": "product"
+    },
+    {
+      "index": 4,
+      "type": "divisonLine"
+    },
+    {
+      "description": "주로 남색 계열의 색상이 많이 느껴지는 공간으로 크게 넓은 공간은 아닙니다. 그래도 세 곳 중 가장 넓고 쾌적한 거 같습니다.",
+      "index": 5,
+      "textAlign": "left",
+      "type": "description"
+    },
+ 
+    {
+      "description": "또한 매장 앞에 스웨그 넘치는 간이 테이블이 많아서 자리가 부족하지는 않을 거 같습니다.",
+      "index": 7,
+      "textAlign": "left",
+      "type": "description"
+    },
+    {
+      "filename": "original/1594818766512IMG_0652.JPG",
+      "size": 143232,
+      "mimetype": "image/jpeg",
+      "index": 2,
+      "url": "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FUrtBr%2FbtqvAAqwXeS%2F6g7fhDFgLs9Ks9BKvOZGZK%2Fimg.png",
+      "type": "image"
+    },
+    {
+      "description": "3작업실은 확실히 새로 오픈한 매장답게 원두나 판매상품에 대한 진열 및 전시도 멋스러워졌습니다. 빨간색과 남색의 종이컵이 인상적입니다. 그리고 3호점에서는 티라미수도 판매를 합니다. (하지만 쿠키가 너무 유명하다 보니 애매합니다)",
+      "index": 7,
+      "textAlign": "left",
+      "type": "description"
+    },
+    {
+      "filename": "original/1594818766512IMG_0652.JPG",
+      "size": 143232,
+      "mimetype": "image/jpeg",
+      "index": 2,
+      "url": "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FbhZEPn%2FbtqvAAKPqKB%2Fy7dWNqg4XNIZ3wJ2I25kI1%2Fimg.png",
+      "type": "image"
+    },
+    {
+      "description": "챔프커피 3호점의 메뉴판입니다. 기존의 1.2호점 매장들과의 차이는 거의 없지만 역시 티라미수의 추가와 브루잉 메뉴에 '브라운 인 소울' 블렌드가 추가된 점이 눈에 띕니다.",
+      "index": 7,
+      "textAlign": "left",
+      "type": "description"
+    },
+    {
+      "filename": "original/1594818766512IMG_0652.JPG",
+      "size": 143232,
+      "mimetype": "image/jpeg",
+      "index": 2,
+      "url": "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FbSa1Ou%2FbtqvAP14MbU%2FTeUt5ya0FBN1HZMiYGF3Tk%2Fimg.png",
+      "type": "image"
+    },
+    {
+      "description": "커피만 마시기는 아쉬울 거 같아 챔프쿠키(크렌베리)도 같이 주문했습니다. 저 둘의 조합은 정말 대단한 거 같습니다 고소하면서도 카라멜같은 느낌의 단맛과 균형 잡힌 밸런스가 뛰어난 플랫화이트와 쫀득쫀득하면서도 달지 않고 묵직한 쿠키의 조합은 정말 최고입니다!",
+      "index": 7,
+      "textAlign": "left",
+      "type": "description"
+    },
+    {
+      "description": "페 열풍이 식고 경기불황이 지속되면서 수많은 카페들이 문을 닫고 정리하는 지금 특유의 개성과 정체성을 지키면서 점점 더 발전되어 가는 모습을 보이는 챔프커피를 보며 많은 것을 배웠습니다. 챔프커피같은 곳들이 잘 되었으면 합니다.",
+      "index": 7,
+      "textAlign": "left",
+      "type": "description"
+    },
+    {
+      "description": "한 줄 정리: 힙하면서도 세련된 곳!",
+      "index": 7,
+      "textAlign": "left",
+      "type": "description"
+    },
+  ]
+}
 
 
 
@@ -432,6 +738,21 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
 
     const currentUser = useSelector((state) => state.currentUser);
     const dispatch = useDispatch();
+
+    // 서버 연결X 테스트용 코드
+    useEffect(() => {
+
+      console.log("response.data.post.mainTags", TEST_FEED_DETAIL.post.mainTags);
+      setParagraphData(TEST_FEED_DETAIL.postBody);
+      setPostId(route.params.feedId);
+      setFeedDetailInfo(TEST_FEED_DETAIL.post);
+      setLikeCount(TEST_FEED_DETAIL.post.likes);
+      setAllCommentCount(TEST_FEED_DETAIL.post.commentsCount+TEST_FEED_DETAIL.post.replysCount);
+      setCreatedDate("3시간전");
+      setCurrentUserLike(route.params.currentUserLike)
+      setCurrentUserScrap(route.params.currentUserScrap);
+
+    }, [])
     // 서버 연결 코드
     useLayoutEffect(() => {
         if(route.params?.feedId) {
@@ -441,7 +762,8 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
            if(response.data.post.user.id === currentUser.user.userId) {
              setCurrentUserFeed(true);
            }
-           console.log("response.data.post", response.data.post);
+           //console.log("response.data.post", response.data.post);
+           /*
            console.log("response.data.post.mainTags", response.data.post.mainTags);
            response.data.post.spendDate = getDateFormat(response.data.post.spendDate)
            setParagraphData(response.data.postBody);
@@ -452,6 +774,18 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
            setCreatedDate(route.params.createdAt);
            setCurrentUserLike(route.params.currentUserLike)
            setCurrentUserScrap(route.params.currentUserScrap);
+           */
+
+          console.log("response.data.post.mainTags", TEST_FEED_DETAIL.post.mainTags);
+          response.data.post.spendDate = getDateFormat(TEST_FEED_DETAIL.post.spendDate)
+          setParagraphData(TEST_FEED_DETAIL.postBody);
+          setPostId(route.params.feedId);
+          setFeedDetailInfo(TEST_FEED_DETAIL.post);
+          setLikeCount(TEST_FEED_DETAIL.post.likes);
+          setAllCommentCount(TEST_FEED_DETAIL.post.commentsCount+TEST_FEED_DETAIL.post.replysCount);
+          setCreatedDate(route.params.createdAt);
+          setCurrentUserLike(route.params.currentUserLike)
+          setCurrentUserScrap(route.params.currentUserScrap);
        })
        .catch(function(error) {
            console.log("error", error);
@@ -670,7 +1004,8 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
               </TouchableWithoutFeedback>
         </RightContainer>
       </HeaderContainer>
-      <ScrollView>
+      <ScrollView
+      showsVerticalScrollIndicator={false}>
       <InformationContainer>
    <FeedInformation
    profileImage={feedDetailInfo.user.profileImg}

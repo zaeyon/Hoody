@@ -22,6 +22,7 @@ import currentUser from '~/reducers/currentUser';
 
 // Route
 import GETRecommendUser from '~/Route/Curation/GETRecommendUser';
+import GETAgeGroupPopularTag from '~/Route/Curation/GETAgeGroupPopularTag';
 
 const Container = Styled.SafeAreaView`
  flex: 1;
@@ -161,6 +162,13 @@ const ExploreScreen = ({navigation, route}: Props) => {
             console.log("GETRecommendUser error", error);
         })
 
+        GETAgeGroupPopularTag()
+        .then(function(response) {
+            console.log("GETAgeGroupPopularTag response", response);
+        })
+        .catch(function(error) {
+            console.log("GETAgegroupPopularTag error", error);
+        })
     }, [])
 
     useEffect(() => {

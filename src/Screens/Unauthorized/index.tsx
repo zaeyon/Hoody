@@ -22,16 +22,32 @@ import appleAuth, {
 
 const Container = Styled.View`
  flex: 1;
- background-color: #ffffff;
+ background-color: #267DFF;
  align-items: center;
 `;
 
-const LogoContainer = Styled.View`
+const AppIconImage = Styled.Image`
+width: ${wp('42%')};
+height: ${wp('42%')};
+`;
 
+const LogoContainer = Styled.View`
 width: ${wp('100%')};
 height: ${hp('70%')};
  justify-content: center;
  align-items: center;
+`;
+
+const LogoImage = Styled.Image`
+width: ${wp('30%')};
+height: ${wp('9%')};
+`;
+
+const IntroText = Styled.Text`
+margin-top: 7px;
+color: #FFFFFF;
+font-size: 18px;
+font-weight: bold;
 `;
 
 const AuthContainer = Styled.View`
@@ -272,7 +288,13 @@ const Unauthorized = ({navigation}) => {
   return (
     <Container>
       <LogoContainer>
-        <HoogingLogo source={require('~/Assets/Images/Logo/logo.png')} />
+        <AppIconImage
+        source={require('~/Assets/Images/Logo/appIcon.png')}/>
+        <LogoImage
+        source={require('~/Assets/Images/Logo/HoodyLogo.png')}/>
+        <IntroText>
+          소비 네트워크의 시작
+        </IntroText>
       </LogoContainer>
       <AuthContainer>
       <SocialLoginContainer>

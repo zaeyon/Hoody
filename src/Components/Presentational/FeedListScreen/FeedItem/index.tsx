@@ -131,7 +131,7 @@ margin-bottom: 5px;
 
 const ImageCountBackground = Styled.View`
  top: 15px;
- right: 5px;
+ right: 2px;
  padding: 5px 9px 5px 9px;
  position: absolute;
  border-radius: 26px;
@@ -407,7 +407,7 @@ const FeedItem = ({
     console.log("피드 닉네임", nickname)
     setChangeState(!changeState);
 
-    var index = currentUser.likeFeeds.findIndex(obj => obj.id === id);
+    var index = currentUser.likeFeeds?.findIndex(obj => obj.id === id);
     if(index !== -1) {
       setCurrentUserLike(true);
       likeFeedsIndex = index;
@@ -416,7 +416,7 @@ const FeedItem = ({
     }
     console.log("해당 피드가 사용자가 좋아요한 피드목록에 있음", index); 
 
-    var scrapFeedIndex = currentUser.scrapFeeds.findIndex(obj => obj.id === id);
+    var scrapFeedIndex = currentUser.scrapFeeds?.findIndex(obj => obj.id === id);
     if(scrapFeedIndex !== -1) {
       setCurrentUserScrap(true);
     } else if(scrapFeedIndex === -1) {
@@ -426,7 +426,7 @@ const FeedItem = ({
 
   useEffect(() => {
     //console.log("currentUser.likeFeeds[0].Like", currentUser.likeFeeds[0].Like)
-    var index = currentUser.likeFeeds.findIndex(obj => obj.id === id);
+    var index = currentUser.likeFeeds?.findIndex(obj => obj.id === id);
     if(index !== -1) {
       if(!currentUserLike) {
         setLikeCount(likeCount+1)
@@ -439,7 +439,7 @@ const FeedItem = ({
       }
     }
 
-    var scrapFeedIndex = currentUser.scrapFeeds.findIndex(obj => obj.id === id);
+    var scrapFeedIndex = currentUser.scrapFeeds?.findIndex(obj => obj.id === id);
     if(scrapFeedIndex !== -1) {
       setCurrentUserScrap(true);
     } else if(scrapFeedIndex === -1) {
@@ -462,7 +462,7 @@ const FeedItem = ({
   const deleteLike = () => {
     console.log("currentUser.likeFeeds", currentUser.likeFeeds);
     var removedLikeFeeds = currentUser.likeFeeds;
-    var deletedIndex = currentUser.likeFeeds.findIndex(obj => obj.id === id);
+    var deletedIndex = currentUser.likeFeeds?.findIndex(obj => obj.id === id);
     removedLikeFeeds.splice(deletedIndex, 1);
     console.log("deletedLike", removedLikeFeeds);
     dispatch(allActions.userActions.setLikeFeeds(removedLikeFeeds))
@@ -524,7 +524,7 @@ const FeedItem = ({
 
     console.log("tmpFeedIds", tmpFeedIds)
     var deletedScrapFeeds = currentUser.scrapFeeds;
-    var deleteIndex = currentUser.scrapFeeds.findIndex(obj => obj.id === id);
+    var deleteIndex = currentUser.scrapFeeds?.findIndex(obj => obj.id === id);
     deletedScrapFeeds.splice(deleteIndex, 1);
     
     dispatch(allActions.userActions.setScrapFeeds(deletedScrapFeeds));

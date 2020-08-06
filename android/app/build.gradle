@@ -189,6 +189,8 @@ android {
 }
 
 dependencies {
+    // React Native Splash Screen
+    implementation project(':react-native-splash-screen')
 
     //  Google Play Services Fused Location provider
     implementation "com.google.android.gms:play-services-base:16.0.1"

@@ -406,7 +406,7 @@ const FeedItem = ({
     console.log("feedITem currentUser", currentUser);
 
     if(currentUser.likeFeeds) {
-    var index = currentUser.likeFeeds.findIndex(obj => obj.id === id);
+    var index = currentUser.likeFeeds?.findIndex(obj => obj.id === id);
     if(index !== -1) {
       setCurrentUserLike(true);
       likeFeedsIndex = index;
@@ -417,7 +417,7 @@ const FeedItem = ({
     }
 
     if(currentUser.scrapFeeds) {
-    var scrapFeedIndex = currentUser.scrapFeeds.findIndex(obj => obj.id === id);
+    var scrapFeedIndex = currentUser.scrapFeeds?.findIndex(obj => obj.id === id);
     if(scrapFeedIndex !== -1) {
       setCurrentUserScrap(true);
     } else if(scrapFeedIndex === -1) {
@@ -432,7 +432,7 @@ const FeedItem = ({
     if(currentUser.likeFeeds) {
 
     //console.log("currentUser.likeFeeds[0].Like", currentUser.likeFeeds[0].Like)
-    var index = currentUser.likeFeeds.findIndex(obj => obj.id === id);
+    var index = currentUser.likeFeeds?.findIndex(obj => obj.id === id);
     if(index !== -1) {
       if(!currentUserLike) {
         setLikeCount(likeCount+1)
@@ -449,7 +449,7 @@ const FeedItem = ({
 
     if(currentUser.scrapFeeds) {
 
-    var scrapFeedIndex = currentUser.scrapFeeds.findIndex(obj => obj.id === id);
+    var scrapFeedIndex = currentUser.scrapFeeds?.findIndex(obj => obj.id === id);
     if(scrapFeedIndex !== -1) {
       setCurrentUserScrap(true);
     } else if(scrapFeedIndex === -1) {
@@ -474,7 +474,7 @@ const FeedItem = ({
   const deleteLike = () => {
     console.log("currentUser.likeFeeds", currentUser.likeFeeds);
     var removedLikeFeeds = currentUser.likeFeeds;
-    var deletedIndex = currentUser.likeFeeds.findIndex(obj => obj.id === id);
+    var deletedIndex = currentUser.likeFeeds?.findIndex(obj => obj.id === id);
     removedLikeFeeds.splice(deletedIndex, 1);
     console.log("deletedLike", removedLikeFeeds);
     dispatch(allActions.userActions.setLikeFeeds(removedLikeFeeds))
@@ -536,7 +536,7 @@ const FeedItem = ({
 
     console.log("tmpFeedIds", tmpFeedIds)
     var deletedScrapFeeds = currentUser.scrapFeeds;
-    var deleteIndex = currentUser.scrapFeeds.findIndex(obj => obj.id === id);
+    var deleteIndex = currentUser.scrapFeeds?.findIndex(obj => obj.id === id);
     deletedScrapFeeds.splice(deleteIndex, 1);
     
     dispatch(allActions.userActions.setScrapFeeds(deletedScrapFeeds));

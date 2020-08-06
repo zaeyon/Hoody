@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {useEffect} from 'react';
 import {
   View,
   Button,
@@ -13,6 +13,8 @@ import {TextInput} from 'react-native-gesture-handler';
 import {createStore} from 'redux';
 import {Provider, useSelector} from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
+import SplashScreen from 'react-native-splash-screen'
+
 
 import rootReducer from '~/reducers';
 import Unauthorized from '~/Screens/Unauthorized';
@@ -73,7 +75,13 @@ RNLocation.configure({
 })
 
 function App() {
+
+  useEffect(() => {
+    SplashScreen.hide();
+  })
+
   requestCameraPermission();
+
   return (
       <Provider store={store}>
         <AppNavigator />

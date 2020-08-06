@@ -98,27 +98,30 @@ const TEST_FEED_DATA = [
   {
     id: 1,
     user : {
-      profileImg: 'https://t1.daumcdn.net/thumb/R600x0/?fname=https%3A%2F%2Ft1.daumcdn.net%2Fqna%2Fimage%2F1542632018000000528',
-      nickname: '테스트닉네임'
+      profileImg: 'https://i.pinimg.com/564x/36/64/bb/3664bbe5c35418ab85850b6314a84366.jpg',
+      nickname: '카페인중독자'
     },
     createAt: '2020-05-22',
-    starRate: 2.5,
+    starRate: 4.5,
+    commentsCount: 12,
+    replysCount: 3,
+    likes: 23,
     mainTags : {
-      name: '메인태그'
+      name: '을지로'
     },
     subTagOnes: {
-      name: '서브태그1'
+      name: '챔프커피'
     },
     subTagTwos: {
-      name: '서브태그2'
+      name: '카페투어'
     },
     address : {
-      address: '블루문 스터디 카페'
+      address: '을지로 세운 대림상가 3층'
     },
-    expense: 2000,
+    expense: "7,000",
     descriptions: [
       {
-        description: "이번 남자친구가 선물해준 키엘 수분 크림을 사용해 봤는데 너무 좋은거 같아요 이번에 남자 ..."
+        description: "이태원에서 이제는 을지로 세운대림상가에 오픈을 한 을지로 '챔프커피' 3호점 입니다. 벌써 3호점이라니 대단합니다. "
       },
       {
         description: "내용2"
@@ -127,11 +130,11 @@ const TEST_FEED_DATA = [
     mediaFiles: [
       {
         type: 'image',
-        url: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fk.kakaocdn.net%2Fdn%2Fb8lOJh%2FbtqBtL2bmwP%2FkUzXrFiEIRfFUKWowimMRk%2Fimg.jpg'
+        url: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2F88HeB%2Fbtqvzgs1M1X%2Ftjan249YhEJsAdZPKVSXsK%2Fimg.png'
       },
       {
         type: 'image',
-        url: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fk.kakaocdn.net%2Fdn%2FJUreB%2FbtqCpQUtIUD%2Ff2rOUTYmBhgNc4rDxbreU0%2Fimg.jpg'
+        url: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FUrtBr%2FbtqvAAqwXeS%2F6g7fhDFgLs9Ks9BKvOZGZK%2Fimg.png'
       }
     ],
     paragraphData: [
@@ -156,28 +159,30 @@ const TEST_FEED_DATA = [
   {
     id: 2,
     user : {
-      profileImg: 'https://t1.daumcdn.net/thumb/R600x0/?fname=https%3A%2F%2Ft1.daumcdn.net%2Fqna%2Fimage%2F1542632018000000528',
-      nickname: '하하'
+      profileImg: 'https://img.jjang0u.com/data3/chalkadak/306/201909/15/156850056031677.jpg',
+      nickname: '고기조아'
     },
     createAt: '2020-06-22',
     starRate: 4,
     mainTags : {
-      name: '스타벅스'
+      name: '멘야하나비'
     },
     subTagOnes: {
-      name: '아이스아메리카노'
+      name: '비빔라면'
     },
     subTagTwos: {
-      name: '아아'
+      name: '일식'
     },
-    likes: 233,
+    likes: 5,
+    commentsCount: 3,
+    replysCount: 1,
     address : {
-      address: '범계역 스타벅스'
+      address: '멘야하나비 서울본점'
     },
-    expense: 2000,
+    expense: "10,900",
     descriptions: [
       {
-        description: "범계역 스타벅스에서 BLT 샌드위치를 먹었다."
+        description: "석촌 호수 인근에 위치한 '멘야하나비'는 일본 비빔라면이 주메뉴. 다소 생소해 보이지만 툭 치고 올라오는 쫄깃하고 매콤한 맛의, 볶은 고기와..."
       },
       {
         description: "ㅎ"
@@ -207,28 +212,25 @@ const TEST_FEED_DATA = [
   {
     id: 3,
     user : {
-      profileImg: 'https://t1.daumcdn.net/thumb/R600x0/?fname=https%3A%2F%2Ft1.daumcdn.net%2Fqna%2Fimage%2F1542632018000000528',
-      nickname: '테스트닉네임'
+      profileImg: 'https://femiwiki-uploaded-files.s3.amazonaws.com/b/b5/%EB%85%B8%EB%9E%91%EC%83%89.png',
+      nickname: '데헷'
     },
     createAt: '2020-05-22',
-    starRate: 2.5,
+    starRate: 1.5,
     mainTags : {
-      name: '메인태그'
+      name: '스타벅스'
     },
     subTagOnes: {
-      name: '서브태그1'
-    },
-    subTagTwos: {
-      name: '서브태그2'
+      name: '포크커틀릿샌드위치'
     },
     likes: 233,
     address : {
-      address: '블루문 스터디 카페'
+      address: '스타벅스 범계역점'
     },
-    expense: 2000,
+    expense: 5900,
     descriptions: [
       {
-        description: "이번 남자친구가 선물해준 키엘 수분 크림을 사용해 봤는데 너무 좋은거 같아요 이번에 남자 ..."
+        description: "겹겹히 쌓은 등심으로 풍부한 식감의 커틀릿에 할라피뇨, 당근 잼을 넣어 매콤 달콤한 맛을 살린 든든한 샌드위치.. 라고 홈페이지에 소개 되어..."
       },
       {
         description: "내용2"
@@ -237,11 +239,11 @@ const TEST_FEED_DATA = [
     mediaFiles: [
       {
         type: 'image',
-        url: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fk.kakaocdn.net%2Fdn%2Fb8lOJh%2FbtqBtL2bmwP%2FkUzXrFiEIRfFUKWowimMRk%2Fimg.jpg'
+        url: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fk.kakaocdn.net%2Fdn%2FJUreB%2FbtqCpQUtIUD%2Ff2rOUTYmBhgNc4rDxbreU0%2Fimg.jpg'
       },
       {
         type: 'image',
-        url: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fk.kakaocdn.net%2Fdn%2FJUreB%2FbtqCpQUtIUD%2Ff2rOUTYmBhgNc4rDxbreU0%2Fimg.jpg'
+        url: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fk.kakaocdn.net%2Fdn%2Fb8lOJh%2FbtqBtL2bmwP%2FkUzXrFiEIRfFUKWowimMRk%2Fimg.jpg'
       },
       {
         type: 'image',
@@ -303,7 +305,6 @@ function FeedListScreen({navigation, route}: Props) {
   
   useEffect(() => {
     getFeedData();
-    
     if(currentUser.user) {
     console.log("currentUser.user.likeFeeds@@", currentUser.user.likeFeeds);
     }
@@ -321,8 +322,6 @@ function FeedListScreen({navigation, route}: Props) {
             { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
         );
       }
-
-
   }, []);
 
   useEffect(() => {
@@ -337,8 +336,10 @@ function FeedListScreen({navigation, route}: Props) {
   }, [query, category])
 
   const getFeedData = () => {
+      // 서버테스트용 데이터
+      setFeedListData(TEST_FEED_DATA);
     GetAllFeed().then(function(response) {
-      setFeedListData(response);
+      //setFeedListData(response);
       setRefreshing(false)
       setOnRefreshFeedList(!onRefreshFeedList)
       console.log("파드 목록 가져오기 성공", response);
@@ -416,7 +417,7 @@ function FeedListScreen({navigation, route}: Props) {
                   like_count={item.likes}
                   comment_count={item.commentsCount}
                   reply_count={item.replysCount}
-                  scrap_count={item.Scraps.length}
+                  scrap_count={0}
                   mediaFiles={item.mediaFiles}
                   image_count={item.mediaFiles.length}
                   location={item.address?item.address.address:null}

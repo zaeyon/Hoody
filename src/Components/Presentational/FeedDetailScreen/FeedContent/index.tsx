@@ -71,6 +71,7 @@ const renderItem = ({item, index}: any) => {
     return (
         <Container>
             <FlatList
+            showsVerticalScrollIndicator={false}
             style={{backgroundColor:"c3c3c3"}}
             data={paragraphData}
             renderItem={renderItem}/>

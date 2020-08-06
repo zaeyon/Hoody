@@ -33,7 +33,7 @@ height: ${wp('42%')};
 
 const LogoContainer = Styled.View`
 width: ${wp('100%')};
-height: ${hp('70%')};
+height: ${hp('65%')};
  justify-content: center;
  align-items: center;
 `;
@@ -52,7 +52,6 @@ font-weight: bold;
 
 const AuthContainer = Styled.View`
 width: ${wp('100%')};
-height: ${hp('30%')};
  justify-content: center;
  align-items: center;
 `;
@@ -60,48 +59,84 @@ height: ${hp('30%')};
 const SocialLoginContainer = Styled.View`
 margin-top: 20px;
   width: ${wp('100%')};
-height: ${hp('8%')};
  justify-content: center;
- flex-direction: row;
+ flex-direction: column;
  align-items: center;
 `;
 
-const LocalContainer = Styled.View`
- align-items: center;
-`;
 
 const LoginContainer = Styled.View`
- width: ${wp('100%')};
-height: ${hp('8%')};
-margin-top: 0px;
- align-items: center;
- justify-content: center;
- margin-bottom: 5px;
 `;
 
 const SignupContainer = Styled.View`
-width: ${wp('100%')};
-height: ${hp('5%')};
-justify-content: center;
+`;
+
+const KakaoLoginButton = Styled.View`
+margin-top: 7px;
+width: ${wp('91.46%')};
+height: ${wp('14.4%')};
+background-color: #FEE500;
+border-radius: 10px;
 align-items: center;
+justify-content: center;
+flex-direction: row;
 `;
 
-const KakaoLoginButton = Styled.Image`
-margin-left: 5px;
-width: ${wp('16%')};
-height: ${wp('16%')};
+const GoogleLoginButton = Styled.View`
+width: ${wp('91.46%')};
+height: ${wp('14.4%')};
+background-color: #FFFFFF;
+border-radius: 10px;
+align-items: center;
+justify-content: center;
+flex-direction: row;
 `;
 
-const GoogleLoginButton = Styled.Image`
-margin-left: 5.5px;
-width: ${wp('15%')};
-height: ${wp('15%')};
+const GoogleIcon = Styled.Image`
+  width: ${wp('6.4%')};
+  height: ${wp('6.4%')};
 `;
 
-const AppleLoginButton = Styled.Image`
-margin-left: 6.7px;
-width: ${wp('15%')};
-height: ${wp('15%')};
+const GoogleLoginText = Styled.Text`
+ margin-left: 6px;
+ font-weight: 600;
+ font-size: 16px;
+ color: #333333;
+`;
+
+const KakaoIcon = Styled.Image`
+  width: ${wp('5.8%')};
+  height: ${wp('5.35%')};
+`;
+
+const KakaoLoginText = Styled.Text`
+margin-left: 6px;
+font-weight: 600;
+font-size: 16px;
+color: #333333;
+`;
+
+const AppleIcon = Styled.Image`
+  width: ${wp('5.35%')};
+  height: ${wp('6.4%')};
+`;
+
+const AppleLoginText = Styled.Text`
+margin-left: 6px;
+font-weight: 600;
+font-size: 16px;
+color: #ffffff;
+`;
+
+const AppleLoginButton = Styled.View`
+margin-top: 7px;
+width: ${wp('91.46%')};
+height: ${wp('14.4%')};
+background-color: #1D1E1F;
+border-radius: 10px;
+align-items: center;
+justify-content: center;
+flex-direction: row;
 `;
 
 const HoogingLogo = Styled.Image`
@@ -135,6 +170,28 @@ text-decoration-line: underline
 const ReviewImage = Styled.Image`
  width: ${wp('100%')};
  height: ${wp('100%')};
+`;
+
+const LocalContainer = Styled.View`
+width: ${wp('100%')};
+flex-direction: row;
+justify-content: space-between;
+padding-top: 23px;
+padding-left: 68px;
+padding-right: 68px;
+`;
+
+const LocalLoginText = Styled.Text`
+ font-weight: 600;
+ font-size: 16px;
+ color: #ffffff;
+`;
+
+const LocalSignupText = Styled.Text`
+margin-top:2px;
+font-weight: 600;
+ font-size: 16px;
+ color: #ffffff;
 `;
 
 if (!KakaoLogins) {
@@ -298,39 +355,42 @@ const Unauthorized = ({navigation}) => {
       </LogoContainer>
       <AuthContainer>
       <SocialLoginContainer>
-        <TouchableWithoutFeedback onPress={() => kakaoLogin()}>
-          <KakaoLoginButton
-            source={require('~/Assets/Images/SocialLogin/ic_kakaoLogin.png')}
-          />
+      <TouchableWithoutFeedback onPress={() => googleLogin()}>
+          <GoogleLoginButton>
+            <GoogleIcon
+            source={require('~/Assets/Images/SocialLogin/ic_google.png')}/>
+            <GoogleLoginText>구글로 로그인</GoogleLoginText>
+          </GoogleLoginButton>
         </TouchableWithoutFeedback>
-        <TouchableWithoutFeedback onPress={() => googleLogin()}>
-          <GoogleLoginButton
-            source={require('~/Assets/Images/SocialLogin/ic_googleLogin.png')}
-          />
+        <TouchableWithoutFeedback onPress={() => kakaoLogin()}>
+          <KakaoLoginButton>
+            <KakaoIcon
+            source={require('~/Assets/Images/SocialLogin/ic_kakao.png')}/>
+            <KakaoLoginText>카카오톡으로 로그인</KakaoLoginText>
+          </KakaoLoginButton>
         </TouchableWithoutFeedback>
         <TouchableWithoutFeedback onPress={() => onAppleButtonPress()}>
-        <AppleLoginButton
-          source={require('~/Assets/Images/SocialLogin/ic_appleLogin.png')}
-        />
+        <AppleLoginButton>
+          <AppleIcon
+          source={require('~/Assets/Images/SocialLogin/ic_apple.png')}/>
+          <AppleLoginText>애플로 로그인</AppleLoginText>
+        </AppleLoginButton>
         </TouchableWithoutFeedback>
        
       </SocialLoginContainer>
       <LocalContainer>
-        <LoginContainer>
           <TouchableWithoutFeedback
             onPress={() => navigation.navigate('LoginScreen')}>
-            <LoginButton>
-              <LoginText>이메일로 로그인</LoginText>
-            </LoginButton>
+            <LoginContainer>
+            <LocalLoginText>이메일로 로그인</LocalLoginText>
+            </LoginContainer>
           </TouchableWithoutFeedback>
-        </LoginContainer>
-        <SignupContainer>
           <TouchableWithoutFeedback
             onPress={() => navigation.navigate('BasicInput')}>
-            <SignupText>이메일 가입하기</SignupText>
+            <SignupContainer>
+            <LocalSignupText>회원가입</LocalSignupText>
+            </SignupContainer>
           </TouchableWithoutFeedback>
-
-        </SignupContainer>
       </LocalContainer>
       </AuthContainer>
     </Container>

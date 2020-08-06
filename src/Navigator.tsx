@@ -434,32 +434,15 @@ function UnauthStackScreen() {
       <UnauthStack.Screen
         name="LoginScreen"
         component={LoginScreen}
-        options={{
-          transitionSpec: {
-            open: config,
-            close: config,
-          },
-        }}
+        
       />
       <UnauthStack.Screen
         name="BasicInput"
-        component={BasicInput}
-        options={({navigation, route}) => ({
-          transitionSpec: {
-            open: config,
-            close: config,
-          },
-        })}
+        component={BasicInput}   
       />
       <UnauthStack.Screen
         name="ProfileInput"
         component={ProfileInput}
-        options={({navigation, route}) => ({
-          transitionSpec: {
-            open: config,
-            close: config,
-          },
-        })}
       />
       <UnauthStack.Screen
         name="Gallery_ProfileImage"

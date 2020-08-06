@@ -5,12 +5,57 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import AboveKeyboard from 'react-native-above-keyboard';
 
 const Container = Styled.SafeAreaView`
  flex: 1;
  background-color: #ffffff;
  align-items: center;
 `;
+
+
+const HeaderBar = Styled.View`
+ width: ${wp('100%')};
+ height: ${wp('11.7%')};
+ flex-direction: row;
+ align-items: center;
+ justify-content: space-between;
+ background-color:#ffffff;
+`;
+
+const HeaderLeftContainer = Styled.View`
+`;
+
+const BackButtonContainer = Styled.View`
+ padding: 7px 15px 13px 16px;
+ align-items: center;
+ justify-content: center;
+`;
+
+const BackButton = Styled.Image`
+ width: ${wp('6.4%')};
+ height: ${wp('6.4%')};
+`;
+
+const HeaderTitleText = Styled.Text`
+font-weight: 600;
+font-size: 18px;
+color: #1D1E1F;
+`;
+
+const HeaderRightContainer = Styled.View`
+padding: 7px 16px 13px 15px;
+ align-items: center;
+ justify-content: center;
+ flex-direction: row;
+`;
+
+const HeaderEmptyContainer = Styled.View`
+ width: ${wp('6.4%')};
+ height: ${wp('6.4%')};
+`;
+
+
 
 const NextText = Styled.Text`
  font-size: 17px;
@@ -52,58 +97,70 @@ height: 0.5px;
 background-color: #c3c3c3;
 `;
 
-const Header = Styled.View`
+const FinishButtonContainer = Styled.View`
 width: ${wp('100%')};
-height: ${hp('6%')};
-border-color: #707070;
-flex-direction: row;
-justify-content: space-between;
-align-items: center;
-padding-right: 15px;
-padding-left: 15px;
-`;
-
-const HeaderTitle = Styled.Text`
-font-size: 20px;
-margin-top: 5px;
-`;
-
-const CloseButton = Styled.Image`
- width: ${wp('4.5%')};
- height: ${wp('4.5%')};
- tint-color: #000000;
+padding-left: ${wp('4.2%')};
+position:absolute;
+bottom: 20px;
 `;
 
 const FinishButton = Styled.View`
- width: ${wp('100%')};
- height: ${hp('8.8%')};
- position: absolute;
- bottom: 0;
+width: ${wp('91.46%')};
+height: ${wp('13.33%')};
+border-radius: 10px;
  background-color: #23E5D2;
  justify-content: center;
  align-items: center;
 `;
 
-const UnabledFinishButton = Styled.View`
- width: ${wp('100%')};
- height: ${hp('8.8%')};
- position: absolute;
- bottom: 0;
- background-color: #cccccc;
+const DisabledFinishButton = Styled.View`
+width: ${wp('91.46%')};
+height: ${wp('13.33%')};
+border-radius: 10px;
+ background-color: #ECECEE;
  justify-content: center;
  align-items: center;
 `;
 
+const DisabledFinishText = Styled.Text`
+font-weight: 600;
+font-size: 18px;
+color: #8E9199;
+`;
+
 const FinishText = Styled.Text`
-font-size: 20px;
+font-weight: 600;
+font-size: 18px;
 color: #ffffff;
 `;
 
 const UnvalidInputText = Styled.Text`
- font-size: 14px;
+ margin-left: 10px;
+ font-size: 13px;
  position: absolute;
- bottom: -15px;
+ bottom: -18px;
  color: #FF0000;
+`;
+
+const ItemContainer = Styled.View`
+`;
+
+const ItemLabelText = Styled.Text`
+ font-weight: 600;
+ font-size: 16px;
+ color: #1D1E1F;
+`;
+
+const ItemTextInput = Styled.TextInput`
+width: ${wp('91.46%')};
+height: ${wp('13.33%')};
+border-radius: 10px;
+background-color: #FAFAFA;
+margin-top: 10px;
+padding-left: 10px;
+padding-right: 10px;
+border-width: 1.5px;
+border-color: #FAFAFA;
 `;
 
 const BasicInput = ({navigation, route}) => {
@@ -125,6 +182,28 @@ const BasicInput = ({navigation, route}) => {
   const [confirmedEmail, setConfirmedEmail] = useState(false);
   const [confirmedPassword, setConfirmedPassword] = useState(false);
   const [confirmedPasswordSame, setConfirmedPasswordSame] = useState(false);
+
+  const [onFocusEmail, setOnFocusEmail] = useState<boolean>(false);
+
+
+  useEffect(() => {
+    Keyboard.addListener('keyboardDidShow', onKeyboardDidShow);
+    Keyboard.addListener('keyboardDidHide', onKeyboardDidHide);
+    return (): void => {
+      Keyboard.removeListener('keyboardDidShow', onKeyboardDidShow);
+      Keyboard.removeListener('keyboardDidHide', onKeyboardDidHide);
+    };
+  }, []);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableWithoutFeedback onPress={() => moveToProfileInput()}>
+          <NextText>다음</NextText>
+        </TouchableWithoutFeedback>
+      ),
+    });
+  }, [navigation]);
 
   function onKeyboardDidShow(e: KeyboardEvent): void {
     setKeyboardHeight(e.endCoordinates.height);
@@ -262,80 +341,67 @@ const BasicInput = ({navigation, route}) => {
     }
   }
 
-  useEffect(() => {
-    Keyboard.addListener('keyboardDidShow', onKeyboardDidShow);
-    Keyboard.addListener('keyboardDidHide', onKeyboardDidHide);
-    return (): void => {
-      Keyboard.removeListener('keyboardDidShow', onKeyboardDidShow);
-      Keyboard.removeListener('keyboardDidHide', onKeyboardDidHide);
-    };
-  }, []);
-
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <TouchableWithoutFeedback onPress={() => moveToProfileInput()}>
-          <NextText>다음</NextText>
-        </TouchableWithoutFeedback>
-      ),
-    });
-  }, [navigation]);
+  const onFocusEmailInput = () => {
+    setOnFocusEmail(true);
+  } 
 
   return (
     <Container>
-      <Header>
+      <HeaderBar>
         <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
-          <CloseButton source={require('~/Assets/Images/close.png')} />
+          <HeaderLeftContainer>
+            <BackButtonContainer>
+              <BackButton
+              source={require('~/Assets/Images/HeaderBar/ic_back.png')}/>
+            </BackButtonContainer>
+          </HeaderLeftContainer>
         </TouchableWithoutFeedback>
-        <HeaderTitle>회원가입</HeaderTitle>
-        <CloseButton
-          style={{tintColor: '#ffffff'}}
-          source={require('~/Assets/Images/close.png')}
-        />
-      </Header>
-      <InputContainer style={{marginTop: 20}}>
-        <LabelInputContainer>
-          <Input
+        <HeaderTitleText>회원가입</HeaderTitleText>
+        <HeaderRightContainer>
+          <HeaderEmptyContainer/>
+        </HeaderRightContainer>
+      </HeaderBar>
+      <InputContainer style={{marginTop: 10}}>
+        <ItemContainer>
+          <ItemLabelText>이메일</ItemLabelText>
+          <ItemTextInput
+            style={blankEmail || (!validEmail && !blankEmail) && {borderColor:'#FF3B30'}}
             autoCapitalize="none"
-            placeholder="이메일"
             onChangeText={(text: string) => changingEmail(text)}
             onSubmitEditing={(text) => checkEmail(text.nativeEvent.text)}
             onEndEditing={(text) => checkEmail(text.nativeEvent.text)}
+            onFocus={() => onFocusEmailInput()}
+            clearButtonMode={"while-editing"}
           />
-          <InputBottomLine />
           {blankEmail && (
             <UnvalidInputText>공백은 사용할 수 없습니다.</UnvalidInputText>
           )}
           {!validEmail && !blankEmail && (
             <UnvalidInputText>올바른 이메일형식이 아닙니다.</UnvalidInputText>
           )}
-        </LabelInputContainer>
+        </ItemContainer>
 
-        <LabelInputContainer>
-          <Input
+        <ItemContainer style={{marginTop: 33}}>
+          <ItemLabelText>비밀번호</ItemLabelText>
+          <ItemTextInput
             autoCapitalize="none"
-            placeholder="비밀번호 (영문,숫자포함 8자리이상)"
+            placeholder="영문,숫자포함 8자리이상"
             onChangeText={(text: string) => changingPassword(text)}
-            onSubmitEditing={(text: string) =>
-              checkPassword(text.nativeEvent.text)
-            }
-            onEndEditing={(text: string) =>
-              checkPassword(text.nativeEvent.text)
-            }
+            onSubmitEditing={(text: string) => checkPassword(text.nativeEvent.text)}
+            onEndEditing={(text: string) => checkPassword(text.nativeEvent.text)}
             secureTextEntry={true}
-          />
-          <InputBottomLine />
+            clearButtonMode={"while-editing"}/>
           {blankPassword && (
             <UnvalidInputText>공백은 사용할 수 없습니다.</UnvalidInputText>
           )}
           {(!validPassword || shortPassword) && !blankPassword && (
             <UnvalidInputText>영문,숫자포함의 8자리이상</UnvalidInputText>
           )}
-        </LabelInputContainer>
-        <LabelInputContainer>
-          <Input
+        </ItemContainer>
+        <ItemContainer style={{marginTop: 33}}>
+          <ItemLabelText>비밀번호 확인</ItemLabelText>
+          <ItemTextInput
             autoCapitalize="none"
-            placeholder="비밀번호 확인"
             secureTextEntry={true}
             onChangeText={(text: string) => changingPasswordSame(text)}
             onSubmitEditing={(text: string) =>
@@ -344,23 +410,31 @@ const BasicInput = ({navigation, route}) => {
             onEndEditing={(text: string) =>
               checkPasswordSame(text.nativeEvent.text)
             }
+            clearButtonMode={"while-editing"}
           />
-          <InputBottomLine />
           {!passwordSame && (
             <UnvalidInputText>비밀번호가 일치하지 않습니다.</UnvalidInputText>
           )}
-        </LabelInputContainer>
+        </ItemContainer>
       </InputContainer>
       {(!confirmedEmail || !confirmedPassword || !confirmedPasswordSame) && (
-        <UnabledFinishButton style={{marginBottom: keyboardHeight}}>
-          <FinishText>다음</FinishText>
-        </UnabledFinishButton>
+        <FinishButtonContainer>
+        <AboveKeyboard>
+        <DisabledFinishButton>
+          <DisabledFinishText>다음</DisabledFinishText>
+        </DisabledFinishButton>
+        </AboveKeyboard>
+        </FinishButtonContainer>
       )}
       {confirmedEmail && confirmedPassword && confirmedPasswordSame && (
         <TouchableWithoutFeedback onPress={() => moveToProfileInput()}>
-          <FinishButton style={{marginBottom: keyboardHeight}}>
+          <FinishButtonContainer>
+          <AboveKeyboard>
+          <FinishButton>
             <FinishText>다음</FinishText>
           </FinishButton>
+          </AboveKeyboard>
+          </FinishButtonContainer>
         </TouchableWithoutFeedback>
       )}
     </Container>

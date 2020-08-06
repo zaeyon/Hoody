@@ -76,6 +76,10 @@ interface Props {
 
 const AlarmScreen = ({navigation, route}: Props) => {
 
+    const moveToAlarmSetting = () => {
+        navigation.navigate("AlarmSettingScreen");
+    }
+
     const renderAlarmItem = ({item, index}) => {
         return (
             <AlarmItem/>
@@ -90,10 +94,12 @@ const AlarmScreen = ({navigation, route}: Props) => {
                         알림
                     </HeaderTitleText>
                 </HeaderLeftContainer>
+                <TouchableWithoutFeedback onPress={() => moveToAlarmSetting()}>
                 <HeaderSettingContainer>
                     <HeaderSettingIcon
                     source={require('~/Assets/Images/ic_setting.png')}/>
                 </HeaderSettingContainer>
+                </TouchableWithoutFeedback>
             </HeaderBar>
             <AlarmListContainer>
                 <FlatList

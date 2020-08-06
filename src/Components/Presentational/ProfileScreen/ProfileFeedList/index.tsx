@@ -60,8 +60,9 @@ padding: 15px 16px ${hp('8.5%')}px 16px;
     route: any,
     feedListData: Array<object>,
     feedListDataByDate: Array<object>,
-    currentSortType: string
+    currentSortType: string,
     onScrollPostList: () => void,
+    requestNickname: string,
   }
 
   const TEST_SECTION_DATA = [
@@ -83,7 +84,7 @@ padding: 15px 16px ${hp('8.5%')}px 16px;
     }
   ]
 
-const ProfileFeedList = ({navigation, route, feedListData, currentSortType, onScrollPostList, feedListDataByDate}: Props) => {
+const ProfileFeedList = ({navigation, route, feedListData, currentSortType, onScrollPostList, feedListDataByDate, requestNickname}: Props) => {
   const currentUser = useSelector((state) => state.currentUser);
 
   useEffect(() => {
@@ -158,7 +159,7 @@ const ProfileFeedList = ({navigation, route, feedListData, currentSortType, onSc
         <FlatList
         scrollEnabled={false}
 scrollEventThrottle={5}
-        data={currentUser.userAllFeeds}
+        data={currentUser.user.nickname === requestNickname ? currentUser.userAllFeeds : feedListData}
         renderItem={renderProfileListFeedItem}
         />
         </ListTypeFeedContainer>

@@ -407,8 +407,6 @@ const FeedItem = ({
     console.log("피드 닉네임", nickname)
     setChangeState(!changeState);
 
-    console.log("feedITem currentUser", currentUser);
-
     var index = currentUser.likeFeeds.findIndex(obj => obj.id === id);
     if(index !== -1) {
       setCurrentUserLike(true);

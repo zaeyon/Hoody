@@ -181,7 +181,7 @@ const FollowListScreen = ({navigation, route}:Props) => {
                 }, 10)
             }
         }
-        
+        /*
         if(route.params?.nickname) {
             console.log("닉네임 존재")
             GETProfileFriends(requestedType, inputedNickname, requestedOffset, requestedLimit, route.params.nickname)
@@ -197,16 +197,52 @@ const FollowListScreen = ({navigation, route}:Props) => {
                 console.log("GETProfileFriends error", error);
             })
         }
-    }, [route.params?.followerCount, route.params?.followingCount, route.params?.nickname])
+        */
+    }, [/*route.params?.followerCount, route.params?.followingCount, route.params?.nickname*/])
+    
 
 
+    /*
     useEffect(() => {
         if(route.params?.requestedType) {
             console.log("requestedType", route.params.requestedType)
+            //setRequestedType(route.params.requestedType);
+            GETProfileFriends(route.params.requestedType, inputedNickname, requestedOffset, requestedLimit, route.params.nickname)
+            .then(function(response) {
+                console.log("GETProfileFriends response", response)
+                if(route.params.requestedType === "followers") {
+                    setFollowerListData(response);
+                } else if(route.params.requestedType === 'followings') {
+                    setFollowingListData(response);
+                }
+            })
+            .catch(function(error) {
+                console.log("GETProfileFriends error", error);
+            })
             
-            setRequestedType(route.params.requestedType);
         }
     }, [route.params?.requestedType])
+
+   */
+
+    useEffect(() => {
+            //setRequestedType(route.params.requestedType);
+            if(route.params?.requestedType !== requestedType) {
+                GETProfileFriends(requestedType, inputedNickname, requestedOffset, requestedLimit, route.params.nickname)
+                .then(function(response) {
+                    console.log("GETProfileFriends response", response)
+                    if(route.params.requestedType === "followers") {
+                        setFollowerListData(response);
+                    } else if(route.params.requestedType === 'followings') {
+                        setFollowingListData(response);
+                    }
+                })
+                .catch(function(error) {
+                    console.log("GETProfileFriends error", error);
+                })
+            }
+    }, [requestedType])
+    
 
     const onChangeSearchInput = (text: string) => {
     }
@@ -223,8 +259,35 @@ const FollowListScreen = ({navigation, route}:Props) => {
         )
     }
 
+    const getToProfileFriendsList = (type: string) => {
+        GETProfileFriends(type, inputedNickname, requestedOffset, requestedLimit, route.params.nickname)
+        .then(function(response) {
+            console.log("GETProfileFriends response", response)
+            if(route.params.requestedType === "followers") {
+                setFollowerListData(response);
+            } else if(route.params.requestedType === 'followings') {
+                setFollowingListData(response);
+            }
+        })
+        .catch(function(error) {
+            console.log("GETProfileFriends error", error);
+        })
+    }
+
 
     function FollowerListTab() {
+        const isFocused = useIsFocused();
+
+        if(isFocused) {
+            console.log("팔로워 탭")
+            if(requestedType !== "followers") {
+                setRequestedType("followers")
+                setTimeout(() => {
+                 getToProfileFriendsList("followers");   
+                }, 100)
+            }
+        }
+
         return (
             <FollowerTabContainer>
             <SearchContainer>
@@ -253,6 +316,19 @@ const FollowListScreen = ({navigation, route}:Props) => {
     }
 
     function FollowingListTab() {
+
+        const isFocused = useIsFocused();
+
+        if(isFocused) {
+            console.log("팔로잉 탭")
+            if(requestedType !== "followings") {
+                setRequestedType("followings");
+                setTimeout(() => {
+                getToProfileFriendsList("followings");   
+                }, 100)
+            }
+        }
+
         return (
             <FollowingTabContainer>
                 <SearchContainer>

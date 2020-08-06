@@ -14,7 +14,7 @@ import ScrollableTabView, { DefaultTabBar,} from 'rn-collapsing-tab-bar';
 
 import {getCurrentUser} from '~/AsyncStorage/User';
 import UserIntroduction from '~/Components/Presentational/ProfileScreen/UserIntroduction';
-import ProfileTabBar from '~/Components/Presentational/ProfileScreen/ProfileTabBar';
+import AnotherUserProfileTabBar from '~/Components/Presentational/AnotherUserProfileScreen/AnotherUserProfileTabBar';
 import ProfileFeedList from '~/Components/Presentational/ProfileScreen/ProfileFeedList';
 import ProfileCollectionList from '~/Components/Presentational/ProfileScreen/ProfileCollectionList';
 
@@ -30,6 +30,7 @@ const Container = Styled.SafeAreaView`
 
 const FeedListTabContainer = Styled.View`
  background-color: #ffffff;
+ 
 `;
 
 const CollectionListTabContainer = Styled.View`
@@ -410,7 +411,7 @@ const AnotherUserProfileScreen = ({navigation, route}: Props) => {
     console.log("requestedType", requestedType);
     navigation.navigate("FollowListScreen", {
       requestedType: requestedType,
-      nickname: currentUser.user.nickname,
+      nickname: userInfoData.nickname,
       followerCount: userInfoData.followersCount,
       followingCount: userInfoData.followingsCount,
     });
@@ -502,7 +503,7 @@ const AnotherUserProfileScreen = ({navigation, route}: Props) => {
       scrollEnabled={true}
       showsVerticalScrollIndicator={false}
       prerenderingSiblingsNumber={Infinity}
-      renderTabBar={() => <ProfileTabBar 
+      renderTabBar={() => <AnotherUserProfileTabBar 
       changeInFeedSortType={changeInFeedSortType}
       selectedFeedSortType={selectedFeedSortType}
       addNewCollection={addNewCollection}
@@ -514,6 +515,7 @@ const AnotherUserProfileScreen = ({navigation, route}: Props) => {
        navigation={navigation}
        feedListData={feedListData ? feedListData : ""}
        currentSortType={selectedFeedSortType}
+       requestNickname={userInfoData ? userInfoData.nickname : ""}
        />
       </FeedListTabContainer>
       <CollectionListTabContainer 
@@ -522,6 +524,7 @@ const AnotherUserProfileScreen = ({navigation, route}: Props) => {
        <ProfileCollectionList
        collectionListData={collectionListData}
        navigation={navigation}
+       requestNickname={userInfoData ? userInfoData.nickname : ""}
        /> 
       </CollectionListTabContainer>
       </ScrollableTabView>

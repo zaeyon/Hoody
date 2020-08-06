@@ -10,6 +10,7 @@ import {
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 
+// Local Component
 import RecommendUser from '~/Components/Presentational/ExploreScreen/RecommendUser';
 import RecommendTagBanner from '~/Components/Presentational/ExploreScreen/RecommendTagBanner';
 import PopularTagByAgeGroup from '~/Components/Presentational/ExploreScreen/PopularTagByAgeGroup';
@@ -19,10 +20,8 @@ import PopularFeedListByLocation from '~/Components/Presentational/ExploreScreen
 import Geolocation from 'react-native-geolocation-service';
 import currentUser from '~/reducers/currentUser';
 
-
-
-
-
+// Route
+import GETRecommendUser from '~/Route/Curation/GETRecommendUser';
 
 const Container = Styled.SafeAreaView`
  flex: 1;
@@ -150,6 +149,19 @@ const ExploreScreen = ({navigation, route}: Props) => {
         latitude: 0,
         longitude: 0,
     });
+    const [recommendUserListData, setRecommendUserListData] = useState<Array<object>>([]);
+
+    useEffect(() => {
+        GETRecommendUser()
+        .then(function(response) {
+            console.log("GETRecommendUser response", response);
+            setRecommendUserListData(response);
+        })
+        .catch(function(error) {
+            console.log("GETRecommendUser error", error);
+        })
+
+    }, [])
 
     useEffect(() => {
         var hasLocationPermission = true;
@@ -203,6 +215,7 @@ const ExploreScreen = ({navigation, route}: Props) => {
             <RecommendUserContainer>
             <RecommendUser
             navigation={navigation}
+            recommendUserListData={recommendUserListData}
             />
             </RecommendUserContainer>
             <RecommendTagBannerContainer>

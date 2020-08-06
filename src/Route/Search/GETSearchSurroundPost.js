@@ -1,5 +1,5 @@
 import axios from 'axios';
-const baseUrl = 'https://f5b0c7d7e0a3.ngrok.io';
+const baseUrl = 'https://21477f4dd22b.ngrok.io';
 
 const GETSearchSurroundPost = (lat, long, radius) => {
     const url = baseUrl + "/search/surroundpost?lat=" + lat + "&long=" + long + "&radius=" + radius;

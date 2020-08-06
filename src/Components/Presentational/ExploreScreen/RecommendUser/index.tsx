@@ -5,6 +5,7 @@ import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import {useSelector} from 'react-redux';
 
 const Container = Styled.View`
  background-color: #ffffff;
@@ -73,17 +74,31 @@ const TEST_Recommend_USER = [
 
 interface Props {
     navigation: any,
+    recommendUserListData: Array<object>,
 }
 
-const RecommendUser = ({navigation}: Props) => {
+const RecommendUser = ({navigation, recommendUserListData}: Props) => {
+
+    const currentUser = useSelector((state) => state.currentUser);
+
+   const moveToUserProfile = (nickname: string) => {
+    if(currentUser.user?.nickname === nickname) {
+        navigation.navigate("Profile")
+    } else {
+        navigation.navigate("AnotherUserProfileStack", {
+          screen: "AnotherUserProfileScreen",
+          params: {requestedUserNickname: nickname}
+        });
+    }
+  }
 
     const renderRecommendUserItem = ({item, index}: any) => {
         return (
-            <TouchableWithoutFeedback onPress={() => navigation.navigate("Profile")}>
-            <RecommendUserItemContainer style={index === 0 && styles.firstUserItem || index === TEST_Recommend_USER.length-1 && styles.lastUserItem}>
+            <TouchableWithoutFeedback onPress={() => moveToUserProfile(item.nickname)}>
+            <RecommendUserItemContainer style={index === 0 && styles.firstUserItem || index === recommendUserListData.length-1 && styles.lastUserItem}>
                 <UserProfileImage
-                source={{uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcQosaN09yAK9bRLHqPmgL2OlTVWJIH1z8oddA&usqp=CAU'}}/>
-                <UserNicknameText>하하핳</UserNicknameText>
+                source={{uri: item.profileImg}}/>
+                <UserNicknameText>{item.nickname}</UserNicknameText>
             </RecommendUserItemContainer>
             </TouchableWithoutFeedback>
             
@@ -100,7 +115,7 @@ const RecommendUser = ({navigation}: Props) => {
                 <FlatList
                 showsHorizontalScrollIndicator={false}
                 horizontal={true}
-                data={TEST_Recommend_USER}
+                data={recommendUserListData}
                 renderItem={renderRecommendUserItem}/>
             </RecommendUserListContainer>
         </Container>

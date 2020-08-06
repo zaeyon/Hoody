@@ -310,6 +310,9 @@ function AlarmStackScreen() {
         name="AlarmScreen"
         component={AlarmScreen}
       />
+      <AlarmStack.Screen
+      name="AlarmSettingScreen"
+      component={AlarmSettingScreen}/>
     </AlarmStack.Navigator>
   );
 }

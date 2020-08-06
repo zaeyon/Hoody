@@ -1,14 +1,14 @@
 import axios from 'axios';
-const baseUrl = "https://21477f4dd22b.ngrok.io";
+const baseUrl = 'https://21477f4dd22b.ngrok.io';
 
-const DELETEPost = (postId) => {
-    const url = baseUrl + '/post/delete?postId=' + postId;
+const GETRecommendUser = () => {
+    const url = baseUrl + "/curation/recommendUser";
 
     return new Promise(function(resolve, reject) {
         axios
-        .delete(url)
+        .get(url)
         .then(function(response) {
-            resolve(response);
+            resolve(response.data);
         })
         .catch(function(error) {
             reject(error);
@@ -16,4 +16,4 @@ const DELETEPost = (postId) => {
     })
 }
 
-export default DELETEPost;
+export default GETRecommendUser;

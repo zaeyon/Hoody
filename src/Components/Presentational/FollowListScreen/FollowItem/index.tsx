@@ -17,8 +17,8 @@ const FollowItemContainer = Styled.View`
 `;
 
 const ProfileImageContainer = Styled.View`
-padding-top: 14px;
 padding-left: 16px;
+justify-content: center;
 `;
 
 const ProfileImage = Styled.Image`
@@ -34,11 +34,13 @@ flex: 1;
 `;
 
 const IntroTopContainer = Styled.View`
-padding-top: 14px;
+flex: 1;
 padding-left: 10px;
 padding-right: 16px;
 flex-direction: row;
+background-color: #ffffff;
 justify-content: space-between;
+align-items: center;
 `;
 
 const NicknameText = Styled.Text`
@@ -95,10 +97,6 @@ font-size: 15px;
 `;
 
 const DescripContainer = Styled.View`
- padding-top: 5px;
- padding-bottom: 8px;
- padding-left: 10px;
- padding-right: 16px;
 `;
 
 const DescripText = Styled.Text`
@@ -115,6 +113,7 @@ interface Props {
 }
 
 const FollowItem = ({profileImageUri, nickname, feedCount, description, followState}: Props) => {
+    console.log("feedCount", feedCount);
     return (
         <FollowItemContainer>
             <ProfileImageContainer>
@@ -125,7 +124,12 @@ const FollowItem = ({profileImageUri, nickname, feedCount, description, followSt
                 <IntroTopContainer>
                 <NicknameFeedCountContainer>
                 <NicknameText>{nickname}</NicknameText>
-                <FeedCountText>{"게시물 "+feedCount+"개"}</FeedCountText>
+                {/*
+                <FeedCountText>{feedCount ? "게시물 "+feedCount+"개" : ""}</FeedCountText>
+                */}
+<DescripContainer>
+                    <DescripText>{description}</DescripText>
+                </DescripContainer>
                 </NicknameFeedCountContainer>
                 <FollowButtonContainer>
                     {followState === false && (
@@ -140,9 +144,6 @@ const FollowItem = ({profileImageUri, nickname, feedCount, description, followSt
                     )}
                 </FollowButtonContainer>
                 </IntroTopContainer>
-                <DescripContainer>
-                    <DescripText>{description}</DescripText>
-                </DescripContainer>
             </IntroductionContainer>
         </FollowItemContainer>
     )

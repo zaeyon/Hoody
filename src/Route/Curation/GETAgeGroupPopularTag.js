@@ -1,9 +1,8 @@
 import axios from 'axios';
-const baseUrl = "https://21477f4dd22b.ngrok.io";
+const baseUrl = 'https://21477f4dd22b.ngrok.io';
 
-const GETCollectionDetailInfo = (collectionId) => {
-    console.log("collectionId", collectionId);
-    const url = baseUrl + "/collection?collectionId=" + collectionId;
+const GETAgeGroupPopularTag = () => {
+    const url = baseUrl + "/curation/ageGroupPopularTag";
 
     return new Promise(function(resolve, reject) {
         axios
@@ -17,4 +16,4 @@ const GETCollectionDetailInfo = (collectionId) => {
     })
 }
 
-export default GETCollectionDetailInfo;
+export default GETAgeGroupPopularTag;

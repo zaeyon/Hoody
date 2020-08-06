@@ -1,11 +1,11 @@
 import axios from 'axios';
-const baseUrl = 'https://f5b0c7d7e0a3.ngrok.io';
+const baseUrl = 'https://21477f4dd22b.ngrok.io';
 
 const GETProfileFriends = (type, query, offset, limit, targetUser) => {
     const url = baseUrl + '/user/profile/friends?targetUser=' + targetUser + "&type=" + type + "&q=" +  query + "&offset=" + offset + "&limit=" + limit 
 
+    console.log("팔로우 타입", type);
     console.log("팔로우리스트 요청 targetUser", targetUser);
-
     console.log("필로우리스트 요청 url", url)
 
     return new Promise(function(resolve, reject) {

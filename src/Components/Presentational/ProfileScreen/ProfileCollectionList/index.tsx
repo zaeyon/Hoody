@@ -5,6 +5,7 @@ import {
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import {Text, FlatList, TouchableWithoutFeedback} from 'react-native';
+import {useSelector} from 'react-redux';
 
 import ProfileCollectionItem from '~/Components/Presentational/ProfileScreen/ProfileCollectionItem';
 
@@ -18,6 +19,10 @@ const NoCollectionContainer = Styled.View`
  background-color: #ffffff;
  align-items: center;
  justify-content: center;
+`;
+
+const CurrentUserCollectionListContainer = Styled.View`
+
 `;
 
 const AddCollectionButton = Styled.View`
@@ -50,15 +55,24 @@ color: #4b4b4b;
 const CollectionItemContainer = Styled.View`
 `;
 
+
+const NoCollectionText = Styled.Text`
+ margin-top: 60px;
+ font-size: 16px;
+ color: #4B4B4B;
+`;
+
 interface Props {
     collectionListData: Array<object>;
     navigation: any,
     profileNickname: string,
     profileImage: string,
+    requestNickname: string,
 }
 
-const ProfileCollectionList = ({collectionListData, navigation, profileNickname, profileImage}: Props) => {
+const ProfileCollectionList = ({collectionListData, navigation, profileNickname, profileImage, requestNickname}: Props) => {
     const [addNewCollection, setAddNewCollection] = useState<boolean>(true);
+    const currentUser = useSelector((state) => state.currentUser);
     
     useEffect(() => {
         console.log("collectionList", collectionListData)  
@@ -81,19 +95,27 @@ const ProfileCollectionList = ({collectionListData, navigation, profileNickname,
     }
 
     if(!collectionListData[0]) {
-    return (
-        <NoCollectionContainer>
-        <TouchableWithoutFeedback onPress={() => navigation.navigate("CollectionUploadScreen")}>
-        <AddCollectionButton>
-            <AddCollectionIcon
-            source={require('~/Assets/Images/ic_bluePlus.png')}
-            />
-        </AddCollectionButton>
-        </TouchableWithoutFeedback>
-        <AddCollectionMainText>첫 컬렉션을 만들어 보세요 :)</AddCollectionMainText>
-        <AddCollectionSubText>나만의 키워드로 게시글들을 분류할 수 있어요.</AddCollectionSubText>
-    </NoCollectionContainer>
-    )
+    if(currentUser.user.nickname === requestNickname) {
+        return (
+            <NoCollectionContainer>
+            <TouchableWithoutFeedback onPress={() => navigation.navigate("CollectionUploadScreen")}>
+            <AddCollectionButton>
+                <AddCollectionIcon
+                source={require('~/Assets/Images/ic_bluePlus.png')}
+                />
+            </AddCollectionButton>
+            </TouchableWithoutFeedback>
+            <AddCollectionMainText>첫 컬렉션을 만들어 보세요 :)</AddCollectionMainText>
+            <AddCollectionSubText>나만의 키워드로 게시글들을 분류할 수 있어요.</AddCollectionSubText>
+        </NoCollectionContainer>
+        )
+    } else if(currentUser.user.nickname !== requestNickname) {
+        return (
+            <NoCollectionContainer>
+                <NoCollectionText>등록된 컬렉션이 없어요.</NoCollectionText>
+            </NoCollectionContainer>
+        )
+    }
     } else {
         return (
             <UserCollectionListContainer>

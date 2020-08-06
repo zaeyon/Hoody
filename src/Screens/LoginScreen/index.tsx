@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import Styled from 'styled-components/native';
-import {Text, TouchableWithoutFeedback} from 'react-native';
-import LoginButton from '~/Components/Button';
+import {Text, TouchableWithoutFeedback, StyleSheet} from 'react-native';
 import axios from 'axios';
 import {resolvePlugin} from '@babel/core';
 import {useSelector, useDispatch} from 'react-redux';
@@ -27,49 +26,47 @@ const Container = Styled.SafeAreaView`
   background-color: #FEFFFF;
 `;
 
-const HeaderContainer = Styled.View`
+const HeaderBar = Styled.View`
  width: ${wp('100%')};
- height: ${hp('7%')};
+ height: ${wp('11.7%')};
  flex-direction: row;
  align-items: center;
- justify-content:space-between;
- background-color: #c3c3c3;
- padding: 0px 0px 0px 0px;
+ justify-content: space-between;
+ background-color:#ffffff;
 `;
 
-
-const LeftContainer = Styled.View`
-background-color: #ffffff;
-height: ${hp('7%')};
-flex: 1;
-justify-content: center;
-align-items: center;
+const HeaderLeftContainer = Styled.View`
 `;
 
-const CenterContainer = Styled.View`
-justify-content: center;
-align-items: center;
-background-color: #ffffff;
-height: ${hp('7%')};
-flex: 7;
-`;
-
-const RightContainer = Styled.View`
-justify-content: center;
-background-color: #ffffff;
-height: ${hp('7%')};
-flex: 1;
-`;
-
-const HeaderTitleText = Styled.Text`
- font-size: 20px;
- margin-left: 6px;
+const BackButtonContainer = Styled.View`
+ padding: 7px 15px 13px 16px;
+ align-items: center;
+ justify-content: center;
 `;
 
 const BackButton = Styled.Image`
-width: 11px;
-height: 19px;
+ width: ${wp('6.4%')};
+ height: ${wp('6.4%')};
 `;
+
+const HeaderTitleText = Styled.Text`
+font-weight: 600;
+font-size: 18px;
+color: #1D1E1F;
+`;
+
+const HeaderRightContainer = Styled.View`
+padding: 7px 16px 13px 15px;
+ align-items: center;
+ justify-content: center;
+ flex-direction: row;
+`;
+
+const HeaderEmptyContainer = Styled.View`
+ width: ${wp('6.4%')};
+ height: ${wp('6.4%')};
+`;
+
 
 const ButtonText = Styled.Text`
  font-size: 20px;
@@ -77,11 +74,7 @@ const ButtonText = Styled.Text`
 `;
 
 const FormContainer = Styled.View`
-  flex: 1;
   width: 100%;
-  align-items: center;
-  justify-content: center;
-  padding: 32px;
 `;
 
 const Logo = Styled.Text`
@@ -120,6 +113,90 @@ const Copyright = Styled.Text`
   text-align: center;
 `;
 
+const BodyContainer = Styled.View`
+ background-color: #ffffff;
+ padding-top: 10px;
+ padding-left: 16px;
+ padding-right: 16px;
+ padding-bottom: 10px;
+`;
+
+const ItemContainer = Styled.View`
+`;
+
+const ItemLabelText = Styled.Text`
+ font-weight: 600;
+ font-size: 16px;
+ color: #1D1E1F;
+`;
+
+const ItemTextInput = Styled.TextInput`
+width: ${wp('91.46%')};
+height: 50px;
+border-radius: 10px;
+background-color: #FAFAFA;
+margin-top: 10px;
+padding-left: 10px;
+padding-right: 10px;
+border-width: 1.5px;
+border-color: #FAFAFA;
+`;
+
+const DisabledLoginButton = Styled.View`
+margin-top: 37px;
+width: ${wp('91.46%')};
+height: 50px;
+background-color: #ECECEE;
+border-radius: 10px;
+justify-content: center;
+align-items: center;
+`;
+
+const DisabledLoginText = Styled.Text`
+font-weight: 600;
+font-size: 18px;
+color: #8E9199;
+`;
+
+
+const AbledLoginButton = Styled.View`
+margin-top: 37px;
+width: ${wp('91.46%')};
+height: 50px;
+background-color: #267DFF;
+border-radius: 10px;
+justify-content: center;
+align-items: center;
+`;
+
+const AbledLoginText = Styled.Text`
+font-weight: 600;
+font-size: 18px;
+color: #FFFFFF;
+`;
+
+const FindPasswordText = Styled.Text`
+font-size: 14px;
+color: #50555C;
+`;
+
+const FooterContainer = Styled.View`
+margin-top: 5px;
+width: ${wp('100%')};
+justify-content: center;
+align-items: center;
+`;
+
+const UnvaildInputText = Styled.Text`
+ position: absolute;
+ bottom: -18;
+ left: 5;
+ margin-left: 3px;
+ margin-top: 5px;
+ color: #FF3B30;
+ font-size: 13px;
+`;
+
 function LoginTitle() {
   return <Text style={{fontSize: 17, }}>로그인</Text>;
 }
@@ -127,6 +204,9 @@ function LoginTitle() {
 const LoginScreen = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [abledLoginButton, setAbledLoginButton] = useState<boolean>(true);
+  const [validEmail, setValidEmail] = useState<boolean>(false);
+  const [emailInputState, setEmailInputState] = useState<string>("noInput");
   const counter = useSelector((state) => state.counter);
   const currentUser = useSelector((state) => state.currentUser);
   const dispatch = useDispatch();
@@ -134,16 +214,43 @@ const LoginScreen = ({navigation}) => {
   let submitingEmail;
   let submitingPassword;
 
+  /*
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: (props) => <LoginTitle {...props} />,
       headerRight: () => <Text></Text>,
     });
   }, []);
+  */
 
+  function checkEmail(str: string) {
+    var regExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+    var blank_pattern = /[\s]/g;
+    if (blank_pattern.test(str) === true) {
+      console.log('공백 포함');
+      setValidEmail(false);
+    } else if (!regExp.test(str)) {
+      console.log('올바른 이메일 형식 아님');
+      setValidEmail(false);
+    } else {
+      setValidEmail(true);
+    }
+  }
 
-  const clickFinish = () => {
-     submitingEmail = email;
+  const onChangeEmailInput = (text: string) => {
+    setEmailInputState("inputing");
+    setEmail(text);
+  }
+
+  const clickLoginButton = () => {
+    var regExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+    var blank_pattern = /[\s]/g;
+
+    if(blank_pattern.test(email) === true || !regExp.test(email)) {
+      console.log("올바른 이메일 형식 아님")
+      setEmailInputState("unvalid");
+    } else {
+      submitingEmail = email;
     submitingPassword = password;
     console.log('로그인 요청!! email', submitingEmail);
     console.log('로그인 요청!! password', submitingPassword);
@@ -175,7 +282,6 @@ const LoginScreen = ({navigation}) => {
           allActions.userActions.setInputedKeywordList([])
         )
       }
-
       GETRecentSearch(0, 20)
       .then(function(response) {
         console.log("GETRecentSearch response", response);
@@ -191,66 +297,113 @@ const LoginScreen = ({navigation}) => {
       console.log("error: ", error);
     })
   };
+ }
+
+
+
+
+    
 
   return (
     <Container>
 
-<HeaderContainer>
-        <LeftContainer>
+<HeaderBar>
+        <HeaderLeftContainer>
           <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
-          <BackButton source={require('~/Assets/Images/ic_back2.png')} />
+            <BackButtonContainer>
+          <BackButton source={require('~/Assets/Images/HeaderBar/ic_back.png')} />
+          </BackButtonContainer>
           </TouchableWithoutFeedback>
-        </LeftContainer>
-        <TouchableWithoutFeedback onPress={() => 0}>
-          <CenterContainer>
-          <HeaderTitleText>로그인</HeaderTitleText>
-        </CenterContainer>
-        </TouchableWithoutFeedback>
-        <RightContainer>
-              <TouchableWithoutFeedback onPress = {() => 0}>
-              <ButtonText></ButtonText>
-              </TouchableWithoutFeedback>
-        </RightContainer>
-      </HeaderContainer>
-      <FormContainer>
-        <Logo>HOOGING</Logo>
-        <Input
-          style={{marginBottom: 16, borderBottomWidth: 0.3}}
-          placeholder="이메일"
-          onChangeText={(text: string) => setEmail(text)}
-          autoCapitalize="none"
-        />
-        <Input
-          style={{marginBottom: 16, borderBottomWidth: 0.3}}
-          placeholder="비밀번호"
+        </HeaderLeftContainer>
+          <HeaderTitleText>이메일로 로그인</HeaderTitleText>
+          <HeaderRightContainer>
+        <HeaderEmptyContainer/>
+        </HeaderRightContainer>
+      </HeaderBar>
+      <BodyContainer>
+        <ItemContainer>
+          <ItemLabelText>이메일</ItemLabelText>
+          <ItemTextInput
+          style={emailInputState === "unvalid" && {borderWidth: 1.5, borderColor: '#FF3B30'}}
+          onChangeText={(text:string) => onChangeEmailInput(text)}
+          autoCapitalize={"none"}
+          onSubmitEditing={(text) => checkEmail(text.nativeEvent.text)}
+          onEndEditing={(text) => checkEmail(text.nativeEvent.text)}
+          />
+          {emailInputState === "unvalid" && (    
+          <UnvaildInputText>올바른 이메일 형식이 아닙니다.</UnvaildInputText>
+          )
+          }
+        </ItemContainer>
+        <ItemContainer style={{marginTop: 30}}>
+          <ItemLabelText>비밀번호</ItemLabelText>
+          <ItemTextInput
           secureTextEntry={true}
           onChangeText={(text: string) => setPassword(text)}
-          autoCapitalize="none"
-        />
-        <PasswordReset onPress={() => navigation.navigate('PasswordReset')}>
-          비밀번호 재설정
-        </PasswordReset>
-        <LoginButton
-          label="로그인하기"
-          style={{marginBottom: 24}}
-          onPress={() => clickFinish()}
-        />
-        <SignupText>
-          계정이 없는가요?{' '}
-          <SignupLink onPress={() => navigation.navigate('Signup')}>
-            가입하기.
-          </SignupLink>
-        </SignupText>
-      </FormContainer>
-      <Footer>
-        <Copyright>HOOGING</Copyright>
-      </Footer>
+          autoCapitalize={"none"}
+          />
+        </ItemContainer>
+        {(email === "" || password === "") && (
+        <DisabledLoginButton>
+        <DisabledLoginText>로그인</DisabledLoginText>
+      </DisabledLoginButton>
+        )}
+        {(email !== "" && password !== "") && (
+          <TouchableWithoutFeedback onPress={() => clickLoginButton()}>
+          <AbledLoginButton>
+            <AbledLoginText>로그인</AbledLoginText>
+          </AbledLoginButton>
+          </TouchableWithoutFeedback>
+        )}
+      </BodyContainer>
+      <FooterContainer>
+        <FindPasswordText>비밀번호 찾기</FindPasswordText>
+      </FooterContainer>
     </Container>
   );
 };
+
+const styles = StyleSheet.create({
+  unvalidInput : {
+    borderWidth: 1.5,
+    borderColor:'#FF3B30'
+  }
+})
 
 LoginScreen.navigationOptions = {
   headerShown: false,
 };
 
 export default LoginScreen;
+
+/*
+<FormContainer>
+<Input
+  style={{marginBottom: 16, borderBottomWidth: 0.3}}
+  placeholder="이메일"
+  onChangeText={(text: string) => setEmail(text)}
+  autoCapitalize="none"
+/>
+<Input
+  style={{marginBottom: 16, borderBottomWidth: 0.3}}
+  placeholder="비밀번호"
+  secureTextEntry={true}
+  onChangeText={(text: string) => setPassword(text)}
+  autoCapitalize="none"
+/>
+<PasswordReset onPress={() => navigation.navigate('PasswordReset')}>
+  비밀번호 재설정
+</PasswordReset>
+<LoginButton
+  label="로그인하기"
+  style={{marginBottom: 24}}
+  onPress={() => clickFinish()}
+/>
+<SignupText>
+  계정이 없는가요?{' '}
+  <SignupLink onPress={() => navigation.navigate('Signup')}>
+    가입하기.
+  </SignupLink>
+</SignupText>
+</FormContainer>
+*/

@@ -1,4 +1,4 @@
-import React, {useState, useLayoutEffect, useEffect} from 'react';
+import React, {useState, useLayoutEffect, useEffect, useRef} from 'react';
 import Styled from 'styled-components/native';
 import {TouchableWithoutFeedback, Keyboard, SafeAreaView} from 'react-native';
 import {
@@ -108,7 +108,7 @@ const FinishButton = Styled.View`
 width: ${wp('91.46%')};
 height: ${wp('13.33%')};
 border-radius: 10px;
- background-color: #23E5D2;
+ background-color: #267DFF;
  justify-content: center;
  align-items: center;
 `;
@@ -140,6 +140,15 @@ const UnvalidInputText = Styled.Text`
  position: absolute;
  bottom: -18px;
  color: #FF0000;
+`;
+
+
+const FocusInputText = Styled.Text`
+ margin-left: 10px;
+ font-size: 13px;
+ position: absolute;
+ bottom: -18px;
+ color: #267DFF;
 `;
 
 const ItemContainer = Styled.View`
@@ -184,7 +193,12 @@ const BasicInput = ({navigation, route}) => {
   const [confirmedPasswordSame, setConfirmedPasswordSame] = useState(false);
 
   const [onFocusEmail, setOnFocusEmail] = useState<boolean>(false);
+  const [onFocusPassword, setOnFocusPassword] = useState<boolean>(false);
+  const [onFocusPasswordConfirm, setOnFocusPasswordConfirm] = useState<boolean>(false);
 
+  var emailInputRef = useRef(null);
+  var passwordInputRef = useRef(null);
+  var passwordConfirmInputRef = useRef(null);
 
   useEffect(() => {
     Keyboard.addListener('keyboardDidShow', onKeyboardDidShow);
@@ -214,15 +228,30 @@ const BasicInput = ({navigation, route}) => {
   }
 
   const moveToProfileInput = () => {
-    console.log('inputedEmail', inputedEmail);
-    console.log('inputedPassword', inputedPassword);
-    navigation.navigate('ProfileInput', {
-      email: inputedEmail,
-      password: inputedPassword,
-    });
+    if(!confirmedEmail || !confirmedPassword || inputedPasswordSame === "") {
+
+    } else {
+      if(inputedPassword !== inputedPasswordSame) {
+        setPasswordSame(false);
+      } else {
+        console.log('inputedEmail', inputedEmail);
+        console.log('inputedPassword', inputedPassword);
+        navigation.navigate('ProfileInput', {
+          email: inputedEmail,
+          password: inputedPassword,
+          nickname: route.params?.inputedNickname,
+          birthdate: route.params?.inputedBirthdate,
+          gender: route.params?.inputedGender,
+        });
+
+        emailInputRef.current.blur();
+        passwordInputRef.current.blur();
+        passwordConfirmInputRef.current.blur();
+      }
+    }
   };
 
-  function checkEmail(str) {
+  function checkEmail(str: string) {
     var regExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
     var blank_pattern = /[\s]/g;
 
@@ -252,15 +281,32 @@ const BasicInput = ({navigation, route}) => {
     }
   }
 
-  function changingEmail(str) {
+  function changingEmail(str: string) {
+    var regExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+    var blank_pattern = /[\s]/g;
+
+    setValidEmail(true);
+    setInputedEmail(str);
+
+    if(!str) {
+     setConfirmedEmail(false);
+    } else if(blank_pattern.test(str) === true) {
+      setConfirmedEmail(false);
+    } else if(!regExp.test(str)) {
+      setConfirmedEmail(false);
+    } else {
+      setConfirmedEmail(true);
+    }
+    /*
     setEmptyEmail(false);
     setBlankEmail(false);
     setValidEmail(true);
     setConfirmedEmail(false);
     setInputedEmail(str);
+    */
   }
 
-  function checkPassword(str) {
+  function checkPassword(str: string) {
     var blank_pattern = /[\s]/g;
     var pattern_num = /[0-9]/; // 숫자
     var pattern_eng = /[a-zA-Z]/; // 문자
@@ -301,11 +347,38 @@ const BasicInput = ({navigation, route}) => {
     }
   }
 
-  function changingPassword(str) {
+  function changingPassword(str: string) {
     if (str === inputedPasswordSame) {
       setPasswordSame(true);
       setConfirmedPasswordSame(true);
     }
+
+    setInputedPassword(str);
+    var blank_pattern = /[\s]/g;
+    var pattern_num = /[0-9]/; // 숫자
+    var pattern_eng = /[a-zA-Z]/; // 문자
+    var strArray = str.split('');
+
+    setValidEmail(true);
+    if (!str) {
+      console.log('비밀번호값이 없음');
+      setConfirmedPassword(false);
+    } else if (blank_pattern.test(str) === true) {
+      console.log('비밀번호값에 공백 포함');
+      setConfirmedPassword(false);
+    } else if (strArray.length < 8) {
+      console.log('비밀번호 8자리 미만');
+      setConfirmedPassword(false);
+    } else if (pattern_eng.test(str) && pattern_num.test(str)) {
+      setConfirmedPassword(true);
+    } else {
+      console.log('비밀번호값에 문자,숫자 미포함');
+      setConfirmedPassword(false);
+    }
+
+
+
+    /*
     setValidPassword(true);
     setShortPassword(false);
     setEmptyPassword(false);
@@ -313,9 +386,11 @@ const BasicInput = ({navigation, route}) => {
     setPasswordSame(true);
     setConfirmedPassword(false);
     setInputedPassword(str);
+    */
   }
 
-  function checkPasswordSame(str) {
+  function checkPasswordSame(str: string) {
+    /*
     if (inputedPassword === str) {
       console.log('비밀번호 일치');
       console.log('inputedPasswlrd', inputedPassword);
@@ -329,9 +404,11 @@ const BasicInput = ({navigation, route}) => {
       console.log('inputedPasswlrd', inputedPassword);
       console.log('str', str);
     }
+    */
   }
 
-  function changingPasswordSame(str) {
+  function changingPasswordSame(str: string) {
+    /*
     if (str === inputedPassword) {
       setPasswordSame(true);
       setConfirmedPasswordSame(true);
@@ -339,11 +416,38 @@ const BasicInput = ({navigation, route}) => {
       setPasswordSame(false);
       setConfirmedPasswordSame(false);
     }
+    */
+   
+   setInputedPasswordSame(str); 
+   setPasswordSame(true);
   }
 
   const onFocusEmailInput = () => {
     setOnFocusEmail(true);
-  } 
+  }
+
+  const onUnfocusEmailInput = (text: string) => {
+    checkEmail(text)
+    setOnFocusEmail(false);
+  }
+
+  const onFocusPasswordInput = () => {
+    setOnFocusPassword(true);
+  }
+
+  const onUnfocusPasswordInput = (text: string) => {
+    checkPassword(text);
+    setOnFocusPassword(false);
+  }
+
+  const onFocusPasswordConfirmInput = () => {
+    setOnFocusPasswordConfirm(true);
+  }
+
+  const onUnfocusPasswordConfirmInput = (text: string) => {
+    checkPasswordSame(text);
+    setOnFocusPasswordConfirm(false);
+  }
 
   return (
     <Container>
@@ -365,11 +469,12 @@ const BasicInput = ({navigation, route}) => {
         <ItemContainer>
           <ItemLabelText>이메일</ItemLabelText>
           <ItemTextInput
-            style={blankEmail || (!validEmail && !blankEmail) && {borderColor:'#FF3B30'}}
+            ref={emailInputRef}
+            style={blankEmail || (!validEmail && !blankEmail) && {borderColor:'#FF3B30'} || onFocusEmail && {borderColor:'#267DFF'}}
             autoCapitalize="none"
             onChangeText={(text: string) => changingEmail(text)}
-            onSubmitEditing={(text) => checkEmail(text.nativeEvent.text)}
-            onEndEditing={(text) => checkEmail(text.nativeEvent.text)}
+            onSubmitEditing={(text) => onUnfocusEmailInput(text.nativeEvent.text)}
+            onEndEditing={(text) => onUnfocusEmailInput(text.nativeEvent.text)}
             onFocus={() => onFocusEmailInput()}
             clearButtonMode={"while-editing"}
           />
@@ -384,32 +489,40 @@ const BasicInput = ({navigation, route}) => {
         <ItemContainer style={{marginTop: 33}}>
           <ItemLabelText>비밀번호</ItemLabelText>
           <ItemTextInput
-            autoCapitalize="none"
-            placeholder="영문,숫자포함 8자리이상"
+            ref={passwordInputRef}
+            style={blankPassword || (!validPassword && !blankPassword && !onFocusPassword) && {borderColor:'#FF3B30'} || onFocusPassword && {borderColor: '#267DFF'}}
+            autoCapitalize={"none"}
             onChangeText={(text: string) => changingPassword(text)}
-            onSubmitEditing={(text: string) => checkPassword(text.nativeEvent.text)}
-            onEndEditing={(text: string) => checkPassword(text.nativeEvent.text)}
+            onSubmitEditing={(text: string) => onUnfocusPasswordInput(text.nativeEvent.text)}
+            onEndEditing={(text: string) => onUnfocusPasswordInput(text.nativeEvent.text)}
+            onFocus={() => onFocusPasswordInput()}
             secureTextEntry={true}
             clearButtonMode={"while-editing"}/>
           {blankPassword && (
             <UnvalidInputText>공백은 사용할 수 없습니다.</UnvalidInputText>
           )}
           {(!validPassword || shortPassword) && !blankPassword && (
-            <UnvalidInputText>영문,숫자포함의 8자리이상</UnvalidInputText>
+            <UnvalidInputText>영문, 숫자 포함 8자 이상</UnvalidInputText>
+          )}
+          {onFocusPassword && (
+           <FocusInputText>영문, 숫자 포함 8자 이상</FocusInputText>
           )}
         </ItemContainer>
         <ItemContainer style={{marginTop: 33}}>
           <ItemLabelText>비밀번호 확인</ItemLabelText>
           <ItemTextInput
+            ref={passwordConfirmInputRef}
+            style={!passwordSame && {borderColor:'#FF3B30'} || onFocusPasswordConfirm && {borderColor:'#267DFF'}}
             autoCapitalize="none"
             secureTextEntry={true}
-            onChangeText={(text: string) => changingPasswordSame(text)}
+            onChangeText={(text:string) => changingPasswordSame(text)}
             onSubmitEditing={(text: string) =>
-              checkPasswordSame(text.nativeEvent.text)
+              onUnfocusPasswordConfirmInput(text.nativeEvent.text)
             }
             onEndEditing={(text: string) =>
-              checkPasswordSame(text.nativeEvent.text)
+              onUnfocusPasswordConfirmInput(text.nativeEvent.text)
             }
+            onFocus={() => onFocusPasswordConfirmInput()}
             clearButtonMode={"while-editing"}
           />
           {!passwordSame && (
@@ -417,26 +530,15 @@ const BasicInput = ({navigation, route}) => {
           )}
         </ItemContainer>
       </InputContainer>
-      {(!confirmedEmail || !confirmedPassword || !confirmedPasswordSame) && (
-        <FinishButtonContainer>
-        <AboveKeyboard>
-        <DisabledFinishButton>
-          <DisabledFinishText>다음</DisabledFinishText>
-        </DisabledFinishButton>
-        </AboveKeyboard>
-        </FinishButtonContainer>
-      )}
-      {confirmedEmail && confirmedPassword && confirmedPasswordSame && (
         <TouchableWithoutFeedback onPress={() => moveToProfileInput()}>
           <FinishButtonContainer>
           <AboveKeyboard>
-          <FinishButton>
-            <FinishText>다음</FinishText>
+          <FinishButton style={(!confirmedEmail || !confirmedPassword || inputedPasswordSame === "") && {backgroundColor: '#ECECEE'}}>
+            <FinishText style={(!confirmedEmail || !confirmedPassword || inputedPasswordSame === "") && {color: '#8E9199'}}>다음</FinishText>
           </FinishButton>
           </AboveKeyboard>
           </FinishButtonContainer>
         </TouchableWithoutFeedback>
-      )}
     </Container>
   );
 };

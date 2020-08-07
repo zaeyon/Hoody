@@ -1,5 +1,5 @@
 import axios from 'axios';
-const baseUrl = 'https://f8c3ed7f93d4.ngrok.io';
+const baseUrl = 'https://278c2954298f.ngrok.io';
 
 const DELETEUnfollowTag = (tagId) => {
     const url = baseUrl + '/tag/unfollow?tagId=' + tagId;

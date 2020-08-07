@@ -1749,9 +1749,11 @@ const renderAddNewDescripInput = () => {
             {visibleConsumptionDatePicker && (
                 <ConsumptionDatePickerContainer>
                 <ConsumptionDatePickerHeaderBar>
+                    <TouchableWithoutFeedback onPress={() => setVisibleConsumptionDatePicker(false)}>
                     <CancelDatePickerContainer>
                     <CancelDatePickerText>취소</CancelDatePickerText>
                     </CancelDatePickerContainer>
+                    </TouchableWithoutFeedback>
                     <DatePickerHeaderBarRightContainer>
                     <TouchableWithoutFeedback onPress={() => removeConsumptionDate()}>
                     <RemoveDatePickerContainer>
@@ -1766,6 +1768,7 @@ const renderAddNewDescripInput = () => {
                     </DatePickerHeaderBarRightContainer>
                 </ConsumptionDatePickerHeaderBar>
                 <DateTimePicker
+                locale={'ko_KR.UTF-8'}
                 style={{flex:1}}
                 testID="dateTimePicker"
                 value={consumptionDate}
@@ -1773,7 +1776,7 @@ const renderAddNewDescripInput = () => {
                 mode={'date'}
                 display="default"
                 is24Hour={true}
-                maximumDate={new Date(2020, 12, 31)}
+                maximumDate={new Date(2050, 12, 31)}
               />
                 </ConsumptionDatePickerContainer>
             )}

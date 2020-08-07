@@ -85,6 +85,9 @@ import GenderSettingScreen from '~/Components/Container/SettingScreen/GenderSett
 // Scrap Screen
 import ScrapListScreen from '~/Components/Container/ScrapListScreen';
 
+// Select Interest Screen
+import SelectInterestScreen from '~/Components/Container/SelectInterestScreen';
+
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
 const ExploreStack = createStackNavigator();
@@ -444,6 +447,9 @@ function UnauthStackScreen() {
         name="ProfileInput"
         component={ProfileInput}
       />
+      <UnauthStack.Screen
+      name="SelectInterestScreen"
+      component={SelectInterestScreen}/>
       <UnauthStack.Screen
         name="Gallery_ProfileImage"
         component={Gallery_ProfileImage}

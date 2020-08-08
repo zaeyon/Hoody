@@ -7,6 +7,9 @@ import {
 } from 'react-native-responsive-screen';
 import AboveKeyboard from 'react-native-above-keyboard';
 
+// Route
+import GETEmailCheck from '~/Route/Auth/GETEmailCheck';
+
 const Container = Styled.SafeAreaView`
  flex: 1;
  background-color: #ffffff;
@@ -195,6 +198,7 @@ const BasicInput = ({navigation, route}) => {
   const [onFocusEmail, setOnFocusEmail] = useState<boolean>(false);
   const [onFocusPassword, setOnFocusPassword] = useState<boolean>(false);
   const [onFocusPasswordConfirm, setOnFocusPasswordConfirm] = useState<boolean>(false);
+  const [emailOverlap, setEmailOverlap] = useState<boolean>(false);
 
   var emailInputRef = useRef(null);
   var passwordInputRef = useRef(null);
@@ -234,19 +238,29 @@ const BasicInput = ({navigation, route}) => {
       if(inputedPassword !== inputedPasswordSame) {
         setPasswordSame(false);
       } else {
-        console.log('inputedEmail', inputedEmail);
-        console.log('inputedPassword', inputedPassword);
-        navigation.navigate('ProfileInput', {
-          email: inputedEmail,
-          password: inputedPassword,
-          nickname: route.params?.inputedNickname,
-          birthdate: route.params?.inputedBirthdate,
-          gender: route.params?.inputedGender,
-        });
+        GETEmailCheck(inputedEmail)
+        .then(function(response) {
+          console.log("GETEmailCheck response", response);
+          console.log('inputedEmail', inputedEmail);
+          console.log('inputedPassword', inputedPassword);
+        
+          navigation.navigate('ProfileInput', {
+            email: inputedEmail,
+            password: inputedPassword,
+            nickname: route.params?.inputedNickname,
+            birthdate: route.params?.inputedBirthdate,
+            gender: route.params?.inputedGender,
+          });
+  
+          emailInputRef.current.blur();
+          passwordInputRef.current.blur();
+          passwordConfirmInputRef.current.blur();
+          })
+          
+          .catch(function(error) {
+            console.log("GETEmailCheck error", error)
+          })
 
-        emailInputRef.current.blur();
-        passwordInputRef.current.blur();
-        passwordConfirmInputRef.current.blur();
       }
     }
   };
@@ -470,7 +484,7 @@ const BasicInput = ({navigation, route}) => {
           <ItemLabelText>이메일</ItemLabelText>
           <ItemTextInput
             ref={emailInputRef}
-            style={blankEmail || (!validEmail && !blankEmail) && {borderColor:'#FF3B30'} || onFocusEmail && {borderColor:'#267DFF'}}
+            style={emailOverlap || blankEmail || (!validEmail && !blankEmail) &&  {borderColor:'#FF3B30'} || onFocusEmail && {borderColor:'#267DFF'}}
             autoCapitalize="none"
             onChangeText={(text: string) => changingEmail(text)}
             onSubmitEditing={(text) => onUnfocusEmailInput(text.nativeEvent.text)}
@@ -483,6 +497,9 @@ const BasicInput = ({navigation, route}) => {
           )}
           {!validEmail && !blankEmail && (
             <UnvalidInputText>올바른 이메일형식이 아닙니다.</UnvalidInputText>
+          )}
+          {emailOverlap && (
+            <UnvalidInputText>이미 사용중인 이메일입니다.</UnvalidInputText>
           )}
         </ItemContainer>
 

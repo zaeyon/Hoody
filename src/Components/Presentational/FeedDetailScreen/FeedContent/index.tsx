@@ -6,6 +6,8 @@ import {
 } from 'react-native-responsive-screen';
 import {FlatList, Text} from 'react-native';
 
+import ProductItem from '~/Components/Presentational/FeedDetailScreen/ProductItem';
+
 const Container = Styled.View`
  background-color: #ffffff;
  flex: 1;
@@ -35,7 +37,15 @@ const ReviewImage = Styled.Image`
  width: ${wp('92%%')};
  height: ${wp('92%')};
  border-radius: 15px;
+`;
 
+const ProductContainer = Styled.View`
+width: ${wp('100%')};
+background-color: #FFFFFF;
+padding-top: 16px;
+padding-bottom: 16px;
+justify-content: center;
+align-items: center;
 `;
 
 interface Props {
@@ -65,6 +75,17 @@ const renderItem = ({item, index}: any) => {
                 <ReviewImage
                 source={{uri: item.url}}/>
             </ImageContainer>
+        )
+    } else if(item.type === "product") {
+        return (
+            <ProductContainer>
+                <ProductItem
+                productImage={item.image}
+                productName={item.title}
+                productDescription={item.description}
+                shopIcon={item.favicon}
+                shopName={item.site}/>
+            </ProductContainer>
         )
     }
 }

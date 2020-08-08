@@ -344,6 +344,15 @@ const ModalTabItemLabelText = Styled.Text`
  color: #1D1E1F;
 `;
 
+const ReportModalContainer = Styled.View`
+ width: ${wp('100%')};
+ height: 500px;
+ background-color: #FFFFFF;
+ border-top-left-radius: 10px;
+ border-top-right-radius: 10px;
+`;
+
+
 
 
 
@@ -618,22 +627,6 @@ const TEST_FEED_DETAIL =
       "type": "image"
     },
     {
-      "title": "전부였던 사람이 떠나갔을 때 태연히 밥을 먹기도 했다(무지개 리커버 에디션)",
-      "description": "사람을 사랑하고, 사람과 이별하고, 그럼에도 전부였던 ...",
-      "image": "http://image.kyobobook.co.kr/images/book/xlarge/505/x9791188469505.jpg",
-      "url": "http://www.kyobobook.co.kr/redi_book.jsp?b=9791188469505&g=KOR",
-      "site": "KYOBOBOOK",
-      "favicon": "http://image.kyobobook.co.kr/newimages/apps/b2c/kyobo.ICO",
-      "postProduct": {
-        "index": 3,
-        "createdAt": "2020-07-15T13:12:47.000Z",
-        "updatedAt": "2020-07-15T13:12:47.000Z",
-        "productId": 1,
-        "postId": 31
-      },
-      "type": "product"
-    },
-    {
       "index": 4,
       "type": "divisonLine"
     },
@@ -704,6 +697,22 @@ const TEST_FEED_DETAIL =
       "textAlign": "left",
       "type": "description"
     },
+    {
+      "title": "전부였던 사람이 떠나갔을 때 태연히 밥을 먹기도 했다(무지개 리커버 에디션)",
+      "description": "사람을 사랑하고, 사람과 이별하고, 그럼에도 전부였던 ...",
+      "image": "http://image.kyobobook.co.kr/images/book/xlarge/505/x9791188469505.jpg",
+      "url": "http://www.kyobobook.co.kr/redi_book.jsp?b=9791188469505&g=KOR",
+      "site": "KYOBOBOOK",
+      "favicon": "http://image.kyobobook.co.kr/newimages/apps/b2c/kyobo.ICO",
+      "postProduct": {
+        "index": 3,
+        "createdAt": "2020-07-15T13:12:47.000Z",
+        "updatedAt": "2020-07-15T13:12:47.000Z",
+        "productId": 1,
+        "postId": 31
+      },
+      "type": "product"
+    },
   ]
 }
 
@@ -735,6 +744,7 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
     const [myFeedModalVisible, setMyFeedModalVisible] = useState<boolean>(false);
     const [otherUsersFeedModalVisible, setOtherUsersFeedModalVisible] = useState<boolean>(false);
     const [currentUserFeed, setCurrentUserFeed] = useState<boolean>(false);
+    const [visibleReportModal, setVisibleReportModal] = useState<boolean>(false);
 
     const currentUser = useSelector((state) => state.currentUser);
     const dispatch = useDispatch();
@@ -942,6 +952,7 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
         setMyFeedModalVisible(true)
       } else {
         setOtherUsersFeedModalVisible(true);
+        //setVisibleReportModal(true);
       }
     }
 
@@ -985,8 +996,13 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
         }
     ],      
   );
-      
-    }
+}
+
+   const clickToReportFeed = () => {
+     console.log("ggg")
+     //setOtherUsersFeedModalVisible(false);
+     setVisibleReportModal(true);
+      }
   
 
    return (
@@ -1115,7 +1131,7 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
         <ModalHeaderContainer>
         <ModalToggleButton/>
         </ModalHeaderContainer>
-        <TouchableWithoutFeedback onPress={() => 0}>
+        <TouchableWithoutFeedback onPress={() => clickToReportFeed()}>
         <ModalTabItemContainer>
           <ModalTabItemIconImage
           style={{tintColor:'#1D1E1F'}}
@@ -1127,6 +1143,19 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
         </TouchableWithoutFeedback>
         </OtherUsersFeedViewMoreModalContainer>
       </Modal>
+      <Modal
+      onBackdropPress={() => setVisibleReportModal(false)}
+      isVisible={visibleReportModal}
+      backdropOpacity={0.25}
+      onSwipeComplete={() => setVisibleReportModal(false)}
+      swipeDirection={['down']}
+      style={styles.reportModal}>
+        <ReportModalContainer>
+          <ModalHeaderContainer>
+            <ModalToggleButton/>
+          </ModalHeaderContainer>
+        </ReportModalContainer>
+      </Modal>
        </Container>
    )
 }
@@ -1137,6 +1166,10 @@ const styles = StyleSheet.create({
     margin: 0,
   },
   otherUsersModal: {
+    justifyContent: 'flex-end',
+    margin: 0,
+  },
+  reportModal : {
     justifyContent: 'flex-end',
     margin: 0,
   }

@@ -95,7 +95,7 @@ const ProfileCollectionList = ({collectionListData, navigation, profileNickname,
     }
 
     if(!collectionListData[0]) {
-    if(currentUser.user.nickname === requestNickname) {
+    if(currentUser.user?.nickname === requestNickname) {
         return (
             <NoCollectionContainer>
             <TouchableWithoutFeedback onPress={() => navigation.navigate("CollectionUploadScreen")}>
@@ -109,7 +109,7 @@ const ProfileCollectionList = ({collectionListData, navigation, profileNickname,
             <AddCollectionSubText>나만의 키워드로 게시글들을 분류할 수 있어요.</AddCollectionSubText>
         </NoCollectionContainer>
         )
-    } else if(currentUser.user.nickname !== requestNickname) {
+    } else if(currentUser.user?.nickname !== requestNickname) {
         return (
             <NoCollectionContainer>
                 <NoCollectionText>등록된 컬렉션이 없어요.</NoCollectionText>

@@ -1,5 +1,5 @@
 import axios from 'axios';
-const baseUrl = 'https://278c2954298f.ngrok.io'; 
+const baseUrl = 'https://19b97d6d2bd8.ngrok.io'; 
 
 const PostUpload = (desArray, mediaArray,mainTag, subTag1, subTag2, rating, location, longitude, latitude, certifiedLocation, dump, sequence, products, openState, subTag1Exis, subTag2Exis) => {
     const url = baseUrl + "/post/upload"

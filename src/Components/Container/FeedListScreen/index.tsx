@@ -337,9 +337,9 @@ function FeedListScreen({navigation, route}: Props) {
 
   const getFeedData = () => {
       // 서버테스트용 데이터
-      setFeedListData(TEST_FEED_DATA);
+      //setFeedListData(TEST_FEED_DATA);
     GetAllFeed().then(function(response) {
-      //setFeedListData(response);
+      setFeedListData(response);
       setRefreshing(false)
       setOnRefreshFeedList(!onRefreshFeedList)
       console.log("파드 목록 가져오기 성공", response);

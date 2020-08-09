@@ -106,17 +106,17 @@ class ImageItem extends Component {
     });
 
     console.log('setState후:', this.state.selectedImages_arr);
+    console.log("selectedImages", this.props.selectedImages);
   }
 
   render() {
-    const {item, selected, selectedMarker, imageMargin} = this.props;
+    const {item, selected, selectedMarker, imageMargin, selectOrder} = this.props;
 
     const marker = selectedMarker || (
       <ImageSelectedButton>
-        <ImageSelectedCount>1</ImageSelectedCount>
+        <ImageSelectedCount>{selectOrder}</ImageSelectedCount>
       </ImageSelectedButton>
     );
-
     const {image} = item.node;
 
     return (

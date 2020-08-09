@@ -750,6 +750,7 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
     const dispatch = useDispatch();
 
     // 서버 연결X 테스트용 코드
+    /*
     useEffect(() => {
 
       console.log("response.data.post.mainTags", TEST_FEED_DETAIL.post.mainTags);
@@ -763,6 +764,8 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
       setCurrentUserScrap(route.params.currentUserScrap);
 
     }, [])
+    */
+
     // 서버 연결 코드
     useLayoutEffect(() => {
         if(route.params?.feedId) {
@@ -773,7 +776,7 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
              setCurrentUserFeed(true);
            }
            //console.log("response.data.post", response.data.post);
-           /*
+           
            console.log("response.data.post.mainTags", response.data.post.mainTags);
            response.data.post.spendDate = getDateFormat(response.data.post.spendDate)
            setParagraphData(response.data.postBody);
@@ -784,18 +787,7 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
            setCreatedDate(route.params.createdAt);
            setCurrentUserLike(route.params.currentUserLike)
            setCurrentUserScrap(route.params.currentUserScrap);
-           */
 
-          console.log("response.data.post.mainTags", TEST_FEED_DETAIL.post.mainTags);
-          response.data.post.spendDate = getDateFormat(TEST_FEED_DETAIL.post.spendDate)
-          setParagraphData(TEST_FEED_DETAIL.postBody);
-          setPostId(route.params.feedId);
-          setFeedDetailInfo(TEST_FEED_DETAIL.post);
-          setLikeCount(TEST_FEED_DETAIL.post.likes);
-          setAllCommentCount(TEST_FEED_DETAIL.post.commentsCount+TEST_FEED_DETAIL.post.replysCount);
-          setCreatedDate(route.params.createdAt);
-          setCurrentUserLike(route.params.currentUserLike)
-          setCurrentUserScrap(route.params.currentUserScrap);
        })
        .catch(function(error) {
            console.log("error", error);

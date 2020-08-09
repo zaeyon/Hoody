@@ -605,6 +605,7 @@ const CancelModifyDescripContainer = Styled.View`
 
 const ConsumptionDatePickerContainer = Styled.View`
  width: ${wp('100%')};
+ background-color:#ffffff;
  position: absolute;
  bottom: 0;
 `;
@@ -1692,7 +1693,7 @@ const renderAddNewDescripInput = () => {
                     <ExpenseInputWonContainer>
                     <ExpenseInput
                     ref={expenseInput}
-                    style={{paddingLeft:20}}
+                    style={{paddingLeft:20, color:'#ffffff'}}
                     keyboardType={"number-pad"}
                     placeholder={ !moneyText ? "소비금액(원)" : ""}
                     caretHidden={false}

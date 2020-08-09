@@ -615,7 +615,6 @@ const ProfileInput = ({navigation, route}) => {
       setConfirmedNickname(false) 
     } else {
       if (strArray.length >= 2 && strArray.length <= 12) {
-        console.log("confirmedNickname", confirmedNickname);
         setConfirmedNickname(true);
       } else {
         setConfirmedNickname(false);
@@ -661,7 +660,6 @@ const ProfileInput = ({navigation, route}) => {
       if(response.status === 201) {
       //navigation.navigate("SelectInterestScreen");
       console.log("회원가입 성공", response)
-      
       dispatch(
         allActions.userActions.setUser({
           email: submitingEmail,
@@ -677,9 +675,17 @@ const ProfileInput = ({navigation, route}) => {
           userId: response.data.user.id,
         }),
       );
+      dispatch(
+        allActions.userActions.setLikeFeeds(response.data.user.LikePosts)
+      )
+      dispatch(
+        allActions.userActions.setScrapFeeds(response.data.user.scraps[0].Posts)
+      )
+      dispatch(
+        allActions.userActions.setInputedKeywordList([])
+      )
 
       }
-      
     })
     .catch(function(error) {
       console.log("회원가입 실패", error);

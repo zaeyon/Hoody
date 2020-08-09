@@ -532,7 +532,7 @@ const CommentListScreen = ({navigation, route}: Props) => {
           )}
         <CommentContainer>
         <ProfileImage
-            source={{uri:currentUser.user.profileImage}}/>
+            source={{uri:currentUser.user?.profileImage}}/>
         <CommentInputContainer>
             <CommentInput
             ref={commentInputRef}

@@ -232,12 +232,15 @@ const BasicInput = ({navigation, route}) => {
   }
 
   const moveToProfileInput = () => {
+    console.log("moveToProfileInput");
     if(!confirmedEmail || !confirmedPassword || inputedPasswordSame === "") {
+      console.log("No confirmed input");
 
     } else {
       if(inputedPassword !== inputedPasswordSame) {
         setPasswordSame(false);
       } else {
+        console.log("이메일 중복 검사");
         GETEmailCheck(inputedEmail)
         .then(function(response) {
           console.log("GETEmailCheck response", response);
@@ -259,6 +262,10 @@ const BasicInput = ({navigation, route}) => {
           
           .catch(function(error) {
             console.log("GETEmailCheck error", error)
+            if(error.status === 403) {
+              console.log("이미 사용중인 이메일", error.status);
+              setEmailOverlap(true);
+            }
           })
 
       }
@@ -300,6 +307,7 @@ const BasicInput = ({navigation, route}) => {
     var blank_pattern = /[\s]/g;
 
     setValidEmail(true);
+    setEmailOverlap(false);
     setInputedEmail(str);
 
     if(!str) {
@@ -484,7 +492,7 @@ const BasicInput = ({navigation, route}) => {
           <ItemLabelText>이메일</ItemLabelText>
           <ItemTextInput
             ref={emailInputRef}
-            style={emailOverlap || blankEmail || (!validEmail && !blankEmail) &&  {borderColor:'#FF3B30'} || onFocusEmail && {borderColor:'#267DFF'}}
+            style={((emailOverlap || blankEmail || (!validEmail && !blankEmail)) &&  {borderColor:'#FF3B30'}) || (onFocusEmail && {borderColor:'#267DFF'})}
             autoCapitalize="none"
             onChangeText={(text: string) => changingEmail(text)}
             onSubmitEditing={(text) => onUnfocusEmailInput(text.nativeEvent.text)}
@@ -547,15 +555,16 @@ const BasicInput = ({navigation, route}) => {
           )}
         </ItemContainer>
       </InputContainer>
-        <TouchableWithoutFeedback onPress={() => moveToProfileInput()}>
           <FinishButtonContainer>
           <AboveKeyboard>
+
+        <TouchableWithoutFeedback onPress={() => moveToProfileInput()}>
           <FinishButton style={(!confirmedEmail || !confirmedPassword || inputedPasswordSame === "") && {backgroundColor: '#ECECEE'}}>
             <FinishText style={(!confirmedEmail || !confirmedPassword || inputedPasswordSame === "") && {color: '#8E9199'}}>다음</FinishText>
           </FinishButton>
+          </TouchableWithoutFeedback>
           </AboveKeyboard>
           </FinishButtonContainer>
-        </TouchableWithoutFeedback>
     </Container>
   );
 };

@@ -30,6 +30,15 @@ class Row extends PureComponent {
 
     const { uri } = item.node.image;
 
+    var selectOrder;
+
+    console.log("renderImage item.node.image", item.node.image);
+    console.log("renderImage this.props.selectedImages", this.props.selectedImages);
+    if(isSelected) {
+      selectOrder = this.props.selectedImages.indexOf(item.node.image)+1;
+      console.log("isSelected true selectOrder", selectOrder);
+    }
+
     return (
       <ImageItem
         key={uri}
@@ -40,6 +49,7 @@ class Row extends PureComponent {
         imagesPerRow={imagesPerRow}
         containerWidth={containerWidth}
         onClick={this.props.selectImage}
+        selectOrder={selectOrder}
       />
     );
   }

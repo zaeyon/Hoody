@@ -39,6 +39,7 @@ const ProductImage = Styled.Image`
  background-color: #c3c3c3;
  border-top-left-radius: 15px;
  border-bottom-left-radius: 15px;
+ 
 `;
 
 const Divider = Styled.View`

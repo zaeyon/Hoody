@@ -12,6 +12,7 @@ const Container = Styled.View`
  background-color: #ffffff;
  flex: 1;
  width: ${wp('100%')};
+ padding-bottom: 30px;
 `;
 
 const DescriptionContainer = Styled.View`

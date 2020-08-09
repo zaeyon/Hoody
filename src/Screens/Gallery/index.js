@@ -323,6 +323,10 @@ class Gallery extends Component {
     const {uri} = item.node.image;
     const isSelected = arrayObjectIndexOf(selected, 'uri', uri) >= 0;
 
+    console.log("선택한 이미지", this.state.selected);
+
+    console.log("renderImage");
+
     return (
       <ImageItem
         key={uri}
@@ -333,6 +337,7 @@ class Gallery extends Component {
         imagesPerRow={imagesPerRow}
         containerWidth={containerWidth}
         onClick={this.selectImage}
+        selectedImages={selected}
       />
     );
   }
@@ -345,6 +350,8 @@ class Gallery extends Component {
       return arrayObjectIndexOf(this.state.selected, 'uri', uri) >= 0;
     });
 
+    console.log("renderRow selected", this.state.selected);
+
     return (
       <Row
         rowData={item}
@@ -354,6 +361,7 @@ class Gallery extends Component {
         containerWidth={this.props.containerWidth}
         imageMargin={this.props.imageMargin}
         selectedMarker={this.props.selectedMarker}
+        selectedImages={this.state.selected}
       />
     );
   }

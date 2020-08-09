@@ -460,6 +460,7 @@ const FeedItem = ({
 }
 
   const deleteLike = () => {
+    if(currentUser.likeFeeds) {
     console.log("currentUser.likeFeeds", currentUser.likeFeeds);
     var removedLikeFeeds = currentUser.likeFeeds;
     var deletedIndex = currentUser.likeFeeds?.findIndex(obj => obj.id === id);
@@ -476,9 +477,11 @@ const FeedItem = ({
     .catch(function(error) {
       console.log("좋아요 삭제 error", error)
     })
+    }
   }
 
   const addLike = () => {
+    if(currentUser.likeFeeds) {
     var addedLikeFeeds = currentUser.likeFeeds;
     const likeObj = {
       id: id,
@@ -495,6 +498,8 @@ const FeedItem = ({
     .catch(function(error) {
       console.log("좋아요 추가 error", error);
     })
+
+    }
   }
 
   const addScrapFeed = () => {
@@ -607,9 +612,11 @@ const FeedItem = ({
               }}
             />
           </TagContainer>
+          {desArray[0] && (
         <DescriptionContainer>
-            <DescriptionText>{desArray[0].description}</DescriptionText>
-          </DescriptionContainer>
+        <DescriptionText>{desArray[0].description}</DescriptionText>
+        </DescriptionContainer>
+          )}
           {mediaFiles.length === 1 && (
           <ReviewImageContainer>
           <ReviewImage source={{uri:mediaFiles[0].url}}/>

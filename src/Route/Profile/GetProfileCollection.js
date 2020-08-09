@@ -1,5 +1,5 @@
 import axios from 'axios';
-const baseUrl = 'https://19b97d6d2bd8.ngrok.io';
+const baseUrl = 'https://2bc6662949ed.ngrok.io';
 
 const GetProfileCollection = (nickname) => {
     const url = baseUrl + '/user/profile?nickname=' + nickname + "&type=collection";

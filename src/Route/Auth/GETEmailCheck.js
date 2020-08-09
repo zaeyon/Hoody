@@ -1,5 +1,5 @@
 import axios from 'axios';
-const baseUrl = 'https://19b97d6d2bd8.ngrok.io';
+const baseUrl = 'https://2bc6662949ed.ngrok.io';
 
 const GETEmailCheck = (email) => {
 
@@ -14,6 +14,7 @@ const GETEmailCheck = (email) => {
         axios
         .post(url, formData)
         .then(function(response) {
+            console.log("GETEmailCheck response.data", response);
             resolve(response.data);
         })
         .catch(function(error) {

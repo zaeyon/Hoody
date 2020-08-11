@@ -11,7 +11,6 @@ import Modal from 'react-native-modal';
 
 import SlidingUpPanel from '~/Components/Presentational/NearFeedMapScreen/SlidingUpPanel';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
-import {BlurView, VibrancyView} from "@react-native-community/blur";
 
 import NearFeedItem from '~/Components/Presentational/NearFeedMapScreen/NearFeedItem';
 import { onChange } from 'react-native-reanimated';
@@ -836,7 +835,6 @@ const PanelContainer = Styled.View`
  flex: 1;
 `;
 
-
 const PanelHeaderContainer = Styled.View`
 width: ${wp('100%')};
 height: ${wp('15%')};
@@ -848,7 +846,6 @@ border-bottom-width: 0.6px;
 border-color: #ECECEE;
 `;
 
-
 const LocationPanelHeaderContainer = Styled.View`
 width: ${wp('100%')};
 height: ${wp('23%')};
@@ -859,7 +856,6 @@ padding-right: 16px;
 border-bottom-width: 0.6px;
 border-color: #ECECEE;
 `;
-
 
 const PanelToggleButton = Styled.View`
  width: ${wp('11.7%')};
@@ -874,17 +870,14 @@ top: 0px;
 right: 0px;
 `;
 
-
-
 const FeedCountBackground = Styled.View`
 padding-top: 4px;
 padding-bottom: 4px;
 padding-left: 6px;
 padding-right: 6px;
 border-radius: 26px;
-background-color: #00000020;
+background-color: #00000095;
 `;
-
 
 const OneMoreThanFeedCountBackground = Styled.View`
 padding-top: 4px;
@@ -892,7 +885,7 @@ padding-bottom: 4px;
 padding-left: 7.5px;
 padding-right: 7.5px;
 border-radius: 50px;
-background-color: #00000020;
+background-color: #00000095;
 `;
 
 const FeedCountText = Styled.Text`
@@ -1221,6 +1214,8 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
               return b["likes"] - a["likes"];
             })
             console.log("tmpNearLocationListData", tmpNearLocationListData);
+            console.log("tmpNearLocationListData[0]", tmpNearLocationListData[0]);
+            console.log("tmpNearLocationListData[2]", tmpNearLocationListData[2]);
             console.log("tmpNearAllFeedListData", tmpNearAllFeedListData);
             setNearLocationListData(tmpNearLocationListData);
             setTimeout(() => {
@@ -1424,11 +1419,9 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
                  : require('~/Assets/Images/Map/ic_hash.png')
                    }/>
               <FeedCountContainer>
-              <VibrancyView blurType={"dark"} style={{borderRadius:13, opacity:0.7}} blurAmount={30} reducedTransparencyFallbackColor={"dark"}>
               <FeedCountBackground>
                 <FeedCountText style={{opacity:0}} >{location.post.metaData.num}</FeedCountText>
               </FeedCountBackground>
-              </VibrancyView>
               <FeedCountText2>{location.post.metaData.num}</FeedCountText2>
               </FeedCountContainer>
             </MarkerThumbnailContainer>
@@ -1478,11 +1471,9 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
               : require('~/Assets/Images/Map/ic_hash.png')
                 }/>
                  <FeedCountContainer>
-              <VibrancyView blurType={"dark"} style={{borderRadius:12, opacity:0.7}} blurAmount={30} reducedTransparencyFallbackColor={"dark"}>
               <OneMoreThanFeedCountBackground>
-                <OneMoreThanFeedCountText style={{opacity:0}} >{location.post.metaData.num}</OneMoreThanFeedCountText>
+                <OneMoreThanFeedCountText style={{opacity:9}} >{location.post.metaData.num}</OneMoreThanFeedCountText>
               </OneMoreThanFeedCountBackground>
-              </VibrancyView>
               <OneMoreThanFeedCountText2>{location.post.metaData.num}</OneMoreThanFeedCountText2>
               </FeedCountContainer>
               </OneMoreThenMarkerThumbnailContainer>

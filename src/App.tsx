@@ -76,6 +76,9 @@ RNLocation.configure({
 
 function App() {
 
+  // Waring 노란색창 숨기기
+  console.disableYellowBox = true;
+
   useEffect(() => {
     SplashScreen.hide();
   })

@@ -363,8 +363,8 @@ const ProfileListFeedItem = ({
   const [paragraphData, setParagraphData] = useState();
   const [createdDate, setCreatedDate] = useState();
   const [changeState, setChangeState] = useState<boolean>(false);
-  const [currentUserLike, setCurrentUserLike] = useState<boolean>();
-  const [currentUserScrap, setCurrentUserScrap] = useState<boolean>();
+  const [currentUserLike, setCurrentUserLike] = useState<boolean>(false);
+  const [currentUserScrap, setCurrentUserScrap] = useState<boolean>(false);
   const [likeCount, setLikeCount] = useState<number>(like_count);
   const [allCommentCount, setAllCommentCount] = useState<number>(comment_count+reply_count);
   const currentUser = useSelector((state) => state.currentUser);
@@ -406,7 +406,7 @@ const ProfileListFeedItem = ({
     console.log("피드 닉네임", nickname)
     setChangeState(!changeState);
 
-    var index = (obj => obj.id === id);
+    var index = currentUser.likeFeeds?.findIndex(obj => obj.id === id);
     if(index !== -1) {
       setCurrentUserLike(true);
       likeFeedsIndex = index;
@@ -426,14 +426,15 @@ const ProfileListFeedItem = ({
   useEffect(() => {
     //console.log("currentUser.likeFeeds[0].Like", currentUser.likeFeeds[0].Like)
     var index = currentUser.likeFeeds?.findIndex(obj => obj.id === id);
+    console.log("currentUser.likeFeeds", currentUser.likeFeeds);
     if(index !== -1) {
       if(!currentUserLike) {
-        setLikeCount(likeCount+1)
+        //setLikeCount(likeCount+1)
         setCurrentUserLike(true);
       } 
     } else if(index === -1) {
       if(currentUserLike) {
-        setLikeCount(likeCount-1)
+        //setLikeCount(likeCount-1)
         setCurrentUserLike(false);
       }
     }

@@ -14,7 +14,7 @@ const TileFeedItemContainer = Styled.View`
 const TileFeedImage = Styled.Image`
  width: ${wp('44.2%')};
  height: ${wp('35.1%')};
- border-radius: 5px;
+ border-radius: 10px;
 `;
 
 const TagListContainer = Styled.View`
@@ -62,29 +62,56 @@ font-size: 13px;
 color: #898A8D;
 `;
 
+const NoImageContainer = Styled.View`
+background-color: #FAFAFA;
+border-radius: 10px;
+width: ${wp('44.2%')};
+height: ${wp('35.1%')};
+`;
+
 interface Props {
+    feedId: number,
+    mainImageUri: string,
+    mainTag: string,
+    rating: number,
+    expense: string,
+    address: string,
     navigation: any,
 }
 
 
 
-const TileFeedItem = ({navigation}: Props) => {
+const TileFeedItem = ({feedId, mainImageUri, mainTag, rating, expense, address, navigation}: Props) => {
+
+    const moveToFeedDetail = () => {
+        navigation.navigate("FeedStack", {
+            screen: "FeedDetailScreen",
+            params: {
+                feedId: feedId,
+            }
+        })
+    }
+
     return (
-        <TouchableWithoutFeedback onPress={() => navigation.navigate("FeedDetailScreen")}>
+        <TouchableWithoutFeedback onPress={() => moveToFeedDetail()}>
         <TileFeedItemContainer>
+            {!mainImageUri && (
+            <NoImageContainer>
+            </NoImageContainer>
+            )}
             <TileFeedImage
-            source={{uri:'https://img.maisonkorea.com/2019/05/msk_5ce1e0ac196ee-1200x800.jpg'}}/>
+            source={{uri:mainImageUri}}/>
             <TagListContainer>
-                <TagText>#아씨에뜨앤</TagText>
+                <TagText>{"#"+mainTag}</TagText>
             </TagListContainer>
             <RatingExpenseContainer>
                 <RatingImage
                 source={require('~/Assets/Images/ic_newStar.png')}/>
-                <RatingText>5 · </RatingText>
-                <ExpenseText>13,000원</ExpenseText>
+                <RatingText>{rating}</RatingText>
+                <ExpenseText>{expense ?" · " + expense + "원" : ""}</ExpenseText>
             </RatingExpenseContainer>
             <LocationContainer>
-                <LocationText>종로구 종로동</LocationText>
+                <LocationText>{address ? address : ""}</LocationText>
             </LocationContainer>
         </TileFeedItemContainer>
         </TouchableWithoutFeedback>

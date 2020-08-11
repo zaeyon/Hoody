@@ -1,10 +1,10 @@
 import axios from 'axios';
 const baseUrl = 'https://68d96a6e1632.ngrok.io';
 
-const GETHotPlace = () => {
-    const url = baseUrl + '/curation/holPlace';
+const GETRecommendCollection = () => {
+    const url = baseUrl + '/curation/recommendCollection';
 
-    return new Promise(function(resolve, reject){
+    return new Promise(function(resolve, reject) {
         axios
         .get(url)
         .then(function(response) {
@@ -16,4 +16,4 @@ const GETHotPlace = () => {
     })
 }
 
-export default GETHotPlace;
+export default GETRecommendCollection;

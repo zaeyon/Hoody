@@ -2276,13 +2276,6 @@
   dependencies:
     deep-assign "^3.0.0"
 
-"@react-native-community/blur@^3.6.0":
-  version "3.6.0"
-  resolved "https://registry.yarnpkg.com/@react-native-community/blur/-/blur-3.6.0.tgz#31c9e0f2770519c9b5c4f99418f192246f0d4db8"
-  integrity sha512-GtDBhpX2pQcjl4VopOC8FktrVufrEfYRwVeMQ2WWckqKIv2BdwvlvWvj88L1WmEdBr9UNcm3rtgz+d+YXkmirA==
-  dependencies:
-    prop-types "^15.5.10"
-
 "@react-native-community/cameraroll@^1.7.2":
   version "1.7.2"
   resolved "https://registry.yarnpkg.com/@react-native-community/cameraroll/-/cameraroll-1.7.2.tgz#d1fc3770fb3c2ab85456cff0a587f756ae4838bf"
@@ -8698,6 +8691,13 @@ react-native-swipe-image@1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/react-native-swipe-image/-/react-native-swipe-image-1.1.0.tgz#3e4d3b2bd1d9b3fd51c46c112f81d7d165799dd4"
   integrity sha512-t2T4yAqA+3Dhf8GNAOvLAb0RBVXzwW1E/hHD/zde7NsGIWaP+kYZM1XjyTA1itSp2F2y4hwQ01vOgiydLthPyg==
+
+react-native-swiper@^1.6.0:
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/react-native-swiper/-/react-native-swiper-1.6.0.tgz#59fdbdf95addee49630312f27077622c27776819"
+  integrity sha512-OnkTTZi+9uZUgy0uz1I9oYDhCU3z36lZn+LFsk9FXPRelxb/KeABzvPs3r3SrHWy1aA67KGtSFj0xNK2QD0NJQ==
+  dependencies:
+    prop-types "^15.5.10"
 
 react-native-tab-view@^2.14.4:
   version "2.14.4"

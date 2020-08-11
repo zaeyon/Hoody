@@ -9,6 +9,7 @@ import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import Swiper from 'react-native-swiper';
 
 // Local Component
 import RecommendUser from '~/Components/Presentational/ExploreScreen/RecommendUser';
@@ -22,7 +23,11 @@ import currentUser from '~/reducers/currentUser';
 
 // Route
 import GETRecommendUser from '~/Route/Curation/GETRecommendUser';
+import GETTrendTags from '~/Route/Curation/GETTrendTags';
 import GETAgeGroupPopularTag from '~/Route/Curation/GETAgeGroupPopularTag';
+import GETPostsByWroteTags from '~/Route/Curation/GETPostsByWroteTags';
+import GETRecommendCollection from '~/Route/Curation/GETRecommendCollection';
+import GETHotPlace from '~/Route/Curation/GETHotPlace';
 
 const Container = Styled.SafeAreaView`
  flex: 1;
@@ -151,6 +156,15 @@ const ExploreScreen = ({navigation, route}: Props) => {
         longitude: 0,
     });
     const [recommendUserListData, setRecommendUserListData] = useState<Array<object>>([]);
+    const [trendTagsListData, setTrendTagsListData] = useState<Array<object>>([]);
+    const [ageGroupPopularTag, setAgeGroupPopularTag] = useState<Array<object>>([
+        {
+            tagName: '',
+            tagPosts: [],
+            selected: false,
+        }
+    ]);
+    const [selectedPopularTagIndex, setSelectedPopularTagIndex] = useState<number>(0);
 
     useEffect(() => {
         GETRecommendUser()
@@ -162,9 +176,29 @@ const ExploreScreen = ({navigation, route}: Props) => {
             console.log("GETRecommendUser error", error);
         })
 
+        GETTrendTags()
+        .then(function(response) {
+            console.log("GETTrendTags response", response);
+            setTrendTagsListData(response);
+        })
+        .catch(function(error) {
+            console.log("GETTrendTags error", error);
+        })
+
         GETAgeGroupPopularTag()
         .then(function(response) {
+            var tmpAgeGroupPopularTag = new Array();
             console.log("GETAgeGroupPopularTag response", response);
+            var index = 0;
+            for(const[key, value] of Object.entries(response)) {
+                tmpAgeGroupPopularTag.push({
+                    tagName: key,
+                    tagPosts: value,
+                    selected: index == 0 ? true : false,
+                })
+                index = index + 1;
+            }
+            setAgeGroupPopularTag(tmpAgeGroupPopularTag);
         })
         .catch(function(error) {
             console.log("GETAgegroupPopularTag error", error);
@@ -186,17 +220,29 @@ const ExploreScreen = ({navigation, route}: Props) => {
                 { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
             );
           }
-        
-        
     }, [])
 
     const moveToNearFeedMap = () => {
         console.log("currentLocation", currentUserLocation);
-  
         navigation.navigate("NearFeedMapScreen", {
           currentLatitude: 37.567859,
           currentLongitude: 126.998215,
       })
+    }
+
+    const selectPopularTag =(item:object, index:number) => {
+        var tmpPopularTagList = ageGroupPopularTag.map(function(tag, index2) {
+            if(index !== index2) {
+                tag.selected = false
+                return tag
+            } else if(index === index2) {
+                tag.selected = true
+                return tag
+            }
+        })
+
+        setAgeGroupPopularTag(tmpPopularTagList);
+        
     }
     return (
         <Container>
@@ -227,11 +273,16 @@ const ExploreScreen = ({navigation, route}: Props) => {
             />
             </RecommendUserContainer>
             <RecommendTagBannerContainer>
-            <RecommendTagBanner/>
+            <RecommendTagBanner
+            trendTagsListData={trendTagsListData}
+            />
             </RecommendTagBannerContainer>
             <PopularTagByAgeGroupContainer>
                 <PopularTagByAgeGroup
                 navigation={navigation}
+                ageGroupPopularTag={ageGroupPopularTag}
+                selectPopularTag={selectPopularTag}
+                selectedPopularTagIndex={selectedPopularTagIndex}
                 />
             </PopularTagByAgeGroupContainer>
             <PopularFeedListContainer>

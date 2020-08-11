@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useLayoutEffect} from 'react';
 import Styled from 'styled-components/native';
 import {
     FlatList,
@@ -330,20 +330,19 @@ const TEST_FEED_DATA = [
 
   interface Props {
     navigation: any,
+    ageGroupPopularTag: Array<object>,
+    selectPopularTag: (item:number, index:number) => 0,
+    selectedPopularTagIndex: number,
   }
 
-const PopularTagByAgeGroup = ({navigation}: Props) => {
-    const [popularTagListData, setPopularTagListData] = useState<Array<object>>();
+const PopularTagByAgeGroup = ({navigation, ageGroupPopularTag, selectPopularTag, selectedPopularTagIndex}: Props) => {
+    const [popularTagListData, setPopularTagListData] = useState<Array<object>>([]);
     const [changeSelectedTag, setChangeSelectedTag] = useState<boolean>(false);
     const [selectedTagFeedListData, setSelectedTagFeedListData] = useState<Array<object>>([]);
 
-    useEffect(() => {
-        setPopularTagListData(TEST_POPULARY_TAG);
-        setSelectedTagFeedListData(TEST_FEED_DATA);
-    }, [])
-
+    /*
     const selectPopularTag = (item: object, index: number) => {
-        var tmpPopularTagList = popularTagListData.map(function(tag, index2) {
+        var tmpPopularTagList = ageGroupPopularTag.map(function(tag, index2) {
             if(index != index2) {
                 tag.selected = false
                 return tag
@@ -358,21 +357,36 @@ const PopularTagByAgeGroup = ({navigation}: Props) => {
         setChangeSelectedTag(!changeSelectedTag);
         console.log("select tag index", index)
     }
+    */
+
+    useEffect(() => {
+      console.log("연령대별 인기태그 목록zz", ageGroupPopularTag[selectedPopularTagIndex].tagPosts)
+    }, [ageGroupPopularTag])
 
     const renderPopularTagItem = ({item, index}: any) => {
+      console.log("renderPopularTagItem", item);
         return (
+          
             <TouchableWithoutFeedback onPress={() => selectPopularTag(item, index)}>
-            <PopularTagItemBackground style={[index === 0 &&  styles.firstTagItem || index === TEST_POPULARY_TAG.length-1 && styles.lastTagItem, item.selected && styles.selectTagBackground]}>
-                <UnselectPopularTagNameText style={item.selected && styles.selectTagText}>{"#" + item.name}</UnselectPopularTagNameText>
+            <PopularTagItemBackground style={[index === 0 &&  styles.firstTagItem || index === ageGroupPopularTag.length-1 && styles.lastTagItem, item.selected && styles.selectTagBackground]}>
+                <UnselectPopularTagNameText style={item.selected && styles.selectTagText}>{"#" + item.tagName}</UnselectPopularTagNameText>
             </PopularTagItemBackground>
             </TouchableWithoutFeedback>
         )
     }
 
     const renderSelectTagFeedItem = ({item, index}: any) => {
+     console.log("선택된 태그 피드 아이템", item)
         return (
             <TileFeedItem
+            feedId={item.id}
             navigation={navigation}
+            mainImageUri={item.mediaFiles[0] ? item.mediaFiles[0].url : null}
+            mainTag={item.mainTags.name}
+            rating={item.starRate}
+            expense={item.expense}
+            address={item.address.address}
+            
             />
         )
     }
@@ -386,7 +400,7 @@ const PopularTagByAgeGroup = ({navigation}: Props) => {
             <FlatList
             showsHorizontalScrollIndicator={false}
             horizontal={true}
-            data={popularTagListData}
+            data={ageGroupPopularTag}
             renderItem={renderPopularTagItem}/>
             </PopularTagListContainer>
             <SelectTagFeedListContainer>
@@ -395,7 +409,7 @@ const PopularTagByAgeGroup = ({navigation}: Props) => {
                 contentContainerStyle={{paddingLeft:16, paddingRight:16}}
                 columnWrapperStyle={{marginTop:8}}
                 numColumns={2}
-                data={selectedTagFeedListData}
+                data={ageGroupPopularTag[selectedPopularTagIndex].tagPosts}
                 renderItem={renderSelectTagFeedItem}
                 />
             </SelectTagFeedListContainer>

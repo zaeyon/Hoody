@@ -1,17 +1,23 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import Styled from 'styled-components/native';
+import {View, FlatList} from 'react-native';
 import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 
+import Swiper from 'react-native-swiper';
+
 const Container = Styled.View`
  width: ${wp('100%')};
- height: ${wp('42.6%')};
+ height: ${wp('50%')};
 `;
 
 const BannerImage = Styled.Image`
 flex:1;
+width: ${wp('91.4%')};
+height: ${wp('50%')};
+border-radius: 10px;
 `;
 
 const TagNameText = Styled.Text`
@@ -31,12 +37,32 @@ const TagFeedCountText = Styled.Text`
 font-weight: 600;
 `;
 
-const RecommendTagBanner = ({}) => {
+const BannerContainer = Styled.View`
+ flex: 1;
+ background-color: #ffffff;
+ padding-left: 16px;
+ padding-right: 16px;
+ padding-bottom: 8px;
+`;
+
+interface Props {
+    trendTagsListData: Array<object>
+}
+
+const RecommendTagBanner = ({trendTagsListData}: Props) => {
+    
     return (
         <Container>
-            <BannerImage
-            source={{uri:'https://dimg.donga.com/wps/NEWS/IMAGE/2020/03/11/100120917.4.jpg'}}
-            resizeMode={"cover"}/>
+            <Swiper paginationStyle={{bottom:-5}} dotStyle={{width:5, height:5}} activeDotStyle={{backgroundColor:'#56575C', width:5, height:5}}>
+                {trendTagsListData.map((item, index) => {
+                    return (
+                    <BannerContainer>
+                    <BannerImage
+                    source={{uri:item.coverImg}}/>
+                    </BannerContainer>
+                    )
+                })}
+            </Swiper>
         </Container>
     )
 }

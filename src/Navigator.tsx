@@ -81,6 +81,8 @@ import AccountSettingScreen from '~/Components/Container/SettingScreen/AccountSe
 import AlarmSettingScreen from '~/Components/Container/SettingScreen/AlarmSettingScreen';
 import BirthdateSettingScreen from '~/Components/Container/SettingScreen/BirthdateSettingScreen';
 import GenderSettingScreen from '~/Components/Container/SettingScreen/GenderSettingScreen';
+import ConfirmPasswordScreen from '~/Components/Container/SettingScreen/ConfirmPasswordScreen';
+import NewPasswordSettingScreen from '~/Components/Container/SettingScreen/NewPasswordSettingScreen';
 
 // Scrap Screen
 import ScrapListScreen from '~/Components/Container/ScrapListScreen';
@@ -743,7 +745,7 @@ function AppNavigator() {
 
   return (
     <NavigationContainer>
-    {(currentUserState.loggedIn) ? (  
+    {(!currentUserState.loggedIn) ? (  
     <NoBottomBarStack.Navigator
     headerMode="none"
     >
@@ -755,6 +757,8 @@ function AppNavigator() {
       <NoBottomBarStack.Screen name="AddCollectionFeedScreen" component={AddCollectionFeedScreen}/>
       <NoBottomBarStack.Screen name="AddScrapAlbumScreen" component={AddScrapAlbumScreen}/>
       <NoBottomBarStack.Screen name="LocationFeedMapScreen" component={LocationFeedMapScreen}/>
+      <NoBottomBarStack.Screen name="ConfirmPasswordScreen" component={ConfirmPasswordScreen}/>
+      <NoBottomBarStack.Screen name="NewPasswordSettingScreen" component={NewPasswordSettingScreen}/>
     </NoBottomBarStack.Navigator>
     ) : (
       <UnauthStackScreen/>

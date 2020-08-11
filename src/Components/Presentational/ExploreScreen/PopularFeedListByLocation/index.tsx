@@ -10,6 +10,7 @@ import TileFeedItem from '~/Components/Presentational/ExploreScreen/TileFeedItem
 import LocationTagItem from '~/Components/Presentational/ExploreScreen/LocationTagItem';
 
 const Container = Styled.View`
+ background-color: #ffffff;
 `;
 
 const HeaderContainer = Styled.View`

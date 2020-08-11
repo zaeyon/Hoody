@@ -11,7 +11,6 @@ import SubRecommendCollectionItem from '~/Components/Presentational/ExploreScree
 
 const Container = Styled.View`
  background-color: #ffffff;
- flex:1;
 `;
 
 const HeaderContainer = Styled.View`
@@ -78,9 +77,11 @@ const TEST_SUB_RECOMMEND_COLLECTION_DATA = [
 
 interface Props {
     navigation: any,
+    recommendMainCollectionListData: Array<object>,
+    recommendSubCollectionListData: Array<object>,
 }
 
-const RecommendCollectionList = ({navigation}: Props) => {
+const RecommendCollectionList = ({navigation, recommendMainCollectionListData, recommendSubCollectionListData}: Props) => {
 
     const renderMainRecommendCollectionItem = ({item, index}: any) => {
         return (
@@ -88,7 +89,7 @@ const RecommendCollectionList = ({navigation}: Props) => {
             <MainRecommendCollectionItem
             coverImage={item.coverImage}
             name={item.name}
-            nickname={item.nickname}
+            nickname={item.user.nickname}
             navigation={navigation}
             />
         </MainRecommendCollectionItemContainer>
@@ -101,7 +102,7 @@ const RecommendCollectionList = ({navigation}: Props) => {
                 <SubRecommendCollectionItem
                 coverImage={item.coverImage}
                 name={item.name}
-                nickname={item.nickname}
+                nickname={item.user.nickname}
                 navigation={navigation}/>
             </SubRecommendCollectionItemContainer>
         )
@@ -116,7 +117,7 @@ const RecommendCollectionList = ({navigation}: Props) => {
                 contentContainerStyle={{backgroundColor:'#ffffff',  justifyContent: 'center', alignItems:'center'}}
                 horizontal={false}
                 numColumns={2}
-                data={TEST_MAIN_RECOMMEND_COLLECTION_DATA}
+                data={recommendMainCollectionListData}
                 renderItem={renderMainRecommendCollectionItem}/>
             </MainRecommendCollectionContainer>
             <SubRecommendCollectionContainer>
@@ -124,7 +125,7 @@ const RecommendCollectionList = ({navigation}: Props) => {
                 contentContainerStyle={{backgroundColor:'#ffffff',  justifyContent: 'center', alignItems:'center'}}
                 horizontal={false}
                 numColumns={3}
-                data={TEST_SUB_RECOMMEND_COLLECTION_DATA}
+                data={recommendSubCollectionListData}
                 renderItem={renderSubRecommendCollectionItem}/>
             </SubRecommendCollectionContainer>
         </Container>

@@ -69,25 +69,31 @@ const FeedLocationText = Styled.Text`
 
 interface Props {
     navigation: any,
+    mainImageUri: string,
+    feedId: number,
+    mainTag: string,
+    address: string,
+    expense: string,
+    rating: rating
 }
 
-const SubPopularFeedItem = ({navigation}: Props) => {
+const SubPopularFeedItem = ({navigation, mainImageUri, feedId, mainTag, address, expense, rating}: Props) => {
     return (
         <TouchableWithoutFeedback onPress={() => navigation.navigate("FeedDetailScreen")}>
         <Container>
             <FeedImageContainer>
                 <FeedMainImage
-                source={{uri:'https://i.pinimg.com/originals/5d/99/89/5d9989c2ddc5aaa8a8627df55c998b62.jpg'}}/>
+                source={{uri:mainImageUri}}/>
             </FeedImageContainer>
             <FeedInfoContainer>
-                <FeedTagText>#Tag</FeedTagText>
+                <FeedTagText>{"#"+mainTag}</FeedTagText>
                 <FeedRatingExpenseContainer>
                     <FeedRatingImage
                     source={require('~/Assets/Images/ic_newStar.png')}/>
-                    <FeedRatingText>3.5 · </FeedRatingText>
-                    <FeedExpenseText>420.000원</FeedExpenseText>
+                    <FeedRatingText>{rating}</FeedRatingText>
+                    <FeedExpenseText>{expense ?" · " +  expense + "원" : null}</FeedExpenseText>
                 </FeedRatingExpenseContainer>
-                <FeedLocationText>하이데어</FeedLocationText>
+                <FeedLocationText>{address}</FeedLocationText>
             </FeedInfoContainer>
         </Container>
         </TouchableWithoutFeedback>

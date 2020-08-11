@@ -330,19 +330,19 @@ const TEST_FEED_DATA = [
 
   interface Props {
     navigation: any,
-    ageGroupPopularTag: Array<object>,
+    ageGroupPopularTagListData: Array<object>,
     selectPopularTag: (item:number, index:number) => 0,
     selectedPopularTagIndex: number,
   }
 
-const PopularTagByAgeGroup = ({navigation, ageGroupPopularTag, selectPopularTag, selectedPopularTagIndex}: Props) => {
+const PopularTagByAgeGroup = ({navigation, ageGroupPopularTagListData, selectPopularTag, selectedPopularTagIndex}: Props) => {
     const [popularTagListData, setPopularTagListData] = useState<Array<object>>([]);
     const [changeSelectedTag, setChangeSelectedTag] = useState<boolean>(false);
     const [selectedTagFeedListData, setSelectedTagFeedListData] = useState<Array<object>>([]);
 
     /*
     const selectPopularTag = (item: object, index: number) => {
-        var tmpPopularTagList = ageGroupPopularTag.map(function(tag, index2) {
+        var tmpPopularTagList = ageGroupPopularTagListData.map(function(tag, index2) {
             if(index != index2) {
                 tag.selected = false
                 return tag
@@ -360,15 +360,15 @@ const PopularTagByAgeGroup = ({navigation, ageGroupPopularTag, selectPopularTag,
     */
 
     useEffect(() => {
-      console.log("연령대별 인기태그 목록zz", ageGroupPopularTag[selectedPopularTagIndex].tagPosts)
-    }, [ageGroupPopularTag])
+      console.log("연령대별 인기태그 목록zz", ageGroupPopularTagListData[selectedPopularTagIndex].tagPosts)
+    }, [ageGroupPopularTagListData])
 
     const renderPopularTagItem = ({item, index}: any) => {
       console.log("renderPopularTagItem", item);
         return (
           
             <TouchableWithoutFeedback onPress={() => selectPopularTag(item, index)}>
-            <PopularTagItemBackground style={[index === 0 &&  styles.firstTagItem || index === ageGroupPopularTag.length-1 && styles.lastTagItem, item.selected && styles.selectTagBackground]}>
+            <PopularTagItemBackground style={[index === 0 &&  styles.firstTagItem || index === ageGroupPopularTagListData.length-1 && styles.lastTagItem, item.selected && styles.selectTagBackground]}>
                 <UnselectPopularTagNameText style={item.selected && styles.selectTagText}>{"#" + item.tagName}</UnselectPopularTagNameText>
             </PopularTagItemBackground>
             </TouchableWithoutFeedback>
@@ -400,7 +400,7 @@ const PopularTagByAgeGroup = ({navigation, ageGroupPopularTag, selectPopularTag,
             <FlatList
             showsHorizontalScrollIndicator={false}
             horizontal={true}
-            data={ageGroupPopularTag}
+            data={ageGroupPopularTagListData}
             renderItem={renderPopularTagItem}/>
             </PopularTagListContainer>
             <SelectTagFeedListContainer>
@@ -409,7 +409,7 @@ const PopularTagByAgeGroup = ({navigation, ageGroupPopularTag, selectPopularTag,
                 contentContainerStyle={{paddingLeft:16, paddingRight:16}}
                 columnWrapperStyle={{marginTop:8}}
                 numColumns={2}
-                data={ageGroupPopularTag[selectedPopularTagIndex].tagPosts}
+                data={ageGroupPopularTagListData[selectedPopularTagIndex].tagPosts}
                 renderItem={renderSelectTagFeedItem}
                 />
             </SelectTagFeedListContainer>

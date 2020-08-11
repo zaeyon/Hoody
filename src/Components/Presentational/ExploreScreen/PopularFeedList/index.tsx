@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
     FlatList,
     TouchableWithoutFeedback
@@ -13,7 +13,7 @@ import MainPopularFeedItem from '~/Components/Presentational/ExploreScreen/MainP
 import SubPopularFeedItem from '~/Components/Presentational/ExploreScreen/SubPopularFeedItem';
 
 const Container = Styled.View`
- flex: 1;
+ background-color:#FFFFFF;
 `;
 
 const HeaderContainer = Styled.View`
@@ -59,9 +59,12 @@ const TEST_POPULAR_FEED_DATA = [
 
 interface Props {
     navigation: any,
+    postsByWroteTagListData: Array<object>,
 }
 
-const PopularFeedList = ({navigation}: Props) => {
+const PopularFeedList = ({navigation, postsByWroteTagListData}: Props) => {
+
+    console.log("사용자가 작성한 태그의 인기게시글", postsByWroteTagListData);
 
     const renderPopularFeedItem = ({item, index}: any) => {
         if(index === 0) {
@@ -69,6 +72,11 @@ const PopularFeedList = ({navigation}: Props) => {
             <MainPopularFeedItemContainer>
             <MainPopularFeedItem
             navigation={navigation}
+            feedId={item.id}
+            mainImageUri={item.mediaFiles[0] ? item.mediaFiles[0].url : null}
+            mainTag={item.mainTags.name}
+            address={item.address ? item.address.address : null}
+            rating={item.starRate}
             />
             </MainPopularFeedItemContainer>
             )
@@ -77,6 +85,12 @@ const PopularFeedList = ({navigation}: Props) => {
             <SubPopularFeedItemContainer>
             <SubPopularFeedItem
             navigation={navigation}
+            feedId={item.id}
+            mainImageUri={item.mediaFiles[0] ? item.mediaFiles[0].url : null}
+            mainTag={item.mainTags.name}
+            address={item.address ? item.address.address : null}
+            rating={item.starRate}
+            expense={item.expense}
             />
             </SubPopularFeedItemContainer>
             )
@@ -91,7 +105,7 @@ const PopularFeedList = ({navigation}: Props) => {
             <PopularFeedListContainer>
                 <FlatList
                 contentContainerStyle={{alignItems:'center'}}
-                data={TEST_POPULAR_FEED_DATA}
+                data={postsByWroteTagListData}
                 renderItem={renderPopularFeedItem}/>
             </PopularFeedListContainer>
         </Container>

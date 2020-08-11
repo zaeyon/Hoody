@@ -34,8 +34,9 @@ const Container = Styled.SafeAreaView`
  background-color: #ffffff;
 `;
 
-const BodyContainer = Styled.ScrollView`
+const BodyContainer = Styled.View`
  background-color: #ffffff;
+ padding-bottom: 40px;
 `;
 
 const HeaderBar = Styled.View`
@@ -142,7 +143,6 @@ const RecommendCollectionContainer = Styled.View`
 
 const PopularFeedListByLocationContainer = Styled.View`
  margin-top: 10px;
- padding-bottom: 40px;
 `;
 
 interface Props {
@@ -157,7 +157,7 @@ const ExploreScreen = ({navigation, route}: Props) => {
     });
     const [recommendUserListData, setRecommendUserListData] = useState<Array<object>>([]);
     const [trendTagsListData, setTrendTagsListData] = useState<Array<object>>([]);
-    const [ageGroupPopularTag, setAgeGroupPopularTag] = useState<Array<object>>([
+    const [ageGroupPopularTagListData, setAgeGroupPopularTagListData] = useState<Array<object>>([
         {
             tagName: '',
             tagPosts: [],
@@ -165,6 +165,9 @@ const ExploreScreen = ({navigation, route}: Props) => {
         }
     ]);
     const [selectedPopularTagIndex, setSelectedPopularTagIndex] = useState<number>(0);
+    const [postsByWroteTagListData, setPostsByWroteTagListData] = useState<Array<object>>([]);
+    const [recommendMainCollectionListData, setRecommendMainCollectionListData] = useState<Array<object>>([]);
+    const [recommendSubCollectionListData, setRecommendSubCollectionListData] = useState<Array<object>>([]);
 
     useEffect(() => {
         GETRecommendUser()
@@ -187,21 +190,40 @@ const ExploreScreen = ({navigation, route}: Props) => {
 
         GETAgeGroupPopularTag()
         .then(function(response) {
-            var tmpAgeGroupPopularTag = new Array();
+            var tmpAgeGroupPopularTagListData = new Array();
             console.log("GETAgeGroupPopularTag response", response);
             var index = 0;
             for(const[key, value] of Object.entries(response)) {
-                tmpAgeGroupPopularTag.push({
+                tmpAgeGroupPopularTagListData.push({
                     tagName: key,
                     tagPosts: value,
                     selected: index == 0 ? true : false,
                 })
                 index = index + 1;
             }
-            setAgeGroupPopularTag(tmpAgeGroupPopularTag);
+            setAgeGroupPopularTagListData(tmpAgeGroupPopularTagListData);
         })
         .catch(function(error) {
             console.log("GETAgegroupPopularTag error", error);
+        })
+
+        GETPostsByWroteTags()
+        .then(function(response) {
+            console.log("GETPostsByWroteTags response", response)
+            setPostsByWroteTagListData(response);
+        })
+        .catch(function(error) {
+            console.log("GETPostsByWroteTags error", error);
+        })
+
+        GETRecommendCollection()
+        .then(function(response) {
+            console.log("GETRecommendCollection response", response)
+            setRecommendMainCollectionListData(response.slice(0, 2));
+            setRecommendSubCollectionListData(response.slice(2));
+        })
+        .catch(function(error) {
+            console.log("GETRecommendCollection error", error);
         })
     }, [])
 
@@ -231,7 +253,7 @@ const ExploreScreen = ({navigation, route}: Props) => {
     }
 
     const selectPopularTag =(item:object, index:number) => {
-        var tmpPopularTagList = ageGroupPopularTag.map(function(tag, index2) {
+        var tmpPopularTagList = ageGroupPopularTagListData.map(function(tag, index2) {
             if(index !== index2) {
                 tag.selected = false
                 return tag
@@ -241,7 +263,7 @@ const ExploreScreen = ({navigation, route}: Props) => {
             }
         })
 
-        setAgeGroupPopularTag(tmpPopularTagList);
+        setAgeGroupPopularTagListData(tmpPopularTagList);
         
     }
     return (
@@ -263,9 +285,9 @@ const ExploreScreen = ({navigation, route}: Props) => {
                 </HeaderMarkerContainer>
                 </TouchableWithoutFeedback>
             </HeaderBar>
-            <BodyContainer
-            showsVerticalScrollIndicator={false}
-            >
+            <ScrollView
+            showsVerticalScrollIndicator={false}>
+            <BodyContainer>
             <RecommendUserContainer>
             <RecommendUser
             navigation={navigation}
@@ -280,7 +302,7 @@ const ExploreScreen = ({navigation, route}: Props) => {
             <PopularTagByAgeGroupContainer>
                 <PopularTagByAgeGroup
                 navigation={navigation}
-                ageGroupPopularTag={ageGroupPopularTag}
+                ageGroupPopularTagListData={ageGroupPopularTagListData}
                 selectPopularTag={selectPopularTag}
                 selectedPopularTagIndex={selectedPopularTagIndex}
                 />
@@ -288,11 +310,14 @@ const ExploreScreen = ({navigation, route}: Props) => {
             <PopularFeedListContainer>
                 <PopularFeedList
                 navigation={navigation}
+                postsByWroteTagListData={postsByWroteTagListData}
                 />
             </PopularFeedListContainer>
             <RecommendCollectionContainer>
                 <RecommendCollectionList
                 navigation={navigation}
+                recommendMainCollectionListData={recommendMainCollectionListData}
+                recommendSubCollectionListData={recommendSubCollectionListData}
                 />
             </RecommendCollectionContainer>
             <PopularFeedListByLocationContainer>
@@ -301,6 +326,7 @@ const ExploreScreen = ({navigation, route}: Props) => {
                 />
             </PopularFeedListByLocationContainer>
             </BodyContainer>
+            </ScrollView>
         </Container>
     )
 }

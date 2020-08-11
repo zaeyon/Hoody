@@ -14,7 +14,7 @@ const Container = Styled.View`
 
 const FeedBackgroundImage = Styled.Image`
  flex: 1;
- border-radius: 5px;
+ border-radius: 10px;
 `;
 
 const FeedInfoContainer = Styled.View`
@@ -26,7 +26,8 @@ background-color: #00000030;
 padding-top: 10px;
 padding-left: 13px;
 padding-bottom: 12px;
-
+border-bottom-left-radius: 10px;
+border-bottom-right-radius: 10px;
 `;
 
 const FeedMainTagNameText = Styled.Text`
@@ -68,27 +69,41 @@ const FeedRatingText = Styled.Text`
 `;
 
 interface Props {
+    feedId: number,
+    mainImageUri: string,
+    mainTag: string,
+    address: string,
+    rating: number,
     navigation: any,
 }
 
-const MainPopularFeedItem = ({navigation}: Props) => {
+const MainPopularFeedItem = ({navigation, feedId, mainImageUri, mainTag, address, rating}: Props) => {
+
+    const moveToFeedDetail = () => {
+        navigation.navigate("FeedStack", {
+            screen: "FeedDetailScreen",
+            params: {
+                feedId: feedId,
+            }
+        })
+    }
+
     return (
-    <TouchableWithoutFeedback onPress={() => navigation.navigate("FeedDetailScreen")}>
+    <TouchableWithoutFeedback onPress={() => moveToFeedDetail()}>
         <Container>
             <FeedBackgroundImage
-            source={{uri:'https://travelblog.expedia.co.kr/wp-content/uploads/2016/12/010.jpg'}}/>
+            source={{uri:mainImageUri}}/>
             <FeedInfoContainer>
-            <FeedMainTagNameText>#북방의_장미_치앙마이</FeedMainTagNameText>
-            <FeedLocationText>태국 치앙마이</FeedLocationText>
+            <FeedMainTagNameText>{"#" + mainTag}</FeedMainTagNameText>
+            <FeedLocationText>{address ? address : ""}</FeedLocationText>
             </FeedInfoContainer>
             <FeedRatingBackground>
                 <FeedRatingStarImage
                 source={require('~/Assets/Images/ic_newStar.png')}/>
-                <FeedRatingText>3.5</FeedRatingText>
+                <FeedRatingText>{rating}</FeedRatingText>
             </FeedRatingBackground>
         </Container>
     </TouchableWithoutFeedback>
-
     )
 }
 

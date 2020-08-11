@@ -154,6 +154,10 @@ const AccountSettingScreen = ({navigation, route}: Props) => {
         navigation.navigate("GenderSettingScreen");
     }
 
+    const moveToConfirmPassword = () => {
+        navigation.navigate("ConfirmPasswordScreen");
+    }
+
     const logout = () => {
         Alert.alert(
             '로그아웃 하시겠습니까?', 
@@ -236,6 +240,7 @@ const AccountSettingScreen = ({navigation, route}: Props) => {
                 style={{marginTop: 10}}>
                     <ItemTitleText>보안</ItemTitleText>
                     </ItemTitleContainer>
+                    <TouchableWithoutFeedback onPress={() => moveToConfirmPassword()}>
                     <TabItemContainer>
                     <TabItemInfoContainer>
                         <TabItemLabelText>비밀번호 설정</TabItemLabelText>
@@ -245,6 +250,7 @@ const AccountSettingScreen = ({navigation, route}: Props) => {
                         </TabItemRightContainer>
                     </TabItemInfoContainer>
                     </TabItemContainer>
+                    </TouchableWithoutFeedback>
                     <TabItemContainer>
                         <TouchableWithoutFeedback onPress={() => logout()}>
                         <TabToggleContainer>

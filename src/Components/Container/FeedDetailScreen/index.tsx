@@ -994,7 +994,16 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
      console.log("ggg")
      //setOtherUsersFeedModalVisible(false);
      setVisibleReportModal(true);
-      }
+   }  
+
+   const moveToFeedEdit = () => {
+     setMyFeedModalVisible(false);
+     navigation.navigate("FeedEditScreen", {
+       paragraphData: paragraphData,
+       feedDetailInfo: feedDetailInfo,
+     });
+   }
+
   
 
    return (
@@ -1100,7 +1109,7 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
           >삭제하기</ModalTabItemLabelText>
         </ModalTabItemContainer>
         </TouchableWithoutFeedback>
-        <TouchableWithoutFeedback onPress={() => 0}>
+        <TouchableWithoutFeedback onPress={() => moveToFeedEdit()}>
         <ModalTabItemContainer>
           <ModalTabItemIconImage
           style={{tintColor:'#1D1E1F'}}

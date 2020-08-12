@@ -58,21 +58,36 @@ const TEST_LOCATION_TAG = [
 
 interface Props {
     navigation: any,
+    placeName: string,
+    hotPlaceData: object,
 }
 
-const PopularFeedListByLocation = ({navigation}: Props) => {
+const PopularFeedListByLocation = ({navigation,hotPlaceData, placeName}: Props) => {
+
+    console.log("PopularFeedListByLocation", hotPlaceData);
 
     const renderLocationPopularFeedItem = ({item, index}: any) => {
         return (
         <TileFeedItem
         navigation={navigation}
+        mainImageUri={item.mediaFiles[0] ? item.mediaFiles[0].url : null}
+        feedId={item.id}
+        mainTag={item.mainTags.name}
+        address={item.address ? item.address.address : null}
+        expense={item.expense ? item.expense : null}
+        rating={item.starRate}
         />
         )
     }
 
     const renderLocationTagItem = ({item,index}: any) => {
         return (
-            <LocationTagItem/>
+            <LocationTagItem
+            tagItem={item}
+            tagName={item.name}
+            feedCount={item.reviewNum}
+            navigation={navigation}
+            />
         )
     }
 
@@ -80,19 +95,19 @@ const PopularFeedListByLocation = ({navigation}: Props) => {
     return (
         <Container>
             <HeaderContainer>
-                <HeaderTitleText>을지로 인기</HeaderTitleText>
+                <HeaderTitleText>{hotPlaceData.place + " 인기"}</HeaderTitleText>
             </HeaderContainer>
             <FeedListContainer>
                 <FlatList
                 contentContainerStyle={{paddingLeft: 16, paddingRight: 16}}
                 horizontal={true}
-                data={TEST_FEED_DATA}
+                data={hotPlaceData.posts}
                 renderItem={renderLocationPopularFeedItem}
                 />
             </FeedListContainer>
             <LocationTagListContainer>
                 <FlatList
-                data={TEST_LOCATION_TAG}
+                data={hotPlaceData.tags}
                 renderItem={renderLocationTagItem}
                 />
             </LocationTagListContainer>

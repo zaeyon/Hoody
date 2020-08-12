@@ -15,7 +15,7 @@ background-color: #ffffff;
 `;
 
 const NoCollectionContainer = Styled.View`
- padding-top: 76px;
+ padding-top: 180px;
  background-color: #ffffff;
  align-items: center;
  justify-content: center;
@@ -57,7 +57,6 @@ const CollectionItemContainer = Styled.View`
 
 
 const NoCollectionText = Styled.Text`
- margin-top: 60px;
  font-size: 16px;
  color: #4B4B4B;
 `;

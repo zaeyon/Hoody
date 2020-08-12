@@ -377,8 +377,8 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
             }}>    
             <CollectionCoverImage
             blurRadius={headerBlur ? 40: 0}
-            source={{uri:'https://d2uh4olaxaj5eq.cloudfront.net/fit-in/1080x0/b10f0e26-105a-49b9-9593-b70b69c2e611.jpg'}}/>
-<HeaderBar style={{marginTop: getStatusBarHeight()}}>
+            source={{uri:collectionDetailInfo.coverImg ? collectionDetailInfo.coverImg : ""}}/>
+            <HeaderBar style={{marginTop: getStatusBarHeight()}}>
                 <HeaderLeftContainer>
                     <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
                     <BackButtonContainer>
@@ -403,8 +403,7 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
             onScroll={Animated.event([
                 {nativeEvent: { contentOffset: {y: scrollOffsetY}}}])}
             scrollEventThrottle={5}
-            showsVerticalScrollIndicator={false}
-            >
+            showsVerticalScrollIndicator={false}>
             <CollectionInfoContainer style={{paddingTop:H_MAX_HEIGHT-25}}>
             <CollectionInfoHeader>
             <CollectionTitleText>{collectionDetailInfo.name}</CollectionTitleText>
@@ -418,9 +417,8 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
             <WriterProfileContainer>
                 <WriterInfoContainer>
                 <ProfileImage
-                source={{uri:route.params?.profileImage}}
-                />
-                <ProfileNicknameText>{route.params?.profileNickname}</ProfileNicknameText>
+                source={{uri:collectionDetailInfo.user?.profileImg}}/>
+                <ProfileNicknameText>{collectionDetailInfo.user?.nickname}</ProfileNicknameText>
                 </WriterInfoContainer>
                 <FollowText>팔로우</FollowText>
             </WriterProfileContainer>
@@ -441,6 +439,7 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
             data={collectionDetailInfo.Posts}
             renderItem={renderCollectionFeedItem}
             />
+            {collectionDetailInfo?.includeLocation && (
             <LocationMapContainer>
             <LocationMapHeaderBar>
                 <LocationMapText>지도</LocationMapText>
@@ -464,6 +463,8 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
                 </Marker>
             </MapView>
             </LocationMapContainer>
+
+            )}
             </ScrollView>
             <ActionSheet
             ref={actionSheetRef}

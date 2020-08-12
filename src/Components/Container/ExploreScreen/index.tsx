@@ -3,6 +3,7 @@ import {
     TouchableWithoutFeedback,
      FlatList,
      ScrollView,
+     RefreshControl,
     } from 'react-native';
 import Styled from 'styled-components/native';
 import {
@@ -30,13 +31,11 @@ import GETRecommendCollection from '~/Route/Curation/GETRecommendCollection';
 import GETHotPlace from '~/Route/Curation/GETHotPlace';
 
 const Container = Styled.SafeAreaView`
- flex: 1;
  background-color: #ffffff;
 `;
 
 const BodyContainer = Styled.View`
  background-color: #ffffff;
- padding-bottom: 40px;
 `;
 
 const HeaderBar = Styled.View`
@@ -142,7 +141,7 @@ const RecommendCollectionContainer = Styled.View`
 `;
 
 const PopularFeedListByLocationContainer = Styled.View`
- margin-top: 10px;
+ padding-bottom: 100px;
 `;
 
 interface Props {
@@ -168,8 +167,31 @@ const ExploreScreen = ({navigation, route}: Props) => {
     const [postsByWroteTagListData, setPostsByWroteTagListData] = useState<Array<object>>([]);
     const [recommendMainCollectionListData, setRecommendMainCollectionListData] = useState<Array<object>>([]);
     const [recommendSubCollectionListData, setRecommendSubCollectionListData] = useState<Array<object>>([]);
+    const [hotPlaceData, setHotPlaceData] = useState<object>({});
+    const [refreshingRecommendData, setRefreshingRecommendData] = useState<boolean>(false);
 
     useEffect(() => {
+        getRecommendData()
+    }, [])
+
+    useEffect(() => {
+        var hasLocationPermission = true;
+        if (hasLocationPermission) {
+            Geolocation.getCurrentPosition(
+                (position) => {
+                  console.log("탐색화면 현재 위치", position);
+                  setCurrentUserLocation(position.coords);
+                },
+                (error) => {
+                  // See error code charts below.
+                  console.log(error.code, error.message);
+                },
+                { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+            );
+          }
+    }, [])
+
+    const getRecommendData = () => {
         GETRecommendUser()
         .then(function(response) {
             console.log("GETRecommendUser response", response);
@@ -225,24 +247,17 @@ const ExploreScreen = ({navigation, route}: Props) => {
         .catch(function(error) {
             console.log("GETRecommendCollection error", error);
         })
-    }, [])
 
-    useEffect(() => {
-        var hasLocationPermission = true;
-        if (hasLocationPermission) {
-            Geolocation.getCurrentPosition(
-                (position) => {
-                  console.log("탐색화면 현재 위치", position);
-                  setCurrentUserLocation(position.coords);
-                },
-                (error) => {
-                  // See error code charts below.
-                  console.log(error.code, error.message);
-                },
-                { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
-            );
-          }
-    }, [])
+        GETHotPlace()
+        .then(function(response) {
+            console.log("GETHotPlace response", response)
+            setHotPlaceData(response);
+        })
+        .catch(function(error) {
+            console.log("GETHotPlace error", error);
+        }) 
+
+    }
 
     const moveToNearFeedMap = () => {
         console.log("currentLocation", currentUserLocation);
@@ -286,7 +301,12 @@ const ExploreScreen = ({navigation, route}: Props) => {
                 </TouchableWithoutFeedback>
             </HeaderBar>
             <ScrollView
-            showsVerticalScrollIndicator={false}>
+            showsVerticalScrollIndicator={false}
+            refreshControl={
+                <RefreshControl
+                refreshing={refreshingRecommendData}
+                onRefresh={getRecommendData}/>
+            }>
             <BodyContainer>
             <RecommendUserContainer>
             <RecommendUser
@@ -323,6 +343,7 @@ const ExploreScreen = ({navigation, route}: Props) => {
             <PopularFeedListByLocationContainer>
                 <PopularFeedListByLocation
                 navigation={navigation}
+                hotPlaceData={hotPlaceData}
                 />
             </PopularFeedListByLocationContainer>
             </BodyContainer>

@@ -601,35 +601,60 @@ const TagSearchScreen = ({navigation, route}: Props) => {
     const moveUpload = () => {
         if(inputMainTag && !inputSubTag1 && !inputSubTag2) {
         console.log("!changingInputedTag", changingInputedTag)
-        navigation.navigate('UploadScreen', {
-            mainTag: inputMainTag,
-            mainTagWidth: mainTagWidth,
-            subTag1: null,
-            subTag2: null,
+
+        if(route.params?.requestType === 'upload') {
+            navigation.navigate('UploadScreen', {
+              mainTag: inputMainTag,
+              mainTagWidth: mainTagWidth,
+              subTag1: null,
+              subTag2: null,
         })
+        } else if(route.params?.requestType === 'edit') {
+            navigation.navigate('FeedEditScreen', {
+                mainTag: inputMainTag,
+              mainTagWidth: mainTagWidth,
+              subTag1: null,
+              subTag2: null,
+            })
+        }
         } else if (inputMainTag && inputSubTag1 && !inputSubTag2) {
-            navigation.navigate('UploadScreen', {
-                mainTag: inputMainTag,
-                mainTagWidth: mainTagWidth,
-                subTag1: inputSubTag1,
-                subTag1Width: subTag1Width,
-                subTag2: null
-            })
+            if(route.params?.requestType === 'upload') {
+                navigation.navigate('UploadScreen', {
+                    mainTag: inputMainTag,
+                    mainTagWidth: mainTagWidth,
+                    subTag1: inputSubTag1,
+                    subTag1Width: subTag1Width,
+                    subTag2: null
+                })
+            } else if(route.params?.requestType === 'edit') {
+                navigation.navigate('FeedEditScreen', {
+                    mainTag: inputMainTag,
+                    mainTagWidth: mainTagWidth,
+                    subTag1: inputSubTag1,
+                    subTag1Width: subTag1Width,
+                    subTag2: null
+                })
+            }
         } else if (inputMainTag && inputSubTag1 && inputSubTag2) {
-
-
-        console.log("TagSearchScreen22 mainTagwidth", mainTagWidth);
-        console.log("TagSearchScreen22 subTag1Width", subTag1Width);
-        console.log("TagSearchScreen22 subTag2Width", subTag2Width);
-
-            navigation.navigate('UploadScreen', {
-                mainTag: inputMainTag,
-                mainTagWidth: mainTagWidth,
-                subTag1: inputSubTag1,
-                subTag1Width: subTag1Width,
-                subTag2: inputSubTag2,
-                subTag2Width: subTag2Width,
-            })
+            if(route.params?.requestType === 'upload') {
+                navigation.navigate('UploadScreen', {
+                    mainTag: inputMainTag,
+                    mainTagWidth: mainTagWidth,
+                    subTag1: inputSubTag1,
+                    subTag1Width: subTag1Width,
+                    subTag2: inputSubTag2,
+                    subTag2Width: subTag2Width,
+                })
+            } else if(route.params?.requestType === 'edit') {
+                navigation.navigate('FeedEditScreen', {
+                    mainTag: inputMainTag,
+                    mainTagWidth: mainTagWidth,
+                    subTag1: inputSubTag1,
+                    subTag1Width: subTag1Width,
+                    subTag2: inputSubTag2,
+                    subTag2Width: subTag2Width,
+                })
+            }
         }
     }
 

@@ -1,9 +1,13 @@
 import React from 'react';
 import Styled from 'styled-components/native';
+import {TouchableWithoutFeedback} from 'react-native';
 import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import { NavigationContainer } from '@react-navigation/native';
+import {useSelector, useDispatch} from 'react-redux';
+import allActions from '~/action';
 
 const Container = Styled.View`
   width: ${wp('100%')};
@@ -57,8 +61,34 @@ font-size: 15px;
 color: #C6C7CC;
 `;
 
-const LocationTagItem = () => {
+interface Props {
+    tagItem: object,
+    tagName: string,
+    feedCount: number,
+    navigation: any,
+}
+
+const LocationTagItem = ({tagItem, tagName, feedCount, navigation}:Props) => {
+    
+    const currentUser = useSelector((state: any) => state.currentUser);
+    const dispatch = useDispatch();
+    
+    const searchToLocationTag = () => {
+        var tmpSelectedSearchItemList = new Array();
+        tmpSelectedSearchItemList.push({
+            item: tagItem,
+            type: "태그"
+        })
+
+        dispatch(allActions.userActions.setInputedKeywordList(tmpSelectedSearchItemList));
+
+        setTimeout(() => {
+        navigation.navigate("SearchResultScreen")
+        }, 10)
+    }
+
     return (
+    <TouchableWithoutFeedback onPress={() => searchToLocationTag()}>
         <Container>
             <TagImageContainer>
                 <TagImageBackground>
@@ -67,10 +97,11 @@ const LocationTagItem = () => {
                 </TagImageBackground>
                 </TagImageContainer>
                 <TagInfoContainer>
-                    <TagNameText>#회식장소</TagNameText>
-                    <TagCountText>233게시글</TagCountText>
+                    <TagNameText>{"#" + tagName}</TagNameText>
+                    <TagCountText>{"게시글 " + feedCount+"개"}</TagCountText>
                 </TagInfoContainer>
         </Container>
+        </TouchableWithoutFeedback>
     )
 }
 

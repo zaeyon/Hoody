@@ -30,7 +30,6 @@ color: #1D1E1F;
 `;
 
 const PopularFeedListContainer = Styled.View`
- flex: 1;
  align-items: center;
  background-color: #ffffff;
 `;

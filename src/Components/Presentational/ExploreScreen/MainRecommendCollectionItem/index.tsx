@@ -40,11 +40,20 @@ interface Props {
     coverImage: string,
     name: string,
     nickname: string,
+    collectionId: number,
 }
 
-const MainRecommendCollectionItem = ({coverImage, name, nickname, navigation}: Props) => {
+const MainRecommendCollectionItem = ({collectionId, coverImage, name, nickname, navigation}: Props) => {
+    console.log("메인 컬렉션 이미지", coverImage)
+
+    const moveToCollectionDetailScreen = () => {
+        navigation.navigate("CollectionDetailScreen", {
+            collectionId: collectionId,
+        });
+    }
+    
     return (
-    <TouchableWithoutFeedback onPress={() => navigation.navigate("CollectionDetailScreen")}>
+    <TouchableWithoutFeedback onPress={() => moveToCollectionDetailScreen()}>
         <CollectionContainer>
         <CollectionCoverImage
         source={{uri:coverImage}}

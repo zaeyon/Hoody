@@ -2,7 +2,7 @@ import React, {useState, useEffect, useLayoutEffect} from 'react';
 import Styled from 'styled-components/native';
 import {
   FlatList,
-  TouchableWithoutFeeback,
+  TouchableWithoutFeedback,
   ScrollView,
   Text,
 } from 'react-native';

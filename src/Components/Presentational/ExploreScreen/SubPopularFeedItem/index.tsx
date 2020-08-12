@@ -78,8 +78,18 @@ interface Props {
 }
 
 const SubPopularFeedItem = ({navigation, mainImageUri, feedId, mainTag, address, expense, rating}: Props) => {
+
+    const moveToFeedDetail = () => {
+        navigation.navigate("FeedStack", {
+            screen: "FeedDetailScreen",
+            params: {
+                feedId: feedId,
+            }
+        })
+    }
+
     return (
-        <TouchableWithoutFeedback onPress={() => navigation.navigate("FeedDetailScreen")}>
+        <TouchableWithoutFeedback onPress={() => moveToFeedDetail()}>
         <Container>
             <FeedImageContainer>
                 <FeedMainImage

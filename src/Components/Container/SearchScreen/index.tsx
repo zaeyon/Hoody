@@ -531,6 +531,7 @@ const SearchScreen = ({navigation}: Props) => {
 
         if(section.title == "태그") {
         return (
+            <TouchableWithoutFeedback onPress={() => selectSearchItem(item, section.title, index)}>
             <SearchResultItemContainer style={item.selected && styles.disalbedSearhResultItem}>
                 <SearchResultItemLeftContainer>
                     <SearchResultItemIconContainer>
@@ -539,14 +540,14 @@ const SearchScreen = ({navigation}: Props) => {
                     </SearchResultItemIconContainer>
                     <SearchItemText>{"#" + item.name}</SearchItemText>
                 </SearchResultItemLeftContainer>
-                <TouchableWithoutFeedback onPress={() => selectSearchItem(item, section.title, index)}>
                 <SearchResultItemSelectContainer>
                     <SearchResultItemSelectText>선택</SearchResultItemSelectText>
                 </SearchResultItemSelectContainer>
-                </TouchableWithoutFeedback>
             </SearchResultItemContainer>
+            </TouchableWithoutFeedback>
         )} else if(section.title == "계정") {
         return (
+            <TouchableWithoutFeedback onPress={() => selectSearchItem(item, section.title, index)}>
             <SearchResultItemContainer style={item.selected && styles.disalbedSearhResultItem}>
                 <SearchResultItemLeftContainer>
                     <SearchResultItemIconContainer>
@@ -555,14 +556,14 @@ const SearchScreen = ({navigation}: Props) => {
                     </SearchResultItemIconContainer>
                     <SearchItemText>{item.nickname}</SearchItemText>
                 </SearchResultItemLeftContainer>
-                <TouchableWithoutFeedback onPress={() => selectSearchItem(item, section.title, index)}>
                 <SearchResultItemSelectContainer>
                     <SearchResultItemSelectText>선택</SearchResultItemSelectText>
                 </SearchResultItemSelectContainer>
-                </TouchableWithoutFeedback>
             </SearchResultItemContainer>
+            </TouchableWithoutFeedback>
         )} else if(section.title == "장소") {
             return (
+            <TouchableWithoutFeedback onPress={() => selectSearchItem(item, section.title, index)}>
             <SearchResultItemContainer style={item.selected && styles.disalbedSearhResultItem}>
             <SearchResultItemLeftContainer>
                 <SearchResultItemIconContainer>
@@ -571,12 +572,11 @@ const SearchScreen = ({navigation}: Props) => {
                 </SearchResultItemIconContainer>
                 <SearchItemText>{item.address}</SearchItemText>
             </SearchResultItemLeftContainer>
-            <TouchableWithoutFeedback onPress={() => selectSearchItem(item, section.title, index)}>
             <SearchResultItemSelectContainer>
                     <SearchResultItemSelectText>선택</SearchResultItemSelectText>
                 </SearchResultItemSelectContainer>
-                </TouchableWithoutFeedback>
             </SearchResultItemContainer>
+            </TouchableWithoutFeedback>
      )}
     }
 

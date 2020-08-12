@@ -190,18 +190,18 @@ const MainTagText = Styled.Text`
  font-size: 16px;
  font-weight: 600;
  color: #3384FF;
- margin-right: 7px;
+ margin-right: 2.5px;
 `;
 
 const SubTagText = Styled.Text`
 color: #CCCCCC;
 font-size: 16px;
 font-weight: 600;
-margin-right: 7px;
+margin-right: 2.5px;
 `;
 
 const LocationPriceContainer = Styled.View`
- margin-top: 5px;
+ margin-top: 3px;
  margin-left: 8px;
  height: 20px;
  flex-direction: row;

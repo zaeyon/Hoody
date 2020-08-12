@@ -90,15 +90,20 @@ import ScrapListScreen from '~/Components/Container/ScrapListScreen';
 // Select Interest Screen
 import SelectInterestScreen from '~/Components/Container/SelectInterestScreen';
 
+// Feed Edit Stack
+import FeedEditScreen from '~/Components/Container/FeedEditScreen';
+
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
 const ExploreStack = createStackNavigator();
 const FeedStack = createStackNavigator();
 const UploadStack = createStackNavigator();
+const FeedEditStack = createStackNavigator();
 const AlarmStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
 const UnauthStack = createStackNavigator();
 const NoBottomBarStack = createStackNavigator();
+
 
 function FeedTitle() {
   return (
@@ -222,6 +227,44 @@ function FeedStackScreen() {
        <FeedStack.Screen
        name="CommentListScreen"
        component={CommentListScreen}/>
+       <FeedStack.Screen
+       name="FeedEditScreen"
+       component={FeedEditScreen}/>
+      <FeedStack.Screen 
+      name="TagSearchScreen"
+      component={TagSearchScreen}
+      options={{
+        transitionSpec: {
+          open: config,
+          close: config,
+        }
+      }}
+      />
+      <FeedStack.Screen
+        name="LocationSearch"
+        component={LocationSearch}
+        options={{
+          headerTitle: (props) => <SearchLocationTitle {...props} />,
+        }}
+      />
+      <FeedStack.Screen
+      name="ProductUrlSearchScreen"
+      component={ProductUrlSearchScreen}
+      />
+      <FeedStack.Screen
+        name="ImagesPullScreen"
+        component={ImagesPullScreen}
+      />
+      <FeedStack.Screen
+        name="Gallery"
+        component={Gallery}
+        options={{
+          transitionSpec: {
+            open: config,
+            close: config,
+          },
+        }}
+      />
     </FeedStack.Navigator>
   );
 }
@@ -306,6 +349,16 @@ function UploadStackScreen() {
     </UploadStack.Navigator>
   );
 }
+
+function FeedEditStackScreen () {
+  <FeedEditStack.Navigator
+  headerMode="none">
+    <FeedEditStack.Screen
+    name="FeedEditScreen"
+    component={FeedEditScreen}/>
+  </FeedEditStack.Navigator>
+}
+
 
 function AlarmStackScreen() {
   return (
@@ -745,7 +798,7 @@ function AppNavigator() {
 
   return (
     <NavigationContainer>
-    {(!currentUserState.loggedIn) ? (  
+    {(currentUserState.loggedIn) ? (  
     <NoBottomBarStack.Navigator
     headerMode="none"
     >

@@ -35,15 +35,23 @@ const CollectionWriterText = Styled.Text`
 `;
 
 interface Props {
+    collectionId: number,
     navigation: any,
     coverImage: string,
     name: string,
     nickname: string,
 }
 
-const SubRecommendCollectionItem = ({coverImage, name, nickname, navigation}: Props) => {
+const SubRecommendCollectionItem = ({collectionId, coverImage, name, nickname, navigation}: Props) => {
+
+    const moveToCollectionDetailScreen = () => {
+        navigation.navigate("CollectionDetailScreen", {
+            collectionId: collectionId,
+        });
+    }
+    
     return (
-    <TouchableWithoutFeedback onPress={() => navigation.navigate("CollectionDetailScreen")}>
+    <TouchableWithoutFeedback onPress={() => moveToCollectionDetailScreen()}>
         <CollectionContainer>
         <CollectionCoverImage
         source={{uri:coverImage}}

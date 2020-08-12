@@ -166,21 +166,35 @@ const FollowListScreen = ({navigation, route}:Props) => {
     var requestedLimit = 20;
 
     useEffect(() => {
-        if(route.params?.followerCount || route.params?.followerCount === 0) {
+        if(route.params?.followerCount || route.params?.followerCount) {
             setFollowerCount(route.params.followerCount)
         }
-        if(route.params?.followingCount || route.params?.followingCount === 0) {
+        if(route.params?.followingCount || route.params?.followingCount) {
             setFollowingCount(route.params.followingCount);
             console.log("route.params?.requestedType11", route.params.requestedType);
             console.log("typeof(route.params.requestedType11", typeof(route.params.requestedType));
-            if(route.params?.requestedType === "followings") {
-                console.log("팔로잉 누름")
-
-                setTimeout(() => {
-                navigation.jumpTo("팔로잉 " + route.params.followingCount + "명")
-                }, 10)
-            }
+            
         }
+        if(route.params?.requestedType === "followings") {
+            console.log("팔로잉 누름")
+
+            setTimeout(() => {
+            navigation.jumpTo("팔로잉 " + route.params.followingCount + "명")
+            }, 10)
+        }
+
+        GETProfileFriends(route.params.requestedType, inputedNickname, requestedOffset, requestedLimit, route.params.nickname)
+                .then(function(response) {
+                    console.log("GETProfileFriends response", response)
+                    if(route.params.requestedType === "followers") {
+                        setFollowerListData(response);
+                    } else if(route.params.requestedType === 'followings') {
+                        setFollowingListData(response);
+                    }
+                })
+                .catch(function(error) {
+                    console.log("GETProfileFriends error", error);
+                })
         /*
         if(route.params?.nickname) {
             console.log("닉네임 존재")
@@ -200,31 +214,6 @@ const FollowListScreen = ({navigation, route}:Props) => {
         */
     }, [/*route.params?.followerCount, route.params?.followingCount, route.params?.nickname*/])
     
-
-
-    /*
-    useEffect(() => {
-        if(route.params?.requestedType) {
-            console.log("requestedType", route.params.requestedType)
-            //setRequestedType(route.params.requestedType);
-            GETProfileFriends(route.params.requestedType, inputedNickname, requestedOffset, requestedLimit, route.params.nickname)
-            .then(function(response) {
-                console.log("GETProfileFriends response", response)
-                if(route.params.requestedType === "followers") {
-                    setFollowerListData(response);
-                } else if(route.params.requestedType === 'followings') {
-                    setFollowingListData(response);
-                }
-            })
-            .catch(function(error) {
-                console.log("GETProfileFriends error", error);
-            })
-            
-        }
-    }, [route.params?.requestedType])
-
-   */
-
     useEffect(() => {
             //setRequestedType(route.params.requestedType);
             if(route.params?.requestedType !== requestedType) {
@@ -242,14 +231,15 @@ const FollowListScreen = ({navigation, route}:Props) => {
                 })
             }
     }, [requestedType])
-    
 
+    
     const onChangeSearchInput = (text: string) => {
     }
 
     const renderFollowItem = ({item, index}: any) => {
         return (
             <FollowItem
+            navigation={navigation}
             profileImageUri={item.profileImg}
             nickname={item.nickname}
             feedCount={item.feedCount}
@@ -286,7 +276,7 @@ const FollowListScreen = ({navigation, route}:Props) => {
                  getToProfileFriendsList("followers");   
                 }, 100)
             }
-        }
+    }
 
         return (
             <FollowerTabContainer>

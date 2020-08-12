@@ -83,11 +83,14 @@ interface Props {
 
 const RecommendCollectionList = ({navigation, recommendMainCollectionListData, recommendSubCollectionListData}: Props) => {
 
+    console.log("RecommendCollectionList recommendMainCollectionListData", recommendMainCollectionListData);
+
     const renderMainRecommendCollectionItem = ({item, index}: any) => {
         return (
         <MainRecommendCollectionItemContainer style={index !== 0 && styles.mainCollectionItem}>
             <MainRecommendCollectionItem
-            coverImage={item.coverImage}
+            collectionId={item.id}
+            coverImage={item.coverImg}
             name={item.name}
             nickname={item.user.nickname}
             navigation={navigation}
@@ -100,7 +103,8 @@ const RecommendCollectionList = ({navigation, recommendMainCollectionListData, r
         return (
             <SubRecommendCollectionItemContainer style={index !== 0 && styles.subCollectionItem}>
                 <SubRecommendCollectionItem
-                coverImage={item.coverImage}
+                collectionId={item.id}
+                coverImage={item.coverImg}
                 name={item.name}
                 nickname={item.user.nickname}
                 navigation={navigation}/>

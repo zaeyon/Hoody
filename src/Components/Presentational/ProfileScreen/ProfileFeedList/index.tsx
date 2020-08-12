@@ -35,7 +35,7 @@ font-size: 22px;
 
 const NoFeedContainer = Styled.View`
  width:${wp('100%')};
- margin-top: 200px;
+ margin-top: 180px;
  align-items: center;
 `;
 

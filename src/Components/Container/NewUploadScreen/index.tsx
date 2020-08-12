@@ -82,7 +82,7 @@ const FinishContainer = Styled.View`
  margin-left: 15px;
  border-radius: 20px;
  background-color: #3384ff;
- padding: 7px 12px 7px 12px;
+ padding: 6px 12px 7px 12px;
 `;
 
 
@@ -90,7 +90,7 @@ const DisabledFinishContainer = Styled.View`
  margin-left: 15px;
  border-radius: 20px;
  background-color: #3384ff;
- padding: 7px 12px 7px 12px;
+ padding: 6px 12px 7px 12px;
  opacity: 0.3;
 `;
 
@@ -662,6 +662,12 @@ font-size: ${wp('3.9%')};
  color: #c4c4c4;
 `;
 
+
+const RatingStarImage = Styled.Image`
+ width: ${wp('4.3%')};
+ height: ${wp('4.3%')};
+`;
+
 const bottomActionOptions = [
     '취소',
     <Text style={{color: 'red'}}>삭제</Text>
@@ -714,9 +720,10 @@ const NewUploadScreen = ({navigation, route}: Props) => {
     const [product, setProduct] = useState<object>();
     const [mediaArray, setMediaArray] = useState<Array<object>>([]);
 
-    var mainTagExis = false;
-    var subTag1Exis = false;
-    var subTag2Exis = false;
+    const [mainTagExis, setMainTagExis] = useState<boolean>(false);
+    const [subTag1Exis, setSubTag1Exis] = useState<boolean>(false);
+    const [subTag2Exis, setSubTag2Exis] = useState<boolean>(false);
+
 
 
     // toggle input expense
@@ -828,9 +835,9 @@ const NewUploadScreen = ({navigation, route}: Props) => {
  console.log("입력된 태그 변경!!")
         if(route.params?.mainTag && !route.params?.subTag1 && !route.params?.subTag2) {
 
-            mainTagExis = true;
-            subTag1Exis = false;
-            subTag2Exis = false;
+            setMainTagExis(true);
+            setSubTag1Exis(false);
+            setSubTag2Exis(false);
 
             if(route.params?.mainTag !== mainTag) {
                 console.log("메인태그만존재")
@@ -846,10 +853,10 @@ const NewUploadScreen = ({navigation, route}: Props) => {
                 setSubTag2(undefined)
             }
         } else if(route.params?.mainTag && route.params?.subTag1 && !route.params?.subTag2) { 
-
-            mainTagExis = true;
-            subTag1Exis = true;
-            subTag2Exis = false;
+            
+            setMainTagExis(true);
+            setSubTag1Exis(true);
+            setSubTag2Exis(false);
 
             console.log("메인태그 존재22", route.params.mainTag);
             console.log("서브태그1 존재", route.params.subTag1);
@@ -865,9 +872,11 @@ const NewUploadScreen = ({navigation, route}: Props) => {
             setSubTag2(undefined)
         } else if(route.params?.mainTag && route.params?.subTag1 && route.params?.subTag2) {
 
-            mainTagExis = true;
-            subTag1Exis = true;
-            subTag2Exis = true;
+            console.log("서브태그2 존재", route.params?.subTag2);
+        
+            setMainTagExis(true);
+            setSubTag1Exis(true);
+            setSubTag2Exis(true);
 
             setSubTag1(route.params.subTag1)
             setSubTag1Width(route.params.subTag1Width);
@@ -1042,12 +1051,15 @@ const NewUploadScreen = ({navigation, route}: Props) => {
 
 const moveTagSearch = (tagType: string, inputedTagName: string) => {
     if(!mainTag) {
-    navigation.navigate("TagSearchScreen")
+    navigation.navigate("TagSearchScreen",{
+        requestType: 'upload'
+    })
     } else if(mainTag && !subTag1 && !subTag2) {
         console.log("메인태그길이는뭘까여", mainTagWidth);
         navigation.navigate("TagSearchScreen", {
             mainTag: mainTag,
             mainTagWidth: mainTagWidth,
+            requestType: 'upload',
         })
     } else if(mainTag && subTag1 && !subTag2) {
         navigation.navigate("TagSearchScreen", {
@@ -1055,6 +1067,7 @@ const moveTagSearch = (tagType: string, inputedTagName: string) => {
             mainTagWidth: mainTagWidth,
             subTag1: subTag1,
             subTag1Width: subTag1Width,
+            requestType: 'upload',
         })
     } else if(mainTag && subTag1 && subTag2) {
         navigation.navigate("TagSearchScreen", {
@@ -1064,6 +1077,7 @@ const moveTagSearch = (tagType: string, inputedTagName: string) => {
             subTag1Width: subTag1Width,
             subTag2: subTag2,
             subTag2Width: subTag2Width,
+            requestType: 'upload',
         })
     }
 }
@@ -1222,6 +1236,8 @@ const touchBackground = () => {
 
 const addExpense = () => {
     setCompletePrice(moneyText);
+    setVisibleExpenseInput(false);
+    setVisibleBottomMenuBar(true);
     //setInputingExpenseText(null);
     console.log("inputingExpenseText", inputingExpenseText)
     expenseInput.current.blur();
@@ -1563,15 +1579,10 @@ const renderAddNewDescripInput = () => {
                     <TouchableWithoutFeedback onPress={() => modifyRating()}>
                     <InputedRatingContainer>
                     <RatingInner>
-                    <InputedRatingText>{rating+"점"}</InputedRatingText>
-                      <Rating
-                      style={{marginLeft: 5}}
-                            type="custom"
-                            ratingImage={ratingImage}
-                            imageSize={wp('5%')}
-                            startingValue={rating}
-                            readonly={true}
-                            />
+                    <RatingStarImage
+                    source={require('~/Assets/Images/ic_newStar.png')}/>
+                    <InputedRatingText style={{marginLeft: 3}}
+                    >{rating+"점"}</InputedRatingText>
                         </RatingInner>
                     </InputedRatingContainer>
                     </TouchableWithoutFeedback>

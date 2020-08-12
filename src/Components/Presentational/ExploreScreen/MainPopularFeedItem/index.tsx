@@ -9,12 +9,12 @@ import {
 const Container = Styled.View`
  width: ${wp('91%')};
  height: ${wp('55.5%')};
- background-color: #ffffff;
 `;
 
 const FeedBackgroundImage = Styled.Image`
- flex: 1;
  border-radius: 10px;
+ width: ${wp('91%')};
+ height: ${wp('55.5%')};
 `;
 
 const FeedInfoContainer = Styled.View`
@@ -22,7 +22,6 @@ width: ${wp('91')};
 position: absolute;
 bottom: 0;
 background-color: #00000030;
-
 padding-top: 10px;
 padding-left: 13px;
 padding-bottom: 12px;
@@ -79,6 +78,8 @@ interface Props {
 
 const MainPopularFeedItem = ({navigation, feedId, mainImageUri, mainTag, address, rating}: Props) => {
 
+    console.log("메인 피드 아이템 mainImageUri", mainImageUri);
+
     const moveToFeedDetail = () => {
         navigation.navigate("FeedStack", {
             screen: "FeedDetailScreen",
@@ -87,7 +88,6 @@ const MainPopularFeedItem = ({navigation, feedId, mainImageUri, mainTag, address
             }
         })
     }
-
     return (
     <TouchableWithoutFeedback onPress={() => moveToFeedDetail()}>
         <Container>

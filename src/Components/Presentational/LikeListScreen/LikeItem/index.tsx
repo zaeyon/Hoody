@@ -1,9 +1,11 @@
 import React from 'react';
 import Styled from 'styled-components/native';
+import {TouchableWithoutFeedback} from 'react-native';
 import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import {useSelector} from 'react-redux';
 
 const Container = Styled.View`
  width: ${wp('100%')};
@@ -39,10 +41,26 @@ const NicknameText = Styled.Text`
 interface Props {
     nickname: string,
     profileImage: string,
+    navigation: any,
 }
 
-const LikeItem = ({nickname, profileImage}: Props) => {
+const LikeItem = ({nickname, profileImage, navigation}: Props) => {
+    const currentUser = useSelector((state) => state.currentUser);
+
+
+   const moveToUserProfile = () => {
+    if(currentUser.user?.nickname === nickname) {
+        navigation.navigate("Profile")
+    } else {
+        navigation.navigate("AnotherUserProfileStack", {
+          screen: "AnotherUserProfileScreen",
+          params: {requestedUserNickname: nickname}
+        });
+    }
+  }
+
     return (
+     <TouchableWithoutFeedback onPress={() => moveToUserProfile()}>
         <Container>
             <ProfileImageContainer>
             <ProfileImage
@@ -52,6 +70,7 @@ const LikeItem = ({nickname, profileImage}: Props) => {
             <NicknameText>{nickname}</NicknameText>    
             </NicknameContainer>
         </Container>
+        </TouchableWithoutFeedback>
     )
 }
 

@@ -5,6 +5,7 @@ import {
     heightPercentageToDP as hp 
 } from 'react-native-responsive-screen';
 import {TouchableWithoutFeedback, FlatList} from 'react-native';
+import {useSelector} from 'react-redux';
 
 import ReplyItem from '~/Components/Presentational/CommentListScreen/ReplyItem';
 
@@ -95,9 +96,11 @@ interface Props {
     createAt: string,
     replys: Array<Object>,
     clickToReply: (target:string, commentId: number) => void,
+    navigation: any,
 }
 
-const CommentItem = ({profileImage, nickname, comment, createAt, replys, clickToReply, commentId}: Props) => {
+const CommentItem = ({profileImage, nickname, comment, createAt, replys, clickToReply, commentId, navigation}: Props) => {
+    const currentUser = useSelector((state: any) => state.currentUser);
 
     function getDateFormat(date) {
         var year = date.getFullYear();
@@ -108,13 +111,26 @@ const CommentItem = ({profileImage, nickname, comment, createAt, replys, clickTo
         return year + '/' + month + '/' + day;
     }
 
+    const moveToUserProfile = () => {
+        if(currentUser.user?.nickname === nickname) {
+            navigation.navigate("Profile")
+        } else {
+            navigation.navigate("AnotherUserProfileStack", {
+              screen: "AnotherUserProfileScreen",
+              params: {requestedUserNickname: nickname}
+            });
+        }
+    }
+
 
     return (
         <Container>
+            <TouchableWithoutFeedback onPress={() => moveToUserProfile()}>
             <ProfileImageContainer>
                 <ProfileImage
                 source={{uri:profileImage}}/>
             </ProfileImageContainer>
+            </TouchableWithoutFeedback>
             <CommentRightContainer>
                 <HeaderContainer>
                     <NicknameText>{nickname}</NicknameText>

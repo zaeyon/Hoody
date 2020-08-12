@@ -103,6 +103,9 @@ const FollowButton = Styled.View`
  align-items: center;
  border-width: 1px;
  border-color: #277DFF;
+ position: absolute;
+ bottom: 0;
+ right: 0;
 `;
 
 const FollowText = Styled.Text`
@@ -120,6 +123,9 @@ justify-content: center;
 align-items: center;
 border-width: 1px;
 border-color: #77A7F1;
+position: absolute;
+bottom: 0;
+right: 0;
 `;
 
 const FollowingText = Styled.Text`

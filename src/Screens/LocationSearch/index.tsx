@@ -348,17 +348,31 @@ const LocationSearch = ({navigation, route}: Props) => {
   }
 
   const clickLocationItem = (item: object) => {
-    navigation.navigate("UploadScreen", {
-      location: item.place_name,
-      longitude: item.x,
-      latitude: item.y,
-    })
+    if(route.params?.requestType === "upload") {
+      navigation.navigate("UploadScreen", {
+        location: item.place_name,
+        longitude: item.x,
+        latitude: item.y,
+      })
+    } else if(route.params?.requestType === "edit") {
+      navigation.navigate("FeedEditScreen", {
+        location: item.place_name,
+        longitude: item.x,
+        latitude: item.y,
+      })
+    }
   }
 
   const removeRegisteredLocation = () => {
-    navigation.navigate('UploadScreen', {
-      removeLocation: true
-    })
+    if(route.params?.requestType === "upload") {
+      navigation.navigate('UploadScreen', {
+        removeLocation: true
+      })
+    } else if(route.params?.requestType === "edit") {
+      navigation.navigate("FeedEditScreen", {
+        removeLocation: true
+      })
+    }
   }
 
   

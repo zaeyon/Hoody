@@ -1001,6 +1001,7 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
      navigation.navigate("FeedEditScreen", {
        paragraphData: paragraphData,
        feedDetailInfo: feedDetailInfo,
+       feedId: postId,
      });
    }
 

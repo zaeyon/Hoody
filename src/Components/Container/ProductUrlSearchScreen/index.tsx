@@ -201,9 +201,15 @@ const ProductUrlSearchScreen = ({navigation, route}: Props) => {
     }
 
     const registerProduct = () => {
+      if(route.params?.requestType === "upload") {
       navigation.navigate("UploadScreen", {
         product: searchedProduct,
       })
+      } else if(route.params?.requestType === "edit") {
+        navigation.navigate("FeedEditScreen", {
+          product: searchedProduct,
+        })
+      }
     }
     
     return (

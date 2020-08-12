@@ -124,6 +124,7 @@ const LikeListScreen = ({navigation, route}: Props) => {
         <LikeItem
         nickname={item.nickname}
         profileImage={item.profileImg}
+        navigation={navigation}
         />
     )
 

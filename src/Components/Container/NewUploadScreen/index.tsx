@@ -707,6 +707,7 @@ const NewUploadScreen = ({navigation, route}: Props) => {
 
     //후기 정보 관련 state
     const [rating, setRating] = useState<string>();
+    const [inputingRating, setInputingRating] = useState<string>("??");
     const [incompleteMainTag, setIncompleteMainTag] = useState<string>();
     const [mainTag, setMainTag] = useState<string>();
     const [subTag1, setSubTag1] = useState<string>();
@@ -798,7 +799,13 @@ const NewUploadScreen = ({navigation, route}: Props) => {
              var newProductPara = {
                 index: paragraphData.length,
                 type: "product",
-                product: route.params.product
+                product: route.params.product,
+                description: route.params.product.description,
+                favicon: route.params.product.favicon,
+                image: route.params.product.image,
+                site: route.params.product.site,
+                title: route.params.product.title,
+                url: route.params.product.url,
                 }
 
                 setRegisterProductBool(!registerProductBool);
@@ -842,6 +849,7 @@ const NewUploadScreen = ({navigation, route}: Props) => {
             if(route.params?.mainTag !== mainTag) {
                 console.log("메인태그만존재")
                 setMainTagProcess(true);
+                setMainTag(route.params.mainTag);
                 setIncompleteMainTag(route.params.mainTag)
                 setMainTagWidth(route.params.mainTagWidth);
                 setAllTagText(route.params.mainTag);
@@ -849,6 +857,7 @@ const NewUploadScreen = ({navigation, route}: Props) => {
                 setSubTag2(undefined)
             } else {
                 console.log("메인태그 일치")
+                setMainTag(route.params.mainTag);
                 setSubTag1(undefined)
                 setSubTag2(undefined)
             }
@@ -867,7 +876,10 @@ const NewUploadScreen = ({navigation, route}: Props) => {
             setMainTagWidth(route.params.mainTagWidth);
             if(route.params?.mainTag !== mainTag) {
                 setMainTagProcess(true);
+                setIncompleteMainTag(route.params.mainTag)
+                setMainTag(route.params.mainTag);
             }
+            setMainTag(route.params.mainTag);
             setAllTagText(route.params.mainTag + " " + route.params.subTag1);
             setSubTag2(undefined)
         } else if(route.params?.mainTag && route.params?.subTag1 && route.params?.subTag2) {
@@ -885,9 +897,11 @@ const NewUploadScreen = ({navigation, route}: Props) => {
             setSubTag2(route.params.subTag2);
             setsubTag2Width(route.params.subTag2Width);
             if(route.params?.mainTag !== mainTag) {
+                setMainTag(route.params.mainTag);
                 setMainTagProcess(true);
+                setIncompleteMainTag(route.params.mainTag)
             }
-
+            setMainTag(route.params.mainTag);
             setAllTagText(route.params.mainTag + " " + route.params.subTag1 + " " + route.params.subTag2);
             
         }
@@ -951,7 +965,7 @@ const NewUploadScreen = ({navigation, route}: Props) => {
     */
     const uploadCancel = () => {
         Alert.alert(
-            '후기 작성을 취소하시겠어요?',
+            '게시글 작성을 취소하시겠어요?',
             ' ',
             [
                 {
@@ -1014,15 +1028,16 @@ const NewUploadScreen = ({navigation, route}: Props) => {
         setMainTagProcess(false);
         setMainTagInserted(true);
         setMainTag(incompleteMainTag);
+        setInputingRating("??");
     }
 
     const ratingMovling = (rating) => {
         console.log("rating changed", rating)
         if(rating === 0) 
         {
-            setRating(0.5)
+            setInputingRating(rating);
         } else {
-        setRating(rating);
+            setInputingRating(rating);
         }
     }
 
@@ -1144,6 +1159,7 @@ const onChangeExpenseInput = (text: string) => {
     console.log("text", text);
     setMoneyText(money);
     setInputingExpenseText(text);
+    setExpense(text);
     }
 }
 
@@ -1197,17 +1213,22 @@ const DismissKeyboard = ({ children }) => (
 );
 
 const moveGallery = () => {
-    navigation.navigate("Gallery");
+    navigation.navigate("Gallery", {
+        requestType: "upload",
+    });
 }
 
 const moveLocationSearch = () => {
     navigation.navigate("LocationSearch", {
         inputedLocation: location,
+        requestType: "upload",
     })
 }
 
 const moveProductUrlSearch = () => {
-    navigation.navigate("ProductUrlSearchScreen")
+    navigation.navigate("ProductUrlSearchScreen", {
+        requestType: "upload",
+    })
 }
 
 const toggleInputExpense = () => {
@@ -1365,7 +1386,7 @@ const clickToUploadFinish = () => {
       console.log("JSONstringify_descriptionArray", JSONstirngify_descriptionArray);
       console.log("JSONstringify_productoArray", JSONstringify_productArray);
 
-      PostUpload(JSONstirngify_descriptionArray, mediaFileArray, mainTag, subTag1, subTag2, rating, location, longitude, latitude, certifiedLocation, temporarySave, sequence, JSONstringify_productArray, openState, subTag1Exis, subTag2Exis)
+      PostUpload(JSONstirngify_descriptionArray, mediaFileArray, mainTag, subTag1, subTag2, rating, expense,location, longitude, latitude, certifiedLocation, temporarySave, sequence, JSONstringify_productArray, openState, subTag1Exis, subTag2Exis)
       .then(function(response) {
           if(response.status === 201) {
               console.log("후기 업로드 성공", response);
@@ -1408,11 +1429,11 @@ const renderDraggableItem = ({item, index, drag, isActive}) => {
                     <TouchableWithoutFeedback onPress={() => showBottomActionSheet(index)}>
                     <ParagraphContentContainer>
                         <ProductItem
-                        productImage={item.product.image}
-                        productName={item.product.title}
-                        productDescription={item.product.description}
-                        shopIcon={item.product.favicon}
-                        shopName={item.product.site}/>
+                        productImage={item.image}
+                        productName={item.title}
+                        productDescription={item.description}
+                        shopIcon={item.favicon}
+                        shopName={item.site}/>
                     </ParagraphContentContainer>
                     </TouchableWithoutFeedback>
                     <TouchableWithoutFeedback onLongPress={drag} delayLongPress={0.2}>
@@ -1551,12 +1572,11 @@ const renderAddNewDescripInput = () => {
                         <RatingInputContainer>
                             <TouchableWithoutFeedback onPress={() => setMainTagProcess(false)}>
                             <RatingTextContainer>
-                            {rating && (
-                                <Text style={{fontWeight:"bold", color: '#8e8e8e', fontSize: 18}}>{rating+"점"}</Text>
-                            )}
-                            {!rating && (
+                                <Text style={{fontWeight:"bold", color: '#8e8e8e', fontSize: 18}}>{inputingRating+"점"}</Text>
+                            
+                            {/*!rating && (
                                 <Text style={{fontWeight:"bold", color: '#cccccc', fontSize: 18}}>{"??점"}</Text>
-                            )}
+                            )*/}
                              </RatingTextContainer>
                              </TouchableWithoutFeedback>
                             <RatingContainer>
@@ -1566,7 +1586,7 @@ const renderAddNewDescripInput = () => {
                             ratingImage={ratingImage}
                             imageSize={wp('11%')}
                             fractions={2}
-                            startingValue={rating || 0}
+                            startingValue={0}
                             setRatingInMove={ratingMovling}
                             />
                             </RatingContainer>

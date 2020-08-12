@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef, createRef} from 'react';
+import React, {useEffect, useState, useRef, createRef, useCallback} from 'react';
 import Styled from 'styled-components/native';
 import {
     widthPercentageToDP as wp,
@@ -16,9 +16,9 @@ import {Rating} from '~/Components/Presentational/UploadScreen/Rating';
 import ProductItem from '~/Components/Presentational/UploadScreen/ProductItem';
 
 // Route
-import PostUpload from '~/Route/Post/Upload';
 import POSTProductUrl from '~/Route/Post/POSTProductUrl';
 import GETSearchAutoComplete from '~/Route/Search/GETSearchAutoComplete';
+import POSTUpdate from '~/Route/Post/POSTUpdate';
 
 const ratingImage = require('~/Assets/Images/ic_star4.png');
 
@@ -668,6 +668,28 @@ font-size: ${wp('3.9%')};
 `;
 
 
+const GetTextWidthContainer = Styled.View`
+ width: 1000px;
+`;
+
+
+const GetWidthTagText = Styled.Text`
+color: #ffffff;
+font-size: 24px;
+font-weight: bold;
+background-color:#ffffff;
+
+`;
+
+
+const TWInputContainer = Styled.View`
+flex-direction: row;
+flex-shrink: 1;
+background-color:#ffffff;
+`;
+
+
+
 const bottomActionOptions = [
     '취소',
     <Text style={{color: 'red'}}>삭제</Text>
@@ -707,6 +729,7 @@ const FeedEditScreen = ({navigation, route}: Props) => {
 
     //후기 정보 관련 state
     const [rating, setRating] = useState<string>();
+    const [inputingRating, setInputingRating] = useState<string>("??")
     const [incompleteMainTag, setIncompleteMainTag] = useState<string>();
     const [mainTag, setMainTag] = useState<string>();
     const [subTag1, setSubTag1] = useState<string>();
@@ -715,15 +738,16 @@ const FeedEditScreen = ({navigation, route}: Props) => {
     const [longitude, setLongitude] = useState<number>();
     const [latitude, setLatitude] = useState<number>();
     const [expense, setExpense] = useState<string>();
+    const [formattedExpense, setFormattedExpense] = useState<string>();
     const [tagList, setTagList] = useState<Array<string>>();
     const [allTagText, setAllTagText] = useState<string>();
     const [product, setProduct] = useState<object>();
     const [mediaArray, setMediaArray] = useState<Array<object>>([]);
 
-    var mainTagExis = false;
-    var subTag1Exis = false;
-    var subTag2Exis = false;
-
+    
+    const [mainTagExis, setMainTagExis] = useState<boolean>(false);
+    const [subTag1Exis, setSubTag1Exis] = useState<boolean>(false);
+    const [subTag2Exis, setSubTag2Exis] = useState<boolean>(false);
 
     // toggle input expense
     const [visibleExpenseInput, setVisibleExpenseInput] = useState<boolean>(false);
@@ -771,6 +795,14 @@ const FeedEditScreen = ({navigation, route}: Props) => {
              if(route.params.feedDetailInfo.subTagTwos) {
                  setSubTag2(route.params.feedDetailInfo.subTagTwos.name);
              }
+             if(route.params.feedDetailInfo.address) {
+                 setLocation(route.params.feedDetailInfo.address.address);
+             }
+             if(route.params.feedDetailInfo.expense) {
+                 setExpense(route.params.feedDetailInfo.expense);
+                 setFormattedExpense(route.params.feedDetailInfo.expense.toLocaleString());
+             }
+             setParagraphData(route.params.paragraphData);
              setIncompleteMainTag(route.params.feedDetailInfo.mainTags.name)
              setMainTagInserted(true);
              setRating(route.params.feedDetailInfo.starRate)
@@ -815,7 +847,13 @@ const FeedEditScreen = ({navigation, route}: Props) => {
              var newProductPara = {
                 index: paragraphData.length,
                 type: "product",
-                product: route.params.product
+                product: route.params.product,
+                description: route.params.product.description,
+                favicon: route.params.product.favicon,
+                image: route.params.product.image,
+                site: route.params.product.site,
+                title: route.params.product.title,
+                url: route.params.product.url,
                 }
 
                 setRegisterProductBool(!registerProductBool);
@@ -852,9 +890,10 @@ const FeedEditScreen = ({navigation, route}: Props) => {
  console.log("입력된 태그 변경!!")
         if(route.params?.mainTag && !route.params?.subTag1 && !route.params?.subTag2) {
 
-            mainTagExis = true;
-            subTag1Exis = false;
-            subTag2Exis = false;
+            setMainTagExis(true);
+            setSubTag1Exis(false);
+            setSubTag2Exis(false);
+            setMainTag(route.params.mainTag);
 
             if(route.params?.mainTag !== mainTag) {
                 console.log("메인태그만존재")
@@ -871,9 +910,10 @@ const FeedEditScreen = ({navigation, route}: Props) => {
             }
         } else if(route.params?.mainTag && route.params?.subTag1 && !route.params?.subTag2) { 
 
-            mainTagExis = true;
-            subTag1Exis = true;
-            subTag2Exis = false;
+            setMainTagExis(true);
+            setSubTag1Exis(true);
+            setSubTag2Exis(false);
+            setMainTag(route.params.mainTag);
 
             console.log("메인태그 존재22", route.params.mainTag);
             console.log("서브태그1 존재", route.params.subTag1);
@@ -884,14 +924,16 @@ const FeedEditScreen = ({navigation, route}: Props) => {
             setMainTagWidth(route.params.mainTagWidth);
             if(route.params?.mainTag !== mainTag) {
                 setMainTagProcess(true);
+                setIncompleteMainTag(route.params.mainTag);
             }
             setAllTagText(route.params.mainTag + " " + route.params.subTag1);
             setSubTag2(undefined)
         } else if(route.params?.mainTag && route.params?.subTag1 && route.params?.subTag2) {
 
-            mainTagExis = true;
-            subTag1Exis = true;
-            subTag2Exis = true;
+            setMainTagExis(true);
+            setSubTag1Exis(true);
+            setSubTag2Exis(true);
+            setMainTag(route.params.mainTag);
 
             setSubTag1(route.params.subTag1)
             setSubTag1Width(route.params.subTag1Width);
@@ -901,6 +943,7 @@ const FeedEditScreen = ({navigation, route}: Props) => {
             setsubTag2Width(route.params.subTag2Width);
             if(route.params?.mainTag !== mainTag) {
                 setMainTagProcess(true);
+                setIncompleteMainTag(route.params.mainTag);
             }
 
             setAllTagText(route.params.mainTag + " " + route.params.subTag1 + " " + route.params.subTag2);
@@ -925,6 +968,51 @@ const FeedEditScreen = ({navigation, route}: Props) => {
             Keyboard.removeListener("keyboardDidHide", onKeyboardDidHide);
         }
     }, [])
+
+    const useMainTagComponentSize = () => {
+        const [mainTagSize, setMainTagSize] = useState(null);
+      
+        const onMainTagLayout = useCallback(event => {
+          const { width, height } = event.nativeEvent.layout;
+          console.log("mainTagSize", width);
+          setMainTagSize({ width, height });
+          setMainTagWidth(width);
+        }, []);
+
+        return [mainTagSize, onMainTagLayout];
+      };
+
+
+    const useSubTag1ComponentSize = () => {
+        const [subTag1Size, setSubTag1Size] = useState(null);
+      
+        const onSubTag1Layout = useCallback(event => {
+          const { width, height } = event.nativeEvent.layout;
+          setSubTag1Size({ width, height });
+          setSubTag1Width(width)
+        }, []);
+
+        return [subTag1Size, onSubTag1Layout];
+      };
+
+    const useSubTag2ComponentSize = () => {
+        const [subTag2Size, setSubTag2Size] = useState(null);
+      
+        const onSubTag2Layout = useCallback(event => {
+          const { width, height } = event.nativeEvent.layout;
+          setSubTag2Size({ width, height });
+          setsubTag2Width(width);
+        }, []);
+
+        return [subTag2Size, onSubTag2Layout];
+      };  
+
+
+    const [mainTagSize, onMainTagLayout] = useMainTagComponentSize();
+    const [subTag1Size, onSubTag1Layout] = useSubTag1ComponentSize();
+    const [subTag2Size, onSubTag2Layout] = useSubTag2ComponentSize();
+
+
 
     function onKeyboardDidShow(e: KeyboardEvent): void {
         console.log("onKeyboardDidHide visibleExpenseInput11", visibleExpenseInput)
@@ -966,7 +1054,7 @@ const FeedEditScreen = ({navigation, route}: Props) => {
     */
     const uploadCancel = () => {
         Alert.alert(
-            '후기 작성을 취소하시겠어요?',
+            '게시글 수정을 취소하시겠어요?',
             ' ',
             [
                 {
@@ -1029,15 +1117,16 @@ const FeedEditScreen = ({navigation, route}: Props) => {
         setMainTagProcess(false);
         setMainTagInserted(true);
         setMainTag(incompleteMainTag);
+        setInputingRating("??");
     }
 
-    const ratingMovling = (rating) => {
+    const ratingMoving = (rating) => {
         console.log("rating changed", rating)
         if(rating === 0) 
         {
-            setRating(0.5)
+            setInputingRating(0.5)
         } else {
-        setRating(rating);
+        setInputingRating(rating);
         }
     }
 
@@ -1159,6 +1248,7 @@ const onChangeExpenseInput = (text: string) => {
     console.log("text", text);
     setMoneyText(money);
     setInputingExpenseText(text);
+    setExpense(text);
     }
 }
 
@@ -1212,17 +1302,22 @@ const DismissKeyboard = ({ children }) => (
 );
 
 const moveGallery = () => {
-    navigation.navigate("Gallery");
+    navigation.navigate("Gallery", {
+        requestType: "edit",
+    });
 }
 
 const moveLocationSearch = () => {
     navigation.navigate("LocationSearch", {
         inputedLocation: location,
+        requestType: "edit",
     })
 }
 
 const moveProductUrlSearch = () => {
-    navigation.navigate("ProductUrlSearchScreen")
+    navigation.navigate("ProductUrlSearchScreen", {
+        requestType: "edit",
+    })
 }
 
 const toggleInputExpense = () => {
@@ -1378,15 +1473,15 @@ const clickToUploadFinish = () => {
       console.log("JSONstringify_descriptionArray", JSONstirngify_descriptionArray);
       console.log("JSONstringify_productoArray", JSONstringify_productArray);
 
-      PostUpload(JSONstirngify_descriptionArray, mediaFileArray, mainTag, subTag1, subTag2, rating, location, longitude, latitude, certifiedLocation, temporarySave, sequence, JSONstringify_productArray, openState, subTag1Exis, subTag2Exis)
+      POSTUpdate(route.params?.feedId, JSONstirngify_descriptionArray, mediaFileArray, mainTag, subTag1, subTag2, rating, expense, location, longitude, latitude, certifiedLocation, temporarySave, sequence, JSONstringify_productArray, openState, subTag1Exis, subTag2Exis)
       .then(function(response) {
           if(response.status === 201) {
-              console.log("후기 업로드 성공", response);
+              console.log("후기 수정 성공", response);
               navigation.goBack();
           }
       })
       .catch(function(error) {
-          console.log("후기 업로드 실패", error);
+          console.log("후기 수정 실패", error);
       });
   }, 100)
 }
@@ -1421,11 +1516,11 @@ const renderDraggableItem = ({item, index, drag, isActive}) => {
                     <TouchableWithoutFeedback onPress={() => showBottomActionSheet(index)}>
                     <ParagraphContentContainer>
                         <ProductItem
-                        productImage={item.product.image}
-                        productName={item.product.title}
-                        productDescription={item.product.description}
-                        shopIcon={item.product.favicon}
-                        shopName={item.product.site}/>
+                        productImage={item.image}
+                        productName={item.title}
+                        productDescription={item.description}
+                        shopIcon={item.favicon}
+                        shopName={item.site}/>
                     </ParagraphContentContainer>
                     </TouchableWithoutFeedback>
                     <TouchableWithoutFeedback onLongPress={drag} delayLongPress={0.2}>
@@ -1559,12 +1654,7 @@ const renderAddNewDescripInput = () => {
                         <RatingInputContainer>
                             <TouchableWithoutFeedback onPress={() => setMainTagProcess(false)}>
                             <RatingTextContainer>
-                            {rating && (
-                                <Text style={{fontWeight:"bold", color: '#8e8e8e', fontSize: 18}}>{rating+"점"}</Text>
-                            )}
-                            {!rating && (
-                                <Text style={{fontWeight:"bold", color: '#cccccc', fontSize: 18}}>{"??점"}</Text>
-                            )}
+                                <Text style={{fontWeight:"bold", color: '#8e8e8e', fontSize: 18}}>{inputingRating+"점"}</Text>
                              </RatingTextContainer>
                              </TouchableWithoutFeedback>
                             <RatingContainer>
@@ -1574,8 +1664,8 @@ const renderAddNewDescripInput = () => {
                             ratingImage={ratingImage}
                             imageSize={wp('11%')}
                             fractions={2}
-                            startingValue={rating || 0}
-                            setRatingInMove={ratingMovling}
+                            startingValue={0}
+                            setRatingInMove={ratingMoving}
                             />
                             </RatingContainer>
                         </RatingInputContainer>
@@ -1609,7 +1699,7 @@ const renderAddNewDescripInput = () => {
                     <ExpenseInner>
                     <InputedExpenseIcon
                     source={require('~/Assets/Images/ic_expense_outline.png')}/>
-                    <InputedExpenseText>{completePrice ? completePrice + "원" : "소비금액"}</InputedExpenseText>
+                    <InputedExpenseText>{expense ? formattedExpense + "원" : "소비금액"}</InputedExpenseText>
                     </ExpenseInner>
                     </InputedExpenseContainer>
                     </TouchableWithoutFeedback>
@@ -1666,6 +1756,35 @@ const renderAddNewDescripInput = () => {
                 
                 )}
             </BodyContainer>
+            <View style={{position:'absolute', bottom:0}}>
+        <View>
+        <GetTextWidthContainer>
+        </GetTextWidthContainer>
+        <TWInputContainer>
+        <GetWidthTagText
+        onLayout={onMainTagLayout}
+              >{"#" + mainTag}</GetWidthTagText>
+        </TWInputContainer>
+        </View>
+        <View>
+        <GetTextWidthContainer>
+        </GetTextWidthContainer>
+        <TWInputContainer>
+        <GetWidthTagText
+        onLayout={onSubTag1Layout}
+              >{"#" + subTag1}</GetWidthTagText>
+        </TWInputContainer>
+        </View>
+        <View>
+        <GetTextWidthContainer>
+        </GetTextWidthContainer>
+        <TWInputContainer>
+        <GetWidthTagText
+        onLayout={onSubTag2Layout}
+              >{"#" + subTag2}</GetWidthTagText>
+        </TWInputContainer>
+        </View>
+        </View>
             {mainTag && !mainTagProcess && visibleBottomMenuBar && !visibleDescripModal && (
                 <BottomMenuBarContainer>
                 <AboveKeyboard>
@@ -1806,6 +1925,7 @@ const renderAddNewDescripInput = () => {
             cancelButtonIndex={0}
             destructiveButtonIndex={1}
             onPress={(index) => removeParagraphIndex(index)}/>
+           
             </Container>
     )
 }

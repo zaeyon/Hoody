@@ -300,9 +300,17 @@ class Gallery extends Component {
     console.log('사진선택 this.state.selected', this.state.selected);
     var _selectedImages = this.state.selected.slice(0);
 
-    this.props.navigation.navigate('UploadScreen', {
-      selectedImages: _selectedImages,
-    });
+    if(this.props.route.params?.requestType === "upload") {
+      this.props.navigation.navigate('UploadScreen', {
+        selectedImages: _selectedImages,
+      });
+    } else if(this.props.route.params?.requestType === "edit") {
+      this.props.navigation.navigate('FeedEditScreen', {
+        selectedImages: _selectedImages,
+      });
+    }
+
+
     this.setState({
       selected: [],
     })

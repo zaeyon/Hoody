@@ -431,6 +431,7 @@ const CommentListScreen = ({navigation, route}: Props) => {
        nickname={item.user.nickname}
        description={item.description}
        createAt={date.toString()}
+       navigation={navigation}
        />
      )
    }
@@ -452,6 +453,7 @@ const CommentListScreen = ({navigation, route}: Props) => {
     comment={item.description}
     replys={item.replys}
     createAt={date.toString()}
+    navigation={navigation}
     />
     {item.replys[0] && (
       <FlatList

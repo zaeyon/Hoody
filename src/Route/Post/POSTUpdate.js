@@ -1,8 +1,12 @@
 import axios from 'axios';
+import FeedDetail from '~/Screens/FeedDetail';
 const baseUrl = 'https://368769abfaf9.ngrok.io'; 
 
-const PostUpload = (desArray, mediaArray,mainTag, subTag1, subTag2, rating, expense,  location, longitude, latitude, certifiedLocation, dump, sequence, products, openState, subTag1Exis, subTag2Exis) => {
-    const url = baseUrl + "/post/upload"
+
+const POSTUpdate = (feedId, desArray, mediaArray,mainTag, subTag1, subTag2, rating, expense,  location, longitude, latitude, certifiedLocation, dump, sequence, products, openState, subTag1Exis, subTag2Exis) => {
+    const url = baseUrl + "/post/update?postId=" + feedId;
+
+    console.log("feedId", feedId);
 
     console.log("업로드할 사진", mediaArray);
     console.log("업로드할 desArray", desArray);
@@ -59,4 +63,4 @@ const PostUpload = (desArray, mediaArray,mainTag, subTag1, subTag2, rating, expe
 }
 
 
-export default PostUpload
+export default POSTUpdate;

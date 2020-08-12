@@ -1,5 +1,5 @@
 import axios from 'axios';
-const baseUrl = "https://dac549af8a8b.ngrok.io";
+const baseUrl = "https://368769abfaf9.ngrok.io";
 
 const POSTCreateCollection = (coverImage, name, description, open, includeLocation, postIds) => {
     const url = baseUrl + "/collection/create";

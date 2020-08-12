@@ -8,7 +8,6 @@ import {TouchableWithoutFeedback, FlatList, TextInput ,Keyboard, KeyboardAvoidin
 import GETTagAutoComplete from '~/Route/Search/GETTagAutoComplete';
 
 const Container = Styled.SafeAreaView`
-  flex: 1;
   background-color: #ffffff;
   align-items: center;
 `;
@@ -143,6 +142,7 @@ font-size: 20px;
 font-weight: bold;
 flex-direction: row;
 flex-wrap: wrap;
+
 `;
 
 
@@ -154,7 +154,6 @@ flex-direction: row;
 `;
 
 const EmptyRemainderContainer = Styled.View`
-flex: 1;
 background-color: #ffffff;
 `;
 
@@ -298,7 +297,6 @@ const InputedTagColumnContainer = Styled.View`
 `;
 
 const NoAutoCompletedTagResultContainer = Styled.View`
- flex: 1;
  background-color:#c3c3c3;
 `;
 
@@ -374,7 +372,12 @@ const TagSearchScreen = ({navigation, route}: Props) => {
             setInputingSubTag1(false);
             setInputingSubTag2(true);
         } else if(route.params?.mainTag && route.params?.subTag1 && route.params.subTag2) {
-            console.log("서브태그2 존재")
+            console.log("메인태그 존재", route.params.mainTag);
+            console.log("서브태그1 존재", route.params.subTag1);
+            console.log("서브태그2 존재", route.params.subTag2);
+
+            console.log("메인태그 길이", route.params.mainTagWidth);
+
             setInputMainTag(route.params.mainTag);
             setMainTagWidth(route.params.mainTagWidth);
             setInputSubTag1(route.params.subTag1);
@@ -494,7 +497,11 @@ const TagSearchScreen = ({navigation, route}: Props) => {
             setMainTagExis(true);
             setInputingMainTag(false);
             if(!inputSubTag1) {
+            console.log("서브태그 입력하기")
             setInputingSubTag1(true)
+            }
+            if(!inputSubTag2 && inputSubTag1) {
+            setInputingSubTag2(true)
             }
             var tmpTagList = tagList;
             tmpTagList[0] = tag;

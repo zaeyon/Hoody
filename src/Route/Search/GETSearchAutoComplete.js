@@ -1,5 +1,5 @@
 import axios from 'axios';
-const baseUrl = 'https://dac549af8a8b.ngrok.io'
+const baseUrl = 'https://368769abfaf9.ngrok.io'
 
 const GETSearchAutoComplete = (query) => {
     console.log("입력된 검색 키워드", query);

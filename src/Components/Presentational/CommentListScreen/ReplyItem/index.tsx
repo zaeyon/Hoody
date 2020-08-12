@@ -5,6 +5,7 @@ import {
     heightPercentageToDP as hp 
 } from 'react-native-responsive-screen';
 import {TouchableWithoutFeedback, FlatList} from 'react-native';
+import {useSelector} from 'react-redux';
 
 
 const Container = Styled.View`
@@ -87,6 +88,7 @@ color: #979797;
 `;
 
 interface Props {
+    navigation: any,
     replyId: number,
     profileImage: string,
     nickname: string,
@@ -94,7 +96,8 @@ interface Props {
     createAt: string,
 }
 
-const ReplyItem = ({profileImage, nickname, description, createAt, replyId}: Props) => {
+const ReplyItem = ({navigation, profileImage, nickname, description, createAt, replyId}: Props) => {
+    const currentUser = useSelector((state: any) => state.currentUser);
 
     function getDateFormat(date) {
         var year = date.getFullYear();
@@ -105,12 +108,25 @@ const ReplyItem = ({profileImage, nickname, description, createAt, replyId}: Pro
         return year + '/' + month + '/' + day;
     }
 
+    const moveToUserProfile = () => {
+        if(currentUser.user?.nickname === nickname) {
+            navigation.navigate("Profile")
+        } else {
+            navigation.navigate("AnotherUserProfileStack", {
+              screen: "AnotherUserProfileScreen",
+              params: {requestedUserNickname: nickname}
+            });
+        }
+    }
+
     return (
         <Container>
+            <TouchableWithoutFeedback onPress={() => moveToUserProfile()}>
             <ProfileImageContainer>
                 <ProfileImage
                 source={{uri:profileImage}}/>
             </ProfileImageContainer>
+            </TouchableWithoutFeedback>
             <CommentRightContainer>
                 <HeaderContainer>
                     <NicknameText>{nickname}</NicknameText>

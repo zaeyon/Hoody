@@ -38,12 +38,16 @@ interface Props {
 }
 
 const AllScrapFolderItem = ({coverImage, name, navigation}: Props) => {
+
+    const moveToAllFeedScrap = () => {
+        navigation.navigate("AllFeedScrapListScreen");
+    }
+
     return (
-    <TouchableWithoutFeedback onPress={() => 0}>
+    <TouchableWithoutFeedback onPress={() => moveToAllFeedScrap()}>
         <ScrapFolderContainer>
         <ScrapFolderCoverImage
-        source={{uri:coverImage}}
-        />
+        source={{uri:coverImage}}/>
         <ScrapFolderNameContainer>
         <ScrapFolderNameText>모든 스크랩</ScrapFolderNameText>
         </ScrapFolderNameContainer>

@@ -582,7 +582,7 @@ const ProfileListFeedItem = ({
             </HeaderCenterContainer>
           </WriterContainer>
           <ExpenseRatingContainer>
-            <ExpenseText>{"300원"}</ExpenseText>
+            <ExpenseText>{expense ? expense.toLocaleString() + "원" : ""}</ExpenseText>
             <RatingStarImage
             source={require('~/Assets/Images/ic_newStar.png')}
             />
@@ -593,6 +593,7 @@ const ProfileListFeedItem = ({
         <View>
         <BodyContainer>
         <TagContainer>
+          {/*
             <FlatList
               horizontal={true}
               data={tagList}
@@ -608,6 +609,17 @@ const ProfileListFeedItem = ({
                 }
               }}
             />
+          */}
+          <MainTagText>
+            {"#" + main_tag}
+            {sub_tag1 && (
+              <SubTagText>{" #" + sub_tag1}
+              {sub_tag2 && (
+                <SubTagText>{" #" + sub_tag2}</SubTagText>
+              )}
+              </SubTagText>
+            )}
+          </MainTagText>
           </TagContainer>
         <DescriptionContainer>
             <DescriptionText>{desArray[0] ? desArray[0].description : null}</DescriptionText>

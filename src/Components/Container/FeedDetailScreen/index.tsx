@@ -767,7 +767,10 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
     */
 
     // 서버 연결 코드
-    useLayoutEffect(() => {
+    useEffect(() => {
+        if(route.params?.update) {
+          route.params.update = false
+        }
         if(route.params?.feedId) {
        GetFeedDetail(route.params.feedId).then(function(response) {
            console.log("GetFeedDetail Success:", response.data);
@@ -793,7 +796,7 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
            console.log("error", error);
        })
     }
-    }, [route.params?.feedId])
+    }, [route.params?.feedId, route.params?.update])
 
     useEffect(() => {
       if(route.params?.commentList) {
@@ -1033,7 +1036,7 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
    subTag1={feedDetailInfo.subTagOnes ? feedDetailInfo.subTagOnes.name : null}
    subTag2={feedDetailInfo.subTagTwos ? feedDetailInfo.subTagTwos.name : null}
    rating={feedDetailInfo.starRate}
-   expensePrice={feedDetailInfo.expense ? feedDetailInfo.expense + "원" : "금액정보 없음"}
+   expensePrice={feedDetailInfo.expense ? feedDetailInfo.expense.toLocaleString() + "원" : "금액정보 없음"}
    location={feedDetailInfo.address ? feedDetailInfo.address.address : "위치정보 없음"}
    expenseDate={feedDetailInfo.spendDate ? feedDetailInfo.spendDate : null}
    moveToWriterProfile={moveToWriterProfile}

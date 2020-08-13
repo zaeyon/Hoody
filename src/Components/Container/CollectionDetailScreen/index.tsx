@@ -14,6 +14,8 @@ import CollectionTileFeedItem from '~/Components/Presentational/CollectionDetail
 
 // Route
 import GETCollectionDetailInfo from '~/Route/Collection/GETCollectionDetailInfo';
+import POSTScrapCollection from '~/Route/Collection/Scrap/POSTScrapCollection';
+import DELETEScrapCollection from '~/Route/Collection/Scrap/DELETEScrapCollection'
 
 const actionSheetRef = createRef();
 const Container = Styled.SafeAreaView`
@@ -151,13 +153,22 @@ const CollectionIconContainer = Styled.View`
  flex-direction: row;
 `;
 
+const CollectionLikeContainer = Styled.View`
+ padding:5px;
+ background-color:#ffffff;
+`;
+
+const CollectionScrapContainer = Styled.View`
+padding:5px;
+background-color:#ffffff;
+`;
+
 const CollectionLikeIcon = Styled.Image`
  width: ${wp('6.4%')};
  height: ${wp('6.4%')};
 `;
 
 const CollectionScrapIcon = Styled.Image`
-margin-left: 12px;
 width: ${wp('6.4%')};
 height: ${wp('6.4%')};
 `;
@@ -295,6 +306,9 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
     const [headerBlur, setHeaderBlur] = useState<boolean>(false);
     const [collectionDetailInfo, setCollectionDetailInfo] = useState<Array<object>>([]);
 
+    const [currentUserLike, setCurrentUserLike] = useState<boolean>(false);
+    const [currentUserScrap, setCurrentUserScrap] = useState<boolean>(false);
+
     const H_MAX_HEIGHT = wp('100%')
     const H_MIN_HEIGHT = wp('25.6%');
     const H_SCROLL_DISTANCE = H_MAX_HEIGHT - H_MIN_HEIGHT;
@@ -359,6 +373,25 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
         }
     }
 
+    const addScrapCollection = () => {
+        POSTScrapCollection(route.params?.collectionId)
+        .then(function(response) {
+            console.log("컬렉션 스크랩 성공", response);
+        })
+        .catch(function(error) {
+            console.log("컬렉션 스크랩 에러", error);
+        })
+    }
+
+    const deleteScrapCollection = () => {
+        DELETEScrapCollection(route.params?.collectionId)
+        .then(function(response) {
+            console.log("컬렉션 스크랩 삭제 ", response);
+        })
+        .catch(function(error) {
+            console.log("컬렉션 스크랩 삭제 에러", error);
+        })
+    }
 
     return (
         <Container>
@@ -408,10 +441,16 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
             <CollectionInfoHeader>
             <CollectionTitleText>{collectionDetailInfo.name}</CollectionTitleText>
             <CollectionIconContainer>
+            <CollectionLikeContainer>
             <CollectionLikeIcon
             source={require('~/Assets/Images/ic_heart_outline.png')}/>
+            </CollectionLikeContainer>
+            <TouchableWithoutFeedback onPress={() => addScrapCollection()}>
+            <CollectionScrapContainer>
             <CollectionScrapIcon
             source={require('~/Assets/Images/ic_scrap_outline.png')}/>
+            </CollectionScrapContainer>
+            </TouchableWithoutFeedback>
             </CollectionIconContainer>
             </CollectionInfoHeader>
             <WriterProfileContainer>

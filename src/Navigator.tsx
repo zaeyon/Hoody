@@ -61,8 +61,9 @@ import CollectionModifyScreen from '~/Components/Container/CollectionModifyScree
 import CollectionFeedEditScreen from '~/Components/Container/CollectionFeedEditScreen';
 
 // Scrap Screen
+import ScrapListScreen from '~/Components/Container/ScrapListScreen';
 import AddScrapAlbumScreen from '~/Components/Container/AddScrapAlbumScreen';
-import CollapsibleTabBarTest from '~/Components/Container/CollapsibleTabBarTest';
+import AllFeedScrapListScreen from '~/Components/Container/AllFeedScrapListScreen';
 
 // Location Feed Map Screen
 import LocationFeedMapScreen from '~/Components/Container/LocationFeedMapScreen';
@@ -83,9 +84,6 @@ import BirthdateSettingScreen from '~/Components/Container/SettingScreen/Birthda
 import GenderSettingScreen from '~/Components/Container/SettingScreen/GenderSettingScreen';
 import ConfirmPasswordScreen from '~/Components/Container/SettingScreen/ConfirmPasswordScreen';
 import NewPasswordSettingScreen from '~/Components/Container/SettingScreen/NewPasswordSettingScreen';
-
-// Scrap Screen
-import ScrapListScreen from '~/Components/Container/ScrapListScreen';
 
 // Select Interest Screen
 import SelectInterestScreen from '~/Components/Container/SelectInterestScreen';
@@ -422,6 +420,9 @@ function ProfileStackScreen() {
       <ProfileStack.Screen
       name="ScrapListScreen"
       component={ScrapListScreen}/>
+      <ProfileStack.Screen
+      name="AllFeedScrapListScreen"
+      component={AllFeedScrapListScreen}/>
       <ProfileStack.Screen
       name="ProfileEditScreen"
       component={ProfileEditScreen}/>

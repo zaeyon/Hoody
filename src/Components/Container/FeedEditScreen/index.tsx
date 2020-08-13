@@ -749,6 +749,12 @@ const FeedEditScreen = ({navigation, route}: Props) => {
     const [subTag1Exis, setSubTag1Exis] = useState<boolean>(false);
     const [subTag2Exis, setSubTag2Exis] = useState<boolean>(false);
 
+    const [subTag1Edit, setSubTag1Edit] = useState<boolean>(false);
+    const [subTag2Edit, setSubTag2Edit] = useState<boolean>(false);
+
+    const [originSubTag1, setOriginSubTag1] = useState<string>("");
+    const [originSubTag2, setOriginSubTag2] = useState<string>("");
+
     // toggle input expense
     const [visibleExpenseInput, setVisibleExpenseInput] = useState<boolean>(false);
     const [inputingExpenseText, setInputingExpenseText] = useState<string>();
@@ -791,9 +797,11 @@ const FeedEditScreen = ({navigation, route}: Props) => {
 
              if(route.params.feedDetailInfo.subTagOnes) {
                  setSubTag1(route.params.feedDetailInfo.subTagOnes.name)
+                 setOriginSubTag1(route.params.feedDetailInfo.subTagOnes.name);
              }
              if(route.params.feedDetailInfo.subTagTwos) {
                  setSubTag2(route.params.feedDetailInfo.subTagTwos.name);
+                 setOriginSubTag2(route.params.feedDetailInfo.subTagTwos.name);
              }
              if(route.params.feedDetailInfo.address) {
                  setLocation(route.params.feedDetailInfo.address.address);
@@ -928,6 +936,7 @@ const FeedEditScreen = ({navigation, route}: Props) => {
             }
             setAllTagText(route.params.mainTag + " " + route.params.subTag1);
             setSubTag2(undefined)
+
         } else if(route.params?.mainTag && route.params?.subTag1 && route.params?.subTag2) {
 
             setMainTagExis(true);
@@ -947,6 +956,7 @@ const FeedEditScreen = ({navigation, route}: Props) => {
             }
 
             setAllTagText(route.params.mainTag + " " + route.params.subTag1 + " " + route.params.subTag2);
+
             
         }
     }, [route.params?.mainTag, route.params?.subTag1, route.params?.subTag2])
@@ -1248,7 +1258,7 @@ const onChangeExpenseInput = (text: string) => {
     console.log("text", text);
     setMoneyText(money);
     setInputingExpenseText(text);
-    setExpense(text);
+    //setExpense(text);
     }
 }
 
@@ -1346,8 +1356,10 @@ const touchBackground = () => {
 
 const addExpense = () => {
     setCompletePrice(moneyText);
+    setExpense(inputingExpenseText);
     //setInputingExpenseText(null);
     console.log("inputingExpenseText", inputingExpenseText)
+    setFormattedExpense(inputingExpenseText.toLocaleString());
     expenseInput.current.blur();
 }
 
@@ -1442,6 +1454,20 @@ const clickToUploadFinish = () => {
   var descriptionArray = new Array();
   var JSONstringify_productArray;
   var JSONstirngify_descriptionArray;
+  var subTagOneEdit = false;
+  var subTagTwoEdit = false;
+
+  console.log("originSubTag1", originSubTag1);
+  console.log("subTag1", subTag1);
+  
+  if(originSubTag1 !== subTag1) {
+      console.log("서브태그 수정됌");
+      subTagOneEdit = true
+  }
+  
+  if(originSubTag2 !== subTag2) {
+      subTagTwoEdit = true
+}
 
   for(var i = 0; i < paragraphData.length; i++) {
       if(paragraphData[i].type === 'description') {
@@ -1452,7 +1478,14 @@ const clickToUploadFinish = () => {
           mediaFileArray.push(paragraphData[i].image);
       } else if(paragraphData[i].type === 'product') {
           sequence = sequence + "P";
-          productArray.push(paragraphData[i].product);
+          productArray.push({
+              description: paragraphData[i].description,
+              favicon: paragraphData[i].favicon,
+              image: paragraphData[i].image,
+              site: paragraphData[i].site,
+              title: paragraphData[i].title,
+              url: paragraphData[i].url,
+          })
       } 
   }
 
@@ -1473,17 +1506,27 @@ const clickToUploadFinish = () => {
       console.log("JSONstringify_descriptionArray", JSONstirngify_descriptionArray);
       console.log("JSONstringify_productoArray", JSONstringify_productArray);
 
-      POSTUpdate(route.params?.feedId, JSONstirngify_descriptionArray, mediaFileArray, mainTag, subTag1, subTag2, rating, expense, location, longitude, latitude, certifiedLocation, temporarySave, sequence, JSONstringify_productArray, openState, subTag1Exis, subTag2Exis)
+      POSTUpdate(route.params?.feedId, JSONstirngify_descriptionArray, mediaFileArray, mainTag, subTag1, subTag2, rating, expense, location, longitude, latitude, certifiedLocation, temporarySave, sequence, JSONstringify_productArray, openState, subTagOneEdit, subTagTwoEdit, subTag1Exis, subTag2Exis)
       .then(function(response) {
-          if(response.status === 201) {
+          if(response.status === 200) {
               console.log("후기 수정 성공", response);
-              navigation.goBack();
+              moveToFeedDetail();
           }
       })
       .catch(function(error) {
           console.log("후기 수정 실패", error);
       });
   }, 100)
+}
+
+const moveToFeedDetail = () => {
+    navigation.navigate("FeedStack", {
+        screen: "FeedDetailScreen",
+        params: {
+            feedId: route.params?.feedId,
+            update: true,
+        }
+    })
 }
 
 
@@ -1834,7 +1877,7 @@ const renderAddNewDescripInput = () => {
                     style={{paddingLeft:20, color:'#ffffff'}}
                     keyboardType={"number-pad"}
                     placeholder={ !moneyText ? "소비금액(원)" : ""}
-                    caretHidden={false}
+                    caretHidden={true}
                     placeholderTextColor="#CCCCCC"
                     onChangeText={(text:string) => onChangeExpenseInput(text)}
                     value={inputingExpenseText}
@@ -1925,7 +1968,6 @@ const renderAddNewDescripInput = () => {
             cancelButtonIndex={0}
             destructiveButtonIndex={1}
             onPress={(index) => removeParagraphIndex(index)}/>
-           
             </Container>
     )
 }

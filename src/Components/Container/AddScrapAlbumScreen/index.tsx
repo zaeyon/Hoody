@@ -21,28 +21,29 @@ const HeaderBar = Styled.View`
  align-items: center;
  justify-content: space-between;
  background-color:#ffffff;
+ border-bottom-width: 0.6px;
+ border-color: #ECECEE;
 `;
 
 const HeaderCancelContainer = Styled.View`
-padding: 10px 15px 10px 15px;
+padding: 12px 16px 15px 16px;
  align-items: center;
  justify-content: center;
 `;
 
 const HeaderCancelText = Styled.Text`
- font-weight: 500;
  font-size: 17px;
- color: #979797;
-`;
+ color: #C6C7CC;
+ `;
 
 const HeaderTitleText = Styled.Text`
-font-weight: 500;
-font-size: 17px;
-color: #333333;
+font-weight: 600;
+font-size: 18px;
+color: #1D1E1F;
 `;
 
 const HeaderFinishContainer = Styled.View`
-padding: 10px 15px 10px 15px;
+padding: 12px 16px 15px 16px;
  align-items: center;
  justify-content: center;
 `;
@@ -56,8 +57,8 @@ const DisabledHeaderFinishText = Styled.Text`
 const AbledHeaderFinishText = Styled.Text`
  font-size: 17px;
  font-weight: 500;
- color: #3384FF;
-`;
+ color: #267DFF;
+ `;
 
 const AlbumNameInputContainer = Styled.View`
  width: ${wp('100%')};
@@ -178,7 +179,7 @@ const AddScrapAlbumScreen = ({navigation, route}: Props) => {
                     <HeaderCancelText>취소</HeaderCancelText>
                 </HeaderCancelContainer>
                 </TouchableWithoutFeedback>
-                <HeaderTitleText>새 스크랩 앨범</HeaderTitleText>
+                <HeaderTitleText>새 앨범</HeaderTitleText>
                     {scrapAlbumName !== "" && selectingScrapList.length > 0 && (
                         <TouchableWithoutFeedback onPress={() => navigation.navigate("ProfileScreen")}>
                         <HeaderFinishContainer>

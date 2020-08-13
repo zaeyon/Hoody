@@ -96,7 +96,7 @@ const ProfileCollectionList = ({collectionListData, navigation, profileNickname,
     if(!collectionListData[0]) {
     if(currentUser.user?.nickname === requestNickname) {
         return (
-            <NoCollectionContainer>
+            <NoCollectionContainer style={{marginTop:-100}}>
             <TouchableWithoutFeedback onPress={() => navigation.navigate("CollectionUploadScreen")}>
             <AddCollectionButton>
                 <AddCollectionIcon

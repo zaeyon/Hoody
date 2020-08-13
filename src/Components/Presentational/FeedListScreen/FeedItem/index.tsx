@@ -596,21 +596,16 @@ const FeedItem = ({
         <View>
         <BodyContainer>
         <TagContainer>
-            <FlatList
-              horizontal={true}
-              data={tagList}
-              renderItem={({item, index}) => {
-                if(index === 0) 
-                { return (
-                  <MainTagText>#{item}</MainTagText>
-                )
-                } else {
-                  return (
-                  <SubTagText>#{item}</SubTagText>
-                  )
-                }
-              }}
-            />
+          <MainTagText>
+            {"#" + main_tag}
+            {sub_tag1 && (
+              <SubTagText>{" #" + sub_tag1}
+              {sub_tag2 && (
+                <SubTagText>{" #" + sub_tag2}</SubTagText>
+              )}
+              </SubTagText>
+            )}
+          </MainTagText>
           </TagContainer>
           {desArray[0] && (
         <DescriptionContainer>

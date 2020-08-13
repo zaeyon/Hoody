@@ -44,14 +44,14 @@ const HeaderTitleText = Styled.Text`
  color: #1D1E1F;
 `;
 
-const HeaderMoreContainer = Styled.View`
+const HeaderAddContainer = Styled.View`
  padding-top: 7px;
  padding-left: 16px;
  padding-right: 16px;
  padding-bottom: 13px;
 `;
 
-const HeaderMoreIcon = Styled.View`
+const HeaderAddIcon = Styled.Image`
  width: ${wp('6.4%')};
  height: ${wp('6.4%')};
 `;
@@ -108,6 +108,11 @@ const ScrapListScreen = ({navigation, route}: Props) => {
         )}
     }
 
+    const moveToAddScrapAlbum = () => {
+        navigation.navigate("AddScrapAlbumScreen");
+    }
+    
+
     return (
         <Container>
             <HeaderBar>
@@ -118,10 +123,12 @@ const ScrapListScreen = ({navigation, route}: Props) => {
                 </HeaderBackContainer>
                 </TouchableWithoutFeedback>
                 <HeaderTitleText>스크랩</HeaderTitleText>
-                <HeaderMoreContainer>
-                    <HeaderBackIcon
-                    source={require('~/Assets/Images/HeaderBar/ic_more.png')}/>
-                </HeaderMoreContainer>
+                <TouchableWithoutFeedback onPress={() => moveToAddScrapAlbum()}>
+                <HeaderAddContainer>
+                    <HeaderAddIcon
+                    source={require('~/Assets/Images/HeaderBar/ic_add.png')}/>
+                </HeaderAddContainer>
+                </TouchableWithoutFeedback>
             </HeaderBar>
             <BodyContainer>
                 <FlatList

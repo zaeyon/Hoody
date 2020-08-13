@@ -85,6 +85,7 @@ const MainPopularFeedItem = ({navigation, feedId, mainImageUri, mainTag, address
             screen: "FeedDetailScreen",
             params: {
                 feedId: feedId,
+                update: true,
             }
         })
     }

@@ -9,6 +9,7 @@ const GETCollectionDetailInfo = (collectionId) => {
         axios
         .get(url)
         .then(function(response) {
+            console.log("컬렉션상세정보", response);
             resolve(response.data);
         })
         .catch(function(error) {

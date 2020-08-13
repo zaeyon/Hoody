@@ -1,15 +1,12 @@
 import axios from 'axios';
 const baseUrl = 'https://85a2bd05d031.ngrok.io';
 
-const POSTScrapFeed = (collectionId) => {
+const DELETEScrapCollection = (collectionId) => {
     const url = baseUrl + '/scrap/collection?collectionId=' + collectionId;
-
-    var form = new FormData();
-    form.append("collectionId", collectionId);
-    
+ 
     return new Promise(function(resolve, reject) {
         axios
-        .delete(url, form)
+        .delete(url)
         .then(function(response) {
             resolve(response);
         })
@@ -19,4 +16,4 @@ const POSTScrapFeed = (collectionId) => {
     })
 }
 
-export default POSTScrapFeed;
+export default DELETEScrapCollection;

@@ -1,9 +1,9 @@
 import axios from 'axios';
 const baseUrl = 'https://85a2bd05d031.ngrok.io';
 
-const POSTScrapCollection = (collectionId) => {
-    const url = baseUrl + '/scrap/collection?collectionId=' + collectionId;
-    
+const POSTLikeCollection = (collectionId) => {
+    const url = baseUrl + '/collection/like?collectionId=' + collectionId;
+   
     return new Promise(function(resolve, reject) {
         axios
         .post(url)
@@ -16,4 +16,4 @@ const POSTScrapCollection = (collectionId) => {
     })
 }
 
-export default POSTScrapCollection;
+export default POSTLikeCollection;

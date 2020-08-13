@@ -4,10 +4,11 @@ import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import {TouchableWithoutFeedback, FlatList, ScrollView, Animated, Image} from 'react-native'
+import {TouchableWithoutFeedback, FlatList, ScrollView, Animated, Image, Alert} from 'react-native'
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import ActionSheet from 'react-native-actionsheet';
+import {useSelector} from 'react-redux';
 
 // Local Component
 import CollectionTileFeedItem from '~/Components/Presentational/CollectionDetailScreen/CollectionTileFeedItem';
@@ -16,6 +17,9 @@ import CollectionTileFeedItem from '~/Components/Presentational/CollectionDetail
 import GETCollectionDetailInfo from '~/Route/Collection/GETCollectionDetailInfo';
 import POSTScrapCollection from '~/Route/Collection/Scrap/POSTScrapCollection';
 import DELETEScrapCollection from '~/Route/Collection/Scrap/DELETEScrapCollection'
+import POSTLikeCollection from '~/Route/Collection/Like/POSTLikeCollection';
+import DELETELikeCollection from '~/Route/Collection/Like/DELETELikeCollection';
+import DELETECollection from '~/Route/Collection/DELETECollection';
 
 const actionSheetRef = createRef();
 const Container = Styled.SafeAreaView`
@@ -144,7 +148,7 @@ const CollectionInfoHeader = Styled.View`
  flex-direction: row;
  align-items: center;
  justify-content: space-between;
- padding-bottom: 16px;
+ padding-bottom: 9px;
  border-bottom-width: 0.6px;
  border-color: #ececee;
 `;
@@ -305,10 +309,11 @@ const LatLng = {
 const CollectionDetailScreen = ({navigation, route}: Props) => {
     const [headerBlur, setHeaderBlur] = useState<boolean>(false);
     const [collectionDetailInfo, setCollectionDetailInfo] = useState<Array<object>>([]);
-
     const [currentUserLike, setCurrentUserLike] = useState<boolean>(false);
     const [currentUserScrap, setCurrentUserScrap] = useState<boolean>(false);
+    const [likeCount, setLikeCount] = useState<number>(0);
 
+    const currentUser = useSelector((state: any) => state.currentUser);
     const H_MAX_HEIGHT = wp('100%')
     const H_MIN_HEIGHT = wp('25.6%');
     const H_SCROLL_DISTANCE = H_MAX_HEIGHT - H_MIN_HEIGHT;
@@ -327,6 +332,9 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
            .then(function(response) {
                console.log("GETCollectionDetailInfo response", response)
                setCollectionDetailInfo(response.collection);
+               setCurrentUserLike(response.collection.liked);
+               setCurrentUserScrap(response.collection.scraped);
+               setLikeCount(response.collection.Like);
            })
            .catch(function(error) {
                console.log("GETCollectionDetailInfo error", error)
@@ -344,7 +352,7 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
             mainTag={item.mainTags.name}
             rating={item.starRate}
             expense={item.expense}
-            location={item.address}
+            location={item.address ? item.address.address : null}
             feedId={item.id}
             />
         )
@@ -364,16 +372,102 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
         actionSheetRef.current.show()
     }
 
-    const onPressActionSheet = (index) => {
+    const deleteCollection = () => {
+        Alert.alert(
+            '정말 컬렉션을 삭제하시겠어요?', 
+            ' ', 
+            [
+            {
+                text: '확인',
+                onPress: () => {
+                  DELETECollection(route.params?.collectionId)
+                  .then(function(response) {
+                  console.log("컬렉션 삭제 성공 response", response);
+                  navigation.navigate("ProfileScreen", {
+                    collectionListChange: true,
+                  });
+                  })
+                  .catch(function(error) {
+                  console.log("컬렉션 삭제 실패 error", error);
+                  })
+
+                    /*
+                  var deletedFeedIndex:number;
+                  console.log("currentUser.userAllFeeds", currentUser.userAllFeeds)
+                  if(currentUser.userAllFeeds) {
+                    currentUser.userAllFeeds.forEach((feed: object, index: number) => {
+                       if(feed.id === postId) {
+                         deletedFeedIndex = index;
+                       }
+                    })
+                  }
+                  DELETEPost(postId)
+                  .then(function(response) {
+                    console.log("피드 삭제 성공 response", response);
+                    if(currentUser.userAllFeeds) {
+                      console.log("피드삭제성공deletedFeedIndex", deletedFeedIndex);
+                      var deletedFeeds = currentUser.userAllFeeds;
+                      deletedFeeds.splice(deletedFeedIndex, 1);
+                      dispatch(allActions.userActions.setUserAllFeeds(deletedFeeds));
+                      navigation.goBack();
+                    }
+                  })
+                  .catch(function(error) {
+                    console.log("피드 삭제 error", error);
+                  })
+                  */
+            }
+            },
+            {
+                text: '취소',
+                onPress: () => 0,
+                style: 'cancel',
+            }
+        ],      
+      );
+    }
+
+    const onPressActionSheet = (index: number) => {
         console.log("actionsheet press index", index);
-        if(index === 2) {
-            navigation.navigate("CollectionModifyScreen");
+        if(index === 1) {
+            deleteCollection()
+        } if(index === 2) {
+            navigation.navigate("CollectionModifyScreen", {
+            coverImage: collectionDetailInfo.coverImg,
+            name: collectionDetailInfo.name,
+            description: collectionDetailInfo.description,
+        });
         } else if(index === 3) {
             navigation.navigate("CollectionFeedEditScreen")
         }
     }
 
+    const addLikeCollection = () => {
+        setCurrentUserLike(true);
+        setLikeCount(likeCount+1);
+        POSTLikeCollection(route.params?.collectionId)
+        .then(function(response) {
+            console.log("컬랙션 좋아요 성공", response);
+        })
+        .catch(function(error) {
+            console.log("컬렉션 좋아요 실패", error);
+        })
+    }
+
+    const deleteLikeCollection = () => {
+        setCurrentUserLike(false);
+        setLikeCount(likeCount-1);
+        DELETELikeCollection(route.params.collectionId)
+        .then(function(response) {
+            console.log("컬렉션 좋아요 삭제 성공", response);
+        })
+        .catch(function(error) {
+            console.log("컬렉션 좋아요 삭제 실패", error);
+        })
+    }
+
     const addScrapCollection = () => {
+        setCurrentUserScrap(true);
         POSTScrapCollection(route.params?.collectionId)
         .then(function(response) {
             console.log("컬렉션 스크랩 성공", response);
@@ -384,6 +478,7 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
     }
 
     const deleteScrapCollection = () => {
+        setCurrentUserScrap(false);
         DELETEScrapCollection(route.params?.collectionId)
         .then(function(response) {
             console.log("컬렉션 스크랩 삭제 ", response);
@@ -441,16 +536,38 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
             <CollectionInfoHeader>
             <CollectionTitleText>{collectionDetailInfo.name}</CollectionTitleText>
             <CollectionIconContainer>
+            {!currentUserLike && (
+            <TouchableWithoutFeedback onPress={() => addLikeCollection()}>
             <CollectionLikeContainer>
             <CollectionLikeIcon
             source={require('~/Assets/Images/ic_heart_outline.png')}/>
             </CollectionLikeContainer>
+            </TouchableWithoutFeedback>
+            )}
+            {currentUserLike && (
+            <TouchableWithoutFeedback onPress={() => deleteLikeCollection()}>
+            <CollectionLikeContainer>
+            <CollectionLikeIcon
+            source={require('~/Assets/Images/ic_pressedLike.png')}/>
+            </CollectionLikeContainer>
+            </TouchableWithoutFeedback>
+            )}
+            {!currentUserScrap && (
             <TouchableWithoutFeedback onPress={() => addScrapCollection()}>
             <CollectionScrapContainer>
             <CollectionScrapIcon
             source={require('~/Assets/Images/ic_scrap_outline.png')}/>
             </CollectionScrapContainer>
             </TouchableWithoutFeedback>
+            )}
+            {currentUserScrap && (
+            <TouchableWithoutFeedback onPress={() => deleteScrapCollection()}>
+            <CollectionScrapContainer>
+            <CollectionScrapIcon
+            source={require('~/Assets/Images/Feed/ic_pressedScrap.png')}/>
+            </CollectionScrapContainer>
+            </TouchableWithoutFeedback>
+            )}
             </CollectionIconContainer>
             </CollectionInfoHeader>
             <WriterProfileContainer>
@@ -459,7 +576,9 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
                 source={{uri:collectionDetailInfo.user?.profileImg}}/>
                 <ProfileNicknameText>{collectionDetailInfo.user?.nickname}</ProfileNicknameText>
                 </WriterInfoContainer>
+                {currentUser.user?.nickname !== collectionDetailInfo.user?.nickname && (
                 <FollowText>팔로우</FollowText>
+                )}
             </WriterProfileContainer>
             <CollectionDescripText>{collectionDetailInfo.description? collectionDetailInfo.description: null}
             </CollectionDescripText>
@@ -468,7 +587,7 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
             <CollectionFeedLabelText>게시글</CollectionFeedLabelText>
             <CollectionInfoCountText>{collectionDetailInfo.Posts ? collectionDetailInfo.Posts.length : ""}</CollectionInfoCountText>
             <CollectionLikeLabelText>좋아요</CollectionLikeLabelText>
-            <CollectionInfoCountText>{collectionDetailInfo.Like}</CollectionInfoCountText>
+            <CollectionInfoCountText>{likeCount}</CollectionInfoCountText>
             </CollectionSocialContainer>
             </CollectionInfoFooter>
             </CollectionInfoContainer>

@@ -4,14 +4,14 @@ import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import {TouchableWithoutFeedback, Switch} from 'react-native'
+import {TouchableWithoutFeedback, Switch, KeyboardAvoidingView, StyleSheet, Platform, ScrollView, View} from 'react-native'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'; 
 
 const Container = Styled.SafeAreaView`
- flex: 1;
  background-color: #f3f3f3;
  align-items: center;
+ flex: 1;
 `;
-
 
 const HeaderBar = Styled.View`
  width: ${wp('100%')};
@@ -133,9 +133,10 @@ font-weight: 600;
 `;
 
 const DescripInput = Styled.TextInput`
+ height: 130px;
  margin-top: 9px;
  font-size: 17px;
- padding-bottom: 100px;
+ padding-bottom: 10px;
 `;
 
 const PrivateSettingContainer = Styled.View`
@@ -181,8 +182,11 @@ interface Props {
 const CollectionModifyScreen = ({navigation, route}: Props) => {
     const [enabledPrivate, setEnabledPrivate] = useState<boolean>(false);
     const [enabledIncludeLocation, setEnabledIncludeLocation] = useState<boolean>(false);
-    const [collectionTitleText, setCollectionTitleText] = useState<string>("");
-    const [collectionDescripText, setCollectionDescripText] = useState<string>("");
+    const [collectionNameText, setCollectionNameText] = useState<string>(route.params?.name);
+    const [collectionDescripText, setCollectionDescripText] = useState<string>(route.params?.description);
+    const [coverImageUri, setCoverImageUri] = useState<string>(route.params?.coverImage);
+    const [name, setName] = useState<string>(route.params?.name);
+    const [description, setDescription] = useState<string>(route.params?.description);
 
     const togglePrivate = () => {
         setEnabledPrivate(!enabledPrivate);
@@ -193,7 +197,7 @@ const CollectionModifyScreen = ({navigation, route}: Props) => {
     }
 
     const onChangeTitle = (text: string) => {
-        setCollectionTitleText(text);
+        setCollectionNameText(text);
     }
 
     const onChangeDescrip = (text: string) => {
@@ -213,19 +217,22 @@ const CollectionModifyScreen = ({navigation, route}: Props) => {
                 </HeaderLeftContainer>
                 </TouchableWithoutFeedback>
                 <HeaderTitleText>컬렉션 수정</HeaderTitleText>
-                {collectionTitleText !== "" && collectionDescripText !== "" && (
+                {collectionNameText !== "" && collectionDescripText !== "" && (
                 <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
                     <HeaderRightContainer>
                        <AbledHeaderNextText>완료</AbledHeaderNextText>
                     </HeaderRightContainer>
                 </TouchableWithoutFeedback>
                 )}
-                {(collectionTitleText === "" || collectionDescripText === "") && (
+                {(collectionNameText === "" || collectionDescripText === "") && (
                     <HeaderRightContainer>
                     <DisabledHeaderNextText>완료</DisabledHeaderNextText>
                     </HeaderRightContainer>
                 )}
             </HeaderBar>
+            <KeyboardAwareScrollView
+            showsVerticalScrollIndicator={false}>
+            <View>
             <CoverContainer>
             <TouchableWithoutFeedback onPress={() => navigation.navigate("Gallery_ProfileImage")}>
             <CoverImageContainer>
@@ -244,7 +251,7 @@ const CollectionModifyScreen = ({navigation, route}: Props) => {
                 <TitleInput
                 placeholder={"컬렉션 이름을 적어주세요."}
                 autoFocus={false}
-                value={collectionTitleText}
+                value={collectionNameText}
                 onChangeText={(text:string) => onChangeTitle(text)}
                 />
             </TitleInputContainer>
@@ -254,6 +261,8 @@ const CollectionModifyScreen = ({navigation, route}: Props) => {
                 multiline={true}
                 placeholder={"컬렉션에 대한 설명을 적어주세요."}
                 autoFocus={false}
+                textAlignVertical={"top"}
+                value={collectionDescripText}
                 onChangeText={(text:string) => onChangeDescrip(text)}
                 />
             </DescripInputContainer>
@@ -270,8 +279,16 @@ const CollectionModifyScreen = ({navigation, route}: Props) => {
                 value={enabledIncludeLocation}
                 onValueChange={toggleIncludeLocation}/>
             </IncludeLocationContainer>
+            </View>
+            </KeyboardAwareScrollView>
         </Container>
     )
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+    }
+})
 
 export default CollectionModifyScreen;

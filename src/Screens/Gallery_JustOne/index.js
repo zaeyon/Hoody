@@ -117,7 +117,7 @@ const nEveryRow = (data, n) => {
   return result;
 };
 
-class Gallery_ProfileImage extends Component {
+class Gallery_JustOne extends Component {
   constructor(props) {
     super(props);
 
@@ -412,7 +412,7 @@ class Gallery_ProfileImage extends Component {
   }
 }
 
-Gallery_ProfileImage.propTypes = {
+Gallery_JustOne.propTypes = {
   initialNumToRender: PropTypes.number,
   groupTypes: PropTypes.oneOf([
     'Album',
@@ -438,7 +438,7 @@ Gallery_ProfileImage.propTypes = {
   loader: PropTypes.node,
 };
 
-Gallery_ProfileImage.defaultProps = {
+Gallery_JustOne.defaultProps = {
   initialNumToRender: 5,
   groupTypes: 'SavedPhotos',
   maximum: 15,
@@ -455,4 +455,4 @@ Gallery_ProfileImage.defaultProps = {
   emptyText: 'No photos.',
 };
 
-export default Gallery_ProfileImage;
+export default Gallery_JustOne;

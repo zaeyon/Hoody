@@ -1,6 +1,6 @@
 import axios from 'axios';
 import FeedDetail from '~/Screens/FeedDetail';
-const baseUrl = 'https://85a2bd05d031.ngrok.io'; 
+const baseUrl = 'https://d2268182fd89.ngrok.io'; 
 
 
 const POSTUpdate = (feedId, desArray, mediaArray,mainTag, subTag1, subTag2, rating, expense,  location, longitude, latitude, certifiedLocation, dump, sequence, products, openState, subTag1Edit, subTag2Edit, subTag1Exis, subTag2Exis) => {
@@ -41,8 +41,8 @@ const POSTUpdate = (feedId, desArray, mediaArray,mainTag, subTag1, subTag2, rati
     form.append('products', products);
     form.append('open', openState);
 
-    form.append('subTagOneEdit', subTag1Edit);
-    form.append('subTagTwoEdit', subTag2Edit);
+//    form.append('subTagOneEdit', subTag1Edit);
+//    form.append('subTagTwoEdit', subTag2Edit);
     form.append('subTagOneExistence', subTag1Exis);
     form.append('subTagTwoExistence', subTag2Exis);
     

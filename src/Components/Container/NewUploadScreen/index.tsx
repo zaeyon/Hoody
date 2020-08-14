@@ -1401,7 +1401,7 @@ const clickToUploadFinish = () => {
 
 
 
-const renderDraggableItem = ({item, index, drag, isActive}) => {
+const renderDraggableItem = ({item, index, drag, isActive}: any) => {
     if(item.type === 'description') {
         console.log("renderDraggableItem index", index);
         console.log("renderDraggableItem paragraphData.length", paragraphData.length-1);

@@ -23,7 +23,7 @@ import CertifiedProfile from '~/Screens/CertifiedProfile';
 import LocationSearch from '~/Screens/LocationSearch';
 import ImagesPullScreen from '~/Screens/ImagesPullScreen';
 import Gallery from '~/Screens/Gallery';
-import Gallery_ProfileImage from '~/Screens/Gallery_ProfileImage';
+import Gallery_JustOne from '~/Screens/Gallery_JustOne';
 import Unauthorized from '~/Screens/Unauthorized';
 import BasicInput from '~/Screens/SignUp/BasicInput';
 import ProfileInput from '~/Screens/SignUp/ProfileInput';
@@ -401,8 +401,8 @@ function ProfileStackScreen() {
         component={CertifiedProfile}
       />
       <ProfileStack.Screen
-        name="Gallery_ProfileImage"
-        component={Gallery_ProfileImage}
+        name="Gallery_JustOne"
+        component={Gallery_JustOne}
         options={{
           transitionSpec: {
             open: config,
@@ -507,8 +507,8 @@ function UnauthStackScreen() {
       name="SelectInterestScreen"
       component={SelectInterestScreen}/>
       <UnauthStack.Screen
-        name="Gallery_ProfileImage"
-        component={Gallery_ProfileImage}
+        name="Gallery_JustOne"
+        component={Gallery_JustOne}
         options={({navigation, route}) => ({
           transitionSpec: {
             open: config,
@@ -801,8 +801,7 @@ function AppNavigator() {
     <NavigationContainer>
     {(currentUserState.loggedIn) ? (  
     <NoBottomBarStack.Navigator
-    headerMode="none"
-    >
+    headerMode="none">
       <NoBottomBarStack.Screen name="BottomTab" component={BottomTab}/>
       <NoBottomBarStack.Screen name="CollectionDetailScreen" component={CollectionDetailScreen}/>
       <NoBottomBarStack.Screen name="CollectionUploadScreen" component={CollectionUploadScreen}/>
@@ -813,6 +812,7 @@ function AppNavigator() {
       <NoBottomBarStack.Screen name="LocationFeedMapScreen" component={LocationFeedMapScreen}/>
       <NoBottomBarStack.Screen name="ConfirmPasswordScreen" component={ConfirmPasswordScreen}/>
       <NoBottomBarStack.Screen name="NewPasswordSettingScreen" component={NewPasswordSettingScreen}/>
+      <NoBottomBarStack.Screen name="Gallery_JustOne" component={Gallery_JustOne}/>
     </NoBottomBarStack.Navigator>
     ) : (
       <UnauthStackScreen/>

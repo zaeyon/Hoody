@@ -207,6 +207,10 @@ const CollectionModifyScreen = ({navigation, route}: Props) => {
     const moveToAddFeed = () => {
         navigation.goBack();
     }
+
+    const moveToGallery = () => {
+        navigation.navigate("Gallery_JustOne");
+    }
     
     return (
         <Container>
@@ -228,19 +232,19 @@ const CollectionModifyScreen = ({navigation, route}: Props) => {
                     <HeaderRightContainer>
                     <DisabledHeaderNextText>완료</DisabledHeaderNextText>
                     </HeaderRightContainer>
-                )}
+            )}
             </HeaderBar>
             <KeyboardAwareScrollView
             showsVerticalScrollIndicator={false}>
             <View>
             <CoverContainer>
-            <TouchableWithoutFeedback onPress={() => navigation.navigate("Gallery_ProfileImage")}>
+            <TouchableWithoutFeedback onPress={() => moveToGallery()}>
             <CoverImageContainer>
             <EmptyCoverIcon
             source={require('~/Assets/Images/ic_emptyImage.png')}/>
             </CoverImageContainer>
             </TouchableWithoutFeedback>
-            <TouchableWithoutFeedback onPress={() => navigation.navigate("Gallery_ProfileImage")}>
+            <TouchableWithoutFeedback onPress={() => moveToGallery()}>
             <SelectCoverContainer>
                 <SelectCoverText>커버 설정</SelectCoverText>
             </SelectCoverContainer>

@@ -46,6 +46,13 @@ const setInputedKeywordList = (inputedKeywordList) => {
   }
 }
 
+const setCollectionFeedList = (collectionFeedList) => {
+  return {
+    type: 'SET_COLLECTION_FEED_LIST',
+    payload: collectionFeedList,
+  }
+}
+
 export default {
   setUser,
   logOut,
@@ -54,4 +61,5 @@ export default {
   setUserAllFeeds,
   setUserRecentSearch,
   setInputedKeywordList,
+  setCollectionFeedList,
 };

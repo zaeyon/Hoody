@@ -286,7 +286,7 @@ const ProfileEditScreen = ({navigation, route}: Props) => {
             </HeaderBar>
             <BodyContainer>
                 <ProfileImageContainer>
-                    <TouchableWithoutFeedback onPress={() => navigation.navigate("Gallery_ProfileImage")}>
+                    <TouchableWithoutFeedback onPress={() => navigation.navigate("Gallery_JustOne")}>
                     <ProfileImageBackground>
                         {currentUserProfile.profileImage && (
                             <ProfileImage
@@ -298,7 +298,7 @@ const ProfileEditScreen = ({navigation, route}: Props) => {
                         )}
                     </ProfileImageBackground>
                     </TouchableWithoutFeedback>
-                    <TouchableWithoutFeedback onPress={() => navigation.navigate("Gallery_ProfileImage")}>
+                    <TouchableWithoutFeedback onPress={() => navigation.navigate("Gallery_JustOne")}>
                     <ProfileImageChangeText>
                         프로필 사진 바꾸기
                     </ProfileImageChangeText>

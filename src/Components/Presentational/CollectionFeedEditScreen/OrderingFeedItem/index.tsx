@@ -7,15 +7,18 @@ import {
 } from 'react-native-responsive-screen';
 
 const Container = Styled.View`
+padding-top: 15px;
+padding-bottom: 15px;
  width: ${wp('100%')};
- height: ${wp('25%')};
+ height: ${wp('28%')};
  flex-direction: row;
  justify-content: space-between;
+ border-bottom-width: 0.4px;
+ border-top-width: 0.4px;
+ border-color: #ECECEE;
 `;
 
 const FeedInfoContainer = Styled.View`
- padding-top: 13px;
- padding-bottom: 13px;
  padding-left: 16px;
  padding-right: 8px;
  flex-direction: column;
@@ -56,7 +59,7 @@ color: #56575C;
 `;
 
 const DeleteContainer = Styled.View`
-margin-top: 18px;
+margin-top: 16px;
 `;
 
 const DeleteText = Styled.Text`
@@ -66,8 +69,6 @@ color: #FF3B30;
 `;
 
 const FeedImageContainer = Styled.View`
- padding-top: 8px;
- padding-bottom: 8px;
  padding-right: 3px;
  padding-left: 8px;
  flex-direction: row;
@@ -78,24 +79,47 @@ const FeedImage = Styled.Image`
  width: ${wp('30%')};
  height: ${wp('21%')};
  border-radius: 10px;
+ margin-right: 3px;
+`;
+
+const NoImage = Styled.View`
+ width: ${wp('30%')};
+ height: ${wp('21%')};
+ border-radius: 10px;
+ margin-right: 3px;
+ background-color: #ECECEE;
+`;
+
+const RightContainer = Styled.View`
+ flex-direction: row;
+`;
+
+const OrderingIconContainer = Styled.View`
+ background-color: #ffffff;
+ justify-content: center;
 `;
 
 const OrderingIcon = Styled.Image`
+ width: ${wp('6.4%')};
+ height: ${wp('6.4%')};
+ margin-right: 2px;
 `;
 
 interface Props {
     mainTag: string,
     rating: number,
     expense: string,
-    mainImageUri: string
+    mainImageUri: string,
+    drag: any,
+    isActive: any,
 }
 
-const OrderingFeedItem = ({mainTag, rating, expense, mainImageUri}: Props) => {
+const OrderingFeedItem = ({mainTag, rating, expense, mainImageUri, drag, isActive}: Props) => {
     return (
         <Container>
             <FeedInfoContainer>
                 <TagContainer>
-                    <MainTagText>{mainTag}</MainTagText>
+                    <MainTagText>{"#" + mainTag}</MainTagText>
                 </TagContainer>
                 <MetadataContainer>
                 <RatingStarImage
@@ -107,12 +131,23 @@ const OrderingFeedItem = ({mainTag, rating, expense, mainImageUri}: Props) => {
                     <DeleteText>삭제</DeleteText>
                 </DeleteContainer>
             </FeedInfoContainer>
+            <RightContainer>
             <FeedImageContainer>
+                {mainImageUri && (
                 <FeedImage
                 source={{uri:mainImageUri}}/>
+                )}
+                {!mainImageUri && (
+                <NoImage/>
+                )}
+            </FeedImageContainer>
+            <TouchableWithoutFeedback onLongPress={drag} delayLongPress={0.2}>
+            <OrderingIconContainer>
                 <OrderingIcon
                 source={require('~/Assets/Images/ic_ordering.png')}/>
-            </FeedImageContainer>
+            </OrderingIconContainer>
+            </TouchableWithoutFeedback>
+            </RightContainer>
         </Container>
     )
 }

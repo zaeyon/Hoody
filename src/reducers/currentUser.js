@@ -37,6 +37,11 @@ const currentUser = (state = {}, action) => {
         ...state,
         inputedKeywordList: action.payload,
       }
+    case 'SET_COLLECTION_FEED_LIST':
+      return {
+        ...state,
+        collectionFeedList: action.payload,
+      }
     default:
       return state;
   }

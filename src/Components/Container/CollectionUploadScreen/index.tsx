@@ -4,7 +4,8 @@ import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import {TouchableWithoutFeedback, Switch, Keyboard} from 'react-native'
+import {TouchableWithoutFeedback, Switch, Keyboard, KeyboardAvoidingView, StyleSheet, Platform, View} from 'react-native'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'; 
 
 const Container = Styled.SafeAreaView`
  flex: 1;
@@ -140,8 +141,9 @@ font-weight: 600;
 
 const DescripInput = Styled.TextInput`
  margin-top: 9px;
+ height: 130px;
  font-size: 17px;
- padding-bottom: 100px;
+ padding-bottom: 10px;
 `;
 
 const PrivateSettingContainer = Styled.View`
@@ -243,8 +245,11 @@ const CollectionUploadScreen = ({navigation, route}: Props) => {
                     </HeaderRightContainer>
                 )}
             </HeaderBar>
+            <KeyboardAwareScrollView
+            showsVerticalScrollIndicator={false}>
+            <View>
             <CoverContainer>
-            <TouchableWithoutFeedback onPress={() => navigation.navigate("Gallery_ProfileImage")}>
+            <TouchableWithoutFeedback onPress={() => navigation.navigate("Gallery_JustOne")}>
             <CoverImageContainer>
                 {collectionCoverImage && (
                     <CoverImage
@@ -256,7 +261,7 @@ const CollectionUploadScreen = ({navigation, route}: Props) => {
                 )}
             </CoverImageContainer>
             </TouchableWithoutFeedback>
-            <TouchableWithoutFeedback onPress={() => navigation.navigate("Gallery_ProfileImage")}>
+            <TouchableWithoutFeedback onPress={() => navigation.navigate("Gallery_JustOne")}>
             <SelectCoverContainer>
                 <SelectCoverText>커버 설정</SelectCoverText>
             </SelectCoverContainer>
@@ -295,6 +300,8 @@ const CollectionUploadScreen = ({navigation, route}: Props) => {
                 value={enabledIncludeLocation}
                 onValueChange={toggleIncludeLocation}/>
             </IncludeLocationContainer>
+            </View>
+            </KeyboardAwareScrollView>
         </Container>
         </TouchableWithoutFeedback>
     )

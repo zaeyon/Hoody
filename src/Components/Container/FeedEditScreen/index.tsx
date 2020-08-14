@@ -798,10 +798,12 @@ const FeedEditScreen = ({navigation, route}: Props) => {
              if(route.params.feedDetailInfo.subTagOnes) {
                  setSubTag1(route.params.feedDetailInfo.subTagOnes.name)
                  setOriginSubTag1(route.params.feedDetailInfo.subTagOnes.name);
+                 setSubTag1Exis(true)
              }
              if(route.params.feedDetailInfo.subTagTwos) {
                  setSubTag2(route.params.feedDetailInfo.subTagTwos.name);
                  setOriginSubTag2(route.params.feedDetailInfo.subTagTwos.name);
+                 setSubTag2Exis(true);
              }
              if(route.params.feedDetailInfo.address) {
                  setLocation(route.params.feedDetailInfo.address.address);

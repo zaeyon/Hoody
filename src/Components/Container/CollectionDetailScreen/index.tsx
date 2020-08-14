@@ -8,7 +8,8 @@ import {TouchableWithoutFeedback, FlatList, ScrollView, Animated, Image, Alert} 
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import ActionSheet from 'react-native-actionsheet';
-import {useSelector} from 'react-redux';
+import {useSelector ,useDispatch} from 'react-redux';
+import allActions from '~/action';
 
 // Local Component
 import CollectionTileFeedItem from '~/Components/Presentational/CollectionDetailScreen/CollectionTileFeedItem';
@@ -270,7 +271,6 @@ font-size: 15px;
 color: #007AFF;
 `;
 
-
 const TEST_COLLECTION_DATA = {
         title: '컬렉션 테스트1',
         feedCount: 13,
@@ -312,13 +312,14 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
     const [currentUserLike, setCurrentUserLike] = useState<boolean>(false);
     const [currentUserScrap, setCurrentUserScrap] = useState<boolean>(false);
     const [likeCount, setLikeCount] = useState<number>(0);
-
-    const currentUser = useSelector((state: any) => state.currentUser);
     const H_MAX_HEIGHT = wp('100%')
     const H_MIN_HEIGHT = wp('25.6%');
     const H_SCROLL_DISTANCE = H_MAX_HEIGHT - H_MIN_HEIGHT;
 
     const scrollOffsetY = useRef(new Animated.Value(0)).current;
+
+    const currentUser = useSelector((state: any) => state.currentUser);
+    const dispatch = useDispatch();
 
     const headerScrollHeight = scrollOffsetY.interpolate({
         inputRange: [0, H_SCROLL_DISTANCE],
@@ -343,9 +344,7 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
 
     }, [route.params?.collectionId])
 
-    
-
-    const renderCollectionFeedItem = ({item, index}) => {
+    const renderCollectionFeedItem = ({item, index}: any) => {
         return (
             <CollectionTileFeedItem
             mainImage={item.mediaFiles[0] ? item.mediaFiles[0].uri : null}
@@ -427,6 +426,13 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
       );
     }
 
+    const moveToCollectionFeedEdit = () => {
+        dispatch(allActions.userActions.setCollectionFeedList(collectionDetailInfo.Posts));
+        navigation.navigate("CollectionFeedEditScreen", {
+            collectionFeedList: collectionDetailInfo.Posts
+        })
+    }
+
     const onPressActionSheet = (index: number) => {
         console.log("actionsheet press index", index);
         if(index === 1) {
@@ -438,7 +444,7 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
             description: collectionDetailInfo.description,
         });
         } else if(index === 3) {
-            navigation.navigate("CollectionFeedEditScreen")
+            moveToCollectionFeedEdit()
         }
     }
 

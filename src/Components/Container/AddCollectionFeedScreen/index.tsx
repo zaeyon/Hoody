@@ -7,7 +7,6 @@ import {
 import {TouchableWithoutFeedback, FlatList} from 'react-native';
 import {useSelector} from 'react-redux';
 
-
 // Local Component
 import ProfileTileFeedItem from '~/Components/Presentational/ProfileScreen/ProfileTileFeedItem';
 import SelectFeedItem from '~/Components/Presentational/AddCollectionFeedScreen/SelectFeedItem';
@@ -129,9 +128,18 @@ const TEST_MY_TILE_FEED = [
 const AddCollectionFeedScreen = ({navigation, route}: Props) => {
     const [selectableFeedList, setSelectableFeedList] = useState<Array<object>>([]);
     const [selectingFeedList, setSelectingFeedList] = useState<Array<object>>([]);
+    const [preCollectionFeedList, setPreCollectionFeedList] = useState<Array<object>>([]);
     const [changeFeedList, setChangeFeedList] = useState<boolean>(false);
     const [triggerType, setTriggerType] = useState<string>("");
+    const [cancleAddFeed, setCancleAddFeed] = useState<boolean>(false);
+
     const currentUser = useSelector((state) => state.currentUser);
+
+    useEffect(() => {
+        if(route.params?.triggerType === "modifyCollection") {
+            setPreCollectionFeedList(route.params.collectionFeedList);
+        }
+    }, [])
 
     useEffect(() => {
         if(currentUser.userAllFeeds) {
@@ -139,20 +147,44 @@ const AddCollectionFeedScreen = ({navigation, route}: Props) => {
             obj.selected = false;
             return obj;
         })
-        setSelectableFeedList(tmpSelectableFeedList);
+        if(route.params?.triggerType) {
+            console.log("route.params.triggerType", route.params.triggerType);
+            console.log("기존의 피드 리스트", route.params.collectionFeedList);
+            if(route.params?.triggerType === "modifyCollection")
+            {
+                setTriggerType("modifyCollection");
+                route.params.collectionFeedList.forEach((item:any, index:any) => {
+                    console.log("선책한 피드 id", item.id);
+                    var index = tmpSelectableFeedList.findIndex((feed: any) =>
+                        feed.id == item.id
+                    )
+                    tmpSelectableFeedList.splice(index, 1);
+                })
 
-        console.log("AddCollectionFeedScreen currentUser", currentUser.userAllFeeds);
+                setTimeout(() => {
+                    setSelectableFeedList(tmpSelectableFeedList);
+                })
+            } else if(route.params.triggerType === "addCollection")
+            {
+                console.log("애드콜랙션")
+                setTriggerType("addCollection");
+            }
+        } 
         }
-    }, [])
+    }, [route.params?.triggerType, route.params?.collectionFeedList])
 
+    /*
     useEffect(() => {
        if(route.params?.triggerType) {
            console.log("route.params.triggerType", route.params.triggerType);
-
            if(route.params?.triggerType === "modifyCollection")
            {
                setTriggerType("modifyCollection");
-
+               console.log("route.params.selectedFeedList", route.params.selectedFeedList);
+               route.params.selectedFeedList.forEach((item:any, index:any) => {
+                   console.log("선책한 피드 id", item.id);
+                   
+               })
            } else if(route.params.triggerType === "addCollection")
            {
                console.log("애드콜랙션")
@@ -160,6 +192,7 @@ const AddCollectionFeedScreen = ({navigation, route}: Props) => {
            }
         } 
     }, [route.params?.triggerType])
+    */
 
     useEffect(() => {
         if(route.params?.coverImage) {
@@ -195,10 +228,12 @@ const AddCollectionFeedScreen = ({navigation, route}: Props) => {
         setChangeFeedList(!changeFeedList)
     }
 
-    const finishAddCollection = () => {
+    const finishAddCollectionFeed = () => {
         console.log("triggerType", triggerType);
         if(triggerType === "modifyCollection") {
-            navigation.navigate("CollectionFeedEditScreen")
+            navigation.navigate("CollectionFeedEditScreen", {
+                addedCollectionFeedList: route.params?.collectionFeedList.concat(selectingFeedList)
+            })
             console.log("selectingFeedList", selectingFeedList);
         } else if(triggerType === "addCollection") {
             console.log("selectingFeedList", selectingFeedList);
@@ -230,6 +265,7 @@ const AddCollectionFeedScreen = ({navigation, route}: Props) => {
         selectOrder = selectingFeedList.indexOf(item) + 1;
         console.log("selectOrder", selectOrder)
         }
+
         return (
             <SelectFeedItem
             index={index}
@@ -245,12 +281,18 @@ const AddCollectionFeedScreen = ({navigation, route}: Props) => {
         )
     }
 
+    const navigateGoBack = () => {
+        console.log("navigateGoBack route.params.collectionFeedList", route.params.collectionFeedList)
+        console.log("preCollectionFeedList", preCollectionFeedList);
+        navigation.navigate("CollectionFeedEditScreen")
+    }
+
 
     return (
         <Container>
             <HeaderBar>
                 <HeaderLeftContainer>
-                    <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
+                    <TouchableWithoutFeedback onPress={() => navigateGoBack()}>
                     <BackButtonContainer>
                         <BackButton
                         source={require('~/Assets/Images/ic_back.png')}/>
@@ -260,7 +302,7 @@ const AddCollectionFeedScreen = ({navigation, route}: Props) => {
                 <HeaderTitleText>내 게시글</HeaderTitleText>
                 <HeaderRightContainer>
                     {selectingFeedList.length > 0 && (
-                    <TouchableWithoutFeedback onPress={() => finishAddCollection()}>
+                    <TouchableWithoutFeedback onPress={() => finishAddCollectionFeed()}>
                     <FinishContainer>
                     <AbledHeaderFinishText>완료</AbledHeaderFinishText>
                     </FinishContainer>
@@ -275,6 +317,7 @@ const AddCollectionFeedScreen = ({navigation, route}: Props) => {
             </HeaderBar>
             <MyFeedTileListContainer>
                 <FlatList
+                showsVerticalScrollIndicator={false}
                 contentContainerStyle={{paddingTop:16, paddingLeft:wp('4%')}}
                 numColumns={2}
                 data={selectableFeedList}

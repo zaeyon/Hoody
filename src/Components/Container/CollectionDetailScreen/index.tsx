@@ -21,6 +21,7 @@ import DELETEScrapCollection from '~/Route/Collection/Scrap/DELETEScrapCollectio
 import POSTLikeCollection from '~/Route/Collection/Like/POSTLikeCollection';
 import DELETELikeCollection from '~/Route/Collection/Like/DELETELikeCollection';
 import DELETECollection from '~/Route/Collection/DELETECollection';
+import {POSTFollowUser, DELETEUnfollowUser} from '~/Route/User/Follow';
 
 const actionSheetRef = createRef();
 const Container = Styled.SafeAreaView`
@@ -261,6 +262,10 @@ font-weight: 600;
 font-size: 15px;
 `;
 
+const FollowContainer = Styled.View`
+padding: 5px;
+`;
+
 const FollowText = Styled.Text`
 font-size: 15px;
 color: #007AFF; 
@@ -311,6 +316,7 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
     const [collectionDetailInfo, setCollectionDetailInfo] = useState<Array<object>>([]);
     const [currentUserLike, setCurrentUserLike] = useState<boolean>(false);
     const [currentUserScrap, setCurrentUserScrap] = useState<boolean>(false);
+    const [currentUserFollow, setCurrentUserFollow] = useState<boolean>(false);
     const [likeCount, setLikeCount] = useState<number>(0);
     const H_MAX_HEIGHT = wp('100%')
     const H_MIN_HEIGHT = wp('25.6%');
@@ -328,6 +334,12 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
     })
 
     useEffect(() => {
+
+        if(route.params?.collectionEdit) {
+            
+            route.params.collectionEdit = false;
+        }
+
         if(route.params?.collectionId) {
            GETCollectionDetailInfo(route.params.collectionId)
            .then(function(response) {
@@ -335,6 +347,7 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
                setCollectionDetailInfo(response.collection);
                setCurrentUserLike(response.collection.liked);
                setCurrentUserScrap(response.collection.scraped);
+               setCurrentUserFollow(response.collection.followed);
                setLikeCount(response.collection.Like);
            })
            .catch(function(error) {
@@ -342,11 +355,12 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
            })
         }
 
-    }, [route.params?.collectionId])
+    }, [route.params?.collectionId, route.params?.collectionEdit])
 
     const renderCollectionFeedItem = ({item, index}: any) => {
         return (
             <CollectionTileFeedItem
+            navigation={navigation}
             mainImage={item.mediaFiles[0] ? item.mediaFiles[0].uri : null}
             mainTag={item.mainTags.name}
             rating={item.starRate}
@@ -429,7 +443,8 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
     const moveToCollectionFeedEdit = () => {
         dispatch(allActions.userActions.setCollectionFeedList(collectionDetailInfo.Posts));
         navigation.navigate("CollectionFeedEditScreen", {
-            collectionFeedList: collectionDetailInfo.Posts
+            collectionFeedList: collectionDetailInfo.Posts,
+            collectionId: route.params?.collectionId
         })
     }
 
@@ -491,6 +506,41 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
         })
         .catch(function(error) {
             console.log("컬렉션 스크랩 삭제 에러", error);
+        })
+    }
+
+    const moveToUserProfile = () => {
+        if(currentUser.user?.nickname === collectionDetailInfo.user.nickname) {
+            navigation.navigate("Profile", {
+                screen:"ProfileScreen"
+            })
+        } else {
+            navigation.navigate("AnotherUserProfileStack", {
+              screen: "AnotherUserProfileScreen",
+              params: {requestedUserNickname: collectionDetailInfo.user.nickname}
+            });
+        }
+      }
+
+    const followUser = () => {
+        setCurrentUserFollow(true);
+        POSTFollowUser(collectionDetailInfo.user.id)
+        .then(function(response) {
+            console.log("팔로우 성공", response);
+        })
+        .catch(function(error) {
+            console.log("팔로우 실패", error);
+        })
+    }
+
+    const unfollowUser = () => {
+        setCurrentUserFollow(false);
+        DELETEUnfollowUser(collectionDetailInfo.user.id)
+        .then(function(response) {
+            console.log("언팔로우 성공", response);
+        })
+        .catch(function(error) {
+            console.log("언팔로우 실패", error);
         })
     }
 
@@ -577,13 +627,26 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
             </CollectionIconContainer>
             </CollectionInfoHeader>
             <WriterProfileContainer>
+                <TouchableWithoutFeedback onPress={() => moveToUserProfile()}>
                 <WriterInfoContainer>
                 <ProfileImage
                 source={{uri:collectionDetailInfo.user?.profileImg}}/>
                 <ProfileNicknameText>{collectionDetailInfo.user?.nickname}</ProfileNicknameText>
                 </WriterInfoContainer>
-                {currentUser.user?.nickname !== collectionDetailInfo.user?.nickname && (
+                </TouchableWithoutFeedback>
+                {currentUser.user?.nickname !== collectionDetailInfo.user?.nickname && currentUserFollow && (
+                <TouchableWithoutFeedback onPress={() => unfollowUser()}>
+                <FollowContainer>   
+                <FollowText>팔로잉</FollowText>
+                </FollowContainer>
+                </TouchableWithoutFeedback>
+                )}
+                {currentUser.user?.nickname !== collectionDetailInfo.user?.nickname && !currentUserFollow && (
+                <TouchableWithoutFeedback onPress={() => followUser()}>
+                <FollowContainer>   
                 <FollowText>팔로우</FollowText>
+                </FollowContainer>
+                </TouchableWithoutFeedback>
                 )}
             </WriterProfileContainer>
             <CollectionDescripText>{collectionDetailInfo.description? collectionDetailInfo.description: null}

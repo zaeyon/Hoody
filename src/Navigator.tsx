@@ -91,12 +91,15 @@ import SelectInterestScreen from '~/Components/Container/SelectInterestScreen';
 // Feed Edit Stack
 import FeedEditScreen from '~/Components/Container/FeedEditScreen';
 
+// Report Screen
+import ReportScreen from '~/Components/Container/ReportScreen';
+
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
 const ExploreStack = createStackNavigator();
 const FeedStack = createStackNavigator();
+const CollectionStack = createStackNavigator();
 const UploadStack = createStackNavigator();
-const FeedEditStack = createStackNavigator();
 const AlarmStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
 const UnauthStack = createStackNavigator();
@@ -193,6 +196,9 @@ function ExploreStackScreen() {
       name="FeedStack"
       component={FeedStackScreen}/>
       <ExploreStack.Screen
+      name="CollectionStack"
+      component={CollectionStackScreen}/>
+      <ExploreStack.Screen
       name="AnotherUserProfileStack"
       component={AnotherUserProfileStackScreen}/>
       <ExploreStack.Screen
@@ -207,64 +213,6 @@ function ExploreStackScreen() {
       />
     </ExploreStack.Navigator>
   )
-}
-
-function FeedStackScreen() {
-  return (
-    <FeedStack.Navigator
-      headerMode={"none"}
-      >
-      <FeedStack.Screen
-        name="FeedDetailScreen"
-        component={FeedDetailScreen}
-      />
-      <FeedStack.Screen
-       name="LikeListScreen"
-       component={LikeListScreen}
-       />
-       <FeedStack.Screen
-       name="CommentListScreen"
-       component={CommentListScreen}/>
-       <FeedStack.Screen
-       name="FeedEditScreen"
-       component={FeedEditScreen}/>
-      <FeedStack.Screen 
-      name="TagSearchScreen"
-      component={TagSearchScreen}
-      options={{
-        transitionSpec: {
-          open: config,
-          close: config,
-        }
-      }}
-      />
-      <FeedStack.Screen
-        name="LocationSearch"
-        component={LocationSearch}
-        options={{
-          headerTitle: (props) => <SearchLocationTitle {...props} />,
-        }}
-      />
-      <FeedStack.Screen
-      name="ProductUrlSearchScreen"
-      component={ProductUrlSearchScreen}
-      />
-      <FeedStack.Screen
-        name="ImagesPullScreen"
-        component={ImagesPullScreen}
-      />
-      <FeedStack.Screen
-        name="Gallery"
-        component={Gallery}
-        options={{
-          transitionSpec: {
-            open: config,
-            close: config,
-          },
-        }}
-      />
-    </FeedStack.Navigator>
-  );
 }
 
 function UploadStackScreen() {
@@ -301,9 +249,6 @@ function UploadStackScreen() {
       <UploadStack.Screen
         name="LocationSearch"
         component={LocationSearch}
-        options={{
-          headerTitle: (props) => <SearchLocationTitle {...props} />,
-        }}
       />
       <UploadStack.Screen
       name="ProductUrlSearchScreen"
@@ -347,16 +292,6 @@ function UploadStackScreen() {
     </UploadStack.Navigator>
   );
 }
-
-function FeedEditStackScreen () {
-  <FeedEditStack.Navigator
-  headerMode="none">
-    <FeedEditStack.Screen
-    name="FeedEditScreen"
-    component={FeedEditScreen}/>
-  </FeedEditStack.Navigator>
-}
-
 
 function AlarmStackScreen() {
   return (
@@ -430,6 +365,9 @@ function ProfileStackScreen() {
       name="FeedStack"
       component={FeedStackScreen}/>
       <ProfileStack.Screen
+      name="CollectionStack"
+      component={CollectionStackScreen}/>
+      <ProfileStack.Screen
       name="SettingScreen"
       component={SettingScreen}
       />
@@ -445,6 +383,9 @@ function ProfileStackScreen() {
       <ProfileStack.Screen
       name="GenderSettingScreen"
       component={GenderSettingScreen}/>
+      <ProfileStack.Screen
+      name="ReportScreen"
+      component={ReportScreen}/>
     </ProfileStack.Navigator>
   );
 }
@@ -520,121 +461,82 @@ function UnauthStackScreen() {
   );
 }
 
-function Navigator() {
-  const currentUser = useSelector((state) => state.currentUser);
+function FeedStackScreen() {
   return (
-    <NavigationContainer>
-      {currentUser.loggedIn ? (
-        <Tab.Navigator
-          tabBarOptions={{
-            showLabel: false,
-            style: styles.tabBar,
-          }}>
-          
-          <Tab.Screen
-            name="Home"
-            component={HomeStackScreen}
-            options={{
-              tabBarIcon: ({focused}: {focused: boolean}) => (
-                <Image
-                  style={{width: 22, height: 22}}
-                  source={
-                    /*
-                  focused
-                    ? require('~/Assets/Images/Tabs/ic_home.png')
-                    : require('~/Assets/Images/Tabs/ic_home_outline.png')
-                
-                    require('~/Assets/Images/Tabs/ic_homeTap.png')
-                  }
-                />
-              ),
-            }}
-          />
-      
-          <Tab.Screen
-            name="Feed"
-            component={FeedStackScreen}
-            options={{
-              tabBarIcon: ({focused}: {focused: boolean}) => (
-                <Image
-                  style={{width: 22, height: 22}}
-                  source={
-                    /*
-                focused
-                  ? require('~/Assets/Images/Tabs/ic_home.png')
-                  : require('~/Assets/Images/Tabs/ic_home_outline.png')
-              */
-                    require('~/Assets/Images/Tabs/ic_feedTap.png')
-                  }
-                />
-              ),
-            }}
-          />
-          <Tab.Screen
-            name="Upload"
-            component={UploadStackScreen}
-            options={{
-              tabBarIcon: ({focused}: {focused: boolean}) => (
-                <Image
-                  style={{width: 22, height: 22}}
-                  source={
-                    /*
-                focused
-                  ? require('~/Assets/Images/Tabs/ic_home.png')
-                  : require('~/Assets/Images/Tabs/ic_home_outline.png')
-              */
-                    require('~/Assets/Images/Tabs/ic_uploadTap.png')
-                  }
-                />
-              ),
-              unmountOnBlur: true,
-              tabBarVisible: false,
-            }}
-          />
-          <Tab.Screen
-            name="Alarm"
-            component={AlarmStackScreen}
-            options={{
-              tabBarIcon: ({focused}: {focused: boolean}) => (
-                <Image
-                  style={{width: 22, height: 22}}
-                  source={
-                    /*
-                focused
-                  ? require('~/Assets/Images/Tabs/ic_home.png')
-                  : require('~/Assets/Images/Tabs/ic_home_outline.png')
-              */
-                    require('~/Assets/Images/Tabs/ic_alarmTap.png')
-                  }
-                />
-              ),
-            }}
-          />
-          <Tab.Screen
-            name="Profile"
-            component={ProfileStackScreen}
-            options={{
-              tabBarIcon: ({focused}: {focused: boolean}) => (
-                <Image
-                  style={{width: 22, height: 22}}
-                  source={
-                    /*
-                focused
-                  ? require('~/Assets/Images/Tabs/ic_home.png')
-                  : require('~/Assets/Images/Tabs/ic_home_outline.png')
-              */
-                    require('~/Assets/Images/Tabs/ic_profileTap.png')
-                  }
-                />
-              ),
-            }}
-          />
-        </Tab.Navigator>
-      ) : (
-        <UnauthStackScreen />
-      )}
-    </NavigationContainer>
+    <FeedStack.Navigator
+      headerMode={"none"}
+      >
+      <FeedStack.Screen
+        name="FeedDetailScreen"
+        component={FeedDetailScreen}
+      />
+      <FeedStack.Screen
+       name="LikeListScreen"
+       component={LikeListScreen}
+       />
+       <FeedStack.Screen
+       name="CommentListScreen"
+       component={CommentListScreen}/>
+       <FeedStack.Screen
+       name="FeedEditScreen"
+       component={FeedEditScreen}/>
+      <FeedStack.Screen 
+      name="TagSearchScreen"
+      component={TagSearchScreen}
+      options={{
+        transitionSpec: {
+          open: config,
+          close: config,
+        }
+      }}
+      />
+      <FeedStack.Screen
+        name="LocationSearch"
+        component={LocationSearch}
+      />
+      <FeedStack.Screen
+      name="ProductUrlSearchScreen"
+      component={ProductUrlSearchScreen}
+      />
+      <FeedStack.Screen
+        name="ImagesPullScreen"
+        component={ImagesPullScreen}
+      />
+      <FeedStack.Screen
+        name="Gallery"
+        component={Gallery}
+        options={{
+          transitionSpec: {
+            open: config,
+            close: config,
+          },
+        }}
+      />
+    </FeedStack.Navigator>
   );
+}
+
+function CollectionStackScreen() {
+  return (
+    <CollectionStack.Navigator
+    headerMode={"none"}>
+      <CollectionStack.Screen
+      name="CollectionDetailScreen"
+      component={CollectionDetailScreen}/>
+    <CollectionStack.Screen 
+      name="CollectionUploadScreen" 
+      component={CollectionUploadScreen}/>
+    <CollectionStack.Screen 
+      name="CollectionModifyScreen" 
+      component={CollectionModifyScreen}/>
+    <CollectionStack.Screen 
+      name="CollectionFeedEditScreen" 
+      component={CollectionFeedEditScreen}/>
+    <NoBottomBarStack.Screen 
+      name="AddCollectionFeedScreen" 
+      component={AddCollectionFeedScreen}/>
+    </CollectionStack.Navigator>
+  )
 }
 
 function BottomTab() {
@@ -657,9 +559,21 @@ function BottomTab() {
     ? route.state.routes[route.state.index].name
     : '';
 
-    if(routeName === 'SearchScreen' || routeName === "FeedStack") {
+    if(routeName === 'SearchScreen' || routeName === "FeedStack" || routeName === "CollectionStack") {
       return false;
     }
+    return true;
+  }
+
+  const getProfileTabBarVisibility = (route: any) => {
+    const routeName = route.state
+    ? route.state.routes[route.state.index].name
+    : '';
+
+    if(routeName === 'FeedStack' || routeName === 'CollectionStack') {
+      return false;
+    }
+
     return true;
   }
 
@@ -758,7 +672,7 @@ function BottomTab() {
           />
         ),
         unmountOnBlur: true,
-        tabBarVisible: getTabBarVisibility(route)
+        tabBarVisible: getProfileTabBarVisibility(route)
       })}
       listeners={({navigation, route}) => ({
         tabPress: e => {
@@ -803,11 +717,6 @@ function AppNavigator() {
     <NoBottomBarStack.Navigator
     headerMode="none">
       <NoBottomBarStack.Screen name="BottomTab" component={BottomTab}/>
-      <NoBottomBarStack.Screen name="CollectionDetailScreen" component={CollectionDetailScreen}/>
-      <NoBottomBarStack.Screen name="CollectionUploadScreen" component={CollectionUploadScreen}/>
-      <NoBottomBarStack.Screen name="CollectionModifyScreen" component={CollectionModifyScreen}/>
-      <NoBottomBarStack.Screen name="CollectionFeedEditScreen" component={CollectionFeedEditScreen}/>
-      <NoBottomBarStack.Screen name="AddCollectionFeedScreen" component={AddCollectionFeedScreen}/>
       <NoBottomBarStack.Screen name="AddScrapAlbumScreen" component={AddScrapAlbumScreen}/>
       <NoBottomBarStack.Screen name="LocationFeedMapScreen" component={LocationFeedMapScreen}/>
       <NoBottomBarStack.Screen name="ConfirmPasswordScreen" component={ConfirmPasswordScreen}/>
@@ -830,3 +739,123 @@ const styles = StyleSheet.create({
 });
 
 export default AppNavigator;
+
+/*
+function Navigator() {
+  const currentUser = useSelector((state) => state.currentUser);
+  return (
+    <NavigationContainer>
+      {currentUser.loggedIn ? (
+        <Tab.Navigator
+          tabBarOptions={{
+            showLabel: false,
+            style: styles.tabBar,
+          }}>
+          
+          <Tab.Screen
+            name="Home"
+            component={HomeStackScreen}
+            options={{
+              tabBarIcon: ({focused}: {focused: boolean}) => (
+                <Image
+                  style={{width: 22, height: 22}}
+                  source={
+                    /*
+                  focused
+                    ? require('~/Assets/Images/Tabs/ic_home.png')
+                    : require('~/Assets/Images/Tabs/ic_home_outline.png')
+                
+                    require('~/Assets/Images/Tabs/ic_homeTap.png')
+                  }
+                />
+              ),
+            }}
+          />
+      
+          <Tab.Screen
+            name="Feed"
+            component={FeedStackScreen}
+            options={{
+              tabBarIcon: ({focused}: {focused: boolean}) => (
+                <Image
+                  style={{width: 22, height: 22}}
+                  source={
+                    /*
+                focused
+                  ? require('~/Assets/Images/Tabs/ic_home.png')
+                  : require('~/Assets/Images/Tabs/ic_home_outline.png')
+              
+                    require('~/Assets/Images/Tabs/ic_feedTap.png')
+                  }
+                />
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="Upload"
+            component={UploadStackScreen}
+            options={{
+              tabBarIcon: ({focused}: {focused: boolean}) => (
+                <Image
+                  style={{width: 22, height: 22}}
+                  source={
+                    /*
+                focused
+                  ? require('~/Assets/Images/Tabs/ic_home.png')
+                  : require('~/Assets/Images/Tabs/ic_home_outline.png')
+              
+                    require('~/Assets/Images/Tabs/ic_uploadTap.png')
+                  }
+                />
+              ),
+              unmountOnBlur: true,
+              tabBarVisible: false,
+            }}
+          />
+          <Tab.Screen
+            name="Alarm"
+            component={AlarmStackScreen}
+            options={{
+              tabBarIcon: ({focused}: {focused: boolean}) => (
+                <Image
+                  style={{width: 22, height: 22}}
+                  source={
+                    /*
+                focused
+                  ? require('~/Assets/Images/Tabs/ic_home.png')
+                  : require('~/Assets/Images/Tabs/ic_home_outline.png')
+              
+                    require('~/Assets/Images/Tabs/ic_alarmTap.png')
+                  }
+                />
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="Profile"
+            component={ProfileStackScreen}
+            options={{
+              tabBarIcon: ({focused}: {focused: boolean}) => (
+                <Image
+                  style={{width: 22, height: 22}}
+                  source={
+                    /*
+                focused
+                  ? require('~/Assets/Images/Tabs/ic_home.png')
+                  : require('~/Assets/Images/Tabs/ic_home_outline.png')
+              
+                    require('~/Assets/Images/Tabs/ic_profileTap.png')
+                  }
+                />
+              ),
+            }}
+          />
+        </Tab.Navigator>
+      ) : (
+        <UnauthStackScreen />
+      )}
+    </NavigationContainer>
+  );
+}
+
+*/

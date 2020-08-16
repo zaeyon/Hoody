@@ -77,6 +77,13 @@ const ProfileCollectionList = ({collectionListData, navigation, profileNickname,
         console.log("collectionList", collectionListData)  
     }, [])
 
+    
+  const moveToCollectionUpload = () => {
+    navigation.navigate("CollectionStack", {
+      screen:"CollectionUploadScreen"
+    })
+  }
+
     const renderProfileCollectionItem = ({item, index}) => {
            return (
             <CollectionItemContainer
@@ -97,7 +104,7 @@ const ProfileCollectionList = ({collectionListData, navigation, profileNickname,
     if(currentUser.user?.nickname === requestNickname) {
         return (
             <NoCollectionContainer style={{marginTop:-100}}>
-            <TouchableWithoutFeedback onPress={() => navigation.navigate("CollectionUploadScreen")}>
+            <TouchableWithoutFeedback onPress={() => moveToCollectionUpload()}>
             <AddCollectionButton>
                 <AddCollectionIcon
                 source={require('~/Assets/Images/ic_bluePlus.png')}

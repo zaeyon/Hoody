@@ -47,8 +47,11 @@ const MainRecommendCollectionItem = ({collectionId, coverImage, name, nickname, 
     console.log("메인 컬렉션 이미지", coverImage)
 
     const moveToCollectionDetailScreen = () => {
-        navigation.navigate("CollectionDetailScreen", {
-            collectionId: collectionId,
+        navigation.navigate("CollectionStack", {
+            screen: "CollectionDetailScreen",
+            params: {
+                collectionId: collectionId,
+            }
         });
     }
     

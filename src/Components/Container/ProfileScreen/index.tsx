@@ -43,7 +43,7 @@ const CollectionListTabContainer = Styled.View`
 
 const HeaderBar = Styled.View`
  width: ${wp('100%')};
- height: ${wp('11.7%')};
+ height: ${wp('13.8%')};
  flex-direction: row;
  align-items: center;
  justify-content: space-between;
@@ -479,7 +479,9 @@ const ProfileScreen = ({navigation, route}: Props) => {
   }
 
   const addNewCollection = () => {
-    navigation.navigate("CollectionUploadScreen")
+    navigation.navigate("CollectionStack", {
+      screen:"CollectionUploadScreen"
+    })
   }
 
   const moveToFollowListScreen = (requestedType: string) => {
@@ -568,11 +570,13 @@ const ProfileScreen = ({navigation, route}: Props) => {
         </HeaderLeftContainer>
         <HeaderRightContainer>
           {currentUserProfileBool && (
+          <TouchableWithoutFeedback onPress={() => navigation.navigate("ReportScreen")}>
           <MyProfileReportContainer>
           <MyProfileReportImage
           source={require('~/Assets/Images/ic_report.png')}/>
           <MyProfileReportText>리포트</MyProfileReportText>
         </MyProfileReportContainer>
+        </TouchableWithoutFeedback>
           )}
           <TouchableWithoutFeedback onPress={() => moveToLocationFeedMap()}>
           <MyProfileReviewMapContainer>

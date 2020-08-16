@@ -13,6 +13,7 @@ import CollectionTileFeedItem from '~/Components/Presentational/CollectionDetail
 import CollectionDraggableFeedItem from '~/Components/Presentational/CollectionDetailScreen/CollectionDraggableFeedItem';
 import OrderingFeedItem from '~/Components/Presentational/CollectionFeedEditScreen/OrderingFeedItem';
 
+import POSTCollectionFeed from '~/Route/Collection/POSTCollectionFeed';
 
 const Container = Styled.SafeAreaView`
  flex: 1;
@@ -277,6 +278,34 @@ const CollectionFeedEditScreen = ({navigation, route}: Props) => {
     })
   }
 
+  const finishCollectionFeedEdit = () => {
+    var feedIdArray = new Array();
+    var feedIdStr = "";
+    collectionFeedList.forEach((item, index) => {
+      console.log("수정된 피드아이디 리스트", item.id)
+      if(index === collectionFeedList.length - 1) {
+      feedIdStr = feedIdStr + item.id;
+      } else {
+      feedIdStr = feedIdStr + item.id + ",";
+      }
+    })
+
+    setTimeout(() => {
+      //feedIds = JSON.stringify(feedIdArray);
+      POSTCollectionFeed(route.params?.collectionId, feedIdStr)
+      .then(function(response) {
+        console.log("컬렉션 피드 게시글 수정", response);
+        navigation.navigate("CollectionDetailScreen", {
+          collectionId: route.params?.collectionId,
+          collecionEdit: true,
+      });
+      })
+      .catch(function(error) {
+        console.log("컬렉션 피드 error", error);
+      })
+    }, 10)
+  }
+
   const renderOrderingFeedItem = ({item, index, drag, isActive}: any) => {
     console.log("renderOrderingFeedItem item", item);
     return (
@@ -340,7 +369,9 @@ const CollectionFeedEditScreen = ({navigation, route}: Props) => {
               <TouchableWithoutFeedback onPress={() => moveToAddFeedScreen()}>
                 <HeaderFinishText>추가</HeaderFinishText>
                 </TouchableWithoutFeedback>
+              <TouchableWithoutFeedback onPress={() => finishCollectionFeedEdit()}>
                <AbledHeaderNextText>완료</AbledHeaderNextText>
+               </TouchableWithoutFeedback>
             </HeaderRightContainer>
         </HeaderBar>
         <BodyContainer>

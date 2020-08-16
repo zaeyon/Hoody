@@ -50,10 +50,13 @@ interface Props {
 const ProfileCollectionItem = ({coverImage, name, navigation, collectionId, profileImage, profileNickname}: Props) => {
 
     const moveToCollectionDetailScreen = () => {
-        navigation.navigate("CollectionDetailScreen", {
+        navigation.navigate("CollectionStack", {
+            screen: "CollectionDetailScreen",
+            params: {
             collectionId: collectionId,
             profileImage: profileImage,
             profileNickname: profileNickname,
+            }
         });
     }
 

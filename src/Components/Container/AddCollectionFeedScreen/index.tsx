@@ -255,7 +255,12 @@ const AddCollectionFeedScreen = ({navigation, route}: Props) => {
             })
         }   
      }
-    
+
+    const navigateGoBack = () => {
+        console.log("navigateGoBack route.params.collectionFeedList", route.params.collectionFeedList)
+        console.log("preCollectionFeedList", preCollectionFeedList);
+        navigation.navigate("CollectionFeedEditScreen")
+    }
 
     const renderMyFeedTileItem = ({item, index}:any) => {
 
@@ -279,12 +284,6 @@ const AddCollectionFeedScreen = ({navigation, route}: Props) => {
             location={item.address ? item.address.address : null}
             />
         )
-    }
-
-    const navigateGoBack = () => {
-        console.log("navigateGoBack route.params.collectionFeedList", route.params.collectionFeedList)
-        console.log("preCollectionFeedList", preCollectionFeedList);
-        navigation.navigate("CollectionFeedEditScreen")
     }
 
 

@@ -1,6 +1,5 @@
 import axios from 'axios';
-import FeedDetail from '~/Screens/FeedDetail';
-const baseUrl = 'https://d2268182fd89.ngrok.io'; 
+const baseUrl = 'https://2eb0c2057794.ngrok.io'; 
 
 
 const POSTUpdate = (feedId, desArray, mediaArray,mainTag, subTag1, subTag2, rating, expense,  location, longitude, latitude, certifiedLocation, dump, sequence, products, openState, subTag1Edit, subTag2Edit, subTag1Exis, subTag2Exis) => {

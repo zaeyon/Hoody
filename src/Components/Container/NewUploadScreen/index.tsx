@@ -166,7 +166,7 @@ color: #cccccc;
 `;
 
 const RatingText = Styled.Text`
-font-weight: bold;
+font-weight: 500;
 font-size: 18px;
 color: #8e8e8e;
 `;
@@ -199,13 +199,18 @@ const MetaInfoContainer = Styled.View`
  border-color: #f1f1f1;
 `;
 
-const RatingLocationExpenseContainer = Styled.View`
+const RatingExpenseContainer = Styled.View`
 width:${wp('92%')};
 flex-direction: row;
 `;
 
+const LocationSpendDateContainer = Styled.View`
+padding-top: 5px;
+flex-direction: row;
+align-items: center;
+`;
+
 const ConsumptionDateContainer = Styled.View`
-padding-top: 10px;
 padding-bottom: 0px;
 `;
 
@@ -225,9 +230,9 @@ const InputedRatingContainer = Styled.View`
 `;
 
 const InputedRatingText = Styled.Text`
- font-size: ${wp('4%')};
- font-weight: 600;
- color: #8E8E8E;
+ font-size: 15px;
+ font-weight: 500;
+ color: #56575C;
  margin-top: 2px;
 `;
 
@@ -251,8 +256,8 @@ const InputedRatingImage = Styled.Text`
 `;
 
 const InputedLocationContainer = Styled.View`
- margin-left: 15px;
  flex-direction: row;
+ align-items: center;
 `;
 
 const InputedLocationIcon = Styled.Image`
@@ -261,9 +266,8 @@ const InputedLocationIcon = Styled.Image`
 `;
 
 const InputedLocationText = Styled.Text`
-font-size: ${wp('4%')};
- font-weight: 600;
- color: #8E8E8E;
+font-size: 15px;
+color: #8E9199;
 `;
 
 const InputedExpenseContainer = Styled.View`
@@ -275,12 +279,14 @@ const InputedExpenseContainer = Styled.View`
 const InputedExpenseIcon = Styled.Image`
  width: ${wp('6%')};
  height: ${wp('6%')};
+ tint-color: #56575C;
+
 `;
 
 const InputedExpenseText = Styled.Text`
-font-size: ${wp('4%')};
- font-weight: 600;
- color: #8E8E8E;
+font-size: 15px;
+font-weight: 500;
+color: #56575C;
  flex-shrink: 1;
 `;
 
@@ -658,8 +664,8 @@ color: #E90000;
 `;
 
 const ConsumptionDateText = Styled.Text`
-font-size: ${wp('3.9%')};
- color: #c4c4c4;
+font-size: 15px;
+color: #8E9199;
 `;
 
 
@@ -680,6 +686,20 @@ interface Props {
 }
 
 const NewUploadScreen = ({navigation, route}: Props) => {
+    
+const convertDateFormat = (date: any) => {
+    var tmpDate = new Date(date),
+    month = '' + (tmpDate.getMonth() + 1),
+    day = '' + (tmpDate.getDate()),
+    year = tmpDate.getFullYear();
+
+    if(month.length < 2) month = '0' + month;
+    if(day.length < 2) day = '0' + day;
+
+    return [year, month, day].join('. ');
+
+}
+
     const [slidingUpHeight, setSlidingUpHeight] = useState(0);
     const [onFocusTagInput, setOnFocusTagInput] = useState(true);
     const [hideSlidingUp, setHideSlidingUp] = useState<boolean>(false);
@@ -735,8 +755,8 @@ const NewUploadScreen = ({navigation, route}: Props) => {
 
     // toggle Consumption date picker
     const [visibleConsumptionDatePicker, setVisibleConsumptionDatePicker] = useState<boolean>(false);
-    const [consumptionDate, setConsumptionDate] = useState(new Date(1598051730000));
-    const [consumptionDateStr, setConsumptionDateStr] = useState<string>();
+    const [consumptionDate, setConsumptionDate] = useState(new Date());
+    const [consumptionDateStr, setConsumptionDateStr] = useState<string>(convertDateFormat(new Date()));
     
     // Paragraph 관련 state
     const [paragraphData, setParagraphData] = useState<Array<object>>([]);
@@ -1181,19 +1201,6 @@ const addConsumptionDate = () => {
     setVisibleBottomMenuBar(true);
 }
 
-const convertDateFormat = (date) => {
-    var tmpDate = new Date(date),
-    month = '' + (tmpDate.getMonth() + 1),
-    day = '' + (tmpDate.getDate()-1),
-    year = tmpDate.getFullYear();
-
-    if(month.length < 2) month = '0' + month;
-    if(day.length < 2) day = '0' + day;
-
-    return [year, month, day].join('. ');
-
-}
-
 const clickParagraphContent = (item, index) => {
     setVisibleDescripModal(true);
     console.log("clickParagraphContent item", item.description);
@@ -1355,6 +1362,16 @@ const clickToUploadFinish = () => {
   var descriptionArray = new Array();
   var JSONstringify_productArray;
   var JSONstirngify_descriptionArray;
+  var transmitSpendDate = "";
+
+  var tmpDate = new Date(consumptionDate),
+  month = '' + (tmpDate.getMonth() + 1),
+  day = '' + (tmpDate.getDate()),
+  year = tmpDate.getFullYear();
+  if(month.length < 2) month = '0' + month;
+  if(day.length < 2) day = '0' + day;
+
+  transmitSpendDate = year + "-" + month + "-" + day;
 
   for(var i = 0; i < paragraphData.length; i++) {
       if(paragraphData[i].type === 'description') {
@@ -1386,7 +1403,7 @@ const clickToUploadFinish = () => {
       console.log("JSONstringify_descriptionArray", JSONstirngify_descriptionArray);
       console.log("JSONstringify_productoArray", JSONstringify_productArray);
 
-      PostUpload(JSONstirngify_descriptionArray, mediaFileArray, mainTag, subTag1, subTag2, rating, expense,location, longitude, latitude, certifiedLocation, temporarySave, sequence, JSONstringify_productArray, openState, subTag1Exis, subTag2Exis)
+      PostUpload(JSONstirngify_descriptionArray, mediaFileArray, mainTag, subTag1, subTag2, rating, expense,location, longitude, latitude, certifiedLocation, temporarySave, sequence, JSONstringify_productArray, transmitSpendDate, openState, subTag1Exis, subTag2Exis)
       .then(function(response) {
           if(response.status === 201) {
               console.log("후기 업로드 성공", response);
@@ -1595,7 +1612,7 @@ const renderAddNewDescripInput = () => {
                 )} 
                 {mainTagInserted && !mainTagProcess && (
                     <MetaInfoContainer>
-                    <RatingLocationExpenseContainer>
+                    <RatingExpenseContainer>
                     <TouchableWithoutFeedback onPress={() => modifyRating()}>
                     <InputedRatingContainer>
                     <RatingInner>
@@ -1606,16 +1623,6 @@ const renderAddNewDescripInput = () => {
                         </RatingInner>
                     </InputedRatingContainer>
                     </TouchableWithoutFeedback>
-                    <TouchableWithoutFeedback onPress={() => moveLocationSearch()}>
-                    <InputedLocationContainer>
-                    <LocationInner>
-                    <InputedLocationIcon
-                    source={require('~/Assets/Images/ic_location_outline.png')}/>
-                    <InputedLocationText>
-                    {location || "위치"}</InputedLocationText>
-                    </LocationInner>
-                    </InputedLocationContainer>
-                    </TouchableWithoutFeedback>
                     <TouchableWithoutFeedback onPress={() => toggleInputExpense()}>
                     <InputedExpenseContainer>
                     <ExpenseInner>
@@ -1625,14 +1632,22 @@ const renderAddNewDescripInput = () => {
                     </ExpenseInner>
                     </InputedExpenseContainer>
                     </TouchableWithoutFeedback>
-                    </RatingLocationExpenseContainer>
-                    {consumptionDateStr && (
-                <TouchableWithoutFeedback onPress={() => toggleConsumptionDatePicker()}>
+                    </RatingExpenseContainer>
+                    <LocationSpendDateContainer>        
+                    <TouchableWithoutFeedback onPress={() => moveLocationSearch()}>
+                    <InputedLocationContainer>
+                    <LocationInner>
+                    <InputedLocationText>
+                    {location || "위치"}</InputedLocationText>
+                    </LocationInner>
+                    </InputedLocationContainer>
+                    </TouchableWithoutFeedback>
+                    <TouchableWithoutFeedback onPress={() => toggleConsumptionDatePicker()}>
                     <ConsumptionDateContainer>
-                    <ConsumptionDateText>{"소비날짜 " + consumptionDateStr}</ConsumptionDateText>
+                    <ConsumptionDateText>{" · 소비날짜 " + consumptionDateStr}</ConsumptionDateText>
                 </ConsumptionDateContainer>
                 </TouchableWithoutFeedback>
-                    )}
+                </LocationSpendDateContainer>
                     </MetaInfoContainer>
                 )}
                 </AdditionInfoContainer>
@@ -1727,7 +1742,7 @@ const renderAddNewDescripInput = () => {
                     style={{paddingLeft:20, color:'#ffffff'}}
                     keyboardType={"number-pad"}
                     placeholder={ !moneyText ? "소비금액(원)" : ""}
-                    caretHidden={false}
+                    caretHidden={true}
                     placeholderTextColor="#CCCCCC"
                     onChangeText={(text:string) => onChangeExpenseInput(text)}
                     value={inputingExpenseText}

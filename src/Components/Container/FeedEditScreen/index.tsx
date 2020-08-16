@@ -1458,6 +1458,16 @@ const clickToUploadFinish = () => {
   var JSONstirngify_descriptionArray;
   var subTagOneEdit = false;
   var subTagTwoEdit = false;
+  var transmitSpendDate = "";
+
+  var tmpDate = new Date(consumptionDate),
+  month = '' + (tmpDate.getMonth() + 1),
+  day = '' + (tmpDate.getDate()),
+  year = tmpDate.getFullYear();
+  if(month.length < 2) month = '0' + month;
+  if(day.length < 2) day = '0' + day;
+
+  transmitSpendDate = year + "-" + month + "-" + day;
 
   console.log("originSubTag1", originSubTag1);
   console.log("subTag1", subTag1);
@@ -1508,7 +1518,7 @@ const clickToUploadFinish = () => {
       console.log("JSONstringify_descriptionArray", JSONstirngify_descriptionArray);
       console.log("JSONstringify_productoArray", JSONstringify_productArray);
 
-      POSTUpdate(route.params?.feedId, JSONstirngify_descriptionArray, mediaFileArray, mainTag, subTag1, subTag2, rating, expense, location, longitude, latitude, certifiedLocation, temporarySave, sequence, JSONstringify_productArray, openState, subTagOneEdit, subTagTwoEdit, subTag1Exis, subTag2Exis)
+      POSTUpdate(route.params?.feedId, JSONstirngify_descriptionArray, mediaFileArray, mainTag, subTag1, subTag2, rating, expense, location, longitude, latitude, certifiedLocation, temporarySave, sequence, JSONstringify_productArray, transmitSpendDate, openState, subTagOneEdit, subTagTwoEdit, subTag1Exis, subTag2Exis)
       .then(function(response) {
           if(response.status === 200) {
               console.log("후기 수정 성공", response);

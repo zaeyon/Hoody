@@ -295,15 +295,22 @@ const CollectionFeedEditScreen = ({navigation, route}: Props) => {
       POSTCollectionFeed(route.params?.collectionId, feedIdStr)
       .then(function(response) {
         console.log("컬렉션 피드 게시글 수정", response);
-        navigation.navigate("CollectionDetailScreen", {
-          collectionId: route.params?.collectionId,
-          collecionEdit: true,
-      });
+        moveToCollectionDetail();
       })
       .catch(function(error) {
         console.log("컬렉션 피드 error", error);
       })
     }, 10)
+  }
+
+  const moveToCollectionDetail = () => {
+    navigation.navigate("CollectionStack", {
+      screen: "CollectionDetailScreen",
+      params: {
+      collectionId: route.params?.collectionId,
+      update: true,
+      } 
+    })
   }
 
   const renderOrderingFeedItem = ({item, index, drag, isActive}: any) => {

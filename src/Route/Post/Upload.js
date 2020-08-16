@@ -1,12 +1,13 @@
 import axios from 'axios';
 const baseUrl = 'https://2eb0c2057794.ngrok.io'; 
 
-const PostUpload = (desArray, mediaArray,mainTag, subTag1, subTag2, rating, expense,  location, longitude, latitude, certifiedLocation, dump, sequence, products, openState, subTag1Exis, subTag2Exis) => {
+const PostUpload = (desArray, mediaArray,mainTag, subTag1, subTag2, rating, expense,  location, longitude, latitude, certifiedLocation, dump, sequence, products, spendDate, openState, subTag1Exis, subTag2Exis) => {
     const url = baseUrl + "/post/upload"
 
     console.log("업로드할 사진", mediaArray);
     console.log("업로드할 desArray", desArray);
     console.log("업로드할 상품", products);
+    console.log("업로드 spendDate", spendDate)
 
 
     console.log("업로드 subTag1", subTag1);
@@ -36,6 +37,8 @@ const PostUpload = (desArray, mediaArray,mainTag, subTag1, subTag2, rating, expe
 
     form.append('subTagOneExistence', subTag1Exis);
     form.append('subTagTwoExistence', subTag2Exis);
+
+    form.append("spendDate", spendDate);
     
     console.log("FormData", form);
     

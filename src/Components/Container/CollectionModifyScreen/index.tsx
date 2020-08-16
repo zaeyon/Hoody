@@ -7,6 +7,8 @@ import {
 import {TouchableWithoutFeedback, Switch, KeyboardAvoidingView, StyleSheet, Platform, ScrollView, View} from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'; 
 
+import POSTCollectionUpdate from '~/Route/Collection/POSTCollectionUpdate';
+
 const Container = Styled.SafeAreaView`
  background-color: #f3f3f3;
  align-items: center;
@@ -211,6 +213,9 @@ const CollectionModifyScreen = ({navigation, route}: Props) => {
     const moveToGallery = () => {
         navigation.navigate("Gallery_JustOne");
     }
+
+    const finishCollectionEdit = () => {
+    }
     
     return (
         <Container>
@@ -222,7 +227,7 @@ const CollectionModifyScreen = ({navigation, route}: Props) => {
                 </TouchableWithoutFeedback>
                 <HeaderTitleText>컬렉션 수정</HeaderTitleText>
                 {collectionNameText !== "" && collectionDescripText !== "" && (
-                <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
+                <TouchableWithoutFeedback onPress={() => finishCollectionEdit()}>
                     <HeaderRightContainer>
                        <AbledHeaderNextText>완료</AbledHeaderNextText>
                     </HeaderRightContainer>

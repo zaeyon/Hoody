@@ -2,7 +2,7 @@ import axios from 'axios';
 const baseUrl = 'https://2eb0c2057794.ngrok.io'; 
 
 
-const POSTUpdate = (feedId, desArray, mediaArray,mainTag, subTag1, subTag2, rating, expense,  location, longitude, latitude, certifiedLocation, dump, sequence, products, openState, subTag1Edit, subTag2Edit, subTag1Exis, subTag2Exis) => {
+const POSTUpdate = (feedId, desArray, mediaArray,mainTag, subTag1, subTag2, rating, expense,  location, longitude, latitude, certifiedLocation, dump, sequence, products, spendDate, openState, subTag1Edit, subTag2Edit, subTag1Exis, subTag2Exis) => {
     const url = baseUrl + "/post/update?postId=" + feedId;
 
     console.log("feedId", feedId);
@@ -19,7 +19,6 @@ const POSTUpdate = (feedId, desArray, mediaArray,mainTag, subTag1, subTag2, rati
     console.log("업로드 subTag2Edit", subTag2Edit);
     console.log("업로드 subTagOneExis", subTag1Exis);
     console.log("업로드 subTagTwoExis", subTag2Exis);
-
 
     var form = new FormData();
 
@@ -38,6 +37,7 @@ const POSTUpdate = (feedId, desArray, mediaArray,mainTag, subTag1, subTag2, rati
     form.append('temporary', dump);
     form.append('sequences', sequence);
     form.append('products', products);
+    form.append("spendDate", spendDate);
     form.append('open', openState);
 
 //    form.append('subTagOneEdit', subTag1Edit);

@@ -334,12 +334,9 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
     })
 
     useEffect(() => {
-
-        if(route.params?.collectionEdit) {
-            
-            route.params.collectionEdit = false;
-        }
-
+        if(route.params?.update) {
+            route.params.update = false
+          }
         if(route.params?.collectionId) {
            GETCollectionDetailInfo(route.params.collectionId)
            .then(function(response) {
@@ -355,7 +352,7 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
            })
         }
 
-    }, [route.params?.collectionId, route.params?.collectionEdit])
+    }, [route.params?.collectionId, route.params?.update])
 
     const renderCollectionFeedItem = ({item, index}: any) => {
         return (

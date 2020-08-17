@@ -63,7 +63,7 @@ import CollectionFeedEditScreen from '~/Components/Container/CollectionFeedEditS
 // Scrap Screen
 import ScrapListScreen from '~/Components/Container/ScrapListScreen';
 import AddScrapAlbumScreen from '~/Components/Container/AddScrapAlbumScreen';
-import AllFeedScrapListScreen from '~/Components/Container/AllFeedScrapListScreen';
+import ScrapFolderFeedListScreen from '~/Components/Container/ScrapFolderFeedListScreen';
 
 // Location Feed Map Screen
 import LocationFeedMapScreen from '~/Components/Container/LocationFeedMapScreen';
@@ -359,8 +359,8 @@ function ProfileStackScreen() {
       name="ScrapListScreen"
       component={ScrapListScreen}/>
       <ProfileStack.Screen
-      name="AllFeedScrapListScreen"
-      component={AllFeedScrapListScreen}/>
+      name="ScrapFolderFeedListScreen"
+      component={ScrapFolderFeedListScreen}/>
       <ProfileStack.Screen
       name="ProfileEditScreen"
       component={ProfileEditScreen}/>

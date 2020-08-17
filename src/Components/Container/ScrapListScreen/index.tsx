@@ -6,8 +6,8 @@ import {
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 
-import AllScrapFolderItem from '~/Components/Presentational/ScrapListScreen/AllScrapFolderItem';
 import ScrapFolderItem from '~/Components/Presentational/ScrapListScreen/ScrapFolderItem';
+//import ScrapFolderItem from '~/Components/Presentational/ScrapListScreen/ScrapFolderItemTest';
 import CollectionItem from '~/Components/Presentational/ScrapListScreen/CollectionItem';
 
 // Route
@@ -111,19 +111,26 @@ const ScrapListScreen = ({navigation, route}: Props) => {
     const renderScrapFolderItem = ({item, index}: any) => {
         if(index === 0) {
         return (
-            <AllScrapFolderItem
+            <ScrapFolderItem
+            folderId={item.id}
+            folderName={item.name}
+            defaultFolder={item.defaultFolder}
             navigation={navigation}
             feedImages={item.Posts}
             name={item.name}/>   
            )
         } else {
-        return (
-            <CollectionItem
-            navigation={navigation}
-            coverImage={item.coverImage}
-            name={item.name}/>
-        )}
-    }
+        if(item.collectionScrap) {
+            return (
+                <CollectionItem
+                collectionId={item.collectionScrap.collectionId}
+                navigation={navigation}
+                coverImage={item.coverImg}
+                name={item.name}
+                profileNickname={item.user.nickname}/>
+            )}
+          }
+        }
 
     const moveToAddScrapAlbum = () => {
         navigation.navigate("AddScrapAlbumScreen", {

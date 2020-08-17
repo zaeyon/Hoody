@@ -94,6 +94,9 @@ import FeedEditScreen from '~/Components/Container/FeedEditScreen';
 // Report Screen
 import ReportScreen from '~/Components/Container/ReportScreen';
 
+// Feed Declare Screen
+import FeedDeclareScreen from '~/Components/Container/FeedDeclareScreen';
+
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
 const ExploreStack = createStackNavigator();
@@ -512,6 +515,9 @@ function FeedStackScreen() {
           },
         }}
       />
+      <FeedStack.Screen
+      name="FeedDeclareScreen"
+      component={FeedDeclareScreen}/>
     </FeedStack.Navigator>
   );
 }

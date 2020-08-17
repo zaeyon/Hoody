@@ -98,6 +98,7 @@ const ScrapListScreen = ({navigation, route}: Props) => {
         GETScrapAllFolder()
         .then(function(response) {
             console.log("모든 스크랩 폴더 ", response)
+            console.log("response[0].Posts", response[0].Posts)
             console.log("response[0].id", response[0].id);
             setAllScrapFolderListData(response);
             setDefaultFolderId(response[0].id);
@@ -112,7 +113,7 @@ const ScrapListScreen = ({navigation, route}: Props) => {
         return (
             <AllScrapFolderItem
             navigation={navigation}
-            coverImage={item.coverImage}
+            feedImages={item.Posts}
             name={item.name}/>   
            )
         } else {

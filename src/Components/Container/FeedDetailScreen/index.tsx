@@ -1008,6 +1008,13 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
      });
    }
 
+   const moveToFeedDeclare = () => {
+     setOtherUsersFeedModalVisible(false);
+     navigation.navigate("FeedDeclareScreen", {
+       feedId: postId,
+     })
+   }
+
   
 
    return (
@@ -1136,6 +1143,7 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
         <ModalHeaderContainer>
         <ModalToggleButton/>
         </ModalHeaderContainer>
+        <TouchableWithoutFeedback onPress={() => moveToFeedDeclare()}>
         <ModalTabItemContainer>
           <ModalTabItemIconImage
           style={{tintColor:'#1D1E1F'}}
@@ -1144,6 +1152,7 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
           style={{color:'#1D1E1F'}}
           >신고하기</ModalTabItemLabelText>
         </ModalTabItemContainer>
+        </TouchableWithoutFeedback>
         </OtherUsersFeedViewMoreModalContainer>
       </Modal>
       <Modal

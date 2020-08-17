@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import Styled from 'styled-components/native';
 import {TouchableWithoutFeedback} from 'react-native';
 import {
@@ -12,7 +12,7 @@ import Top5TagList from '~/Components/Presentational/ReportScreen/Top5TagList';
 
 const Container = Styled.SafeAreaView`
  flex: 1;
- background-color: #ffffff;;
+ background-color: #ffffff;
 `;
 
 const HeaderBar = Styled.View`
@@ -62,7 +62,7 @@ height: ${wp('6.4%')};
 
 const BodyContainer = Styled.ScrollView`
 flex: 1;
-background-color: #F4F4F7;
+background-color: #ffffff;
 `;
 
 const MonthSelectContainer = Styled.View`
@@ -97,7 +97,12 @@ const ReportChartContainer = Styled.View`
 `;
 
 const Top5TagListContainer = Styled.View`
- margin-top: 9px;
+`;
+
+const IntervalContainer = Styled.View`
+width: ${wp('100%')};
+height: 9px;
+background-color: #F4F4F6;
 `;
 
 interface Props {
@@ -106,6 +111,12 @@ interface Props {
 }
 
 const ReportScreen = ({navigation, route}: Props) => {
+    const [top5TagType, setTop5TagType] = useState<string>("popular")
+
+    const changeTop5TagType = (type:string) => {
+        setTop5TagType(type)
+    }
+
     return (
         <Container>
             <HeaderBar>
@@ -132,8 +143,12 @@ const ReportScreen = ({navigation, route}: Props) => {
                 <ReportChartContainer>
                 <ReportChart/>
                 </ReportChartContainer>
+                <IntervalContainer>
+                </IntervalContainer>
                 <Top5TagListContainer>
-                <Top5TagList/>
+                <Top5TagList
+                type={top5TagType}
+                changeTop5TagType={changeTop5TagType}/>
                 </Top5TagListContainer>
             </BodyContainer>
         </Container>

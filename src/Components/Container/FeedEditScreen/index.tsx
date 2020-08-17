@@ -204,13 +204,18 @@ const MetaInfoContainer = Styled.View`
  border-color: #f1f1f1;
 `;
 
-const RatingLocationExpenseContainer = Styled.View`
+const RatingExpenseContainer = Styled.View`
 width:${wp('92%')};
 flex-direction: row;
 `;
 
+const LocationSpendDateContainer = Styled.View`
+padding-top: 5px;
+flex-direction: row;
+align-items: center;
+`;
+
 const ConsumptionDateContainer = Styled.View`
-padding-top: 10px;
 padding-bottom: 0px;
 `;
 
@@ -230,10 +235,10 @@ const InputedRatingContainer = Styled.View`
 `;
 
 const InputedRatingText = Styled.Text`
- font-size: ${wp('4%')};
- font-weight: 600;
- color: #8E8E8E;
- margin-top: 2px;
+font-size: 15px;
+font-weight: 500;
+color: #56575C;
+margin-top: 2px;
 `;
 
 const RatingInner = Styled.View`
@@ -256,8 +261,8 @@ const InputedRatingImage = Styled.Text`
 `;
 
 const InputedLocationContainer = Styled.View`
- margin-left: 15px;
  flex-direction: row;
+ align-items: center;
 `;
 
 const InputedLocationIcon = Styled.Image`
@@ -266,9 +271,8 @@ const InputedLocationIcon = Styled.Image`
 `;
 
 const InputedLocationText = Styled.Text`
-font-size: ${wp('4%')};
- font-weight: 600;
- color: #8E8E8E;
+font-size: 15px;
+color: #8E9199;
 `;
 
 const InputedExpenseContainer = Styled.View`
@@ -280,12 +284,13 @@ const InputedExpenseContainer = Styled.View`
 const InputedExpenseIcon = Styled.Image`
  width: ${wp('6%')};
  height: ${wp('6%')};
+ tint-color: #56575C;
 `;
 
 const InputedExpenseText = Styled.Text`
-font-size: ${wp('4%')};
- font-weight: 600;
- color: #8E8E8E;
+font-size: 15px;
+font-weight: 500;
+color: #56575C;
  flex-shrink: 1;
 `;
 
@@ -663,8 +668,8 @@ color: #E90000;
 `;
 
 const ConsumptionDateText = Styled.Text`
-font-size: ${wp('3.9%')};
- color: #c4c4c4;
+font-size: 15px;
+color: #8E9199;
 `;
 
 
@@ -794,6 +799,7 @@ const FeedEditScreen = ({navigation, route}: Props) => {
              console.log("게시글 수정 route.params.feedDetailInfo", route.params.feedDetailInfo);
              console.log("게시글 수정 route.params.paragraphData", route.params.paragraphData);
              setMainTag(route.params.feedDetailInfo.mainTags.name);
+             setConsumptionDateStr(route.params.feedDetailInfo.spendDate);
 
              if(route.params.feedDetailInfo.subTagOnes) {
                  setSubTag1(route.params.feedDetailInfo.subTagOnes.name)
@@ -1285,7 +1291,7 @@ const addConsumptionDate = () => {
 const convertDateFormat = (date) => {
     var tmpDate = new Date(date),
     month = '' + (tmpDate.getMonth() + 1),
-    day = '' + (tmpDate.getDate()-1),
+    day = '' + (tmpDate.getDate()),
     year = tmpDate.getFullYear();
 
     if(month.length < 2) month = '0' + month;
@@ -1728,7 +1734,7 @@ const renderAddNewDescripInput = () => {
                 )} 
                 {mainTagInserted && !mainTagProcess && (
                     <MetaInfoContainer>
-                    <RatingLocationExpenseContainer>
+                    <RatingExpenseContainer>
                     <TouchableWithoutFeedback onPress={() => modifyRating()}>
                     <InputedRatingContainer>
                     <RatingInner>
@@ -1739,16 +1745,6 @@ const renderAddNewDescripInput = () => {
                     </RatingInner>
                     </InputedRatingContainer>
                     </TouchableWithoutFeedback>
-                    <TouchableWithoutFeedback onPress={() => moveLocationSearch()}>
-                    <InputedLocationContainer>
-                    <LocationInner>
-                    <InputedLocationIcon
-                    source={require('~/Assets/Images/ic_location_outline.png')}/>
-                    <InputedLocationText>
-                    {location || "위치"}</InputedLocationText>
-                    </LocationInner>
-                    </InputedLocationContainer>
-                    </TouchableWithoutFeedback>
                     <TouchableWithoutFeedback onPress={() => toggleInputExpense()}>
                     <InputedExpenseContainer>
                     <ExpenseInner>
@@ -1758,14 +1754,26 @@ const renderAddNewDescripInput = () => {
                     </ExpenseInner>
                     </InputedExpenseContainer>
                     </TouchableWithoutFeedback>
-                    </RatingLocationExpenseContainer>
-                    {consumptionDateStr && (
+                    </RatingExpenseContainer>
+                    <LocationSpendDateContainer>
+                    <TouchableWithoutFeedback onPress={() => moveLocationSearch()}>
+                    <InputedLocationContainer>
+                    <LocationInner>
+                        {/*
+                    <InputedLocationIcon
+                    source={require('~/Assets/Images/ic_location_outline.png')}/>
+                        */}
+                    <InputedLocationText>
+                    {location || "위치"}</InputedLocationText>
+                    </LocationInner>
+                    </InputedLocationContainer>
+                    </TouchableWithoutFeedback>
                 <TouchableWithoutFeedback onPress={() => toggleConsumptionDatePicker()}>
                     <ConsumptionDateContainer>
-                    <ConsumptionDateText>{"소비날짜 " + consumptionDateStr}</ConsumptionDateText>
+                    <ConsumptionDateText>{" · 소비날짜 " + consumptionDateStr}</ConsumptionDateText>
                 </ConsumptionDateContainer>
                 </TouchableWithoutFeedback>
-                    )}
+                </LocationSpendDateContainer>
                     </MetaInfoContainer>
                 )}
                 </AdditionInfoContainer>

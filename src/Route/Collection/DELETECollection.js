@@ -1,5 +1,5 @@
 import axios from 'axios';
-const baseUrl = 'https://2eb0c2057794.ngrok.io';
+const baseUrl = 'https://c04104131d01.ngrok.io';
 
 const DELETECollection = (collectionId) => {
     const url = baseUrl + '/collection/delete';

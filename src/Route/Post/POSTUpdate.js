@@ -1,5 +1,5 @@
 import axios from 'axios';
-const baseUrl = 'https://2eb0c2057794.ngrok.io'; 
+const baseUrl = 'https://c04104131d01.ngrok.io'; 
 
 
 const POSTUpdate = (feedId, desArray, mediaArray,mainTag, subTag1, subTag2, rating, expense,  location, longitude, latitude, certifiedLocation, dump, sequence, products, spendDate, openState, subTag1Edit, subTag2Edit, subTag1Exis, subTag2Exis) => {
@@ -10,6 +10,7 @@ const POSTUpdate = (feedId, desArray, mediaArray,mainTag, subTag1, subTag2, rati
     console.log("업로드할 사진", mediaArray);
     console.log("업로드할 desArray", desArray);
     console.log("업로드할 상품", products);
+    console.log("게시글 수정 spendDate", spendDate);
 
     console.log("업로드 expense", expense);
 

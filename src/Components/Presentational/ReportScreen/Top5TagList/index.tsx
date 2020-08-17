@@ -1,6 +1,6 @@
 import React from 'react';
 import Styled from 'styled-components/native';
-import {FlatList} from 'react-native';
+import {FlatList, StyleSheet, TouchableWithoutFeedback} from 'react-native';
 import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
@@ -50,7 +50,12 @@ font-size: 14px;
 const Top5TagListContainer = Styled.View`
 `;
 
-const Top5TagList = ({}) => {
+interface Props {
+    type: string,
+    changeTop5TagType: (type:string) => void,
+}
+
+const Top5TagList = ({type, changeTop5TagType}: Props) => {
 
     const renderPopularTop5TagItem = ({item, index}: any) => {
         return (
@@ -65,9 +70,13 @@ const Top5TagList = ({}) => {
                 <TitleText>TOP 5 태그</TitleText>
                 <SortTypeContainer>
                     <SortTypeContainer>
-                        <ActiveSortTypeText>인기순</ActiveSortTypeText>
-                        <InactiveSortTypeText
-                        style={{marginLeft:8}}>흥미순</InactiveSortTypeText>
+                        <TouchableWithoutFeedback onPress={() => changeTop5TagType("popular")}>
+                        <ActiveSortTypeText style={type !== "popular" && styles.inactive}>인기순</ActiveSortTypeText>
+                        </TouchableWithoutFeedback>
+                        <TouchableWithoutFeedback onPress={() => changeTop5TagType("interest")}>
+                        <ActiveSortTypeText
+                        style={[{marginLeft:8}, type !== "interest" && styles.inactive]}>흥미순</ActiveSortTypeText>
+                        </TouchableWithoutFeedback>
                     </SortTypeContainer>
                 </SortTypeContainer>
             </TitleContainer>
@@ -79,6 +88,12 @@ const Top5TagList = ({}) => {
         </Container>
     )
 }
+
+const styles = StyleSheet.create({
+    inactive : {
+        color: '#C6C7CC'
+    }
+})
 
 export default Top5TagList;
 

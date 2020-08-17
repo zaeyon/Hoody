@@ -451,6 +451,7 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
             deleteCollection()
         } if(index === 2) {
             navigation.navigate("CollectionModifyScreen", {
+            collectionId: route.params?.collectionId,
             coverImage: collectionDetailInfo.coverImg,
             name: collectionDetailInfo.name,
             description: collectionDetailInfo.description,

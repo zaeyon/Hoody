@@ -186,7 +186,7 @@ const CollectionModifyScreen = ({navigation, route}: Props) => {
     const [enabledIncludeLocation, setEnabledIncludeLocation] = useState<boolean>(false);
     const [collectionNameText, setCollectionNameText] = useState<string>(route.params?.name);
     const [collectionDescripText, setCollectionDescripText] = useState<string>(route.params?.description);
-    const [coverImageUri, setCoverImageUri] = useState<string>(route.params?.coverImage);
+    const [coverImage, setCoverImage] = useState(route.params?.coverImage);
     const [name, setName] = useState<string>(route.params?.name);
     const [description, setDescription] = useState<string>(route.params?.description);
 
@@ -215,6 +215,13 @@ const CollectionModifyScreen = ({navigation, route}: Props) => {
     }
 
     const finishCollectionEdit = () => {
+        POSTCollectionUpdate(route.params?.collectionId, collectionNameText, !enabledPrivate, coverImage, collectionDescripText, enabledIncludeLocation)
+        .then(function(response) {
+            console.log("컬렉션 수정 response", response);
+        })
+        .catch(function(error) {
+            console.log("컬렉션 수정 error", error);
+        })
     }
     
     return (

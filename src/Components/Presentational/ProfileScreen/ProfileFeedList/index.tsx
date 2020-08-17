@@ -76,9 +76,18 @@ const YearPickerContainer = Styled.View`
 border-top-left-radius: 10px;
 border-top-right-radius: 10px;
  width:${wp('100%')};
- height: ${wp('50%')};
+ height: ${wp('60%')};
  background-color: #ffffff;
 `;
+
+const MonthPickerContainer = Styled.View`
+border-top-left-radius: 10px;
+border-top-right-radius: 10px;
+ width:${wp('100%')};
+ height: ${wp('60%')};
+ background-color: #ffffff;
+`;
+
 
 const PickerHeaderContainer = Styled.View`
  border-width: 0.6px;
@@ -90,6 +99,8 @@ const PickerHeaderContainer = Styled.View`
  justify-content: flex-end;
  align-items: center;
  padding-left: 16px;
+ position: absolute;
+ top: 0;
 `;
 
 const PickerFinishContainer = Styled.View`
@@ -102,15 +113,6 @@ const PickerFinishText = Styled.Text`
  font-size: 16px;
  color: #267DFF;
 `;
-  interface Props {
-    navigation: any,
-    route: any,
-    feedListData: Array<object>,
-    feedListDataByDate: Array<object>,
-    currentSortType: string,
-    onScrollPostList: () => void,
-    requestNickname: string,
-  }
 
   const TEST_SECTION_DATA = [
     {
@@ -131,15 +133,22 @@ const PickerFinishText = Styled.Text`
     }
   ]
 
-  const YEAR_LIST = [
-    2020, 2019, 2018, 2017, 2016, 2015, 2014, 2013, 2012, 2011, 2010, 2009, 2008, 2007, 2006, 2005, 2004, 2003, 2002, 2001, 2000, 1999, 1998, 1997, 1996, 1995, 1994, 1993, 1992, 1991, 1990, 1989, 1988, 1987, 1986, 1985, 1984, 1983, 1982, 1981, 1980,
-  ]
 
-  const MONTH_LIST = [
-    12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1
-  ]
+  interface Props {
+    navigation: any,
+    route: any,
+    feedListData: Array<object>,
+    feedListDataByDate: Array<object>,
+    currentSortType: string,
+    onScrollPostList: () => void,
+    requestNickname: string,
+    openYearPicker: () => void,
+    openMonthPicker: () => void,
+    selectedYear: number,
+    selectedMonth: number,
+  }
 
-const ProfileFeedList = ({navigation, route, feedListData, currentSortType, onScrollPostList, feedListDataByDate, requestNickname}: Props) => {
+const ProfileFeedList = ({navigation, route, feedListData, currentSortType, onScrollPostList, feedListDataByDate, requestNickname, openYearPicker, openMonthPicker, selectedYear, selectedMonth}: Props) => {
 
   const getCurrentYear = (date: Date) => {
     return date.getFullYear();
@@ -150,28 +159,7 @@ const ProfileFeedList = ({navigation, route, feedListData, currentSortType, onSc
   }
   
   const currentUser = useSelector((state) => state.currentUser);
-  const [visibleYearPicker, setVisibleYearPicker] = useState<boolean>(false);
-  const [visibleMonthPicker, setVisibleMonthPicker] = useState<boolean>(false);
-  const [selectedYear, setSelectedYear] = useState<number>(getCurrentYear(new Date()));
-  const [changingYear, setChangingYear] = useState<number>(getCurrentYear(new Date()));
-  const [selectedMonth, setSelectedMonth] = useState<number>(getCurrentMonth(new Date()));
-  const [changingMonth, setChangingMonth] = useState<number>(getCurrentMonth(new Date()));
-
-  useEffect(() => {
-    console.log("ProfileFeedList feedListData", feedListData)
-    console.log("ProfileFeedList feedListDataByDate@@", feedListDataByDate)
-
-
-  }, [feedListData, feedListDataByDate])
-
-  useEffect(() => {
-    console.log("profileFeedList currentUser.feedListData", currentUser.userAllFeeds);
-  }, [currentUser]);
-
-  const openYearPicker = () => {
-    setVisibleYearPicker(true);
-  }
-
+  
     const renderProfileListFeedItem = ({item, index}) => {
         return (
             <ProfileListFeedItem
@@ -243,12 +231,14 @@ scrollEventThrottle={5}
           <SelectingDateContainer>
           <TouchableWithoutFeedback onPress={() => openYearPicker()}>
           <YearSelectContainer>
-            <SelectingYearText>2020년</SelectingYearText>
+            <SelectingYearText>{selectedYear + "년"}</SelectingYearText>
           </YearSelectContainer>
           </TouchableWithoutFeedback>
+          <TouchableWithoutFeedback onPress={() => openMonthPicker()}>
           <MonthSelectContainer>
-            <SelectingMonthText>7월</SelectingMonthText>
+            <SelectingMonthText>{selectedMonth + "월"}</SelectingMonthText>
           </MonthSelectContainer>
+          </TouchableWithoutFeedback>
           </SelectingDateContainer>
           <ExpenseDaySectionListContainer>
           <SectionList
@@ -263,20 +253,14 @@ scrollEventThrottle={5}
           </ExpenseDaySectionListContainer>
         </TileTypeFeedContainer>
         )}
+        {/*
           <Modal
           isVisible={visibleYearPicker}
-          onBackdropPress={() => setVisibleYearPicker(false)}
+          onBackdropPress={() => cancelYearPicker()}
           backdropOpacity={0.25}
           style={styles.modalView}>
-          
           <YearPickerContainer>
-            <PickerHeaderContainer>
-              <PickerFinishContainer>
-                <PickerFinishText>완료</PickerFinishText>
-              </PickerFinishContainer>
-            </PickerHeaderContainer>
             <Picker
-            style={{flex:1}}
             selectedValue={changingYear}
             onValueChange={(itemValue, itemIndex) => setChangingYear(itemValue)}>
             {YEAR_LIST.map((year) => {
@@ -285,8 +269,40 @@ scrollEventThrottle={5}
               )
             })}
             </Picker>
+            <PickerHeaderContainer>
+              <TouchableWithoutFeedback onPress={() => selectYearPicker()}>
+              <PickerFinishContainer>
+                <PickerFinishText>완료</PickerFinishText>
+              </PickerFinishContainer>
+              </TouchableWithoutFeedback>
+            </PickerHeaderContainer>
           </YearPickerContainer>
           </Modal>
+          <Modal
+          isVisible={visibleMonthPicker}
+          onBackdropPress={() => cancelMonthPicker()}
+          backdropOpacity={0.25}
+          style={styles.modalView}>
+          <MonthPickerContainer>
+            <Picker
+            selectedValue={changingMonth}
+            onValueChange={(itemValue, itemIndex) => setChangingMonth(itemValue)}>
+            {MONTH_LIST.map((month) => {
+              return (
+                <Picker.Item label={month+"월"} value={month}/>
+              )
+            })}
+            </Picker>
+            <PickerHeaderContainer>
+              <TouchableWithoutFeedback onPress={() => selectMonthPicker()}>
+              <PickerFinishContainer>
+                <PickerFinishText>완료</PickerFinishText>
+              </PickerFinishContainer>
+              </TouchableWithoutFeedback>
+            </PickerHeaderContainer>
+          </MonthPickerContainer>
+          </Modal>
+          */}
        </UserFeedListContainer>
     )
 }

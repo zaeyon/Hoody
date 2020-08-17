@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {TouchableWithoutFeedback, FlatList} from 'react-native'
 import Styled from 'styled-components/native';
 import {
@@ -9,6 +9,9 @@ import {
 import AllScrapFolderItem from '~/Components/Presentational/ScrapListScreen/AllScrapFolderItem';
 import ScrapFolderItem from '~/Components/Presentational/ScrapListScreen/ScrapFolderItem';
 import CollectionItem from '~/Components/Presentational/ScrapListScreen/CollectionItem';
+
+// Route
+import GETScrapAllFolder from '~/Route/Scrap/GETScrapAllFolder';
 
 const Container = Styled.SafeAreaView`
  flex: 1;
@@ -22,8 +25,6 @@ const HeaderBar = Styled.View`
  align-items: center;
  justify-content: space-between;
  background-color: #ffffff;
- border-bottom-width: 0.6px;
- border-color: #ECECEE;
 `;
 
 const HeaderBackContainer = Styled.View`
@@ -90,6 +91,21 @@ interface Props {
 }
 
 const ScrapListScreen = ({navigation, route}: Props) => {
+    const [allScrapFolderListData, setAllScrapFolderListData] = useState<Array<object>>([]);
+    const [defaultFolderId, setDefaultFolderId] = useState<number>();
+
+    useEffect(() => {
+        GETScrapAllFolder()
+        .then(function(response) {
+            console.log("모든 스크랩 폴더 ", response)
+            console.log("response[0].id", response[0].id);
+            setAllScrapFolderListData(response);
+            setDefaultFolderId(response[0].id);
+        }) 
+        .catch(function(error) {
+            console.log("스크랩폴더 불러오기 실패", error);
+        })
+    }, [])
 
     const renderScrapFolderItem = ({item, index}: any) => {
         if(index === 0) {
@@ -109,7 +125,9 @@ const ScrapListScreen = ({navigation, route}: Props) => {
     }
 
     const moveToAddScrapAlbum = () => {
-        navigation.navigate("AddScrapAlbumScreen");
+        navigation.navigate("AddScrapAlbumScreen", {
+            defaultFolderId: defaultFolderId,
+        });
     }
     
 
@@ -134,7 +152,7 @@ const ScrapListScreen = ({navigation, route}: Props) => {
                 <FlatList
 columnWrapperStyle={{justifyContent:'space-between', paddingLeft:15, paddingRight:15, paddingTop:17, paddingBottom:10, backgroundColor:'#ffffff'}}
                 numColumns={2}
-                data={TEST_SCRAP_FOLDER_LIST}
+                data={allScrapFolderListData}
                 renderItem={renderScrapFolderItem}/>
             </BodyContainer>
         </Container>

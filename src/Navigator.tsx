@@ -589,14 +589,10 @@ function BottomTab() {
       options={({route}) => ({
         tabBarIcon: ({focused}: {focused: boolean}) => (
           <Image
-            style={{width: 30, height: 30}}
             source={
-              /*
-          focused
-            ? require('~/Assets/Images/Tabs/ic_home.png')
-            : require('~/Assets/Images/Tabs/ic_home_outline.png')
-        */
-              require('~/Assets/Images/NewTabs/ic_home_outline.png')
+            focused
+             ? require('~/Assets/Images/BottomTab/ic_home_focused.png')
+             : require('~/Assets/Images/BottomTab/ic_home_outline.png')
             }
           />
         ),
@@ -609,14 +605,10 @@ function BottomTab() {
       options={({route}) => ({
         tabBarIcon: ({focused}: {focused: boolean}) => (
           <Image
-            style={{width: 30, height: 30}}
             source={
-              /*
-          focused
-            ? require('~/Assets/Images/Tabs/ic_home.png')
-            : require('~/Assets/Images/Tabs/ic_home_outline.png')
-        */
-              require('~/Assets/Images/NewTabs/ic_search_outline.png')
+            focused
+             ? require('~/Assets/Images/BottomTab/ic_search_focused.png')
+             : require('~/Assets/Images/BottomTab/ic_search_outline.png')
             }
           />
         ),
@@ -630,14 +622,8 @@ function BottomTab() {
       options={{
         tabBarIcon: ({focused}: {focused: boolean}) => (
           <Image
-            style={{width: 30, height: 30}}
             source={
-              /*
-          focused
-            ? require('~/Assets/Images/Tabs/ic_home.png')
-            : require('~/Assets/Images/Tabs/ic_home_outline.png')
-        */
-              require('~/Assets/Images/NewTabs/ic_upload_outline.png')
+               require('~/Assets/Images/BottomTab/ic_upload.png')
             }
           />
         ),
@@ -651,9 +637,10 @@ function BottomTab() {
       options={{
         tabBarIcon: ({focused}: {focused: boolean}) => (
           <Image
-            style={{width: 30, height: 30}}
             source={
-              require('~/Assets/Images/NewTabs/ic_alarm_outline.png')
+              focused
+               ? require('~/Assets/Images/BottomTab/ic_alarm_focused.png')
+               : require('~/Assets/Images/BottomTab/ic_alarm_outline.png')
             }
           />
         ),
@@ -665,9 +652,10 @@ function BottomTab() {
       options={({route}) => ({
         tabBarIcon: ({focused}: {focused: boolean}) => (
           <Image
-            style={{width: 30, height: 30}}
             source={
-              require('~/Assets/Images/Tabs/ic_profile_outline.png')
+              focused
+               ? require('~/Assets/Images/BottomTab/ic_profile_focused.png')
+               : require('~/Assets/Images/BottomTab/ic_profile_outline.png')
             }
           />
         ),

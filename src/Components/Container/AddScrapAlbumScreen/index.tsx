@@ -5,8 +5,13 @@ import {
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import {TouchableWithoutFeedback, FlatList} from 'react-native'
+import {useSelector} from 'react-redux';
 
+// Local Component
 import SelectScrapItem from '~/Components/Presentational/AddScrapAlbumScreen/SelectScrapItem';
+
+// Route
+import GETScrapFolder from '~/Route/Scrap/GETScrapFolder';
 
 const Container = Styled.SafeAreaView`
  flex: 1;
@@ -21,8 +26,6 @@ const HeaderBar = Styled.View`
  align-items: center;
  justify-content: space-between;
  background-color:#ffffff;
- border-bottom-width: 0.6px;
- border-color: #ECECEE;
 `;
 
 const HeaderCancelContainer = Styled.View`
@@ -79,9 +82,8 @@ color: #333333;
 const AlbumNameInput = Styled.TextInput`
  margin-top: 10px;
  font-size: 17px;
- font-weight: 600;
- color: #333333;
-`;
+ color: #979797;
+ `;
 
 const BodyContainer = Styled.View`
  flex:1;
@@ -122,14 +124,27 @@ const AddScrapAlbumScreen = ({navigation, route}: Props) => {
     const [selectingScrapList, setSelectingScrapList] = useState<Array<object>>([]);
     const [changeSelectScrapData, setChangeSelectScrapData] = useState<boolean>(false);
     const [scrapAlbumName, setScrapAlbumName] = useState<string>("");
+    const currentUser = useSelector((state: any) => state.currentUser);
 
     useEffect(() => {
+        console.log("route.params.defaultFolderId", route.params.defaultFolderId);
+        //console.log("모든 스크랩 목록", currentUser.scrapFeeds);
+        if(route.params?.defaultFolderId) {
+            GETScrapFolder(route.params.defaultFolderId)
+            .then(function(response) {
+                console.log("모든 스크랩", response)
+            })
+            .catch(function(error) {
+                console.log("모든 스크랩 불러오기 실퍄", error)
+            })
+        }
+        
         var tmpSelectableScrapList = allScrapData.map(function(obj) {
             obj.selected = false;
             return obj;
         })
         setAllScrapData(tmpSelectableScrapList);
-    }, [])
+    }, [route.params?.defaultFolderId])
 
     const onSelectCircle = (index:number) => {
         var tmpAllScrapData = allScrapData;

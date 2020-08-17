@@ -1,5 +1,6 @@
 import React from 'react';
 import Styled from 'styled-components/native';
+import {TouchableWithoutFeedback} from 'react-native';
 import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
@@ -69,14 +70,27 @@ color: #898A8D;
 `;
 
 interface Props {
+    navigation: any,
+    feedId: number,
     mainImage: string,
     mainTag: string,
     rating: string,
     expense: string,
     location: string,
 }
-const ProfileTileFeedItem = ({mainImage, mainTag, rating, expense, location}: Props) => {
+const ProfileTileFeedItem = ({navigation, feedId, mainImage, mainTag, rating, expense, location}: Props) => {
+
+    const moveToFeedDetail = () => {
+        navigation.navigate("FeedStack", {
+          screen: "FeedDetailScreen",
+          params: {
+          feedId:feedId,
+          }
+        })
+      }
+
     return (
+        <TouchableWithoutFeedback onPress={() => moveToFeedDetail()}>
         <ProfileTileFeedItemContainer>
             {mainImage && (
             <TileFeedImage
@@ -99,6 +113,7 @@ const ProfileTileFeedItem = ({mainImage, mainTag, rating, expense, location}: Pr
                 <LocationText>{location}</LocationText>
             </LocationContainer>
         </ProfileTileFeedItemContainer>
+        </TouchableWithoutFeedback>
     )
 }
 

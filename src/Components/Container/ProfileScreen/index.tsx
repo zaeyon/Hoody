@@ -485,7 +485,7 @@ const ProfileScreen = ({navigation, route}: Props) => {
         console.log("GetUserProfile error", error);
       })
 
-      GETProfileFeedByDate(currentUser.user.nickname, selectedYear + "-" + selectedMonth)
+      GETProfileFeedByDate(currentUser.user.nickname, getCurrentYear(new Date()) + "-" + getCurrentMonth(new Date()))
       .then(function(response) {
         console.log("GETProfileFeedByDate response", response)
         var tmpFeedListByDate = new Array();

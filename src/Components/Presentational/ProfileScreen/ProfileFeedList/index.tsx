@@ -195,6 +195,8 @@ const ProfileFeedList = ({navigation, route, feedListData, currentSortType, onSc
         renderItem={({item, index}) => {
           return (
             <ProfileTileFeedItem
+            navigation={navigation}
+            feedId={item.id}
             mainImage={item.mediaFiles[0] ? item.mediaFiles[0].url : null}
             mainTag={item.mainTags.name}
             rating={item.starRate}

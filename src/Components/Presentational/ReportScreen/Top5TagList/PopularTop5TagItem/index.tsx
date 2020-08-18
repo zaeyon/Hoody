@@ -1,9 +1,11 @@
 import React from 'react';
 import Styled from 'styled-components/native';
+import {TouchableWithoutFeedback} from 'react-native';
 import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import { NavigationContainer } from '@react-navigation/native';
 
 const Container = Styled.View`
 flex-direction: row;
@@ -66,8 +68,18 @@ width: ${wp('3.2%')};
 height: ${wp('3.2%')};
 `;
 
-const PopularTop5TagItem = () => {
+interface Props {
+    navigation: any,
+}
+
+const PopularTop5TagItem = ({navigation}: Props) => {
+
+    const moveToPopularTagDetail = () => {
+        navigation.navigate("TopPopularTagDetailScreen")
+    }
+
     return (
+    <TouchableWithoutFeedback onPress={() => moveToPopularTagDetail()}>
         <Container>
             <TagContainer>
                 <TagRankingText>1</TagRankingText>
@@ -87,6 +99,7 @@ const PopularTop5TagItem = () => {
                 source={require('~/Assets/Images/Report/ic_disclosure.png')}/>
             </TagEvaluateContainer>
         </Container>
+        </TouchableWithoutFeedback>
     )
 }
 

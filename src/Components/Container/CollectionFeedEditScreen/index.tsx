@@ -273,7 +273,7 @@ const CollectionFeedEditScreen = ({navigation, route}: Props) => {
 
   const moveToAddFeedScreen = () => {
     navigation.navigate("AddCollectionFeedScreen", {
-      triggerType: "modifyCollection",
+      triggerType: "collectionFeedEdit",
       collectionFeedList: collectionFeedList,
     })
   }

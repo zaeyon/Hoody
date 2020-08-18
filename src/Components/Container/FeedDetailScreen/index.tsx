@@ -1110,16 +1110,6 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
         <ModalHeaderContainer>
         <ModalToggleButton/>
         </ModalHeaderContainer>
-        <TouchableWithoutFeedback onPress={() => deleteFeed()}>
-        <ModalTabItemContainer>
-          <ModalTabItemIconImage
-          style={{tintColor:'#FF3B30'}}
-          source={require('~/Assets/Images/Feed/ic_remove.png')}/>
-          <ModalTabItemLabelText
-          style={{color:'#FF3B30'}}
-          >삭제하기</ModalTabItemLabelText>
-        </ModalTabItemContainer>
-        </TouchableWithoutFeedback>
         <TouchableWithoutFeedback onPress={() => moveToFeedEdit()}>
         <ModalTabItemContainer>
           <ModalTabItemIconImage
@@ -1128,6 +1118,16 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
           <ModalTabItemLabelText
           style={{color:'#1D1E1F'}}
           >수정하기</ModalTabItemLabelText>
+        </ModalTabItemContainer>
+        </TouchableWithoutFeedback>
+        <TouchableWithoutFeedback onPress={() => deleteFeed()}>
+        <ModalTabItemContainer>
+          <ModalTabItemIconImage
+          style={{tintColor:'#FF3B30'}}
+          source={require('~/Assets/Images/Feed/ic_remove.png')}/>
+          <ModalTabItemLabelText
+          style={{color:'#FF3B30'}}
+          >삭제하기</ModalTabItemLabelText>
         </ModalTabItemContainer>
         </TouchableWithoutFeedback>
         </MyFeedViewMoreModalContainer>

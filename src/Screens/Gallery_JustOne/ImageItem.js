@@ -92,7 +92,16 @@ class ImageItem extends Component {
   handleClick(item) {
     this.props.onClick(item);
     console.log('item @@:', item);
-    this.props.navigation.navigate('ProfileInput', {profileImage: item.uri});
+    console.log("this.props.requestType", this.props.requestType);
+    if(this.props.requestType === "collectionUpload") {
+      this.props.navigation.navigate('CollectionUploadScreen', {
+        selectedCoverImage: item
+      });
+    } else if(this.props.requestType === "profileInput") {
+      this.props.navigation.navigate('ProfileInput', {
+        selectedProfileImage: item
+      });
+    }
   }
 
   render() {

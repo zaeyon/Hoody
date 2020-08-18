@@ -3,7 +3,7 @@ import allActions from '~/action';
 import AsyncStorage from '@react-native-community/async-storage';
 import {setCurrentUser} from '~/AsyncStorage/User';
 
-const baseUrl = 'https://c04104131d01.ngrok.io';
+const baseUrl = 'https://11f9deb512eb.ngrok.io';
 
 const SignUp = (email, password, nickname, birthdate, gender, socialId, provider) => {
     const url = baseUrl + '/auth/signUp';

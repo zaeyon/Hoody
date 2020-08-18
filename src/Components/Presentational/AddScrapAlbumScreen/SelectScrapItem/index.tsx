@@ -11,10 +11,17 @@ const SelectScrapItemContainer = Styled.View`
  height: ${wp('51.1%')};
 `;
 
+const NoFeedImage = Styled.View`
+width: ${wp('44.2%')};
+height: ${wp('35.1%')};
+border-radius: 10px;
+background-color: #ECECEE;
+`;
+
 const TileFeedImage = Styled.Image`
  width: ${wp('44.2%')};
  height: ${wp('35.1%')};
- border-radius: 5px;
+ border-radius: 10px;
 `;
 
 const TagListContainer = Styled.View`
@@ -96,27 +103,37 @@ interface Props {
     index: number,
     selected: boolean,
     onSelectCircle: (index:number) => void,
+    mainImage: object,
+    mainTag: string,
+    rating: number,
+    expense: number,
+    address: string,
 }
 
 
-const SelectFeedItem = ({selected, index, onSelectCircle}: Props) => {
+const SelectFeedItem = ({selected, index, onSelectCircle, mainImage, mainTag, rating, expense, address}: Props) => {
 
     return (
         <SelectFeedContainer>
         <SelectScrapItemContainer>
+            {mainImage && (
             <TileFeedImage
-            source={{uri:'https://img.maisonkorea.com/2019/05/msk_5ce1e0ac196ee-1200x800.jpg'}}/>
+            source={{uri:mainImage.url}}/>
+            )}
+            {!mainImage && (
+            <NoFeedImage/>
+            )}
             <TagListContainer>
-                <TagText>#아씨에뜨앤</TagText>
+                <TagText>{"#" + mainTag}</TagText>
             </TagListContainer>
             <RatingExpenseContainer>
                 <RatingImage
                 source={require('~/Assets/Images/ic_newStar.png')}/>
-                <RatingText>5 · </RatingText>
-                <ExpenseText>13,000원</ExpenseText>
+                <RatingText>{rating}</RatingText>
+                <ExpenseText>{expense ? " · " + expense +"원" : null}</ExpenseText>
             </RatingExpenseContainer>
             <LocationContainer>
-                <LocationText>종로구 종로동</LocationText>
+                <LocationText>{address}</LocationText>
             </LocationContainer>
         </SelectScrapItemContainer>
         <SelectCircleContainer>

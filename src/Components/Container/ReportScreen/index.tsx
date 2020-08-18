@@ -9,6 +9,7 @@ import {
 // Local Component
 import ReportChart from '~/Components/Presentational/ReportScreen/ReportChart';
 import Top5TagList from '~/Components/Presentational/ReportScreen/Top5TagList';
+import TopLocationList from '~/Components/Presentational/ReportScreen/TopLocationList';
 
 const Container = Styled.SafeAreaView`
  flex: 1;
@@ -99,6 +100,10 @@ const ReportChartContainer = Styled.View`
 const Top5TagListContainer = Styled.View`
 `;
 
+const TopLocationListContainer = Styled.View`
+ padding-bottom: 50px;
+`;
+
 const IntervalContainer = Styled.View`
 width: ${wp('100%')};
 height: 9px;
@@ -112,9 +117,14 @@ interface Props {
 
 const ReportScreen = ({navigation, route}: Props) => {
     const [top5TagType, setTop5TagType] = useState<string>("popular")
+    const [topLocationType, setTopLocationType] = useState<string>("popular");
 
     const changeTop5TagType = (type:string) => {
-        setTop5TagType(type)
+        setTop5TagType(type);
+    }
+
+    const changeTopLocationType = (type:string) => {
+        setTopLocationType(type);
     }
 
     return (
@@ -138,7 +148,7 @@ const ReportScreen = ({navigation, route}: Props) => {
                     <SelectedMonthText>7월</SelectedMonthText>
                 </MonthSelectContainer>
                 <TitleContainer>
-                    <TitleText>민정님의 소비만족도</TitleText>
+                    <TitleText>재연님의 소비만족도</TitleText>
                 </TitleContainer>
                 <ReportChartContainer>
                 <ReportChart/>
@@ -148,8 +158,16 @@ const ReportScreen = ({navigation, route}: Props) => {
                 <Top5TagListContainer>
                 <Top5TagList
                 type={top5TagType}
-                changeTop5TagType={changeTop5TagType}/>
+                changeTop5TagType={changeTop5TagType}
+                navigation={navigation}/>
                 </Top5TagListContainer>
+                <IntervalContainer/>
+                <TopLocationListContainer>
+                <TopLocationList
+                type={topLocationType}
+                changeTopLocationType={changeTopLocationType}
+                navigation={navigation}/>
+                </TopLocationListContainer>
             </BodyContainer>
         </Container>
     )

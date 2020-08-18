@@ -8,9 +8,9 @@ import {
 
 // Local Component;
 import PopularTop5TagItem from './PopularTop5TagItem';
+import InterestTop5TagItem from './InterestTop5TagItem';
 
 const Container = Styled.View`
- flex: 1;
  background-color: #ffffff;
  padding-left: 16px;
  padding-right: 16px;
@@ -51,15 +51,24 @@ const Top5TagListContainer = Styled.View`
 `;
 
 interface Props {
+    navigation: any,
     type: string,
     changeTop5TagType: (type:string) => void,
 }
 
-const Top5TagList = ({type, changeTop5TagType}: Props) => {
+const Top5TagList = ({navigation, type, changeTop5TagType}: Props) => {
 
     const renderPopularTop5TagItem = ({item, index}: any) => {
         return (
-            <PopularTop5TagItem/>
+            <PopularTop5TagItem
+            navigation={navigation}/>
+        )
+    }
+
+    const renderInterestTop5TagItem = ({item, index}: any) => {
+        return (
+            <InterestTop5TagItem
+            navigation={navigation}/>
         )
     }
 
@@ -81,9 +90,16 @@ const Top5TagList = ({type, changeTop5TagType}: Props) => {
                 </SortTypeContainer>
             </TitleContainer>
             <Top5TagListContainer>
+                {type === "popular" && (
                 <FlatList
                 data={[1,2,3,4,5]}
                 renderItem={renderPopularTop5TagItem}/>
+                )}
+                {type === "interest" && (
+                <FlatList
+                data={[1,2,3,4,5]}
+                renderItem={renderInterestTop5TagItem}/>
+                )}
             </Top5TagListContainer>
         </Container>
     )

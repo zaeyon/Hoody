@@ -358,7 +358,7 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
         return (
             <CollectionTileFeedItem
             navigation={navigation}
-            mainImage={item.mediaFiles[0] ? item.mediaFiles[0].uri : null}
+            mainImage={item.mediaFiles[0] ? item.mediaFiles[0] : null}
             mainTag={item.mainTags.name}
             rating={item.starRate}
             expense={item.expense}

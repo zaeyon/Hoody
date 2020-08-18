@@ -192,7 +192,7 @@ const ProfileEditScreen = ({navigation, route}: Props) => {
     const [currentUserProfile, setCurrentUserProfile] = useState<object>({});
     const [nickname ,setNickname] = useState<string>(currentUser.user?.nickname);
     const [description, setDescription] = useState<string>(currentUser.user?.description);
-    const [profileImage, setProfileImage] = useState<any>(currentUser.user?.profileImage);
+    const [profileImageUri, setProfileImageUri] = useState<any>(currentUser.user?.profileImage);
 
     useEffect(() => {
         if(currentUser.user) {
@@ -201,6 +201,12 @@ const ProfileEditScreen = ({navigation, route}: Props) => {
             setProfileImage(currentUser.user.profileImage);
         }
     }, [])
+
+    useEffect(() => {
+        if(route.params?.selectedProfileImage) {
+            setProfileImageUri(route.params?.selectedProfileImage);
+        }
+    }, [route.params?.selectedProfileImage])
 
     const onChangeNicknameInput = (text: string) => {
         setNickname(text);
@@ -218,14 +224,14 @@ const ProfileEditScreen = ({navigation, route}: Props) => {
     const completeProfileEdit = () => {
         if(currentUser.user.nickname !== nickname) {
         console.log("닉네임 바뀜")
-        POSTProfileUpdate(description, profileImage, nickname)
+        POSTProfileUpdate(description, profileImageUri, nickname)
         .then(function(response ){
             console.log("completeProfileEdit response", response);
             var modifiedProfile = currentUser.user;
             console.log("modifiedProfile", modifiedProfile);
             modifiedProfile.nickname = nickname;
             modifiedProfile.description = description;
-            modifiedProfile.profileImage = profileImage;
+            modifiedProfile.profileImage = profileImageUri;
 
             setTimeout(() => {
             dispatch(allActions.userActions.setUser(modifiedProfile));
@@ -247,13 +253,13 @@ const ProfileEditScreen = ({navigation, route}: Props) => {
         })
         } else if(currentUser.user.nickname === nickname) {
         console.log("닉네임 안바뀜");
-        POSTProfileUpdate(description, profileImage)
+        POSTProfileUpdate(description, profileImageUri)
         .then(function(response ){
             console.log("completeProfileEdit response", response);
             var modifiedProfile = currentUser.user;
             console.log("modifiedProfile", modifiedProfile);
             modifiedProfile.description = description;
-            modifiedProfile.profileImage = profileImage;
+            modifiedProfile.profileImage = profileImageUri;
             setTimeout(() => {
             dispatch(allActions.userActions.setUser(modifiedProfile));
             navigation.navigate("ProfileScreen", {
@@ -265,6 +271,12 @@ const ProfileEditScreen = ({navigation, route}: Props) => {
             console.log("completeProfileEdit error", error)
         })  
         }
+    }
+
+    const moveToGallery = () => {
+        navigation.navigate("Gallery_JustOne", {
+            requestType: "profileEdit"
+        })
     }
 
     return (
@@ -286,11 +298,11 @@ const ProfileEditScreen = ({navigation, route}: Props) => {
             </HeaderBar>
             <BodyContainer>
                 <ProfileImageContainer>
-                    <TouchableWithoutFeedback onPress={() => navigation.navigate("Gallery_JustOne")}>
+                    <TouchableWithoutFeedback onPress={() => moveToGallery()}>
                     <ProfileImageBackground>
                         {currentUserProfile.profileImage && (
                             <ProfileImage
-                            source={{uri:currentUserProfile.profileImage}}/>
+                            source={{uri:profileImageUri}}/>
                         )}
                         {!currentUserProfile.profileImage && (
                             <EmptyProfileImage
@@ -298,7 +310,7 @@ const ProfileEditScreen = ({navigation, route}: Props) => {
                         )}
                     </ProfileImageBackground>
                     </TouchableWithoutFeedback>
-                    <TouchableWithoutFeedback onPress={() => navigation.navigate("Gallery_JustOne")}>
+                    <TouchableWithoutFeedback onPress={() => moveToGallery()}>
                     <ProfileImageChangeText>
                         프로필 사진 바꾸기
                     </ProfileImageChangeText>

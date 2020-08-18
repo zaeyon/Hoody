@@ -12,6 +12,7 @@ import SelectScrapItem from '~/Components/Presentational/AddScrapAlbumScreen/Sel
 
 // Route
 import GETScrapFolder from '~/Route/Scrap/GETScrapFolder';
+import POSTCreateScrapFolder from '~/Route/Scrap/POSTCreateScrapFolder';
 
 const Container = Styled.SafeAreaView`
  flex: 1;
@@ -52,14 +53,12 @@ padding: 12px 16px 15px 16px;
 `;
 
 const DisabledHeaderFinishText = Styled.Text`
- font-size: 17px;
- font-weight: 500;
- color: #cccccc;
+ font-size: 17px; 
+ color: #C6C7CC;
 `;
 
 const AbledHeaderFinishText = Styled.Text`
  font-size: 17px;
- font-weight: 500;
  color: #267DFF;
  `;
 
@@ -82,7 +81,7 @@ color: #333333;
 const AlbumNameInput = Styled.TextInput`
  margin-top: 10px;
  font-size: 17px;
- color: #979797;
+ color: #333333;
  `;
 
 const BodyContainer = Styled.View`
@@ -110,17 +109,7 @@ interface Props {
 }
 
 const AddScrapAlbumScreen = ({navigation, route}: Props) => {
-    const [allScrapData, setAllScrapData] = useState<Array<object>>([
-        {
-            index: '0'
-        },
-        {
-            index: '1'
-        },
-        {
-            index: '2',
-        }
-    ]);
+    const [allScrapData, setAllScrapData] = useState<Array<object>>([]);
     const [selectingScrapList, setSelectingScrapList] = useState<Array<object>>([]);
     const [changeSelectScrapData, setChangeSelectScrapData] = useState<boolean>(false);
     const [scrapAlbumName, setScrapAlbumName] = useState<string>("");
@@ -132,18 +121,18 @@ const AddScrapAlbumScreen = ({navigation, route}: Props) => {
         if(route.params?.defaultFolderId) {
             GETScrapFolder(route.params.defaultFolderId)
             .then(function(response) {
-                console.log("모든 스크랩", response)
+                console.log("모든 스크랩", response);
+                var tmpSelectableScrapList = response.Posts.map(function(obj) {
+                    obj.selected = false;
+                    return obj;
+                })
+                setAllScrapData(tmpSelectableScrapList);
             })
             .catch(function(error) {
                 console.log("모든 스크랩 불러오기 실퍄", error)
             })
         }
         
-        var tmpSelectableScrapList = allScrapData.map(function(obj) {
-            obj.selected = false;
-            return obj;
-        })
-        setAllScrapData(tmpSelectableScrapList);
     }, [route.params?.defaultFolderId])
 
     const onSelectCircle = (index:number) => {
@@ -153,7 +142,8 @@ const AddScrapAlbumScreen = ({navigation, route}: Props) => {
             tmpSelectingScrapList.push(tmpAllScrapData[index]);
             tmpAllScrapData[index].selected = !tmpAllScrapData[index].selected;
 
-            console.log("selectingScrapList", selectingScrapList);
+            console.log("선택안됌 selectingScrapList", selectingScrapList);
+            console.log("tmpSelectingScrapList", tmpSelectingScrapList);
             setSelectingScrapList(tmpSelectingScrapList);
             setAllScrapData(tmpAllScrapData);
             setChangeSelectScrapData(!changeSelectScrapData);
@@ -163,7 +153,7 @@ const AddScrapAlbumScreen = ({navigation, route}: Props) => {
             tmpAllScrapData[index].selected  = !tmpAllScrapData[index].selected;
             tmpSelectingScrapList.splice(selectingIndex, 1);
 
-            console.log("selectingScrapList", selectingScrapList);
+            console.log("선택됌 selectingScrapList", selectingScrapList);
 
             setSelectingScrapList(tmpSelectingScrapList);
             setAllScrapData(tmpAllScrapData);
@@ -175,12 +165,35 @@ const AddScrapAlbumScreen = ({navigation, route}: Props) => {
         setScrapAlbumName(text);
     }
 
+    const createScrapAlbum = () => {
+        var postIds = selectingScrapList.map((item: any, index: number) => {
+          return item.id
+        })
+
+        POSTCreateScrapFolder(scrapAlbumName, JSON.stringify(postIds))
+        .then(function(response) {
+            console.log("스크랩 앨범 추가", response)
+
+            navigation.navigate("ScrapListScreen", {
+                scrapAlbumChange: true,
+            });
+        })
+        .catch(function(error) {
+            console.log("스크랩 앨범 추가 실패", error)
+        })
+    }
+
     const renderSelectAlbumItem = ({item, index}: any) => {
         return (
             <SelectScrapItem
             index={index}
             selected={item.selected}
             onSelectCircle={onSelectCircle}
+            mainImage={item.mediaFiles[0] ? item.mediaFiles[0] : null}
+            mainTag={item.mainTags.name}
+            rating={item.starRate}
+            expense={item.expense}
+            address={item.address ? item.address.address : null}
             />
         )
     }
@@ -196,7 +209,7 @@ const AddScrapAlbumScreen = ({navigation, route}: Props) => {
                 </TouchableWithoutFeedback>
                 <HeaderTitleText>새 앨범</HeaderTitleText>
                     {scrapAlbumName !== "" && selectingScrapList.length > 0 && (
-                        <TouchableWithoutFeedback onPress={() => navigation.navigate("ProfileScreen")}>
+                        <TouchableWithoutFeedback onPress={() => createScrapAlbum()}>
                         <HeaderFinishContainer>
                         <AbledHeaderFinishText>완료</AbledHeaderFinishText>
                         </HeaderFinishContainer>
@@ -222,6 +235,8 @@ const AddScrapAlbumScreen = ({navigation, route}: Props) => {
             <SelectAllScrapContainer>
             <AllScrapText>모든 스크랩</AllScrapText>
             <FlatList
+            columnWrapperStyle={{marginTop:15}}
+            showsVerticalScrollIndicator={false}
             style={{marginTop:12}}
             numColumns={2}
             data={allScrapData}

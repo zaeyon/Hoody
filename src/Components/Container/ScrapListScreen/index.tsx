@@ -60,6 +60,7 @@ const HeaderAddIcon = Styled.Image`
 const BodyContainer = Styled.View`
  flex: 1;
  background-color: #ffffff;
+ padding-bottom: 40px;
 `;
 
 const TEST_SCRAP_FOLDER_LIST = [
@@ -95,6 +96,9 @@ const ScrapListScreen = ({navigation, route}: Props) => {
     const [defaultFolderId, setDefaultFolderId] = useState<number>();
 
     useEffect(() => {
+        if(route.params?.scrapAlbumChange) {
+            route.params.scrapAlbumChange = false;
+        }
         GETScrapAllFolder()
         .then(function(response) {
             console.log("모든 스크랩 폴더 ", response)
@@ -106,7 +110,7 @@ const ScrapListScreen = ({navigation, route}: Props) => {
         .catch(function(error) {
             console.log("스크랩폴더 불러오기 실패", error);
         })
-    }, [])
+    }, [route.params?.scrapAlbumChange])
 
     const renderScrapFolderItem = ({item, index}: any) => {
         if(index === 0) {
@@ -128,9 +132,21 @@ const ScrapListScreen = ({navigation, route}: Props) => {
                 coverImage={item.coverImg}
                 name={item.name}
                 profileNickname={item.user.nickname}/>
-            )}
-          }
+            )
+        } else {
+            return (
+                <ScrapFolderItem
+                folderId={item.id}
+                folderName={item.name}
+                defaultFolder={item.defaultFolder}
+                defaultFolderId={defaultFolderId}
+                navigation={navigation}
+                feedImages={item.Posts}
+                name={item.name}/>
+            )
         }
+      }
+    }
 
     const moveToAddScrapAlbum = () => {
         navigation.navigate("AddScrapAlbumScreen", {
@@ -161,7 +177,8 @@ const ScrapListScreen = ({navigation, route}: Props) => {
 columnWrapperStyle={{justifyContent:'space-between', paddingLeft:15, paddingRight:15, paddingTop:17, paddingBottom:10, backgroundColor:'#ffffff'}}
                 numColumns={2}
                 data={allScrapFolderListData}
-                renderItem={renderScrapFolderItem}/>
+                renderItem={renderScrapFolderItem}
+                showsVerticalScrollIndicator={false}/>
             </BodyContainer>
         </Container>
     )

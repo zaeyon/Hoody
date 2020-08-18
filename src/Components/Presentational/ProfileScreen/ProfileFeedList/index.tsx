@@ -180,6 +180,7 @@ const ProfileFeedList = ({navigation, route, feedListData, currentSortType, onSc
             location={item.address?item.address.address:null}
             expense={item.expense?item.expense:null}
             desArray={item.descriptions}
+            productArray={item.Products}
             navigation={navigation}
           />
         )

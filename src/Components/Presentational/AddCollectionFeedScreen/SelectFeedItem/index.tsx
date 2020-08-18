@@ -14,14 +14,14 @@ const ProfileTileFeedItemContainer = Styled.View`
 const TileFeedImage = Styled.Image`
  width: ${wp('44.2%')};
  height: ${wp('35.1%')};
- border-radius: 5px;
+ border-radius: 10px;
 `;
 
 
 const NoFeedImage = Styled.View`
 width: ${wp('44.2%')};
 height: ${wp('35.1%')};
-border-radius: 5px;
+border-radius: 10px;
 background-color: #eeeeee;
 `;
 
@@ -130,7 +130,7 @@ const SelectFeedItem = ({selected, index, onSelectCircle, selectOrder, mainImage
             )}
             {mainImage && (
             <TileFeedImage
-            source={{uri:'https://img.maisonkorea.com/2019/05/msk_5ce1e0ac196ee-1200x800.jpg'}}/>
+            source={{uri:mainImage.url}}/>
             )}
             <TagListContainer>
                 <TagText>{"#" + mainTag}</TagText>

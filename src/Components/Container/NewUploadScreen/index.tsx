@@ -1662,6 +1662,7 @@ const renderAddNewDescripInput = () => {
                     >
                 <ContentContainer>
                         <DraggableFlatList
+                        showsVerticalScrollIndicator={false}
                         style={{width:wp('100%'), height:(hp('100%')-(hp('6.5%') + MetaContainerHeight))}}
                         onLayout={(event) => {
                             const layout = event.nativeEvent.layout;

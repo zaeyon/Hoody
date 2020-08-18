@@ -64,6 +64,7 @@ import CollectionFeedEditScreen from '~/Components/Container/CollectionFeedEditS
 import ScrapListScreen from '~/Components/Container/ScrapListScreen';
 import AddScrapAlbumScreen from '~/Components/Container/AddScrapAlbumScreen';
 import ScrapFolderFeedListScreen from '~/Components/Container/ScrapFolderFeedListScreen';
+import ScrapFolderEditScreen from '~/Components/Container/ScrapFolderEditScreen';
 
 // Location Feed Map Screen
 import LocationFeedMapScreen from '~/Components/Container/LocationFeedMapScreen';
@@ -93,6 +94,8 @@ import FeedEditScreen from '~/Components/Container/FeedEditScreen';
 
 // Report Screen
 import ReportScreen from '~/Components/Container/ReportScreen';
+import TopPopularTagDetailScreen from '~/Components/Container/ReportScreen/TopPopularTagDetailScreen';
+import TopInterestTagDetailScreen from '~/Components/Container/ReportScreen/TopInterestTagDetailScreen';
 
 // Feed Declare Screen
 import FeedDeclareScreen from '~/Components/Container/FeedDeclareScreen';
@@ -362,6 +365,9 @@ function ProfileStackScreen() {
       name="ScrapFolderFeedListScreen"
       component={ScrapFolderFeedListScreen}/>
       <ProfileStack.Screen
+      name="ScrapFolderEditScreen"
+      component={ScrapFolderEditScreen}/>
+      <ProfileStack.Screen
       name="ProfileEditScreen"
       component={ProfileEditScreen}/>
       <ProfileStack.Screen
@@ -389,6 +395,12 @@ function ProfileStackScreen() {
       <ProfileStack.Screen
       name="ReportScreen"
       component={ReportScreen}/>
+      <ProfileStack.Screen
+      name="TopPopularTagDetailScreen"
+      component={TopPopularTagDetailScreen}/>
+      <ProfileStack.Screen
+      name="TopInterestTagDetailScreen"
+      component={TopInterestTagDetailScreen}/>
     </ProfileStack.Navigator>
   );
 }

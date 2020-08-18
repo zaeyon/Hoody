@@ -102,7 +102,7 @@ const CollectionTileFeedItem = ({navigation, mainImage, mainTag, rating, expense
         <ProfileTileFeedItemContainer>
             {mainImage && (
             <TileFeedImage
-            source={{uri:'https://img.maisonkorea.com/2019/05/msk_5ce1e0ac196ee-1200x800.jpg'}}/>
+            source={{uri:mainImage.url}}/>
             )}
             {!mainImage && (
                 <NoFeedImage></NoFeedImage>

@@ -163,6 +163,8 @@ class Gallery_JustOne extends Component {
         album: this.data,
       }),
     );
+
+    console.log("갤러리 요청화면", this.props.route.params?.requestType);
   }
 
   componentWillUnmount() {
@@ -312,6 +314,7 @@ class Gallery_JustOne extends Component {
 
     return (
       <Row
+        requestType={this.props.route.params?.requestType}
         navigation={this.props.navigation}
         rowData={item}
         isSelected={isSelected}

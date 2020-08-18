@@ -384,6 +384,32 @@ function FeedListScreen({navigation, route}: Props) {
       getFeedData()
     }, 10)
   }
+
+  const renderFeedItem = ({item, index}: any) => {
+    
+    return (
+            <FeedItem
+              id={item.id}
+              profile_image={item.user.profileImg}
+              nickname={item.user.nickname}
+              createdAt={item.createdAt}
+              rating={item.starRate}
+              main_tag={item.mainTags.name}
+              sub_tag1={item.subTagOnes?item.subTagOnes.name:null}
+              sub_tag2={item.subTagTwos?item.subTagTwos.name:null}
+              like_count={item.likes}
+              comment_count={item.commentsCount}
+              reply_count={item.replysCount}
+              scrap_count={0}
+              mediaFiles={item.mediaFiles}
+              image_count={item.mediaFiles.length}
+              location={item.address?item.address.address:null}
+              expense={item.expense?item.expense:null}
+              desArray={item.descriptions}
+              navigation={navigation}
+              productArray={item.Products}/>
+         )
+  }
   
 
   return (
@@ -404,28 +430,7 @@ function FeedListScreen({navigation, route}: Props) {
         refreshing={refreshing}
         showsVerticalScrollIndicator={false}
         data={feedListData}
-        renderItem={({item}) => (
-                <FeedItem
-                  id={item.id}
-                  profile_image={item.user.profileImg}
-                  nickname={item.user.nickname}
-                  createdAt={item.createdAt}
-                  rating={item.starRate}
-                  main_tag={item.mainTags.name}
-                  sub_tag1={item.subTagOnes?item.subTagOnes.name:null}
-                  sub_tag2={item.subTagTwos?item.subTagTwos.name:null}
-                  like_count={item.likes}
-                  comment_count={item.commentsCount}
-                  reply_count={item.replysCount}
-                  scrap_count={0}
-                  mediaFiles={item.mediaFiles}
-                  image_count={item.mediaFiles.length}
-                  location={item.address?item.address.address:null}
-                  expense={item.expense?item.expense:null}
-                  desArray={item.descriptions}
-                  navigation={navigation}
-                />
-        )}
+        renderItem={renderFeedItem}
       />
       </FeedListContainer>
       )}

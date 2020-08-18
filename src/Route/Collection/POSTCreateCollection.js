@@ -1,5 +1,5 @@
 import axios from 'axios';
-const baseUrl = "https://c04104131d01.ngrok.io";
+const baseUrl = "https://11f9deb512eb.ngrok.io";
 
 const POSTCreateCollection = (coverImage, name, description, open, includeLocation, postIds) => {
     const url = baseUrl + "/collection/create";
@@ -13,7 +13,11 @@ const POSTCreateCollection = (coverImage, name, description, open, includeLocati
    
     form.append("name", name);
     form.append('open', open);
-    form.append("coverImg", coverImage);
+    form.append(`coverImg`, {
+        uri: coverImage.uri,
+        name: coverImage.filename,
+        type: 'image/jpeg',
+    })
     form.append("includeLocation", includeLocation);
     form.append("description", description);
     form.append("postIds", JSON.stringify(postIds));

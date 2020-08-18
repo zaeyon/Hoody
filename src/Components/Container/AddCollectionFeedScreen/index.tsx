@@ -58,8 +58,8 @@ padding: 10px 15px 10px 15px;
 `;
 
 const BackButton = Styled.Image`
- width: ${wp('8%')};
- height: ${wp('8%')};
+ width: ${wp('6.4%')};
+ height: ${wp('6.4%')};
 `;
 
 const HeaderRightContainer = Styled.View`
@@ -73,6 +73,7 @@ padding: 10px 15px 10px 15px;
 
 const MyFeedTileListContainer = Styled.View`
  flex:1;
+ background-color: #ffffff;
 `;
 
 const FeedItemContainer = Styled.View`
@@ -136,6 +137,7 @@ const AddCollectionFeedScreen = ({navigation, route}: Props) => {
     const currentUser = useSelector((state) => state.currentUser);
 
     useEffect(() => {
+        console.log("currentUser.userAllFeeds", currentUser.userAllFeeds);
         if(route.params?.triggerType === "modifyCollection") {
             setPreCollectionFeedList(route.params.collectionFeedList);
         }
@@ -150,7 +152,7 @@ const AddCollectionFeedScreen = ({navigation, route}: Props) => {
         if(route.params?.triggerType) {
             console.log("route.params.triggerType", route.params.triggerType);
             console.log("기존의 피드 리스트", route.params.collectionFeedList);
-            if(route.params?.triggerType === "modifyCollection")
+            if(route.params?.triggerType === "collectionFeedEdit")
             {
                 setTriggerType("modifyCollection");
                 route.params.collectionFeedList.forEach((item:any, index:any) => {
@@ -164,10 +166,11 @@ const AddCollectionFeedScreen = ({navigation, route}: Props) => {
                 setTimeout(() => {
                     setSelectableFeedList(tmpSelectableFeedList);
                 })
-            } else if(route.params.triggerType === "addCollection")
+            } else if(route.params.triggerType === "collectionUpload")
             {
                 console.log("애드콜랙션")
-                setTriggerType("addCollection");
+                setTriggerType("collectionUpload");
+                setSelectableFeedList(tmpSelectableFeedList);
             }
         } 
         }
@@ -230,12 +233,12 @@ const AddCollectionFeedScreen = ({navigation, route}: Props) => {
 
     const finishAddCollectionFeed = () => {
         console.log("triggerType", triggerType);
-        if(triggerType === "modifyCollection") {
+        if(triggerType === "collectionFeedEdit") {
             navigation.navigate("CollectionFeedEditScreen", {
                 addedCollectionFeedList: route.params?.collectionFeedList.concat(selectingFeedList)
             })
             console.log("selectingFeedList", selectingFeedList);
-        } else if(triggerType === "addCollection") {
+        } else if(triggerType === "collectionUpload") {
             console.log("selectingFeedList", selectingFeedList);
             var selectingFeedIdList = selectingFeedList.map((obj) => {
                 return obj.id
@@ -257,9 +260,13 @@ const AddCollectionFeedScreen = ({navigation, route}: Props) => {
      }
 
     const navigateGoBack = () => {
-        console.log("navigateGoBack route.params.collectionFeedList", route.params.collectionFeedList)
-        console.log("preCollectionFeedList", preCollectionFeedList);
-        navigation.navigate("CollectionFeedEditScreen")
+        //console.log("navigateGoBack route.params.collectionFeedList", route.params.collectionFeedList)
+        //console.log("preCollectionFeedList", preCollectionFeedList);
+        if(route.params.triggerType === "collectionUpload") {
+            navigation.navigate("CollectionUploadScreen");
+        } else if(route.params.triggerTyp === "collectionFeedEdit") {
+            navigation.navigate("CollectionFeedEditScreen")
+        }
     }
 
     const renderMyFeedTileItem = ({item, index}:any) => {
@@ -277,7 +284,7 @@ const AddCollectionFeedScreen = ({navigation, route}: Props) => {
             selected={item.selected}
             selectOrder={selectOrder}
             onSelectCircle={onSelectCircle}
-            mainImage={item.mediaFiles[0] ? item.mediaFiles[0].uri : null}
+            mainImage={item.mediaFiles[0] ? item.mediaFiles[0] : null}
             mainTag={item.mainTags.name}
             rating={item.starRate}
             expense={item.expense ? item.expense : null}
@@ -294,7 +301,7 @@ const AddCollectionFeedScreen = ({navigation, route}: Props) => {
                     <TouchableWithoutFeedback onPress={() => navigateGoBack()}>
                     <BackButtonContainer>
                         <BackButton
-                        source={require('~/Assets/Images/ic_back.png')}/>
+                        source={require('~/Assets/Images/HeaderBar/ic_back.png')}/>
                     </BackButtonContainer>
                     </TouchableWithoutFeedback>
                 </HeaderLeftContainer>

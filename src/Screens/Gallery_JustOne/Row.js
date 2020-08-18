@@ -29,6 +29,7 @@ class Row extends PureComponent {
 
     return (
       <ImageItem
+        requestType={this.props.requestType}
         navigation={this.props.navigation}
         key={uri}
         item={item}

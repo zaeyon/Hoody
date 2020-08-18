@@ -216,12 +216,13 @@ interface Props {
     folderId: number,
     folderName: string,
     defaultFolder: boolean,
+    defaultFolderId: number,
     navigation: any,
     feedImages: Array<object>,
     name: string,
 }
 
-const ScrapFolderItem = ({folderId, folderName, defaultFolder, feedImages, name, navigation}: Props) => {
+const ScrapFolderItem = ({folderId, folderName, defaultFolder, defaultFolderId, feedImages, name, navigation}: Props) => {
     
     console.log("feedImages", feedImages);
 
@@ -229,6 +230,8 @@ const ScrapFolderItem = ({folderId, folderName, defaultFolder, feedImages, name,
         navigation.navigate("ScrapFolderFeedListScreen", {
             folderId: folderId,
             folderName: defaultFolder ? "모든 스크랩" : folderName, 
+            defaultFolder: defaultFolder,
+            defaultFolderId: defaultFolderId,
         });
     }
 

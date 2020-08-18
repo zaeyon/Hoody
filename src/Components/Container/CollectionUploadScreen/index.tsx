@@ -191,9 +191,13 @@ const CollectionUploadScreen = ({navigation, route}: Props) => {
     const [enabledIncludeLocation, setEnabledIncludeLocation] = useState<boolean>(false);
     const [collectionTitleText, setCollectionTitleText] = useState<string>("");
     const [collectionDescripText, setCollectionDescripText] = useState<string>("");
-    const [collectionCoverImage, setCollectionCoverImage] = useState<object>({
-        uri:'https://i.pinimg.com/564x/9a/5f/12/9a5f120317a83632166bb3171d6b5614.jpg'
-    });
+    const [collectionCoverImage, setCollectionCoverImage] = useState<object>();
+
+    useEffect(() => {
+        if(route.params?.selectedCoverImage) {
+            setCollectionCoverImage(route.params.selectedCoverImage);
+        }
+    }, [route.params?.selectedCoverImage])
 
     const togglePrivate = () => {
         setEnabledPrivate(!enabledPrivate);
@@ -218,7 +222,13 @@ const CollectionUploadScreen = ({navigation, route}: Props) => {
             description: collectionDescripText,
             private: enabledPrivate,
             includeLocation: enabledIncludeLocation,
-            triggerType: "addCollection"
+            triggerType: "collectionUpload"
+        })
+    }
+
+    const moveToGallery = () => {
+        navigation.navigate("Gallery_JustOne", {
+            requestType: "collectionUpload"
         })
     }
     
@@ -249,7 +259,7 @@ const CollectionUploadScreen = ({navigation, route}: Props) => {
             showsVerticalScrollIndicator={false}>
             <View>
             <CoverContainer>
-            <TouchableWithoutFeedback onPress={() => navigation.navigate("Gallery_JustOne")}>
+            <TouchableWithoutFeedback onPress={() => moveToGallery()}>
             <CoverImageContainer>
                 {collectionCoverImage && (
                     <CoverImage
@@ -261,7 +271,7 @@ const CollectionUploadScreen = ({navigation, route}: Props) => {
                 )}
             </CoverImageContainer>
             </TouchableWithoutFeedback>
-            <TouchableWithoutFeedback onPress={() => navigation.navigate("Gallery_JustOne")}>
+            <TouchableWithoutFeedback onPress={() => moveToGallery()}>
             <SelectCoverContainer>
                 <SelectCoverText>커버 설정</SelectCoverText>
             </SelectCoverContainer>

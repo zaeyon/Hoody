@@ -1,5 +1,5 @@
 import axios from 'axios';
-const baseUrl = 'https://c04104131d01.ngrok.io';
+const baseUrl = 'https://11f9deb512eb.ngrok.io';
 
 const POSTProfileUpdate = ( description: string, profileImage?: string, nickname?: string) => {
   const url = baseUrl + '/user/profile/update';

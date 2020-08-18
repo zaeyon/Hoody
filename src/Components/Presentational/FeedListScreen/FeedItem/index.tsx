@@ -8,6 +8,8 @@ import {
 import {useSelector, useDispatch} from 'react-redux';
 import allActions from '~/action';
 
+import ProductItem from './ProductItem';
+
 // Route
 import GetFeedDetail from '~/Route/Post/GetFeedDetail';
 import {POSTLike, DELETELike} from '~/Route/Post/Like';
@@ -168,6 +170,10 @@ height: ${wp('82%')}px;
 margin-bottom: 10px;
 `;
 
+const ProductContainer = Styled.View`
+padding-top: 10px;
+`;
+
 const ReviewImage = Styled.Image`
 resize-mode:cover;
 border-radius: 10px; 
@@ -326,7 +332,8 @@ interface Props {
   expense: number;
   desArray: Array<object>;
   navigation: any;
-  mediaFiles: Array<objevt>;
+  mediaFiles: Array<object>;
+  productArray: Array<object>;
 }
 
 const FeedItem = ({
@@ -350,6 +357,7 @@ const FeedItem = ({
   desArray,
   navigation,
   mediaFiles,
+  productArray,
 }: Props) => {
   const [ratingArray, setRatingArray] = useState([
     'empty',
@@ -373,6 +381,7 @@ const FeedItem = ({
   const tmpRatingArr = ['empty', 'empty', 'empty', 'empty', 'empty'];
 
   useEffect(() => {
+    console.log("FeedItem productArray", productArray);
     if (rating % 1 === 0) {
       for (var i = 0; i < rating; i++) {
         tmpRatingArr[i] = 'full';
@@ -611,6 +620,16 @@ const FeedItem = ({
         <DescriptionContainer>
         <DescriptionText>{desArray[0].description}</DescriptionText>
         </DescriptionContainer>
+          )}
+          {!mediaFiles[0] && productArray[0] && (
+          <ProductContainer>
+            <ProductItem
+            productImage={productArray[0].image}
+            productName={productArray[0].title}
+            productDescription={productArray[0].description}
+            shopIcon={productArray[0].favicon}
+            shopName={productArray[0].site}/>
+          </ProductContainer>
           )}
           {mediaFiles.length === 1 && (
           <ReviewImageContainer>

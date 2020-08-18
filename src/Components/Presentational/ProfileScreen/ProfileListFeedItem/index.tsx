@@ -14,6 +14,8 @@ import {POSTLike, DELETELike} from '~/Route/Post/Like';
 import POSTScrapFeed from '~/Route/Post/Scrap/POSTScrapFeed';
 import DELETEScrapFeed from '~/Route/Post/Scrap/DELETEScrapFeed';
 
+import ProductItem from './ProductItem';
+
 const Container = Styled.View`
 
  `;
@@ -306,6 +308,10 @@ const ExpenseText = Styled.Text`
  color: #1D1E1F;
 `;
 
+const ProductContainer = Styled.View`
+padding-top: 10px;
+`;
+
 interface Props {
   id: number;
   profile_image: string;
@@ -326,7 +332,8 @@ interface Props {
   expense: number;
   desArray: Array<object>;
   navigation: any;
-  mediaFiles: Array<objevt>;
+  mediaFiles: Array<object>,
+  productArray: Array<object>;
 }
 
 const ProfileListFeedItem = ({
@@ -350,6 +357,7 @@ const ProfileListFeedItem = ({
   desArray,
   navigation,
   mediaFiles,
+  productArray,
 }: Props) => {
   const [ratingArray, setRatingArray] = useState([
     'empty',
@@ -624,6 +632,16 @@ const ProfileListFeedItem = ({
         <DescriptionContainer>
             <DescriptionText>{desArray[0] ? desArray[0].description : null}</DescriptionText>
           </DescriptionContainer>
+          {!mediaFiles[0] && productArray[0] && (
+          <ProductContainer>
+            <ProductItem
+            productImage={productArray[0].image}
+            productName={productArray[0].title}
+            productDescription={productArray[0].description}
+            shopIcon={productArray[0].favicon}
+            shopName={productArray[0].site}/>
+          </ProductContainer>
+          )}
           {mediaFiles.length === 1 && (
           <ReviewImageContainer>
           <ReviewImage source={{uri:mediaFiles[0].url}}/>

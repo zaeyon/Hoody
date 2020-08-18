@@ -1,5 +1,5 @@
 import axios from 'axios';
-const baseUrl = 'https://c04104131d01.ngrok.io'; 
+const baseUrl = 'https://11f9deb512eb.ngrok.io'; 
 
 
 const POSTUpdate = (feedId, desArray, mediaArray,mainTag, subTag1, subTag2, rating, expense,  location, longitude, latitude, certifiedLocation, dump, sequence, products, spendDate, openState, subTag1Edit, subTag2Edit, subTag1Exis, subTag2Exis) => {
@@ -24,6 +24,7 @@ const POSTUpdate = (feedId, desArray, mediaArray,mainTag, subTag1, subTag2, rati
     var form = new FormData();
 
     // IOS simulator 테스트용 이미지 추가
+    
     form.append('mediaFiles',  mediaArray);
     form.append('descriptions', desArray);
     form.append('starRate', rating);

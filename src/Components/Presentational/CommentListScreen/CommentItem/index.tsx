@@ -4,7 +4,7 @@ import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp 
 } from 'react-native-responsive-screen';
-import {TouchableWithoutFeedback, FlatList} from 'react-native';
+import {TouchableWithoutFeedback, TouchableHighlight, TouchableOpacity, FlatList} from 'react-native';
 import {useSelector} from 'react-redux';
 
 import ReplyItem from '~/Components/Presentational/CommentListScreen/ReplyItem';
@@ -73,7 +73,6 @@ const CreateAtText = Styled.Text`
 `;
 
 const ReplyText = Styled.Text`
-margin-left: 15px;
 font-size: 14px;
 font-weight: 600;
 color: #979797;
@@ -97,9 +96,10 @@ interface Props {
     replys: Array<Object>,
     clickToReply: (target:string, commentId: number) => void,
     navigation: any,
+    openCommentModal: (nickname:string, commentId:number) => void,
 }
 
-const CommentItem = ({profileImage, nickname, comment, createAt, replys, clickToReply, commentId, navigation}: Props) => {
+const CommentItem = ({profileImage, nickname, comment, createAt, replys, clickToReply, commentId, navigation, openCommentModal}: Props) => {
     const currentUser = useSelector((state: any) => state.currentUser);
 
     function getDateFormat(date) {
@@ -122,8 +122,13 @@ const CommentItem = ({profileImage, nickname, comment, createAt, replys, clickTo
         }
     }
 
+    const onLongPressComment = () => {
+        openCommentModal(nickname, commentId)
+    }
+
 
     return (
+        <TouchableOpacity onLongPress={() => onLongPressComment()}>
         <Container>
             <TouchableWithoutFeedback onPress={() => moveToUserProfile()}>
             <ProfileImageContainer>
@@ -137,7 +142,6 @@ const CommentItem = ({profileImage, nickname, comment, createAt, replys, clickTo
                 </HeaderContainer>
                 <CommentDescripText>{comment}</CommentDescripText>
                 <FooterContainer>
-                    <ReportText>신고</ReportText>
                     <TouchableWithoutFeedback onPress={() => clickToReply(nickname, commentId)}>
                     <ReplyText>답글달기</ReplyText>
                     </TouchableWithoutFeedback>
@@ -145,6 +149,7 @@ const CommentItem = ({profileImage, nickname, comment, createAt, replys, clickTo
                 </FooterContainer>
             </CommentRightContainer>
         </Container>
+        </TouchableOpacity>
     )
 }
 

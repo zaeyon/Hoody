@@ -4,7 +4,7 @@ import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp 
 } from 'react-native-responsive-screen';
-import {TouchableWithoutFeedback, FlatList} from 'react-native';
+import {TouchableWithoutFeedback, FlatList, TouchableOpacity} from 'react-native';
 import {useSelector} from 'react-redux';
 
 
@@ -50,8 +50,8 @@ const FooterContainer = Styled.View`
 `;
 
 const ProfileImage = Styled.Image`
- width: ${wp('6.4%')};
- height: ${wp('6.4%')};
+ width: ${wp('8.5%')};
+ height: ${wp('8.5%')};
  border-radius: 100px;
 `;
 
@@ -68,7 +68,6 @@ const CommentDescripText = Styled.Text`
 const CreateAtText = Styled.Text`
  font-size: 15px;
  color: #cccccc;
- margin-left: 10px;
 `;
 
 const ReplyText = Styled.Text`
@@ -94,9 +93,10 @@ interface Props {
     nickname: string,
     description: string,
     createAt: string,
+    openCommentModal: (nickname:string, commentId:number) => void,
 }
 
-const ReplyItem = ({navigation, profileImage, nickname, description, createAt, replyId}: Props) => {
+const ReplyItem = ({navigation, profileImage, nickname, description, createAt, replyId, openCommentModal}: Props) => {
     const currentUser = useSelector((state: any) => state.currentUser);
 
     function getDateFormat(date) {
@@ -119,7 +119,13 @@ const ReplyItem = ({navigation, profileImage, nickname, description, createAt, r
         }
     }
 
+    const onLongPressComment = () => {
+        console.log("replyId", replyId);
+        openCommentModal(nickname, replyId)
+    }
+
     return (
+        <TouchableOpacity onLongPress={() => onLongPressComment()}>
         <Container>
             <TouchableWithoutFeedback onPress={() => moveToUserProfile()}>
             <ProfileImageContainer>
@@ -133,11 +139,11 @@ const ReplyItem = ({navigation, profileImage, nickname, description, createAt, r
                 </HeaderContainer>
                 <CommentDescripText>{description}</CommentDescripText>
                 <FooterContainer>
-                    <ReportText>신고</ReportText>
                     <CreateAtText>{createAt}</CreateAtText>
                 </FooterContainer>
             </CommentRightContainer>
         </Container>
+        </TouchableOpacity>
     )
 }
 

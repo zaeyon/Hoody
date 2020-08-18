@@ -4,15 +4,18 @@ import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp
 } from 'react-native-responsive-screen';
-import {FlatList, TouchableWithoutFeedback, Keyboard, ScrollView, Text} from 'react-native';
+import {FlatList, TouchableWithoutFeedback, Keyboard, ScrollView, Text, StyleSheet} from 'react-native';
 import {useSelector} from 'react-redux';
 import AboveKeyboard from 'react-native-above-keyboard';
 import {KeyboardAwareScrollView, KeyboardAwareFlatList} from 'react-native-keyboard-aware-scroll-view';
+import Modal from 'react-native-modal';
 
 import CommentItem from '~/Components/Presentational/CommentListScreen/CommentItem';
 import ReplyItem from '~/Components/Presentational/CommentListScreen/ReplyItem';
-import {POSTComment, GetComment, PostReply} from '~/Route/Post/Comment';
 import FeedInformation from '~/Components/Presentational/FeedDetailScreen/FeedInformation';
+
+import {POSTComment, GetComment, PostReply} from '~/Route/Post/Comment';
+import DELETEComment from '~/Route/Post/DELETEComment';
 
 const Container = Styled.SafeAreaView`
  flex: 1;
@@ -179,6 +182,60 @@ const InputingReplyCancelIcon = Styled.Image`
  height: ${wp('2.6%')};
 `;
 
+const ReportModalContainer = Styled.View`
+ width: ${wp('100%')};
+ height: 500px;
+ background-color: #FFFFFF;
+ border-top-left-radius: 10px;
+ border-top-right-radius: 10px;
+`;
+
+
+const OtherUsersFeedViewMoreModalContainer = Styled.View`
+width: ${wp('100%')};
+height: ${wp('36.8%')};
+border-top-left-radius: 10px;
+border-top-right-radius: 10px;
+background-color: #FFFFFF;
+`;
+
+const ModalHeaderContainer = Styled.View`
+ padding-top: 4px;
+ width: ${wp('100%')};
+ padding-bottom: 10px;
+ align-items: center;
+`;
+
+
+const ModalToggleButton = Styled.View`
+ width: ${wp('11.7%')};
+ height: ${wp('1.4%')};
+ background-color: #F4F4F7;
+ border-radius: 5px;
+`;
+
+
+const ModalTabItemContainer = Styled.View`
+ height: ${wp('17%')};
+ flex-direction: row;
+ align-items: center;
+ padding-left: 16px;
+ padding-right: 16px;
+ border-bottom-width: 0.6px;
+ border-color: #ECECEE;
+`;
+
+const ModalTabItemIconImage = Styled.Image`
+width: ${wp('6.4%')};
+height: ${wp('6.4%')};
+tint-color: #1D1E1F;
+`;
+
+const ModalTabItemLabelText = Styled.Text`
+ margin-left: 11px;
+ font-size: 18px;
+ color: #1D1E1F;
+`;
 
 
 const COMMENT_DATA = 
@@ -303,6 +360,10 @@ const CommentListScreen = ({navigation, route}: Props) => {
     const [allCommentCount, setAllCommentCount] = useState<number>(0);
     const [replyCommentId, setReplyCommentId] = useState<number>();
     const [reloadCommentList, setReloadCommentList] = useState<boolean>(false);
+    const [visibleCommentModal, setVisibleCommentModal] = useState<boolean>(false);
+    const [visibleMyCommentModal, setVisibleMyCommentModal] = useState<boolean>(false);
+    const [selectedCommentId, setSelectedCommentId] = useState<number>();
+    const [reloadComment, setReloadComment] = useState<boolean>(false);
     const currentUser = useSelector((state) => state.currentUser);
     const commentInputRef = useRef(null);
 
@@ -324,6 +385,9 @@ const CommentListScreen = ({navigation, route}: Props) => {
     })
 
     useEffect(() => {
+        if(reloadComment) {
+          setReloadComment(false)
+        }
         if(route.params?.postId) {
             console.log("route.params.feedId", route.params.feedId);
             setPostId(route.params.postId);
@@ -337,7 +401,7 @@ const CommentListScreen = ({navigation, route}: Props) => {
                 console.log("댓글 불러오기 실패", error);
             })
         }
-    }, [route.params?.postId])
+    }, [route.params?.postId, reloadComment])
 
     const clickToReply = (target: string, commentId: number) => {
         console.log("답글 달기", target);
@@ -420,18 +484,44 @@ const CommentListScreen = ({navigation, route}: Props) => {
      commentInputRef.current.blur()
    }
 
-   const renderReplyItem = ({item, index}) => {
+   const openCommentModal = (nickname:string, commentId:number) => {
+     if(currentUser.user.nickname == nickname) {
+       setVisibleMyCommentModal(true)
+       console.log("선택한 commentId", commentId);
+       setSelectedCommentId(commentId);
+     } else {
+       setVisibleCommentModal(true)
+     }
+   }
+
+   const deleteComment = () => {
+     console.log("selectedCommentId", selectedCommentId);
+     DELETEComment(selectedCommentId)
+     .then(function(response) {
+       console.log("댓글 삭제 성공", response);
+       setVisibleMyCommentModal(false);
+       setReloadComment(true);
+     })
+     .catch(function(error) {
+       console.log("댓글 삭제 실패", error)
+     })
+   }
+
+   const renderReplyItem = ({item, index}: any) => {
+     console.log("renderReplyItem", item);
      var date = new Date(item.createdAt);
      date = getDateFormat(date);
+     
 
      return (
        <ReplyItem
-       replyId={item.replyId}
+       replyId={item.id}
        profileImage={item.user.profileImg}
        nickname={item.user.nickname}
        description={item.description}
        createAt={date.toString()}
        navigation={navigation}
+       openCommentModal={openCommentModal}
        />
      )
    }
@@ -454,6 +544,7 @@ const CommentListScreen = ({navigation, route}: Props) => {
     replys={item.replys}
     createAt={date.toString()}
     navigation={navigation}
+    openCommentModal={openCommentModal}
     />
     {item.replys[0] && (
       <FlatList
@@ -553,8 +644,61 @@ const CommentListScreen = ({navigation, route}: Props) => {
         </CommentContainer>
         </AboveKeyboard>
         </FooterContainer>
+        <Modal
+      onBackdropPress={() => setVisibleCommentModal(false)}
+      isVisible={visibleCommentModal}
+      backdropOpacity={0.25}
+      onSwipeComplete={() => setVisibleCommentModal(false)}
+      swipeDirection={['down']}
+      style={styles.commentModal}>
+        <OtherUsersFeedViewMoreModalContainer>
+        <ModalHeaderContainer>
+        <ModalToggleButton/>
+        </ModalHeaderContainer>
+        <TouchableWithoutFeedback onPress={() => 0}>
+        <ModalTabItemContainer>
+          <ModalTabItemIconImage
+          style={{tintColor:'#1D1E1F'}}
+          source={require('~/Assets/Images/Feed/ic_declare.png')}/>
+          <ModalTabItemLabelText
+          style={{color:'#1D1E1F'}}
+          >신고하기</ModalTabItemLabelText>
+        </ModalTabItemContainer>
+        </TouchableWithoutFeedback>
+        </OtherUsersFeedViewMoreModalContainer>
+      </Modal>
+      <Modal
+      onBackdropPress={() => setVisibleMyCommentModal(false)}
+      isVisible={visibleMyCommentModal}
+      backdropOpacity={0.25}
+      onSwipeComplete={() => setVisibleMyCommentModal(false)}
+      swipeDirection={['down']}
+      style={styles.commentModal}>
+        <OtherUsersFeedViewMoreModalContainer>
+        <ModalHeaderContainer>
+        <ModalToggleButton/>
+        </ModalHeaderContainer>
+        <TouchableWithoutFeedback onPress={() => deleteComment()}>
+        <ModalTabItemContainer>
+          <ModalTabItemIconImage
+          style={{tintColor:'#1D1E1F'}}
+          source={require('~/Assets/Images/Feed/ic_remove.png')}/>
+          <ModalTabItemLabelText
+          style={{color:'#1D1E1F'}}
+          >삭제하기</ModalTabItemLabelText>
+        </ModalTabItemContainer>
+        </TouchableWithoutFeedback>
+        </OtherUsersFeedViewMoreModalContainer>
+      </Modal>
     </Container>
     )
 }
+
+const styles = StyleSheet.create({
+  commentModal: {
+    justifyContent: 'flex-end',
+    margin: 0,
+  }
+})
 
 export default CommentListScreen;

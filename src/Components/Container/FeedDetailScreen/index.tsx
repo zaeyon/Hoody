@@ -1155,19 +1155,6 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
         </TouchableWithoutFeedback>
         </OtherUsersFeedViewMoreModalContainer>
       </Modal>
-      <Modal
-      onBackdropPress={() => setVisibleReportModal(false)}
-      isVisible={visibleReportModal}
-      backdropOpacity={0.25}
-      onSwipeComplete={() => setVisibleReportModal(false)}
-      swipeDirection={['down']}
-      style={styles.reportModal}>
-        <ReportModalContainer>
-          <ModalHeaderContainer>
-            <ModalToggleButton/>
-          </ModalHeaderContainer>
-        </ReportModalContainer>
-      </Modal>
        </Container>
    )
 }

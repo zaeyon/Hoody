@@ -485,10 +485,10 @@ const CommentListScreen = ({navigation, route}: Props) => {
    }
 
    const openCommentModal = (nickname:string, commentId:number) => {
+    setSelectedCommentId(commentId);
      if(currentUser.user.nickname == nickname) {
        setVisibleMyCommentModal(true)
        console.log("선택한 commentId", commentId);
-       setSelectedCommentId(commentId);
      } else {
        setVisibleCommentModal(true)
      }
@@ -504,6 +504,13 @@ const CommentListScreen = ({navigation, route}: Props) => {
      })
      .catch(function(error) {
        console.log("댓글 삭제 실패", error)
+     })
+   }
+
+   const moveToCommentDeclare = () => {
+     setVisibleCommentModal(false);
+     navigation.navigate("CommentDeclareScreen", {
+       commentId: selectedCommentId
      })
    }
 
@@ -655,7 +662,7 @@ const CommentListScreen = ({navigation, route}: Props) => {
         <ModalHeaderContainer>
         <ModalToggleButton/>
         </ModalHeaderContainer>
-        <TouchableWithoutFeedback onPress={() => 0}>
+        <TouchableWithoutFeedback onPress={() => moveToCommentDeclare()}>
         <ModalTabItemContainer>
           <ModalTabItemIconImage
           style={{tintColor:'#1D1E1F'}}

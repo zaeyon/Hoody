@@ -11,6 +11,9 @@ import AboveKeyboard from 'react-native-above-keyboard';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import ActionSheet from 'react-native-actionsheet'
 
+import Modal from 'react-native-modal';
+import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
+
 // Local Components
 import {Rating} from '~/Components/Presentational/UploadScreen/Rating';
 import ProductItem from '~/Components/Presentational/UploadScreen/ProductItem';
@@ -693,6 +696,68 @@ flex-shrink: 1;
 background-color:#ffffff;
 `;
 
+const SettingModalContainer = Styled.View`
+width: ${wp('100%')};
+height: ${wp('56.5%')};
+border-top-left-radius: 10px;
+border-top-right-radius: 10px;
+background-color: #FFFFFF;
+`;
+
+const ModalHeaderContainer = Styled.View`
+ padding-top: 4px;
+ width: ${wp('100%')};
+ padding-bottom: 10px;
+ align-items: center;
+`;
+
+const ModalToggleButton = Styled.View`
+ width: ${wp('11.7%')};
+ height: ${wp('1.4%')};
+ background-color: #F4F4F7;
+ border-radius: 5px;
+`;
+
+const SettingModalTitleContainer = Styled.View`
+ width: ${wp('100%')};
+ padding-top: 14px;
+ padding-bottom: 14px;
+ align-items: center;
+`;
+
+const SettingModalTitleText = Styled.Text`
+ font-weight: 600;
+ font-size: 18px;
+ color: #1D1E1F; 
+`;
+
+const RadioTabContainer = Styled.View`
+height: ${wp('15%')};
+width: ${wp('100%')};
+padding-left: 8px;
+padding-right: 16px;
+background-color: #ffffff;
+justify-content: center;
+`;
+
+const RadioTabInfoContainer = Styled.View`
+height: ${wp('12.5%')};
+flex-direction: row;
+align-items: center;
+padding-top: 15px;
+justify-content: space-between;
+border-top-width: 0.6px;
+border-color: #ECECEE;
+background-color: #ffffff;
+`;
+
+const RadioButtonContainer = Styled.View`
+position: absolute;
+top: 18px;
+right: 0;
+`;
+
+
 
 
 const bottomActionOptions = [
@@ -782,11 +847,16 @@ const FeedEditScreen = ({navigation, route}: Props) => {
     const [descripModalInputText, setDescripModalInputText] = useState<string>(null);
     const [paragraphChange, setParagraphChange] = useState<boolean>(false);
 
+    // Setting
+    const [visibleSettingModal, setVisibleSettingModal] = useState<boolean>(false);
+    const [selectedOpenRadioIndex, setSelectedOpenRadioIndex] = useState<number>(0);
+
     // useRef
     const newDescripInput = useRef(null);
     const scrollViewRef = useRef(null);
     const draggableFlatListRef = useRef(null);
     const expenseInput = useRef(null);
+
 
     const [AdditionInfoContainerHeight, setAdditionInfoContainerHeight] = useState<number>();
 
@@ -1547,6 +1617,16 @@ const moveToFeedDetail = () => {
     })
 }
 
+const onPressRadioButton = (i: number, obj: object) => {
+    setSelectedOpenRadioIndex(i);
+    console.log("selectedRadioIndex", i);
+    if(i === 0) {
+        setOpenState(true)
+    } else if(i === 1) {
+        setOpenState(false);
+    }
+}
+
 
 
 const renderDraggableItem = ({item, index, drag, isActive}) => {
@@ -1989,6 +2069,41 @@ const renderAddNewDescripInput = () => {
             cancelButtonIndex={0}
             destructiveButtonIndex={1}
             onPress={(index) => removeParagraphIndex(index)}/>
+             <RadioForm>
+                            {radio_props.map((obj, i) => (
+                            <TouchableWithoutFeedback onPress={() => onPressRadioButton(i, obj)}>
+                            <RadioTabContainer>
+                            <RadioTabInfoContainer>
+                            <RadioButton
+                            labelHorizontal={true} 
+                            key={i}>
+                                <RadioButtonLabel
+                                obj={obj}
+                                index={i}
+                                onPress={() => onPressRadioButton(i, obj)}
+                                labelHorizontal={true}
+                                labelStyle={{fontSize: 16, color: '#1D1E1F'}}
+                                labelWrapStyle={{paddingRight: 230, backgroundColor:'#ffffff'}}/>
+                            </RadioButton>
+                            <RadioButtonContainer>
+                            <RadioButtonInput
+                                obj={obj}
+                                index={i}
+                                isSelected={selectedOpenRadioIndex === i}
+                                onPress={() => onPressRadioButton(i, obj)}
+                                borderWidth={1.5}
+                                buttonInnerColor={'#267DFF'}
+                                buttonOuterColor={selectedOpenRadioIndex === i ? '#267DFF' : '#00000020'}
+                                buttonSize={wp('3.73%')}
+                                buttonOuterSize={wp('5.86%')}
+                                buttonStyle={{}}
+                                buttonWrapStyle={{marginLeft: 10}}/>
+                                </RadioButtonContainer>
+                            </RadioTabInfoContainer>
+                            </RadioTabContainer>
+                            </TouchableWithoutFeedback>
+                             ))}
+                           </RadioForm>
             </Container>
     )
 }

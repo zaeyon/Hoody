@@ -77,6 +77,9 @@ import ExploreScreen from '~/Components/Container/ExploreScreen';
 import SearchScreen from '~/Components/Container/SearchScreen';
 import SearchResultScreen from '~/Components/Container/SearchResultScreen';
 
+// Upload Screen
+import TemporarySaveBoxScreen from '~/Components/Container/TemporarySaveBoxScreen';
+
 // Setting Screen
 import SettingScreen from '~/Components/Container/SettingScreen';
 import AccountSettingScreen from '~/Components/Container/SettingScreen/AccountSettingScreen';
@@ -97,8 +100,9 @@ import ReportScreen from '~/Components/Container/ReportScreen';
 import TopPopularTagDetailScreen from '~/Components/Container/ReportScreen/TopPopularTagDetailScreen';
 import TopInterestTagDetailScreen from '~/Components/Container/ReportScreen/TopInterestTagDetailScreen';
 
-// Feed Declare Screen
+// Declare Screen
 import FeedDeclareScreen from '~/Components/Container/FeedDeclareScreen';
+import CommentDeclareScreen from '~/Components/Container/CommentDeclareScreen';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
@@ -295,6 +299,9 @@ function UploadStackScreen() {
       <UploadStack.Screen
       name="GalleryTest"
       component={GalleryTest}/>
+      <UploadStack.Screen
+      name="TemporarySaveBoxScreen"
+      component={TemporarySaveBoxScreen}/>
     </UploadStack.Navigator>
   );
 }
@@ -530,6 +537,9 @@ function FeedStackScreen() {
       <FeedStack.Screen
       name="FeedDeclareScreen"
       component={FeedDeclareScreen}/>
+      <FeedStack.Screen
+      name="CommentDeclareScreen"
+      component={CommentDeclareScreen}/>
     </FeedStack.Navigator>
   );
 }

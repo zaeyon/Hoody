@@ -117,7 +117,7 @@ interface Props {
     route: any,
 }
 
-const FeedDeclareScreen = ({navigation, route}: Props) => {
+const CommentDeclareScreen = ({navigation, route}: Props) => {
     const [selectedRadioIndex, setSelectedRadioIndex] = useState<number>(0);
     const [selectedReason, setSelectedReason] = useState<string>("영리목적/홍보성");
     const dispatch = useDispatch();
@@ -142,9 +142,9 @@ const FeedDeclareScreen = ({navigation, route}: Props) => {
     const declareFeed = () => {
         console.log("selectedReaseon", selectedReason);
 
-        POSTReport("post", route.params.feedId, selectedReason)
+        POSTReport("comment", route.params?.commentId, selectedReason)
         .then(function(response) {
-            console.log("게시글 신고 성공", response)
+            console.log("댓글 신고 성공", response)
             navigation.goBack();
              Alert.alert("신고가 완료되었습니다.",'', [
                  {
@@ -154,7 +154,7 @@ const FeedDeclareScreen = ({navigation, route}: Props) => {
              ])
         })
         .catch(function(error) {
-            console.log("게시글 신고 실패", error);
+            console.log("댓글 신고 실패", error);
         })
         
     }
@@ -170,7 +170,7 @@ const FeedDeclareScreen = ({navigation, route}: Props) => {
                     </BackButtonContainer>
                 </HeaderLeftContainer>
                 </TouchableWithoutFeedback>
-                <HeaderTitleText>게시글 신고</HeaderTitleText>
+                <HeaderTitleText>댓글 신고</HeaderTitleText>
                 <TouchableWithoutFeedback onPress={() => declareFeed()}>
                 <HeaderRightContainer>
                     <HeaderEmptyContainer>
@@ -181,7 +181,7 @@ const FeedDeclareScreen = ({navigation, route}: Props) => {
             </HeaderBar>
             <BodyContainer>
                 <DescripContainer>
-                    <DescripText>불법적인 내용이거나, 서비스 이용목적에 부합하지 않는 게시글을 신고해 주세요. 신고하신 게시글은 운영정책에 따라 처리되며, 허위 신고시 이용에 제한을 받을 수 있습니다.</DescripText>
+                    <DescripText>불법적인 내용이거나, 서비스 이용목적에 부합하지 않는 댓글을 신고해 주세요. 신고하신 댓글은 운영정책에 따라 처리되며, 허위 신고시 이용에 제한을 받을 수 있습니다.</DescripText>
                 </DescripContainer>
                 <RadioForm>
                             {radio_props.map((obj, i) => (
@@ -224,7 +224,7 @@ const FeedDeclareScreen = ({navigation, route}: Props) => {
     )
 }
 
-export default FeedDeclareScreen;
+export default CommentDeclareScreen;
 
 
 

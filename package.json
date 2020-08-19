@@ -70,6 +70,7 @@
     "react-native-swiper": "^1.6.0",
     "react-native-tab-view": "^2.14.4",
     "react-native-text-size": "^4.0.0-rc.1",
+    "react-native-webview": "^10.7.0",
     "react-redux": "7.2.0",
     "react-use-dimensions": "1.2.1",
     "redux": "4.0.5",

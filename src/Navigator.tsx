@@ -106,6 +106,7 @@ import CommentDeclareScreen from '~/Components/Container/CommentDeclareScreen';
 
 // Feed Detail Screen
 import FeedImagePullScreen from '~/Components/Container/FeedImagePullScreen';
+import ProductWebView from '~/Components/Container/ProductWebView';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
@@ -543,6 +544,9 @@ function FeedStackScreen() {
       <FeedStack.Screen
       name="CommentDeclareScreen"
       component={CommentDeclareScreen}/>
+      <FeedStack.Screen
+      name="ProductWebView"
+      component={ProductWebView}/>
     </FeedStack.Navigator>
   );
 }

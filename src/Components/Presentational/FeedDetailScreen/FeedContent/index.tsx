@@ -5,9 +5,9 @@ import {
     heightPercentageToDP as hp
 } from 'react-native-responsive-screen';
 import {FlatList, Text, TouchableWithoutFeedback} from 'react-native';
+import { WebView } from 'react-native-webview';
 
 import ProductItem from '~/Components/Presentational/FeedDetailScreen/ProductItem';
-
 const Container = Styled.View`
  padding-top: 10px;
  background-color: #ffffff;
@@ -66,6 +66,13 @@ const FeedContent = ({paragraphData, navigation, moveToImageFull}: Props) => {
         console.log("paragraph", paragraphData);
     }, [paragraphData])
 
+    const moveToProductUri = (url: string) => {
+        console.log("moveToProductUri uri", url);
+        navigation.navigate("ProductWebView", {
+            uri: url
+        })
+    }
+
 
 const renderItem = ({item, index}: any) => {
     if(item.type === "description") {
@@ -85,7 +92,9 @@ const renderItem = ({item, index}: any) => {
             </TouchableWithoutFeedback>
         )
     } else if(item.type === "product") {
+        console.log("product item", item);
         return (
+            <TouchableWithoutFeedback onPress={() => moveToProductUri(item.url)}>
             <ProductContainer>
                 <ProductItem
                 productImage={item.image}
@@ -94,6 +103,7 @@ const renderItem = ({item, index}: any) => {
                 shopIcon={item.favicon}
                 shopName={item.site}/>
             </ProductContainer>
+            </TouchableWithoutFeedback>
         )
     }
 }

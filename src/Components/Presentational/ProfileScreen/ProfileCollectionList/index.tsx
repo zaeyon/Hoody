@@ -12,6 +12,7 @@ import ProfileCollectionItem from '~/Components/Presentational/ProfileScreen/Pro
 const UserCollectionListContainer = Styled.View`
 width: ${wp('100%')};
 background-color: #ffffff;
+padding-bottom: 40px;
 `;
 
 const NoCollectionContainer = Styled.View`

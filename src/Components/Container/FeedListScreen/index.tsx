@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {TouchableWithoutFeedback, FlatList, View, Keyboard, ScrollView} from 'react-native';
+import {TouchableWithoutFeedback, FlatList, View, Keyboard, ScrollView, RefreshControl} from 'react-native';
 import Styled from 'styled-components/native';
 import {
   widthPercentageToDP as wp,
@@ -8,15 +8,20 @@ import {
 import {useSelector} from 'react-redux';
 import axios from 'axios';
 import {NavigationContainer} from '@react-navigation/native';
+import Geolocation from 'react-native-geolocation-service';
 
+// Local Component
 import FeedItem from '~/Components/Presentational/FeedListScreen/FeedItem';
 import PopularTagItem from '~/Components/Presentational/FeedListScreen/PopularTagItem';
-import GetAllFeed from '~/Route/Post/TestFeed';
 import SearchBar from '~/Components/Presentational/FeedListScreen/SearchBar'
 import SearchResult from '~/Components/SearchResult';
 import SearchAutoComplete from '~/Components/Presentational/SearchScreen/SearchAutoCompleteItem';
+
+// Route
+import GetAllFeed from '~/Route/Post/TestFeed';
 import GETSearchAutoComplete from '~/Route/Search/GETSearchAutoComplete';
-import Geolocation from 'react-native-geolocation-service';
+import GETFeed from '~/Route/Home/GETFeed';
+
 
 const BottomTabHeight = Styled.View`
  width: ${wp('100%')}px;
@@ -64,8 +69,8 @@ const ReviewMapIcon = Styled.Image`
 `;
 
 const NoFeedListContainer = Styled.View`
- width: ${wp('100%')}px;
- height: ${hp('87%')}px;
+ width: ${wp('100%')};
+ height: ${hp('70%')};
  justify-content: center;
  align-items: center;
 `;
@@ -290,6 +295,9 @@ interface Props {
   route: any
 }
 
+var offset = 0;
+var limit = 20;
+
 function FeedListScreen({navigation, route}: Props) {
   const [feedListData, setFeedListData] = useState([]);
   const [searchFocus, setSearchFocus] = useState<boolean>(false);
@@ -335,7 +343,7 @@ function FeedListScreen({navigation, route}: Props) {
     })
   }, [query, category])
 
-  const getFeedData = () => {
+  const getAllFeedData = () => {
       // 서버테스트용 데이터
       //setFeedListData(TEST_FEED_DATA);
     GetAllFeed().then(function(response) {
@@ -348,6 +356,20 @@ function FeedListScreen({navigation, route}: Props) {
       console.log("피드 목록 가져오기 실패", error);
     })
   };
+
+
+  const getFeedData = () => {
+    GETFeed(offset, limit).then(function(response) {
+    console.log("파드 목록 가져오기 성공", response);
+    setFeedListData(response.result);
+    setRefreshing(false)
+    setOnRefreshFeedList(!onRefreshFeedList)
+  })
+  .catch(function(error) {
+    console.log("피드 목록 가져오기 실패", error);
+  })
+};
+
 
   const onFocusSearch = () => {
     setSearchFocus(true);
@@ -386,75 +408,72 @@ function FeedListScreen({navigation, route}: Props) {
   }
 
   const renderFeedItem = ({item, index}: any) => {
-    
+    if(feedListData[0]) {
     return (
-            <FeedItem
-              id={item.id}
-              profile_image={item.user.profileImg}
-              nickname={item.user.nickname}
-              createdAt={item.createdAt}
-              rating={item.starRate}
-              main_tag={item.mainTags.name}
-              sub_tag1={item.subTagOnes?item.subTagOnes.name:null}
-              sub_tag2={item.subTagTwos?item.subTagTwos.name:null}
-              like_count={item.likes}
-              comment_count={item.commentsCount}
-              reply_count={item.replysCount}
-              scrap_count={0}
-              mediaFiles={item.mediaFiles}
-              image_count={item.mediaFiles.length}
-              location={item.address?item.address.address:null}
-              expense={item.expense?item.expense:null}
-              desArray={item.descriptions}
-              navigation={navigation}
-              productArray={item.Products}/>
-         )
+      <FeedItem
+        id={item.id}
+        profile_image={item.user.profileImg}
+        nickname={item.user.nickname}
+        createdAt={item.createdAt}
+        rating={item.starRate}
+        main_tag={item.mainTags.name}
+        sub_tag1={item.subTagOnes?item.subTagOnes.name:null}
+        sub_tag2={item.subTagTwos?item.subTagTwos.name:null}
+        like_count={item.likes}
+        comment_count={item.commentsCount}
+        reply_count={item.replysCount}
+        scrap_count={0}
+        mediaFiles={item.mediaFiles}
+        image_count={item.mediaFiles.length}
+        location={item.address?item.address.address:null}
+        expense={item.expense?item.expense:null}
+        desArray={item.descriptions}
+        navigation={navigation}
+        productArray={item.Products}/>
+   )
+  } else if(!feedListData[0]) {
+    return (
+      <NoFeedListContainer>
+        <NoFeedText>등록된 게시글이 없어요</NoFeedText>
+      </NoFeedListContainer>
+    )
   }
+}
   
 
   return (
-    <TouchableWithoutFeedback onPress={() => onBlurSearch()}>
     <Container>
-      
       <HeaderBar>
           <HeaderLeftContainer>
           <HeaderTitleText>피드</HeaderTitleText>
           </HeaderLeftContainer>
       </HeaderBar>
-      <BodyContainer
-      >
+      <BodyContainer>
+      <ScrollView
+      showsVerticalScrollIndicator={false}
+      refreshControl={
+        <RefreshControl
+          refreshing={refreshing}
+          onRefresh={onRefreshFeedListData}/>
+        }>
       {feedListData[0] && (
       <FeedListContainer>
       <FlatList
-        onRefresh={onRefreshFeedListData}
-        refreshing={refreshing}
-        showsVerticalScrollIndicator={false}
-        data={feedListData}
-        renderItem={renderFeedItem}
+      showsVerticalScrollIndicator={false}
+      data={feedListData[0] ? feedListData : [0]}
+      renderItem={renderFeedItem}
       />
       </FeedListContainer>
       )}
       {!feedListData[0] && (
-        <NoFeedListContainer>
-          <NoFeedText>등록된 피드가 없어요</NoFeedText>
-        </NoFeedListContainer>
+      <NoFeedListContainer>
+        <NoFeedText>등록된 게시글이 없어요.</NoFeedText>
+      </NoFeedListContainer>
+
       )}
-      {/*
-      {searchFocus && (
-        <TagAutoCompleteContainer>
-        <SearchAutoComplete
-        autoCompleteResult={autoComplete}
-        changeSearchCategory={changeSearchCategory}
-        query={query}
-        resultCategory={category}
-        > 
-        </SearchAutoComplete>
-        </TagAutoCompleteContainer>
-      )}
-      */}
+      </ScrollView>
       </BodyContainer>
     </Container>
-    </TouchableWithoutFeedback>
   );
 }
 

@@ -119,7 +119,7 @@ interface Props {
 
 const CommentDeclareScreen = ({navigation, route}: Props) => {
     const [selectedRadioIndex, setSelectedRadioIndex] = useState<number>(0);
-    const [selectedReason, setSelectedReason] = useState<string>("영리목적/홍보성");
+    const [selectedReason, setSelectedReason] = useState<string>("광고성/영리목적");
     const dispatch = useDispatch();
 
     var radio_props = [

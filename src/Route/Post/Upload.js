@@ -7,7 +7,8 @@ const PostUpload = (desArray, mediaArray,mainTag, subTag1, subTag2, rating, expe
     console.log("업로드할 사진", mediaArray);
     console.log("업로드할 desArray", desArray);
     console.log("업로드할 상품", products);
-    console.log("업로드 spendDate", spendDate)
+    console.log("업로드 spendDate", spendDate);
+    console.log("업로드 임시저장", dump)
 
 
     console.log("업로드 subTag1", subTag1);

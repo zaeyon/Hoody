@@ -1066,14 +1066,22 @@ const convertDateFormat = (date: any) => {
     const uploadCancel = () => {
         Alert.alert(
             '게시글 작성을 취소하시겠어요?',
-            ' ',
+            '',
             [
+                {
+                text: '임시 저장',
+                onPress: () => {
+                    setTemporarySave(true);
+                    clickToTemporarySave();
+                }
+                },
                 {
                     text: '확인',
                     onPress: () => {
                         navigation.goBack()
                     },
                 },
+                
                 {
                     text: '취소',
                     onPress: () => 0,
@@ -1448,7 +1456,7 @@ const onPressRadioButton = (i: number, obj: object) => {
 }
 
 const moveToTemporarySave = () => {
-    navigation.navigate("TemporarySaveBoxScreen");
+    navigation.navigate("TemporarySaveBoxScreen")
 }
 
 
@@ -1514,6 +1522,70 @@ const clickToUploadFinish = () => {
       });
   }, 100)
 }
+
+
+const clickToTemporarySave = () => {
+    console.log("임시저장 paragraphData", paragraphData);
+    var sequence = "";
+    var descriptionStr = "";
+    var mediaFileArray = new Array();
+    var productArray = new Array();
+    var descriptionArray = new Array();
+    var JSONstringify_productArray;
+    var JSONstirngify_descriptionArray;
+    var transmitSpendDate = "";
+  
+    var tmpDate = new Date(consumptionDate),
+    month = '' + (tmpDate.getMonth() + 1),
+    day = '' + (tmpDate.getDate()),
+    year = tmpDate.getFullYear();
+    if(month.length < 2) month = '0' + month;
+    if(day.length < 2) day = '0' + day;
+  
+    transmitSpendDate = year + "-" + month + "-" + day;
+  
+    for(var i = 0; i < paragraphData.length; i++) {
+        if(paragraphData[i].type === 'description') {
+            sequence = sequence + "D";
+            descriptionArray.push(paragraphData[i].description);
+        } else if(paragraphData[i].type === 'image') {
+            sequence = sequence + "M";
+            mediaFileArray.push(paragraphData[i].image);
+        } else if(paragraphData[i].type === 'product') {
+            sequence = sequence + "P";
+            productArray.push(paragraphData[i].product);
+        } 
+    }
+  
+    setTimeout(() => {
+        descriptionStr = "[" + descriptionStr + "]";
+        console.log("descriptionStr", descriptionStr);
+        console.log("sequence", sequence);
+        console.log("mediaFileArray", mediaFileArray);
+        console.log("productArray", productArray);
+        console.log("productArray.toString()", productArray.toString());
+        var productArrayStr = productArray.toString();
+        console.log("productArrayStr", productArrayStr);
+        console.log("JSON.stringify(productArray)", JSON.stringify(productArray));
+  
+        JSONstirngify_descriptionArray = JSON.stringify(descriptionArray);
+        JSONstringify_productArray = JSON.stringify(productArray);
+  
+        console.log("JSONstringify_descriptionArray", JSONstirngify_descriptionArray);
+        console.log("JSONstringify_productoArray", JSONstringify_productArray);
+  
+        PostUpload(JSONstirngify_descriptionArray, mediaFileArray, mainTag, subTag1, subTag2, rating, expense,location, longitude, latitude, certifiedLocation, true, sequence, JSONstringify_productArray, transmitSpendDate, openState, subTag1Exis, subTag2Exis)
+        .then(function(response) {
+            if(response.status === 201) {
+                console.log("게시글 임시저장 성공", response);
+                navigation.goBack();
+            }
+        })
+        .catch(function(error) {
+            console.log("게시글 임시저장 실패", error);
+        });
+    }, 100)
+  }
 
 
 

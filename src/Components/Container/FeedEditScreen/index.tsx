@@ -1146,6 +1146,13 @@ const FeedEditScreen = ({navigation, route}: Props) => {
             ' ',
             [
                 {
+                    text: '임시 저장',
+                    onPress: () => {
+                        setTemporarySave(true);
+                        clickToTemporarySave();
+                    }
+                },
+                {
                     text: '확인',
                     onPress: () => {
                         navigation.goBack()
@@ -1606,6 +1613,92 @@ const clickToUploadFinish = () => {
       });
   }, 100)
 }
+
+
+const clickToTemporarySave = () => {
+    console.log("임시저장 paragraphData", paragraphData);
+    var sequence = "";
+    var descriptionStr = "";
+    var mediaFileArray = new Array();
+    var productArray = new Array();
+    var descriptionArray = new Array();
+    var JSONstringify_productArray;
+    var JSONstirngify_descriptionArray;
+    var subTagOneEdit = false;
+    var subTagTwoEdit = false;
+    var transmitSpendDate = "";
+  
+    var tmpDate = new Date(consumptionDate),
+    month = '' + (tmpDate.getMonth() + 1),
+    day = '' + (tmpDate.getDate()),
+    year = tmpDate.getFullYear();
+    if(month.length < 2) month = '0' + month;
+    if(day.length < 2) day = '0' + day;
+  
+    transmitSpendDate = year + "-" + month + "-" + day;
+  
+    console.log("originSubTag1", originSubTag1);
+    console.log("subTag1", subTag1);
+    
+    if(originSubTag1 !== subTag1) {
+        console.log("서브태그 수정됌");
+        subTagOneEdit = true
+    }
+    
+    if(originSubTag2 !== subTag2) {
+        subTagTwoEdit = true
+  }
+  
+    for(var i = 0; i < paragraphData.length; i++) {
+        if(paragraphData[i].type === 'description') {
+            sequence = sequence + "D";
+            descriptionArray.push(paragraphData[i].description);
+        } else if(paragraphData[i].type === 'image') {
+            sequence = sequence + "M";
+            mediaFileArray.push(paragraphData[i].image);
+        } else if(paragraphData[i].type === 'product') {
+            sequence = sequence + "P";
+            productArray.push({
+                description: paragraphData[i].description,
+                favicon: paragraphData[i].favicon,
+                image: paragraphData[i].image,
+                site: paragraphData[i].site,
+                title: paragraphData[i].title,
+                url: paragraphData[i].url,
+            })
+        } 
+    }
+  
+    setTimeout(() => {
+        descriptionStr = "[" + descriptionStr + "]";
+        console.log("descriptionStr", descriptionStr);
+        console.log("sequence", sequence);
+        console.log("mediaFileArray", mediaFileArray);
+        console.log("productArray", productArray);
+        console.log("productArray.toString()", productArray.toString());
+        var productArrayStr = productArray.toString();
+        console.log("productArrayStr", productArrayStr);
+        console.log("JSON.stringify(productArray)", JSON.stringify(productArray));
+  
+        JSONstirngify_descriptionArray = JSON.stringify(descriptionArray);
+        JSONstringify_productArray = JSON.stringify(productArray);
+  
+        console.log("JSONstringify_descriptionArray", JSONstirngify_descriptionArray);
+        console.log("JSONstringify_productoArray", JSONstringify_productArray);
+  
+        POSTUpdate(route.params?.feedId, JSONstirngify_descriptionArray, mediaFileArray, mainTag, subTag1, subTag2, rating, expense, location, longitude, latitude, certifiedLocation, true, sequence, JSONstringify_productArray, transmitSpendDate, openState, subTagOneEdit, subTagTwoEdit, subTag1Exis, subTag2Exis)
+        .then(function(response) {
+            if(response.status === 200) {
+                console.log("후기 임시저장 성공", response);
+                moveToFeedDetail();
+            }
+        })
+        .catch(function(error) {
+            console.log("후기 임시저장 실패", error);
+        });
+    }, 100)
+  }
+
 
 const moveToFeedDetail = () => {
     navigation.navigate("FeedStack", {

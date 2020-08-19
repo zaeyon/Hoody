@@ -349,6 +349,8 @@ interface Props {
     route: any
 }
 
+var selectingCommentId = 0;
+
 const CommentListScreen = ({navigation, route}: Props) => {
     const [commentList, setCommentList] = useState<Array<object>>([]);
     const [keyboardHeight, setKeyboardHeight] = useState<number>(0);
@@ -366,6 +368,7 @@ const CommentListScreen = ({navigation, route}: Props) => {
     const [reloadComment, setReloadComment] = useState<boolean>(false);
     const currentUser = useSelector((state) => state.currentUser);
     const commentInputRef = useRef(null);
+    
 
     const onKeyboardDidShow = (e: KeyboardEvent) => {
         setKeyboardHeight(e.endCoordinates.height);
@@ -485,18 +488,19 @@ const CommentListScreen = ({navigation, route}: Props) => {
    }
 
    const openCommentModal = (nickname:string, commentId:number) => {
-    setSelectedCommentId(commentId);
+     //setSelectedCommentId(commentId);
+     selectingCommentId = commentId;
+     console.log("선택한 commentId", commentId);
      if(currentUser.user.nickname == nickname) {
        setVisibleMyCommentModal(true)
-       console.log("선택한 commentId", commentId);
      } else {
        setVisibleCommentModal(true)
      }
    }
 
    const deleteComment = () => {
-     console.log("selectedCommentId", selectedCommentId);
-     DELETEComment(selectedCommentId)
+     console.log("selectingCommentId", selectingCommentId);
+     DELETEComment(selectingCommentId)
      .then(function(response) {
        console.log("댓글 삭제 성공", response);
        setVisibleMyCommentModal(false);
@@ -510,12 +514,11 @@ const CommentListScreen = ({navigation, route}: Props) => {
    const moveToCommentDeclare = () => {
      setVisibleCommentModal(false);
      navigation.navigate("CommentDeclareScreen", {
-       commentId: selectedCommentId
+       commentId: selectingCommentId
      })
    }
 
    const renderReplyItem = ({item, index}: any) => {
-     console.log("renderReplyItem", item);
      var date = new Date(item.createdAt);
      date = getDateFormat(date);
      

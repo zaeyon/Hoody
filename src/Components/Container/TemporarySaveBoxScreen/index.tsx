@@ -82,6 +82,7 @@ const TemporarySaveItemContainer = Styled.View`
  padding-right: 16px;
  border-bottom-width: 0.6px
  border-color: #ECECEE;
+ background-color: #FFFFFF;
 `;
 
 const TagListText = Styled.Text`
@@ -97,6 +98,32 @@ color: #C4C4C4;
  const RemoveText = Styled.Text`
   font-size: 16px;
   color: #ff3b30;
+ `;
+
+ const InWritingPostContainer = Styled.View`
+  padding-top: 19px;
+  padding-bottom: 19px;
+  padding-left: 16px;
+  padding-right: 16px;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+background-color: #FFFFFF;
+border-bottom-width: 0.6px;
+border-color: #ECECEE;
+ `;
+
+ const InWritingPostInfoContainer = Styled.View`
+ `;
+
+ const InWritingPostText = Styled.Text`
+font-size: 14px;
+color: #C6C7CC;
+ `;
+
+ const InWritingPostSaveText = Styled.Text`
+font-size: 16px;
+color: #267DFF;
  `;
 
 const TemporarySaveBoxScreen = ({navigation, route}: any) => {

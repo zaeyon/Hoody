@@ -53,6 +53,20 @@ const setCollectionFeedList = (collectionFeedList) => {
   }
 }
 
+  const setRealTimeAddLike = (realTimeAddLike) => {
+    return {
+      type: 'SET_REAL_TIME_Add_LIKE',
+      payload: realTimeAddLike,
+    }
+}
+
+const setRealTimeRemoveLike = (realTimeRemoveLike) => {
+  return {
+    type: 'SET_REAL_TIME_REMOVE_LIKE',
+    payload: realTimeRemoveLike
+  }
+}
+
 export default {
   setUser,
   logOut,
@@ -62,4 +76,6 @@ export default {
   setUserRecentSearch,
   setInputedKeywordList,
   setCollectionFeedList,
+  setRealTimeAddLike,
+  setRealTimeRemoveLike,
 };

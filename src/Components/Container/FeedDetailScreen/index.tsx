@@ -858,6 +858,8 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
 
     const addLike = () => {
       var addedLikeFeeds = currentUser.likeFeeds;
+      //var realTimeAddLikeList = currentUser.realTimeAddLikeList ? currentUser.realTimeAddLikeList : [];
+
       var tmpLikeCount = likeCount + 1;
       setLikeCount(tmpLikeCount);
       setCurrentUserLike(true);
@@ -866,8 +868,10 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
       }
 
       addedLikeFeeds.push(likeObj);
-      dispatch(allActions.userActions.setLikeFeeds(addedLikeFeeds))
-
+      //realTimeAddLikeList = [likeObj]
+      
+      dispatch(allActions.userActions.setLikeFeeds(addedLikeFeeds));
+      dispatch(allActions.userActions.setRealTimeAddLike(postId));
       POSTLike(currentUser.user.userId, postId)
       .then(function(response) {
         console.log("response", response)
@@ -883,6 +887,8 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
       var index = deletedLikeFeeds.indexOf(postId);
       deletedLikeFeeds.splice(index, 1);
       dispatch(allActions.userActions.setLikeFeeds(deletedLikeFeeds));
+      dispatch(allActions.userActions.setRealTimeRemoveLike(postId));
+
 
       var tmpLikeCount = likeCount - 1;
       setLikeCount(tmpLikeCount);

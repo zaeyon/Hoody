@@ -42,6 +42,17 @@ const currentUser = (state = {}, action) => {
         ...state,
         collectionFeedList: action.payload,
       }
+    case 'SET_REAL_TIME_Add_LIKE':
+      return {
+        ...state,
+        realTimeAddLike: action.payload,
+      }
+    case 'SET_REAL_TIME_REMOVE_LIKE':
+      return {
+        ...state,
+        realTimeRemoveLike: action.payload,
+      }
+
     default:
       return state;
   }

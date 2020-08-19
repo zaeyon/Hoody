@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import Styled from 'styled-components/native';
-import {View, FlatList} from 'react-native';
+import {View, FlatList, TouchableWithoutFeedback} from 'react-native';
 import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
@@ -46,20 +46,27 @@ const BannerContainer = Styled.View`
 `;
 
 interface Props {
-    trendTagsListData: Array<object>
+    trendTagsListData: Array<object>,
+    navigation: any,
 }
 
-const RecommendTagBanner = ({trendTagsListData}: Props) => {
+const RecommendTagBanner = ({trendTagsListData, navigation}: Props) => {
+
+    const searchToTrendTag = () => {
+        navigation.navigate("SearchResultScreen");
+    }
     
     return (
         <Container>
             <Swiper paginationStyle={{bottom:-5}} dotStyle={{width:5, height:5}} activeDotStyle={{backgroundColor:'#56575C', width:5, height:5}}>
                 {trendTagsListData.map((item, index) => {
                     return (
+                    <TouchableWithoutFeedback onPress={() => searchToTrendTag()}>
                     <BannerContainer>
                     <BannerImage
                     source={{uri:item.coverImg}}/>
                     </BannerContainer>
+                    </TouchableWithoutFeedback>
                     )
                 })}
             </Swiper>

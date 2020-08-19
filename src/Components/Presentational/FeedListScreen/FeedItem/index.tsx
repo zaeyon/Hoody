@@ -381,6 +381,7 @@ const FeedItem = ({
   const tmpRatingArr = ['empty', 'empty', 'empty', 'empty', 'empty'];
 
   useEffect(() => {
+    /*
     console.log("FeedItem productArray", productArray);
     if (rating % 1 === 0) {
       for (var i = 0; i < rating; i++) {
@@ -406,8 +407,8 @@ const FeedItem = ({
     if (sub_tag1 !== null) tmpTagList.push(sub_tag1);
     if (sub_tag2 !== null) tmpTagList.push(sub_tag2);
     setTagList(tmpTagList);
+    */
     
-
     const tmpCreatedDate = getDateFormat(createdAt);
     setCreatedDate(tmpCreatedDate);
     console.log("description", desArray);
@@ -416,12 +417,24 @@ const FeedItem = ({
     console.log("피드 닉네임", nickname)
     setChangeState(!changeState);
 
+    console.log("유저의 실시간 좋아요 리스트", currentUser.realTimeAddLikeList);
+
     var index = currentUser.likeFeeds?.findIndex(obj => obj.id === id);
+    //var realTimeAddIndex = currentUser.realTimeAddLikeList?.findIndex(obj => obj.id === id);
     if(index !== -1) {
       setCurrentUserLike(true);
       likeFeedsIndex = index;
+      if(currentUser.realTimeAddLike === id) {
+       // console.log("realTimeIndexzz", realTimeAddIndex);
+        dispatch(allActions.userActions.setRealTimeAddLike(null));
+        setLikeCount(likeCount+1);
+      }
     } else if(index === -1) {
       setCurrentUserLike(false);
+      if(currentUser.realTimeRemoveLike === id) {
+        dispatch(allActions.userActions.setRealTimeRemoveLike(null))
+        setLikeCount(likeCount-1);
+      }
     }
     console.log("해당 피드가 사용자가 좋아요한 피드목록에 있음", index); 
 
@@ -431,8 +444,9 @@ const FeedItem = ({
     } else if(scrapFeedIndex === -1) {
       setCurrentUserScrap(false);
     }
-  }, []);
+  }, [currentUser]);
 
+  /*
   useEffect(() => {
     //console.log("currentUser.likeFeeds[0].Like", currentUser.likeFeeds[0].Like)
     var index = currentUser.likeFeeds?.findIndex(obj => obj.id === id);
@@ -447,6 +461,7 @@ const FeedItem = ({
         setCurrentUserLike(false);
       }
     }
+    
 
     var scrapFeedIndex = currentUser.scrapFeeds?.findIndex(obj => obj.id === id);
     if(scrapFeedIndex !== -1) {
@@ -456,7 +471,7 @@ const FeedItem = ({
     }
 
   }, [currentUser])
-
+  */
 
   function getDateFormat(date) {
     var tmpDate = new Date(date);

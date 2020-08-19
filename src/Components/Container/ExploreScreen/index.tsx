@@ -252,11 +252,19 @@ const ExploreScreen = ({navigation, route}: Props) => {
         .then(function(response) {
             console.log("GETHotPlace response", response)
             setHotPlaceData(response);
+            setRefreshingRecommendData(false);
         })
         .catch(function(error) {
             console.log("GETHotPlace error", error);
-        }) 
+        })
 
+    }
+
+    const onRefreshRecommendData = () => {
+        setRefreshingRecommendData(true);
+        setTimeout(() => {
+            getRecommendData()
+        }, 10)
     }
 
     const moveToNearFeedMap = () => {
@@ -305,7 +313,7 @@ const ExploreScreen = ({navigation, route}: Props) => {
             refreshControl={
                 <RefreshControl
                 refreshing={refreshingRecommendData}
-                onRefresh={getRecommendData}/>
+                onRefresh={onRefreshRecommendData}/>
             }>
             <BodyContainer>
             <RecommendUserContainer>
@@ -317,6 +325,7 @@ const ExploreScreen = ({navigation, route}: Props) => {
             <RecommendTagBannerContainer>
             <RecommendTagBanner
             trendTagsListData={trendTagsListData}
+            navigation={navigation}
             />
             </RecommendTagBannerContainer>
             <PopularTagByAgeGroupContainer>

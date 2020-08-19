@@ -7,7 +7,7 @@ import {
 import { unstable_enableLogBox } from 'react-native';
 
 const Container = Styled.View`
-width: ${wp('84%')};
+width: ${wp('79.2%')};
 height: ${wp('38%')};
 background-color: #ffffff;
 flex-direction: row;
@@ -25,7 +25,7 @@ padding-left: 15px;
 padding-top: 15px;
 padding-right: 13px;
 padding-bottom: 15px;
-background-color: #fafafa;
+background-color: #ffffff;
 border-top-right-radius: 15px;
 border-bottom-right-radius: 15px;
 flex-shrink: 1;
@@ -36,10 +36,9 @@ flex: 1;
 const ProductImage = Styled.Image`
  width: ${wp('40%')};
  height: ${wp('37.7%')};
- background-color: #c3c3c3;
+ background-color: #ECECEE;
  border-top-left-radius: 15px;
  border-bottom-left-radius: 15px;
- 
 `;
 
 const Divider = Styled.View`
@@ -49,7 +48,7 @@ const Divider = Styled.View`
 `;
 
 const ProductName = Styled.Text`
- font-size: 16px;
+ font-size: 15px;
 `;
 
 const ProductDescription = Styled.Text`
@@ -65,8 +64,8 @@ const ShopContainer = Styled.View`
 `;
 
 const ShopIcon = Styled.Image`
- width: ${wp('6.4%')};
- height: ${wp('6.4%')};
+ width: ${wp('5%')};
+ height: ${wp('5%')};
 `;
 
 const ShopName = Styled.Text`

@@ -61,24 +61,27 @@ height: ${wp('8%')};
 `;
 
 const FollowerTabContainer = Styled.View`
-flex: 1;
+width:${wp('100%')};
 background-color: #ffffff;
-`;
-
-const FollowerListContainer = Styled.View`
 flex: 1;
-background-color: #ffffff;
-`;
-
-const FollowingListContainer = Styled.View`
-flex: 1;
-background-color: #ffffff;
 `;
 
 const FollowingTabContainer = Styled.View`
- flex: 1;
+width:${wp('100%')};
  background-color: #ffffff;
+ flex: 1;
 `;
+
+const FollowerListContainer = Styled.View`
+background-color: #ffffff;
+flex: 1;
+`;
+
+const FollowingListContainer = Styled.View`
+background-color: #ffffff;
+flex: 1;
+`;
+
 
 const SearchInputContainer = Styled.View`
 justify-content: center;
@@ -161,6 +164,8 @@ const FollowListScreen = ({navigation, route}:Props) => {
     const [followingCount, setFollowingCount] = useState<number>(0);
     const [followerListData, setFollowerListData] = useState<Array<object>>([]);
     const [followingListData, setFollowingListData] = useState<Array<object>>([]);
+    const [followerListChange, setFollowerListChange] = useState<boolean>(false);
+    const [followingListChange, setFollowingListChange] = useState<boolean>(false);
     const FollowTopTab = createMaterialTopTabNavigator();
     var requestedOffset = 0;
     var requestedLimit = 20;
@@ -183,14 +188,19 @@ const FollowListScreen = ({navigation, route}:Props) => {
             }, 10)
         }
 
-        GETProfileFriends(route.params.requestedType, inputedNickname, requestedOffset, requestedLimit, route.params.nickname)
+                GETProfileFriends("followers", inputedNickname, requestedOffset, requestedLimit, route.params.nickname)
                 .then(function(response) {
-                    console.log("GETProfileFriends response", response)
-                    if(route.params.requestedType === "followers") {
-                        setFollowerListData(response);
-                    } else if(route.params.requestedType === 'followings') {
-                        setFollowingListData(response);
-                    }
+                  console.log("GETProfileFriends response", response)
+                    setFollowerListData(response);
+                })
+                .catch(function(error) {
+                    console.log("GETProfileFriends error", error);
+                })
+
+                GETProfileFriends("followings", inputedNickname, requestedOffset, requestedLimit, route.params.nickname)
+                .then(function(response) {
+                  console.log("GETProfileFriends response", response)
+                    setFollowingListData(response);
                 })
                 .catch(function(error) {
                     console.log("GETProfileFriends error", error);
@@ -230,7 +240,7 @@ const FollowListScreen = ({navigation, route}:Props) => {
                     console.log("GETProfileFriends error", error);
                 })
             }
-    }, [requestedType])
+    }, [])
 
     
     const onChangeSearchInput = (text: string) => {
@@ -255,8 +265,10 @@ const FollowListScreen = ({navigation, route}:Props) => {
             console.log("GETProfileFriends response", response)
             if(route.params.requestedType === "followers") {
                 setFollowerListData(response);
+                setFollowerListChange(!followerListChange);
             } else if(route.params.requestedType === 'followings') {
                 setFollowingListData(response);
+                setFollowingListChange(!followingListChange)
             }
         })
         .catch(function(error) {
@@ -273,7 +285,7 @@ const FollowListScreen = ({navigation, route}:Props) => {
             if(requestedType !== "followers") {
                 setRequestedType("followers")
                 setTimeout(() => {
-                 getToProfileFriendsList("followers");   
+                 //getToProfileFriendsList("followers");   
                 }, 100)
             }
     }
@@ -309,12 +321,14 @@ const FollowListScreen = ({navigation, route}:Props) => {
 
         const isFocused = useIsFocused();
 
+        console.log("followingListData", followingListData);
+
         if(isFocused) {
             console.log("팔로잉 탭")
             if(requestedType !== "followings") {
                 setRequestedType("followings");
                 setTimeout(() => {
-                getToProfileFriendsList("followings");   
+                //getToProfileFriendsList("followings");   
                 }, 100)
             }
         }

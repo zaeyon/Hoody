@@ -841,7 +841,7 @@ function Upload({route, navigation}) {
                         <SelectedImageContainer>
                           <TouchableWithoutFeedback
                             onPress={() =>
-                              navigation.navigate('ImagesPullScreen', {
+                              navigation.navigate('ImagesFullScreen', {
                                 imagesUrl_arr: imageUrl_arr.slice(
                                   0,
                                   imageUrl_arr.length - 1,

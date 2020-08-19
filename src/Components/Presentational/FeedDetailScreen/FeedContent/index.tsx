@@ -4,23 +4,24 @@ import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp
 } from 'react-native-responsive-screen';
-import {FlatList, Text} from 'react-native';
+import {FlatList, Text, TouchableWithoutFeedback} from 'react-native';
 
 import ProductItem from '~/Components/Presentational/FeedDetailScreen/ProductItem';
 
 const Container = Styled.View`
+ padding-top: 10px;
  background-color: #ffffff;
  flex: 1;
  width: ${wp('100%')};
- padding-bottom: 30px;
+ padding-bottom: 50px;
 `;
 
 const DescriptionContainer = Styled.View`
 width: ${wp('100%')};
-padding-top: 16px;
+padding-top: 10px;
 padding-left: 18px;
 padding-right: 18px;
-padding-bottom: 15px;
+padding-bottom: 10px;
 justify-content: center;
 `;
 
@@ -30,6 +31,8 @@ const ReviewDescription = Styled.Text`
 `;
 
 const ImageContainer = Styled.View`
+ margin-top: 10px;
+ margin-bottom: 10px;
  justify-content: center;
  align-items: center;
 `;
@@ -43,24 +46,26 @@ const ReviewImage = Styled.Image`
 const ProductContainer = Styled.View`
 width: ${wp('100%')};
 background-color: #FFFFFF;
-padding-top: 16px;
-padding-bottom: 16px;
+padding-top: 10px;
+padding-bottom: 10px;
 justify-content: center;
 align-items: center;
 `;
 
 interface Props {
-    paragraphData: Array<Object>
+    paragraphData: Array<Object>,
+    navigation: any,
+    moveToImageFull: () => void,
 }
 
 
-const FeedContent = ({paragraphData}: Props) => {
+const FeedContent = ({paragraphData, navigation, moveToImageFull}: Props) => {
     const [paragraph, setParagraph] = useState();
 
     useEffect(() => {
         console.log("paragraph", paragraphData);
     }, [paragraphData])
-    
+
 
 const renderItem = ({item, index}: any) => {
     if(item.type === "description") {
@@ -70,12 +75,14 @@ const renderItem = ({item, index}: any) => {
             </DescriptionContainer>
         )
     } else if(item.type === "image") {
-        console.log("피드 상세페이지 image.url", item.url);
+        console.log("피드 상세페이지 image.url", item);
         return (
+            <TouchableWithoutFeedback onPress={() => moveToImageFull(item.url)}>
             <ImageContainer>
                 <ReviewImage
                 source={{uri: item.url}}/>
             </ImageContainer>
+            </TouchableWithoutFeedback>
         )
     } else if(item.type === "product") {
         return (

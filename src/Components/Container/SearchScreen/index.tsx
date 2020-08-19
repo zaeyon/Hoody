@@ -459,10 +459,14 @@ const SearchScreen = ({navigation}: Props) => {
 
 
         if(currentUser.inputedKeywordList.length === 1 && currentUser.inputedKeywordList[0].type === "계정") {
+        if(currentUser.user.nickname === currentUser.inputedKeywordList[0].item.nickname) {
+        navigation.navigate("Profile");
+        } else {
         navigation.navigate("AnotherUserProfileStack", {
             screen: 'AnotherUserProfileScreen',
             params: {requestedUserNickname: currentUser.inputedKeywordList[0].item.nickname}
-        })    
+        }) 
+        }   
         } else {
         navigation.navigate("SearchResultScreen");
         }

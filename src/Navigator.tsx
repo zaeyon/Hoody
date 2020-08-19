@@ -21,7 +21,7 @@ import PinterMap from '~/Screens/PinterMap';
 import UncertifiedProfile from '~/Screens/UncertifiedProfile';
 import CertifiedProfile from '~/Screens/CertifiedProfile';
 import LocationSearch from '~/Screens/LocationSearch';
-import ImagesPullScreen from '~/Screens/ImagesPullScreen';
+import ImagesFullScreen from '~/Screens/ImagesFullScreen';
 import Gallery from '~/Screens/Gallery';
 import Gallery_JustOne from '~/Screens/Gallery_JustOne';
 import Unauthorized from '~/Screens/Unauthorized';
@@ -103,6 +103,9 @@ import TopInterestTagDetailScreen from '~/Components/Container/ReportScreen/TopI
 // Declare Screen
 import FeedDeclareScreen from '~/Components/Container/FeedDeclareScreen';
 import CommentDeclareScreen from '~/Components/Container/CommentDeclareScreen';
+
+// Feed Detail Screen
+import FeedImagePullScreen from '~/Components/Container/FeedImagePullScreen';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
@@ -265,8 +268,8 @@ function UploadStackScreen() {
       component={ProductUrlSearchScreen}
       />
       <UploadStack.Screen
-        name="ImagesPullScreen"
-        component={ImagesPullScreen}
+        name="ImagesFullScreen"
+        component={ImagesFullScreen}
       />
       <UploadStack.Screen
         name="Gallery"
@@ -521,8 +524,8 @@ function FeedStackScreen() {
       component={ProductUrlSearchScreen}
       />
       <FeedStack.Screen
-        name="ImagesPullScreen"
-        component={ImagesPullScreen}
+        name="ImagesFullScreen"
+        component={ImagesFullScreen}
       />
       <FeedStack.Screen
         name="Gallery"

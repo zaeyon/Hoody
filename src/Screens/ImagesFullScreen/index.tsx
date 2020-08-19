@@ -1,23 +1,46 @@
 import React, {useEffect, useState} from 'react';
 import Styled from 'styled-components/native';
-import {BackHandler} from 'react-native';
+import {BackHandler, TouchableWithoutFeedback} from 'react-native';
 import Swiper from 'react-native-swipe-image';
 import {SliderBox} from '~/Components/SliderBox';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-const Container = Styled.View`
+const Container = Styled.SafeAreaView`
  flex: 1;
- background-color: #FFFFFF;
+ background-color: #000000;
  justify-content: center;
+ align-items: center;
 `;
 
 const PullImage = Styled.Image`
 flex: 1;
 `;
 
-const ImagePullScreen = ({route, navigation}) => {
+const HeaderCancelContainer = Styled.View`
+ padding-top: 50px
+ padding-left: 16px;
+ padding-bottom: 14px;
+ padding-right: 16px;
+ position: absolute;
+ top: 0;
+ left: 0;
+`;
+
+const HeaderCancelIcon = Styled.Image`
+ width: ${wp('6.4%')};
+ height: ${wp('6.4%')};
+ tint-color: #ffffff;
+`;
+
+interface Props {
+  navigation: any,
+  route: any,
+}
+
+
+const ImagePullScreen = ({route, navigation}: Props) => {
   const [images, setImages] = useState([
     'https://source.unsplash.com/1024x768/?nature',
     'https://source.unsplash.com/1024x768/?water',
@@ -46,21 +69,21 @@ const ImagePullScreen = ({route, navigation}) => {
 
   return (
     <Container>
-      {/*     <PullImage
-        resizeMode="contain"
-        source={{
-          uri: 'https://www.paxetv.com/news/photo/201911/82404_54450_5212.jpg',
-        }}
-    />*/}
       <SliderBox
         images={imagesUrl_arr}
         disableOnPress={true}
         resizeMode="contain"
         sliderBoxHeight={hp('100%')}
         imageIndex={imageIndex}
-        dotColor="#23E5D2"
+        dotColor="#267DFF"
         inactiveDotColor="#cccccc"
       />
+<TouchableWithoutFeedback onPress={() => navigation.goBack()}>
+<HeaderCancelContainer>
+        <HeaderCancelIcon
+        source={require('~/Assets/Images/HeaderBar/ic_X.png')}/>
+      </HeaderCancelContainer>
+      </TouchableWithoutFeedback>
     </Container>
   );
 };

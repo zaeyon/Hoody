@@ -1273,7 +1273,18 @@ const SearchResultScreen = ({navigation, route}: Props) => {
       if(currentUser?.inputedKeywordList) {
         console.log("currentUser.inputedKeywordList", currentUser.inputedKeywordList);
         if(currentUser.inputedKeywordList.length === 1) {
-          setSingleKeyword(true);
+          if(currentUser.inputedKeywordList[0].type === "계정") {
+            if(currentUser.user.nickname === currentUser.inputedKeywordList[0].item.nickname) {
+              navigation.navigate("Profile");
+            } else {
+              navigation.navigate("AnotherUserProfileStack", {
+                screen: 'AnotherUserProfileScreen',
+                params: {requestedUserNickname: currentUser.inputedKeywordList[0].item.nickname, requestScreen: "SearchResultScreen"}
+            }) 
+            }
+          } else {
+            setSingleKeyword(true);
+          }
         }
         currentUser.inputedKeywordList.forEach((keyword: any, index: number) => {
           if(keyword.type === "태그") {

@@ -418,7 +418,11 @@ const AnotherUserProfileScreen = ({navigation, route}: Props) => {
   }
 
   const navigateGoBack = () => {
-      navigation.goBack();
+      if(route.params?.requestScreen) {
+        navigation.navigate("SearchScreen");
+      } else {
+        navigation.goBack();
+      }
   }
 
   const followUser = () => {

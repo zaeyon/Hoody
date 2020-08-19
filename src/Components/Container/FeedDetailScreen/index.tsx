@@ -745,6 +745,7 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
     const [otherUsersFeedModalVisible, setOtherUsersFeedModalVisible] = useState<boolean>(false);
     const [currentUserFeed, setCurrentUserFeed] = useState<boolean>(false);
     const [visibleReportModal, setVisibleReportModal] = useState<boolean>(false);
+    const [imageUriArray, setImageUriArray] = useState<Array<string>>("");
 
     const currentUser = useSelector((state) => state.currentUser);
     const dispatch = useDispatch();
@@ -1015,6 +1016,21 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
      })
    }
 
+   const moveToImageFull = (imageUri:string) => {
+     console.log("feedDetailInfo.mediaFiles", feedDetailInfo.mediaFiles);
+     var index = feedDetailInfo.mediaFiles.findIndex((image) => image.url === imageUri);
+     var imageUri = feedDetailInfo.mediaFiles.map((image) => {
+       return image.url
+     })
+
+     console.log("선택한 사진의 mediaFiles index", index);
+
+     navigation.navigate("ImagesFullScreen", {
+       imagesUrl_arr : imageUri,
+       imageIndex: index,
+     })
+   }
+
   
 
    return (
@@ -1050,6 +1066,8 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
    />
       </InformationContainer>
           <FeedContent
+          moveToImageFull={moveToImageFull}
+          navigation={navigation}
           paragraphData={paragraphData}
           ></FeedContent>
           </ScrollView>

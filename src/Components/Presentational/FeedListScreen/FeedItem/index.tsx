@@ -609,7 +609,7 @@ const FeedItem = ({
             </HeaderCenterContainer>
           </WriterContainer>
           <ExpenseRatingContainer>
-            <ExpenseText>{expense ? expense+"원" : null}</ExpenseText>
+            <ExpenseText>{expense ? expense.toLocaleString()+"원" : null}</ExpenseText>
             <RatingStarImage
             source={require('~/Assets/Images/ic_newStar.png')}
             />

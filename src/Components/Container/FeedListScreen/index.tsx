@@ -410,6 +410,7 @@ function FeedListScreen({navigation, route}: Props) {
   }
 
   const loadMoreFeedListData = () => {
+    console.log("피드리스트 데이터 더 불러오기")
     offset = offset + 20;
     limit = limit + 20;
 
@@ -479,7 +480,7 @@ function FeedListScreen({navigation, route}: Props) {
       data={feedListData[0] ? feedListData : [0]}
       renderItem={renderFeedItem}
       onEndReached={loadMoreFeedListData}
-      onEndReachedThreshold={0.5}
+      onEndReachedThreshold={1}
       />
       </FeedListContainer>
       )}

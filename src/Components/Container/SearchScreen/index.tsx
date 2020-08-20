@@ -370,7 +370,7 @@ const SearchScreen = ({navigation}: Props) => {
     const selectSearchItem = (item: object, type: string, index: number) => {
         
         console.log("selectSearchItem", item);
-        
+
         if(selectedSearchItemList.length === 3) {
             Alert.alert('검색어는 최대 3개까지 입력 가능합니다.', ' ', [
                 {
@@ -417,20 +417,20 @@ const SearchScreen = ({navigation}: Props) => {
 
         var tmpSearchResultListData = searchResultListData;
 
-        if(requestedItem.type === "태그") {
+        if(requestedItem.type === "태그" && tmpSearchResultListData[0]) {
             console.log("tmpSearchResultListData[0].data", tmpSearchResultListData[0].data);
             var index2 = tmpSearchResultListData[0].data.indexOf(requestedItem.item);
             if(index2 !== -1) {
                 tmpSearchResultListData[0].data[index2].selected = false;
                 setSearchResultListData(tmpSearchResultListData);
             }
-        } else if(requestedItem.type === "계정") {
+        } else if(requestedItem.type === "계정" && tmpSearchResultListData[0]) {
             var index2 = tmpSearchResultListData[1].data.indexOf(requestedItem.item);
             if(index2 !== -1) {
                 tmpSearchResultListData[1].data[index2].selected = false;
                 setSearchResultListData(tmpSearchResultListData);
             }
-        } else if(requestedItem.type === "장소") {
+        } else if(requestedItem.type === "장소" && tmpSearchResultListData[0]) {
             var index2 = tmpSearchResultListData[2].data.indexOf(requestedItem.item);
             if(index2 !== -1) {
                 tmpSearchResultListData[2].data[index2].selected = false;

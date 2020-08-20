@@ -294,6 +294,19 @@ const SingleKeywordFollowingText = Styled.Text`
  color: #77A7F1;
 `;
 
+const NoSearchResultContainer = Styled.View`
+ width: ${wp('100%')};
+ height: ${hp('50%')};
+ align-items: center;
+ justify-content: center;
+ background-color: #ffffff;
+`;
+
+const NoSearchResultText = Styled.Text`
+ font-size: 15px;
+ color: #56575C;
+`;
+
 const TEST_FEED_DATA = [
     {
       id: 1,
@@ -1245,6 +1258,9 @@ interface Props {
     route: any,
 }
 
+var offset = 0;
+var limit = 20;
+
 const SearchResultScreen = ({navigation, route}: Props) => {
     const [keywordList, setKeywordList] = useState<Array<object>>([]);
     const [filterModalVisible, setFilterModalVisible] = useState<boolean>(false);
@@ -1259,6 +1275,8 @@ const SearchResultScreen = ({navigation, route}: Props) => {
     const [searchQuery, setSearchQuery] = useState<string>("");
 
     const [currentUserFollowing, setCurrentUserFollowing] = useState<boolean>(false);
+    const [noSearchFeedList, setNoSearchFeedList] = useState<boolean>(false);
+    const [noSearchCollectionList, setNoSearchCollectionList] = useState<boolean>(false);
 
     const currentUser = useSelector((state: any) => state.currentUser);
     const dispatch = useDispatch();
@@ -1316,14 +1334,18 @@ const SearchResultScreen = ({navigation, route}: Props) => {
         })
       }
 
-    }, [currentUser])
+    }, [])
 
     const keywordSearchFeedList = (query: string, order: string, offset: number, limit: number) => {
       GETSearchResult("post", query, order, offset, limit)
             .then(function(response) {
             console.log("GETSearchResult response", response);
             setSearchResultFeedListData(response.data);
-
+            if(response.data.length == 0) {
+              setNoSearchFeedList(true);
+            } else {
+              setNoSearchFeedList(false);
+            }
             var tmpKeywordList = currentUser?.inputedKeywordList;
             if(currentUser?.inputedKeywordList.length === 1) {
               if(currentUser.inputedKeywordList[0]?.type === "태그") {
@@ -1353,6 +1375,12 @@ const SearchResultScreen = ({navigation, route}: Props) => {
       .then(function(response) {
         console.log("GETSearch Collection response", response);
         setSearchResultCollectionListData(response.data);
+        if(response.data.length == 0) {
+          setNoSearchCollectionList(true);
+        } else {
+          setNoSearchCollectionList(false);
+        }
+        
       })
       .catch(function(error) {
         console.log("GETSearch Collection error", error);
@@ -1444,6 +1472,25 @@ const SearchResultScreen = ({navigation, route}: Props) => {
           dispatch(allActions.userActions.setInputedKeywordList([]))
         }
       })
+    }
+
+    const loadMoreSearchFeedData = () => {
+      console.log("검색 결과 무한 스크롤");
+      /*
+      offset = offset + 20;
+      limit = limit + 20;
+      var order = "createdAt"
+
+      GETSearchResult("post", searchQuery, order, offset, limit)
+            .then(function(response) {
+            console.log("GETSearchResult response", response);
+            setSearchResultFeedListData(searchResultFeedListData.concat(response.data));
+            //dispatch(allActions.userActions.setInputedKeywordList(tmpKeywordList));
+            })
+            .catch(function(error) {
+            console.log("GETSearchResult error", error);
+      })
+      */
     }
 
     const keywordListContainer = () => {
@@ -1652,27 +1699,42 @@ const SearchResultScreen = ({navigation, route}: Props) => {
             <FeedListTabContainer
             onLayout={(event) => measureFeedListTab(event)}
             tabLabel="게시글" >
+              {!noSearchFeedList && (
                 <FlatList
                 scrollEnabled={false}
                 showsVerticalScrollIndicator={false}
                 keyExtractor={(index: any) => index}
                 data={searchResultFeedListData}
-                renderItem={renderFeedItem}/>
+                renderItem={renderFeedItem}
+                onEndReached={loadMoreSearchFeedData}
+                onEndReachedThreshold={1}
+                />
+              )}
+              {noSearchFeedList && (
+                <NoSearchResultContainer>
+                  <NoSearchResultText>검색된 게시글이 없어요.</NoSearchResultText>
+                </NoSearchResultContainer>
+              )}
             </FeedListTabContainer>
             <CollectionListTabContainer
             onLayout={(event) => measureCollectionListTab(event)}
             tabLabel="컬렉션"
             >
-            <CollectionListTabContainer>
+              {!noSearchCollectionList && (
             <FlatList
-columnWrapperStyle={{justifyContent:'space-between', paddingLeft:15, paddingRight:15, paddingTop:10, paddingBottom:10, backgroundColor:'#ffffff'}}
+            columnWrapperStyle={{justifyContent:'space-between', paddingLeft:15, paddingRight:15, paddingTop:10, paddingBottom:10, backgroundColor:'#ffffff'}}
             numColumns={2}
             scrollEnabled={false}
             showsVerticalScrollIndicator={false}
             keyExtractor={(index: any) => index}
             data={searchResultCollectionListData}
             renderItem={renderCollectionItem}/>
-            </CollectionListTabContainer>
+              )}
+              {noSearchCollectionList && (
+                <NoSearchResultContainer>
+                  <NoSearchResultText>검색된 컬렉션이 없어요.</NoSearchResultText>
+                </NoSearchResultContainer>
+              )}
             </CollectionListTabContainer>
             </ScrollableTabView>
             {/*

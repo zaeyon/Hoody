@@ -304,12 +304,13 @@ const SearchScreen = ({navigation}: Props) => {
     const [noInputSearch, setNoInputSearch] = useState<boolean>(true);
 
     const currentUser = useSelector((state) => state.currentUser);
+    const recentSearchList = useSelector((state) => state.search);
     const dispatch = useDispatch();
 
     useEffect(() => {
-        console.log("currentUser.userRecentSearch", currentUser.userRecentSearch)
-        dispatch(allActions.userActions.setInputedKeywordList([]))
-       setRecentlySearchListData(currentUser.userRecentSearch);
+       // dispatch(allActions.userActions.setInputedKeywordList([]))
+       //setRecentlySearchListData(currentUser.userRecentSearch);
+       console.log("recentSearchList!!", recentSearchList.userRecentSearch);
     }, [])
 
     const onChangeSearchInput = (text: string) => {
@@ -367,6 +368,9 @@ const SearchScreen = ({navigation}: Props) => {
     }
 
     const selectSearchItem = (item: object, type: string, index: number) => {
+        
+        console.log("selectSearchItem", item);
+        
         if(selectedSearchItemList.length === 3) {
             Alert.alert('검색어는 최대 3개까지 입력 가능합니다.', ' ', [
                 {
@@ -700,6 +704,7 @@ const SearchScreen = ({navigation}: Props) => {
             )}
             {noInputSearch && (
                 <NoSearchInputContainer>
+                    {/*
                     <RecentlySearchHeader>
                         <RecentlySearchText>최근 검색</RecentlySearchText>
                         <RecentlySearchRemoveText>전체삭제</RecentlySearchRemoveText>
@@ -710,6 +715,7 @@ const SearchScreen = ({navigation}: Props) => {
                         keyExtractor={(item:any,index:number) => index.toString()}
                         renderItem={renderRecentlyResultItem}/>
                     </RecentlySearchListContainer>
+                    */}
 
                 </NoSearchInputContainer>
             )}

@@ -5,7 +5,8 @@ import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-
+import {useDispatch} from 'react-redux';
+import allActions from '~/action';
 import Swiper from 'react-native-swiper';
 
 const Container = Styled.View`
@@ -51,9 +52,26 @@ interface Props {
 }
 
 const RecommendTagBanner = ({trendTagsListData, navigation}: Props) => {
+    const dispatch = useDispatch();
 
-    const searchToTrendTag = () => {
-        navigation.navigate("SearchResultScreen");
+    const searchToTrendTag = (item: object) => {
+        var trendTag = [{
+            item : {
+                id: item.id,
+                name: item.name,
+                reviewNum: item.reviewNum,
+                selected: false,
+                starRate: item.starRate,
+            },
+            type : "태그"
+        }]
+        dispatch(allActions.userActions.setInputedKeywordList(trendTag));
+
+        setTimeout(() => {
+            navigation.navigate("SearchResultScreen", {
+                requestType: "trendTag"
+            });
+        }, 10)
     }
     
     return (
@@ -61,7 +79,7 @@ const RecommendTagBanner = ({trendTagsListData, navigation}: Props) => {
             <Swiper paginationStyle={{bottom:-5}} dotStyle={{width:5, height:5}} activeDotStyle={{backgroundColor:'#56575C', width:5, height:5}}>
                 {trendTagsListData.map((item, index) => {
                     return (
-                    <TouchableWithoutFeedback onPress={() => searchToTrendTag()}>
+                    <TouchableWithoutFeedback onPress={() => searchToTrendTag(item)}>
                     <BannerContainer>
                     <BannerImage
                     source={{uri:item.coverImg}}/>

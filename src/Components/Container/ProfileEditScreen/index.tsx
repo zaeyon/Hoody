@@ -198,7 +198,7 @@ const ProfileEditScreen = ({navigation, route}: Props) => {
         if(currentUser.user) {
             console.log("profileEditScreen currentUser", currentUser);
             setCurrentUserProfile(currentUser.user);
-            setProfileImage(currentUser.user.profileImage);
+            setProfileImageUri(currentUser.user.profileImage);
         }
     }, [])
 

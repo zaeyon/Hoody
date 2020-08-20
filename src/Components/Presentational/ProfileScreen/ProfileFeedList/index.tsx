@@ -11,6 +11,7 @@ import Modal from 'react-native-modal'
 
 import ProfileListFeedItem from '~/Components/Presentational/ProfileScreen/ProfileListFeedItem';
 import ProfileTileFeedItem from '~/Components/Presentational/ProfileScreen/ProfileTileFeedItem';
+import FeedItem from '~/Components/Presentational/ProfileScreen/FeedItem';
 
 
 const UserFeedListContainer = Styled.View`
@@ -162,27 +163,26 @@ const ProfileFeedList = ({navigation, route, feedListData, currentSortType, onSc
   
     const renderProfileListFeedItem = ({item, index}) => {
         return (
-            <ProfileListFeedItem
-            id={item.id}
-            profile_image={item.user.profileImg}
-            nickname={item.user.nickname}
-            createdAt={item.createdAt}
-            rating={item.starRate}
-            main_tag={item.mainTags.name}
-            sub_tag1={item.subTagOnes?item.subTagOnes.name:null}
-            sub_tag2={item.subTagTwos?item.subTagTwos.name:null}
-            like_count={item.likes}
-            comment_count={item.commentsCount}
-            reply_count={item.replysCount}
-            scrap_count={item.Scraps.length}
-            mediaFiles={item.mediaFiles}
-            image_count={item.mediaFiles.length}
-            location={item.address?item.address.address:null}
-            expense={item.expense?item.expense:null}
-            desArray={item.descriptions}
-            productArray={item.Products}
-            navigation={navigation}
-          />
+          <FeedItem
+          id={item.id}
+          profile_image={item.user.profileImg}
+          nickname={item.user.nickname}
+          createdAt={item.createdAt}
+          rating={item.starRate}
+          main_tag={item.mainTags.name}
+          sub_tag1={item.subTagOnes?item.subTagOnes.name:null}
+          sub_tag2={item.subTagTwos?item.subTagTwos.name:null}
+          like_count={item.likes}
+          comment_count={item.commentsCount}
+          reply_count={item.replysCount}
+          scrap_count={0}
+          mediaFiles={item.mediaFiles}
+          image_count={item.mediaFiles.length}
+          location={item.address?item.address.address:null}
+          expense={item.expense?item.expense:null}
+          desArray={item.descriptions}
+          navigation={navigation}
+          productArray={item.Products}/>
         )
     }
 

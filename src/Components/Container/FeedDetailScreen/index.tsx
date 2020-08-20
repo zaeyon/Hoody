@@ -857,31 +857,34 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
     }
 
     const addLike = () => {
-      var addedLikeFeeds = currentUser.likeFeeds;
-      //var realTimeAddLikeList = currentUser.realTimeAddLikeList ? currentUser.realTimeAddLikeList : [];
-
-      var tmpLikeCount = likeCount + 1;
-      setLikeCount(tmpLikeCount);
       setCurrentUserLike(true);
-      const likeObj = {
-        id: route.params.feedId,
-      }
-
-      addedLikeFeeds.push(likeObj);
-      //realTimeAddLikeList = [likeObj]
-      
-      dispatch(allActions.userActions.setLikeFeeds(addedLikeFeeds));
-      dispatch(allActions.userActions.setRealTimeAddLike(postId));
-      POSTLike(currentUser.user.userId, postId)
-      .then(function(response) {
-        console.log("response", response)
-      })
-      .catch(function(error) {
-        console.log("error", error);
+      setLikeCount(likeCount+1);
+      setTimeout(() => {
+        var addedLikeFeeds = currentUser.likeFeeds;
+        //var realTimeAddLikeList = currentUser.realTimeAddLikeList ? currentUser.realTimeAddLikeList : [];
+        const likeObj = {
+          id: route.params.feedId,
+        }
+  
+        addedLikeFeeds.push(likeObj);
+        //realTimeAddLikeList = [likeObj]
+        
+        dispatch(allActions.userActions.setLikeFeeds(addedLikeFeeds));
+        dispatch(allActions.userActions.setRealTimeAddLike(postId));
+        POSTLike(currentUser.user.userId, postId)
+        .then(function(response) {
+          console.log("response", response)
+        })
+        .catch(function(error) {
+          console.log("error", error);
+        })
       })
     }
 
     const deleteLike = () => {
+      setCurrentUserLike(false);
+      setLikeCount(likeCount-1)
+      setTimeout(() => {
       var deletedLikeFeeds = currentUser.likeFeeds;
       console.log("FeedDetailScreen currentUser", currentUser);
       var index = deletedLikeFeeds.indexOf(postId);
@@ -889,17 +892,14 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
       dispatch(allActions.userActions.setLikeFeeds(deletedLikeFeeds));
       dispatch(allActions.userActions.setRealTimeRemoveLike(postId));
 
-
-      var tmpLikeCount = likeCount - 1;
-      setLikeCount(tmpLikeCount);
-      setCurrentUserLike(false);
-
       DELETELike(currentUser.user.userId, postId)
       .then(function(response) {
         console.log("response", response)
       })
       .catch(function(error) {
         console.log("error", error)
+      })
+
       })
     }
 

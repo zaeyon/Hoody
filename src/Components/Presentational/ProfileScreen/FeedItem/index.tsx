@@ -8,13 +8,13 @@ import {
 import {useSelector, useDispatch} from 'react-redux';
 import allActions from '~/action';
 
+import ProductItem from './ProductItem';
+
 // Route
 import GetFeedDetail from '~/Route/Post/GetFeedDetail';
 import {POSTLike, DELETELike} from '~/Route/Post/Like';
 import POSTScrapFeed from '~/Route/Post/Scrap/POSTScrapFeed';
 import DELETEScrapFeed from '~/Route/Post/Scrap/DELETEScrapFeed';
-
-import ProductItem from './ProductItem';
 
 const Container = Styled.View`
 
@@ -133,7 +133,7 @@ margin-bottom: 5px;
 
 const ImageCountBackground = Styled.View`
  top: 15px;
- right: 5px;
+ right: 2px;
  padding: 5px 9px 5px 9px;
  position: absolute;
  border-radius: 26px;
@@ -170,6 +170,10 @@ height: ${wp('82%')}px;
 margin-bottom: 10px;
 `;
 
+const ProductContainer = Styled.View`
+padding-top: 10px;
+`;
+
 const ReviewImage = Styled.Image`
 resize-mode:cover;
 border-radius: 10px; 
@@ -192,18 +196,18 @@ const MainTagText = Styled.Text`
  font-size: 16px;
  font-weight: 600;
  color: #3384FF;
- margin-right: 7px;
+ margin-right: 2.5px;
 `;
 
 const SubTagText = Styled.Text`
 color: #CCCCCC;
 font-size: 16px;
 font-weight: 600;
-margin-right: 7px;
+margin-right: 2.5px;
 `;
 
 const LocationPriceContainer = Styled.View`
- margin-top: 5px;
+ margin-top: 3px;
  margin-left: 8px;
  height: 20px;
  flex-direction: row;
@@ -308,10 +312,6 @@ const ExpenseText = Styled.Text`
  color: #1D1E1F;
 `;
 
-const ProductContainer = Styled.View`
-padding-top: 10px;
-`;
-
 interface Props {
   id: number;
   profile_image: string;
@@ -332,11 +332,11 @@ interface Props {
   expense: number;
   desArray: Array<object>;
   navigation: any;
-  mediaFiles: Array<object>,
+  mediaFiles: Array<object>;
   productArray: Array<object>;
 }
 
-const ProfileListFeedItem = ({
+const FeedItem = ({
   id,
   profile_image,
   nickname,
@@ -382,6 +382,7 @@ const ProfileListFeedItem = ({
 
   useEffect(() => {
     /*
+    console.log("FeedItem productArray", productArray);
     if (rating % 1 === 0) {
       for (var i = 0; i < rating; i++) {
         tmpRatingArr[i] = 'full';
@@ -399,16 +400,15 @@ const ProfileListFeedItem = ({
         }
       }
     }
-    */
 
-    /*
+    
     let tmpTagList = new Array();
     tmpTagList.push(main_tag);
     if (sub_tag1 !== null) tmpTagList.push(sub_tag1);
     if (sub_tag2 !== null) tmpTagList.push(sub_tag2);
     setTagList(tmpTagList);
     */
-
+    
     const tmpCreatedDate = getDateFormat(createdAt);
     setCreatedDate(tmpCreatedDate);
     console.log("description", desArray);
@@ -417,20 +417,25 @@ const ProfileListFeedItem = ({
     console.log("피드 닉네임", nickname)
     setChangeState(!changeState);
 
+    console.log("유저의 실시간 좋아요 리스트", currentUser.realTimeAddLikeList);
     var index = currentUser.likeFeeds?.findIndex(obj => obj.id === id);
+    //var realTimeAddIndex = currentUser.realTimeAddLikeList?.findIndex(obj => obj.id === id);
     if(index !== -1) {
       setCurrentUserLike(true);
       likeFeedsIndex = index;
       if(currentUser.realTimeAddLike === id) {
        // console.log("realTimeIndexzz", realTimeAddIndex);
-        dispatch(allActions.userActions.setRealTimeAddLike(null));
-        setLikeCount(likeCount+1);
+       //   dispatch(allActions.userActions.setRealTimeAddLike(null));
+       // setLikeCount(likeCount+1);
+      }  else {
+       //   setLikeCount(like_count);
       }
     } else if(index === -1) {
       setCurrentUserLike(false);
       if(currentUser.realTimeRemoveLike === id) {
-        dispatch(allActions.userActions.setRealTimeRemoveLike(null))
-        setLikeCount(likeCount-1);
+        //  console.log("실시간 싫어요", id);
+        //dispatch(allActions.userActions.setRealTimeRemoveLike(null))
+        //setLikeCount(likeCount-1);
       }
     }
     console.log("해당 피드가 사용자가 좋아요한 피드목록에 있음", index); 
@@ -447,18 +452,18 @@ const ProfileListFeedItem = ({
   useEffect(() => {
     //console.log("currentUser.likeFeeds[0].Like", currentUser.likeFeeds[0].Like)
     var index = currentUser.likeFeeds?.findIndex(obj => obj.id === id);
-    console.log("currentUser.likeFeeds", currentUser.likeFeeds);
     if(index !== -1) {
       if(!currentUserLike) {
-        //setLikeCount(likeCount+1)
+        setLikeCount(likeCount+1)
         setCurrentUserLike(true);
       } 
     } else if(index === -1) {
       if(currentUserLike) {
-        //setLikeCount(likeCount-1)
+        setLikeCount(likeCount-1)
         setCurrentUserLike(false);
       }
     }
+    
 
     var scrapFeedIndex = currentUser.scrapFeeds?.findIndex(obj => obj.id === id);
     if(scrapFeedIndex !== -1) {
@@ -469,7 +474,6 @@ const ProfileListFeedItem = ({
 
   }, [currentUser])
   */
-
 
   function getDateFormat(date) {
     var tmpDate = new Date(date);
@@ -482,6 +486,7 @@ const ProfileListFeedItem = ({
 }
 
   const deleteLike = () => {
+    if(currentUser.likeFeeds) {
     console.log("currentUser.likeFeeds", currentUser.likeFeeds);
     var removedLikeFeeds = currentUser.likeFeeds;
     var deletedIndex = currentUser.likeFeeds?.findIndex(obj => obj.id === id);
@@ -498,9 +503,11 @@ const ProfileListFeedItem = ({
     .catch(function(error) {
       console.log("좋아요 삭제 error", error)
     })
+    }
   }
 
   const addLike = () => {
+    if(currentUser.likeFeeds) {
     var addedLikeFeeds = currentUser.likeFeeds;
     const likeObj = {
       id: id,
@@ -517,6 +524,8 @@ const ProfileListFeedItem = ({
     .catch(function(error) {
       console.log("좋아요 추가 error", error);
     })
+
+    }
   }
 
   const addScrapFeed = () => {
@@ -571,8 +580,6 @@ const ProfileListFeedItem = ({
       screen: "FeedDetailScreen",
       params: {
       feedId:id,
-      tagList: tagList,
-      ratingArray: ratingArray,
       createdAt: createdDate,
       currentUserLike: currentUserLike,
       currentUserScrap: currentUserScrap,
@@ -604,7 +611,7 @@ const ProfileListFeedItem = ({
             </HeaderCenterContainer>
           </WriterContainer>
           <ExpenseRatingContainer>
-            <ExpenseText>{expense ? expense.toLocaleString() + "원" : ""}</ExpenseText>
+            <ExpenseText>{expense ? expense+"원" : null}</ExpenseText>
             <RatingStarImage
             source={require('~/Assets/Images/ic_newStar.png')}
             />
@@ -615,23 +622,6 @@ const ProfileListFeedItem = ({
         <View>
         <BodyContainer>
         <TagContainer>
-          {/*
-            <FlatList
-              horizontal={true}
-              data={tagList}
-              renderItem={({item, index}) => {
-                if(index === 0) 
-                { return (
-                  <MainTagText>#{item}</MainTagText>
-                )
-                } else {
-                  return (
-                  <SubTagText>#{item}</SubTagText>
-                  )
-                }
-              }}
-            />
-          */}
           <MainTagText>
             {"#" + main_tag}
             {sub_tag1 && (
@@ -643,9 +633,11 @@ const ProfileListFeedItem = ({
             )}
           </MainTagText>
           </TagContainer>
+          {desArray[0] && (
         <DescriptionContainer>
-            <DescriptionText>{desArray[0] ? desArray[0].description : null}</DescriptionText>
-          </DescriptionContainer>
+        <DescriptionText>{desArray[0] ? desArray[0].description : ""}</DescriptionText>
+        </DescriptionContainer>
+          )}
           {!mediaFiles[0] && productArray[0] && (
           <ProductContainer>
             <ProductItem
@@ -695,7 +687,7 @@ style={{tintColor:'#8E9199'}}
             </InfoContainer>
             </TouchableWithoutFeedback>
             )}
-            <InfoContainer style={{marginLeft: 50}}> 
+            <InfoContainer style={{marginLeft: 50, backgroundColor:'#ffffff'}}> 
             <CommentIcon
 style={{tintColor:'#8E9199'}}
             source={require('~/Assets/Images/ic_comment.png')}/>
@@ -705,8 +697,8 @@ style={{tintColor:'#8E9199'}}
             <FooterRightContainer>
               {!currentUserScrap && (
             <TouchableWithoutFeedback onPress={() => addScrapFeed()}>
-            <InfoContainer style={{paddingTop: 3}}
-            >
+            <InfoContainer
+            style={{backgroundColor:'#ffffff', paddingTop:3}}>
             <ScrapIcon
             style={{tintColor:'#8E9199'}}
             source={require('~/Assets/Images/Feed/ic_emptyScrap.png')}/>
@@ -715,7 +707,8 @@ style={{tintColor:'#8E9199'}}
               )}
               {currentUserScrap && (
               <TouchableWithoutFeedback onPress={() => deleteScrapFeed()}>
-                <InfoContainer style={{paddingTop: 3}}>
+                <InfoContainer
+                style={{backgroundColor:'#ffffff', paddingTop:3}}>
                   <ScrapIcon
                   source={require('~/Assets/Images/Feed/ic_pressedScrap.png')}/>
                 </InfoContainer>
@@ -742,4 +735,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default ProfileListFeedItem;
+export default FeedItem;

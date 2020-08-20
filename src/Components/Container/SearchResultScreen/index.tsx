@@ -1437,6 +1437,15 @@ const SearchResultScreen = ({navigation, route}: Props) => {
       
     }
 
+    const navigateGoBack = () => {
+      navigation.goBack();
+      setTimeout(() => {
+        if(route.params?.requestType === "trendTag") {
+          dispatch(allActions.userActions.setInputedKeywordList([]))
+        }
+      })
+    }
+
     const keywordListContainer = () => {
       
       if(!singleKeyword) {
@@ -1575,6 +1584,7 @@ const SearchResultScreen = ({navigation, route}: Props) => {
                   expense={item.expense?item.expense:null}
                   desArray={item.descriptions}
                   navigation={navigation}
+                  productArray={item.Products}
                 />
         )
     }
@@ -1596,7 +1606,7 @@ const SearchResultScreen = ({navigation, route}: Props) => {
     return (
         <Container>
             <HeaderBar>
-                <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
+                <TouchableWithoutFeedback onPress={() => navigateGoBack()}>
                 <HeaderLeftContainer>
                     <HeaderBackIcon
                     source={require('~/Assets/Images/HeaderBar/ic_back.png')}/>

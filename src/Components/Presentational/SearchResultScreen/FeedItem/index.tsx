@@ -8,6 +8,7 @@ import {
 import {useSelector, useDispatch} from 'react-redux';
 import allActions from '~/action';
 
+import ProductItem from './ProductItem';
 // Route
 import GetFeedDetail from '~/Route/Post/GetFeedDetail';
 import {POSTLike, DELETELike} from '~/Route/Post/Like';
@@ -305,6 +306,10 @@ const ExpenseText = Styled.Text`
  color: #1D1E1F;
 `;
 
+const ProductContainer = Styled.View`
+padding-top: 10px;
+`;
+
 interface Props {
   id: number;
   profile_image: string;
@@ -324,7 +329,8 @@ interface Props {
   expense: number;
   desArray: Array<object>;
   navigation: any;
-  mediaFiles: Array<objevt>;
+  mediaFiles: Array<object>;
+  productArray: Array<object>;
 }
 
 const FeedItem = ({
@@ -347,6 +353,7 @@ const FeedItem = ({
   desArray,
   navigation,
   mediaFiles,
+  productArray,
 }: Props) => {
   const [ratingArray, setRatingArray] = useState([
     'empty',
@@ -370,6 +377,7 @@ const FeedItem = ({
   const tmpRatingArr = ['empty', 'empty', 'empty', 'empty', 'empty'];
 
   useEffect(() => {
+    /*
     if (rating % 1 === 0) {
       for (var i = 0; i < rating; i++) {
         tmpRatingArr[i] = 'full';
@@ -387,13 +395,15 @@ const FeedItem = ({
         }
       }
     }
+    */
 
-    
+    /*
     let tmpTagList = new Array();
     tmpTagList.push(main_tag);
     if (sub_tag1 !== null) tmpTagList.push(sub_tag1);
     if (sub_tag2 !== null) tmpTagList.push(sub_tag2);
     setTagList(tmpTagList);
+    */
 
     const tmpCreatedDate = getDateFormat(createdAt);
     setCreatedDate(tmpCreatedDate);
@@ -406,14 +416,24 @@ const FeedItem = ({
     console.log("feedITem currentUser", currentUser);
 
     if(currentUser.likeFeeds) {
-    var index = currentUser.likeFeeds?.findIndex(obj => obj.id === id);
+      var index = currentUser.likeFeeds?.findIndex(obj => obj.id === id);
+    //var realTimeAddIndex = currentUser.realTimeAddLikeList?.findIndex(obj => obj.id === id);
     if(index !== -1) {
       setCurrentUserLike(true);
       likeFeedsIndex = index;
+      if(currentUser.realTimeAddLike === id) {
+       // console.log("realTimeIndexzz", realTimeAddIndex);
+        dispatch(allActions.userActions.setRealTimeAddLike(null));
+        setLikeCount(likeCount+1);
+      }
     } else if(index === -1) {
       setCurrentUserLike(false);
+      if(currentUser.realTimeRemoveLike === id) {
+        dispatch(allActions.userActions.setRealTimeRemoveLike(null))
+        setLikeCount(likeCount-1);
+      }
     }
-    console.log("해당 피드가 사용자가 좋아요한 피드목록에 있음", index); 
+
     }
 
     if(currentUser.scrapFeeds) {
@@ -424,10 +444,9 @@ const FeedItem = ({
       setCurrentUserScrap(false);
     }
     }
+  }, [currentUser]);
 
-
-  }, []);
-
+  /*
   useEffect(() => {
     if(currentUser.likeFeeds) {
 
@@ -457,8 +476,8 @@ const FeedItem = ({
     }
 
     }
-
   }, [currentUser])
+  */
 
 
   function getDateFormat(date) {
@@ -472,13 +491,13 @@ const FeedItem = ({
 }
 
   const deleteLike = () => {
+    setCurrentUserLike(false);
     console.log("currentUser.likeFeeds", currentUser.likeFeeds);
     var removedLikeFeeds = currentUser.likeFeeds;
     var deletedIndex = currentUser.likeFeeds?.findIndex(obj => obj.id === id);
     removedLikeFeeds.splice(deletedIndex, 1);
     console.log("deletedLike", removedLikeFeeds);
     dispatch(allActions.userActions.setLikeFeeds(removedLikeFeeds))
-    setCurrentUserLike(false);
     setLikeCount(likeCount-1);
     console.log("deleteLike currentUser.user.userId", currentUser.user.userId);
     console.log("deleteLike id", id);
@@ -491,6 +510,8 @@ const FeedItem = ({
   }
 
   const addLike = () => {
+
+    setCurrentUserLike(true);
     var addedLikeFeeds = currentUser.likeFeeds;
     const likeObj = {
       id: id,
@@ -499,7 +520,6 @@ const FeedItem = ({
 
     addedLikeFeeds.push(likeObj);
     dispatch(allActions.userActions.setLikeFeeds(addedLikeFeeds))
-    setCurrentUserLike(true);
     setLikeCount(likeCount+1);
     POSTLike(currentUser.user.userId, id)
     .then(function(response) {
@@ -605,25 +625,32 @@ const FeedItem = ({
         <View>
         <BodyContainer>
         <TagContainer>
-            <FlatList
-              horizontal={true}
-              data={tagList}
-              renderItem={({item, index}) => {
-                if(index === 0) 
-                { return (
-                  <MainTagText>#{item}</MainTagText>
-                )
-                } else {
-                  return (
-                  <SubTagText>#{item}</SubTagText>
-                  )
-                }
-              }}
-            />
+        <MainTagText>
+            {"#" + main_tag}
+            {sub_tag1 && (
+              <SubTagText>{" #" + sub_tag1}
+              {sub_tag2 && (
+                <SubTagText>{" #" + sub_tag2}</SubTagText>
+              )}
+              </SubTagText>
+            )}
+          </MainTagText>
           </TagContainer>
+          {desArray[0] && (
         <DescriptionContainer>
-            <DescriptionText>{desArray[0] ? desArray[0].description : null}</DescriptionText>
-          </DescriptionContainer>
+        <DescriptionText>{desArray[0] ? desArray[0].description : ""}</DescriptionText>
+        </DescriptionContainer>
+          )}
+           {!mediaFiles[0] && productArray[0] && (
+          <ProductContainer>
+            <ProductItem
+            productImage={productArray[0].image}
+            productName={productArray[0].title}
+            productDescription={productArray[0].description}
+            shopIcon={productArray[0].favicon}
+            shopName={productArray[0].site}/>
+          </ProductContainer>
+          )}
           {mediaFiles.length === 1 && (
           <ReviewImageContainer>
           <ReviewImage source={{uri:mediaFiles[0].url}}/>

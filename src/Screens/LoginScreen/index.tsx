@@ -286,7 +286,7 @@ const LoginScreen = ({navigation}) => {
       .then(function(response) {
         console.log("GETRecentSearch response", response);
         dispatch(
-          allActions.userActions.setUserRecentSearch(response)
+          allActions.searchAction.setUserRecentSearch(response)
         )
       })
       .catch(function(error) {

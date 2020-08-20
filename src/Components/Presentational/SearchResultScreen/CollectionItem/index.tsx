@@ -50,12 +50,16 @@ interface Props {
 const CollectionItem = ({coverImage, name, navigation, collectionId, profileImage, profileNickname}: Props) => {
 
     const moveToCollectionDetailScreen = () => {
-        navigation.navigate("CollectionDetailScreen", {
-            collectionId: collectionId,
-            profileImage: profileImage,
-            profileNickname: profileNickname,
+        navigation.navigate("CollectionStack", {
+            screen: "CollectionDetailScreen",
+            params: {
+                collectionId: collectionId,
+                profileImage: profileImage,
+                profileNickname: profileNickname,
+            }
         });
     }
+
 
     return (
     <TouchableWithoutFeedback onPress={() => moveToCollectionDetailScreen()}>

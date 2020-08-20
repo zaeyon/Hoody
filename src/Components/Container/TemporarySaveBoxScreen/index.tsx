@@ -1,7 +1,7 @@
 
 import React, {useState, useEffect} from 'react';
 import Styled from 'styled-components/native';
-import {TouchableWithoutFeedback, Alert} from 'react-native';
+import {TouchableWithoutFeedback, Alert, FlatList} from 'react-native';
 import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
@@ -9,6 +9,10 @@ import {
 import {useDispatch} from 'react-redux';
 import allActions from '~/action';
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
+
+import GETPostTemporary from '~/Route/Post/GETPostTemporary';
+import DELETEPost from '~/Route/Post/DELETEPost';
+
 
 const Container = Styled.SafeAreaView`
 flex: 1;
@@ -65,6 +69,12 @@ font-size: 17px;
 color: #267DFF;
 `;
 
+const HeaderFinishText = Styled.Text`
+font-weight: 500;
+font-size: 17px;
+color: #267DFF;
+`;
+
 const HeaderEmptyContainer = Styled.View`
 width: ${wp('6.4%')};
 height: ${wp('6.4%')};
@@ -72,61 +82,134 @@ height: ${wp('6.4%')};
 
 const BodyContainer = Styled.View`
 flex: 1;
-background-color: #e5e5e570;
+background-color: #ffffff;
 `;
 
 const TemporarySaveItemContainer = Styled.View`
- padding-top: 19px;
- padding-bottom: 19px;
- padding-left: 16px;
- padding-right: 16px;
+ 
  border-bottom-width: 0.6px
  border-color: #ECECEE;
  background-color: #FFFFFF;
+ flex-direction: row;
+ justify-content: space-between;
 `;
 
-const TagListText = Styled.Text`
+const TagListContainer = Styled.View`
+ flex-direction: row;
+ align-items: center;
+`;
+
+const MainTagText = Styled.Text`
+font-size: 16px;
+color: #1D1E1F;
+`;
+
+const SubTagText = Styled.Text`
  font-size: 16px;
  color: #1D1E1F;
  `;
 
  const SaveDateText = Styled.Text`
-font-size: 11px;
+font-size: 12.5px;
 color: #C4C4C4;
  `;
 
- const RemoveText = Styled.Text`
-  font-size: 16px;
-  color: #ff3b30;
+ const FeedInfoContainer = Styled.View`
+ padding-top: 19px;
+ padding-bottom: 19px;
+ padding-left: 16px;
+ padding-right: 16px;
+ justify-content: center;
  `;
 
- const InWritingPostContainer = Styled.View`
-  padding-top: 19px;
-  padding-bottom: 19px;
-  padding-left: 16px;
-  padding-right: 16px;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-background-color: #FFFFFF;
-border-bottom-width: 0.6px;
-border-color: #ECECEE;
+ const FeedRemoveContainer = Styled.View`
+ padding-top: 19px;
+ padding-bottom: 19px;
+ padding-left: 16px;
+ padding-right: 16px;
+ align-items: center;
+ justify-content: center;
  `;
 
- const InWritingPostInfoContainer = Styled.View`
+ const FeedRemoveText = Styled.Text`
+ font-size: 16px;
+ color: #FF3B30;
  `;
+ 
+ const TemporarySaveBoxScreen = ({navigation, route}: any) => {
+    const [temporarySaveListData, setTemporarySaveListData] = useState<Array<object>>([]);
+    const [temporarySaveListEdit, setTemporarySaveListEdit] = useState<boolean>(false);
 
- const InWritingPostText = Styled.Text`
-font-size: 14px;
-color: #C6C7CC;
- `;
+    useEffect(() => {
+        GETPostTemporary()
+        .then(function(response) {
+            console.log("임시저장 게시글 불러오기 성공", response)
+            setTemporarySaveListData(response);
+        })
+        .catch(function(error) {
+            console.log("임시저장 게시글 불러오기 실패", error);
+        })
+    }, [])
 
- const InWritingPostSaveText = Styled.Text`
-font-size: 16px;
-color: #267DFF;
- `;
+    const clickToEdit = () => {
+        setTemporarySaveListEdit(true);
+    }
 
-const TemporarySaveBoxScreen = ({navigation, route}: any) => {
+    const finishEditing = () => {
+        setTemporarySaveListEdit(false);
+    }
+
+    const deleteTemporarySaveFeed = (feedId: number, index: number) => {
+        DELETEPost(feedId)
+        .then(function(response) {
+            console.log("DELETEPost response", response);
+            var deletedTemporarySaveList = temporarySaveListData;
+            deletedTemporarySaveList.splice(index, 1);
+            setTemporarySaveListData(deletedTemporarySaveList);
+        })
+        .catch(function(error) {
+            console.log("DELETEPost error", error);
+        })
+    }
+
+    const renderTemporarySaveItem = ({item, index}: any) => {
+
+        var date = new Date(item.createdAt),
+        year = date.getFullYear(),
+        month = date.getMonth() + 1,
+        day = date.getDate();
+        
+        if(month.length > 2) month = "0" + month;
+        if(day.length > 2) day =  "0" + day;
+        var createdDate = year + ". " + month + ". " + day;
+        
+        return (
+            <TemporarySaveItemContainer>
+                <FeedInfoContainer>
+                <TagListContainer>
+                <MainTagText>{"#" + item.mainTags.name}
+                {item.subTagOnes && (
+                    <SubTagText>{" #" + item.subTagOnes.name}
+                    {item.subTagTwos && (
+                        <SubTagText>{" #" + item.subTagTwos.name}</SubTagText>
+                    )}
+                    </SubTagText>
+                )}
+                </MainTagText>
+                </TagListContainer>
+                <SaveDateText>{createdDate + " 저장됌"}</SaveDateText>
+                </FeedInfoContainer>
+                {temporarySaveListEdit && (
+                <TouchableWithoutFeedback onPress={() => deleteTemporarySaveFeed(item.id, index)}>
+                <FeedRemoveContainer>
+                    <FeedRemoveText>삭제</FeedRemoveText>
+                </FeedRemoveContainer>
+                </TouchableWithoutFeedback>
+                )}
+            </TemporarySaveItemContainer>
+        )
+    }
+
     return (
         <Container>
             <HeaderBar>
@@ -139,11 +222,25 @@ const TemporarySaveBoxScreen = ({navigation, route}: any) => {
                 </HeaderLeftContainer>
                 </TouchableWithoutFeedback>
                 <HeaderTitleText>임시 보관함</HeaderTitleText>
+                {!temporarySaveListEdit && (
+                <TouchableWithoutFeedback onPress={() => clickToEdit()}>
                 <HeaderRightContainer>
                     <HeaderEditText>편집</HeaderEditText>
                 </HeaderRightContainer>
+                </TouchableWithoutFeedback>
+                )}
+                {temporarySaveListEdit && (
+                <TouchableWithoutFeedback onPress={() => finishEditing()}>
+                <HeaderRightContainer>
+                    <HeaderEditText>완료</HeaderEditText>
+                </HeaderRightContainer>
+                </TouchableWithoutFeedback>
+                )}
             </HeaderBar>
             <BodyContainer>
+                <FlatList
+                data={temporarySaveListData}
+                renderItem={renderTemporarySaveItem}/>
             </BodyContainer>
         </Container>
     )

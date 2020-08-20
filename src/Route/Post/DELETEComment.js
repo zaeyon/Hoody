@@ -1,5 +1,5 @@
 import axios from 'axios';
-const baseUrl = "https://fd458451ac2f.ngrok.io";
+const baseUrl = "https://b7fb6e3d4f9a.ngrok.io";
 
 const DELETEComment = (commentId) => {
     console.log("삭제할 commentId", commentId);

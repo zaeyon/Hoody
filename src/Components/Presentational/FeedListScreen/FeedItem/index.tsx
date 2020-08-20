@@ -633,7 +633,7 @@ const FeedItem = ({
           </TagContainer>
           {desArray[0] && (
         <DescriptionContainer>
-        <DescriptionText>{desArray[0].description}</DescriptionText>
+        <DescriptionText>{desArray[0] ? desArray[0].description : ""}</DescriptionText>
         </DescriptionContainer>
           )}
           {!mediaFiles[0] && productArray[0] && (

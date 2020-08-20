@@ -1,5 +1,5 @@
 import axios from 'axios';
-const baseUrl = 'https://fd458451ac2f.ngrok.io';
+const baseUrl = 'https://b7fb6e3d4f9a.ngrok.io';
 
 const DELETEScrapFolder = (folderId) => {
     const url = baseUrl + "/scrap/folder";

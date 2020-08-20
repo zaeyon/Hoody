@@ -1461,7 +1461,7 @@ const SearchResultScreen = ({navigation, route}: Props) => {
               source={require('~/Assets/Images/SearchResult/ic_tagImage.png')}/>
               <SingleKeywordTextContainer>
               <SingleKeywordFeedCountText>{((currentUser.inputedKeywordList[0]?.item.reviewNum != undefined) ? currentUser.inputedKeywordList[0]?.item.reviewNum : "0")  + "개의 게시물"}</SingleKeywordFeedCountText>
-                <SingleKeywordDescripText>{currentUserFollowing ? "이미 팔로우하신 태그입니다." : "#" + currentUser.inputedKeywordList[0]?.item.name + "태그를 팔로우하고 소식을 받아보세요."}</SingleKeywordDescripText>
+                <SingleKeywordDescripText>{currentUserFollowing ? "이미 팔로우하신 태그입니다." : "#" + currentUser.inputedKeywordList[0]?.item.name + "를(을) 팔로우하고 소식을 받아보세요."}</SingleKeywordDescripText>
               </SingleKeywordTextContainer>
               </SingleKeywordInfoContainer>
               {currentUserFollowing && (

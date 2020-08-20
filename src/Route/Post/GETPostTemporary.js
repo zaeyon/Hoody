@@ -1,13 +1,12 @@
 import axios from 'axios';
-const baseUrl = 'https://b7fb6e3d4f9a.ngrok.io';
+const baseUrl = 'https://b7fb6e3d4f9a.ngrok.io'; 
 
-const POSTFollowTag = (tagId) => {
-    const url = baseUrl + "/tag/follow?tagId=" + tagId;
-    console.log("POSTFollowTag tagId", tagId);
+const GETPostTemporary = () => {
+    url = baseUrl + '/post/temporary';
 
     return new Promise(function(resolve, reject) {
         axios
-        .post(url)
+        .get(url)
         .then(function(response) {
             resolve(response.data);
         })
@@ -17,4 +16,4 @@ const POSTFollowTag = (tagId) => {
     })
 }
 
-export default POSTFollowTag;
+export default GETPostTemporary;

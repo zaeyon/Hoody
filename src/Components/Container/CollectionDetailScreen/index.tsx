@@ -276,6 +276,18 @@ font-size: 15px;
 color: #007AFF;
 `;
 
+const PrivateText = Styled.Text`
+ margin-left: 5px;
+ font-weight: 500;
+ font-size: 15px;
+ color: #C6C7CC;
+`;
+
+const CollectionNameContainer = Styled.View`
+ flex-direction: row;
+ align-items: flex-end;
+`;
+
 const TEST_COLLECTION_DATA = {
         title: '컬렉션 테스트1',
         feedCount: 13,
@@ -588,7 +600,13 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
             showsVerticalScrollIndicator={false}>
             <CollectionInfoContainer style={{paddingTop:H_MAX_HEIGHT-25}}>
             <CollectionInfoHeader>
-            <CollectionTitleText>{collectionDetailInfo.name}</CollectionTitleText>
+            <CollectionNameContainer>
+            <CollectionTitleText>{collectionDetailInfo.name}
+            </CollectionTitleText>
+            {!collectionDetailInfo.open && (
+            <PrivateText>비공개</PrivateText>
+            )}
+            </CollectionNameContainer>
             <CollectionIconContainer>
             {!currentUserLike && (
             <TouchableWithoutFeedback onPress={() => addLikeCollection()}>

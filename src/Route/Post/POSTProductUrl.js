@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { SegmentedControlIOSComponent } from 'react-native';
-const baseUrl = 'https://fd458451ac2f.ngrok.io'
+const baseUrl = 'https://b7fb6e3d4f9a.ngrok.io'
 
 const POSTProductUrl = (productUrl) => {
     console.log("입력된 productUrl", productUrl); 

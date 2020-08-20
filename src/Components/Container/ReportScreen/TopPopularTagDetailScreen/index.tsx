@@ -4,7 +4,7 @@ import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import {TouchableWithoutFeedback, FlatList} from 'react-native';
+import {TouchableWithoutFeedback, FlatList, SectionList} from 'react-native';
 import {useSelector} from 'react-redux';
 
 const Container = Styled.SafeAreaView`
@@ -15,13 +15,16 @@ const Container = Styled.SafeAreaView`
 const HeaderBar = Styled.View`
  width: ${wp('100%')};
  height: ${wp('29.6%')};
- flex-direction: row;
- align-items: center;
- justify-content: space-between;
  background-color: #FAFAFA;
 
  border-bottom-width: 0.5px;
  border-color: #F1F1F1;
+`;
+
+const HeaderContainer = Styled.View`
+flex-direction: row;
+align-items: center;
+justify-content: space-between;
 `;
 
 const HeaderLeftContainer = Styled.View`
@@ -52,26 +55,43 @@ padding: 7px 16px 13px 15px;
 `;
 
 const HeaderViewMoreIcon = Styled.Image`
- width: ${wp('6.4%')};
- height: ${wp('6.4%')};
+ width: ${wp('7.5%')};
+ height: ${wp('7.5%')};
+`;
+
+const TagEvaluateContainer = Styled.View`
+ flex-direction: row;
+ align-items: center;
+ justify-content: center;
+ flex: 1;
+`;
+
+const TagEvaluateItemContainer = Styled.View`
+padding-top: 16px;
+padding-bottom: 16px;
+align-items: center;
+`;
+
+const TagEvaluateItemLabelText = Styled.Text`
+font-size: 14px;
+color: #8E8E8E;
+`;
+
+const TagEvaluateItemValueText = Styled.Text`
+font-weight: 600;
+font-size: 16px;
+color: #333333;
+`;
+
+const TagValueContainer = Styled.View`
+margin-top: 2px;
+align-items: center;
+flex-direction: row;
 `;
 
 const BodyContainer = Styled.View`
 flex: 1;
 background-color: #e5e5e570;
-`;
-
-const TagEvaluateContainer = Styled.View`
-flex-direction: row;
-justify-content: space-around;
-`;
-
-const TagEvaluateItemContainer = Styled.View`
-`;
-
-const TagEvaluateItemLabelText = Styled.View`
-font-size: 14px;
-color: #8e8e8e;
 `;
 
 interface Props {
@@ -83,6 +103,7 @@ const TopPopularTagDetailScreen = ({navigation, route}: Props) => {
     return (
         <Container>
           <HeaderBar>
+              <HeaderContainer>
               <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
               <HeaderLeftContainer>
                   <BackButtonContainer>
@@ -96,6 +117,27 @@ const TopPopularTagDetailScreen = ({navigation, route}: Props) => {
                   <HeaderViewMoreIcon
                   source={require('~/Assets/Images/HeaderBar/ic_more.png')}/>
               </HeaderRightContainer>
+              </HeaderContainer>
+              <TagEvaluateContainer>
+                  <TagEvaluateItemContainer style={{flex:2}}>
+                      <TagEvaluateItemLabelText>조회수</TagEvaluateItemLabelText>
+                      <TagValueContainer>
+                      <TagEvaluateItemValueText>544</TagEvaluateItemValueText>
+                      </TagValueContainer>
+                  </TagEvaluateItemContainer>
+                  <TagEvaluateItemContainer style={{flex:1}}>
+                      <TagEvaluateItemLabelText>하트</TagEvaluateItemLabelText>
+                      <TagValueContainer>
+                      <TagEvaluateItemValueText>124</TagEvaluateItemValueText>
+                      </TagValueContainer>
+                  </TagEvaluateItemContainer>
+                  <TagEvaluateItemContainer style={{flex:2}}>
+                      <TagEvaluateItemLabelText>댓글</TagEvaluateItemLabelText>
+                      <TagValueContainer>
+                      <TagEvaluateItemValueText>32</TagEvaluateItemValueText>
+                      </TagValueContainer>
+                  </TagEvaluateItemContainer>
+              </TagEvaluateContainer>
           </HeaderBar>
           <BodyContainer>
 

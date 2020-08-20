@@ -186,9 +186,13 @@ const FollowListScreen = ({navigation, route}:Props) => {
             setTimeout(() => {
             navigation.jumpTo("팔로잉 " + route.params.followingCount + "명")
             }, 10)
-        }
 
-                GETProfileFriends("followers", inputedNickname, requestedOffset, requestedLimit, route.params.nickname)
+            GETProfileFriends("followings", inputedNickname, requestedOffset, requestedLimit, route.params.nickname)
+                .then(function(followingResponse) {
+                  console.log("GETProfileFriends response", followingResponse)
+                    setFollowingListData(followingResponse);
+
+                    GETProfileFriends("followers", inputedNickname, requestedOffset, requestedLimit, route.params.nickname)
                 .then(function(response) {
                   console.log("GETProfileFriends response", response)
                     setFollowerListData(response);
@@ -196,15 +200,28 @@ const FollowListScreen = ({navigation, route}:Props) => {
                 .catch(function(error) {
                     console.log("GETProfileFriends error", error);
                 })
-
-                GETProfileFriends("followings", inputedNickname, requestedOffset, requestedLimit, route.params.nickname)
-                .then(function(response) {
-                  console.log("GETProfileFriends response", response)
-                    setFollowingListData(response);
                 })
                 .catch(function(error) {
                     console.log("GETProfileFriends error", error);
                 })
+        } else {
+            GETProfileFriends("followers", inputedNickname, requestedOffset, requestedLimit, route.params.nickname)
+                .then(function(response) {
+                  console.log("GETProfileFriends response", response)
+                    setFollowerListData(response);
+                    GETProfileFriends("followings", inputedNickname, requestedOffset, requestedLimit, route.params.nickname)
+                .then(function(followingResponse) {
+                  console.log("GETProfileFriends response", followingResponse)
+                    setFollowingListData(followingResponse);
+                })
+                .catch(function(error) {
+                    console.log("GETProfileFriends error", error);
+                })
+                })
+                .catch(function(error) {
+                    console.log("GETProfileFriends error", error);
+                })
+        }
         /*
         if(route.params?.nickname) {
             console.log("닉네임 존재")

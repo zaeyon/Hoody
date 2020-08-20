@@ -622,7 +622,7 @@ const FeedItem = ({
             />
           </TagContainer>
         <DescriptionContainer>
-            <DescriptionText>{desArray ? desArray[0].description : null}</DescriptionText>
+            <DescriptionText>{desArray[0] ? desArray[0].description : null}</DescriptionText>
           </DescriptionContainer>
           {mediaFiles.length === 1 && (
           <ReviewImageContainer>

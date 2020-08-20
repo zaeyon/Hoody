@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef, createRef} from 'react';
+import React, {useEffect, useState, useRef, createRef, useCallback} from 'react';
 import Styled from 'styled-components/native';
 import {
     widthPercentageToDP as wp,
@@ -21,6 +21,7 @@ import ProductItem from '~/Components/Presentational/UploadScreen/ProductItem';
 import PostUpload from '~/Route/Post/Upload';
 import POSTProductUrl from '~/Route/Post/POSTProductUrl';
 import GETSearchAutoComplete from '~/Route/Search/GETSearchAutoComplete';
+import GETPostTemporaryDetail from '~/Route/Post/GETPostTemporaryDetail';
 
 const ratingImage = require('~/Assets/Images/ic_star4.png');
 
@@ -743,6 +744,27 @@ top: 18px;
 right: 0;
 `;
 
+const GetTextWidthContainer = Styled.View`
+ width: 1000px;
+`;
+
+
+const GetWidthTagText = Styled.Text`
+color: #ffffff;
+font-size: 24px;
+font-weight: bold;
+background-color:#ffffff;
+
+`;
+
+
+const TWInputContainer = Styled.View`
+flex-direction: row;
+flex-shrink: 1;
+background-color:#ffffff;
+`;
+
+
 
 const bottomActionOptions = [
     '취소',
@@ -927,6 +949,7 @@ const convertDateFormat = (date: any) => {
         }
     }, [route.params?.location])
 
+
     useEffect(() => {
         //console.log("route.params.selectTagName", route.params.selectTagName)
         if(route.params?.selectTagName) {
@@ -937,6 +960,7 @@ const convertDateFormat = (date: any) => {
         }
         }
     }, [route.params?.selectTagName])
+
 
     useEffect(() => {
  console.log("입력된 태그 변경!!")
@@ -1024,6 +1048,91 @@ const convertDateFormat = (date: any) => {
             Keyboard.removeListener("keyboardDidHide", onKeyboardDidHide);
         }
     }, [])
+
+    useEffect(() => {
+        if(route.params?.temporarySaved) {
+            route.params.temporarySaved = false;
+            GETPostTemporaryDetail(route.params?.temporaryFeedId)
+            .then(function(response) {
+                console.log("임시 저장게시글 상세 정보", response)
+                setMainTag(response.post.mainTags.name);
+                setConsumptionDateStr(convertDateFormat(response.post.spendDate));
+                setConsumptionDate(response.post.spendDate);
+
+                if(response.subTagOnes) {
+                    setSubTag1(response.post.subTagOnes.name);
+                    setSubTag1Exis(true);
+                }
+
+                if(response.subTagTwos) {
+                    setSubTag2(response.post.subTagTwos.name);
+                    setSubTag2Exis(true);
+                }
+
+                if(response.address) {
+                    setLocation(response.post.address.address);
+                }
+
+                if(response.expense) {
+                    setExpense(response.post.expense);
+                }
+
+                setParagraphData(response.postBody);
+                setRating(response.post.starRate);
+                setMainTagInserted(true);
+                setIncompleteMainTag(response.post.mainTags.name);
+            })
+            .catch(function(error) {
+                console.log("임시 저장게시글 상세 정보 오류", error);
+            })
+        }
+    }, [route.params?.temporarySaved, route.params?.temporaryFeedId]);
+
+    const useMainTagComponentSize = () => {
+        const [mainTagSize, setMainTagSize] = useState(null);
+      
+        const onMainTagLayout = useCallback(event => {
+          const { width, height } = event.nativeEvent.layout;
+          console.log("mainTagSize", width);
+          setMainTagSize({ width, height });
+          setMainTagWidth(width);
+        }, []);
+
+        return [mainTagSize, onMainTagLayout];
+    };
+
+    const useSubTag1ComponentSize = () => {
+        const [subTag1Size, setSubTag1Size] = useState(null);
+      
+        const onSubTag1Layout = useCallback(event => {
+          const { width, height } = event.nativeEvent.layout;
+          setSubTag1Size({ width, height });
+          setSubTag1Width(width)
+        }, []);
+
+        return [subTag1Size, onSubTag1Layout];
+      };
+
+      const useSubTag2ComponentSize = () => {
+        const [subTag2Size, setSubTag2Size] = useState(null);
+      
+        const onSubTag2Layout = useCallback(event => {
+          const { width, height } = event.nativeEvent.layout;
+          setSubTag2Size({ width, height });
+          setsubTag2Width(width);
+        }, []);
+
+        return [subTag2Size, onSubTag2Layout];
+      };  
+
+    const [mainTagSize, onMainTagLayout] = useMainTagComponentSize();
+    const [subTag1Size, onSubTag1Layout] = useSubTag1ComponentSize();
+    const [subTag2Size, onSubTag2Layout] = useSubTag2ComponentSize();
+
+
+
+
+
 
     function onKeyboardDidShow(e: KeyboardEvent): void {
         console.log("onKeyboardDidHide visibleExpenseInput11", visibleExpenseInput)
@@ -1801,7 +1910,7 @@ const renderAddNewDescripInput = () => {
                     <ExpenseInner>
                     <InputedExpenseIcon
                     source={require('~/Assets/Images/ic_expense_outline.png')}/>
-                    <InputedExpenseText>{completePrice ? completePrice + "원" : "소비금액"}</InputedExpenseText>
+                    <InputedExpenseText>{expense ? expense.toLocaleString() + "원" : "소비금액"}</InputedExpenseText>
                     </ExpenseInner>
                     </InputedExpenseContainer>
                     </TouchableWithoutFeedback>
@@ -1867,6 +1976,35 @@ const renderAddNewDescripInput = () => {
                 
                 )}
             </BodyContainer>
+            <View style={{position:'absolute', bottom:0}}>
+        <View>
+        <GetTextWidthContainer>
+        </GetTextWidthContainer>
+        <TWInputContainer>
+        <GetWidthTagText
+        onLayout={onMainTagLayout}
+              >{"#" + mainTag}</GetWidthTagText>
+        </TWInputContainer>
+        </View>
+        <View>
+        <GetTextWidthContainer>
+        </GetTextWidthContainer>
+        <TWInputContainer>
+        <GetWidthTagText
+        onLayout={onSubTag1Layout}
+              >{"#" + subTag1}</GetWidthTagText>
+        </TWInputContainer>
+        </View>
+        <View>
+        <GetTextWidthContainer>
+        </GetTextWidthContainer>
+        <TWInputContainer>
+        <GetWidthTagText
+        onLayout={onSubTag2Layout}
+              >{"#" + subTag2}</GetWidthTagText>
+        </TWInputContainer>
+        </View>
+        </View>
             {mainTag && !mainTagProcess && visibleBottomMenuBar && !visibleDescripModal && (
                 <BottomMenuBarContainer>
                 <AboveKeyboard>

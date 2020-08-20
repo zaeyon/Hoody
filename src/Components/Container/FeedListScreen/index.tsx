@@ -400,11 +400,27 @@ function FeedListScreen({navigation, route}: Props) {
   }
 
   const onRefreshFeedListData = () => {
+    offset = 0;
+    limit = 20;
     console.log("onRefreshFeedListData")
     setRefreshing(true)
     setTimeout(() => {
       getFeedData()
     }, 10)
+  }
+
+  const loadMoreFeedListData = () => {
+    offset = offset + 20;
+    limit = limit + 20;
+
+    GETFeed(offset, limit).then(function(response) {
+      console.log("파드 목록 가져오기 성공", response);
+      var preFeedListData = feedListData;
+      setFeedListData(preFeedListData.concat(response.result));
+    })
+    .catch(function(error) {
+      console.log("피드 목록 가져오기 실패", error);
+    })
   }
 
   const renderFeedItem = ({item, index}: any) => {
@@ -462,6 +478,8 @@ function FeedListScreen({navigation, route}: Props) {
       showsVerticalScrollIndicator={false}
       data={feedListData[0] ? feedListData : [0]}
       renderItem={renderFeedItem}
+      onEndReached={loadMoreFeedListData}
+      onEndReachedThreshold={0.5}
       />
       </FeedListContainer>
       )}

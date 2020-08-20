@@ -479,8 +479,11 @@ const TagSearchScreen = ({navigation, route}: Props) => {
     }
 
     const changeMainTagInput = (query) => {
-
-        var tmpTag = query.trim();
+        if(query === " ") {
+         setInputingMainTagText("");
+   
+        } else {
+            var tmpTag = query.trim();
         setInputingMainTagText(tmpTag);
 
         if(query === "") {
@@ -520,8 +523,9 @@ const TagSearchScreen = ({navigation, route}: Props) => {
             console.log("태그 자동완성 실패", error);
         })
        }
-    }
-    }
+      }
+     }
+   }
 
 
     const changeSubTag1Input = (query) => {
@@ -611,7 +615,7 @@ const TagSearchScreen = ({navigation, route}: Props) => {
 
         if(route.params?.requestType === 'upload') {
             navigation.navigate('UploadScreen', {
-              mainTag: inputMainTag,
+              mainTag: inputingMainTagText ? inputingMainTagText : null,
               mainTagWidth: mainTagWidth,
               subTag1: null,
               subTag2: null,
@@ -1017,7 +1021,7 @@ const TagSearchScreen = ({navigation, route}: Props) => {
                 </InputedTagRowContainer>
                 </InputedTagColumnContainer>
             )}
-            <MaximumTagCountText>태그 최대 3개</MaximumTagCountText>
+            <MaximumTagCountText>공백으로 태그 입력 / 태그 최대 3개</MaximumTagCountText>
             </InputedTagListContainer>
         </TagContainer>
         <View style={{position:'absolute', bottom:0}}>

@@ -12,6 +12,7 @@ import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-
 
 import GETPostTemporary from '~/Route/Post/GETPostTemporary';
 import DELETEPost from '~/Route/Post/DELETEPost';
+import GETPostTemporaryDetail from '~/Route/Post/GETPostTemporaryDetail';
 
 
 const Container = Styled.SafeAreaView`
@@ -120,6 +121,7 @@ color: #C4C4C4;
  padding-left: 16px;
  padding-right: 16px;
  justify-content: center;
+ flex:1;
  `;
 
  const FeedRemoveContainer = Styled.View`
@@ -139,6 +141,8 @@ color: #C4C4C4;
  const TemporarySaveBoxScreen = ({navigation, route}: any) => {
     const [temporarySaveListData, setTemporarySaveListData] = useState<Array<object>>([]);
     const [temporarySaveListEdit, setTemporarySaveListEdit] = useState<boolean>(false);
+    const [temporarySaveListChange, setTemporarySaveListChange] = useState<boolean>(false);
+
 
     useEffect(() => {
         GETPostTemporary()
@@ -159,13 +163,22 @@ color: #C4C4C4;
         setTemporarySaveListEdit(false);
     }
 
+    const moveToTemporaryDetail = (feedId: number) => {
+        navigation.navigate("UploadScreen", {
+            temporarySaved: true,
+            temporaryFeedId: feedId,
+        })
+    }
+
     const deleteTemporarySaveFeed = (feedId: number, index: number) => {
+
         DELETEPost(feedId)
         .then(function(response) {
-            console.log("DELETEPost response", response);
+            console.log("임시저장 게시글 삭제완료")
             var deletedTemporarySaveList = temporarySaveListData;
             deletedTemporarySaveList.splice(index, 1);
             setTemporarySaveListData(deletedTemporarySaveList);
+            setTemporarySaveListChange(!temporarySaveListChange);
         })
         .catch(function(error) {
             console.log("DELETEPost error", error);
@@ -185,6 +198,7 @@ color: #C4C4C4;
         
         return (
             <TemporarySaveItemContainer>
+                <TouchableWithoutFeedback onPress={() => moveToTemporaryDetail(item.id)}>
                 <FeedInfoContainer>
                 <TagListContainer>
                 <MainTagText>{"#" + item.mainTags.name}
@@ -199,6 +213,7 @@ color: #C4C4C4;
                 </TagListContainer>
                 <SaveDateText>{createdDate + " 저장됌"}</SaveDateText>
                 </FeedInfoContainer>
+                </TouchableWithoutFeedback>
                 {temporarySaveListEdit && (
                 <TouchableWithoutFeedback onPress={() => deleteTemporarySaveFeed(item.id, index)}>
                 <FeedRemoveContainer>

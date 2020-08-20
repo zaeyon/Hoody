@@ -765,6 +765,11 @@ const bottomActionOptions = [
     <Text style={{color: 'red'}}>삭제</Text>
 ]
 
+var radio_props = [
+    {label: '전체공개', value: 0 },
+    {label: '비공개', value: 1},
+  ];
+
 
 interface Props {
     navigation: any,
@@ -876,14 +881,17 @@ const FeedEditScreen = ({navigation, route}: Props) => {
                  setOriginSubTag1(route.params.feedDetailInfo.subTagOnes.name);
                  setSubTag1Exis(true)
              }
+
              if(route.params.feedDetailInfo.subTagTwos) {
                  setSubTag2(route.params.feedDetailInfo.subTagTwos.name);
                  setOriginSubTag2(route.params.feedDetailInfo.subTagTwos.name);
                  setSubTag2Exis(true);
              }
+
              if(route.params.feedDetailInfo.address) {
                  setLocation(route.params.feedDetailInfo.address.address);
              }
+
              if(route.params.feedDetailInfo.expense) {
                  setExpense(route.params.feedDetailInfo.expense);
                  setFormattedExpense(route.params.feedDetailInfo.expense.toLocaleString());
@@ -2162,7 +2170,21 @@ const renderAddNewDescripInput = () => {
             cancelButtonIndex={0}
             destructiveButtonIndex={1}
             onPress={(index) => removeParagraphIndex(index)}/>
-             <RadioForm>
+             <Modal
+      onBackdropPress={() => setVisibleSettingModal(false)}
+      isVisible={visibleSettingModal}
+      backdropOpacity={0.25}
+      onSwipeComplete={() => setVisibleSettingModal(false)}
+      swipeDirection={['down']}
+      style={styles.modal}>
+        <SettingModalContainer>
+        <ModalHeaderContainer>
+        <ModalToggleButton/>
+        </ModalHeaderContainer>
+        <SettingModalTitleContainer>
+            <SettingModalTitleText>공개 범위</SettingModalTitleText>
+        </SettingModalTitleContainer>
+        <RadioForm>
                             {radio_props.map((obj, i) => (
                             <TouchableWithoutFeedback onPress={() => onPressRadioButton(i, obj)}>
                             <RadioTabContainer>
@@ -2197,6 +2219,8 @@ const renderAddNewDescripInput = () => {
                             </TouchableWithoutFeedback>
                              ))}
                            </RadioForm>
+        </SettingModalContainer>
+      </Modal>
             </Container>
     )
 }
@@ -2210,6 +2234,10 @@ const styles = StyleSheet.create({
     shadow: {
 
     },
+    modal: {
+        justifyContent:'flex-end',
+        margin: 0,
+    }
 })
 
 export default FeedEditScreen;

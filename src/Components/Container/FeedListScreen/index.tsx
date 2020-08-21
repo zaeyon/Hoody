@@ -1,17 +1,20 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useMemo} from 'react';
 import {TouchableWithoutFeedback, FlatList, View, Keyboard, ScrollView, RefreshControl} from 'react-native';
 import Styled from 'styled-components/native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import axios from 'axios';
+import allActions from '~/action';
 import {NavigationContainer} from '@react-navigation/native';
 import Geolocation from 'react-native-geolocation-service';
 
 // Local Component
-import FeedItem from '~/Components/Presentational/FeedListScreen/FeedItem';
+//import FeedItem from '~/Components/Presentational/FeedListScreen/MomoizedFeedItem';
+import MomoizedFeedItem from '~/Components/Presentational/FeedListScreen/MomoizedFeedItem';
+
 import PopularTagItem from '~/Components/Presentational/FeedListScreen/PopularTagItem';
 import SearchBar from '~/Components/Presentational/FeedListScreen/SearchBar'
 import SearchResult from '~/Components/SearchResult';
@@ -27,11 +30,11 @@ const BottomTabHeight = Styled.View`
  width: ${wp('100%')}px;
  height: 45px;
  background-color: #F4F8FB;
+ flex: 1;
 `;
 
 const Container = Styled.SafeAreaView`
- flex: 1;
- background-color: #ffffff;
+ background-color: #c3c3c3;
  align-items: center;
 `;
 
@@ -71,15 +74,16 @@ const ReviewMapIcon = Styled.Image`
 const NoFeedListContainer = Styled.View`
  width: ${wp('100%')};
  height: ${hp('70%')};
+ background-color: #c3c3c3;
  justify-content: center;
  align-items: center;
 `;
 
 const FeedListContainer = Styled.View`
  width: ${wp('100%')}px;
- justify-content: center;
- align-items: center;
  padding-bottom: 80px;
+ background-color: #707070;
+ flex: 1;
 `;
 
 const NoFeedText = Styled.Text`
@@ -309,10 +313,14 @@ function FeedListScreen({navigation, route}: Props) {
   const [currentLocation, setCurrentLocation] = useState();
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [onRefreshFeedList, setOnRefreshFeedList] = useState<boolean>(false);
-  const currentUser = useSelector((state) => state.currentUser);
-  
+  const [noMoreFeedListData, setNoMoreFeedListData] = useState<boolean>(false);
+  const currentUser = useSelector((state: any) => state.currentUser);
+  const home = useSelector((state: any) => state.home);
+  const dispatch = useDispatch();
+
   useEffect(() => {
     getFeedData();
+    //setFeedListData(TEST_FEED_DATA);
     if(currentUser.user) {
     console.log("currentUser.user.likeFeeds@@", currentUser.user.likeFeeds);
     }
@@ -350,7 +358,7 @@ function FeedListScreen({navigation, route}: Props) {
       setFeedListData(response);
       setRefreshing(false)
       setOnRefreshFeedList(!onRefreshFeedList)
-      console.log("파드 목록 가져오기 성공", response);
+      console.log("파드 목록 가져오기 성공@@", response);
     })
     .catch(function(error) {
       console.log("피드 목록 가져오기 실패", error);
@@ -360,8 +368,9 @@ function FeedListScreen({navigation, route}: Props) {
 
   const getFeedData = () => {
     GETFeed(offset, limit).then(function(response) {
-    console.log("파드 목록 가져오기 성공", response);
-    setFeedListData(response.result);
+    console.log("파드 목록 가져오기 성공@@@", response);
+    //setFeedListData(response.result);
+    dispatch(allActions.feedListAction.setHomeFeedList(response.result));
     setRefreshing(false)
     setOnRefreshFeedList(!onRefreshFeedList)
   })
@@ -399,6 +408,7 @@ function FeedListScreen({navigation, route}: Props) {
     })
   }
 
+
   const onRefreshFeedListData = () => {
     offset = 0;
     limit = 20;
@@ -410,24 +420,39 @@ function FeedListScreen({navigation, route}: Props) {
   }
 
   const loadMoreFeedListData = () => {
-    console.log("피드리스트 데이터 더 불러오기")
+    if(noMoreFeedListData) {
+      return
+    }
+    if(!noMoreFeedListData) {
+      console.log("피드리스트 데이터 더 불러오기")
     offset = offset + 20;
     limit = limit + 20;
 
-    GETFeed(offset, limit).then(function(response) {
+    setTimeout(() => {
+      GETFeed(offset, limit).then(function(response) {
       console.log("파드 목록 가져오기 성공", response);
-      var preFeedListData = feedListData;
-      setFeedListData(preFeedListData.concat(response.result));
+      if(response.result.length === 0) {
+        console.log("더이상 불러올 데이터 없음", feedListData);
+        setNoMoreFeedListData(true);
+
+      } else if(response.result.length > 0) {
+        console.log("불러올 데이터 존재")
+        var preFeedListData = home.homeFeedList;
+        dispatch(allActions.feedListAction.setHomeFeedList(preFeedListData.concat(response.result)))
+      }
     })
     .catch(function(error) {
       console.log("피드 목록 가져오기 실패", error);
     })
+    }, 100)
+
+    
+    }
   }
 
   const renderFeedItem = ({item, index}: any) => {
-    if(feedListData[0]) {
     return (
-      <FeedItem
+      <MomoizedFeedItem
         id={item.id}
         profile_image={item.user.profileImg}
         nickname={item.user.nickname}
@@ -448,13 +473,6 @@ function FeedListScreen({navigation, route}: Props) {
         navigation={navigation}
         productArray={item.Products}/>
    )
-  } else if(!feedListData[0]) {
-    return (
-      <NoFeedListContainer>
-        <NoFeedText>등록된 게시글이 없어요</NoFeedText>
-      </NoFeedListContainer>
-    )
-  }
 }
   
 
@@ -466,31 +484,18 @@ function FeedListScreen({navigation, route}: Props) {
           </HeaderLeftContainer>
       </HeaderBar>
       <BodyContainer>
-      <ScrollView
-      showsVerticalScrollIndicator={false}
-      refreshControl={
-        <RefreshControl
-          refreshing={refreshing}
-          onRefresh={onRefreshFeedListData}/>
-        }>
-      {feedListData[0] && (
       <FeedListContainer>
       <FlatList
+      style={{flex:1, width: wp('100%')}}
+      refreshing={refreshing}
+      onRefresh={onRefreshFeedListData}
       showsVerticalScrollIndicator={false}
-      data={feedListData[0] ? feedListData : [0]}
+      data={home.homeFeedList}
       renderItem={renderFeedItem}
       onEndReached={loadMoreFeedListData}
       onEndReachedThreshold={1}
       />
       </FeedListContainer>
-      )}
-      {!feedListData[0] && (
-      <NoFeedListContainer>
-        <NoFeedText>등록된 게시글이 없어요.</NoFeedText>
-      </NoFeedListContainer>
-
-      )}
-      </ScrollView>
       </BodyContainer>
     </Container>
   );

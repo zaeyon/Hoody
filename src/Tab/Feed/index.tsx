@@ -9,7 +9,7 @@ import {useSelector} from 'react-redux';
 import axios from 'axios';
 import {NavigationContainer} from '@react-navigation/native';
 
-import FeedItem from '~/Components/Presentational/FeedListScreen/FeedItem';
+import FeedItem from '~/Components/Presentational/FeedListScreen/MomoizedFeedItem';
 import PopularTagItem from '~/Components/Presentational/FeedListScreen/PopularTagItem';
 import GetAllFeed from '~/Route/Post/TestFeed';
 import SearchBar from '~/Components/Presentational/FeedListScreen/SearchBar'

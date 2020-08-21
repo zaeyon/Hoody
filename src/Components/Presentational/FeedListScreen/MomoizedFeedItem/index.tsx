@@ -417,8 +417,6 @@ const FeedItem = ({
     console.log("피드 닉네임", nickname)
     setChangeState(!changeState);
 
-    console.log("유저의 실시간 좋아요 리스트", currentUser.realTimeAddLikeList);
-
     var index = currentUser.likeFeeds?.findIndex(obj => obj.id === id);
     //var realTimeAddIndex = currentUser.realTimeAddLikeList?.findIndex(obj => obj.id === id);
     if(index !== -1) {
@@ -733,4 +731,6 @@ const styles = StyleSheet.create({
   }
 })
 
-export default FeedItem;
+const MemoizedFeedItem = React.memo(FeedItem);
+
+export default MemoizedFeedItem;

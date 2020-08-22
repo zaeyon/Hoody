@@ -230,11 +230,12 @@ const SingleKeywordContainer = Styled.View`
 `;
 
 const SingleKeywordItemContainer = Styled.View`
+width: ${wp('100%')};
+height: ${wp('18%')};
 `;
 
 const SingleKeywordInfoContainer = Styled.View`
  flex-direction: row;
- align-items: center;
 `;
 
 const SingleKeywordImage = Styled.Image`
@@ -1257,13 +1258,16 @@ interface Props {
     route: any,
 }
 
-var offset = 0;
-var limit = 20;
+var feedOffset = 0;
+var feedLimit = 20;
+
+var collectionOffset = 0;
+var collectionLimit = 20;
 
 const SearchResultScreen = ({navigation, route}: Props) => {
     const [keywordList, setKeywordList] = useState<Array<object>>([]);
     const [filterModalVisible, setFilterModalVisible] = useState<boolean>(false);
-    const [selectedRadioIndex, setSelectedRadioIndex] = useState<number>(0);
+    const [selectedRadioIndex, setSelectedRadioIndex] = useState<number>(1);
     const [feedListTabHeight, setFeedListTabHeight] = useState<number>(containerHeight);
     const [collectionListTabHeight, setCollectionListTabHeight] = useState<number>(containerHeight);
     const [searchResultFeedListData, setSearchResultFeedListData] = useState<Array<object>>([]);
@@ -1281,6 +1285,9 @@ const SearchResultScreen = ({navigation, route}: Props) => {
     const [noMoreSearchCollectionData, setNoMoreSearchCollectionData] = useState<boolean>(false);
 
     const [refreshingSearchData, setRefreshingSearchData] = useState<boolean>(false);
+    const [refreshingSearchCollectionData, setRefreshingSearchCollectionData] = useState<boolean>(false);
+
+    const [searchSort, setSearchSort] = useState<string>("createdAt");
     
     const currentUser = useSelector((state: any) => state.currentUser);
     const dispatch = useDispatch();
@@ -1309,6 +1316,7 @@ const SearchResultScreen = ({navigation, route}: Props) => {
             setSingleKeyword(true);
           }
         }
+
         currentUser.inputedKeywordList.forEach((keyword: any, index: number) => {
           if(keyword.type === "태그") {
             if(index === currentUser.inputedKeywordList.length-1) {
@@ -1332,16 +1340,16 @@ const SearchResultScreen = ({navigation, route}: Props) => {
 
           setTimeout(() => {
             setSearchQuery(query);
-            keywordSearchFeedList(query, "createdAt", 0, 20);
-            keywordSearchCollectionList(query, "createdAt", 0, 20);
+            keywordSearchFeedList(query, searchSort, 0, 20);
+            keywordSearchCollectionList(query, searchSort, 0, 20);
           })
         })
       }
 
-    }, [])
+    }, [currentUser, searchSort])
 
-    const keywordSearchFeedList = (query: string, order: string, offset: number, limit: number) => {
-      GETSearchResult("post", query, order, offset, limit)
+    const keywordSearchFeedList = (query: string, order: string, feedOffset: number, feedLimit: number) => {
+      GETSearchResult("post", query, order, feedOffset, feedLimit)
             .then(function(response) {
             console.log("GETSearchResult response", response);
             setSearchResultFeedListData(response.data);
@@ -1375,11 +1383,12 @@ const SearchResultScreen = ({navigation, route}: Props) => {
       })
     }
 
-    const keywordSearchCollectionList = (query: string, order: string, offset: number, limit: number) => {
-      GETSearchResult("collection", query, order, offset, limit)
+    const keywordSearchCollectionList = (query: string, order: string, collectionOffset: number, collectionLimit: number) => {
+      GETSearchResult("collection", query, order, collectionOffset, collectionLimit)
       .then(function(response) {
         console.log("GETSearch Collection response", response);
         setSearchResultCollectionListData(response.data);
+        setRefreshingSearchCollectionData(false);
         if(response.data.length == 0) {
           setNoSearchCollectionList(true);
         } else {
@@ -1401,18 +1410,22 @@ const SearchResultScreen = ({navigation, route}: Props) => {
         console.log("selectedRadioIndex", i);
     }
 
-    const applySearchFilter = () => {
+    const applySearchSort = () => {
         setFilterModalVisible(false);
-        if(selectedRadioIndex == 0 && selectedOrder === "createdAt") {
-          setSelectedOrder("popular");
+        if(selectedRadioIndex == 0 && searchSort === "createdAt") {
+          setSearchSort("popular");
+          /*
           setTimeout(() => {
           keywordSearchFeedList(searchQuery ,selectedType, "popular", 0, 20);
           }, 10)
-        } else if(selectedRadioIndex == 1 && selectedOrder === "popular") {
-          setSelectedOrder("createdAt")
+          */
+        } else if(selectedRadioIndex == 1 && searchSort === "popular") {
+          setSearchSort("createdAt");
+          /*
           setTimeout(() => {
             keywordSearchFeedList(searchQuery ,selectedType, "createdAt", 0, 20);
           }, 10)
+          */
         }
     }
 
@@ -1480,15 +1493,26 @@ const SearchResultScreen = ({navigation, route}: Props) => {
     }
 
     const onRefreshSearchFeedData = () => {
-      offset = 0;
-      limit = 20;
-      var order = "createdAt";
+      feedOffset = 0;
+      feedLimit = 20;
 
       setRefreshingSearchData(true);
       setNoMoreSearchFeedData(false);
 
       setTimeout(() => {
-        keywordSearchFeedList(searchQuery, order, offset, limit);
+        keywordSearchFeedList(searchQuery, searchSort, feedOffset, feedLimit);
+      }, 10);
+    }
+
+    const onRefreshSearchCollectionData = () => {
+      collectionOffset = 0;
+      collectionLimit = 20;
+
+      setRefreshingSearchCollectionData(true);
+      setNoMoreSearchCollectionData(false);
+
+      setTimeout(() => {
+        keywordSearchCollectionList(searchQuery, searchSort, collectionOffset, collectionLimit);
       }, 10);
     }
 
@@ -1496,34 +1520,60 @@ const SearchResultScreen = ({navigation, route}: Props) => {
       if(noMoreSearchFeedData) {
         return
       } else {
-      console.log("검색 결과 무한 스크롤");
+      console.log("게시글 검색 결과 무한 스크롤");
   
-      offset = offset + 20;
-      limit = limit + 20;
+      feedOffset = feedOffset + 20;
+      feedLimit = feedLimit + 20;
 
-      console.log("offset", offset);
-      console.log("limit", limit);
+      console.log("offset", feedOffset);
+      console.log("limit", feedLimit);
 
-      var order = "createdAt"
 
       setTimeout(() => {
-        GETSearchResult("post", searchQuery, order, offset, limit)
+        GETSearchResult("post", searchQuery, searchSort, feedOffset, feedLimit)
               .then(function(response) {
               console.log("GETSearchResult response", response);
               if(response.data.length === 0) {
                 setNoMoreSearchFeedData(true);
               } else {
               setSearchResultFeedListData(searchResultFeedListData.concat(response.data));
-              //dispatch(allActions.userActions.setInputedKeywordList(tmpKeywordList));
               }
               })
               .catch(function(error) {
               console.log("GETSearchResult error", error);
         })
       }, 50)
-
       }
-      
+    }
+
+    const loadMoreSearchCollectionData = () => {
+      if(noMoreSearchCollectionData) {
+        return
+      } else {
+      console.log("컬렉션 검색 결과 무한 스크롤");
+  
+      collectionOffset = collectionOffset + 20;
+      collectionLimit = collectionLimit + 20;
+
+      console.log("offset", collectionOffset);
+      console.log("limit", collectionLimit);
+
+
+      setTimeout(() => {
+        GETSearchResult("collection", searchQuery, searchSort, collectionOffset, collectionLimit)
+              .then(function(response) {
+              console.log("GETSearchResult response", response);
+              if(response.data.length === 0) {
+                setNoMoreSearchCollectionData(true);
+              } else {
+              setSearchResultCollectionListData(searchResultCollectionListData.concat(response.data));
+              }
+              })
+              .catch(function(error) {
+              console.log("GETSearchResult error", error);
+        })
+      }, 50)
+      }
     }
 
     const keywordListContainer = () => {
@@ -1721,8 +1771,11 @@ const SearchResultScreen = ({navigation, route}: Props) => {
             </HeaderBar>
             <ScrollableTabView
             refreshingSearchData={refreshingSearchData}
+            refreshingSearchCollectionData={refreshingSearchCollectionData}
             onRefreshSearchData={onRefreshSearchFeedData}
+            onRefreshSearchCollectionData={onRefreshSearchCollectionData}
             loadMoreSearchFeedData={loadMoreSearchFeedData}
+            loadMoreSearchCollectionData={loadMoreSearchCollectionData}
             collapsableBar={keywordListContainer()}
             initialPage={0}
             tabContentHeights={[feedListTabHeight, collectionListTabHeight]}
@@ -1780,7 +1833,7 @@ const SearchResultScreen = ({navigation, route}: Props) => {
                         <ModalTitleText>
                             검색 필터
                         </ModalTitleText>
-                        <TouchableWithoutFeedback onPress={() => applySearchFilter()}>
+                        <TouchableWithoutFeedback onPress={() => applySearchSort()}>
                         <ModalApplyText>
                             적용
                         </ModalApplyText>
@@ -1788,6 +1841,7 @@ const SearchResultScreen = ({navigation, route}: Props) => {
                          </ModalTitleContainer>
                             <RadioForm>
                             {radio_props.map((obj, i) => (
+                            <TouchableWithoutFeedback onPress={() => onPressRadioButton(i)}>
                             <ModalTabContainer>
                             <ModalTabInfoContainer>
                             <RadioButton 
@@ -1799,7 +1853,7 @@ const SearchResultScreen = ({navigation, route}: Props) => {
                                 onPress={() => onPressRadioButton(i)}
                                 labelHorizontal={true}
                                 labelStyle={{fontSize: 16, color: '#1D1E1F'}}
-                                labelWrapStyle={{paddingRight: 300, backgroundColor:'#ffffff'}}/>
+                                labelWrapStyle={{paddingRight: 250, backgroundColor:'#ffffff'}}/>
                             </RadioButton>
                             <RadioButtonInput
                                 obj={obj}
@@ -1815,6 +1869,7 @@ const SearchResultScreen = ({navigation, route}: Props) => {
                                 buttonWrapStyle={{marginLeft: 10}}/>
                             </ModalTabInfoContainer>
                             </ModalTabContainer>
+                            </TouchableWithoutFeedback>
                              ))}
                            </RadioForm>
                 </FilterModalContainer>

@@ -44,6 +44,9 @@ const ScrollableTabView = createReactClass({
 		loadMoreSearchFeedData: PropTypes.func,
 		refreshingSearchData: PropTypes.bool,
 		onRefreshSearchData: PropTypes.func,
+		refreshingSearchCollectionData: PropTypes.bool,
+		onRefreshSearchCollectionData: PropTypes.func,
+		loadMoreSearchCollectionData: PropTypes.func,
 	},
 
 	getDefaultProps() {
@@ -57,6 +60,7 @@ const ScrollableTabView = createReactClass({
 			scrollWithoutAnimation: false,
 			locked: false,
 			prerenderingSiblingsNumber: 0,
+			refreshingSearchData: false,
 		};
 	},
 
@@ -138,13 +142,6 @@ const ScrollableTabView = createReactClass({
 	handleCollapseScroll(event) {
 		this.setState({ collapseScrollHeight: event.nativeEvent.contentOffset.y })
 		if (this.isCloseToBottom(event.nativeEvent)) {
-		}
-	},
-
-	loadMoreData(event) {
-		console.log("loadMoreData");
-		if(this.isCloseToBottom(event.nativeEvent)) {
-			this.props?.loadMoreSearchFeedData()
 		}
 	},
 
@@ -272,10 +269,12 @@ const ScrollableTabView = createReactClass({
 	_onScrollBottom(e) {
 		if(this.isCloseToBottom(e.nativeEvent)) {
 		console.log("스크롤 끝");
-		if(this.state.currentPage === 1) {
+		if(this.state.currentPage === 0) {
+			console.log("게시글 스크롤");
 			this.props?.loadMoreSearchFeedData()
-		} else if(this.state.currentPage === 0) {
-
+		} else if(this.state.currentPage === 1) {
+			console.log("컬렉션 스크롤")
+			this.props?.loadMoreSearchCollectionData()
 		}
 		}
 	},
@@ -386,8 +385,8 @@ const ScrollableTabView = createReactClass({
 				scrollEventThrottle={16}
 				refreshControl={
 					<RefreshControl
-					refreshing={this.props.refreshingSearchData}
-					onRefresh={this.props.onRefreshSearchData}/>
+					refreshing={this.state.currentPage === 0 ? this.props.refreshingSearchData : this.props.refreshingSearchCollectionData}
+					onRefresh={this.state.currentPage === 0 ? this.props.onRefreshSearchData : this.props.onRefreshSearchCollectionData}/>
 				}
 				style={[styles.container, this.props.style,]}
 				contentContainerStyle={{ maxHeight: this.state.collapseHeight + (this.props.tabBarHeight ? this.props.tabBarHeight : 50) + (this.state.contentHeight[this.state.currentPage] || 0) }}

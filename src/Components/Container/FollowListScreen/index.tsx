@@ -157,6 +157,9 @@ interface Props {
     route: any,
 }
 
+var requestedOffset = 0;
+var requestedLimit = 20;
+
 const FollowListScreen = ({navigation, route}:Props) => {
     const [requestedType, setRequestedType] = useState<string>("followers");
     const [inputedNickname, setInputedNickname] = useState<string>("");
@@ -167,8 +170,7 @@ const FollowListScreen = ({navigation, route}:Props) => {
     const [followerListChange, setFollowerListChange] = useState<boolean>(false);
     const [followingListChange, setFollowingListChange] = useState<boolean>(false);
     const FollowTopTab = createMaterialTopTabNavigator();
-    var requestedOffset = 0;
-    var requestedLimit = 20;
+    
 
     useEffect(() => {
         if(route.params?.followerCount || route.params?.followerCount) {
@@ -400,7 +402,7 @@ const FollowListScreen = ({navigation, route}:Props) => {
                 activeTintColor:'#333333',
                 inactiveTintColor:'#cccccc',
                 tabStyle:{width: wp('50%'), height: wp('10%')},
-                labelStyle:{fontSize:16, fontWeight:'600'},
+                labelStyle:{fontSize:15, fontWeight:'600'},
                 indicatorStyle:{backgroundColor:'#000000'},
             }}
             >

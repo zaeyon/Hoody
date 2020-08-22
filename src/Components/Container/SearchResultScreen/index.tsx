@@ -14,8 +14,9 @@ import ScrollableTabView, {DefaultTabBar} from 'rn-collapsing-tab-bar';
 // Import Local Component
 import SearchResultTopTabNavigator from '~/Components/Presentational/SearchResultScreen/SearchResultTopTabNavigator';
 import SearchResultTabBar from '~/Components/Presentational/SearchResultScreen/SearchResultTabBar';
-import FeedItem from '~/Components/Presentational/SearchResultScreen/FeedItem';
+import MemoizedFeedItem from '~/Components/Presentational/SearchResultScreen/MemoizedFeedItem';
 import CollectionItem from '~/Components/Presentational/SearchResultScreen/CollectionItem';
+import SearchFeedList from '~/Components/Presentational/SearchResultScreen/SearchFeedList';
 
 // Route
 import GETSearchResult from '~/Route/Search/GETSearchResult';
@@ -211,13 +212,11 @@ const SearchResultListContainer = Styled.View`
 
 const FeedListTabContainer = Styled.View`
  background-color: #ffffff;
- padding-bottom: ${hp('4.5%')};
 `;
 
 const CollectionListTabContainer = Styled.View`
  background-color: #ffffff;
  padding-top: 3px;
- padding-bottom: 25px;
 `;
 
 const SingleKeywordContainer = Styled.View`
@@ -1278,6 +1277,11 @@ const SearchResultScreen = ({navigation, route}: Props) => {
     const [noSearchFeedList, setNoSearchFeedList] = useState<boolean>(false);
     const [noSearchCollectionList, setNoSearchCollectionList] = useState<boolean>(false);
 
+    const [noMoreSearchFeedData, setNoMoreSearchFeedData] = useState<boolean>(false);
+    const [noMoreSearchCollectionData, setNoMoreSearchCollectionData] = useState<boolean>(false);
+
+    const [refreshingSearchData, setRefreshingSearchData] = useState<boolean>(false);
+    
     const currentUser = useSelector((state: any) => state.currentUser);
     const dispatch = useDispatch();
 
@@ -1341,6 +1345,7 @@ const SearchResultScreen = ({navigation, route}: Props) => {
             .then(function(response) {
             console.log("GETSearchResult response", response);
             setSearchResultFeedListData(response.data);
+            setRefreshingSearchData(false);
             if(response.data.length == 0) {
               setNoSearchFeedList(true);
             } else {
@@ -1474,23 +1479,51 @@ const SearchResultScreen = ({navigation, route}: Props) => {
       })
     }
 
+    const onRefreshSearchFeedData = () => {
+      offset = 0;
+      limit = 20;
+      var order = "createdAt";
+
+      setRefreshingSearchData(true);
+      setNoMoreSearchFeedData(false);
+
+      setTimeout(() => {
+        keywordSearchFeedList(searchQuery, order, offset, limit);
+      }, 10);
+    }
+
     const loadMoreSearchFeedData = () => {
+      if(noMoreSearchFeedData) {
+        return
+      } else {
       console.log("검색 결과 무한 스크롤");
-      /*
+  
       offset = offset + 20;
       limit = limit + 20;
+
+      console.log("offset", offset);
+      console.log("limit", limit);
+
       var order = "createdAt"
 
-      GETSearchResult("post", searchQuery, order, offset, limit)
-            .then(function(response) {
-            console.log("GETSearchResult response", response);
-            setSearchResultFeedListData(searchResultFeedListData.concat(response.data));
-            //dispatch(allActions.userActions.setInputedKeywordList(tmpKeywordList));
-            })
-            .catch(function(error) {
-            console.log("GETSearchResult error", error);
-      })
-      */
+      setTimeout(() => {
+        GETSearchResult("post", searchQuery, order, offset, limit)
+              .then(function(response) {
+              console.log("GETSearchResult response", response);
+              if(response.data.length === 0) {
+                setNoMoreSearchFeedData(true);
+              } else {
+              setSearchResultFeedListData(searchResultFeedListData.concat(response.data));
+              //dispatch(allActions.userActions.setInputedKeywordList(tmpKeywordList));
+              }
+              })
+              .catch(function(error) {
+              console.log("GETSearchResult error", error);
+        })
+      }, 50)
+
+      }
+      
     }
 
     const keywordListContainer = () => {
@@ -1554,7 +1587,6 @@ const SearchResultScreen = ({navigation, route}: Props) => {
     }
 
     const renderKeywordItem = ({item, index}: any) => {
-        console.log("renderKeywordItem", item);
         if(item.type == "태그") {
             return (
                 <KeywordItemBackground style={(index === 0 && styles.firstKeyword) || (index === keywordList.length -1 && styles.lastKeyword)}>
@@ -1613,7 +1645,7 @@ const SearchResultScreen = ({navigation, route}: Props) => {
 
     const renderFeedItem = ({item, index}: any) => {
         return (
-            <FeedItem
+            <MemoizedFeedItem
                   id={item.id}
                   profile_image={item.user.profileImg}
                   nickname={item.user.nickname}
@@ -1688,6 +1720,9 @@ const SearchResultScreen = ({navigation, route}: Props) => {
                 </TouchableWithoutFeedback>
             </HeaderBar>
             <ScrollableTabView
+            refreshingSearchData={refreshingSearchData}
+            onRefreshSearchData={onRefreshSearchFeedData}
+            loadMoreSearchFeedData={loadMoreSearchFeedData}
             collapsableBar={keywordListContainer()}
             initialPage={0}
             tabContentHeights={[feedListTabHeight, collectionListTabHeight]}
@@ -1699,22 +1734,10 @@ const SearchResultScreen = ({navigation, route}: Props) => {
             <FeedListTabContainer
             onLayout={(event) => measureFeedListTab(event)}
             tabLabel="게시글" >
-              {!noSearchFeedList && (
-                <FlatList
-                scrollEnabled={false}
-                showsVerticalScrollIndicator={false}
-                keyExtractor={(index: any) => index}
-                data={searchResultFeedListData}
-                renderItem={renderFeedItem}
-                onEndReached={loadMoreSearchFeedData}
-                onEndReachedThreshold={1}
-                />
-              )}
-              {noSearchFeedList && (
-                <NoSearchResultContainer>
-                  <NoSearchResultText>검색된 게시글이 없어요.</NoSearchResultText>
-                </NoSearchResultContainer>
-              )}
+            <SearchFeedList
+            route={route}
+            navigation={navigation}
+            feedListData={searchResultFeedListData}/>
             </FeedListTabContainer>
             <CollectionListTabContainer
             onLayout={(event) => measureCollectionListTab(event)}
@@ -1796,7 +1819,6 @@ const SearchResultScreen = ({navigation, route}: Props) => {
                            </RadioForm>
                 </FilterModalContainer>
             </Modal>
-
         </Container>
     )
 }

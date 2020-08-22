@@ -13,7 +13,7 @@ import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs
 
 
 // Local Component;
-import FeedItem from '~/Components/Presentational/SearchResultScreen/FeedItem';
+import FeedItem from '~/Components/Presentational/SearchResultScreen/MemoizedFeedItem';
 
 const Container = Styled.View`
  flex: 1;

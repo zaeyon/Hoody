@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useMemo} from 'react';
 import Styled from 'styled-components/native';
 import {FlatList, TouchableWithoutFeedback, View, StyleSheet} from 'react-native';
 import {
@@ -413,7 +413,6 @@ const FeedItem = ({
     console.log("피드 닉네임", nickname)
     setChangeState(!changeState);
 
-    console.log("feedITem currentUser", currentUser);
 
     if(currentUser.likeFeeds) {
       var index = currentUser.likeFeeds?.findIndex(obj => obj.id === id);
@@ -738,4 +737,6 @@ const styles = StyleSheet.create({
   }
 })
 
-export default FeedItem;
+const MemoizedFeedItem = React.memo(FeedItem);
+
+export default MemoizedFeedItem;

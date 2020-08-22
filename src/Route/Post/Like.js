@@ -1,5 +1,5 @@
 import axios from 'axios';
-const baseUrl = 'https://5af9132796cd.ngrok.io';
+const baseUrl = 'https://bf02c7fd7028.ngrok.io';
 
 const POSTLike = (userId, postId) => {
     const url = baseUrl + '/like?userId=' + userId + "&postId=" + postId;

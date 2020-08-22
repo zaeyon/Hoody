@@ -1,5 +1,5 @@
 import axios from 'axios';
-const baseUrl = 'https://5af9132796cd.ngrok.io'; 
+const baseUrl = 'https://bf02c7fd7028.ngrok.io'; 
 
 const GETFeed = (offset, limit) => {
     const url = baseUrl + '/feed?offset=' + offset + "&limit=" + limit;

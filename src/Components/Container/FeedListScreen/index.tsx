@@ -26,15 +26,9 @@ import GETSearchAutoComplete from '~/Route/Search/GETSearchAutoComplete';
 import GETFeed from '~/Route/Home/GETFeed';
 
 
-const BottomTabHeight = Styled.View`
- width: ${wp('100%')}px;
- height: 45px;
- background-color: #F4F8FB;
- flex: 1;
-`;
 
 const Container = Styled.SafeAreaView`
- background-color: #c3c3c3;
+ background-color: #ffffff;
  align-items: center;
 `;
 
@@ -73,17 +67,17 @@ const ReviewMapIcon = Styled.Image`
 
 const NoFeedListContainer = Styled.View`
  width: ${wp('100%')};
- height: ${hp('70%')};
- background-color: #c3c3c3;
+ height: ${hp('100%')};
+ padding-bottom: 200px;
+ background-color: #ffffff;
  justify-content: center;
  align-items: center;
 `;
 
 const FeedListContainer = Styled.View`
  width: ${wp('100%')}px;
- padding-bottom: 80px;
- background-color: #707070;
- flex: 1;
+ padding-bottom: 135px;
+ background-color: #ffffff;
 `;
 
 const NoFeedText = Styled.Text`
@@ -414,6 +408,7 @@ function FeedListScreen({navigation, route}: Props) {
     limit = 20;
     console.log("onRefreshFeedListData")
     setRefreshing(true)
+    setNoMoreFeedListData(false);
     setTimeout(() => {
       getFeedData()
     }, 10)
@@ -425,6 +420,7 @@ function FeedListScreen({navigation, route}: Props) {
     }
     if(!noMoreFeedListData) {
       console.log("피드리스트 데이터 더 불러오기")
+
     offset = offset + 20;
     limit = limit + 20;
 
@@ -444,7 +440,7 @@ function FeedListScreen({navigation, route}: Props) {
     .catch(function(error) {
       console.log("피드 목록 가져오기 실패", error);
     })
-    }, 100)
+    }, 50)
 
     
     }
@@ -484,18 +480,24 @@ function FeedListScreen({navigation, route}: Props) {
           </HeaderLeftContainer>
       </HeaderBar>
       <BodyContainer>
+      {home.homeFeedList[0] && (
       <FeedListContainer>
       <FlatList
-      style={{flex:1, width: wp('100%')}}
       refreshing={refreshing}
       onRefresh={onRefreshFeedListData}
       showsVerticalScrollIndicator={false}
       data={home.homeFeedList}
       renderItem={renderFeedItem}
       onEndReached={loadMoreFeedListData}
-      onEndReachedThreshold={1}
+      onEndReachedThreshold={0.2}
       />
       </FeedListContainer>
+      )}
+      {!home.homeFeedList[0] && (
+      <NoFeedListContainer>
+        <NoFeedText>등록된 게시글이 없습니다.</NoFeedText>
+      </NoFeedListContainer>
+      )}
       </BodyContainer>
     </Container>
   );

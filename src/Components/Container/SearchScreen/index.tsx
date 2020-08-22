@@ -303,8 +303,8 @@ const SearchScreen = ({navigation}: Props) => {
     const [changeSelectedSearchItem, setChangeSelectedSearchItem] = useState<boolean>(false);
     const [noInputSearch, setNoInputSearch] = useState<boolean>(true);
 
-    const currentUser = useSelector((state) => state.currentUser);
-    const recentSearchList = useSelector((state) => state.search);
+    const currentUser = useSelector((state: any) => state.currentUser);
+    const recentSearchList = useSelector((state: any) => state.search);
     const dispatch = useDispatch();
 
     useEffect(() => {

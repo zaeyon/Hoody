@@ -9,7 +9,6 @@ import Modal from 'react-native-modal';
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 import {useSelector, useDispatch} from 'react-redux';
 import allActions from '~/action';
-import ScrollableTabView, {DefaultTabBar} from 'rn-collapsing-tab-bar';
 
 // Import Local Component
 import SearchResultTopTabNavigator from '~/Components/Presentational/SearchResultScreen/SearchResultTopTabNavigator';
@@ -17,6 +16,7 @@ import SearchResultTabBar from '~/Components/Presentational/SearchResultScreen/S
 import MemoizedFeedItem from '~/Components/Presentational/SearchResultScreen/MemoizedFeedItem';
 import CollectionItem from '~/Components/Presentational/SearchResultScreen/CollectionItem';
 import SearchFeedList from '~/Components/Presentational/SearchResultScreen/SearchFeedList';
+import ScrollableTabView from '~/Components/Presentational/SearchResultScreen/rn-collapsing-tab-bar';
 
 // Route
 import GETSearchResult from '~/Route/Search/GETSearchResult';

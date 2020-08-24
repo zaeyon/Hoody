@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useMemo} from 'react';
+import React, {useEffect, useState} from 'react';
 import Styled from 'styled-components/native';
 import {FlatList, TouchableWithoutFeedback, View, StyleSheet} from 'react-native';
 import {
@@ -9,6 +9,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import allActions from '~/action';
 
 import ProductItem from './ProductItem';
+
 // Route
 import GetFeedDetail from '~/Route/Post/GetFeedDetail';
 import {POSTLike, DELETELike} from '~/Route/Post/Like';
@@ -91,6 +92,7 @@ font-size: 16px;
 font-weight: 600;
 `;
 
+
 const LocationText = Styled.Text`
  margin-top: 4px;
  font-size: 13px;
@@ -131,7 +133,7 @@ margin-bottom: 5px;
 
 const ImageCountBackground = Styled.View`
  top: 15px;
- right: 5px;
+ right: 2px;
  padding: 5px 9px 5px 9px;
  position: absolute;
  border-radius: 26px;
@@ -168,6 +170,10 @@ height: ${wp('82%')}px;
 margin-bottom: 10px;
 `;
 
+const ProductContainer = Styled.View`
+padding-top: 10px;
+`;
+
 const ReviewImage = Styled.Image`
 resize-mode:cover;
 border-radius: 10px; 
@@ -190,18 +196,18 @@ const MainTagText = Styled.Text`
  font-size: 16px;
  font-weight: 600;
  color: #3384FF;
- margin-right: 7px;
+ margin-right: 2.5px;
 `;
 
 const SubTagText = Styled.Text`
 color: #CCCCCC;
 font-size: 16px;
 font-weight: 600;
-margin-right: 7px;
+margin-right: 2.5px;
 `;
 
 const LocationPriceContainer = Styled.View`
- margin-top: 5px;
+ margin-top: 3px;
  margin-left: 8px;
  height: 20px;
  flex-direction: row;
@@ -306,10 +312,6 @@ const ExpenseText = Styled.Text`
  color: #1D1E1F;
 `;
 
-const ProductContainer = Styled.View`
-padding-top: 10px;
-`;
-
 interface Props {
   id: number;
   profile_image: string;
@@ -325,12 +327,15 @@ interface Props {
   like_count: number;
   comment_count: number;
   reply_count: number;
+  scrap_count: number;
   location: string;
   expense: number;
   desArray: Array<object>;
   navigation: any;
   mediaFiles: Array<object>;
   productArray: Array<object>;
+  userLike: Array<object>;
+  userScrap: Array<object>;
 }
 
 const FeedItem = ({
@@ -348,12 +353,15 @@ const FeedItem = ({
   like_count,
   comment_count,
   reply_count,
+  scrap_count,
   location,
   expense,
   desArray,
   navigation,
   mediaFiles,
   productArray,
+  userLike,
+  userScrap,
 }: Props) => {
   const [ratingArray, setRatingArray] = useState([
     'empty',
@@ -377,46 +385,29 @@ const FeedItem = ({
   const tmpRatingArr = ['empty', 'empty', 'empty', 'empty', 'empty'];
 
   useEffect(() => {
-    /*
-    if (rating % 1 === 0) {
-      for (var i = 0; i < rating; i++) {
-        tmpRatingArr[i] = 'full';
-        if (i === rating - 1) {
-          setRatingArray(tmpRatingArr);
-        }
-      }
-    } else {
-      for (var i = 0; i < rating; i++) {
-        if (i === rating - 0.5) {
-          tmpRatingArr[i] = 'half';
-          setRatingArray(tmpRatingArr);
-        } else {
-          tmpRatingArr[i] = 'full';
-        }
-      }
-    }
-    */
-
-    /*
-    let tmpTagList = new Array();
-    tmpTagList.push(main_tag);
-    if (sub_tag1 !== null) tmpTagList.push(sub_tag1);
-    if (sub_tag2 !== null) tmpTagList.push(sub_tag2);
-    setTagList(tmpTagList);
-    */
 
     const tmpCreatedDate = getDateFormat(createdAt);
     setCreatedDate(tmpCreatedDate);
-    console.log("description", desArray);
-    console.log("feedId", id);
-    console.log("피드 상세 미디어파일",mediaFiles)
-    console.log("피드 닉네임", nickname)
     setChangeState(!changeState);
 
+    if(userLike[0]?.id) {
+      setCurrentUserLike(true);
+    } else {
+      setCurrentUserLike(false);
+    }
 
-    if(currentUser.likeFeeds) {
-      var index = currentUser.likeFeeds?.findIndex(obj => obj.id === id);
+    if(userScrap[0]?.id) {
+      setCurrentUserScrap(true);
+    } else {
+      setCurrentUserScrap(false);
+    }
+
+    setLikeCount(like_count);
+    
+    // 현재 사용자 좋아요 여부 
+    //var index = currentUser.likeFeeds?.findIndex(obj => obj.id === id);
     //var realTimeAddIndex = currentUser.realTimeAddLikeList?.findIndex(obj => obj.id === id);
+    /*
     if(index !== -1) {
       setCurrentUserLike(true);
       likeFeedsIndex = index;
@@ -433,22 +424,18 @@ const FeedItem = ({
       }
     }
 
-    }
-
-    if(currentUser.scrapFeeds) {
     var scrapFeedIndex = currentUser.scrapFeeds?.findIndex(obj => obj.id === id);
     if(scrapFeedIndex !== -1) {
       setCurrentUserScrap(true);
     } else if(scrapFeedIndex === -1) {
       setCurrentUserScrap(false);
     }
-    }
-  }, [currentUser]);
+    */
+
+  }, [userLike, userScrap, like_count]);
 
   /*
   useEffect(() => {
-    if(currentUser.likeFeeds) {
-
     //console.log("currentUser.likeFeeds[0].Like", currentUser.likeFeeds[0].Like)
     var index = currentUser.likeFeeds?.findIndex(obj => obj.id === id);
     if(index !== -1) {
@@ -462,10 +449,7 @@ const FeedItem = ({
         setCurrentUserLike(false);
       }
     }
-
-    }
-
-    if(currentUser.scrapFeeds) {
+    
 
     var scrapFeedIndex = currentUser.scrapFeeds?.findIndex(obj => obj.id === id);
     if(scrapFeedIndex !== -1) {
@@ -474,10 +458,8 @@ const FeedItem = ({
         setCurrentUserScrap(false);
     }
 
-    }
   }, [currentUser])
   */
-
 
   function getDateFormat(date) {
     var tmpDate = new Date(date);
@@ -491,15 +473,7 @@ const FeedItem = ({
 
   const deleteLike = () => {
     setCurrentUserLike(false);
-    console.log("currentUser.likeFeeds", currentUser.likeFeeds);
-    var removedLikeFeeds = currentUser.likeFeeds;
-    var deletedIndex = currentUser.likeFeeds?.findIndex(obj => obj.id === id);
-    removedLikeFeeds.splice(deletedIndex, 1);
-    console.log("deletedLike", removedLikeFeeds);
-    dispatch(allActions.userActions.setLikeFeeds(removedLikeFeeds))
     setLikeCount(likeCount-1);
-    console.log("deleteLike currentUser.user.userId", currentUser.user.userId);
-    console.log("deleteLike id", id);
     DELETELike(currentUser.user.userId, id)
     .then(function(response) {
     })
@@ -509,16 +483,7 @@ const FeedItem = ({
   }
 
   const addLike = () => {
-
     setCurrentUserLike(true);
-    var addedLikeFeeds = currentUser.likeFeeds;
-    const likeObj = {
-      id: id,
-      likeCount: likeCount+1
-    }
-
-    addedLikeFeeds.push(likeObj);
-    dispatch(allActions.userActions.setLikeFeeds(addedLikeFeeds))
     setLikeCount(likeCount+1);
     POSTLike(currentUser.user.userId, id)
     .then(function(response) {
@@ -526,6 +491,7 @@ const FeedItem = ({
     .catch(function(error) {
       console.log("좋아요 추가 error", error);
     })
+
   }
 
   const addScrapFeed = () => {
@@ -533,12 +499,6 @@ const FeedItem = ({
     scrapFeedArray.push(id);
     setCurrentUserScrap(true);
 
-    var addedScrapFeeds = currentUser.scrapFeeds;
-    const scrapObj = {
-      id: id,
-    }
-    addedScrapFeeds.push(scrapObj);
-    dispatch(allActions.userActions.setScrapFeeds(addedScrapFeeds))
     POSTScrapFeed(scrapFeedArray)
     .then(function(response: any) {
       console.log("스크랩성공", response)
@@ -553,12 +513,15 @@ const FeedItem = ({
     var tmpFeedIds = new Array();
     tmpFeedIds.push(id);
 
+    /*
     console.log("tmpFeedIds", tmpFeedIds)
     var deletedScrapFeeds = currentUser.scrapFeeds;
     var deleteIndex = currentUser.scrapFeeds?.findIndex(obj => obj.id === id);
     deletedScrapFeeds.splice(deleteIndex, 1);
     
     dispatch(allActions.userActions.setScrapFeeds(deletedScrapFeeds));
+    */
+   
     DELETEScrapFeed(tmpFeedIds)
     .then(function(response) {
       console.log("스크랩삭제", response);
@@ -580,8 +543,6 @@ const FeedItem = ({
       screen: "FeedDetailScreen",
       params: {
       feedId:id,
-      tagList: tagList,
-      ratingArray: ratingArray,
       createdAt: createdDate,
       currentUserLike: currentUserLike,
       currentUserScrap: currentUserScrap,
@@ -613,7 +574,7 @@ const FeedItem = ({
             </HeaderCenterContainer>
           </WriterContainer>
           <ExpenseRatingContainer>
-            <ExpenseText>{"300원"}</ExpenseText>
+            <ExpenseText>{expense ? expense.toLocaleString()+"원" : null}</ExpenseText>
             <RatingStarImage
             source={require('~/Assets/Images/ic_newStar.png')}
             />
@@ -624,7 +585,7 @@ const FeedItem = ({
         <View>
         <BodyContainer>
         <TagContainer>
-        <MainTagText>
+          <MainTagText>
             {"#" + main_tag}
             {sub_tag1 && (
               <SubTagText>{" #" + sub_tag1}
@@ -640,7 +601,7 @@ const FeedItem = ({
         <DescriptionText>{desArray[0] ? desArray[0].description : ""}</DescriptionText>
         </DescriptionContainer>
           )}
-           {!mediaFiles[0] && productArray[0] && (
+          {!mediaFiles[0] && productArray[0] && (
           <ProductContainer>
             <ProductItem
             productImage={productArray[0].image}

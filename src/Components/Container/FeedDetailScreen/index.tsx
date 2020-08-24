@@ -859,6 +859,7 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
     const addLike = () => {
       setCurrentUserLike(true);
       setLikeCount(likeCount+1);
+      /*
       setTimeout(() => {
         var addedLikeFeeds = currentUser.likeFeeds;
         //var realTimeAddLikeList = currentUser.realTimeAddLikeList ? currentUser.realTimeAddLikeList : [];
@@ -871,6 +872,7 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
         
         dispatch(allActions.userActions.setLikeFeeds(addedLikeFeeds));
         dispatch(allActions.userActions.setRealTimeAddLike(postId));
+        */
         POSTLike(currentUser.user.userId, postId)
         .then(function(response) {
           console.log("response", response)
@@ -878,12 +880,14 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
         .catch(function(error) {
           console.log("error", error);
         })
-      })
+      
     }
 
     const deleteLike = () => {
       setCurrentUserLike(false);
-      setLikeCount(likeCount-1)
+      setLikeCount(likeCount-1);
+
+      /*
       setTimeout(() => {
       var deletedLikeFeeds = currentUser.likeFeeds;
       console.log("FeedDetailScreen currentUser", currentUser);
@@ -891,6 +895,7 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
       deletedLikeFeeds.splice(index, 1);
       dispatch(allActions.userActions.setLikeFeeds(deletedLikeFeeds));
       dispatch(allActions.userActions.setRealTimeRemoveLike(postId));
+      */
 
       DELETELike(currentUser.user.userId, postId)
       .then(function(response) {
@@ -898,8 +903,6 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
       })
       .catch(function(error) {
         console.log("error", error)
-      })
-
       })
     }
 
@@ -915,12 +918,14 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
     scrapFeedArray.push(postId);
     setCurrentUserScrap(true);
 
+    /*
     var addedScrapFeeds = currentUser.scrapFeeds;
     const scrapObj = {
       id: postId,
     }
     addedScrapFeeds.push(scrapObj);
     dispatch(allActions.userActions.setScrapFeeds(addedScrapFeeds))
+    */
     POSTScrapFeed(scrapFeedArray)
     .then(function(response: any) {
       console.log("스크랩성공", response)
@@ -935,6 +940,7 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
       scrapFeedArray.push(postId);
       setCurrentUserScrap(false);
 
+      
       DELETEScrapFeed(scrapFeedArray)
       .then(function(response) {
         console.log("스크랩삭제 성공", response)
@@ -943,10 +949,12 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
         console.log("스크랩삭제 실패", error);
       })
 
+      /*
       var deletedScrapFeeds = currentUser.scrapFeeds;
       var deletedFeedIndex = deletedScrapFeeds.indexOf(postId);
       deletedScrapFeeds.splice(deletedFeedIndex, 1);
       dispatch(allActions.userActions.setScrapFeeds(deletedScrapFeeds))
+      */
     }
 
     const clickToViewMore = () => {
@@ -978,12 +986,13 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
               DELETEPost(postId)
               .then(function(response) {
                 console.log("피드 삭제 성공 response", response);
+                setMyFeedModalVisible(false);
+                navigation.goBack();
                 if(currentUser.userAllFeeds) {
                   console.log("피드삭제성공deletedFeedIndex", deletedFeedIndex);
                   var deletedFeeds = currentUser.userAllFeeds;
                   deletedFeeds.splice(deletedFeedIndex, 1);
                   dispatch(allActions.userActions.setUserAllFeeds(deletedFeeds));
-                  navigation.goBack();
                 }
               })
               .catch(function(error) {

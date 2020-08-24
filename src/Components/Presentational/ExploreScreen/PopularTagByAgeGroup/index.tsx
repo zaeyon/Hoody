@@ -381,7 +381,7 @@ const PopularTagByAgeGroup = ({navigation, ageGroupPopularTagListData, selectPop
             <TileFeedItem
             feedId={item.id}
             navigation={navigation}
-            mainImageUri={item.mediaFiles[0] ? item.mediaFiles[0].url : null}
+            mainImageUri={item.mediaFiles[0] ? item.mediaFiles[0].url : ""}
             mainTag={item.mainTags.name}
             rating={item.starRate}
             expense={item.expense}

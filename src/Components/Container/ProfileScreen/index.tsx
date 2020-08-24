@@ -714,6 +714,7 @@ const ProfileScreen = ({navigation, route}: Props) => {
         </HeaderRightContainer>
       </HeaderBar>
       <ScrollableTabView
+      loadMoreSearchFeedData={() => 0}
       collapsableBar={userIntroComponent()}
       initialPage={0}
       tabContentHeights={[feedListTabHeight, collectionListTabHeight]}

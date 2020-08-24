@@ -476,6 +476,11 @@ const SearchScreen = ({navigation}: Props) => {
         }
     }
 
+    const navigateGoBack = () => {
+        navigation.goBack();
+        dispatch(allActions.userActions.setInputedKeywordList([]))
+    }
+
     const renderSelectedItem = ({item,index}: any) => {
         console.log("renderSelectedItem item", item);
         if(item.type === "태그") {
@@ -645,7 +650,7 @@ const SearchScreen = ({navigation}: Props) => {
     return (
         <Container>
             <HeaderBar>
-            <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
+            <TouchableWithoutFeedback onPress={() => navigateGoBack()}>
             <HeaderLeftContainer>
                 <HeaderBackIcon
                 source={require('~/Assets/Images/HeaderBar/ic_back.png')}/>

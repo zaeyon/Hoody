@@ -90,7 +90,7 @@ const RecommendCollectionList = ({navigation, recommendMainCollectionListData, r
         <MainRecommendCollectionItemContainer style={index !== 0 && styles.mainCollectionItem}>
             <MainRecommendCollectionItem
             collectionId={item.id}
-            coverImage={item.coverImg}
+            coverImage={item.coverImg ? item.coverImg : ""}
             name={item.name}
             nickname={item.user.nickname}
             navigation={navigation}
@@ -104,7 +104,7 @@ const RecommendCollectionList = ({navigation, recommendMainCollectionListData, r
             <SubRecommendCollectionItemContainer style={index !== 0 && styles.subCollectionItem}>
                 <SubRecommendCollectionItem
                 collectionId={item.id}
-                coverImage={item.coverImg}
+                coverImage={item.coverImg ? item.coverImg : ""}
                 name={item.name}
                 nickname={item.user.nickname}
                 navigation={navigation}/>

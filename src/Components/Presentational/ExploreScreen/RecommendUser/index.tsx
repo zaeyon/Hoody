@@ -97,7 +97,7 @@ const RecommendUser = ({navigation, recommendUserListData}: Props) => {
             <TouchableWithoutFeedback onPress={() => moveToUserProfile(item.nickname)}>
             <RecommendUserItemContainer style={index === 0 && styles.firstUserItem || index === recommendUserListData.length-1 && styles.lastUserItem}>
                 <UserProfileImage
-                source={{uri: item.profileImg}}/>
+                source={{uri: item.profileImg ? item.profileImg : ""}}/>
                 <UserNicknameText>{item.nickname}</UserNicknameText>
             </RecommendUserItemContainer>
             </TouchableWithoutFeedback>

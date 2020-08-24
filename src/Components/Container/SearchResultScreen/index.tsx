@@ -1339,9 +1339,14 @@ const SearchResultScreen = ({navigation, route}: Props) => {
           }
 
           setTimeout(() => {
+            feedOffset = 0;
+            feedLimit = 20;
+
+            collectionOffset = 0;
+            collectionLimit = 20;
             setSearchQuery(query);
-            keywordSearchFeedList(query, searchSort, 0, 20);
-            keywordSearchCollectionList(query, searchSort, 0, 20);
+            keywordSearchFeedList(query, searchSort, feedOffset, feedLimit);
+            keywordSearchCollectionList(query, searchSort, collectionOffset, collectionLimit);
           })
         })
       }

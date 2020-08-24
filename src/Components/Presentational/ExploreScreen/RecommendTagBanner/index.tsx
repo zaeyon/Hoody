@@ -82,7 +82,7 @@ const RecommendTagBanner = ({trendTagsListData, navigation}: Props) => {
                     <TouchableWithoutFeedback onPress={() => searchToTrendTag(item)}>
                     <BannerContainer>
                     <BannerImage
-                    source={{uri:item.coverImg}}/>
+                    source={{uri:item.coverImg ? item.coverImg : ""}}/>
                     </BannerContainer>
                     </TouchableWithoutFeedback>
                     )

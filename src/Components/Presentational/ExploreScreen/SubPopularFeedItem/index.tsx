@@ -93,7 +93,7 @@ const SubPopularFeedItem = ({navigation, mainImageUri, feedId, mainTag, address,
         <Container>
             <FeedImageContainer>
                 <FeedMainImage
-                source={{uri:mainImageUri}}/>
+                source={{uri:mainImageUri ? mainImageUri : ""}}/>
             </FeedImageContainer>
             <FeedInfoContainer>
                 <FeedTagText>{"#"+mainTag}</FeedTagText>

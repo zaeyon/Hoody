@@ -467,7 +467,10 @@ function FeedListScreen({navigation, route}: Props) {
         expense={item.expense?item.expense:null}
         desArray={item.descriptions}
         navigation={navigation}
-        productArray={item.Products}/>
+        productArray={item.Products}
+        userLike={item.Likers}
+        userScrap={item.Scraps}
+        />
    )
 }
   

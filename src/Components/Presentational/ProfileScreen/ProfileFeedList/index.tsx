@@ -12,6 +12,7 @@ import Modal from 'react-native-modal'
 import ProfileListFeedItem from '~/Components/Presentational/ProfileScreen/ProfileListFeedItem';
 import ProfileTileFeedItem from '~/Components/Presentational/ProfileScreen/ProfileTileFeedItem';
 import FeedItem from '~/Components/Presentational/ProfileScreen/FeedItem';
+import MemoizedFeedItem from '~/Components/Presentational/ProfileScreen/MemoizedFeedItem';
 
 
 const UserFeedListContainer = Styled.View`
@@ -162,11 +163,12 @@ const ProfileFeedList = ({navigation, route, feedListData, currentSortType, onSc
   const currentUser = useSelector((state) => state.currentUser);
   
     const renderProfileListFeedItem = ({item, index}) => {
+      console.log("renderProfileListFeedItem", item);
         return (
-          <FeedItem
+          <MemoizedFeedItem
           id={item.id}
-          profile_image={item.user.profileImg}
-          nickname={item.user.nickname}
+          profile_image={currentUser.user.profileImage}
+          nickname={currentUser.user.nickname}
           createdAt={item.createdAt}
           rating={item.starRate}
           main_tag={item.mainTags.name}
@@ -180,9 +182,11 @@ const ProfileFeedList = ({navigation, route, feedListData, currentSortType, onSc
           image_count={item.mediaFiles.length}
           location={item.address?item.address.address:null}
           expense={item.expense?item.expense:null}
-          desArray={item.descriptions}
+          desArray={item.descriptions ? item.descriptions : []}
           navigation={navigation}
-          productArray={item.Products}/>
+          productArray={item.Products ? item.Products : []}
+          userLike={item.Likers}
+          userScrap={item.Scraps}/>
         )
     }
 

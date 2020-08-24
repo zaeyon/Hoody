@@ -100,7 +100,7 @@ const TileFeedItem = ({feedId, mainImageUri, mainTag, rating, expense, address, 
             </NoImageContainer>
             )}
             <TileFeedImage
-            source={{uri:mainImageUri}}/>
+            source={{uri:mainImageUri ? mainImageUri : ""}}/>
             <TagListContainer>
                 <TagText>{"#"+mainTag}</TagText>
             </TagListContainer>

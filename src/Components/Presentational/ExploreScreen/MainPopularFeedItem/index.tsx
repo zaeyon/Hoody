@@ -93,7 +93,7 @@ const MainPopularFeedItem = ({navigation, feedId, mainImageUri, mainTag, address
     <TouchableWithoutFeedback onPress={() => moveToFeedDetail()}>
         <Container>
             <FeedBackgroundImage
-            source={{uri:mainImageUri}}/>
+            source={{uri:mainImageUri ? mainImageUri : ""}}/>
             <FeedInfoContainer>
             <FeedMainTagNameText>{"#" + mainTag}</FeedMainTagNameText>
             <FeedLocationText>{address ? address : ""}</FeedLocationText>

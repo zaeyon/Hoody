@@ -147,6 +147,7 @@ const SearchFeedList = ({navigation, route, feedListData}: Props) => {
   const currentUser = useSelector((state) => state.currentUser);
   
     const renderSearchFeedItem = ({item, index}: any) => {
+        console.log("renderSearchFeedItem item.Likers", item.Likers);
         return (
           <MemoizedFeedItem
           id={item.id}
@@ -160,14 +161,15 @@ const SearchFeedList = ({navigation, route, feedListData}: Props) => {
           like_count={item.likes}
           comment_count={item.commentsCount}
           reply_count={item.replysCount}
-          scrap_count={0}
           mediaFiles={item.mediaFiles}
           image_count={item.mediaFiles.length}
           location={item.address?item.address.address:null}
           expense={item.expense?item.expense:null}
           desArray={item.descriptions}
           navigation={navigation}
-          productArray={item.Products}/>
+          productArray={item.Products}
+          userLike={item.Likers}
+          userScrap={item.Scraps}/>
         )
     }
 

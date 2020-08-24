@@ -54,7 +54,7 @@ const SubRecommendCollectionItem = ({collectionId, coverImage, name, nickname, n
     <TouchableWithoutFeedback onPress={() => moveToCollectionDetailScreen()}>
         <CollectionContainer>
         <CollectionCoverImage
-        source={{uri:coverImage}}
+        source={{uri:coverImage ? coverImage : ""}}
         />
         <CollectionInfoContainer>
         <CollectionNameText>{name}</CollectionNameText>

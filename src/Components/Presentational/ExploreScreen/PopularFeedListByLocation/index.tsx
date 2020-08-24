@@ -70,7 +70,7 @@ const PopularFeedListByLocation = ({navigation,hotPlaceData, placeName}: Props) 
         return (
         <TileFeedItem
         navigation={navigation}
-        mainImageUri={item.mediaFiles[0] ? item.mediaFiles[0].url : null}
+        mainImageUri={item.mediaFiles[0] ? item.mediaFiles[0].url : ""}
         feedId={item.id}
         mainTag={item.mainTags.name}
         address={item.address ? item.address.address : null}

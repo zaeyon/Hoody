@@ -459,6 +459,8 @@ const ProfileScreen = ({navigation, route}: Props) => {
   const [selectedMonth, setSelectedMonth] = useState<number>(getCurrentMonth(new Date()));
   const [changingMonth, setChangingMonth] = useState<number>(getCurrentMonth(new Date()));
 
+  const [userProfileInfo, setUserProfileInfo] = useState<object>({}); 
+
   const [refreshingProfileFeed, setRefreshingProfileFeed] = useState<boolean>(false);
   const [refreshingProfileCollection, setRefreshingProfileCollection] = useState<boolean>(false);
 
@@ -482,7 +484,13 @@ const ProfileScreen = ({navigation, route}: Props) => {
         setFeedListData(response.posts);
         setChangeProfileData(!changeProfileData);
         dispatch(allActions.userActions.setUserAllFeeds(response.posts));
-        console.log("요청된 프로필 정보@@@", response)
+        console.log("요청된 프로필 정보@@@", response);
+        var profileInfo = {
+          profileImage : response.profileImg,
+          nickname: response.nickname,
+          description: response.description
+        }
+        setUserProfileInfo(profileInfo);
         console.log("response.followed", response.followed)
       }).catch(function(error) {
         console.log("GetUserProfile error", error);
@@ -784,6 +792,7 @@ const ProfileScreen = ({navigation, route}: Props) => {
       <FeedListTabContainer onLayout={(event) => measureFeedListTab(event)}
       tabLabel='게시글'>
        <ProfileFeedList
+       userProfileInfo={userProfileInfo}
        navigation={navigation}
        feedListData={currentUser.userAllFeeds ? currentUser.userAllFeeds : []}
        feedListDataByDate={feedListDataByDate ? feedListDataByDate : []}

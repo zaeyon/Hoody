@@ -148,9 +148,10 @@ const PickerFinishText = Styled.Text`
     openMonthPicker: () => void,
     selectedYear: number,
     selectedMonth: number,
+    userProfileInfo: object,
   }
 
-const ProfileFeedList = ({navigation, route, feedListData, currentSortType, onScrollPostList, feedListDataByDate, requestNickname, openYearPicker, openMonthPicker, selectedYear, selectedMonth}: Props) => {
+const ProfileFeedList = ({navigation, route, feedListData, currentSortType, onScrollPostList, feedListDataByDate, requestNickname, openYearPicker, openMonthPicker, selectedYear, selectedMonth, userProfileInfo}: Props) => {
 
   const getCurrentYear = (date: Date) => {
     return date.getFullYear();
@@ -163,12 +164,11 @@ const ProfileFeedList = ({navigation, route, feedListData, currentSortType, onSc
   const currentUser = useSelector((state) => state.currentUser);
   
     const renderProfileListFeedItem = ({item, index}) => {
-      console.log("renderProfileListFeedItem", item);
         return (
           <MemoizedFeedItem
           id={item.id}
-          profile_image={currentUser.user.profileImage}
-          nickname={currentUser.user.nickname}
+          profile_image={userProfileInfo.profileImage}
+          nickname={userProfileInfo.nickname}
           createdAt={item.createdAt}
           rating={item.starRate}
           main_tag={item.mainTags.name}

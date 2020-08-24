@@ -10,7 +10,7 @@ import {
 
 import {useSelector} from 'react-redux';
 
-import ScrollableTabView, { DefaultTabBar,} from 'rn-collapsing-tab-bar';
+import ScrollableTabView, { DefaultTabBar,} from '~/Components/Presentational/ProfileScreen/rn-collapsing-tab-bar';
 
 import {getCurrentUser} from '~/AsyncStorage/User';
 import UserIntroduction from '~/Components/Presentational/ProfileScreen/UserIntroduction';
@@ -19,6 +19,7 @@ import ProfileFeedList from '~/Components/Presentational/ProfileScreen/ProfileFe
 import ProfileCollectionList from '~/Components/Presentational/ProfileScreen/ProfileCollectionList';
 
 import GetProfileFeedByList from '~/Route/Profile/GetProfileFeedByList';
+import GETProfileFeedByDate from '~/Route/Profile/GETProfileFeedByDate';
 import GetProfileCollection from '~/Route/Profile/GetProfileCollection';
 
 import {getStatusBarHeight} from 'react-native-status-bar-height';
@@ -342,6 +343,12 @@ const AnotherUserProfileScreen = ({navigation, route}: Props) => {
   const [changeProfileData, setChangeProfileData] = useState<boolean>(false);
    const [followed, setFollowed] = useState<boolean>(false);
 
+  const [userProfileInfo, setUserProfileInfo] = useState<object>({})
+
+  const [refreshingProfileFeed, setRefreshingProfileFeed] = useState<boolean>(false);
+  const [refreshingProfileCollection, setRefreshingProfileCollection] = useState<boolean>(false);
+
+
   const currentUser = useSelector((state) => state.currentUser);
 
   
@@ -362,7 +369,13 @@ const AnotherUserProfileScreen = ({navigation, route}: Props) => {
         }
         setFeedListData(response.posts);
         setChangeProfileData(!changeProfileData);
-        console.log("요청된 프로필 정보@@@", response)
+        console.log("요청된 프로필 정보@@@", response);
+        var profileInfo = {
+          profileImage : response.profileImg,
+          nickname: response.nickname,
+          description: response.description
+        }
+        setUserProfileInfo(profileInfo);
         console.log("response.followed", response.followed)
       }).catch(function(error) {
         console.log("GetUserProfile error", error);
@@ -381,11 +394,50 @@ const AnotherUserProfileScreen = ({navigation, route}: Props) => {
 
   }, [route.params?.requestedUserNickname])
 
-  useEffect(() => {
-    console.log("Profile route", route.params.requestedUserProfileImage);
-    console.log("Profile navigation", navigation);
-    
-  }, [route.params?.requestedUserNickname])
+  const onRefreshProfileFeed = () => {
+    console.log("프로필 데이터 불러오기");
+    setRefreshingProfileFeed(true);
+    getFeedListData();
+  }
+
+  const onRefreshProfileCollection = () => {
+    setRefreshingProfileCollection(true);
+    getCollectionListData();
+  }
+
+  const getFeedListData = () => {
+    GetProfileFeedByList(route.params?.requestedUserNickname)
+    .then(function(response) {
+      setUserInfoData(response);
+      if(response.followed == true) {
+        setFollowed(true)
+      } else {
+        setFollowed(false)
+      }
+
+      setFeedListData(response.posts);
+      setChangeProfileData(!changeProfileData);
+      setRefreshingProfileFeed(false);
+    }).catch(function(error) {
+      console.log("GetUserProfile error", error);
+    })  
+  }
+
+  const getCollectionListData = () => {
+    GetProfileCollection(route.params?.requestedUserNickname)
+    .then(function(response) {
+      console.log("GetProfileCollection response", response);
+      console.log("GetProfileCollection response.profileUser.colllections", response.profileUser.collections);
+      setRefreshingProfileCollection(false);
+      setCollectionListData(response.profileUser.collections);
+      setChangeProfileData(!changeProfileData);
+    })
+    .catch(function(error) {
+      console.log("GetProfileCollection error", error);
+    })
+
+  }
+
 
   const moveToLocationFeedMap = () => {
     navigation.navigate("LocationFeedMapScreen");
@@ -501,6 +553,10 @@ const AnotherUserProfileScreen = ({navigation, route}: Props) => {
         </HeaderRightContainer>
       </HeaderBar>
       <ScrollableTabView
+      refreshingProfileFeed={refreshingProfileFeed}
+      refreshingProfileCollection={refreshingProfileCollection}
+      onRefreshProfileFeed={onRefreshProfileFeed}
+      onRefreshProfileCollection={onRefreshProfileCollection}
       collapsableBar={userIntroComponent()}
       initialPage={0}
       tabContentHeights={[feedListTabHeight, collectionListTabHeight]}
@@ -516,6 +572,7 @@ const AnotherUserProfileScreen = ({navigation, route}: Props) => {
       <FeedListTabContainer onLayout={(event) => measureFeedListTab(event)}
       tabLabel='게시글'>
        <ProfileFeedList
+       userProfileInfo={userProfileInfo}
        navigation={navigation}
        feedListData={feedListData ? feedListData : ""}
        currentSortType={selectedFeedSortType}

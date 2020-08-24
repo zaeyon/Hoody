@@ -21,7 +21,7 @@ const UserFeedListContainer = Styled.View`
 `;
 
 const ListTypeFeedContainer = Styled.View`
-padding-bottom: 40px;
+padding-bottom: 30px;
 `;
 
 const TileTypeFeedContainer = Styled.View`

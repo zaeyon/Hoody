@@ -11,7 +11,7 @@ import {
 import {useSelector, useDispatch} from 'react-redux';
 import allActions from '~/action';
 import Modal from 'react-native-modal';
-import ScrollableTabView, { DefaultTabBar,} from 'rn-collapsing-tab-bar';
+import ScrollableTabView from '~/Components/Presentational/ProfileScreen/rn-collapsing-tab-bar';
 
 import {getCurrentUser} from '~/AsyncStorage/User';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
@@ -459,6 +459,9 @@ const ProfileScreen = ({navigation, route}: Props) => {
   const [selectedMonth, setSelectedMonth] = useState<number>(getCurrentMonth(new Date()));
   const [changingMonth, setChangingMonth] = useState<number>(getCurrentMonth(new Date()));
 
+  const [refreshingProfileFeed, setRefreshingProfileFeed] = useState<boolean>(false);
+  const [refreshingProfileCollection, setRefreshingProfileCollection] = useState<boolean>(false);
+
   const currentUser = useSelector((state: any) => state.currentUser);
   const dispatch = useDispatch();
 
@@ -502,6 +505,7 @@ const ProfileScreen = ({navigation, route}: Props) => {
         setTimeout(() => {
         setFeedListDataByDate(tmpFeedListByDate);
         })
+
       })
       .catch(function(error) {
         console.log("GETProfileFeedByDate error", error);
@@ -521,9 +525,56 @@ const ProfileScreen = ({navigation, route}: Props) => {
 
   }, [route.params?.collectionListChange, route.params?.profileModification])
 
+  const onRefreshProfileFeed = () => {
+    console.log("프로필 데이터 불러오기");
+    setRefreshingProfileFeed(true);
+    getFeedListData();
+  }
+
+  const onRefreshProfileCollection = () => {
+    setRefreshingProfileCollection(true);
+    getCollectionListData();
+  }
+
+  const getFeedListData = () => {
+    GetProfileFeedByList(currentUser.user.nickname)
+    .then(function(response) {
+      setUserInfoData(response);
+      if(response.followed == true) {
+        setFollowed(true)
+      } else {
+        setFollowed(false)
+      }
+
+      setFeedListData(response.posts);
+      setChangeProfileData(!changeProfileData);
+      dispatch(allActions.userActions.setUserAllFeeds(response.posts));
+
+      getFeedListDataByDate();
+    }).catch(function(error) {
+      console.log("GetUserProfile error", error);
+    })  
+  }
+
+  const getCollectionListData = () => {
+    GetProfileCollection(currentUser.user.nickname)
+    .then(function(response) {
+      console.log("GetProfileCollection response", response);
+      console.log("GetProfileCollection response.profileUser.colllections", response.profileUser.collections);
+      setRefreshingProfileCollection(false);
+      setCollectionListData(response.profileUser.collections);
+      setChangeProfileData(!changeProfileData);
+    })
+    .catch(function(error) {
+      console.log("GetProfileCollection error", error);
+    })
+
+  }
+
   const getFeedListDataByDate = () => {
     GETProfileFeedByDate(currentUser.user.nickname, changingYear + "-" + changingMonth)
     .then(function(response) {
+      setRefreshingProfileFeed(false);
       console.log("GETProfileFeedByDate response", response)
       var tmpFeedListByDate = new Array();
 
@@ -714,7 +765,10 @@ const ProfileScreen = ({navigation, route}: Props) => {
         </HeaderRightContainer>
       </HeaderBar>
       <ScrollableTabView
-      loadMoreSearchFeedData={() => 0}
+      refreshingProfileFeed={refreshingProfileFeed}
+      refreshingProfileCollection={refreshingProfileCollection}
+      onRefreshProfileFeed={onRefreshProfileFeed}
+      onRefreshProfileCollection={onRefreshProfileCollection}
       collapsableBar={userIntroComponent()}
       initialPage={0}
       tabContentHeights={[feedListTabHeight, collectionListTabHeight]}

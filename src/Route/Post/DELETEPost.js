@@ -1,5 +1,5 @@
 import axios from 'axios';
-const baseUrl = "https://9ed9874dfb94.ngrok.io";
+const baseUrl = "https://39c3aa47b6d2.ngrok.io";
 
 const DELETEPost = (postId) => {
     const url = baseUrl + '/post/delete?postId=' + postId;

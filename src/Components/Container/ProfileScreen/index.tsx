@@ -1,7 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import {
-  FlatList, View, Text, Dimensions, TouchableOpacity, TouchableWithoutFeedback, SafeAreaView, StyleSheet, Picker
+  FlatList, View, Text, Dimensions, TouchableOpacity, TouchableWithoutFeedback, SafeAreaView, StyleSheet, Picker, Alert
 } from 'react-native';
+
 import Styled from 'styled-components/native';
 import {
   widthPercentageToDP as wp, 
@@ -486,9 +487,12 @@ const ProfileScreen = ({navigation, route}: Props) => {
         dispatch(allActions.userActions.setUserAllFeeds(response.posts));
         console.log("요청된 프로필 정보@@@", response);
         var profileInfo = {
+          email: currentUser.user.email,
           profileImage : response.profileImg,
           nickname: response.nickname,
-          description: response.description
+          description: response.description,
+          birthdate: response.birthdate,
+          gender: response.gender,
         }
         setUserProfileInfo(profileInfo);
         console.log("response.followed", response.followed)
@@ -642,8 +646,24 @@ const ProfileScreen = ({navigation, route}: Props) => {
     });
   }
 
+  const moveToReport = () => {
+    Alert.alert('서비스 준비중입니다.', '', [
+      {
+        text: '확인',
+        onPress: () => 0,
+      }
+    ]);
+
+    /*
+    navigation.navigate("ReportScreen");
+    */
+  }
+
   const moveToSetting = () => {
-    navigation.navigate("SettingScreen");
+    navigation.navigate("SettingScreen", {
+      profileInfo: userProfileInfo,
+    });
+
     setProfileModalVisible(false)
   }
 
@@ -755,7 +775,7 @@ const ProfileScreen = ({navigation, route}: Props) => {
         </HeaderLeftContainer>
         <HeaderRightContainer>
           {currentUserProfileBool && (
-          <TouchableWithoutFeedback onPress={() => navigation.navigate("ReportScreen")}>
+          <TouchableWithoutFeedback onPress={() => moveToReport()}>
           <MyProfileReportContainer>
           <MyProfileReportImage
           source={require('~/Assets/Images/ic_report.png')}/>

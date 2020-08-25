@@ -1,10 +1,11 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useCallback, useState} from 'react';
 import {
   View,
   Button,
   PermissionsAndroid,
   ToastAndroid,
   BackHandler,
+  Alert
 } from 'react-native';
 import Styled from 'styled-components/native';
 import {NavigationContainer} from '@react-navigation/native';
@@ -14,6 +15,7 @@ import {createStore} from 'redux';
 import {Provider, useSelector} from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
 import SplashScreen from 'react-native-splash-screen'
+import messaging from '@react-native-firebase/messaging'
 
 
 import rootReducer from '~/reducers';
@@ -74,16 +76,69 @@ RNLocation.configure({
   showsBackgroundLocationIndicator: false,
 })
 
-function App() {
+// Waring 노란색창 숨기기
+console.disableYellowBox = true;
 
-  // Waring 노란색창 숨기기
-  console.disableYellowBox = true;
+function App() {
+  const [pushToken, setPushToken] = useState<string>();
+  const [isAuthorized, setIsAuthorized] = useState<boolean>(false);
+  const foregroundListener = useCallback(() => {
+    messaging().onMessage(async message => {
+      console.log("푸시 알림 message", message);
+    })
+  }, [])
+
+
+  useEffect(() => {
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+    });
+
+    return unsubscribe;
+  }, []);
+
+  const handlePushToken = useCallback(async () => {
+    const enabled = await messaging().hasPermission()
+    if (enabled) {
+      const fcmToken = await messaging().getToken()
+      if (fcmToken) {
+        setPushToken(fcmToken)
+        console.log("fcmToken", fcmToken);
+      }
+    } else {
+      const authorized = await messaging().requestPermission()
+      if (authorized) setIsAuthorized(true)
+    }
+  }, [])
+
+  const saveTokenToDatabase = useCallback(async (token) => {
+    //const { error } = await setFcmToken(token)
+    //if (error) throw Error(error)
+  }, [])
+
+
+  const saveDeviceToken = useCallback(async () => {
+    if (isAuthorized) {
+      const currentFcmToken = await messaging().getToken()
+      if (currentFcmToken !== pushToken) {
+        return saveTokenToDatabase(currentFcmToken)
+      }
+
+      return messaging().onTokenRefresh((token) => saveTokenToDatabase(token))
+    }
+  }, [pushToken, isAuthorized])
+
+  useEffect(() => {
+    foregroundListener()
+    handlePushToken()
+    saveDeviceToken()
+    requestCameraPermission()
+  }, [])
+
 
   useEffect(() => {
     SplashScreen.hide();
   })
-
-  requestCameraPermission();
 
   return (
       <Provider store={store}>

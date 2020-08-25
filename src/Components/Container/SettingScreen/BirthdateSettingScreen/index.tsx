@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Styled from 'styled-components/native';
 import {TouchableWithoutFeedback, Alert} from 'react-native';
 import {
@@ -7,6 +7,7 @@ import {
 } from 'react-native-responsive-screen';
 import {useDispatch} from 'react-redux';
 import allActions from '~/action';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 const Container = Styled.SafeAreaView`
  flex: 1;
@@ -50,6 +51,18 @@ padding: 7px 16px 13px 15px;
  align-items: center;
  justify-content: center;
  flex-direction: row;
+`;
+
+const HeaderRegisterText = Styled.Text`
+font-weight: 500;
+font-size: 17px;
+color: #267DFF;
+`;
+
+const DisabledHeaderRegisterText = Styled.Text`
+font-weight: 500;
+font-size: 17px;
+color: #C6C7CC;
 `;
 
 const HeaderEmptyContainer = Styled.View`
@@ -110,6 +123,35 @@ const BirthdateText = Styled.Text`
  color: #1D1E1F;
 `;
 
+const BirthdateModalContainer = Styled.View`
+width: ${wp('100%')};
+position: absolute;
+bottom: ${hp('8.5%')};
+`;
+
+const ModalHeaderContainer = Styled.View`
+ border-width: 0.6px;
+ border-color: #ECECEE;
+ width: ${wp('100%')};
+ height: ${wp('11.2%')};
+ background-color: #FAFAFA;
+ flex-direction: row;
+ justify-content: flex-end;
+ align-items: center;
+ padding-left: 16px;
+`;
+
+const ModalFinishContainer = Styled.View`
+padding-top: 12px;
+padding-bottom: 12px;
+padding-right: 16px
+`;
+
+const ModalFinishText = Styled.Text`
+ font-size: 16px;
+ color: #267DFF;
+`;
+
 
 interface Props {
     navigation: any,
@@ -118,6 +160,34 @@ interface Props {
 
 const BirthdateSettingScreen = ({navigation, route}: Props) => {
     const dispatch = useDispatch();
+    const [birthdate, setBirthdate] = useState<Date>(new Date());
+    const [visibleBirthdatePicker, setVisibleBirthdatePicker] = useState<boolean>(false);
+    const [birthdateIndication, setBirthdateIndication] = useState<string>("1998년 1월 3일");
+
+    function formatIndicationDate(date: any) {
+        var d = new Date(date),
+          month = '' + (d.getMonth() + 1),
+          day = '' + d.getDate(),
+          year = d.getFullYear();
+    
+        if (month.length < 2) month = '0' + month;
+        if (day.length < 2) day = '0' + day;
+    
+        return year + "년 " + month + "월 " + day + "일";
+      }
+
+  const applyBirthdate = () => {
+    console.log("birthdate", birthdate);
+
+    setBirthdateIndication(formatIndicationDate(birthdate));
+    setVisibleBirthdatePicker(false);
+  }
+
+  const onChangeBirthdatePicker = (event, date) => {
+    setBirthdate(date)
+  }
+
+
 
     return (
         <Container>
@@ -147,11 +217,35 @@ const BirthdateSettingScreen = ({navigation, route}: Props) => {
                 </DescripContainer>
                 <BirthdateContainer>
                     <BirthdateLabelText>생년월일</BirthdateLabelText>
+                    <TouchableWithoutFeedback onPress={() => setVisibleBirthdatePicker(true)}>
                     <BirthdateInputContainer>
-                        <BirthdateText>2020년 12월 31일</BirthdateText>
+                        <BirthdateText>{birthdateIndication}</BirthdateText>
                     </BirthdateInputContainer>
+                    </TouchableWithoutFeedback>
                 </BirthdateContainer>
             </BodyContainer>
+            {visibleBirthdatePicker && (
+        <BirthdateModalContainer>
+          <ModalHeaderContainer>
+            <TouchableWithoutFeedback onPress={() => applyBirthdate()}>
+            <ModalFinishContainer>
+              <ModalFinishText>완료</ModalFinishText>
+            </ModalFinishContainer>
+            </TouchableWithoutFeedback>
+          </ModalHeaderContainer>
+          <DateTimePicker
+                locale={'ko_KR.UTF-8'}
+                style={{flex:1}}
+                testID="birthdatePicker"
+                value={birthdate}
+                onChange={(event,date) => onChangeBirthdatePicker(event,date)}
+                mode={'date'}
+                display="default"
+                is24Hour={true}
+                maximumDate={new Date()}
+              />
+        </BirthdateModalContainer>
+      )}
         </Container>
         
     )

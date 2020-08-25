@@ -1,11 +1,11 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import Styled from 'styled-components/native';
 import {TouchableWithoutFeedback, Alert} from 'react-native';
 import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import allActions from '~/action';
 
 // Route
@@ -144,7 +144,30 @@ interface Props {
 }
 
 const AccountSettingScreen = ({navigation, route}: Props) => {
+    
+  function formatIndicationDate(date: any) {
+    var d = new Date(date),
+      month = '' + (d.getMonth() + 1),
+      day = '' + d.getDate(),
+      year = d.getFullYear();
+
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+
+    return year + "년 " + month + "월 " + day + "일";
+  }
+
+    const [profileInfo, setProfileInfo] = useState<object>(route.params?.profileInfo);
+    const [birthdateIndication, setBirthdateIndication] = useState<string>(formatIndicationDate(route.params?.profileInfo.birthdate));
+
     const dispatch = useDispatch();
+    const currentUser = useSelector((state: any) => state.currentUser);
+    
+
+    useEffect(() => {
+    console.log("AccountSettingScreen route.params?.profileInfo", route.params?.profileInfo);
+    }, [route.params?.profileInfo])
+
 
     const moveToBirthdateSetting = () => {
         navigation.navigate("BirthdateSettingScreen");
@@ -209,7 +232,7 @@ const AccountSettingScreen = ({navigation, route}: Props) => {
                 <TabItemContainer>
                     <TabItemInfoContainer>
                         <TabItemLabelText>이메일</TabItemLabelText>
-                        <TabItemContentText>abcd@gmail.com</TabItemContentText>
+                        <TabItemContentText>{profileInfo.email}</TabItemContentText>
                     </TabItemInfoContainer>
                 </TabItemContainer>
                 <TouchableWithoutFeedback onPress={() => moveToBirthdateSetting()}>
@@ -217,7 +240,7 @@ const AccountSettingScreen = ({navigation, route}: Props) => {
                     <TabItemInfoContainer>
                         <TabItemLabelText>생일</TabItemLabelText>
                         <TabItemRightContainer>
-                        <TabItemContentText>1996년 1월 1일</TabItemContentText>
+                        <TabItemContentText>{birthdateIndication}</TabItemContentText>
                         <TabItemDisclosureIcon
                         source={require('~/Assets/Images/Setting/ic_disclosure.png')}/>
                         </TabItemRightContainer>
@@ -229,7 +252,7 @@ const AccountSettingScreen = ({navigation, route}: Props) => {
                     <TabItemInfoContainer>
                         <TabItemLabelText>성별</TabItemLabelText>
                         <TabItemRightContainer>
-                        <TabItemContentText>여성</TabItemContentText>
+                        <TabItemContentText>{profileInfo.gender === "male" ? "남성" : (profileInfo.gender === "female" ? "여성" : "선택 안함")}</TabItemContentText>
                         <TabItemDisclosureIcon
                         source={require('~/Assets/Images/Setting/ic_disclosure.png')}/>
                         </TabItemRightContainer>

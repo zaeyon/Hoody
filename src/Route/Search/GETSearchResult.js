@@ -1,5 +1,5 @@
 import axios from 'axios';
-const baseUrl = 'https://946aa95b0787.ngrok.io';
+const baseUrl = 'https://d15a7753d61e.ngrok.io';
 
 const GETSearchResult = (type, query, order, offset, limit) => {
     console.log("입력된 검색 query", query)

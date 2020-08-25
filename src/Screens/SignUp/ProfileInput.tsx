@@ -20,8 +20,6 @@ import axios from 'axios';
 import {useSelector, useDispatch} from 'react-redux';
 import allActions from '~/action';
 import AboveKeyboard from 'react-native-above-keyboard';
-
-
 import SignUp from '~/Route/Auth/SignUp';
 
 const Container = Styled.SafeAreaView`

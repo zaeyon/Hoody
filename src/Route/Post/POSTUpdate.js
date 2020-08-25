@@ -1,5 +1,5 @@
 import axios from 'axios';
-const baseUrl = 'https://946aa95b0787.ngrok.io'; 
+const baseUrl = 'https://d15a7753d61e.ngrok.io'; 
 
 
 const POSTUpdate = (feedId, desArray, mediaArray,mainTag, subTag1, subTag2, rating, expense,  location, longitude, latitude, certifiedLocation, dump, sequence, products, spendDate, openState, subTag1Edit, subTag2Edit, subTag1Exis, subTag2Exis) => {

@@ -11,7 +11,7 @@ import {
 import {useSelector, useDispatch} from 'react-redux';
 import allActions from '~/action';
 import Modal from 'react-native-modal';
-import ScrollableTabView from '~/Components/Presentational/ProfileScreen/rn-collapsing-tab-bar';
+import ScrollableTabView from 'rn-collapsing-tab-bar';
 
 import {getCurrentUser} from '~/AsyncStorage/User';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
@@ -773,10 +773,12 @@ const ProfileScreen = ({navigation, route}: Props) => {
         </HeaderRightContainer>
       </HeaderBar>
       <ScrollableTabView
-      refreshingProfileFeed={refreshingProfileFeed}
-      refreshingProfileCollection={refreshingProfileCollection}
-      onRefreshProfileFeed={onRefreshProfileFeed}
-      onRefreshProfileCollection={onRefreshProfileCollection}
+      loadMoreSearchFeedData={() => 0}
+      loadMoreSearchCollectionData={() => 0}
+      refreshingFeed={refreshingProfileFeed}
+      refreshingCollection={refreshingProfileCollection}
+      onRefreshFeed={onRefreshProfileFeed}
+      onRefreshCollection={onRefreshProfileCollection}
       collapsableBar={userIntroComponent()}
       initialPage={0}
       tabContentHeights={[feedListTabHeight, collectionListTabHeight]}

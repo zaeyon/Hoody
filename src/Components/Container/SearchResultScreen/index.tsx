@@ -16,8 +16,7 @@ import SearchResultTabBar from '~/Components/Presentational/SearchResultScreen/S
 import MemoizedFeedItem from '~/Components/Presentational/SearchResultScreen/MemoizedFeedItem';
 import CollectionItem from '~/Components/Presentational/SearchResultScreen/CollectionItem';
 import SearchFeedList from '~/Components/Presentational/SearchResultScreen/SearchFeedList';
-import ScrollableTabView from '~/Components/Presentational/SearchResultScreen/rn-collapsing-tab-bar';
-
+import ScrollableTabView from 'rn-collapsing-tab-bar'
 // Route
 import GETSearchResult from '~/Route/Search/GETSearchResult';
 import POSTFollowTag from '~/Route/Tag/POSTFollowTag';
@@ -1498,6 +1497,7 @@ const SearchResultScreen = ({navigation, route}: Props) => {
     }
 
     const onRefreshSearchFeedData = () => {
+      console.log("피드데이터 리로드")
       feedOffset = 0;
       feedLimit = 20;
 
@@ -1775,10 +1775,10 @@ const SearchResultScreen = ({navigation, route}: Props) => {
                 </TouchableWithoutFeedback>
             </HeaderBar>
             <ScrollableTabView
-            refreshingSearchData={refreshingSearchData}
-            refreshingSearchCollectionData={refreshingSearchCollectionData}
-            onRefreshSearchData={onRefreshSearchFeedData}
-            onRefreshSearchCollectionData={onRefreshSearchCollectionData}
+            refreshingFeed={refreshingSearchData}
+            refreshingCollection={refreshingSearchCollectionData}
+            onRefreshFeed={onRefreshSearchFeedData}
+            onRefreshCollection={onRefreshSearchCollectionData}
             loadMoreSearchFeedData={loadMoreSearchFeedData}
             loadMoreSearchCollectionData={loadMoreSearchCollectionData}
             collapsableBar={keywordListContainer()}

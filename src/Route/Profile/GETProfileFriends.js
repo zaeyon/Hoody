@@ -1,5 +1,5 @@
 import axios from 'axios';
-const baseUrl = 'https://39c3aa47b6d2.ngrok.io';
+const baseUrl = 'https://946aa95b0787.ngrok.io';
 
 const GETProfileFriends = (type, query, offset, limit, targetUser) => {
     const url = baseUrl + '/user/profile/friends?targetUser=' + targetUser + "&type=" + type + "&q=" +  query + "&offset=" + offset + "&limit=" + limit 

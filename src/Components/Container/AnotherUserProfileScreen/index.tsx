@@ -10,7 +10,7 @@ import {
 
 import {useSelector} from 'react-redux';
 
-import ScrollableTabView, { DefaultTabBar,} from '~/Components/Presentational/ProfileScreen/rn-collapsing-tab-bar';
+import ScrollableTabView, { DefaultTabBar,} from 'rn-collapsing-tab-bar';
 
 import {getCurrentUser} from '~/AsyncStorage/User';
 import UserIntroduction from '~/Components/Presentational/ProfileScreen/UserIntroduction';
@@ -553,10 +553,13 @@ const AnotherUserProfileScreen = ({navigation, route}: Props) => {
         </HeaderRightContainer>
       </HeaderBar>
       <ScrollableTabView
-      refreshingProfileFeed={refreshingProfileFeed}
-      refreshingProfileCollection={refreshingProfileCollection}
-      onRefreshProfileFeed={onRefreshProfileFeed}
-      onRefreshProfileCollection={onRefreshProfileCollection}
+      loadMoreSearchFeedData={() => 0}
+      loadMoreSearchCollectionData={() => 0}
+      refreshingFeed={refreshingProfileFeed}
+      refreshingCollection={refreshingProfileCollection}
+      onRefreshFeed={onRefreshProfileFeed}
+      onRefreshCollection={onRefreshProfileCollection}
+      
       collapsableBar={userIntroComponent()}
       initialPage={0}
       tabContentHeights={[feedListTabHeight, collectionListTabHeight]}

@@ -9,6 +9,9 @@ import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-
 import {useDispatch} from 'react-redux';
 import allActions from '~/action';
 
+// Route
+import POSTGenderUpdate from '~/Route/Profile/POSTGenderUpdate';
+
 const Container = Styled.SafeAreaView`
  flex: 1;
  background-color: #ffffff;
@@ -47,10 +50,22 @@ color: #1D1E1F;
 `;
 
 const HeaderRightContainer = Styled.View`
-padding: 7px 16px 13px 15px;
+padding: 11px 16px 13px 15px;
  align-items: center;
  justify-content: center;
  flex-direction: row;
+`;
+
+const HeaderRegisterText = Styled.Text`
+font-weight: 500;
+font-size: 17px;
+color: #267DFF;
+`;
+
+const DisabledHeaderRegisterText = Styled.Text`
+font-weight: 500;
+font-size: 17px;
+color: #C6C7CC;
 `;
 
 const HeaderEmptyContainer = Styled.View`
@@ -111,7 +126,8 @@ interface Props {
 }
 
 const GenderSettingScreen = ({navigation, route}: Props) => {
-    const [selectedRadioIndex, setSelectedRadioIndex] = useState<number>(0);
+    const [selectedRadioIndex, setSelectedRadioIndex] = useState<number>(route.params?.selectedRadioIndex);
+    const [genderChange, setGenderChange] = useState<boolean>(false);
     const dispatch = useDispatch();
 
     var radio_props = [
@@ -121,8 +137,23 @@ const GenderSettingScreen = ({navigation, route}: Props) => {
       ];
 
     const onPressRadioButton = (i: number) => {
-        setSelectedRadioIndex(i)
+        setSelectedRadioIndex(i);
+        setGenderChange(true);
         console.log("selectedRadioIndex", i);
+    }
+
+    const updateGender = () => {
+        var submitGender = selectedRadioIndex === 0 ? "female" : (selectedRadioIndex === 1 ? "male" : (selectedRadioIndex === 2 ? "undefined" : ""))
+         POSTGenderUpdate(submitGender)
+         .then(function(response) {
+             console.log("성별변경 완료", response);
+             navigation.navigate("AccountSettingScreen", {
+                 genderUpdate: submitGender,
+             })
+         })
+         .catch(function(error) {
+             console.log("성별변경 실패", error);
+         })
     }
   
 
@@ -138,10 +169,18 @@ const GenderSettingScreen = ({navigation, route}: Props) => {
                 </HeaderLeftContainer>
                 </TouchableWithoutFeedback>
                 <HeaderTitleText>성별</HeaderTitleText>
+                {genderChange && (
+                <TouchableWithoutFeedback onPress={() => updateGender()}>
                 <HeaderRightContainer>
-                    <HeaderEmptyContainer>
-                    </HeaderEmptyContainer>
+                    <HeaderRegisterText>적용</HeaderRegisterText>
                 </HeaderRightContainer>
+                </TouchableWithoutFeedback>
+                )}
+                {!genderChange && (
+                <HeaderRightContainer>
+                    <DisabledHeaderRegisterText>적용</DisabledHeaderRegisterText>
+                </HeaderRightContainer>
+                )}
             </HeaderBar>
             <BodyContainer>
                 <DescripContainer>

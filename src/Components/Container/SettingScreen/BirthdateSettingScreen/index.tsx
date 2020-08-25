@@ -9,6 +9,9 @@ import {useDispatch} from 'react-redux';
 import allActions from '~/action';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
+// Route
+import POSTBirthdateUpdate from '~/Route/Profile/POSTBirthdateUpdate';
+
 const Container = Styled.SafeAreaView`
  flex: 1;
  background-color: #ffffff;
@@ -47,7 +50,7 @@ color: #1D1E1F;
 `;
 
 const HeaderRightContainer = Styled.View`
-padding: 7px 16px 13px 15px;
+padding: 11px 16px 13px 15px;
  align-items: center;
  justify-content: center;
  flex-direction: row;
@@ -160,9 +163,13 @@ interface Props {
 
 const BirthdateSettingScreen = ({navigation, route}: Props) => {
     const dispatch = useDispatch();
-    const [birthdate, setBirthdate] = useState<Date>(new Date());
+    const [birthdate, setBirthdate] = useState<Date>(new Date(route.params?.birthdate));
     const [visibleBirthdatePicker, setVisibleBirthdatePicker] = useState<boolean>(false);
-    const [birthdateIndication, setBirthdateIndication] = useState<string>("1998년 1월 3일");
+    const [birthdateIndication, setBirthdateIndication] = useState<string>(route.params?.birthdateIndication);
+    const [submitBirthdate, setSubmitBirthdate] = useState<string>();
+    const [birthdateChange, setBirthdateChange] = useState<boolean>(false);
+
+    console.log("birthDate", birthdate);
 
     function formatIndicationDate(date: any) {
         var d = new Date(date),
@@ -175,16 +182,47 @@ const BirthdateSettingScreen = ({navigation, route}: Props) => {
     
         return year + "년 " + month + "월 " + day + "일";
       }
+       
+      function formatDate(date: any) {
+        var d = new Date(date),
+          month = '' + (d.getMonth() + 1),
+          day = '' + d.getDate(),
+          year = d.getFullYear();
+    
+        if (month.length < 2) month = '0' + month;
+        if (day.length < 2) day = '0' + day;
+    
+        return year + "/" + month + "/" + day;
+      }
 
   const applyBirthdate = () => {
     console.log("birthdate", birthdate);
+    console.log("new Date(route.params?.birthdate)", new Date(route.params?.birthdate));
+    
+    if(formatDate(birthdate) !== formatDate(route.params?.birthdate)) {
+        setBirthdateChange(true);
+    }
 
     setBirthdateIndication(formatIndicationDate(birthdate));
     setVisibleBirthdatePicker(false);
+    setSubmitBirthdate(formatDate(birthdate));
   }
 
   const onChangeBirthdatePicker = (event, date) => {
     setBirthdate(date)
+  }
+
+  const updateBirthdate = () => {
+      POSTBirthdateUpdate(submitBirthdate)
+      .then(function(response) {
+          console.log("response", response);
+          navigation.navigate("AccountSettingScreen", {
+              birthdateUpdate: birthdate,
+          })
+      })
+      .catch(function(error) {
+          console.log("error", error)
+      })
   }
 
 
@@ -201,10 +239,18 @@ const BirthdateSettingScreen = ({navigation, route}: Props) => {
                 </HeaderLeftContainer>
                 </TouchableWithoutFeedback>
                 <HeaderTitleText>생일</HeaderTitleText>
+                {birthdateChange && (
+                <TouchableWithoutFeedback onPress={() => updateBirthdate()}>
                 <HeaderRightContainer>
-                    <HeaderEmptyContainer>
-                    </HeaderEmptyContainer>
+                    <HeaderRegisterText>적용</HeaderRegisterText>
                 </HeaderRightContainer>
+                </TouchableWithoutFeedback>
+                )}
+                {!birthdateChange && (
+                <HeaderRightContainer>
+                    <DisabledHeaderRegisterText>적용</DisabledHeaderRegisterText>
+                </HeaderRightContainer>
+                )}
             </HeaderBar>
             <BodyContainer>
                 <DescripContainer>

@@ -159,22 +159,57 @@ const AccountSettingScreen = ({navigation, route}: Props) => {
 
     const [profileInfo, setProfileInfo] = useState<object>(route.params?.profileInfo);
     const [birthdateIndication, setBirthdateIndication] = useState<string>(formatIndicationDate(route.params?.profileInfo.birthdate));
+    const [profileUpdate, setProfileUpdate] = useState<boolean>(false);
 
     const dispatch = useDispatch();
     const currentUser = useSelector((state: any) => state.currentUser);
+
+
     
 
     useEffect(() => {
     console.log("AccountSettingScreen route.params?.profileInfo", route.params?.profileInfo);
     }, [route.params?.profileInfo])
 
+    useEffect(() => {
+
+        if(route.params?.birthdateUpdate) {
+        var preProfileInfo = profileInfo;
+        preProfileInfo.birthdate = route.params?.birthdateUpdate;
+
+        setProfileInfo(preProfileInfo);
+        setBirthdateIndication(formatIndicationDate(route.params?.birthdateUpdate));
+        setProfileUpdate(!profileUpdate);
+        }
+        
+    }, [route.params?.birthdateUpdate])
+
+    useEffect(() => {
+        if(route.params?.genderUpdate) {
+
+            console.log("성별변경!", route.params?.genderUpdate);
+            
+            var preProfileInfo = profileInfo;
+            preProfileInfo.gender = route.params?.genderUpdate;
+
+            setProfileInfo(preProfileInfo);
+            setProfileUpdate(!profileUpdate);
+        }
+    }, [route.params?.genderUpdate])
+
 
     const moveToBirthdateSetting = () => {
-        navigation.navigate("BirthdateSettingScreen");
+        navigation.navigate("BirthdateSettingScreen", {
+            birthdateIndication: birthdateIndication,
+            birthdate: profileInfo.birthdate,
+        });
     }
 
     const moveToGenderSetting = () => {
-        navigation.navigate("GenderSettingScreen");
+        navigation.navigate("GenderSettingScreen", {
+            gender: profileInfo.gender,
+            selectedRadioIndex: profileInfo.gender === "male" ? 1 : (profileInfo.gender === "female" ? 0 : 2)
+        });
     }
 
     const moveToConfirmPassword = () => {
@@ -252,7 +287,7 @@ const AccountSettingScreen = ({navigation, route}: Props) => {
                     <TabItemInfoContainer>
                         <TabItemLabelText>성별</TabItemLabelText>
                         <TabItemRightContainer>
-                        <TabItemContentText>{profileInfo.gender === "male" ? "남성" : (profileInfo.gender === "female" ? "여성" : "선택 안함")}</TabItemContentText>
+                        <TabItemContentText>{profileInfo.gender === "male" ? "남성" : (profileInfo.gender === "female" ? "여성" : "선택안함")}</TabItemContentText>
                         <TabItemDisclosureIcon
                         source={require('~/Assets/Images/Setting/ic_disclosure.png')}/>
                         </TabItemRightContainer>

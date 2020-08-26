@@ -8,8 +8,8 @@
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint .",
-    "postinstall": "yarn run cjk-textinput-patch;",
-    "postuninstall": "yarn run cjk-textinput-patch;"
+    "postinstall": "yarn run cjk-textinput-patch; yarn run infinite-flatlist-patch",
+    "postuninstall": "yarn run cjk-textinput-patch; yarn run infinite-flatlist-patch"
   },
   "dependencies": {
     "@eva-design/eva": "2.0.0",
@@ -97,6 +97,7 @@
     "jest": "25.2.4",
     "metro-react-native-babel-preset": "0.59.0",
     "react-native-cjk-textinput-patch": "^1.0.0",
+    "react-native-infinite-flatlist-patch": "^1.0.7",
     "react-test-renderer": "16.11.0",
     "typescript": "3.8.3"
   },

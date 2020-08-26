@@ -596,6 +596,8 @@ const FeedItem = ({
             )}
             </HeaderCenterContainer>
           </WriterContainer>
+          {/*
+
           <ExpenseRatingContainer>
             <ExpenseText>{expense ? expense.toLocaleString()+"원" : null}</ExpenseText>
             <RatingStarImage
@@ -603,6 +605,8 @@ const FeedItem = ({
             />
             <RatingText>{rating}</RatingText>
           </ExpenseRatingContainer>
+
+          */}
         </HeaderContainer>
         <TouchableWithoutFeedback onPress={() => moveToFeedDetail()}>
         <View>

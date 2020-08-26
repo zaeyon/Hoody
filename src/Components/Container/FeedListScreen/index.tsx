@@ -11,6 +11,7 @@ import allActions from '~/action';
 import {NavigationContainer} from '@react-navigation/native';
 import Geolocation from 'react-native-geolocation-service';
 
+
 // Local Component
 //import FeedItem from '~/Components/Presentational/FeedListScreen/MomoizedFeedItem';
 import MomoizedFeedItem from '~/Components/Presentational/FeedListScreen/MomoizedFeedItem';
@@ -296,6 +297,8 @@ interface Props {
 var offset = 0;
 var limit = 20;
 
+const baseUrl = 'http://hoody-api-test-server-alb-1622974409.ap-northeast-2.elb.amazonaws.com/'; 
+
 function FeedListScreen({navigation, route}: Props) {
   const [feedListData, setFeedListData] = useState([]);
   const [searchFocus, setSearchFocus] = useState<boolean>(false);
@@ -308,6 +311,7 @@ function FeedListScreen({navigation, route}: Props) {
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [onRefreshFeedList, setOnRefreshFeedList] = useState<boolean>(false);
   const [noMoreFeedListData, setNoMoreFeedListData] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const currentUser = useSelector((state: any) => state.currentUser);
   const home = useSelector((state: any) => state.home);
   const dispatch = useDispatch();
@@ -363,8 +367,8 @@ function FeedListScreen({navigation, route}: Props) {
   const getFeedData = () => {
     GETFeed(offset, limit).then(function(response) {
     console.log("파드 목록 가져오기 성공@@@", response);
-    //setFeedListData(response.result);
-    dispatch(allActions.feedListAction.setHomeFeedList(response.result));
+    setFeedListData(response.result);
+    //dispatch(allActions.feedListAction.setHomeFeedList(response.result));
     setRefreshing(false)
     setOnRefreshFeedList(!onRefreshFeedList)
   })
@@ -402,6 +406,18 @@ function FeedListScreen({navigation, route}: Props) {
     })
   }
 
+  const isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }: any) => {
+		const paddingToBottom = 20;
+		return layoutMeasurement.height + contentOffset.y >=
+			contentSize.height - paddingToBottom;
+	}
+
+  const onScrollBottom = (e: any) => {
+    if(isCloseToBottom(e.nativeEvent)) {
+      loadMoreFeedListData()
+    }
+  }
+
 
   const onRefreshFeedListData = () => {
     offset = 0;
@@ -412,38 +428,55 @@ function FeedListScreen({navigation, route}: Props) {
     setTimeout(() => {
       getFeedData()
     }, 10)
-  }
+  } 
 
   const loadMoreFeedListData = () => {
+    setLoading(true);
     if(noMoreFeedListData) {
       return
     }
     if(!noMoreFeedListData) {
       console.log("피드리스트 데이터 더 불러오기")
-
-    offset = offset + 20;
-    limit = limit + 20;
-
-    setTimeout(() => {
+      offset = offset + 20;
+      limit = limit + 20;
+      var url = baseUrl + '/feed?offset=' + offset + "&limit=" + limit;  
+      /*
       GETFeed(offset, limit).then(function(response) {
       console.log("파드 목록 가져오기 성공", response);
       if(response.result.length === 0) {
         console.log("더이상 불러올 데이터 없음", feedListData);
         setNoMoreFeedListData(true);
-
+        setLoading(false);
       } else if(response.result.length > 0) {
         console.log("불러올 데이터 존재")
-        var preFeedListData = home.homeFeedList;
-        dispatch(allActions.feedListAction.setHomeFeedList(preFeedListData.concat(response.result)))
+        setLoading(false);
+        setFeedListData(feedListData.concat(response.result))
+        //setFeedListData([...feedListData, ...response.result])
       }
     })
     .catch(function(error) {
       console.log("피드 목록 가져오기 실패", error);
     })
-    }, 50)
-
-    
-    }
+    */ 
+           axios
+           .get(url)
+           .then(function(response) {
+               // resolve(response.data);
+               if(response.data.result.length === 0) {
+                console.log("더이상 불러올 데이터 없음", feedListData);
+                setNoMoreFeedListData(true);
+                setLoading(false);
+              } else if(response.data.result.length > 0) {
+                console.log("불러올 데이터 존재")
+                setLoading(false);
+                setFeedListData(feedListData.concat(response.data.result))
+                //setFeedListData([...feedListData, ...response.result])
+              }
+           })
+           .catch(function(error) {
+               // reject(error);
+           })
+  }
   }
 
   const renderFeedItem = ({item, index}: any) => {
@@ -482,26 +515,31 @@ function FeedListScreen({navigation, route}: Props) {
           <HeaderTitleText>피드</HeaderTitleText>
           </HeaderLeftContainer>
       </HeaderBar>
+      <ScrollView
+      refreshControl={
+        <RefreshControl
+        refreshing={refreshing}
+        onRefresh={onRefreshFeedListData}
+        />}
+      onMomentumScrollEnd={onScrollBottom}
+      >
       <BodyContainer>
-      {home.homeFeedList[0] && (
+      {feedListData[0] && (
       <FeedListContainer>
       <FlatList
-      refreshing={refreshing}
-      onRefresh={onRefreshFeedListData}
       showsVerticalScrollIndicator={false}
-      data={home.homeFeedList}
+      data={feedListData}
       renderItem={renderFeedItem}
-      onEndReached={loadMoreFeedListData}
-      onEndReachedThreshold={0.2}
       />
       </FeedListContainer>
       )}
-      {!home.homeFeedList[0] && (
+      {!feedListData[0] && (
       <NoFeedListContainer>
         <NoFeedText>등록된 게시글이 없습니다.</NoFeedText>
       </NoFeedListContainer>
       )}
       </BodyContainer>
+      </ScrollView>
     </Container>
   );
 }

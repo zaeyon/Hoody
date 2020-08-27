@@ -89,6 +89,17 @@ import GenderSettingScreen from '~/Components/Container/SettingScreen/GenderSett
 import ConfirmPasswordScreen from '~/Components/Container/SettingScreen/ConfirmPasswordScreen';
 import ChangePasswordSettingScreen from '~/Components/Container/SettingScreen/ChangePasswordSettingScreen';
 import VerifyEmailScreen from '~/Components/Container/SettingScreen/VerifyEmailScreen';
+import CustomerServiceSettingScreen from '~/Components/Container/SettingScreen/CustomerServiceScreen';
+import ReportProblemScreen from '~/Components/Container/SettingScreen/ReportProblemScreen';
+import FreAskQuestionsScreen from '~/Components/Container/SettingScreen/FreAskQuestionsScreen';
+import InformationScreen from '~/Components/Container/SettingScreen/InformationScreen';
+import DataPolicyScreen from '~/Components/Container/SettingScreen/InformationScreen/DataPolicyScreen';
+import TermsOfUseScreen from '~/Components/Container/SettingScreen/InformationScreen/TermsOfUseScreen';
+import CookiePolicyScreen from '~/Components/Container/SettingScreen/InformationScreen/CookiePolicyScreen';
+import OpenSourceLibraryScreen from '~/Components/Container/SettingScreen/InformationScreen/OpenSourceLibraryScreen';
+import PrivacyPolicyScreen from '~/Components/Container/SettingScreen/InformationScreen/PrivacyPolicyScreen';
+import SendFeedbackScreen from '~/Components/Container/SettingScreen/SendFeedBackScreen';
+
 
 // Select Interest Screen
 import SelectInterestScreen from '~/Components/Container/SelectInterestScreen';
@@ -444,6 +455,36 @@ function SettingStackScreen() {
       <SettingStack.Screen
       name="ChangePasswordSettingScreen"
       component={ChangePasswordSettingScreen}/>
+      <SettingStack.Screen
+      name="CustomerServiceSettingScreen"
+      component={CustomerServiceSettingScreen}/>
+      <SettingStack.Screen
+      name="ReportProblemScreen"
+      component={ReportProblemScreen}/>
+      <SettingStack.Screen
+      name="FreAskQuestionsScreen"
+      component={FreAskQuestionsScreen}/>
+      <SettingStack.Screen
+      name="InformationScreen"
+      component={InformationScreen}/>
+      <SettingStack.Screen
+      name="DataPolicyScreen"
+      component={DataPolicyScreen}/>
+      <SettingStack.Screen
+      name="CookiePolicyScreen"
+      component={CookiePolicyScreen}/>
+      <SettingStack.Screen
+      name="OpenSourceLibraryScreen"
+      component={OpenSourceLibraryScreen}/>
+      <SettingStack.Screen
+      name="PrivacyPolicyScreen"
+      component={PrivacyPolicyScreen}/>
+      <SettingStack.Screen
+      name="TermsOfUseScreen"
+      component={TermsOfUseScreen}/>
+      <SettingStack.Screen
+      name="SendFeedbackScreen"
+      component={SendFeedbackScreen}/>
     </SettingStack.Navigator>
   )
 
@@ -622,7 +663,7 @@ function BottomTab() {
       return false;
     }
 
-    if(stackRouteName === "ConfirmPasswordScreen" || stackRouteName === "ChangePasswordSettingScreen") {
+    if(stackRouteName === "ConfirmPasswordScreen" || stackRouteName === "ChangePasswordSettingScreen" || stackRouteName === "VerifyEmailScreen") {
       return false;
     }
 
@@ -753,7 +794,7 @@ function AppNavigator() {
 
   return (
     <NavigationContainer>
-    {(currentUserState.loggedIn) ? (  
+    {(!currentUserState.loggedIn) ? (  
     <NoBottomBarStack.Navigator
     headerMode="none">
       <NoBottomBarStack.Screen name="BottomTab" component={BottomTab}/>

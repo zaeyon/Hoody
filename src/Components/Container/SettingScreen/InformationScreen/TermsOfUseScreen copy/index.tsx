@@ -1,15 +1,19 @@
 import React, {useEffect, useState} from 'react';
 import Styled from 'styled-components/native';
-import {TouchableWithoutFeedback, Alert} from 'react-native';
+import {TouchableWithoutFeedback, Alert, Keyboard, FlatList} from 'react-native';
 import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import {useDispatch, useSelector} from 'react-redux';
-import allActions from '~/action';
+import {useDispatch, useSelector} from './node_modules/react-redux';
+import allActions from './node_modules/~/action';
+import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from './node_modules/react-native-simple-radio-button';
+
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'; 
+
 
 // Route
-import GETLogout from '~/Route/Auth/GETLogout';
+import GETLogout from './node_modules/~/Route/Auth/GETLogout';
 
 const Container = Styled.SafeAreaView`
  flex: 1;
@@ -23,7 +27,6 @@ const HeaderBar = Styled.View`
  align-items: center;
  justify-content: space-between;
  background-color:#ffffff;
-
  border-bottom-width: 0.6px;
  border-color: #ECECEE;
 `;
@@ -55,6 +58,17 @@ padding: 7px 16px 13px 15px;
  flex-direction: row;
 `;
 
+const HeaderReportContainer = Styled.View`
+ position: absolute;
+ right: 16px;
+`;
+
+const HeaderReportText = Styled.Text`
+font-weight: 500;
+font-size: 17px;
+color: #FF3B30;
+`;
+
 const HeaderEmptyContainer = Styled.View`
  width: ${wp('6.4%')};
  height: ${wp('6.4%')};
@@ -62,7 +76,7 @@ const HeaderEmptyContainer = Styled.View`
 
 const BodyContainer = Styled.View`
 flex: 1;
-background-color: #e5e5e570;
+background-color: #ffffff;
 `;
 
 const ItemTitleContainer = Styled.View`
@@ -80,6 +94,18 @@ const ItemTitleText = Styled.Text`
  color: #1D1E1F;
 `;
 
+const QuestionTypeListContainer = Styled.View`
+ flex-direction: row;
+ background-color: #ffffff;
+ align-items: center;
+ padding-top: 7px;
+ padding-bottom: 7px;
+ padding-left: 16px;
+ padding-right: 16px;
+ border-width: 0.6px;
+ border-color: #ECECEE;
+`;
+
 const TabItemContainer = Styled.View`
 width: ${wp('100%')};
 height: ${wp('15%')};
@@ -89,6 +115,8 @@ padding-left: 16px;
 padding-right: 16px;
 justify-content: center;
 background-color: #ffffff;
+border-bottom-width: 0.6px;
+border-color: #ECECEE;
 `;
 
 const TabItemInfoContainer = Styled.View`
@@ -97,8 +125,6 @@ flex-direction: row;
 align-items: center;
 height: ${wp('15%')};
 justify-content: space-between;
-border-bottom-width: 0.6px;
-border-color: #ECECEE;
 `;
 
 const TabItemLabelText = Styled.Text`
@@ -122,38 +148,58 @@ const TabItemDisclosureIcon = Styled.Image`
  height: ${wp('3.2%')};
 `;
 
-
-const TabToggleContainer = Styled.View`
-height: ${wp('15%')};
-align-items: center;
-justify-content: center;
-background-color: #ffffff;
-border-bottom-width: 0.6px;
-border-color: #ECECEE;
+const QuestionTypeBackground = Styled.View`
+ padding-top: 9px;
+ padding-bottom: 9px;
+ padding-left: 14px;
+ padding-right: 14px;
+ border-radius: 20px;
+ background-color: #FAFAFA;
+ align-items: center;
+ border-width: 1px;
+ border-color: #ECECEE;
+ margin-right: 6px;
 `;
 
-const TabToggleText = Styled.Text`
-color: #267DFF;
-font-size: 16px;
+const QuestionTypeText = Styled.Text`
+color: #8E9199;
+font-weight: 500;
+font-size: 17px;
 `;
 
+const UserInfoQuestionContainer = Styled.View`
+background-color: #FFFFFF;
+`;
 
+const PostQuestionContainer = Styled.View`
+flex: 1;
+background-color: #FFFFFF;
+`;
+
+const ErrorQuestionContainer = Styled.View`
+flex: 1;
+background-color: #FFFFFF;
+`;
+
+const AnswerContainer = Styled.View`
+padding-top: 15px;
+padding-bottom: 15px;
+padding-left: 16px;
+padding-right: 16px;
+background-color: #F7F7F7;
+`;
+
+const AnswerText = Styled.Text`
+font-size: 15px;
+color: #1D1E1F;
+`;
 
 interface Props {
     navigation: any,
     route: any,
 }
 
-const CustomerServiceScreen = ({navigation, route}: Props) => {
-
-
-const moveToReportProblem = () => {
-    navigation.navigate("ReportProblemScreen");
-}
-
-const moveToFreAskQuestions = () => {
-    navigation.navigate("FreAskQuestionsScreen");   
-}
+const TermsOfUseScreen = ({navigation, route}: Props) => {
 
     return (
         <Container>
@@ -166,42 +212,19 @@ const moveToFreAskQuestions = () => {
                     </BackButtonContainer>
                 </HeaderLeftContainer>
                 </TouchableWithoutFeedback>
-                <HeaderTitleText>고객 센터</HeaderTitleText>
+                <HeaderTitleText>이용 약관</HeaderTitleText>
                 <HeaderRightContainer>
                     <HeaderEmptyContainer>
                     </HeaderEmptyContainer>
                 </HeaderRightContainer>
             </HeaderBar>
-            <BodyContainer>
-                <TouchableWithoutFeedback onPress={() => moveToReportProblem()}>
-                <TabItemContainer>
-                    <TabItemInfoContainer>
-                        <TabItemLabelText>문제 신고</TabItemLabelText>
-                        <TabItemRightContainer>
-                        <TabItemDisclosureIcon
-                        source={require('~/Assets/Images/Setting/ic_disclosure.png')}/>
-                        </TabItemRightContainer>
-                    </TabItemInfoContainer>
-                </TabItemContainer>
-                </TouchableWithoutFeedback>
-                <TouchableWithoutFeedback onPress={() => moveToFreAskQuestions()}>
-                <TabItemContainer>
-                    <TabItemInfoContainer>
-                        <TabItemLabelText>자주 묻는 질문</TabItemLabelText>
-                        <TabItemRightContainer>
-                        <TabItemDisclosureIcon
-                        source={require('~/Assets/Images/Setting/ic_disclosure.png')}/>
-                        </TabItemRightContainer>
-                    </TabItemInfoContainer>
-                </TabItemContainer>
-                </TouchableWithoutFeedback>
+            <BodyContainer>   
             </BodyContainer>
         </Container>
-        
     )
 }
 
-export default CustomerServiceScreen;
+export default TermsOfUseScreen;
 
 
 

@@ -137,6 +137,23 @@ color: #267DFF;
 font-size: 16px;
 `;
 
+const VersionText = Styled.Text`
+font-size: 16px;
+color: #56575C;
+`;
+
+const CopyrightContainer = Styled.View`
+padding-top: 10px;
+padding-bottom: 10px;
+align-items: center;
+justify-content: center;
+`;
+
+const CopyrightText = Styled.Text`
+font-size: 13px;
+color: #c3c3c3;
+`;
+
 
 
 interface Props {
@@ -144,15 +161,27 @@ interface Props {
     route: any,
 }
 
-const CustomerServiceScreen = ({navigation, route}: Props) => {
+const InformationScreen = ({navigation, route}: Props) => {
 
 
-const moveToReportProblem = () => {
-    navigation.navigate("ReportProblemScreen");
+const moveToDataPolicy = () => {
+    navigation.navigate("DataPolicyScreen");
 }
 
-const moveToFreAskQuestions = () => {
-    navigation.navigate("FreAskQuestionsScreen");   
+const moveToTermsOfUse = () => {
+    navigation.navigate("TermsOfUseScreen");   
+}
+
+const moveToCookiePolicy = () => {
+    navigation.navigate("CookiePolicyScreen");
+}
+
+const moveToOpenSourceLibrary = () => {
+    navigation.navigate("OpenSourceLibraryScreen");
+}
+
+const moveToPrivacyPolicy = () => {
+    navigation.navigate("PrivacyPolicyScreen");
 }
 
     return (
@@ -166,17 +195,23 @@ const moveToFreAskQuestions = () => {
                     </BackButtonContainer>
                 </HeaderLeftContainer>
                 </TouchableWithoutFeedback>
-                <HeaderTitleText>고객 센터</HeaderTitleText>
+                <HeaderTitleText>정보</HeaderTitleText>
                 <HeaderRightContainer>
                     <HeaderEmptyContainer>
                     </HeaderEmptyContainer>
                 </HeaderRightContainer>
             </HeaderBar>
             <BodyContainer>
-                <TouchableWithoutFeedback onPress={() => moveToReportProblem()}>
-                <TabItemContainer>
+            <TabItemContainer>
+                    <TabItemInfoContainer style={{borderBottomWidth:0}}>
+                        <TabItemLabelText>버전 정보</TabItemLabelText>
+                        <VersionText>1.0</VersionText>
+                    </TabItemInfoContainer>
+                </TabItemContainer>
+                <TouchableWithoutFeedback onPress={() => moveToDataPolicy()}>
+                <TabItemContainer style={{marginTop:10}}>
                     <TabItemInfoContainer>
-                        <TabItemLabelText>문제 신고</TabItemLabelText>
+                        <TabItemLabelText>데이터 정책</TabItemLabelText>
                         <TabItemRightContainer>
                         <TabItemDisclosureIcon
                         source={require('~/Assets/Images/Setting/ic_disclosure.png')}/>
@@ -184,10 +219,10 @@ const moveToFreAskQuestions = () => {
                     </TabItemInfoContainer>
                 </TabItemContainer>
                 </TouchableWithoutFeedback>
-                <TouchableWithoutFeedback onPress={() => moveToFreAskQuestions()}>
+                <TouchableWithoutFeedback onPress={() => moveToTermsOfUse()}>
                 <TabItemContainer>
                     <TabItemInfoContainer>
-                        <TabItemLabelText>자주 묻는 질문</TabItemLabelText>
+                        <TabItemLabelText>아용 약관</TabItemLabelText>
                         <TabItemRightContainer>
                         <TabItemDisclosureIcon
                         source={require('~/Assets/Images/Setting/ic_disclosure.png')}/>
@@ -195,13 +230,49 @@ const moveToFreAskQuestions = () => {
                     </TabItemInfoContainer>
                 </TabItemContainer>
                 </TouchableWithoutFeedback>
+                <TouchableWithoutFeedback onPress={() => moveToPrivacyPolicy()}>
+                <TabItemContainer>
+                    <TabItemInfoContainer>
+                        <TabItemLabelText>개인 정보 처리 방침</TabItemLabelText>
+                        <TabItemRightContainer>
+                        <TabItemDisclosureIcon
+                        source={require('~/Assets/Images/Setting/ic_disclosure.png')}/>
+                        </TabItemRightContainer>
+                    </TabItemInfoContainer>
+                </TabItemContainer>
+                </TouchableWithoutFeedback>
+                <TouchableWithoutFeedback onPress={() => moveToCookiePolicy()}>
+                <TabItemContainer>
+                    <TabItemInfoContainer>
+                        <TabItemLabelText>쿠키 사용 정책</TabItemLabelText>
+                        <TabItemRightContainer>
+                        <TabItemDisclosureIcon
+                        source={require('~/Assets/Images/Setting/ic_disclosure.png')}/>
+                        </TabItemRightContainer>
+                    </TabItemInfoContainer>
+                </TabItemContainer>
+                </TouchableWithoutFeedback>
+                <TouchableWithoutFeedback onPress={() => moveToOpenSourceLibrary()}>
+                <TabItemContainer>
+                    <TabItemInfoContainer>
+                        <TabItemLabelText>오픈 소스 라이브러리</TabItemLabelText>
+                        <TabItemRightContainer>
+                        <TabItemDisclosureIcon
+                        source={require('~/Assets/Images/Setting/ic_disclosure.png')}/>
+                        </TabItemRightContainer>
+                    </TabItemInfoContainer>
+                </TabItemContainer>
+                </TouchableWithoutFeedback>
+                <CopyrightContainer>
+                <CopyrightText>Copyright © 2020 Hoody, Inc.</CopyrightText>
+                </CopyrightContainer>
             </BodyContainer>
         </Container>
         
     )
 }
 
-export default CustomerServiceScreen;
+export default InformationScreen;
 
 
 

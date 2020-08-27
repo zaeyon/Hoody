@@ -111,6 +111,18 @@ const SettingScreen = ({navigation, route}: Props) => {
         navigation.navigate("AlarmSettingScreen");
     }
 
+    const moveToCustomerService = () => {
+        navigation.navigate("CustomerServiceSettingScreen");
+    }
+
+    const moveToInformation = () => {
+        navigation.navigate("InformationScreen");
+    }
+
+    const moveToSendFeedback = () => {
+        navigation.navigate("SendFeedbackScreen");
+    }
+
     return (
         <Container>
             <HeaderBar>
@@ -147,6 +159,7 @@ const SettingScreen = ({navigation, route}: Props) => {
                     </TabItemInnerContainer>
                 </TabItemContainer>
                 </TouchableWithoutFeedback>
+                <TouchableWithoutFeedback onPress={() => moveToCustomerService()}>
                 <TabItemContainer>
                     <TabItemInnerContainer>
                         <SettingTabIconImage
@@ -154,6 +167,8 @@ const SettingScreen = ({navigation, route}: Props) => {
                         <SettingTabLabelText>고객센터</SettingTabLabelText>
                     </TabItemInnerContainer>
                 </TabItemContainer>
+                </TouchableWithoutFeedback>
+                <TouchableWithoutFeedback onPress={() => moveToInformation()}>
                 <TabItemContainer>
                     <TabItemInnerContainer>
                         <SettingTabIconImage
@@ -161,6 +176,8 @@ const SettingScreen = ({navigation, route}: Props) => {
                         <SettingTabLabelText>정보</SettingTabLabelText>
                     </TabItemInnerContainer>
                 </TabItemContainer>
+                </TouchableWithoutFeedback>
+                <TouchableWithoutFeedback onPress={() => moveToSendFeedback()}>
                 <TabItemContainer>
                     <TabItemInnerContainer>
                         <SettingTabIconImage
@@ -168,6 +185,7 @@ const SettingScreen = ({navigation, route}: Props) => {
                         <SettingTabLabelText>의견 전달하기</SettingTabLabelText>
                     </TabItemInnerContainer>
                 </TabItemContainer>
+                </TouchableWithoutFeedback>
             </SettingTabListContainer>
             <EmptyContaienr>
 

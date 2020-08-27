@@ -8,7 +8,7 @@ import {
 import AboveKeyboard from 'react-native-above-keyboard';
 
 // Route
-
+import GETVerifyEmail from '~/Route/Auth/GETVerifyEmail';
 
 const Container = Styled.SafeAreaView`
  flex: 1;
@@ -61,7 +61,6 @@ const HeaderEmptyContainer = Styled.View`
 `;
 
 const BodyContainer = Styled.View`
- flex: 1;
  background-color: #FFFFFF;
  padding-top:  29px;
  align-items: center;
@@ -96,8 +95,9 @@ border-color: #FAFAFA;
 `;
 
 const FinishButtonContainer = Styled.View`
+margin-top: 30px;
 width: ${wp('100%')};
-padding-left: ${wp('4.2%')};
+align-items: center;
 `;
 
 const FinishButton = Styled.View`
@@ -139,34 +139,75 @@ font-size: 13px;
 color: #FF3B30;
 `;
 
+const UnvalidInputText = Styled.Text`
+ margin-left: 10px;
+ font-size: 13px;
+ position: absolute;
+ bottom: -18px;
+ color: #FF0000;
+`;
+
 interface Props {
     navigation: any,
     route: any,
 }
 
 const VerifyEmailScreen = ({navigation, route}: Props) => {
-    const [confirm, setConfirm] = useState<boolean>(true);
-    const [password, setPassword] = useState<string>("");
-    
-    const moveToNewPasswordSetting = () => {
-        navigation.navigate("ChangePasswordSettingScreen");
+    const [email, setEmail] = useState<string>(route.params?.email ? route.params.email : "")
+    const [validEmail, setValidEmail] = useState<boolean>(true);
+    const [changingEmail, setChangingEmail] = useState<boolean>(false);
+    const [emailInputFocus, setEmailInputFocus] = useState<boolean>(false);
+
+
+  function checkEmail(str: string) {
+    var regExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
+    var blank_pattern = /[\s]/g;
+
+    if (!str) {
+      console.log('값이 없음');
+      setValidEmail(false);
+      return false
+    } else if (blank_pattern.test(str) === true) {
+      console.log('공백 포함');
+      setValidEmail(false);
+      return false
+    } else if (!regExp.test(str)) {
+      console.log('올바른 이메일 형식 아님');
+      setValidEmail(false);
+      return false
+    } else {
+      setValidEmail(true);
+      return true
+    }
+  }
+
+
+    const onChangeEmailInput = (text: string) => {
+        setEmail(text);
+        setChangingEmail(true);
     }
 
-    const checkConfirmedPassword = () => {
-        Login(route.params.email, password)
-        .then(function(response) {
-            if(response.status === 200) {
-                setConfirm(true)
-                moveToNewPasswordSetting();
-            }
-        })
-        .catch(function(response) {
-            console.log("response", response);
-        })
+    const sendAuthCodeToEmail = () => {
+        setChangingEmail(false);
+        if(checkEmail(email)) {
+            console.log("올바른 이메일", email);
+            GETVerifyEmail(email)
+            .then(function(response) {
+                console.log("인증코드 보냄", response);
+            })
+            .catch(function(error) {
+                console.log("인증코드 보내기 실패", error);
+            })
+
+        } else {
+            console.log("잘못된 이메일", email);
+
+        }
+
     }
-    
-    const onChangePassword = (text: string) => {
-        setPassword(text);
+
+    const onFocusEmailInput = () => {
+        setEmailInputFocus(true);
     }
     
     return (
@@ -186,32 +227,33 @@ const VerifyEmailScreen = ({navigation, route}: Props) => {
                 </HeaderRightContainer>
             </HeaderBar>
             <BodyContainer>
-                <DescripText>
-                회원님의 정보를 안전하게 보호하기 위해 비밀번호를 다시 한 번 확인해주세요.
-                </DescripText>
-                <ItemContainer style={{marginTop:22}}>
+                <ItemContainer>
                     <ItemLabelText>이메일</ItemLabelText>
                     <ItemTextInput
-                    editable={false}
-                    value={route.params?.email}
+                    style={(!validEmail && !changingEmail) && {borderColor:'#FF3B30'} || emailInputFocus && {borderColor:'#267DFF'}}
+                    editable={true}
+                    value={email}
+                    onChangeText={(text:string) => onChangeEmailInput(text)}
+                    onFocus={() => onFocusEmailInput()}
                     />
+                    {!validEmail && !changingEmail && (
+                    <UnvalidInputText>올바른 이메일형식이 아닙니다.</UnvalidInputText>
+                    )}
                 </ItemContainer>
             </BodyContainer>
             <FinishButtonContainer>
-                <AboveKeyboard>
-                    {password === "" && (
+                    {email === "" && (
                     <DisabledFinishButton>
-                        <FinishText style={{color:'#8E9199'}}>다음</FinishText>
+                        <FinishText style={{color:'#8E9199'}}>인증코드 전송</FinishText>
                     </DisabledFinishButton>
                     )}
-                    {password !== "" && password.length > 0 && (
-                    <TouchableWithoutFeedback onPress={() => checkConfirmedPassword()}>
+                    {email !== "" && email.length > 0 && (
+                    <TouchableWithoutFeedback onPress={() => sendAuthCodeToEmail()}>
                     <FinishButton>
-                        <FinishText>다음</FinishText>
+                        <FinishText>인증코드 전송</FinishText>
                     </FinishButton>
                     </TouchableWithoutFeedback>
                     )}
-                </AboveKeyboard>
             </FinishButtonContainer>
         </Container>
     )

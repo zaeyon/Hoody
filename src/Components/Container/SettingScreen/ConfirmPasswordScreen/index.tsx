@@ -184,6 +184,12 @@ const ConfirmPasswordScreen = ({navigation, route}: Props) => {
         setPassword(text);
         setConfirm(true);
     }
+
+    const moveToFindPassword = () => {
+        navigation.navigate("VerifyEmailScreen", {
+            email : route.params.email,
+        })
+    }
     
     return (
         <Container>
@@ -227,9 +233,10 @@ const ConfirmPasswordScreen = ({navigation, route}: Props) => {
                     </UnconfirmPasswordContainer>
                 )}
                 </ItemContainer>
-                
                 <PasswordFindContainer>
+                <TouchableWithoutFeedback onPress={() => moveToFindPassword()}>
                 <PasswordFindText>비밀번호 찾기</PasswordFindText>
+                </TouchableWithoutFeedback>
                 </PasswordFindContainer>
             </BodyContainer>
             <FinishButtonContainer>

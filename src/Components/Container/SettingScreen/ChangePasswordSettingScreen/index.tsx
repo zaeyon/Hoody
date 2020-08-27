@@ -275,7 +275,6 @@ const ChangePasswordSettingScreen = ({navigation, route}: Props) => {
               text: '확인',
               onPress: () => {
                 navigation.navigate("AccountSettingScreen");
-
               }
             }
           ])

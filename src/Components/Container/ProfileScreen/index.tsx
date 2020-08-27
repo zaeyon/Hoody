@@ -660,8 +660,11 @@ const ProfileScreen = ({navigation, route}: Props) => {
   }
 
   const moveToSetting = () => {
-    navigation.navigate("SettingScreen", {
-      profileInfo: userProfileInfo,
+    navigation.navigate("SettingStack", {
+      screen: 'SettingScreen',
+      params: {
+        profileInfo: userProfileInfo,
+      }
     });
 
     setProfileModalVisible(false)

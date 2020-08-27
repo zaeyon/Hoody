@@ -77,7 +77,7 @@ const NoFeedListContainer = Styled.View`
 
 const FeedListContainer = Styled.View`
  width: ${wp('100%')}px;
- padding-bottom: 135px;
+ padding-bottom: 85px;
  background-color: #ffffff;
 `;
 
@@ -297,7 +297,7 @@ interface Props {
 var offset = 0;
 var limit = 20;
 
-const baseUrl = 'http://hoody-api-test-server-alb-1622974409.ap-northeast-2.elb.amazonaws.com/'; 
+const baseUrl = 'http://hoody-api-test-server-alb-1622974409.ap-northeast-2.elb.amazonaws.com'; 
 
 function FeedListScreen({navigation, route}: Props) {
   const [feedListData, setFeedListData] = useState([]);
@@ -440,42 +440,23 @@ function FeedListScreen({navigation, route}: Props) {
       offset = offset + 20;
       limit = limit + 20;
       var url = baseUrl + '/feed?offset=' + offset + "&limit=" + limit;  
-      /*
-      GETFeed(offset, limit).then(function(response) {
-      console.log("파드 목록 가져오기 성공", response);
-      if(response.result.length === 0) {
-        console.log("더이상 불러올 데이터 없음", feedListData);
-        setNoMoreFeedListData(true);
-        setLoading(false);
-      } else if(response.result.length > 0) {
-        console.log("불러올 데이터 존재")
-        setLoading(false);
-        setFeedListData(feedListData.concat(response.result))
-        //setFeedListData([...feedListData, ...response.result])
-      }
-    })
-    .catch(function(error) {
-      console.log("피드 목록 가져오기 실패", error);
-    })
-    */ 
-           axios
-           .get(url)
-           .then(function(response) {
-               // resolve(response.data);
-               if(response.data.result.length === 0) {
-                console.log("더이상 불러올 데이터 없음", feedListData);
-                setNoMoreFeedListData(true);
-                setLoading(false);
-              } else if(response.data.result.length > 0) {
-                console.log("불러올 데이터 존재")
-                setLoading(false);
-                setFeedListData(feedListData.concat(response.data.result))
-                //setFeedListData([...feedListData, ...response.result])
-              }
-           })
-           .catch(function(error) {
-               // reject(error);
-           })
+     
+      axios
+       .get(url)
+       .then(function(response) {
+       if(response.data.result.length === 0) {
+         console.log("더이상 불러올 데이터 없음", feedListData);
+         setNoMoreFeedListData(true);
+         setLoading(false);
+       } else if(response.data.result.length > 0) {
+         console.log("불러올 데이터 존재")
+         setLoading(false);
+         setFeedListData(feedListData.concat(response.data.result))
+       }
+       })
+       .catch(function(error) {
+         console.log("피드 불러오기 실패", error);       
+       })
   }
   }
 
@@ -507,7 +488,6 @@ function FeedListScreen({navigation, route}: Props) {
    )
 }
   
-
   return (
     <Container>
       <HeaderBar>
@@ -516,6 +496,7 @@ function FeedListScreen({navigation, route}: Props) {
           </HeaderLeftContainer>
       </HeaderBar>
       <ScrollView
+      showsVerticalScrollIndicator={false}
       refreshControl={
         <RefreshControl
         refreshing={refreshing}
@@ -545,3 +526,22 @@ function FeedListScreen({navigation, route}: Props) {
 }
 
 export default FeedListScreen;
+
+ /*
+      GETFeed(offset, limit).then(function(response) {
+      console.log("파드 목록 가져오기 성공", response);
+      if(response.result.length === 0) {
+        console.log("더이상 불러올 데이터 없음", feedListData);
+        setNoMoreFeedListData(true);
+        setLoading(false);
+      } else if(response.result.length > 0) {
+        console.log("불러올 데이터 존재")
+        setLoading(false);
+        setFeedListData(feedListData.concat(response.result))
+        //setFeedListData([...feedListData, ...response.result])
+      }
+    })
+    .catch(function(error) {
+      console.log("피드 목록 가져오기 실패", error);
+    })
+    */ 

@@ -143,19 +143,7 @@ interface Props {
     route: any,
 }
 
-const AccountSettingScreen = ({navigation, route}: Props) => {
-    
-  function formatIndicationDate(date: any) {
-    var d = new Date(date),
-      month = '' + (d.getMonth() + 1),
-      day = '' + d.getDate(),
-      year = d.getFullYear();
-
-    if (month.length < 2) month = '0' + month;
-    if (day.length < 2) day = '0' + day;
-
-    return year + "년 " + month + "월 " + day + "일";
-  }
+const CustomerServiceScreen = ({navigation, route}: Props) => {
 
     const [profileInfo, setProfileInfo] = useState<object>(route.params?.profileInfo);
     const [birthdateIndication, setBirthdateIndication] = useState<string>(formatIndicationDate(route.params?.profileInfo.birthdate));
@@ -263,21 +251,13 @@ const AccountSettingScreen = ({navigation, route}: Props) => {
                 </HeaderRightContainer>
             </HeaderBar>
             <BodyContainer>
-                <ItemTitleContainer>
-                    <ItemTitleText>계정 및 개인정보</ItemTitleText>
-                </ItemTitleContainer>
                 <TabItemContainer>
-                    <TabItemInfoContainer>
-                        <TabItemLabelText>이메일</TabItemLabelText>
-                        <TabItemContentText>{profileInfo.email}</TabItemContentText>
-                    </TabItemInfoContainer>
                 </TabItemContainer>
                 <TouchableWithoutFeedback onPress={() => moveToBirthdateSetting()}>
                 <TabItemContainer>
                     <TabItemInfoContainer>
-                        <TabItemLabelText>생일</TabItemLabelText>
+                        <TabItemLabelText>문제 신고</TabItemLabelText>
                         <TabItemRightContainer>
-                        <TabItemContentText>{birthdateIndication}</TabItemContentText>
                         <TabItemDisclosureIcon
                         source={require('~/Assets/Images/Setting/ic_disclosure.png')}/>
                         </TabItemRightContainer>
@@ -287,9 +267,8 @@ const AccountSettingScreen = ({navigation, route}: Props) => {
                 <TouchableWithoutFeedback onPress={() => moveToGenderSetting()}>
                 <TabItemContainer>
                     <TabItemInfoContainer>
-                        <TabItemLabelText>성별</TabItemLabelText>
+                        <TabItemLabelText>자주 묻는 질문</TabItemLabelText>
                         <TabItemRightContainer>
-                        <TabItemContentText>{profileInfo.gender === "male" ? "남성" : (profileInfo.gender === "female" ? "여성" : "선택안함")}</TabItemContentText>
                         <TabItemDisclosureIcon
                         source={require('~/Assets/Images/Setting/ic_disclosure.png')}/>
                         </TabItemRightContainer>
@@ -333,7 +312,7 @@ const AccountSettingScreen = ({navigation, route}: Props) => {
     )
 }
 
-export default AccountSettingScreen;
+export default CustomerServiceScreen;
 
 
 

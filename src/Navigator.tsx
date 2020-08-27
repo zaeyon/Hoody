@@ -87,7 +87,8 @@ import AlarmSettingScreen from '~/Components/Container/SettingScreen/AlarmSettin
 import BirthdateSettingScreen from '~/Components/Container/SettingScreen/BirthdateSettingScreen';
 import GenderSettingScreen from '~/Components/Container/SettingScreen/GenderSettingScreen';
 import ConfirmPasswordScreen from '~/Components/Container/SettingScreen/ConfirmPasswordScreen';
-import NewPasswordSettingScreen from '~/Components/Container/SettingScreen/NewPasswordSettingScreen';
+import ChangePasswordSettingScreen from '~/Components/Container/SettingScreen/ChangePasswordSettingScreen';
+import VerifyEmailScreen from '~/Components/Container/SettingScreen/VerifyEmailScreen';
 
 // Select Interest Screen
 import SelectInterestScreen from '~/Components/Container/SelectInterestScreen';
@@ -118,7 +119,7 @@ const AlarmStack = createStackNavigator();
 const ProfileStack = createStackNavigator();
 const UnauthStack = createStackNavigator();
 const NoBottomBarStack = createStackNavigator();
-
+const SettingStack = createStackNavigator();
 
 function FeedTitle() {
   return (
@@ -326,17 +327,9 @@ function AlarmStackScreen() {
 }
 
 function ProfileStackScreen() {
-  const currentUser = useSelector((state: any) => state.currentUser)
   return (
     <ProfileStack.Navigator
-      headerMode="none"
-      screenOptions={{
-        headerStyle: {
-          height: 47,
-          elevation: 1.5,
-        },
-        headerTitleAlign: 'center',
-      }}>
+      headerMode="none">
       <ProfileStack.Screen
         name="ProfileScreen"
         component={ProfileScreen}
@@ -385,24 +378,11 @@ function ProfileStackScreen() {
       name="FeedStack"
       component={FeedStackScreen}/>
       <ProfileStack.Screen
+      name="SettingStack"
+      component={SettingStackScreen}/>
+      <ProfileStack.Screen
       name="CollectionStack"
       component={CollectionStackScreen}/>
-      <ProfileStack.Screen
-      name="SettingScreen"
-      component={SettingScreen}
-      />
-      <ProfileStack.Screen
-      name="AccountSettingScreen"
-      component={AccountSettingScreen}/>
-      <ProfileStack.Screen
-      name="AlarmSettingScreen"
-      component={AlarmSettingScreen}/>
-      <ProfileStack.Screen
-      name="BirthdateSettingScreen"
-      component={BirthdateSettingScreen}/>
-      <ProfileStack.Screen
-      name="GenderSettingScreen"
-      component={GenderSettingScreen}/>
       <ProfileStack.Screen
       name="ReportScreen"
       component={ReportScreen}/>
@@ -418,17 +398,9 @@ function ProfileStackScreen() {
 
 
 function AnotherUserProfileStackScreen() {
-  const currentUser = useSelector((state) => state.currentUser)
   return (
     <ProfileStack.Navigator
-      headerMode="none"
-      screenOptions={{
-        headerStyle: {
-          height: 47,
-          elevation: 1.5,
-        },
-        headerTitleAlign: 'center',
-      }}>
+      headerMode="none">
       <ProfileStack.Screen
         name="AnotherUserProfileScreen"
         component={AnotherUserProfileScreen}
@@ -441,6 +413,40 @@ function AnotherUserProfileStackScreen() {
       component={FollowListScreen}/>
     </ProfileStack.Navigator>
   );
+}
+
+function SettingStackScreen() {
+  return (
+    <SettingStack.Navigator
+    headerMode="none">
+      <SettingStack.Screen
+      name="SettingScreen"
+      component={SettingScreen}
+      />
+      <SettingStack.Screen
+      name="AccountSettingScreen"
+      component={AccountSettingScreen}/>
+      <SettingStack.Screen
+      name="AlarmSettingScreen"
+      component={AlarmSettingScreen}/>
+      <SettingStack.Screen
+      name="BirthdateSettingScreen"
+      component={BirthdateSettingScreen}/>
+      <SettingStack.Screen
+      name="GenderSettingScreen"
+      component={GenderSettingScreen}/>
+      <SettingStack.Screen
+      name="VerifyEmailScreen"
+      component={VerifyEmailScreen}/>
+      <SettingStack.Screen
+      name="ConfirmPasswordScreen"
+      component={ConfirmPasswordScreen}/>
+      <SettingStack.Screen
+      name="ChangePasswordSettingScreen"
+      component={ChangePasswordSettingScreen}/>
+    </SettingStack.Navigator>
+  )
+
 }
 
 
@@ -483,6 +489,9 @@ function UnauthStackScreen() {
           },
         })}
       />
+      <UnauthStack.Screen
+      name={"SettingStack"}
+      component={SettingStackScreen}/>
     </UnauthStack.Navigator>
   );
 }
@@ -602,10 +611,18 @@ function BottomTab() {
 
   const getProfileTabBarVisibility = (route: any) => {
     const routeName = route.state
-    ? route.state.routes[route.state.index].name
+    ? route.state.routes[route.state.index]
     : '';
 
-    if(routeName === 'FeedStack' || routeName === 'CollectionStack') {
+    const stackRouteName = routeName.state
+    ? routeName.state.routes[routeName.state.index].name
+    : '';
+
+    if(routeName.name === 'FeedStack' || routeName.name === 'CollectionStack') {
+      return false;
+    }
+
+    if(stackRouteName === "ConfirmPasswordScreen" || stackRouteName === "ChangePasswordSettingScreen") {
       return false;
     }
 
@@ -742,8 +759,6 @@ function AppNavigator() {
       <NoBottomBarStack.Screen name="BottomTab" component={BottomTab}/>
       <NoBottomBarStack.Screen name="AddScrapAlbumScreen" component={AddScrapAlbumScreen}/>
       <NoBottomBarStack.Screen name="LocationFeedMapScreen" component={LocationFeedMapScreen}/>
-      <NoBottomBarStack.Screen name="ConfirmPasswordScreen" component={ConfirmPasswordScreen}/>
-      <NoBottomBarStack.Screen name="NewPasswordSettingScreen" component={NewPasswordSettingScreen}/>
       <NoBottomBarStack.Screen name="Gallery_JustOne" component={Gallery_JustOne}/>
     </NoBottomBarStack.Navigator>
     ) : (

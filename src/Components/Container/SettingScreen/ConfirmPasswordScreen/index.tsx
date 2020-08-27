@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Styled from 'styled-components/native';
 import {TouchableWithoutFeedback} from 'react-native';
 import {
@@ -6,6 +6,9 @@ import {
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import AboveKeyboard from 'react-native-above-keyboard';
+
+// Route
+import POSTUserCheck from '~/Route/Auth/POSTUserCheck';
 
 
 const Container = Styled.SafeAreaView`
@@ -109,10 +112,41 @@ border-radius: 10px;
  align-items: center;
 `;
 
+const DisabledFinishButton = Styled.View`
+width: ${wp('91.46%')};
+height: ${wp('13.33%')};
+border-radius: 10px;
+ background-color: #ECECEE;
+ justify-content: center;
+ align-items: center;
+`;
+
 const FinishText = Styled.Text`
 font-weight: 600;
 font-size: 18px;
 color: #ffffff;
+`;
+
+const PasswordFindText = Styled.Text`
+color: #50555C;
+font-size: 14px;
+`;
+
+const PasswordFindContainer = Styled.View`
+width: ${wp('91.46%')};
+padding-top: 30px;
+`;
+
+const UnconfirmPasswordContainer = Styled.View`
+width: ${wp('91.46%')};
+position: absolute;
+bottom: -20;
+left: 10;
+`;
+
+const UnconfirmedPasswordText = Styled.Text`
+font-size: 13px;
+color: #FF3B30;
 `;
 
 interface Props {
@@ -121,9 +155,34 @@ interface Props {
 }
 
 const ConfirmPasswordScreen = ({navigation, route}: Props) => {
-
+    const [confirm, setConfirm] = useState<boolean>(true);
+    const [password, setPassword] = useState<string>("");
+    
     const moveToNewPasswordSetting = () => {
-        navigation.navigate("NewPasswordSettingScreen");
+        navigation.navigate("ChangePasswordSettingScreen", {
+            email: route.params.email
+        });
+    }
+
+    const checkConfirmedPassword = () => {
+        POSTUserCheck(route.params.email, password)
+        .then(function(response) {
+            if(response.status === 200) {
+                setConfirm(true)
+                moveToNewPasswordSetting();
+            }
+        })
+        .catch(function(error) {
+            console.log("error", error);
+            if(error.status === 401) {
+            setConfirm(false);
+            }
+        })
+    }
+
+    const onChangePassword = (text: string) => {
+        setPassword(text);
+        setConfirm(true);
     }
     
     return (
@@ -150,23 +209,43 @@ const ConfirmPasswordScreen = ({navigation, route}: Props) => {
                     <ItemLabelText>이메일</ItemLabelText>
                     <ItemTextInput
                     editable={false}
+                    value={route.params?.email}
                     />
                 </ItemContainer>
                 <ItemContainer style={{marginTop:22}}>
                     <ItemLabelText>비밀번호</ItemLabelText>
                     <ItemTextInput
+                    style={!confirm && {borderColor:'#FF3B30'}}
                     editable={true}
                     secureTextEntry={true}
+                    value={password}
+                    onChangeText={onChangePassword}
                     />
+                    {!confirm && (
+                    <UnconfirmPasswordContainer>
+                    <UnconfirmedPasswordText>비밀번호가 일치하지 않습니다.</UnconfirmedPasswordText>
+                    </UnconfirmPasswordContainer>
+                )}
                 </ItemContainer>
+                
+                <PasswordFindContainer>
+                <PasswordFindText>비밀번호 찾기</PasswordFindText>
+                </PasswordFindContainer>
             </BodyContainer>
             <FinishButtonContainer>
                 <AboveKeyboard>
-                    <TouchableWithoutFeedback onPress={() => moveToNewPasswordSetting()}>
+                    {password === "" && (
+                    <DisabledFinishButton>
+                        <FinishText style={{color:'#8E9199'}}>다음</FinishText>
+                    </DisabledFinishButton>
+                    )}
+                    {password !== "" && password.length > 0 && (
+                    <TouchableWithoutFeedback onPress={() => checkConfirmedPassword()}>
                     <FinishButton>
-                        <FinishText>완료</FinishText>
+                        <FinishText>다음</FinishText>
                     </FinishButton>
                     </TouchableWithoutFeedback>
+                    )}
                 </AboveKeyboard>
             </FinishButtonContainer>
         </Container>

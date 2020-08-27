@@ -7,6 +7,8 @@ import {
 } from 'react-native-responsive-screen';
 import AboveKeyboard from 'react-native-above-keyboard';
 
+// Route
+
 
 const Container = Styled.SafeAreaView`
  flex: 1;
@@ -96,8 +98,6 @@ border-color: #FAFAFA;
 const FinishButtonContainer = Styled.View`
 width: ${wp('100%')};
 padding-left: ${wp('4.2%')};
-position:absolute;
-bottom: 20px;
 `;
 
 const FinishButton = Styled.View`
@@ -109,10 +109,34 @@ border-radius: 10px;
  align-items: center;
 `;
 
+const DisabledFinishButton = Styled.View`
+width: ${wp('91.46%')};
+height: ${wp('13.33%')};
+border-radius: 10px;
+ background-color: #ECECEE;
+ justify-content: center;
+ align-items: center;
+`;
+
 const FinishText = Styled.Text`
 font-weight: 600;
 font-size: 18px;
 color: #ffffff;
+`;
+
+const PasswordFindText = Styled.Text`
+color: #50555C;
+font-size: 14px;
+`;
+
+const PasswordFindContainer = Styled.View`
+width: ${wp('91.46%')};
+padding-top: 15px;
+`;
+
+const UnconfirmedPasswordText = Styled.Text`
+font-size: 13px;
+color: #FF3B30;
 `;
 
 interface Props {
@@ -120,35 +144,31 @@ interface Props {
     route: any,
 }
 
-const NewPasswordSettingScreen = ({navigation, route}: Props) => {
-
-    const [inputedNewPassword, setInputedNewPassword] = useState<string>('')
-    const [inputedConfirmNewPassword, setInputedConfirmNewPassword] = useState<string>('');
-
-    const [blankPassword, setBlankPassword] = useState<boolean>(false);
-    const [shortPassword, setShortPassword] = useState<boolean>(false);
-    const [validPassword, setValidPassword] = useState<boolean>(false);
-    const [confirmedPassword, setConfirmedPassword] = useState<boolean>(false);
-
-    const [passwordInputFocus, setPasswordInputFocus] = useState<boolean>(false);
-    const [confirmPasswordInputFocus, setConfirmPasswordInputFocus] = useState<boolean>(false);
-
-    const onFocusPasswordInput = () => {
-        setPasswordInputFocus(true);
+const VerifyEmailScreen = ({navigation, route}: Props) => {
+    const [confirm, setConfirm] = useState<boolean>(true);
+    const [password, setPassword] = useState<string>("");
+    
+    const moveToNewPasswordSetting = () => {
+        navigation.navigate("ChangePasswordSettingScreen");
     }
 
-    const onUnfocusPasswordInput = () => {
-        setPasswordInputFocus(false);
+    const checkConfirmedPassword = () => {
+        Login(route.params.email, password)
+        .then(function(response) {
+            if(response.status === 200) {
+                setConfirm(true)
+                moveToNewPasswordSetting();
+            }
+        })
+        .catch(function(response) {
+            console.log("response", response);
+        })
     }
-
-    const onFocusConfirmPasswordInput = () => {
-        setConfirmPasswordInputFocus(true);
+    
+    const onChangePassword = (text: string) => {
+        setPassword(text);
     }
-
-    const onUnfocusConfirmPasswordInput = () => {
-        setConfirmPasswordInputFocus(false);
-    }
-
+    
     return (
         <Container>
             <HeaderBar>
@@ -160,46 +180,41 @@ const NewPasswordSettingScreen = ({navigation, route}: Props) => {
                     </BackButtonContainer>
                 </HeaderLeftContainer>
                 </TouchableWithoutFeedback>
-                <HeaderTitleText>새 비밀번호 설정</HeaderTitleText>
+                <HeaderTitleText>비밀번호 찾기</HeaderTitleText>
                 <HeaderRightContainer>
                     <HeaderEmptyContainer/>
                 </HeaderRightContainer>
             </HeaderBar>
             <BodyContainer>
                 <DescripText>
-                비밀번호는 영문, 숫자를 포함한 8자 이상으로 설정해주세요.</DescripText>
-                <ItemContainer style={{marginTop:36}}>
-                    <ItemLabelText>새 비밀번호</ItemLabelText>
-                    <ItemTextInput
-                    style={passwordInputFocus && {borderColor: '#267DFF'}}
-                    editable={true}
-                    secureTextEntry={true}
-                    onSubmitEditing={() => onUnfocusPasswordInput()}
-                    onEndEditing = {() => onUnfocusPasswordInput()}
-                    onFocus={() => onFocusPasswordInput()}
-                    />
-                </ItemContainer>
+                회원님의 정보를 안전하게 보호하기 위해 비밀번호를 다시 한 번 확인해주세요.
+                </DescripText>
                 <ItemContainer style={{marginTop:22}}>
-                    <ItemLabelText>새 비밀번호 확인</ItemLabelText>
+                    <ItemLabelText>이메일</ItemLabelText>
                     <ItemTextInput
-                    style={confirmPasswordInputFocus && {borderColor: '#267DFF'}}
-                    editable={true}
-                    secureTextEntry={true}
-                    onSubmitEditing={() => onUnfocusConfirmPasswordInput()}
-                    onEndEditing={() => onUnfocusConfirmPasswordInput()}
-                    onFocus={() => onFocusConfirmPasswordInput()}
+                    editable={false}
+                    value={route.params?.email}
                     />
                 </ItemContainer>
             </BodyContainer>
             <FinishButtonContainer>
                 <AboveKeyboard>
+                    {password === "" && (
+                    <DisabledFinishButton>
+                        <FinishText style={{color:'#8E9199'}}>다음</FinishText>
+                    </DisabledFinishButton>
+                    )}
+                    {password !== "" && password.length > 0 && (
+                    <TouchableWithoutFeedback onPress={() => checkConfirmedPassword()}>
                     <FinishButton>
                         <FinishText>다음</FinishText>
                     </FinishButton>
+                    </TouchableWithoutFeedback>
+                    )}
                 </AboveKeyboard>
             </FinishButtonContainer>
         </Container>
     )
 }
 
-export default NewPasswordSettingScreen;
+export default VerifyEmailScreen;

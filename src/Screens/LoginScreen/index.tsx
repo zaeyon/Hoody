@@ -242,6 +242,12 @@ const LoginScreen = ({navigation}) => {
     setEmail(text);
   }
 
+  const moveToFindPassword = () => {
+    navigation.navigate("SettingStack" , {
+      screen: 'VerifyEmailScreen'
+    });
+  }
+
   const clickLoginButton = () => {
     var regExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
     var blank_pattern = /[\s]/g;
@@ -357,7 +363,9 @@ const LoginScreen = ({navigation}) => {
         )}
       </BodyContainer>
       <FooterContainer>
+        <TouchableWithoutFeedback onPress={() => moveToFindPassword()}>
         <FindPasswordText>비밀번호 찾기</FindPasswordText>
+        </TouchableWithoutFeedback>
       </FooterContainer>
     </Container>
   );

@@ -1,18 +1,17 @@
 import axios from 'axios';
-import allActions from '~/action';
-import {setCurrentUser} from '~/AsyncStorage/User';
 
 const baseUrl = 'http://hoody-api-test-server-alb-1622974409.ap-northeast-2.elb.amazonaws.com';
 
+const POSTChangePassword = (email, password) => {
+    const url = baseUrl + '/auth/changePassword';
 
-const Login = (email, password) => {
-    const url = baseUrl + '/auth/login';
-    console.log("email11", email);
-    console.log("password11", password)
+    console.log("비밀번호변경 email", email);
+    console.log("비밀번호변경 password", password);
 
     let form = new FormData();
     form.append('email', email);
     form.append('password', password);
+
     return new Promise(function (resolve, reject) {
       axios
         .post(url, form, {
@@ -25,7 +24,6 @@ const Login = (email, password) => {
         .then(function (response) {
           resolve(response);
           console.log("response.data", response)
-          setCurrentUser(email, response.data.user.nickname, "login");
         })
         .catch(function (error) {
           console.log('error : ', error);
@@ -34,4 +32,4 @@ const Login = (email, password) => {
     });
 }
 
-export default Login;
+export default POSTChangePassword;

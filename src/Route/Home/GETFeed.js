@@ -1,5 +1,5 @@
 import axios from 'axios';
-const baseUrl = 'http://hoody-api-test-server-alb-1622974409.ap-northeast-2.elb.amazonaws.com/'; 
+const baseUrl = 'http://hoody-api-test-server-alb-1622974409.ap-northeast-2.elb.amazonaws.com'; 
 
 const GETFeed = (offset, limit) => {
     const url = baseUrl + '/feed?offset=' + offset + "&limit=" + limit;

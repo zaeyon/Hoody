@@ -1,5 +1,5 @@
 import axios from 'axios';
-const baseUrl = 'http://hoody-api-test-server-alb-1622974409.ap-northeast-2.elb.amazonaws.com/';
+const baseUrl = 'http://hoody-api-test-server-alb-1622974409.ap-northeast-2.elb.amazonaws.com';
 
 const GETSearchSurroundPost = (lat, long, radius) => {
     const url = baseUrl + "/search/surroundpost?lat=" + lat + "&long=" + long + "&radius=" + radius;

@@ -517,16 +517,16 @@ const BasicInput = ({navigation, route}) => {
             ref={passwordInputRef}
             style={blankPassword || (!validPassword && !blankPassword && !onFocusPassword) && {borderColor:'#FF3B30'} || onFocusPassword && {borderColor: '#267DFF'}}
             autoCapitalize={"none"}
-            onChangeText={(text: string) => changingPassword(text)}
-            onSubmitEditing={(text: string) => onUnfocusPasswordInput(text.nativeEvent.text)}
-            onEndEditing={(text: string) => onUnfocusPasswordInput(text.nativeEvent.text)}
+            onChangeText={(text: any) => changingPassword(text)}
+            onSubmitEditing={(text: any) => onUnfocusPasswordInput(text.nativeEvent.text)}
+            onEndEditing={(text: any) => onUnfocusPasswordInput(text.nativeEvent.text)}
             onFocus={() => onFocusPasswordInput()}
             secureTextEntry={true}
             clearButtonMode={"while-editing"}/>
-          {blankPassword && (
+          {blankPassword && !onFocusPassword && (
             <UnvalidInputText>공백은 사용할 수 없습니다.</UnvalidInputText>
           )}
-          {(!validPassword || shortPassword) && !blankPassword && (
+          {(!validPassword || shortPassword) && !blankPassword && (inputedPassword.length > 0) && (!onFocusPassword) && (
             <UnvalidInputText>영문, 숫자 포함 8자 이상</UnvalidInputText>
           )}
           {onFocusPassword && (

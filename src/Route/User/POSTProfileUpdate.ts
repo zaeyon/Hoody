@@ -1,5 +1,5 @@
 import axios from 'axios';
-const baseUrl = 'http://hoody-api-test-server-alb-1622974409.ap-northeast-2.elb.amazonaws.com/';
+const baseUrl = 'http://hoody-api-test-server-alb-1622974409.ap-northeast-2.elb.amazonaws.com';
 
 const POSTProfileUpdate = ( description: string, profileImage?: string, nickname?: string) => {
   const url = baseUrl + '/user/profile/update';

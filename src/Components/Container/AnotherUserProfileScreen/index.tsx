@@ -440,7 +440,9 @@ const AnotherUserProfileScreen = ({navigation, route}: Props) => {
 
 
   const moveToLocationFeedMap = () => {
-    navigation.navigate("LocationFeedMapScreen");
+    navigation.navigate("FeedMapScreen", {
+      nickname: route.params?.requestedUserNickname
+    });
   }
 
   const measureFeedListTab = (event) => {

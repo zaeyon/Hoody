@@ -297,7 +297,7 @@ interface Props {
 var offset = 0;
 var limit = 20;
 
-const baseUrl = 'http://hoody-api-test-server-alb-1622974409.ap-northeast-2.elb.amazonaws.com'; 
+const baseUrl = 'http://hoody-api-test-server-alb-349396782.ap-northeast-2.elb.amazonaws.com'; 
 
 function FeedListScreen({navigation, route}: Props) {
   const [feedListData, setFeedListData] = useState([]);

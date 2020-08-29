@@ -466,6 +466,7 @@ const ProfileScreen = ({navigation, route}: Props) => {
   const [refreshingProfileCollection, setRefreshingProfileCollection] = useState<boolean>(false);
 
   const currentUser = useSelector((state: any) => state.currentUser);
+  const locationFeedList = useSelector((state: any) => state.feedList);
   const dispatch = useDispatch();
 
   
@@ -486,6 +487,17 @@ const ProfileScreen = ({navigation, route}: Props) => {
         setChangeProfileData(!changeProfileData);
         dispatch(allActions.userActions.setUserAllFeeds(response.posts));
         console.log("요청된 프로필 정보@@@", response);
+        let tmpLocationFeedList = new Array();
+        for(var i = 0; i < response.posts.length-1; i++) {
+          if(response.posts[i].address) {
+            console.log("위치정보 있는 게시글", response.posts[i])
+            tmpLocationFeedList.push(response.posts[i])            
+          }
+
+          setTimeout(() => {
+            dispatch(allActions.feedListAction.setLocationFeedList(tmpLocationFeedList));
+          }, 10)
+        }
         var profileInfo = {
           email: currentUser.user.email,
           profileImage : response.profileImg,
@@ -615,7 +627,9 @@ const ProfileScreen = ({navigation, route}: Props) => {
   }, [route.params?.requestedUserNickname])
 
   const moveToLocationFeedMap = () => {
-    navigation.navigate("LocationFeedMapScreen");
+    navigation.navigate("FeedMapScreen", {
+      nickname: currentUser.user.nickname
+    });
   }
 
   const measureFeedListTab = (event) => {

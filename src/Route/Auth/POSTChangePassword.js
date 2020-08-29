@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseUrl = 'http://hoody-api-test-server-alb-1622974409.ap-northeast-2.elb.amazonaws.com';
+const baseUrl = 'http://hoody-api-test-server-alb-349396782.ap-northeast-2.elb.amazonaws.com';
 
 const POSTChangePassword = (email, password) => {
     const url = baseUrl + '/auth/changePassword';

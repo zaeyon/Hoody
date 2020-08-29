@@ -1,13 +1,13 @@
 import currentUser from './currentUser';
 import search from './search'
-import home from './home'
+import feedList from './feedList'
 
 import {combineReducers} from 'redux';
 
 const rootReducer = combineReducers({
   currentUser,
   search,
-  home,
+  feedList,
 });
 
 export default rootReducer;

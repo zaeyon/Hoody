@@ -1170,6 +1170,7 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
     
   const API_KEY = 'd824d5c645bfeafcb06f24db24be7238';
 
+    // 사용자 행정구역 정보 불러오기
     useEffect(() => {
         console.log("getStatusBarHeight", getStatusBarHeight());
         if(route.params?.currentLatitude) {
@@ -1213,10 +1214,6 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
             tmpNearAllFeedListData.sort(function(a, b) {
               return b["likes"] - a["likes"];
             })
-            console.log("tmpNearLocationListData", tmpNearLocationListData);
-            console.log("tmpNearLocationListData[0]", tmpNearLocationListData[0]);
-            console.log("tmpNearLocationListData[2]", tmpNearLocationListData[2]);
-            console.log("tmpNearAllFeedListData", tmpNearAllFeedListData);
             setNearLocationListData(tmpNearLocationListData);
             setTimeout(() => {
               setNearAllFeedListData(tmpNearAllFeedListData);

@@ -1,4 +1,4 @@
-const home = (state = {
+const feedList = (state = {
     homeFeedList: [],
 }, action) => {
     switch(action.type) {
@@ -7,10 +7,16 @@ const home = (state = {
                 ...state,
                 homeFeedList: action.payload,
             }
+        
+        case 'SET_LOCATION_FEED_LIST':
+            return {
+                ...state,
+                locationFeedList: action.payload,
+            }
 
             default:
                 return state;
     }
 };
 
-export default home;
+export default feedList;

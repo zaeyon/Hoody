@@ -67,7 +67,7 @@ import ScrapFolderFeedListScreen from '~/Components/Container/ScrapFolderFeedLis
 import ScrapFolderEditScreen from '~/Components/Container/ScrapFolderEditScreen';
 
 // Location Feed Map Screen
-import LocationFeedMapScreen from '~/Components/Container/LocationFeedMapScreen';
+import FeedMapScreen from '~/Components/Container/FeedMapScreen';
 
 // Alarm Screen
 import AlarmScreen from '~/Components/Container/AlarmScreen';
@@ -794,12 +794,12 @@ function AppNavigator() {
 
   return (
     <NavigationContainer>
-    {(!currentUserState.loggedIn) ? (  
+    {(currentUserState.loggedIn) ? (  
     <NoBottomBarStack.Navigator
     headerMode="none">
       <NoBottomBarStack.Screen name="BottomTab" component={BottomTab}/>
       <NoBottomBarStack.Screen name="AddScrapAlbumScreen" component={AddScrapAlbumScreen}/>
-      <NoBottomBarStack.Screen name="LocationFeedMapScreen" component={LocationFeedMapScreen}/>
+      <NoBottomBarStack.Screen name="FeedMapScreen" component={FeedMapScreen}/>
       <NoBottomBarStack.Screen name="Gallery_JustOne" component={Gallery_JustOne}/>
     </NoBottomBarStack.Navigator>
     ) : (

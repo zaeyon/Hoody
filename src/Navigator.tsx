@@ -131,6 +131,7 @@ const ProfileStack = createStackNavigator();
 const UnauthStack = createStackNavigator();
 const NoBottomBarStack = createStackNavigator();
 const SettingStack = createStackNavigator();
+const MapStack = createStackNavigator();
 
 function FeedTitle() {
   return (
@@ -394,6 +395,9 @@ function ProfileStackScreen() {
       <ProfileStack.Screen
       name="CollectionStack"
       component={CollectionStackScreen}/>
+      <ProfileStack.Screen
+      name="FeedMapScreen"
+      component={FeedMapScreen}/>
       <ProfileStack.Screen
       name="ReportScreen"
       component={ReportScreen}/>
@@ -659,7 +663,7 @@ function BottomTab() {
     ? routeName.state.routes[routeName.state.index].name
     : '';
 
-    if(routeName.name === 'FeedStack' || routeName.name === 'CollectionStack') {
+    if(routeName.name === 'FeedStack' || routeName.name === 'CollectionStack' || routeName.name === "FeedMapScreen") {
       return false;
     }
 
@@ -799,7 +803,6 @@ function AppNavigator() {
     headerMode="none">
       <NoBottomBarStack.Screen name="BottomTab" component={BottomTab}/>
       <NoBottomBarStack.Screen name="AddScrapAlbumScreen" component={AddScrapAlbumScreen}/>
-      <NoBottomBarStack.Screen name="FeedMapScreen" component={FeedMapScreen}/>
       <NoBottomBarStack.Screen name="Gallery_JustOne" component={Gallery_JustOne}/>
     </NoBottomBarStack.Navigator>
     ) : (

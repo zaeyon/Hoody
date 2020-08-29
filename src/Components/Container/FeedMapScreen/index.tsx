@@ -39,13 +39,28 @@ const HeaderBar = Styled.View`
 const HeaderLeftContainer = Styled.View`
 padding-left: 16px;
 padding-bottom: 0px;
-padding-top: 5px;
+padding-top: 0px;
 padding-right: 16px;
 background-color: #ffffff;
 flex-direction: row;
 justify-content: center;
 align-items: center;
 `;
+
+const HeaderRefreshContainer = Styled.View`
+background-color: #ffffff;
+justify-content: center;
+align-items: center;
+padding-top: 0px;
+padding-left: 5px;
+padding-bottom: 0px;
+`;
+
+const HeaderRefreshIcon = Styled.Image`
+width: ${wp('4.5%')};
+height: ${wp('4.5%')};
+`;
+
 
 const HeaderTitleText = Styled.Text`
 font-weight: 600;
@@ -62,7 +77,7 @@ const HeaderLogoImage = Styled.Image`
 const HeaderRightContainer = Styled.View`
 padding-left: 16px;
 padding-bottom: 13px;
-padding-top: 15px;
+padding-top: 20px;
 padding-right: 16px;
 justify-content: center;
 align-items: center;
@@ -512,7 +527,11 @@ const FeedMapScreen = ({navigation, route}: Props) => {
 <HeaderBar style={{marginTop:getStatusBarHeight()}}>
         <HeaderLeftContainer>
             <HeaderTitleText>내 지도</HeaderTitleText>
-          
+            <HeaderRefreshContainer>
+              <HeaderRefreshIcon
+              source={require('~/Assets/Images/HeaderBar/ic_refresh.png')}/>
+            </HeaderRefreshContainer>
+        
         </HeaderLeftContainer>
         <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
         <HeaderRightContainer>

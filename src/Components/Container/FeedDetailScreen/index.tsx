@@ -4,7 +4,7 @@ import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import {TouchableWithoutFeedback, Text, FlatList, ScrollView, StyleSheet, Alert} from 'react-native';
+import {TouchableWithoutFeedback, Text, FlatList, ScrollView, StyleSheet, Alert, RefreshControl} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import allActions from '~/action';
 import Modal from 'react-native-modal';
@@ -43,6 +43,7 @@ padding-top: 7px;
 padding-left: 16px;
 padding-bottom: 13px;
 `;
+
 
 const CenterContainer = Styled.View`
 justify-content: center;
@@ -351,6 +352,7 @@ const ReportModalContainer = Styled.View`
  border-top-left-radius: 10px;
  border-top-right-radius: 10px;
 `;
+
 
 
 
@@ -745,9 +747,10 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
     const [otherUsersFeedModalVisible, setOtherUsersFeedModalVisible] = useState<boolean>(false);
     const [currentUserFeed, setCurrentUserFeed] = useState<boolean>(false);
     const [visibleReportModal, setVisibleReportModal] = useState<boolean>(false);
-    const [imageUriArray, setImageUriArray] = useState<Array<string>>("");
+    const [imageUriArray, setImageUriArray] = useState<Array<string>>([]);
+    const [refreshingFeedDetail, setRefreshingFeedDetail] = useState<boolean>(false);
 
-    const currentUser = useSelector((state) => state.currentUser);
+    const currentUser = useSelector((state:any) => state.currentUser);
     const dispatch = useDispatch();
 
     // 서버 연결X 테스트용 코드
@@ -773,29 +776,7 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
           route.params.update = false
         }
         if(route.params?.feedId) {
-       GetFeedDetail(route.params.feedId).then(function(response) {
-           console.log("GetFeedDetail Success:", response.data);
-           console.log("currentUser.user", currentUser.user);
-           if(response.data.post.user.id === currentUser.user.userId) {
-             setCurrentUserFeed(true);
-           }
-           //console.log("response.data.post", response.data.post);
-           
-           console.log("response.data.post.mainTags", response.data.post.mainTags);
-           response.data.post.spendDate = getDateFormat(response.data.post.spendDate)
-           setParagraphData(response.data.postBody);
-           setPostId(route.params.feedId);
-           setFeedDetailInfo(response.data.post);
-           setLikeCount(response.data.post.likes);
-           setAllCommentCount(response.data.post.commentsCount+response.data.post.replysCount);
-           setCreatedDate(route.params.createdAt);
-           setCurrentUserLike(route.params.currentUserLike)
-           setCurrentUserScrap(route.params.currentUserScrap);
-
-       })
-       .catch(function(error) {
-           console.log("error", error);
-       })
+       getFeedDetail(route.params?.feedId)
     }
     }, [route.params?.feedId, route.params?.update])
 
@@ -805,7 +786,30 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
       }
     }, [route.params?.commentList])
 
-    function getDateFormat(date) {
+    const getFeedDetail = (feedId: number) => {
+      GetFeedDetail(feedId).then(function(response) {
+        console.log("GetFeedDetail Success:", response.data);
+        console.log("currentUser.user", currentUser.user);
+        if(response.data.post.user.id === currentUser.user.userId) {
+          setCurrentUserFeed(true);
+        }
+        response.data.post.spendDate = getDateFormat(response.data.post.spendDate)
+        setParagraphData(response.data.postBody);
+        setPostId(route.params.feedId);
+        setFeedDetailInfo(response.data.post);
+        setLikeCount(response.data.post.likes);
+        setAllCommentCount(response.data.post.commentsCount+response.data.post.replysCount);
+        setCreatedDate(getCreatedAtDateFormat(response.data.post.createdAt));
+        setCurrentUserLike(route.params.currentUserLike)
+        setCurrentUserScrap(route.params.currentUserScrap);
+        setRefreshingFeedDetail(false);
+    })
+    .catch(function(error) {
+        console.log("error", error);
+    })
+    }
+
+    function getDateFormat(date: any) {
       var tmpDate = new Date(date);
       var year = tmpDate.getFullYear();
       var month = tmpDate.getMonth() + 1;
@@ -813,6 +817,17 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
       var day = tmpDate.getDate();
       day = day >= 10 ? day : '0' + day;
       return year + '. ' + month + '. ' + day
+    }
+
+    function getCreatedAtDateFormat(date: any) {
+      console.log("getCreatedDataFormat", date)
+      var tmpDate = new Date(date);
+      var year =  tmpDate.getFullYear();
+      var month = tmpDate.getMonth() + 1;
+      month = month >= 10 ? month : '0' + month;
+      var day = tmpDate.getDate();
+      day = day >= 10 ? day : '0' + day;
+      return year + "년 " + month + '월 ' + day + "일"
     }
 
     const moveToCommentList = () => {
@@ -1046,6 +1061,13 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
      })
    }
 
+   const onRefreshFeedDetail = () => {
+     setRefreshingFeedDetail(true);
+     setTimeout(() => {
+       getFeedDetail(route.params?.feedId)
+     }, 10)
+   }
+
   
 
    return (
@@ -1064,6 +1086,11 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
         </RightContainer>
       </HeaderContainer>
       <ScrollView
+      refreshControl={
+        <RefreshControl
+        refreshing={refreshingFeedDetail}
+        onRefresh={onRefreshFeedDetail}/>
+      }
       showsVerticalScrollIndicator={false}>
       <InformationContainer>
    <FeedInformation

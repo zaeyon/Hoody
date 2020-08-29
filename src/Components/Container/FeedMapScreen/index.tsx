@@ -13,9 +13,10 @@ import allActions from '~/action';
 
 import SlidingUpPanel from '~/Components/Presentational/NearFeedMapScreen/SlidingUpPanel';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
-
 import NearFeedItem from '~/Components/Presentational/NearFeedMapScreen/NearFeedItem';
 import { onChange } from 'react-native-reanimated';
+
+import MemoizedFeedMap from '~/Components/Presentational/FeedMapScreen/FeedMap';
 
 // Route
 import GETUserMap from '~/Route/Profile/GETUserMap';
@@ -360,6 +361,12 @@ const FeedMapScreen = ({navigation, route}: Props) => {
     const [locationInfo, setLocationInfo] = useState<object>({});
     const [locationFeedList, setLocationFeedList] = useState<Array<object>>([]);
     const [currentUserAddress, setCurrentUserAddress] = useState<string>();
+    const [mapRegion, setMapRegion] = useState<Region>({
+      latitude:  35.9,
+      longitude: 127.8,
+      latitudeDelta: 2.5022,
+      longitudeDelta: 4.0421,
+    })
     const [initialMapRegion, setInitialMapRegion] = useState<Region>({
       latitude:  35.9,
       longitude: 127.8,
@@ -387,12 +394,19 @@ const FeedMapScreen = ({navigation, route}: Props) => {
               posts: value.posts,
               selected: false,
             })
-
-            setTimeout(() => {
-            setLocationListData(tmpLocationListData);
-            }, 10)
-  
+            tmpAllFeedListData = tmpAllFeedListData.concat(value.posts);
           }
+
+          setTimeout(() => {
+            tmpAllFeedListData.sort(function(a, b) {
+              return b["likes"] - a["likes"];
+            })
+
+            setLocationListData(tmpLocationListData);
+            setTimeout(() => {
+              setAllFeedListData(tmpAllFeedListData);
+            })
+          }, 10)
         })
         .catch(function(error) {
           console.log("사용자 피드 지도 데이터 불어오기 실패", error);
@@ -409,8 +423,13 @@ const FeedMapScreen = ({navigation, route}: Props) => {
       console.log("onDragEndPanel position", position);
 
       if(position < 645) {
-        if(!selectLocationMarker) allFeedPanelRef.current.hide();
-        else locationPanelRef.current.hide();
+        if(!selectLocationMarker) 
+        {
+          console.log("allFeedPanelRef.hide", allFeedPanelRef);
+          allFeedPanelRef.current.hide();
+        } else {
+          locationPanelRef.current.hide();
+        } 
       }
     }
 
@@ -462,6 +481,11 @@ const FeedMapScreen = ({navigation, route}: Props) => {
       })
     }
 
+    const onRegionChange = (location: any) => {
+      console.log("onRegionChange", location);
+      setInitialMapRegion(initialMapRegion)
+    }
+
 
 
     const renderNearFeedItem = ({item, index}: any) => {
@@ -497,7 +521,15 @@ const FeedMapScreen = ({navigation, route}: Props) => {
         </HeaderRightContainer>
         </TouchableWithoutFeedback>
       </HeaderBar>
-    <MapView
+      <MemoizedFeedMap
+      onRegionChange={onRegionChange}
+      mapRef={mapRef}
+      initialMapRegion={initialMapRegion}
+      mapRegion={mapRegion}
+      locationListData={locationListData}
+      onPressLocationMarker={onPressLocationMarker}/>
+      {/*
+         <MapView
       ref={mapRef}
       style={{flex:1}}
       provider={PROVIDER_GOOGLE}
@@ -588,6 +620,9 @@ const FeedMapScreen = ({navigation, route}: Props) => {
             )} 
         })}
       </MapView>
+
+      */}
+   
       {!selectLocationMarker && (
       <SlidingUpPanel
       ref={allFeedPanelRef}
@@ -600,17 +635,11 @@ const FeedMapScreen = ({navigation, route}: Props) => {
       onChangePanelState={onChangePanelState}
       completeOpenPanel={completeOpenPanel}
       >
-        <LocationFloatingContainer>
-        <LocationFloatingButton>
-          <GPSIcon
-          source={require('~/Assets/Images/Map/ic_gps.png')}/>
-        </LocationFloatingButton>
-        </LocationFloatingContainer>
         <PanelContainer>
           <PanelHeaderContainer>
             <PanelToggleButton/>
           <NearAllFeedCountContainer>
-          <NearAllFeedCountText>{allFeedListData.length === 0 ? "지도에 등록된 게시글이 없습니다." : "게시글 " + allFeedListData.length+ "개"}</NearAllFeedCountText>
+          <NearAllFeedCountText>{allFeedListData.length === 0 ? "지도에 등록된 게시글이 없습니다." : "지도에 등록된 게시글 " + allFeedListData.length+ "개"}</NearAllFeedCountText>
           </NearAllFeedCountContainer>
           </PanelHeaderContainer>
           <FlatList
@@ -645,12 +674,6 @@ const FeedMapScreen = ({navigation, route}: Props) => {
          onDragEnd={(position:any, gestureState:any) => onDragEndPanel(position,gestureState)}
       onChangePanelState={onChangePanelState}
       completeOpenPanel={completeOpenPanel}>
-        <LocationFloatingContainer>
-          <LocationFloatingButton>
-            <GPSIcon
-            source={require('~/Assets/Images/Map/ic_gps.png')}/>
-          </LocationFloatingButton>
-          </LocationFloatingContainer>
            <PanelContainer onLayout={(event) => {
              console.log("event.layout.height", event);
            }}>
@@ -672,7 +695,7 @@ const FeedMapScreen = ({navigation, route}: Props) => {
              </SelectedLocationInfoContainer>
              </LocationPanelHeaderContainer>
              <FlatList
-          keyboardShouldPersistTaps={"handled"}
+             keyboardShouldPersistTaps={"handled"}
              onScroll={(e) => {
                let offset = e.nativeEvent.contentOffset.y;
                let index = parseInt(offset / wp('37.3%'));

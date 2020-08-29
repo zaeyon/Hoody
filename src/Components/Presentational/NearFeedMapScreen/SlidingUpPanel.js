@@ -202,6 +202,7 @@ class SlidingUpPanel extends React.PureComponent {
       return true
     } 
 
+    
     if(!this.props.completeOpenPanel) {
     const animatedValue = this.props.animatedValue.__getValue()
     return (
@@ -209,6 +210,7 @@ class SlidingUpPanel extends React.PureComponent {
       Math.abs(gestureState.dy) > this.props.minimumDistanceThreshold
     )
     }
+    
   }
 
   _onPanResponderGrant(evt, gestureState) {

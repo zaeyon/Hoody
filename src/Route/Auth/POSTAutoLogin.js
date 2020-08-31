@@ -1,18 +1,16 @@
 import axios from 'axios';
-import allActions from '~/action';
-import {setAutoLoginUser} from '~/AsyncStorage/User';
 
 const baseUrl = 'http://hoody-api-test-server-alb-349396782.ap-northeast-2.elb.amazonaws.com';
 
-const POSTUserCheck = (email, password) => {
-    const url = baseUrl + '/auth/checkUser';
 
-    console.log("email11", email);
-    console.log("password11", password);
+const POSTAutoLogin = (userId, sessionId) => {
+    const url = baseUrl + '/auth/autologin';
+
+    console.log("POSTAutoLogin userId", userId);
 
     let form = new FormData();
-    form.append('email', email);
-    form.append('password', password);
+    form.append('userId', userId);
+    form.append('sessionId', sessionId);
 
     return new Promise(function (resolve, reject) {
       axios
@@ -24,14 +22,12 @@ const POSTUserCheck = (email, password) => {
           },
         })
         .then(function (response) {
-          resolve(response);
-          console.log("response.data", response)
+          resolve(response.data);
         })
         .catch(function (error) {
-          console.log('error : ', error);
           reject(error.response);
         });
     });
 }
 
-export default POSTUserCheck;
+export default POSTAutoLogin;

@@ -14,7 +14,7 @@ import allActions from '~/action';
 import Modal from 'react-native-modal';
 import ScrollableTabView from 'rn-collapsing-tab-bar';
 
-import {getCurrentUser} from '~/AsyncStorage/User';
+import {getAutoLoginUser} from '~/AsyncStorage/User';
 import {getStatusBarHeight} from 'react-native-status-bar-height';
 
 // local component
@@ -761,7 +761,7 @@ const ProfileScreen = ({navigation, route}: Props) => {
      description={currentUser.user ? currentUser.user.description : ""}
      followerCount={userInfoData ? userInfoData.followersCount : ""}
      followingCount={userInfoData ? userInfoData.followingsCount : ""}
-     feedCount={userInfoData ? userInfoData.postsCount : 0}
+     feedCount={feedListData ? feedListData.length : 0}
      currentUserProfileBool={currentUserProfileBool}
      moveToFollowListScreen={moveToFollowListScreen}/>
    )

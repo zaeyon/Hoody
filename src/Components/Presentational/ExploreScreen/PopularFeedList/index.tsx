@@ -66,6 +66,7 @@ const PopularFeedList = ({navigation, postsByWroteTagListData}: Props) => {
     console.log("사용자가 작성한 태그의 인기게시글", postsByWroteTagListData);
 
     const renderPopularFeedItem = ({item, index}: any) => {
+        console.log("renderPopularFeedItem", item);
         if(index === 0) {
             return (
             <MainPopularFeedItemContainer>

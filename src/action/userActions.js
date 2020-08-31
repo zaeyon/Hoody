@@ -67,6 +67,13 @@ const setRealTimeRemoveLike = (realTimeRemoveLike) => {
   }
 }
 
+const setFcmToken = (fcmToken) => {
+  return {
+    type: 'SET_FCM_TOKEN',
+    payload: fcmToken,
+  }
+}
+
 export default {
   setUser,
   logOut,
@@ -78,4 +85,5 @@ export default {
   setCollectionFeedList,
   setRealTimeAddLike,
   setRealTimeRemoveLike,
+  setFcmToken,
 };

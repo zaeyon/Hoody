@@ -52,6 +52,11 @@ const currentUser = (state = {}, action) => {
         ...state,
         realTimeRemoveLike: action.payload,
       }
+    case 'SET_FCM_TOKEN':
+      return {
+        ...state,
+        fcmToken: action.payload,
+      }
 
     default:
       return state;

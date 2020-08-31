@@ -30,7 +30,7 @@ import GETFeed from '~/Route/Home/GETFeed';
 
 const Container = Styled.SafeAreaView`
  background-color: #ffffff;
- align-items: center;
+ flex:1;
 `;
 
 const HeaderBar = Styled.View`
@@ -77,7 +77,7 @@ const NoFeedListContainer = Styled.View`
 
 const FeedListContainer = Styled.View`
  width: ${wp('100%')}px;
- padding-bottom: 85px;
+ padding-bottom: 30px;
  background-color: #ffffff;
 `;
 
@@ -87,6 +87,7 @@ const NoFeedText = Styled.Text`
 `;
 
 const BodyContainer = Styled.View`
+ flex: 1;
  background-color: #ffffff;
 `;
 
@@ -496,6 +497,7 @@ function FeedListScreen({navigation, route}: Props) {
           </HeaderLeftContainer>
       </HeaderBar>
       <ScrollView
+      style={{backgroundColor:'#FFFFFF'}}
       showsVerticalScrollIndicator={false}
       refreshControl={
         <RefreshControl

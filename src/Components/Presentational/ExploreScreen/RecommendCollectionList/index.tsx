@@ -92,7 +92,7 @@ const RecommendCollectionList = ({navigation, recommendMainCollectionListData, r
             collectionId={item.id}
             coverImage={item.coverImg ? item.coverImg : ""}
             name={item.name}
-            nickname={item.user.nickname}
+            nickname={item.user?.nickname}
             navigation={navigation}
             />
         </MainRecommendCollectionItemContainer>

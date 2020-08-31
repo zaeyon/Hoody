@@ -90,13 +90,6 @@ target 'hoogingApp' do
   # Google Sign In
   pod 'GoogleSignIn', '~> 5.0.2'
   
-  # Add the Firebase pod for Google Analytics
-  pod 'Firebase/Analytics'
-  # Add the pod for Firebase Cloud Messaging
-  pod 'Firebase/Messaging'
-  
-  pod 'Firebase/CoreOnly'
-  
   target 'hoogingAppTests' do
      inherit! :complete
      # Pods for testing

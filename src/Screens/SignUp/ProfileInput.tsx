@@ -384,7 +384,7 @@ const ProfileInput = ({navigation, route}) => {
   let socialNickname = '';
   let socialGender = '';
 
-  const currentUser = useSelector((state) => state.currentUser);
+  const currentUser = useSelector((state: any) => state.currentUser);
   const dispatch = useDispatch();
 
   const [keyboardHeight, setKeyboardHeight] = useState(0);
@@ -418,6 +418,8 @@ const ProfileInput = ({navigation, route}) => {
   const [birthdateIndication, setBirthdateIndication] = useState('');
   const [nicknameInputFocused, setNicknameFocused] = useState<boolean>(false);
   const [selectedGenderRadioIndex, setSelectedGenderRadioIndex] = useState<number>(0);
+
+  console.log("currentUser", currentUser);
 
 
   var radio_props = [
@@ -653,7 +655,7 @@ const ProfileInput = ({navigation, route}) => {
     console.log('가입요청 socialId', submitingSocialId);
     console.log('가입요청 provider', submitingProvider);
 
-    SignUp(submitingEmail, submitingPassword, submitingNickname, submitingBirthDate, submitingGender, submitingSocialId, submitingProvider)
+    SignUp(submitingEmail, submitingPassword, submitingNickname, submitingBirthDate, submitingGender, submitingSocialId, submitingProvider, currentUser.fcmToken)
     .then(function(response) {
       if(response.status === 201) {
       //navigation.navigate("SelectInterestScreen");

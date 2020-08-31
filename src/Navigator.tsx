@@ -1,14 +1,16 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import {NavigationContainer, StackActions, StackRouter} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
-import {Image, StyleSheet, Text} from 'react-native';
-import {useSelector} from 'react-redux';
+import {Image, StyleSheet, Text, Alert} from 'react-native';
+import {useSelector, useDispatch} from 'react-redux';
+import allActions from '~/action';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import {getCurrentUser} from '~/AsyncStorage/User';
+import {getAutoLoginUser} from '~/AsyncStorage/User';
+import messaging from '@react-native-firebase/messaging'
 
 import Home from '~/Tab/Home';
 import Feed from '~/Tab/Feed';
@@ -132,46 +134,6 @@ const UnauthStack = createStackNavigator();
 const NoBottomBarStack = createStackNavigator();
 const SettingStack = createStackNavigator();
 const MapStack = createStackNavigator();
-
-function FeedTitle() {
-  return (
-    <Text style={{fontSize: 17, }}>오늘의 후깅</Text>
-  );
-}
-
-function FeedDetailTitle() {
-  return <Text style={{fontSize: 17, }}></Text>;
-}
-
-function AlarmTitle() {
-  return <Text style={{fontSize: 17, }}>알림</Text>;
-}
-
-function ProfileTitle() {
-  return <Text style={{fontSize: 17, }}>프로필</Text>;
-}
-
-function LoginTitle() {
-  return <Text style={{fontSize: 17, }}>로그인</Text>;
-}
-
-function SignupTitle() {
-  return (
-    <Text style={{fontSize: 17, }}>회원 가입</Text>
-  );
-}
-
-function SearchLocationTitle() {
-  return (
-    <Text style={{fontSize: 17, }}>위치 검색</Text>
-  );
-}
-
-function BasicInputTitle() {
-  return (
-    <Text style={{fontSize: 17, }}>회원 가입</Text>
-  );
-}
 
 const config = {
   animation: 'timing',
@@ -648,7 +610,7 @@ function BottomTab() {
     ? route.state.routes[route.state.index].name
     : '';
 
-    if(routeName === 'SearchScreen' || routeName === "FeedStack" || routeName === "CollectionStack") {
+    if(routeName === 'SearchScreen' || routeName === "FeedStack" || routeName === "CollectionStack" || routeName === "NearFeedMapScreen") {
       return false;
     }
     return true;
@@ -776,24 +738,60 @@ function BottomTab() {
 }
 
 function AppNavigator() {
-  const [currentUser, setCurrentUser] = useState({
+  const [currentUser, setAutoLoginUser] = useState({
     email:"",
     state:"logout",
   });
   const [changeUserState, setChangeUserState] = useState<boolean>(false);
   const currentUserState = useSelector((state) => state.currentUser)
+  const [pushToken, setPushToken] = useState<string>();
+  const [isAuthorized, setIsAuthorized] = useState<boolean>(false);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+    });
+  
+    return unsubscribe;
+  }, []);
+
+
+  const handlePushToken = useCallback(async () => {
+    const enabled = await messaging().hasPermission()
+    if (enabled) {
+      const fcmToken = await messaging().getToken()
+      if (fcmToken) {
+        setPushToken(fcmToken)
+        console.log("fcmToken 존재", fcmToken);
+        dispatch(allActions.userActions.setFcmToken(fcmToken));
+      }
+    } else {
+      const authorized = await messaging().requestPermission()
+      if (authorized) setIsAuthorized(true)
+    }
+  }, [])
+
+  const saveTokenToDatabase = useCallback(async (token) => {
+    //const { error } = await setFcmToken(token)
+    //if (error) throw Error(error)
+  }, [])
+
+
+  const saveDeviceToken = useCallback(async () => {
+    if (isAuthorized) {
+      const currentFcmToken = await messaging().getToken()
+      if (currentFcmToken !== pushToken) {
+        return saveTokenToDatabase(currentFcmToken)
+      }
+
+      return messaging().onTokenRefresh((token) => saveTokenToDatabase(token))
+    }
+  }, [pushToken, isAuthorized])
   
   useEffect(() => {
-  getCurrentUser().then(function(response) {
-    console.log("responsegggg", response);
-    console.log("자동로그인 response.nickname", response.nickname);
-    console.log("자동로그인 response.state", response.state);
-    setCurrentUser(response);
-    setChangeUserState(!changeUserState);
-  })
-  .catch(function(error) {
-    console.log("error");
-  })
+    handlePushToken()
+    saveDeviceToken()
   }, [])
 
   return (

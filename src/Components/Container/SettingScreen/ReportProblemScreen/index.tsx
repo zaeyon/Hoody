@@ -13,7 +13,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 
 
 // Route
-import GETLogout from '~/Route/Auth/GETLogout';
+import POSTReportDemand from '~/Route/Declare/POSTReportDemand';
 
 const Container = Styled.SafeAreaView`
  flex: 1;
@@ -257,6 +257,25 @@ const ReportProblemScreen = ({navigation, route}: Props) => {
         setReportDescrip(text);
     } 
 
+    const reportDemend = () => {
+        POSTReportDemand(reportType, reportDescrip)
+        .then(function(response) {
+            console.log("문제 신고 완료", response);
+            Alert.alert("신고가 접수되었습니다.", '', [
+                {
+                    text:'완료',
+                    onPress: () => {
+                        navigation.goBack()
+                    }
+                }
+            ])
+        })
+        
+        .catch(function(error) {
+            console.log("문제 신고 실패", error);
+        })
+    }
+
     return (
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <Container>
@@ -270,6 +289,7 @@ const ReportProblemScreen = ({navigation, route}: Props) => {
                 </HeaderLeftContainer>
                 </TouchableWithoutFeedback>
                 <HeaderTitleText>문제 신고</HeaderTitleText>
+                <TouchableWithoutFeedback onPress={() => reportDemend()}>
                 <HeaderRightContainer>
                     <HeaderReportContainer>
                         <HeaderReportText>신고하기</HeaderReportText>
@@ -277,6 +297,7 @@ const ReportProblemScreen = ({navigation, route}: Props) => {
                     <HeaderEmptyContainer>
                     </HeaderEmptyContainer>
                 </HeaderRightContainer>
+                </TouchableWithoutFeedback>
             </HeaderBar>
             <KeyboardAwareScrollView
             showsVerticalScrollIndicator={false}>

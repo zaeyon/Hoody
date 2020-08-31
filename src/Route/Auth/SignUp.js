@@ -1,12 +1,14 @@
 import axios from 'axios';
 import allActions from '~/action';
 import AsyncStorage from '@react-native-community/async-storage';
-import {setCurrentUser} from '~/AsyncStorage/User';
+import {setAutoLoginUser} from '~/AsyncStorage/User';
 
 const baseUrl = 'http://hoody-api-test-server-alb-349396782.ap-northeast-2.elb.amazonaws.com';
 
-const SignUp = (email, password, nickname, birthdate, gender, socialId, provider) => {
+const SignUp = (email, password, nickname, birthdate, gender, socialId, provider, fcmToken) => {
     const url = baseUrl + '/auth/signUp';
+
+    console.log("Signup fcmToken", fcmToken);
 
     let form = new FormData();
 
@@ -17,6 +19,9 @@ const SignUp = (email, password, nickname, birthdate, gender, socialId, provider
     form.append('gender', gender);
     form.append('socialId', socialId);
     form.append('provider', provider);
+    form.append("fcmToken", fcmToken);
+
+    console.log("signup form", form);
 
     return new Promise(function (resolve, reject) {
         axios
@@ -33,13 +38,14 @@ const SignUp = (email, password, nickname, birthdate, gender, socialId, provider
             if (response.status === 201) {
               console.log('회원가입 성공');
               console.log("회원가입성공 닉네임", response.data.user.nickname)
-              setCurrentUser(email, response.data.user.nickname, "login");
+              setAutoLoginUser(email, response.data.user.nickname, response.data.user.id, response.data.sessionId, "login");
             } else if(response.status === 400) {
               console.log("response", response);
             }
           })
-          .catch(function (response) {
-            console.log("response", response);
+          .catch(function (error) {
+            console.log("error", error);
+            reject(error);
           });
       });
 }

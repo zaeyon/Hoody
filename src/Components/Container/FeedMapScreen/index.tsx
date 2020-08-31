@@ -388,7 +388,17 @@ const FeedMapScreen = ({navigation, route}: Props) => {
       latitudeDelta: 2.5022,
       longitudeDelta: 4.0421,
     })
+    const [refreshingMap, setRefreshingMap] = useState<boolean>(false);
     const [completeOpenPanel, setCompleteOpenPanel] = useState<boolean>(false);
+
+    const [initialCamera, setInitialCamera] = useState<object>({
+      center: {
+      latitude:  35.9,
+      longitude: 127.8,
+    },
+    pitch: 0,
+    heading: 0,
+    zoom: 8})
     
     var allFeedPanelRef = useRef(null);
     var mapRef = useRef(null);
@@ -428,6 +438,42 @@ const FeedMapScreen = ({navigation, route}: Props) => {
         })
       }
     }, [route.params?.nickname])
+
+    const getUserFeedMapData = () => {
+      GETUserMap(route.params?.nickname)
+        .then(function(response) {
+        
+          console.log("사용자 피드 지도 데이터 불어오기 성공", response);
+          var tmpLocationListData = new Array();
+          var tmpAllFeedListData = new Array();
+
+          for(const[key, value] of Object.entries(response)) {
+            tmpLocationListData.push({
+              location: key,
+              metaData: value.metaData,
+              posts: value.posts,
+              selected: false,
+            })
+            tmpAllFeedListData = tmpAllFeedListData.concat(value.posts);
+          }
+
+          setTimeout(() => {
+            tmpAllFeedListData.sort(function(a, b) {
+              return b["likes"] - a["likes"];
+            })
+
+            setLocationListData(tmpLocationListData);
+            setTimeout(() => {
+              setAllFeedListData(tmpAllFeedListData);
+              setRefreshingMap(false);
+            })
+          }, 10)
+        })
+        .catch(function(error) {
+          console.log("사용자 피드 지도 데이터 불어오기 실패", error);
+        })
+      
+    }
 
     const onChangePanelState = (panelState: any) => {
       setCompleteOpenPanel(panelState)
@@ -497,8 +543,27 @@ const FeedMapScreen = ({navigation, route}: Props) => {
     }
 
     const onRegionChange = (location: any) => {
+        setInitialMapRegion(initialMapRegion)
       console.log("onRegionChange", location);
-      setInitialMapRegion(initialMapRegion)
+    
+    }
+
+    const onRefreshFeedMap = () => {
+      setSelectLocationMarker(false);
+      getUserFeedMapData()
+      setTimeout(() => {
+        var initialCamera = {
+          center: {
+            latitude:  35.9,
+            longitude: 127.8,
+          },
+          pitch: 0,
+          heading: 0,
+          zoom: 7.03,
+        }
+        mapRef.current.setCamera(initialCamera, 200);
+      }, 100)
+
     }
 
 
@@ -527,11 +592,12 @@ const FeedMapScreen = ({navigation, route}: Props) => {
 <HeaderBar style={{marginTop:getStatusBarHeight()}}>
         <HeaderLeftContainer>
             <HeaderTitleText>내 지도</HeaderTitleText>
+            <TouchableWithoutFeedback onPress={() => onRefreshFeedMap()}>
             <HeaderRefreshContainer>
               <HeaderRefreshIcon
               source={require('~/Assets/Images/HeaderBar/ic_refresh.png')}/>
             </HeaderRefreshContainer>
-        
+            </TouchableWithoutFeedback>
         </HeaderLeftContainer>
         <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
         <HeaderRightContainer>
@@ -540,19 +606,12 @@ const FeedMapScreen = ({navigation, route}: Props) => {
         </HeaderRightContainer>
         </TouchableWithoutFeedback>
       </HeaderBar>
-      <MemoizedFeedMap
-      onRegionChange={onRegionChange}
-      mapRef={mapRef}
-      initialMapRegion={initialMapRegion}
-      mapRegion={mapRegion}
-      locationListData={locationListData}
-      onPressLocationMarker={onPressLocationMarker}/>
-      {/*
          <MapView
       ref={mapRef}
       style={{flex:1}}
       provider={PROVIDER_GOOGLE}
-      region={initialMapRegion}
+      onRegionChange={onRegionChange}
+      initialRegion={initialMapRegion}
       showsUserLocation={true}>
         {locationListData?.map((location, index) => {
           if(location.metaData.num >= 10) {
@@ -639,9 +698,6 @@ const FeedMapScreen = ({navigation, route}: Props) => {
             )} 
         })}
       </MapView>
-
-      */}
-   
       {!selectLocationMarker && (
       <SlidingUpPanel
       ref={allFeedPanelRef}

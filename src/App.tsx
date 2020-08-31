@@ -11,19 +11,21 @@ import Styled from 'styled-components/native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {TextInput} from 'react-native-gesture-handler';
+import {getAutoLoginUser} from '~/AsyncStorage/User';
 import {createStore} from 'redux';
-import {Provider, useSelector} from 'react-redux';
+import {Provider, useSelector, useDispatch} from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
 import SplashScreen from 'react-native-splash-screen'
 import messaging from '@react-native-firebase/messaging'
-
-
 import rootReducer from '~/reducers';
 import Unauthorized from '~/Screens/Unauthorized';
 import AuthUser from '~/Auth';
 import AppNavigator from '~/Navigator';
 import Navigator from '~/Navigator';
 import RNLocation from 'react-native-location';
+
+// Route
+import POSTAutoLogin from '~/Route/Auth/POSTAutoLogin';
 
 const Container = Styled.View`
   
@@ -90,54 +92,28 @@ function App() {
 
 
   useEffect(() => {
-    const unsubscribe = messaging().onMessage(async remoteMessage => {
-      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
-    });
-
-    return unsubscribe;
-  }, []);
-
-  const handlePushToken = useCallback(async () => {
-    const enabled = await messaging().hasPermission()
-    if (enabled) {
-      const fcmToken = await messaging().getToken()
-      if (fcmToken) {
-        setPushToken(fcmToken)
-        console.log("fcmToken", fcmToken);
-      }
-    } else {
-      const authorized = await messaging().requestPermission()
-      if (authorized) setIsAuthorized(true)
+  getAutoLoginUser().then(function(response) {
+    console.log("responsegggg", response);
+    console.log("자동로그인 response.nickname", response.nickname);
+    console.log("자동로그인 response.state", response.state);
+    if(response == "NoLogined") {
+      return
+    } else if(response.userId) {
+      POSTAutoLogin(response.userId, response.sessionId)
+      .then(function(response) {
+        console.log("자동로그인 성공", response);
+      })
+      .catch(function(error) {
+        console.log("자동로그인 실패", error);
+      })
     }
-  }, [])
-
-  const saveTokenToDatabase = useCallback(async (token) => {
-    //const { error } = await setFcmToken(token)
-    //if (error) throw Error(error)
-  }, [])
-
-
-  const saveDeviceToken = useCallback(async () => {
-    if (isAuthorized) {
-      const currentFcmToken = await messaging().getToken()
-      if (currentFcmToken !== pushToken) {
-        return saveTokenToDatabase(currentFcmToken)
-      }
-
-      return messaging().onTokenRefresh((token) => saveTokenToDatabase(token))
-    }
-  }, [pushToken, isAuthorized])
-
-  useEffect(() => {
-    foregroundListener()
-    handlePushToken()
-    saveDeviceToken()
-    requestCameraPermission()
-  }, [])
-
-
-  useEffect(() => {
-    SplashScreen.hide();
+  })
+  .catch(function(error) {
+    console.log("error");
+  })
+    setTimeout(() => {
+      SplashScreen.hide();
+    },10)
   })
 
   return (

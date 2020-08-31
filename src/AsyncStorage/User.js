@@ -1,35 +1,39 @@
 import AsyncStorage from '@react-native-community/async-storage';
 
-const setCurrentUser = async(email,nickname, state) => {
+const setAutoLoginUser = async(email,nickname, userId, sessionId, state) => {
     try { 
         const loginedUser = {
             email: email,
             nickname: nickname,
+            userId: userId,
+            sessionId: sessionId,
             state: state
         }
-        console.log("setCurrentUser email", email);
-        console.log("SetCurrentUSer nickname", nickname);
-        await AsyncStorage.setItem('current_user', JSON.stringify(loginedUser))
+        console.log("setAutoLoginUser email", email);
+        console.log("SetAutoLogin User nickname", nickname);
+        console.log("setAutoLoginUser userId", userId);
+        console.log("setAutoLoginUser sessionId", sessionId);
+        await AsyncStorage.setItem('autoLogin_user', JSON.stringify(loginedUser))
 
     } catch (e) {
         console.log("AsynckStorage 저장 실패", e);
     }
 }
 
-const getCurrentUser = async() => {
+const getAutoLoginUser = async() => {
     try {
-        const currentUser = await AsyncStorage.getItem('current_user')
+        const autoLoginUser = await AsyncStorage.getItem('autoLogin_user')
 
-        console.log("currentUser222", currentUser);
-        if(currentUser == null) {
+        console.log("autoLoginUser", autoLoginUser);
+        if(autoLoginUser == null) {
             console.log("로그인된사용자 없음")
             return "NoLogined"
         } else {
-            return JSON.parse(currentUser)
+            return JSON.parse(autoLoginUser)
         }
     } catch(e) {
-        console.log("getCurrentUser error", e);
+        console.log("getAutoLoginUser error", e);
     }
 }
 
-export {getCurrentUser, setCurrentUser};
+export {getAutoLoginUser, setAutoLoginUser};

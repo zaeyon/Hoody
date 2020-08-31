@@ -207,6 +207,8 @@ const LoginScreen = ({navigation}) => {
   const [abledLoginButton, setAbledLoginButton] = useState<boolean>(true);
   const [validEmail, setValidEmail] = useState<boolean>(false);
   const [emailInputState, setEmailInputState] = useState<string>("noInput");
+  const [emailInputFocus, setEmailInputFocus] = useState<boolean>(false);
+  const [passwordInputFocus, setPasswordInputFocus] = useState<boolean>(false);
   const counter = useSelector((state) => state.counter);
   const currentUser = useSelector((state) => state.currentUser);
   const dispatch = useDispatch();
@@ -248,6 +250,23 @@ const LoginScreen = ({navigation}) => {
     });
   }
 
+  const onFocusEmailInput = () => {
+    setEmailInputFocus(true);
+  }
+
+  const onUnfocusEmailInput = (text:string) => {
+    setEmailInputFocus(false);
+    checkEmail(text);
+  }
+
+  const onFocusPasswordInput = () => {
+    setPasswordInputFocus(true);
+  }
+
+  const onUnfocusPasswordInput = (text:string) => {
+    setPasswordInputFocus(false);
+  }
+
   const clickLoginButton = () => {
     var regExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
     var blank_pattern = /[\s]/g;
@@ -260,7 +279,7 @@ const LoginScreen = ({navigation}) => {
     submitingPassword = password;
     console.log('로그인 요청!! email', submitingEmail);
     console.log('로그인 요청!! password', submitingPassword);
-    Login(submitingEmail, submitingPassword)
+    Login(submitingEmail, submitingPassword, currentUser.fcmToken)
     .then(function(response) {
       console.log('로그인성공 유저 정보@@', response.data.user);
       console.log("로그인성공 user.id", response.data.user.id);
@@ -330,11 +349,13 @@ const LoginScreen = ({navigation}) => {
         <ItemContainer>
           <ItemLabelText>이메일</ItemLabelText>
           <ItemTextInput
-          style={emailInputState === "unvalid" && {borderWidth: 1.5, borderColor: '#FF3B30'}}
+         
+          style={(emailInputState === "unvalid" && {borderColor: '#FF3B30'}) || (emailInputFocus && {borderColor:'#267DFF'})}
           onChangeText={(text:string) => onChangeEmailInput(text)}
           autoCapitalize={"none"}
-          onSubmitEditing={(text) => checkEmail(text.nativeEvent.text)}
-          onEndEditing={(text) => checkEmail(text.nativeEvent.text)}
+          onSubmitEditing={(text) => onUnfocusEmailInput(text.nativeEvent.text)}
+          onEndEditing={(text) => onUnfocusEmailInput(text.nativeEvent.text)}
+          onFocus={() => onFocusEmailInput()}
           />
           {emailInputState === "unvalid" && (    
           <UnvaildInputText>올바른 이메일 형식이 아닙니다.</UnvaildInputText>
@@ -344,6 +365,10 @@ const LoginScreen = ({navigation}) => {
         <ItemContainer style={{marginTop: 30}}>
           <ItemLabelText>비밀번호</ItemLabelText>
           <ItemTextInput
+          style={passwordInputFocus && {borderColor:'#267DFF'}}
+          onFocus={() => onFocusPasswordInput()}
+          onSubmitEditing={(text:any) => onUnfocusPasswordInput(text.nativeEvent.text)}
+          onEndEditing={(text:any) => onUnfocusPasswordInput(text.nativeEvent.text)}
           secureTextEntry={true}
           onChangeText={(text: string) => setPassword(text)}
           autoCapitalize={"none"}

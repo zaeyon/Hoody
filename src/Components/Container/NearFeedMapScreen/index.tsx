@@ -1094,6 +1094,12 @@ const GPSIcon = Styled.Image`
  height: ${wp('6.4%')};
 `;
 
+const HeaderShadowContainer = Styled.View`
+
+ width: ${wp('100%')};
+ height: 0.5px;
+ background-color:#FFFFFF;
+`;
 
 
 
@@ -1226,7 +1232,6 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
       }
     }, [selectedRadius])
 
-    
 
     /*
     useEffect(() => {
@@ -1254,7 +1259,6 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
       })
     }, [])
     */
-
 
     const onChangePanelState = (panelState: any) => {
       setCompleteOpenPanel(panelState)
@@ -1334,6 +1338,12 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
       setRadiusSettingModalVisible(false);
     }
 
+    const onRegionChange = (location: any) => {
+      setCurrentMapRegion(currentMapRegion);
+    console.log("onRegionChange", location);
+   }
+
+
 
     const renderNearFeedItem = ({item, index}: any) => {
       return (
@@ -1364,12 +1374,9 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
       )
     }
 
-    
-
-
   return (
     <Container>
-<HeaderBar style={{marginTop:getStatusBarHeight()}}>
+<HeaderBar style={[{marginTop:getStatusBarHeight()}]}>
         <HeaderLeftContainer>
           <CurrentLocationText>{currentUserAddress ? currentUserAddress + " 주변" : "내 주변"}</CurrentLocationText>
           <TouchableWithoutFeedback onPress={() => setRadiusSettingModalVisible(true)}>
@@ -1387,16 +1394,19 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
         </HeaderRightContainer>
         </TouchableWithoutFeedback>
       </HeaderBar>
-    <MapView
+      <HeaderShadowContainer style={styles.headerBarShadow}>
+      </HeaderShadowContainer>
+      <MapView
       ref={mapRef}
       style={{flex:1}}
       provider={PROVIDER_GOOGLE}
-      region={currentMapRegion}
+      onRegionChange={onRegionChange}
+      initialRegion={currentMapRegion}
       showsUserLocation={true}>
         {nearLocationListData?.map((location, index) => {
           if(location.post.metaData.num >= 10) {
-            return (
-         <Marker
+          return (
+          <Marker
           onPress={(coordinate:any) => onPressLocationMarker(coordinate, index, location)}
           style={{
             justifyContent: 'center',
@@ -1491,12 +1501,13 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
       completeOpenPanel={completeOpenPanel}
       >
         <LocationFloatingContainer>
-        <LocationFloatingButton>
+        <LocationFloatingButton style={styles.floatingButtonShadow}>
           <GPSIcon
           source={require('~/Assets/Images/Map/ic_gps.png')}/>
         </LocationFloatingButton>
         </LocationFloatingContainer>
-        <PanelContainer>
+        <PanelContainer
+        style={styles.panelShadow}>
           <PanelHeaderContainer>
             <PanelToggleButton/>
           <NearAllFeedCountContainer>
@@ -1536,14 +1547,15 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
       onChangePanelState={onChangePanelState}
       completeOpenPanel={completeOpenPanel}>
         <LocationFloatingContainer>
-          <LocationFloatingButton>
+          <LocationFloatingButton style={styles.floatingButtonShadow}>
             <GPSIcon
             source={require('~/Assets/Images/Map/ic_gps.png')}/>
           </LocationFloatingButton>
           </LocationFloatingContainer>
            <PanelContainer onLayout={(event) => {
              console.log("event.layout.height", event);
-           }}>
+           }}
+           style={styles.panelShadow}>
              <LocationPanelHeaderContainer
              onLayout={(event) => {
                const height = event.nativeEvent.layout.height;
@@ -1618,6 +1630,36 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     margin: 0,
   },
+
+  panelShadow : {
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 0,
+      height: 0
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 9
+  },
+  
+  floatingButtonShadow : {
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 0,
+      height: 0
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 4
+  },
+
+  headerBarShadow : {
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 0,
+      height: 0
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 20
+  }
 });
 
 export default NearFeedMapScreen;

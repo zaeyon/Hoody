@@ -472,13 +472,6 @@ const FeedItem = ({
 }
 
   const deleteLike = () => {
-    if(currentUser.likeFeeds) {
-    console.log("currentUser.likeFeeds", currentUser.likeFeeds);
-    var removedLikeFeeds = currentUser.likeFeeds;
-    var deletedIndex = currentUser.likeFeeds?.findIndex(obj => obj.id === id);
-    removedLikeFeeds.splice(deletedIndex, 1);
-    console.log("deletedLike", removedLikeFeeds);
-    dispatch(allActions.userActions.setLikeFeeds(removedLikeFeeds))
     setCurrentUserLike(false);
     setLikeCount(likeCount-1);
     console.log("deleteLike currentUser.user.userId", currentUser.user.userId);
@@ -489,19 +482,10 @@ const FeedItem = ({
     .catch(function(error) {
       console.log("좋아요 삭제 error", error)
     })
-    }
+
   }
 
   const addLike = () => {
-    if(currentUser.likeFeeds) {
-    var addedLikeFeeds = currentUser.likeFeeds;
-    const likeObj = {
-      id: id,
-      likeCount: likeCount+1
-    }
-
-    addedLikeFeeds.push(likeObj);
-    dispatch(allActions.userActions.setLikeFeeds(addedLikeFeeds))
     setCurrentUserLike(true);
     setLikeCount(likeCount+1);
     POSTLike(currentUser.user.userId, id)
@@ -510,21 +494,12 @@ const FeedItem = ({
     .catch(function(error) {
       console.log("좋아요 추가 error", error);
     })
-
-    }
   }
 
   const addScrapFeed = () => {
     var scrapFeedArray = new Array();
     scrapFeedArray.push(id);
     setCurrentUserScrap(true);
-
-    var addedScrapFeeds = currentUser.scrapFeeds;
-    const scrapObj = {
-      id: id,
-    }
-    addedScrapFeeds.push(scrapObj);
-    dispatch(allActions.userActions.setScrapFeeds(addedScrapFeeds))
     POSTScrapFeed(scrapFeedArray)
     .then(function(response: any) {
       console.log("스크랩성공", response)
@@ -539,12 +514,14 @@ const FeedItem = ({
     var tmpFeedIds = new Array();
     tmpFeedIds.push(id);
 
+    /*
     console.log("tmpFeedIds", tmpFeedIds)
     var deletedScrapFeeds = currentUser.scrapFeeds;
     var deleteIndex = currentUser.scrapFeeds?.findIndex(obj => obj.id === id);
     deletedScrapFeeds.splice(deleteIndex, 1);
-    
     dispatch(allActions.userActions.setScrapFeeds(deletedScrapFeeds));
+    */
+   
     DELETEScrapFeed(tmpFeedIds)
     .then(function(response) {
       console.log("스크랩삭제", response);

@@ -463,13 +463,13 @@ const ProfileInput = ({navigation, route}) => {
     }
   }, []);
 
-  if (route.params!.password) {
+  if (route.params?.password) {
     submitingPassword = route.params!.password;
   } else {
-    console.log('소셜 로그인함');
+    console.log('소셜 로그인함', route);
     submitingPassword = null;
-    if (route.params!.socialNickname) {
-      socialNickname = route.params!.socialNickname;
+    if (route.params?.socialProvider) {
+      socialNickname = route.params?.socialNickname;
       //setConfirmedNickname(true);
     }
     socialGender = route.params!.socialGender;
@@ -509,6 +509,10 @@ const ProfileInput = ({navigation, route}) => {
     setConfirmedGender(true);
     setInputedGender('female');
   };
+
+  const notSelectGender = () => {
+    setInputedGender('notSelect')
+  }
 
   function checkNickname(nickname) {
     console.log('입력된 nickname', nickname);
@@ -600,7 +604,7 @@ const ProfileInput = ({navigation, route}) => {
     } else if(selectedGenderRadioIndex === 1) {
       setInputedGender('male')
     } else if(selectedGenderRadioIndex === 2) {
-      setInputedGender('noSelect')
+      setInputedGender('notSelect')
     }
 
     setVisibleGenderModal(false);
@@ -633,12 +637,16 @@ const ProfileInput = ({navigation, route}) => {
     checkNickname(text)
   }
 
-  const moveToBasicInput = () => {
-    navigation.navigate("BasicInput", {
-      inputedNickname: inputedNickname,
-      inputedGender: inputedGender,
-      inputedBirthdate: birthdate,
-    })
+  const navigateGoBack = () => {
+    if(route.params?.socialProvider) {
+      navigation.goBack();
+    } else {
+      navigation.navigate("BasicInput", {
+        inputedNickname: inputedNickname,
+        inputedGender: inputedGender,
+        inputedBirthdate: birthdate,
+      })
+    }
   }
 
   const signUp = () => {
@@ -731,7 +739,7 @@ const ProfileInput = ({navigation, route}) => {
   return (
     <Container>
       <HeaderBar>
-        <TouchableWithoutFeedback onPress={() => moveToBasicInput()}>
+        <TouchableWithoutFeedback onPress={() => navigateGoBack()}>
           <HeaderLeftContainer>
             <BackButtonContainer>
               <BackButton
@@ -788,7 +796,7 @@ const ProfileInput = ({navigation, route}) => {
             <ItemLabelText>성별</ItemLabelText>
             <TouchableWithoutFeedback onPress={() => showGenderSettingModal()}>
             <GenderBackground style={visibleGenderModal && {borderColor:'#267DFF'}}>
-              <GenderText>{inputedGender === "male" ? "남자" : (inputedGender === "female" ? "여자" : "선택안함")}</GenderText>
+              <GenderText>{inputedGender === "male" ? "남자" : (inputedGender === "female" ? "여자" : (inputedGender === "notSelect" ? "선택안함" : ""))}</GenderText>
             </GenderBackground>
             </TouchableWithoutFeedback>
           </GenderContainer>
@@ -843,6 +851,7 @@ style={(!confirmedNickname || !confirmedBirthDate || !confirmedGender) &&{backgr
           </GenderModalDescripContainer>
           <RadioForm>
                             {radio_props.map((obj, i) => (
+                            <TouchableWithoutFeedback onPress={() => onPressRadioButton(i)}>
                             <RadioTabContainer>
                             <RadioTabInfoContainer>
                             <RadioButton
@@ -870,6 +879,7 @@ style={(!confirmedNickname || !confirmedBirthDate || !confirmedGender) &&{backgr
                                 buttonWrapStyle={{marginLeft: 10}}/>
                             </RadioTabInfoContainer>
                             </RadioTabContainer>
+                            </TouchableWithoutFeedback>
                              ))}
                            </RadioForm>
 

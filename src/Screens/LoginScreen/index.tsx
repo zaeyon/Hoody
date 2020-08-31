@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import Styled from 'styled-components/native';
-import {Text, TouchableWithoutFeedback, StyleSheet} from 'react-native';
+import {Text, TouchableWithoutFeedback, StyleSheet, Alert} from 'react-native';
 import axios from 'axios';
 import {resolvePlugin} from '@babel/core';
 import {useSelector, useDispatch} from 'react-redux';
@@ -213,8 +213,8 @@ const LoginScreen = ({navigation}) => {
   const currentUser = useSelector((state) => state.currentUser);
   const dispatch = useDispatch();
   const user = {name: 'Rei'};
-  let submitingEmail;
-  let submitingPassword;
+  let submitingEmail:any;
+  let submitingPassword:any;
 
   /*
   React.useLayoutEffect(() => {
@@ -288,21 +288,20 @@ const LoginScreen = ({navigation}) => {
         dispatch(
           allActions.userActions.setUser({
             email: submitingEmail,
-            password: submitingPassword,
             profileImage: response.data.user.profileImg,
             nickname: response.data.user.nickname,
             description: response.data.user.description,
             userId: response.data.user.id,
-            likeCollections: response.data.user.LikeCollections,
-            likeFeeds: response.data.user.LikePosts,
           })
         )
+        /*
         dispatch(
           allActions.userActions.setLikeFeeds(response.data.user.LikePosts)
         )
         dispatch(
           allActions.userActions.setScrapFeeds(response.data.user.scraps[0].Posts)
         )
+        */
         dispatch(
           allActions.userActions.setInputedKeywordList([])
         )
@@ -320,6 +319,21 @@ const LoginScreen = ({navigation}) => {
     })
     .catch(function (error) {
       console.log("error: ", error);
+      if(error.data.message === "You are not a member") {
+        Alert.alert('등록되지 않은 계정입니다.', '', [
+          {
+            text: "확인",
+            onPress: () => 0,
+          },
+        ])
+      } else if(error.data.message === "Not correct password.") {
+        Alert.alert('비밀번호가 일치하지 않습니다.', '', [
+          {
+            text: "확인",
+            onPress: () => 0,
+          },
+        ])
+      }
     })
   };
  }

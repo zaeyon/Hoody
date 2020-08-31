@@ -90,9 +90,10 @@ function App() {
     })
   }, [])
 
-
+/*
   useEffect(() => {
-  getAutoLoginUser().then(function(response) {
+  getAutoLoginUser()
+  .then(function(response) {
     console.log("responsegggg", response);
     console.log("자동로그인 response.nickname", response.nickname);
     console.log("자동로그인 response.state", response.state);
@@ -109,12 +110,13 @@ function App() {
     }
   })
   .catch(function(error) {
-    console.log("error");
+    console.log("error", error);
   })
     setTimeout(() => {
       SplashScreen.hide();
     },10)
-  })
+})
+*/
 
   return (
       <Provider store={store}>

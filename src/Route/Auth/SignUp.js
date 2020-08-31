@@ -45,7 +45,7 @@ const SignUp = (email, password, nickname, birthdate, gender, socialId, provider
           })
           .catch(function (error) {
             console.log("error", error);
-            reject(error);
+            reject(error.response);
           });
       });
 }

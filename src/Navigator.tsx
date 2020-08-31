@@ -11,6 +11,7 @@ import {
 } from 'react-native-responsive-screen';
 import {getAutoLoginUser} from '~/AsyncStorage/User';
 import messaging from '@react-native-firebase/messaging'
+import SplashScreen from 'react-native-splash-screen'
 
 import Home from '~/Tab/Home';
 import Feed from '~/Tab/Feed';
@@ -121,6 +122,9 @@ import CommentDeclareScreen from '~/Components/Container/CommentDeclareScreen';
 // Feed Detail Screen
 import FeedImagePullScreen from '~/Components/Container/FeedImagePullScreen';
 import ProductWebView from '~/Components/Container/ProductWebView';
+
+// Route
+import POSTAutoLogin from '~/Route/Auth/POSTAutoLogin';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
@@ -762,7 +766,6 @@ function AppNavigator() {
     if (enabled) {
       const fcmToken = await messaging().getToken()
       if (fcmToken) {
-        setPushToken(fcmToken)
         console.log("fcmToken 존재", fcmToken);
         dispatch(allActions.userActions.setFcmToken(fcmToken));
       }
@@ -772,26 +775,44 @@ function AppNavigator() {
     }
   }, [])
 
-  const saveTokenToDatabase = useCallback(async (token) => {
-    //const { error } = await setFcmToken(token)
-    //if (error) throw Error(error)
-  }, [])
-
-
-  const saveDeviceToken = useCallback(async () => {
-    if (isAuthorized) {
-      const currentFcmToken = await messaging().getToken()
-      if (currentFcmToken !== pushToken) {
-        return saveTokenToDatabase(currentFcmToken)
+  useEffect(() => {
+    getAutoLoginUser()
+    .then(function(asyStorResponse) {
+      console.log("responsegggg", asyStorResponse);
+      console.log("자동로그인 response.nickname", asyStorResponse.nickname);
+      console.log("자동로그인 response.state", asyStorResponse.state);
+      if(asyStorResponse == "NoLogined") {
+        SplashScreen.hide();
+      } else if(asyStorResponse.userId) {
+        POSTAutoLogin(asyStorResponse.userId, asyStorResponse.sessionId)
+        .then(function(response) {
+          console.log("자동로그인 성공", response);
+          /*
+          dispatch(allActions.userActions.setUser({
+            email: asyStorResponse.email,
+            profileImage: response.profileImg,
+            nickname: response.nickname,
+            description: response.description,
+            userId: response.id,
+          }))
+          */
+          SplashScreen.hide();
+        })
+        .catch(function(error) {
+          console.log("자동로그인 실패", error);
+          SplashScreen.hide();
+        })
       }
-
-      return messaging().onTokenRefresh((token) => saveTokenToDatabase(token))
-    }
-  }, [pushToken, isAuthorized])
+    })
+    .catch(function(error) {
+      console.log("error", error);
+    })
+      setTimeout(() => {
+      },10)
+  }, [])
   
   useEffect(() => {
     handlePushToken()
-    saveDeviceToken()
   }, [])
 
   return (

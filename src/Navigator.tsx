@@ -158,7 +158,6 @@ function HomeStackScreen() {
             open: config,
             close: config,
           },
-          
         }}
       />
       <HomeStack.Screen
@@ -187,7 +186,8 @@ function ExploreStackScreen() {
       component={SearchResultScreen}/>
       <ExploreStack.Screen
       name="FeedStack"
-      component={FeedStackScreen}/>
+      component={FeedStackScreen}
+      />
       <ExploreStack.Screen
       name="CollectionStack"
       component={CollectionStackScreen}/>
@@ -510,19 +510,37 @@ function UnauthStackScreen() {
 function FeedStackScreen() {
   return (
     <FeedStack.Navigator
-      headerMode={"none"}
-      >
+      headerMode={"none"}>
       <FeedStack.Screen
         name="FeedDetailScreen"
         component={FeedDetailScreen}
+        options={{
+          transitionSpec: {
+            open: config,
+            close: config,
+          }
+        }}
       />
       <FeedStack.Screen
        name="LikeListScreen"
        component={LikeListScreen}
+       options={{
+        transitionSpec: {
+          open: config,
+          close: config,
+        }
+      }}
        />
        <FeedStack.Screen
        name="CommentListScreen"
-       component={CommentListScreen}/>
+       component={CommentListScreen}
+       options={{
+        transitionSpec: {
+          open: config,
+          close: config,
+        }
+      }}
+      />
        <FeedStack.Screen
        name="FeedEditScreen"
        component={FeedEditScreen}/>

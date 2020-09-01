@@ -2,7 +2,7 @@ import axios from 'axios';
 import allActions from '~/action';
 import {setAutoLoginUser} from '~/AsyncStorage/User';
 
-const baseUrl = 'https://069fc9fc1c9a.ngrok.io';
+const baseUrl = 'http://hoody-api-test-server-alb-349396782.ap-northeast-2.elb.amazonaws.com';
 
 const POSTUserCheck = (email, password) => {
     const url = baseUrl + '/auth/checkUser';

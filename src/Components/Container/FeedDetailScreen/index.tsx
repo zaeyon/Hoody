@@ -1067,7 +1067,11 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
    }
 
    const navigateGoBack = () => {
-     navigation.navigate("FeedListScreen");
+     if(route.params?.pushAlarm) {
+      navigation.navigate("FeedListScreen");
+     } else {
+       navigation.goBack();
+     }
    }
 
    return (

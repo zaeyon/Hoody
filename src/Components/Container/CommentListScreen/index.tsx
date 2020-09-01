@@ -1,10 +1,10 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect, useRef, useLayoutEffect} from 'react';
 import Styled from 'styled-components/native';
 import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp
 } from 'react-native-responsive-screen';
-import {FlatList, TouchableWithoutFeedback, Keyboard, ScrollView, Text, StyleSheet} from 'react-native';
+import {FlatList, TouchableWithoutFeedback, Keyboard, ScrollView, Text, StyleSheet, RefreshControl} from 'react-native';
 import {useSelector} from 'react-redux';
 import AboveKeyboard from 'react-native-above-keyboard';
 import {KeyboardAwareScrollView, KeyboardAwareFlatList} from 'react-native-keyboard-aware-scroll-view';
@@ -16,6 +16,7 @@ import FeedInformation from '~/Components/Presentational/FeedDetailScreen/FeedIn
 
 import {POSTComment, GetComment, PostReply} from '~/Route/Post/Comment';
 import DELETEComment from '~/Route/Post/DELETEComment';
+import { configure } from 'react-native-location';
 
 const Container = Styled.SafeAreaView`
  flex: 1;
@@ -344,6 +345,13 @@ const COMMENT_DATA =
   }
 ]
 
+const config = {
+  animation: 'timing',
+  config: {
+    duration: 0,
+  },
+};
+
 interface Props {
     navigation: any,
     route: any
@@ -366,6 +374,9 @@ const CommentListScreen = ({navigation, route}: Props) => {
     const [visibleMyCommentModal, setVisibleMyCommentModal] = useState<boolean>(false);
     const [selectedCommentId, setSelectedCommentId] = useState<number>();
     const [reloadComment, setReloadComment] = useState<boolean>(false);
+
+    const [refreshingComment, setRefreshingComment] = useState<boolean>(false);
+
     const currentUser = useSelector((state) => state.currentUser);
     const commentInputRef = useRef(null);
     
@@ -377,6 +388,16 @@ const CommentListScreen = ({navigation, route}: Props) => {
     const onKeyboardDidHide = () => {
         setKeyboardHeight(0);
     }
+
+    useLayoutEffect(() => {
+      navigation.setOptions({
+        transitionSpec: {
+          open: config,
+          close: config,
+        }
+      })
+    },[navigation, route])
+
 
     useEffect(() => {
       console.log("CommentListScreen navigation", navigation)
@@ -398,17 +419,23 @@ const CommentListScreen = ({navigation, route}: Props) => {
         if(route.params?.postId) {
             console.log("route.params.feedId", route.params.feedId);
             setPostId(route.params.postId);
-            GetComment(route.params.postId)
+            getCommentList();
+            
+        }
+    }, [route.params?.postId, reloadComment])
+
+    const getCommentList = () => {
+      GetComment(route.params.postId)
             .then(function(response) {
                 console.log("댓글 불러오기 성공", response.allComment)
+                setRefreshingComment(false);
                 setCommentList(response.allComment);
                 setAllCommentCount(response.allCommentCount)
             })
             .catch(function(error) {
                 console.log("댓글 불러오기 실패", error);
             })
-        }
-    }, [route.params?.postId, reloadComment])
+    }
 
     const clickToReply = (target: string, commentId: number) => {
         console.log("답글 달기", target);
@@ -468,9 +495,15 @@ const CommentListScreen = ({navigation, route}: Props) => {
    }}
 
    const navigateGoBack = () => {
-       navigation.navigate("FeedDetailScreen", {
-           commentList: commentList,
-       })
+      if(route.params?.pushAlarm) {
+        navigation.navigate("FeedDetailScreen", {
+            commentList: commentList,
+            feedId: route.params?.postId,
+            pushAlarm: true,
+        })
+      } else {
+        navigation.goBack();
+      }
    }
 
 
@@ -520,6 +553,11 @@ const CommentListScreen = ({navigation, route}: Props) => {
      navigation.navigate("CommentDeclareScreen", {
        commentId: selectingCommentId
      })
+   }
+
+   const onRefreshComment = () => {
+     setRefreshingComment(true);
+     getCommentList();
    }
 
    const renderReplyItem = ({item, index}: any) => {
@@ -612,6 +650,11 @@ const CommentListScreen = ({navigation, route}: Props) => {
      */}
      <KeyboardAwareScrollView
      showsVerticalScrollIndicator={false}
+     refreshControl={
+       <RefreshControl
+       refreshing={refreshingComment}
+       onRefresh={onRefreshComment}/>
+     }
      >
       <CommentListContainer>
          <FlatList

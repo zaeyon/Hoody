@@ -1,5 +1,5 @@
 import axios from 'axios';
-const baseUrl = "https://069fc9fc1c9a.ngrok.io";
+const baseUrl = "http://hoody-api-test-server-alb-349396782.ap-northeast-2.elb.amazonaws.com";
 
 const POSTCreateCollection = (coverImage, name, description, open, includeLocation, postIds) => {
     const url = baseUrl + "/collection/create";

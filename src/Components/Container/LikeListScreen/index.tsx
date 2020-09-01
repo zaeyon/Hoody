@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useLayoutEffect} from 'react';
 import Styled from 'styled-components/native';
 import {
     widthPercentageToDP as wp,
@@ -104,14 +104,29 @@ const LIKE_USER_DATA = [
     },
 ]
 
+const config = {
+    animation: 'timing',
+    config: {
+        duration: 0,
+    }
+}
+
 interface Props {
     navigation: any,
     route: any,
 }
 
 const LikeListScreen = ({navigation, route}: Props) => {
-
     const [likersListData, setLikersListData] = useState<Array<object>>([]);
+
+    useLayoutEffect(() => {
+        navigation.setOptions({
+            transitionSpec: {
+                open: config,
+                close: config,
+            }
+        })
+    }, [navigation, route])
 
     useEffect(() => {
         if(route.params?.likersList) {
@@ -119,6 +134,17 @@ const LikeListScreen = ({navigation, route}: Props) => {
             setLikersListData(route.params.likersList);
         }
     }, [route.params?.likersList])
+
+    const navigateGoBack = () => {
+        if(route.params?.pushAlarm) {
+            navigation.navigate("FeedDetailScreen", {
+                feedId: route.params?.postId,
+                pushAlarm: true,
+            })
+        } else {
+            navigation.goBack();
+        }
+    }
 
     const renderLikeItem = ({item,index}) => (
         <LikeItem
@@ -130,7 +156,7 @@ const LikeListScreen = ({navigation, route}: Props) => {
 
  return <Container>
      <HeaderBar>
-         <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
+         <TouchableWithoutFeedback onPress={() => navigateGoBack()}>
         <HeaderLeftContainer>
             <HeaderCancelIcon
             source={require('~/Assets/Images/HeaderBar/ic_X.png')}/>

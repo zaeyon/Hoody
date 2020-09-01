@@ -298,7 +298,7 @@ interface Props {
 var offset = 0;
 var limit = 20;
 
-const baseUrl = 'https://069fc9fc1c9a.ngrok.io'; 
+const baseUrl = 'http://hoody-api-test-server-alb-349396782.ap-northeast-2.elb.amazonaws.com'; 
 
 function FeedListScreen({navigation, route}: Props) {
   const [feedListData, setFeedListData] = useState([]);
@@ -322,13 +322,27 @@ function FeedListScreen({navigation, route}: Props) {
     // Assume a message-notification contains a "type" property in the data payload of the screen to open
     messaging().onNotificationOpenedApp(remoteMessage => {
       console.log('background state notification: ',remoteMessage);
-      if(remoteMessage.data.type === "like") {
+      if(remoteMessage.data.type === "comment") {
         navigation.navigate("FeedStack", {
           screen: "CommentListScreen",
           params: {
           postId: remoteMessage.data.postId,
+          pushAlarm: true,
           }
         })
+      } else if(remoteMessage.data.type === "like") {
+        navigation.navigate("FeedStack", {
+          screen: 'LikeListScreen',
+          params: {
+          postId: remoteMessage.data.postId,
+          pushAlarm: true,
+          }
+        })
+        
+      } else if(remoteMessage.data.type === "follow") {
+
+      } else if(remoteMessage.data.type === "reply") {
+        
       }
     });
 

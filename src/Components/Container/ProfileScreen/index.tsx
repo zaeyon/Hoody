@@ -564,7 +564,7 @@ const ProfileScreen = ({navigation, route}: Props) => {
   }
 
   const getFeedListData = () => {
-    GetProfileFeedByList(currentUser.user.nickname)
+    GetProfileFeedByList(currentUser.user?.nickname)
     .then(function(response) {
       setUserInfoData(response);
       if(response.followed == true) {

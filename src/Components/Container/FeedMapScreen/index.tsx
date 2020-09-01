@@ -591,7 +591,7 @@ const FeedMapScreen = ({navigation, route}: Props) => {
     <Container>
 <HeaderBar style={{marginTop:getStatusBarHeight()}}>
         <HeaderLeftContainer>
-            <HeaderTitleText>내 지도</HeaderTitleText>
+            <HeaderTitleText>지도</HeaderTitleText>
             <TouchableWithoutFeedback onPress={() => onRefreshFeedMap()}>
             <HeaderRefreshContainer>
               <HeaderRefreshIcon

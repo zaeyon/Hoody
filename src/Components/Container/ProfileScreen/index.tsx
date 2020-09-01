@@ -489,18 +489,19 @@ const ProfileScreen = ({navigation, route}: Props) => {
         setChangeProfileData(!changeProfileData);
         dispatch(allActions.userActions.setUserAllFeeds(response.posts));
         console.log("요청된 프로필 정보@@@", response);
-        let tmpLocationFeedList = new Array();
+
         let tmpFeedMapCount = 0;
         for(var i = 0; i < response.posts.length-1; i++) {
           if(response.posts[i].address) {
             console.log("위치정보 있는 게시글", response.posts[i])
             tmpFeedMapCount = tmpFeedMapCount + 1;
           }
-
-          setTimeout(() => {
-            setFeedMapCount(tmpFeedMapCount);
-          }, 10)
         }
+      
+        setTimeout(() => {
+          setFeedMapCount(tmpFeedMapCount);
+        }, 10)
+        
         var profileInfo = {
           email: currentUser.user.email,
           profileImage : response.profileImg,
@@ -572,6 +573,18 @@ const ProfileScreen = ({navigation, route}: Props) => {
       } else {
         setFollowed(false)
       }
+
+      let tmpFeedMapCount = 0;
+      for(var i = 0; i < response.posts.length-1; i++) {
+        if(response.posts[i].address) {
+          console.log("위치정보 있는 게시글", response.posts[i])
+          tmpFeedMapCount = tmpFeedMapCount + 1;
+        }
+      }
+    
+      setTimeout(() => {
+        setFeedMapCount(tmpFeedMapCount);
+      }, 10)
 
       setFeedListData(response.posts);
       setChangeProfileData(!changeProfileData);

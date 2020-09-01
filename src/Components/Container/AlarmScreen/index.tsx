@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {FlatList, TouchableWithoutFeedback} from 'react-native';
 import Styled from 'styled-components/native';
 import {
@@ -7,6 +7,9 @@ import {
 } from 'react-native-responsive-screen';
 
 import AlarmItem from '~/Components/Presentational/AlarmScreen/AlarmItem';
+
+// Route
+import GETNotificationList from '~/Route/Notification/GETNotificationList';
 
 const Container = Styled.SafeAreaView`
  flex: 1;
@@ -75,12 +78,35 @@ interface Props {
 }
 
 const AlarmScreen = ({navigation, route}: Props) => {
+    const [notificationListData, setNotificationListData] = useState<Array<object>>([]);
+    const [refreshing, setRefreshing] = useState<boolean>(false);
+
+    useEffect(() => {
+        getNotificationList();
+    }, [])
+    
+    const getNotificationList = () => {
+        GETNotificationList()
+        .then(function(response) {
+            console.log("알림 리스트 response", response);
+            setRefreshing(false);
+
+        })
+        .catch(function(error) {
+            console.log("알림 리스트error", error)
+        })
+    }
+
+    const onRefreshNotificationList = () => {
+        setRefreshing(true);
+        getNotificationList();
+    }
 
     const moveToAlarmSetting = () => {
         navigation.navigate("AlarmSettingScreen");
     }
 
-    const renderAlarmItem = ({item, index}) => {
+    const renderAlarmItem = ({item, index}: any) => {
         return (
             <AlarmItem/>
         )
@@ -103,7 +129,9 @@ const AlarmScreen = ({navigation, route}: Props) => {
             </HeaderBar>
             <AlarmListContainer>
                 <FlatList
-                data={TEST_ALARM_DATA}
+                refreshing={refreshing}
+                onRefresh={onRefreshNotificationList}
+                data={notificationListData}
                 renderItem={renderAlarmItem}/>
             </AlarmListContainer>
         </Container>

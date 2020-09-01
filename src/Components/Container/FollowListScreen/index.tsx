@@ -4,6 +4,7 @@ import {
     Text,
     FlatList,
     Dimensions,
+    RefreshControl,
 } from 'react-native';
 import Styled from 'styled-components/native';
 import {
@@ -72,12 +73,12 @@ width:${wp('100%')};
  flex: 1;
 `;
 
-const FollowerListContainer = Styled.View`
+const FollowerListContainer = Styled.ScrollView`
 background-color: #ffffff;
 flex: 1;
 `;
 
-const FollowingListContainer = Styled.View`
+const FollowingListContainer = Styled.ScrollView`
 background-color: #ffffff;
 flex: 1;
 `;
@@ -169,6 +170,10 @@ const FollowListScreen = ({navigation, route}:Props) => {
     const [followingListData, setFollowingListData] = useState<Array<object>>([]);
     const [followerListChange, setFollowerListChange] = useState<boolean>(false);
     const [followingListChange, setFollowingListChange] = useState<boolean>(false);
+
+    const [refreshingFollower, setRefreshingFollower] = useState<boolean>(false);
+    const [refreshingFollowing, setRefreshingFollowing] = useState<boolean>(false);
+
     const FollowTopTab = createMaterialTopTabNavigator();
     
 
@@ -224,24 +229,8 @@ const FollowListScreen = ({navigation, route}:Props) => {
                     console.log("GETProfileFriends error", error);
                 })
         }
-        /*
-        if(route.params?.nickname) {
-            console.log("닉네임 존재")
-            GETProfileFriends(requestedType, inputedNickname, requestedOffset, requestedLimit, route.params.nickname)
-            .then(function(response) {
-                console.log("GETProfileFriends response", response)
-                if(requestedType === "followers") {
-                    setFollowerListData(response);
-                } else if(requestedType === 'followings') {
-                    setFollowingListData(response);
-                }
-            })
-            .catch(function(error) {
-                console.log("GETProfileFriends error", error);
-            })
-        }
-        */
-    }, [/*route.params?.followerCount, route.params?.followingCount, route.params?.nickname*/])
+        
+    }, [])
     
     useEffect(() => {
             //setRequestedType(route.params.requestedType);
@@ -260,6 +249,49 @@ const FollowListScreen = ({navigation, route}:Props) => {
                 })
             }
     }, [])
+
+    const onRefreshFollower = () => {
+        //setRefreshingFollower(true);
+        GETProfileFriends("followers", inputedNickname, requestedOffset, requestedLimit, route.params.nickname)
+                .then(function(response) {
+                //setRefreshingFollower(false);
+                  console.log("GETProfileFriends response", response)
+                    setFollowerListData(response);
+                    GETProfileFriends("followings", inputedNickname, requestedOffset, requestedLimit, route.params.nickname)
+                .then(function(followingResponse) {
+                  console.log("GETProfileFriends response", followingResponse)
+                    setFollowingListData(followingResponse);
+                })
+                .catch(function(error) {
+                    console.log("GETProfileFriends error", error);
+                })
+                })
+                .catch(function(error) {
+                    console.log("GETProfileFriends error", error);
+                })
+    }
+
+    const onRefreshFollowing = () => {
+        //setRefreshingFollowing(true);
+        GETProfileFriends("followings", inputedNickname, requestedOffset, requestedLimit, route.params.nickname)
+                .then(function(followingResponse) {
+                  console.log("GETProfileFriends response", followingResponse)
+                    setFollowingListData(followingResponse);
+                    //setRefreshingFollowing(false);
+                    GETProfileFriends("followers", inputedNickname, requestedOffset, requestedLimit, route.params.nickname)
+                .then(function(response) {
+                  console.log("GETProfileFriends response", response)
+                    setFollowerListData(response);
+                })
+                .catch(function(error) {
+                    console.log("GETProfileFriends error", error);
+                })
+                })
+                .catch(function(error) {
+                    console.log("GETProfileFriends error", error);
+                })
+
+    }
 
     
     const onChangeSearchInput = (text: string) => {
@@ -311,6 +343,7 @@ const FollowListScreen = ({navigation, route}:Props) => {
 
         return (
             <FollowerTabContainer>
+                {/*
             <SearchContainer>
               <SearchInputContainer>
               <SearchInput
@@ -326,8 +359,15 @@ const FollowListScreen = ({navigation, route}:Props) => {
                 </SearchIconContainer>
                 </SearchInputContainer>
             </SearchContainer>
-            <FollowerListContainer>
+                */}
+            <FollowerListContainer
+            refreshControl={
+                <RefreshControl
+                refreshing={refreshingFollower}
+                onRefresh={onRefreshFollower}/>
+            }>
                 <FlatList
+                scrollEnabled={false}
                 data={followerListData}
                 renderItem={renderFollowItem}
                 />
@@ -354,6 +394,7 @@ const FollowListScreen = ({navigation, route}:Props) => {
 
         return (
             <FollowingTabContainer>
+                {/*
                 <SearchContainer>
               <SearchInputContainer>
               <SearchInput
@@ -369,8 +410,15 @@ const FollowListScreen = ({navigation, route}:Props) => {
                 </SearchIconContainer>
                 </SearchInputContainer>
             </SearchContainer>
-            <FollowingListContainer>
+                */}
+            <FollowingListContainer
+            refreshControl={
+                <RefreshControl
+                refreshing={refreshingFollowing}
+                onRefresh={onRefreshFollowing}/>
+            }>
                 <FlatList
+                scrollEnabled={false}
                 data={followingListData}
                 renderItem={renderFollowItem}
                 />

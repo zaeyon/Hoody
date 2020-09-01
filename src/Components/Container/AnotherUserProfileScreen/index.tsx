@@ -109,14 +109,15 @@ const MyProfileReportText = Styled.Text`
 
 const MyProfileReviewMapContainer = Styled.View`
 margin-left: 7px;
-width: ${wp('22%')};
  height: ${wp('9')};
  background-color: #FAFAFA;
  border-radius: 22px;
  border-width: 0.6px;
  border-color: #EFEFEF;
  flex-direction: row;
- justify-content: center;
+ padding-left: 10px;
+ padding-right: 10px;
+ justify-content: space-between;
  align-items: center;
 `;
 
@@ -347,6 +348,7 @@ const AnotherUserProfileScreen = ({navigation, route}: Props) => {
 
   const [refreshingProfileFeed, setRefreshingProfileFeed] = useState<boolean>(false);
   const [refreshingProfileCollection, setRefreshingProfileCollection] = useState<boolean>(false);
+  const [feedMapCount, setFeedMapCount] = useState<number>(0);
 
 
   const currentUser = useSelector((state) => state.currentUser);
@@ -370,6 +372,17 @@ const AnotherUserProfileScreen = ({navigation, route}: Props) => {
         setFeedListData(response.posts);
         setChangeProfileData(!changeProfileData);
         console.log("요청된 프로필 정보@@@", response);
+        let tmpFeedMapCount = 0;
+        for(var i = 0; i < response.posts.length-1; i++) {
+          if(response.posts[i].address) {
+            tmpFeedMapCount = tmpFeedMapCount + 1;
+          }
+        }
+
+        setTimeout(() => {
+          setFeedMapCount(tmpFeedMapCount);
+        }, 10)
+
         var profileInfo = {
           profileImage : response.profileImg,
           nickname: response.nickname,
@@ -414,6 +427,17 @@ const AnotherUserProfileScreen = ({navigation, route}: Props) => {
       } else {
         setFollowed(false)
       }
+
+      let tmpFeedMapCount = 0;
+        for(var i = 0; i < response.posts.length-1; i++) {
+          if(response.posts[i].address) {
+            tmpFeedMapCount = tmpFeedMapCount + 1;
+          }
+        }
+
+        setTimeout(() => {
+          setFeedMapCount(tmpFeedMapCount);
+        }, 10)
 
       setFeedListData(response.posts);
       setChangeProfileData(!changeProfileData);
@@ -549,7 +573,7 @@ const AnotherUserProfileScreen = ({navigation, route}: Props) => {
           <MyProfileReviewMapContainer>
             <MyProfileReviewMapImage
             source={require('~/Assets/Images/ic_reviewMap.png')}/>
-            <MyProfileReviewMapText>299</MyProfileReviewMapText>
+            <MyProfileReviewMapText>{feedMapCount}</MyProfileReviewMapText>
           </MyProfileReviewMapContainer>
           </TouchableWithoutFeedback>
         </HeaderRightContainer>

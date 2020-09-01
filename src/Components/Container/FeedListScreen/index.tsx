@@ -338,9 +338,11 @@ function FeedListScreen({navigation, route}: Props) {
           pushAlarm: true,
           }
         })
-        
       } else if(remoteMessage.data.type === "follow") {
-
+        navigation.navigate("AnotherUserProfileStack", {
+          screen: 'AnotherUserProfileScreen',
+          params: {requestedUserNickname: remoteMessage.data.userNickname}
+        });
       } else if(remoteMessage.data.type === "reply") {
         
       }
@@ -352,6 +354,30 @@ function FeedListScreen({navigation, route}: Props) {
       .then(remoteMessage => {
         if (remoteMessage) {
           console.log('quite state notification: ', remoteMessage);
+          if(remoteMessage.data.type === "comment") {
+            navigation.navigate("FeedStack", {
+              screen: "CommentListScreen",
+              params: {
+              postId: remoteMessage.data.postId,
+              pushAlarm: true,
+              }
+            })
+          } else if(remoteMessage.data.type === "like") {
+            navigation.navigate("FeedStack", {
+              screen: 'LikeListScreen',
+              params: {
+              postId: remoteMessage.data.postId,
+              pushAlarm: true,
+              }
+            })
+          } else if(remoteMessage.data.type === "follow") {
+            navigation.navigate("AnotherUserProfileStack", {
+              screen: 'AnotherUserProfileScreen',
+              params: {requestedUserNickname: remoteMessage.data.userNickname}
+            });
+          } else if(remoteMessage.data.type === "reply") {
+            
+          }
         }
       });
   });

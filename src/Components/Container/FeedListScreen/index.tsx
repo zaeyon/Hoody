@@ -10,7 +10,7 @@ import axios from 'axios';
 import allActions from '~/action';
 import {NavigationContainer} from '@react-navigation/native';
 import Geolocation from 'react-native-geolocation-service';
-
+import messaging from '@react-native-firebase/messaging';
 
 // Local Component
 //import FeedItem from '~/Components/Presentational/FeedListScreen/MomoizedFeedItem';
@@ -298,7 +298,7 @@ interface Props {
 var offset = 0;
 var limit = 20;
 
-const baseUrl = 'http://hoody-api-test-server-alb-349396782.ap-northeast-2.elb.amazonaws.com'; 
+const baseUrl = 'https://069fc9fc1c9a.ngrok.io'; 
 
 function FeedListScreen({navigation, route}: Props) {
   const [feedListData, setFeedListData] = useState([]);
@@ -316,6 +316,31 @@ function FeedListScreen({navigation, route}: Props) {
   const currentUser = useSelector((state: any) => state.currentUser);
   const home = useSelector((state: any) => state.home);
   const dispatch = useDispatch();
+
+
+  useEffect(() => {
+    // Assume a message-notification contains a "type" property in the data payload of the screen to open
+    messaging().onNotificationOpenedApp(remoteMessage => {
+      console.log('background state notification: ',remoteMessage);
+      if(remoteMessage.data.type === "like") {
+        navigation.navigate("FeedStack", {
+          screen: "CommentListScreen",
+          params: {
+          postId: remoteMessage.data.postId,
+          }
+        })
+      }
+    });
+
+    // Check whether an initial notification is available
+    messaging()
+      .getInitialNotification()
+      .then(remoteMessage => {
+        if (remoteMessage) {
+          console.log('quite state notification: ', remoteMessage);
+        }
+      });
+  });
 
   useEffect(() => {
     getFeedData();

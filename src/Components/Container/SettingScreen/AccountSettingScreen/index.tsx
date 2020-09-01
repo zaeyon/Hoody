@@ -7,6 +7,7 @@ import {
 } from 'react-native-responsive-screen';
 import {useDispatch, useSelector} from 'react-redux';
 import allActions from '~/action';
+import {setAutoLoginUser} from '~/AsyncStorage/User';
 
 // Route
 import GETLogout from '~/Route/Auth/GETLogout';
@@ -230,6 +231,7 @@ const AccountSettingScreen = ({navigation, route}: Props) => {
                    .then(function(response) {
                    console.log("logout response", response);
                    dispatch(allActions.userActions.logOut())
+                   setAutoLoginUser("","","","", "logout");
                 })
                 .catch(function(error) {
                 console.log("logout error", error);

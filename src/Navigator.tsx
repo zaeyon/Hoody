@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useCallback} from 'react';
-import {NavigationContainer, StackActions, StackRouter} from '@react-navigation/native';
+import {NavigationContainer, useNavigation} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
 import {Image, StyleSheet, Text, Alert} from 'react-native';
@@ -741,7 +741,7 @@ function BottomTab() {
   )
 }
 
-function AppNavigator() {
+function AppNavigator({navigation, route}: any) {
   const [currentUser, setAutoLoginUser] = useState({
     email:"",
     state:"logout",
@@ -752,6 +752,7 @@ function AppNavigator() {
   const [isAuthorized, setIsAuthorized] = useState<boolean>(false);
   const dispatch = useDispatch();
 
+
   useEffect(() => {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
       Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
@@ -759,7 +760,6 @@ function AppNavigator() {
   
     return unsubscribe;
   }, []);
-
 
   const handlePushToken = useCallback(async () => {
     const enabled = await messaging().hasPermission()
@@ -775,7 +775,11 @@ function AppNavigator() {
     }
   }, [])
 
+
   useEffect(() => {
+   // SplashScreen.hide();
+
+    
     getAutoLoginUser()
     .then(function(asyStorResponse) {
       console.log("responsegggg", asyStorResponse);
@@ -784,19 +788,22 @@ function AppNavigator() {
       if(asyStorResponse == "NoLogined") {
         SplashScreen.hide();
       } else if(asyStorResponse.userId) {
+        //SplashScreen.hide();
         POSTAutoLogin(asyStorResponse.userId, asyStorResponse.sessionId)
         .then(function(response) {
+          SplashScreen.hide();
           console.log("자동로그인 성공", response);
-          /*
+          console.log("이메일", asyStorResponse.email);
           dispatch(allActions.userActions.setUser({
             email: asyStorResponse.email,
-            profileImage: response.profileImg,
-            nickname: response.nickname,
-            description: response.description,
-            userId: response.id,
+            profileImage: response.user.profileImg,
+            nickname: response.user.nickname,
+            description: response.user.description,
+            userId: response.user.id,
           }))
-          */
-          SplashScreen.hide();
+          dispatch(
+            allActions.userActions.setInputedKeywordList([])
+          )          
         })
         .catch(function(error) {
           console.log("자동로그인 실패", error);
@@ -807,10 +814,10 @@ function AppNavigator() {
     .catch(function(error) {
       console.log("error", error);
     })
-      setTimeout(() => {
-      },10)
+    
   }, [])
   
+
   useEffect(() => {
     handlePushToken()
   }, [])

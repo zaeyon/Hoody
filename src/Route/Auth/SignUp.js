@@ -3,7 +3,7 @@ import allActions from '~/action';
 import AsyncStorage from '@react-native-community/async-storage';
 import {setAutoLoginUser} from '~/AsyncStorage/User';
 
-const baseUrl = 'http://hoody-api-test-server-alb-349396782.ap-northeast-2.elb.amazonaws.com';
+const baseUrl = 'https://069fc9fc1c9a.ngrok.io';
 
 const SignUp = (email, password, nickname, birthdate, gender, socialId, provider, fcmToken) => {
     const url = baseUrl + '/auth/signUp';

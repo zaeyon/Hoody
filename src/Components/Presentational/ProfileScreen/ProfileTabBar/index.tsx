@@ -116,11 +116,11 @@ const ProfileTabBar = createReactClass({
     const numberOfTabs = this.props.tabs.length;
     const tabUnderlineStyle = {
       position: 'absolute',
-      width: wp('11%'),
+      width: wp('10.5%'),
       height: 2,
       backgroundColor: 'black',
       bottom: 0,
-      left: 3,
+      left: 1.0,
       flex: 1,
       flexDirection:'row',
     };

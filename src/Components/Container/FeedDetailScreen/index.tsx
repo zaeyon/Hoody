@@ -832,7 +832,6 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
 
     const moveToCommentList = () => {
         console.log("postId", postId);
-
         navigation.navigate("CommentListScreen", {
             postId: postId,
             feedDetailInfo: feedDetailInfo,
@@ -895,7 +894,6 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
         .catch(function(error) {
           console.log("error", error);
         })
-      
     }
 
     const deleteLike = () => {
@@ -1068,13 +1066,15 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
      }, 10)
    }
 
-  
+   const navigateGoBack = () => {
+     navigation.navigate("FeedListScreen");
+   }
 
    return (
        <Container>
         <HeaderContainer>
         <LeftContainer>
-          <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
+          <TouchableWithoutFeedback onPress={() => navigateGoBack()}>
           <BackButton source={require('~/Assets/Images/HeaderBar/ic_back.png')} />
           </TouchableWithoutFeedback>
         </LeftContainer>

@@ -1,5 +1,5 @@
 import axios from 'axios';
-const baseUrl = 'http://hoody-api-test-server-alb-349396782.ap-northeast-2.elb.amazonaws.com'; 
+const baseUrl = 'https://069fc9fc1c9a.ngrok.io'; 
 
 const PostUpload = (desArray, mediaArray,mainTag, subTag1, subTag2, rating, expense,  location, longitude, latitude, certifiedLocation, dump, sequence, products, spendDate, openState, subTag1Exis, subTag2Exis) => {
     const url = baseUrl + "/post/upload"

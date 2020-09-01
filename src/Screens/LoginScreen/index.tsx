@@ -275,7 +275,7 @@ const LoginScreen = ({navigation}) => {
       console.log("올바른 이메일 형식 아님")
       setEmailInputState("unvalid");
     } else {
-      submitingEmail = email;
+    submitingEmail = email;
     submitingPassword = password;
     console.log('로그인 요청!! email', submitingEmail);
     console.log('로그인 요청!! password', submitingPassword);

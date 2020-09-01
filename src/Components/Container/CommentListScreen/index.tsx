@@ -379,6 +379,10 @@ const CommentListScreen = ({navigation, route}: Props) => {
     }
 
     useEffect(() => {
+      console.log("CommentListScreen navigation", navigation)
+    }, [])
+
+    useEffect(() => {
         Keyboard.addListener("keyboardDidShow", onKeyboardDidShow);
         Keyboard.addListener("keyboardDidHide", onKeyboardDidHide);
         return ():void => {
@@ -588,8 +592,8 @@ const CommentListScreen = ({navigation, route}: Props) => {
        </HeaderRightContainer>
      </HeaderBar>
      <HeaderBorder/>
+     {/*
      <FeedInformationContainer>
-
      <FeedInformation
      profileImage={route.params?.feedDetailInfo.user.profileImg}
      profileNickname={route.params?.feedDetailInfo.user.nickname}
@@ -604,6 +608,8 @@ const CommentListScreen = ({navigation, route}: Props) => {
      moveToWriterProfile={moveToWriterProfile}
      />
      </FeedInformationContainer>
+
+     */}
      <KeyboardAwareScrollView
      showsVerticalScrollIndicator={false}
      >

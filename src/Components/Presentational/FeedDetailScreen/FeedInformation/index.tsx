@@ -1,5 +1,11 @@
 import React from 'react';
-import {TouchableWithoutFeedback} from 'react-native'
+import {TouchableWithoutFeedback, View} from 'react-native'
+import {
+    Placeholder,
+    PlaceholderMedia,
+    PlaceholderLine,
+    Fade
+  } from "rn-placeholder";
 import Styled from 'styled-components/native';
 import {
     widthPercentageToDP as wp,
@@ -127,11 +133,38 @@ interface Props {
     location: string,
     expenseDate: string,
     moveToWriterProfile: () => void,
+    loadingFeedInfo: boolean,
 }
 
-const FeedInformation = ({profileImage, profileNickname, createdAt, mainTag, subTag1, subTag2, rating, expensePrice, location, expenseDate, moveToWriterProfile}: Props) => {
+const FeedInformation = ({profileImage, profileNickname, createdAt, mainTag, subTag1, subTag2, rating, expensePrice, location, expenseDate, moveToWriterProfile, loadingFeedInfo}: Props) => {
     return (
         <Container>
+            {loadingFeedInfo && (
+            <ProfileInfoContainer>
+            <Placeholder
+                Animation={Fade}>
+                <View style={{flexDirection:"row"}}>
+                <PlaceholderMedia
+                isRound={true}
+                style={{width: wp('6.9%'), height: wp('6.9%')}}/>
+                <PlaceholderLine 
+                style={{marginTop:7, marginLeft:10, width:wp('82.5%'), height: 15}}
+                />
+                </View>
+                <PlaceholderLine 
+                style={{marginTop:10, width:wp('92%')}}
+                height={20} />
+                <PlaceholderLine 
+                style={{marginTop:0, width:wp('92%')}}
+                height={12} />
+                <PlaceholderLine 
+                style={{marginTop:0, width: wp('92%')}}
+                height={12} />
+            </Placeholder>
+            </ProfileInfoContainer>
+            )}
+            {!loadingFeedInfo && (
+            <View>
             <ProfileInfoContainer>
                 <TouchableWithoutFeedback onPress={() => moveToWriterProfile()}>
                 <WriterProfileContainer>
@@ -173,6 +206,8 @@ const FeedInformation = ({profileImage, profileNickname, createdAt, mainTag, sub
                     </ExpenseDateText>
                 </LocationText>
             </LocationExpenseDateInfoContainer>
+            </View>
+            )}
         </Container>
     )
 }

@@ -6,6 +6,12 @@ import {
 } from 'react-native-responsive-screen';
 import {FlatList, Text, TouchableWithoutFeedback} from 'react-native';
 import { WebView } from 'react-native-webview';
+import {
+    Placeholder,
+    PlaceholderMedia,
+    PlaceholderLine,
+    Fade
+  } from "rn-placeholder";
 
 import ProductItem from '~/Components/Presentational/FeedDetailScreen/ProductItem';
 const Container = Styled.View`
@@ -56,10 +62,11 @@ interface Props {
     paragraphData: Array<Object>,
     navigation: any,
     moveToImageFull: () => void,
+    loadingFeedInfo: boolean,
 }
 
 
-const FeedContent = ({paragraphData, navigation, moveToImageFull}: Props) => {
+const FeedContent = ({paragraphData, navigation, moveToImageFull, loadingFeedInfo}: Props) => {
     const [paragraph, setParagraph] = useState();
 
     useEffect(() => {
@@ -109,11 +116,27 @@ const renderItem = ({item, index}: any) => {
 }
     return (
         <Container>
+            {loadingFeedInfo && (
+            <Placeholder
+            Animation={Fade}>
+                <PlaceholderLine
+                style={{marginTop: 10, marginLeft: 15, width: wp('92%')}}
+                height={12}/>
+                <PlaceholderLine
+                style={{marginTop: 5, marginLeft: 15, width: wp('92%')}}
+                height={12}/>
+                <PlaceholderLine
+                style={{marginTop: 5, marginLeft: 15, width: wp('92%')}}
+                height={12}/>
+            </Placeholder>
+            )}
+            {!loadingFeedInfo && (
             <FlatList
             showsVerticalScrollIndicator={false}
             style={{backgroundColor:"c3c3c3"}}
             data={paragraphData}
             renderItem={renderItem}/>
+            )}
         </Container>
     )
 }

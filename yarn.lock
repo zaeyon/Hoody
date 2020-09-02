@@ -10696,6 +10696,11 @@ rn-collapsing-tab-bar@^0.1.7:
     prop-types "^15.6.0"
     react-timer-mixin "^0.13.3"
 
+rn-placeholder@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/rn-placeholder/-/rn-placeholder-3.0.1.tgz#5073210e9d35791e379df9604414d3c6d531a3ee"
+  integrity sha512-hpJiCiNXMvljCaDFdjLATYmHaU2RZg8Nv+g/VaAdLzGIMlV7/pFxvR4B+tYd93iVOMbHuKDmfqGYobAlTHOVIw==
+
 rn-sliding-up-panel@^2.4.2:
   version "2.4.2"
   resolved "https://registry.yarnpkg.com/rn-sliding-up-panel/-/rn-sliding-up-panel-2.4.2.tgz#a42994b8e302775b9c6f539c450cf407c3fe2a60"

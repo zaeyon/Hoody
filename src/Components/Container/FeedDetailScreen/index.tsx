@@ -8,6 +8,12 @@ import {TouchableWithoutFeedback, Text, FlatList, ScrollView, StyleSheet, Alert,
 import {useSelector, useDispatch} from 'react-redux';
 import allActions from '~/action';
 import Modal from 'react-native-modal';
+import {
+  Placeholder,
+  PlaceholderMedia,
+  PlaceholderLine,
+  Fade
+} from "rn-placeholder";
 
 // location component
 import FeedContent from '~/Components/Presentational/FeedDetailScreen/FeedContent';
@@ -749,6 +755,7 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
     const [visibleReportModal, setVisibleReportModal] = useState<boolean>(false);
     const [imageUriArray, setImageUriArray] = useState<Array<string>>([]);
     const [refreshingFeedDetail, setRefreshingFeedDetail] = useState<boolean>(false);
+    const [loadingFeedInfo, setLoadingFeedInfo] = useState<boolean>(true)
 
     const currentUser = useSelector((state:any) => state.currentUser);
     const dispatch = useDispatch();
@@ -803,6 +810,7 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
         setCurrentUserLike(route.params.currentUserLike)
         setCurrentUserScrap(route.params.currentUserScrap);
         setRefreshingFeedDetail(false);
+        setLoadingFeedInfo(false)
     })
     .catch(function(error) {
         console.log("error", error);
@@ -1098,6 +1106,7 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
       showsVerticalScrollIndicator={false}>
       <InformationContainer>
    <FeedInformation
+   loadingFeedInfo={loadingFeedInfo}
    profileImage={feedDetailInfo.user.profileImg}
    profileNickname={feedDetailInfo.user.nickname}
    createdAt={createdDate}
@@ -1112,12 +1121,13 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
    />
       </InformationContainer>
           <FeedContent
+          loadingFeedInfo={loadingFeedInfo}
           moveToImageFull={moveToImageFull}
           navigation={navigation}
           paragraphData={paragraphData}
           ></FeedContent>
           </ScrollView>
-      <BottomBar>
+          <BottomBar>
           <InfoContainer>
             {!currentUserLike && (
             <TouchableWithoutFeedback onPress={() => addLike()}>

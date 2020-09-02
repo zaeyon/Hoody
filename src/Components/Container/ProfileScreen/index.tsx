@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {
-  FlatList, View, Text, Dimensions, TouchableOpacity, TouchableWithoutFeedback, SafeAreaView, StyleSheet, Picker, Alert
+  FlatList, View, Text, Dimensions, TouchableOpacity, TouchableWithoutFeedback, SafeAreaView, StyleSheet, Picker, Alert, ActivityIndicator
 } from 'react-native';
 
 import Styled from 'styled-components/native';
@@ -222,6 +222,14 @@ padding-right: 16px
 const PickerFinishText = Styled.Text`
  font-size: 16px;
  color: #267DFF;
+`;
+
+const LoadingContainer = Styled.View`
+ align-items: center;
+ margin-top: 300px;
+ width: ${wp('100%')};
+ height: ${hp('100%')};
+ background-color: #FFFFFF;
 `;
 
  
@@ -465,6 +473,10 @@ const ProfileScreen = ({navigation, route}: Props) => {
 
   const [refreshingProfileFeed, setRefreshingProfileFeed] = useState<boolean>(false);
   const [refreshingProfileCollection, setRefreshingProfileCollection] = useState<boolean>(false);
+  const [loadingProfileFeedByList, setLoadingProfileFeedByList] = useState<boolean>(true);
+  const [loadingProfileFeedByDate, setLoadingProfileFeedByDate] = useState<boolean>(true);
+  const [loadingProfileCollection, setLoadingProfileCollection] = useState<boolean>(true);
+
   const [feedMapCount, setFeedMapCount] = useState<number>(0);
 
   const currentUser = useSelector((state: any) => state.currentUser);
@@ -477,6 +489,7 @@ const ProfileScreen = ({navigation, route}: Props) => {
     console.log("currentUser.user.profileImage", currentUser.user.profileImage);
       GetProfileFeedByList(currentUser.user.nickname)
       .then(function(response) {
+        setLoadingProfileFeedByList(false);
         console.log(
         "GetProfileFeedByList response@@", response.posts)
         setUserInfoData(response);
@@ -518,6 +531,7 @@ const ProfileScreen = ({navigation, route}: Props) => {
 
       GETProfileFeedByDate(currentUser.user.nickname, getCurrentYear(new Date()) + "-" + getCurrentMonth(new Date()))
       .then(function(response) {
+        setLoadingProfileFeedByDate(false);
         console.log("GETProfileFeedByDate response", response)
         var tmpFeedListByDate = new Array();
 
@@ -541,6 +555,7 @@ const ProfileScreen = ({navigation, route}: Props) => {
 
       GetProfileCollection(currentUser.user.nickname)
       .then(function(response) {
+        setLoadingProfileCollection(false);
         console.log("GetProfileCollection response", response);
         console.log("GetProfileCollection response.profileUser.colllections", response.profileUser.collections)
         setCollectionListData(response.profileUser.collections);
@@ -614,6 +629,7 @@ const ProfileScreen = ({navigation, route}: Props) => {
   const getFeedListDataByDate = () => {
     GETProfileFeedByDate(currentUser.user.nickname, changingYear + "-" + changingMonth)
     .then(function(response) {
+      setLoadingProfileFeedByDate(false);
       setRefreshingProfileFeed(false);
       console.log("GETProfileFeedByDate response", response)
       var tmpFeedListByDate = new Array();
@@ -734,6 +750,7 @@ const ProfileScreen = ({navigation, route}: Props) => {
     setVisibleYearPicker(false);
 
     if(changingYear != selectedYear) {
+      setLoadingProfileFeedByDate(true);
       setSelectedYear(changingYear)
       getFeedListDataByDate()
     }
@@ -753,6 +770,7 @@ const ProfileScreen = ({navigation, route}: Props) => {
     setVisibleMonthPicker(false);
 
     if(changingMonth != selectedMonth) {
+      setLoadingProfileFeedByDate(true);
       setSelectedMonth(changingMonth);
       getFeedListDataByDate()
     }
@@ -847,6 +865,8 @@ const ProfileScreen = ({navigation, route}: Props) => {
       <FeedListTabContainer onLayout={(event) => measureFeedListTab(event)}
       tabLabel='게시글'>
        <ProfileFeedList
+       loadingProfileFeedByList={loadingProfileFeedByList}
+       loadingProfileFeedByDate={loadingProfileFeedByDate}
        userProfileInfo={userProfileInfo}
        navigation={navigation}
        feedListData={currentUser.userAllFeeds ? currentUser.userAllFeeds : []}

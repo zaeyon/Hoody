@@ -1,5 +1,5 @@
 import React, {useEffect, useState, useMemo} from 'react';
-import {TouchableWithoutFeedback, FlatList, View, Keyboard, ScrollView, RefreshControl} from 'react-native';
+import {TouchableWithoutFeedback, FlatList, View, Keyboard, ScrollView, RefreshControl, ActivityIndicator} from 'react-native';
 import Styled from 'styled-components/native';
 import {
   widthPercentageToDP as wp,
@@ -97,6 +97,14 @@ width: ${wp('100%')}px;
 top: 0px;
 position: absolute;
 background-color: #ffffff;
+`;
+
+const ActivityIndicatorContainer = Styled.View`
+ flex: 1;
+ background-color:#FFFFFF;
+ align-items: center;
+ justify-content: center;
+ padding-bottom: 100px;
 `;
 
 const TEST_FEED_DATA = [
@@ -312,7 +320,7 @@ function FeedListScreen({navigation, route}: Props) {
   const [refreshing, setRefreshing] = useState<boolean>(false);
   const [onRefreshFeedList, setOnRefreshFeedList] = useState<boolean>(false);
   const [noMoreFeedListData, setNoMoreFeedListData] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const currentUser = useSelector((state: any) => state.currentUser);
   const home = useSelector((state: any) => state.home);
   const dispatch = useDispatch();
@@ -435,6 +443,7 @@ function FeedListScreen({navigation, route}: Props) {
     console.log("파드 목록 가져오기 성공@@@", response);
     setFeedListData(response.result);
     //dispatch(allActions.feedListAction.setHomeFeedList(response.result));
+    setLoading(false);
     setRefreshing(false)
     setOnRefreshFeedList(!onRefreshFeedList)
   })
@@ -497,7 +506,6 @@ function FeedListScreen({navigation, route}: Props) {
   } 
 
   const loadMoreFeedListData = () => {
-    setLoading(true);
     if(noMoreFeedListData) {
       return
     }
@@ -513,10 +521,8 @@ function FeedListScreen({navigation, route}: Props) {
        if(response.data.result.length === 0) {
          console.log("더이상 불러올 데이터 없음", feedListData);
          setNoMoreFeedListData(true);
-         setLoading(false);
        } else if(response.data.result.length > 0) {
          console.log("불러올 데이터 존재")
-         setLoading(false);
          setFeedListData(feedListData.concat(response.data.result))
        }
        })
@@ -561,6 +567,13 @@ function FeedListScreen({navigation, route}: Props) {
           <HeaderTitleText>피드</HeaderTitleText>
           </HeaderLeftContainer>
       </HeaderBar>
+      {loading && (
+        <ActivityIndicatorContainer>
+          <ActivityIndicator
+          size={"small"}/>
+        </ActivityIndicatorContainer>
+      )}
+      {!loading && (
       <ScrollView
       style={{backgroundColor:'#FFFFFF'}}
       showsVerticalScrollIndicator={false}
@@ -588,6 +601,7 @@ function FeedListScreen({navigation, route}: Props) {
       )}
       </BodyContainer>
       </ScrollView>
+      )}
     </Container>
   );
 }

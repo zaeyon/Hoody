@@ -4,6 +4,7 @@ import {
      FlatList,
      ScrollView,
      RefreshControl,
+     ActivityIndicator,
     } from 'react-native';
 import Styled from 'styled-components/native';
 import {
@@ -144,6 +145,14 @@ const PopularFeedListByLocationContainer = Styled.View`
  padding-bottom: 100px;
 `;
 
+const ActivityIndicatorContainer = Styled.View`
+ width: ${wp('100%')};
+ height: ${hp('100%')};
+ background-color:#FFFFFF;
+ align-items: center;
+ margin-top: 300px;
+`;
+
 interface Props {
     navigation: any,
     route: any,
@@ -169,6 +178,12 @@ const ExploreScreen = ({navigation, route}: Props) => {
     const [recommendSubCollectionListData, setRecommendSubCollectionListData] = useState<Array<object>>([]);
     const [hotPlaceData, setHotPlaceData] = useState<object>({});
     const [refreshingRecommendData, setRefreshingRecommendData] = useState<boolean>(false);
+
+    const [loadingRecommendUser, setLoadingRecommendUser] = useState<boolean>(true);
+    const [loadingTrendTag, setLoadingTrendTag] = useState<boolean>(true);
+    const [loadingPopularTag, setLoadingPopularTag] = useState<boolean>(true);
+
+    const [loadingAll, setLoadingAll] = useState<boolean>(true);
 
     useEffect(() => {
         getRecommendData()
@@ -196,6 +211,7 @@ const ExploreScreen = ({navigation, route}: Props) => {
         .then(function(response) {
             console.log("GETRecommendUser response", response);
             setRecommendUserListData(response);
+            setLoadingRecommendUser(false);
         })
         .catch(function(error) {
             console.log("GETRecommendUser error", error);
@@ -205,6 +221,7 @@ const ExploreScreen = ({navigation, route}: Props) => {
         .then(function(response) {
             console.log("GETTrendTags response", response);
             setTrendTagsListData(response);
+            setLoadingTrendTag(false);
         })
         .catch(function(error) {
             console.log("GETTrendTags error", error);
@@ -212,6 +229,7 @@ const ExploreScreen = ({navigation, route}: Props) => {
 
         GETAgeGroupPopularTag()
         .then(function(response) {
+            setLoadingPopularTag(false);
             var tmpAgeGroupPopularTagListData = new Array();
             console.log("GETAgeGroupPopularTag response", response);
             var index = 0;
@@ -248,15 +266,19 @@ const ExploreScreen = ({navigation, route}: Props) => {
             console.log("GETRecommendCollection error", error);
         })
 
-        GETHotPlace()
-        .then(function(response) {
-            console.log("GETHotPlace response", response)
-            setHotPlaceData(response);
-            setRefreshingRecommendData(false);
-        })
-        .catch(function(error) {
-            console.log("GETHotPlace error", error);
-        })
+        setTimeout(() => {
+            GETHotPlace()
+            .then(function(response) {
+                console.log("GETHotPlace response", response)
+                setHotPlaceData(response);
+                setRefreshingRecommendData(false);
+                setLoadingAll(false);
+            })
+            .catch(function(error) {
+                console.log("GETHotPlace error", error);
+            })
+        }, 100)
+
 
     }
 
@@ -308,6 +330,12 @@ const ExploreScreen = ({navigation, route}: Props) => {
                 </HeaderMarkerContainer>
                 </TouchableWithoutFeedback>
             </HeaderBar>
+            {loadingAll && (
+            <ActivityIndicatorContainer>
+                <ActivityIndicator/>
+            </ActivityIndicatorContainer>
+            )}
+            {!loadingAll && (
             <ScrollView
             showsVerticalScrollIndicator={false}
             refreshControl={
@@ -318,18 +346,21 @@ const ExploreScreen = ({navigation, route}: Props) => {
             <BodyContainer>
             <RecommendUserContainer>
             <RecommendUser
+            loadingRecommendUser={loadingRecommendUser}
             navigation={navigation}
             recommendUserListData={recommendUserListData}
             />
             </RecommendUserContainer>
             <RecommendTagBannerContainer>
             <RecommendTagBanner
+            loadingTrendTag={loadingTrendTag}
             trendTagsListData={trendTagsListData}
             navigation={navigation}
             />
             </RecommendTagBannerContainer>
             <PopularTagByAgeGroupContainer>
                 <PopularTagByAgeGroup
+                loadingPopularTag={loadingPopularTag}
                 navigation={navigation}
                 ageGroupPopularTagListData={ageGroupPopularTagListData}
                 selectPopularTag={selectPopularTag}
@@ -357,6 +388,7 @@ const ExploreScreen = ({navigation, route}: Props) => {
             </PopularFeedListByLocationContainer>
             </BodyContainer>
             </ScrollView>
+            )}
         </Container>
     )
 }

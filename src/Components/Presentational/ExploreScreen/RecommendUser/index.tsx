@@ -6,6 +6,12 @@ import {
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import {useSelector} from 'react-redux';
+import {
+    Placeholder,
+    PlaceholderMedia,
+    PlaceholderLine,
+    Fade
+} from 'rn-placeholder'
 
 const Container = Styled.View`
  background-color: #ffffff;
@@ -25,6 +31,7 @@ const RecommendUserText = Styled.Text`
 
 const RecommendUserListContainer = Styled.View`
 padding-bottom: 10px;
+flex-direction: row;
 `;
 
 const RecommendUserItemContainer = Styled.View`
@@ -75,9 +82,10 @@ const TEST_Recommend_USER = [
 interface Props {
     navigation: any,
     recommendUserListData: Array<object>,
+    loadingRecommendUser: boolean,
 }
 
-const RecommendUser = ({navigation, recommendUserListData}: Props) => {
+const RecommendUser = ({navigation, recommendUserListData, loadingRecommendUser}: Props) => {
 
     const currentUser = useSelector((state) => state.currentUser);
 
@@ -108,9 +116,47 @@ const RecommendUser = ({navigation, recommendUserListData}: Props) => {
 
     return (
         <Container>
-            <HeaderContainer>
-            <RecommendUserText>추천 친구</RecommendUserText>
-            </HeaderContainer>
+        <HeaderContainer>
+        <RecommendUserText>추천 친구</RecommendUserText>
+        </HeaderContainer>
+            {loadingRecommendUser && (
+                <Placeholder
+                Animation={Fade}>
+                    <RecommendUserListContainer>
+                    <RecommendUserItemContainer style={styles.firstUserItem}>
+                        <PlaceholderMedia
+                        style={{width:wp("12%"), height:wp("12%"), borderRadius:100}}/>
+                        <PlaceholderLine
+                        style={{marginTop: 8,width:55, height: 10}}/>
+                    </RecommendUserItemContainer>
+                    <RecommendUserItemContainer>
+                        <PlaceholderMedia
+                        style={{width:wp("12%"), height:wp("12%"), borderRadius:100}}/>
+                        <PlaceholderLine
+                        style={{marginTop: 8,width:55, height: 10}}/>
+                    </RecommendUserItemContainer>
+                    <RecommendUserItemContainer>
+                        <PlaceholderMedia
+                        style={{width:wp("12%"), height:wp("12%"), borderRadius:100}}/>
+                        <PlaceholderLine
+                        style={{marginTop: 8,width:55, height: 10}}/>
+                    </RecommendUserItemContainer>
+                    <RecommendUserItemContainer>
+                        <PlaceholderMedia
+                        style={{width:wp("12%"), height:wp("12%"), borderRadius:100}}/>
+                        <PlaceholderLine
+                        style={{marginTop: 8,width:55, height: 10}}/>
+                    </RecommendUserItemContainer>
+                    <RecommendUserItemContainer style={styles.lastUserItem}>
+                        <PlaceholderMedia
+                        style={{width:wp("12%"), height:wp("12%"), borderRadius:100}}/>
+                        <PlaceholderLine
+                        style={{marginTop: 8,width:55, height: 10}}/>
+                    </RecommendUserItemContainer>
+                    </RecommendUserListContainer>
+                </Placeholder>
+            )}
+            {!loadingRecommendUser && (
             <RecommendUserListContainer>
                 <FlatList
                 showsHorizontalScrollIndicator={false}
@@ -118,6 +164,7 @@ const RecommendUser = ({navigation, recommendUserListData}: Props) => {
                 data={recommendUserListData}
                 renderItem={renderRecommendUserItem}/>
             </RecommendUserListContainer>
+            )}
         </Container>
     )
 }

@@ -4,7 +4,7 @@ import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp
 } from 'react-native-responsive-screen';
-import {FlatList, Text, TouchableWithoutFeedback} from 'react-native';
+import {FlatList, Text, TouchableWithoutFeedback, ActivityIndicator} from 'react-native';
 import { WebView } from 'react-native-webview';
 import {
     Placeholder,
@@ -121,9 +121,6 @@ const renderItem = ({item, index}: any) => {
             Animation={Fade}>
                 <PlaceholderLine
                 style={{marginTop: 10, marginLeft: 15, width: wp('92%')}}
-                height={12}/>
-                <PlaceholderLine
-                style={{marginTop: 5, marginLeft: 15, width: wp('92%')}}
                 height={12}/>
                 <PlaceholderLine
                 style={{marginTop: 5, marginLeft: 15, width: wp('92%')}}

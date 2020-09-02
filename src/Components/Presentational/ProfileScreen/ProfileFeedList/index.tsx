@@ -5,7 +5,7 @@ import {
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import {FlatList, SectionList, Picker, TouchableWithoutFeedback, StyleSheet} from 'react-native';
+import {FlatList, SectionList, Picker, TouchableWithoutFeedback, StyleSheet, ActivityIndicator} from 'react-native';
 import {useSelector} from 'react-redux';
 import Modal from 'react-native-modal'
 
@@ -116,6 +116,14 @@ const PickerFinishText = Styled.Text`
  color: #267DFF;
 `;
 
+const LoadingContainer = Styled.View`
+ align-items: center;
+ margin-top: 170px;
+ width: ${wp('100%')};
+ height: ${hp('100%')};
+ background-color: #FFFFFF;
+`;
+
   const TEST_SECTION_DATA = [
     {
       title: '30일',
@@ -149,9 +157,11 @@ const PickerFinishText = Styled.Text`
     selectedYear: number,
     selectedMonth: number,
     userProfileInfo: object,
+    loadingProfileFeedByList: boolean,
+    loadingProfileFeedByDate: boolean,
   }
 
-const ProfileFeedList = ({navigation, route, feedListData, currentSortType, onScrollPostList, feedListDataByDate, requestNickname, openYearPicker, openMonthPicker, selectedYear, selectedMonth, userProfileInfo}: Props) => {
+const ProfileFeedList = ({navigation, route, feedListData, currentSortType, onScrollPostList, feedListDataByDate, requestNickname, openYearPicker, openMonthPicker, selectedYear, selectedMonth, userProfileInfo, loadingProfileFeedByList, loadingProfileFeedByDate}: Props) => {
 
   const getCurrentYear = (date: Date) => {
     return date.getFullYear();
@@ -216,22 +226,32 @@ const ProfileFeedList = ({navigation, route, feedListData, currentSortType, onSc
 
     return (
         <UserFeedListContainer>
-          {!feedListData[0] && (
+          {!feedListData[0] && !loadingProfileFeedByList && !loadingProfileFeedByDate && (
         <NoFeedContainer>
         <NoFeedText>
           등록된 후기가 없어요.
         </NoFeedText>
       </NoFeedContainer>
           )}
-         {(currentSortType === 'list') && feedListData[0] && (
+          {loadingProfileFeedByList && (
+          <LoadingContainer>
+            <ActivityIndicator/>
+          </LoadingContainer>
+          )}
+         {(currentSortType === 'list') && feedListData[0] && !loadingProfileFeedByList && (
         <ListTypeFeedContainer>
         <FlatList
         scrollEnabled={false}
-scrollEventThrottle={5}
+        scrollEventThrottle={5}
         data={currentUser.user.nickname === requestNickname ? currentUser.userAllFeeds : feedListData}
         renderItem={renderProfileListFeedItem}
         />
         </ListTypeFeedContainer>
+         )}
+         {loadingProfileFeedByDate && (
+          <LoadingContainer>
+            <ActivityIndicator/>
+          </LoadingContainer>
          )}
         {(currentSortType === 'tile')  && feedListData[0] && (
         <TileTypeFeedContainer>
@@ -248,68 +268,25 @@ scrollEventThrottle={5}
           </TouchableWithoutFeedback>
           </SelectingDateContainer>
           <ExpenseDaySectionListContainer>
-          <SectionList
-          scrollEnabled={false}
-          onScroll={onScrollPostList}
-          sections={feedListDataByDate}
-          renderItem={renderProfileTileFeedItem}
-          renderSectionHeader={({ section: {title}}) => (
+            {loadingProfileFeedByDate && (
+              <LoadingContainer>
+                <ActivityIndicator/>
+              </LoadingContainer>
+            )}
+            {!loadingProfileFeedByDate && (
+            <SectionList
+            scrollEnabled={false}
+            onScroll={onScrollPostList}
+            sections={feedListDataByDate}
+            renderItem={renderProfileTileFeedItem}
+            renderSectionHeader={({ section: {title}}) => (
             <ExpenseDayText>{title+"일"}</ExpenseDayText>
-          )}
+            )}
           />
+            )}
           </ExpenseDaySectionListContainer>
         </TileTypeFeedContainer>
         )}
-        {/*
-          <Modal
-          isVisible={visibleYearPicker}
-          onBackdropPress={() => cancelYearPicker()}
-          backdropOpacity={0.25}
-          style={styles.modalView}>
-          <YearPickerContainer>
-            <Picker
-            selectedValue={changingYear}
-            onValueChange={(itemValue, itemIndex) => setChangingYear(itemValue)}>
-            {YEAR_LIST.map((year) => {
-              return (
-                <Picker.Item label={year+"년"} value={year}/>
-              )
-            })}
-            </Picker>
-            <PickerHeaderContainer>
-              <TouchableWithoutFeedback onPress={() => selectYearPicker()}>
-              <PickerFinishContainer>
-                <PickerFinishText>완료</PickerFinishText>
-              </PickerFinishContainer>
-              </TouchableWithoutFeedback>
-            </PickerHeaderContainer>
-          </YearPickerContainer>
-          </Modal>
-          <Modal
-          isVisible={visibleMonthPicker}
-          onBackdropPress={() => cancelMonthPicker()}
-          backdropOpacity={0.25}
-          style={styles.modalView}>
-          <MonthPickerContainer>
-            <Picker
-            selectedValue={changingMonth}
-            onValueChange={(itemValue, itemIndex) => setChangingMonth(itemValue)}>
-            {MONTH_LIST.map((month) => {
-              return (
-                <Picker.Item label={month+"월"} value={month}/>
-              )
-            })}
-            </Picker>
-            <PickerHeaderContainer>
-              <TouchableWithoutFeedback onPress={() => selectMonthPicker()}>
-              <PickerFinishContainer>
-                <PickerFinishText>완료</PickerFinishText>
-              </PickerFinishContainer>
-              </TouchableWithoutFeedback>
-            </PickerHeaderContainer>
-          </MonthPickerContainer>
-          </Modal>
-          */}
        </UserFeedListContainer>
     )
 }

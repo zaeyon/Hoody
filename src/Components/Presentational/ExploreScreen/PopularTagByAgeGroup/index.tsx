@@ -4,6 +4,7 @@ import {
     FlatList,
     StyleSheet,
     TouchableWithoutFeedback,
+    View
 } from 'react-native'
 import {
     widthPercentageToDP as wp,
@@ -12,8 +13,12 @@ import {
 
 import TileFeedItem from '~/Components/Presentational/ExploreScreen/TileFeedItem';
 
-
-
+import {
+  Placeholder,
+  PlaceholderLine,
+  PlaceholderMedia,
+  Fade,
+} from 'rn-placeholder'
 
 const Container = Styled.View`
  background-color: #ffffff;
@@ -36,6 +41,7 @@ const AgeGroupText = Styled.Text`
 const PopularTagListContainer = Styled.View`
 padding-top: 2px;
 padding-bottom: 4px;
+flex-direction: row;
 `;
 
 const PopularTagItemBackground = Styled.View`
@@ -61,308 +67,16 @@ const SelectTagFeedListContainer = Styled.View`
  
 `;
 
-const TEST_POPULARY_TAG = [
-    {
-        name: "Tag",
-        selected: false,
-    },
-    {
-        name: "Tag",
-        selected: false,
-    },
-    {
-        name: "을지로",
-        selected: false,
-    },
-    {
-        name: "피자나라치킨공주",
-        selected: false,
-    },
-    {
-        name: "재난지원금",
-        selected: false,
-    }
-]
-
-
-const TEST_FEED_DATA = [
-    {
-      id: 1,
-      user : {
-        profileImg: 'https://t1.daumcdn.net/thumb/R600x0/?fname=https%3A%2F%2Ft1.daumcdn.net%2Fqna%2Fimage%2F1542632018000000528',
-        nickname: '테스트닉네임'
-      },
-      createAt: '2020-05-22',
-      starRate: 2.5,
-      likes: 13,
-      hits: 2,
-      mainTags : {
-        name: '메인태그'
-      },
-      subTagOnes: {
-        name: '서브태그1'
-      },
-      subTagTwos: {
-        name: '서브태그2'
-      },
-      address : {
-        address: '블루문 스터디 카페'
-      },
-      expense: 2000,
-      descriptions: [
-        {
-          description: "이번 남자친구가 선물해준 키엘 수분 크림을 사용해 봤는데 너무 좋은거 같아요 이번에 남자 ..."
-        },
-        {
-          description: "내용2"
-        }
-      ],
-      mediaFiles: [
-        {
-          type: 'image',
-          url: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fk.kakaocdn.net%2Fdn%2Fb8lOJh%2FbtqBtL2bmwP%2FkUzXrFiEIRfFUKWowimMRk%2Fimg.jpg'
-        },
-        {
-          type: 'image',
-          url: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fk.kakaocdn.net%2Fdn%2FJUreB%2FbtqCpQUtIUD%2Ff2rOUTYmBhgNc4rDxbreU0%2Fimg.jpg'
-        }
-      ],
-      paragraphData: [
-        {
-          type:"description",
-          description: "내용1"
-        },
-        {
-          type:"image",
-          url: 'https://img1.daumcdn.net/thumb/R720x0/?fname=https%3A%2F%2Ft1.daumcdn.net%2Fliveboard%2Fdailylife%2F6d8abd51eb3644958240a9ca6ddf28bd.JPG',
-        },
-        {
-          type:"description",
-          description: "내용2"
-        },
-        {
-          type: 'image',
-          url: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fk.kakaocdn.net%2Fdn%2Fb8lOJh%2FbtqBtL2bmwP%2FkUzXrFiEIRfFUKWowimMRk%2Fimg.jpg'
-        }
-      ]
-    },
-    {
-      id: 2,
-      user : {
-        profileImg: 'https://t1.daumcdn.net/thumb/R600x0/?fname=https%3A%2F%2Ft1.daumcdn.net%2Fqna%2Fimage%2F1542632018000000528',
-        nickname: '하하'
-      },
-      createAt: '2020-06-22',
-      starRate: 4,
-      likes: 13,
-      hits: 2,
-      mainTags : {
-        name: '스타벅스'
-      },
-      subTagOnes: {
-        name: '아이스아메리카노'
-      },
-      subTagTwos: {
-        name: '아아'
-      },
-      address : {
-        address: '범계역 스타벅스'
-      },
-      expense: 2000,
-      descriptions: [
-        {
-          description: "범계역 스타벅스에서 BLT 샌드위치를 먹었다."
-        },
-        {
-          description: "ㅎ"
-        }
-      ],
-      mediaFiles: [
-        {
-          type: 'image',
-          url: 'https://img1.daumcdn.net/thumb/R720x0/?fname=https%3A%2F%2Ft1.daumcdn.net%2Fliveboard%2Fdailylife%2F6d8abd51eb3644958240a9ca6ddf28bd.JPG'
-        }
-      ],
-      paragraphData: [
-        {
-          type:"description",
-          description: "내용1"
-        },
-        {
-          type:"image",
-          url: 'https://img1.daumcdn.net/thumb/R720x0/?fname=https%3A%2F%2Ft1.daumcdn.net%2Fliveboard%2Fdailylife%2F6d8abd51eb3644958240a9ca6ddf28bd.JPG',
-        },
-        {
-          type:"description",
-          description: "내용2"
-        }
-      ]
-    },
-    {
-      id: 3,
-      user : {
-        profileImg: 'https://t1.daumcdn.net/thumb/R600x0/?fname=https%3A%2F%2Ft1.daumcdn.net%2Fqna%2Fimage%2F1542632018000000528',
-        nickname: '테스트닉네임'
-      },
-      createAt: '2020-05-22',
-      starRate: 2.5,
-      likes: 13,
-      hits: 2,
-      mainTags : {
-        name: '메인태그'
-      },
-      subTagOnes: {
-        name: '서브태그1'
-      },
-      subTagTwos: {
-        name: '서브태그2'
-      },
-      address : {
-        address: '블루문 스터디 카페'
-      },
-      expense: 2000,
-      descriptions: [
-        {
-          description: "이번 남자친구가 선물해준 키엘 수분 크림을 사용해 봤는데 너무 좋은거 같아요 이번에 남자 ..."
-        },
-        {
-          description: "내용2"
-        }
-      ],
-      mediaFiles: [
-        {
-          type: 'image',
-          url: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fk.kakaocdn.net%2Fdn%2Fb8lOJh%2FbtqBtL2bmwP%2FkUzXrFiEIRfFUKWowimMRk%2Fimg.jpg'
-        },
-        {
-          type: 'image',
-          url: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fk.kakaocdn.net%2Fdn%2FJUreB%2FbtqCpQUtIUD%2Ff2rOUTYmBhgNc4rDxbreU0%2Fimg.jpg'
-        },
-        {
-          type: 'image',
-          url: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fk.kakaocdn.net%2Fdn%2FJUreB%2FbtqCpQUtIUD%2Ff2rOUTYmBhgNc4rDxbreU0%2Fimg.jpg'
-        }
-      ],
-      paragraphData: [
-        {
-          type:"description",
-          description: "내용1"
-        },
-        {
-          type:"image",
-          url: 'https://img1.daumcdn.net/thumb/R720x0/?fname=https%3A%2F%2Ft1.daumcdn.net%2Fliveboard%2Fdailylife%2F6d8abd51eb3644958240a9ca6ddf28bd.JPG',
-        },
-        {
-          type:"description",
-          description: "내용2"
-        },
-        {
-          type: 'image',
-          url: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fk.kakaocdn.net%2Fdn%2Fb8lOJh%2FbtqBtL2bmwP%2FkUzXrFiEIRfFUKWowimMRk%2Fimg.jpg'
-        }
-      ]
-    },
-    {
-        id: 4,
-        user : {
-          profileImg: 'https://t1.daumcdn.net/thumb/R600x0/?fname=https%3A%2F%2Ft1.daumcdn.net%2Fqna%2Fimage%2F1542632018000000528',
-          nickname: '테스트닉네임'
-        },
-        createAt: '2020-05-22',
-        starRate: 2.5,
-        likes: 13,
-        hits: 2,
-        mainTags : {
-          name: '메인태그'
-        },
-        subTagOnes: {
-          name: '서브태그1'
-        },
-        subTagTwos: {
-          name: '서브태그2'
-        },
-        address : {
-          address: '블루문 스터디 카페'
-        },
-        expense: 2000,
-        descriptions: [
-          {
-            description: "이번 남자친구가 선물해준 키엘 수분 크림을 사용해 봤는데 너무 좋은거 같아요 이번에 남자 ..."
-          },
-          {
-            description: "내용2"
-          }
-        ],
-        mediaFiles: [
-          {
-            type: 'image',
-            url: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fk.kakaocdn.net%2Fdn%2Fb8lOJh%2FbtqBtL2bmwP%2FkUzXrFiEIRfFUKWowimMRk%2Fimg.jpg'
-          },
-          {
-            type: 'image',
-            url: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fk.kakaocdn.net%2Fdn%2FJUreB%2FbtqCpQUtIUD%2Ff2rOUTYmBhgNc4rDxbreU0%2Fimg.jpg'
-          },
-          {
-            type: 'image',
-            url: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fk.kakaocdn.net%2Fdn%2FJUreB%2FbtqCpQUtIUD%2Ff2rOUTYmBhgNc4rDxbreU0%2Fimg.jpg'
-          }
-        ],
-        paragraphData: [
-          {
-            type:"description",
-            description: "내용1"
-          },
-          {
-            type:"image",
-            url: 'https://img1.daumcdn.net/thumb/R720x0/?fname=https%3A%2F%2Ft1.daumcdn.net%2Fliveboard%2Fdailylife%2F6d8abd51eb3644958240a9ca6ddf28bd.JPG',
-          },
-          {
-            type:"description",
-            description: "내용2"
-          },
-          {
-            type: 'image',
-            url: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fk.kakaocdn.net%2Fdn%2Fb8lOJh%2FbtqBtL2bmwP%2FkUzXrFiEIRfFUKWowimMRk%2Fimg.jpg'
-          }
-        ]
-      },
-  ];
-
   interface Props {
     navigation: any,
     ageGroupPopularTagListData: Array<object>,
     selectPopularTag: (item:number, index:number) => 0,
     selectedPopularTagIndex: number,
+    loadingPopularTag: boolean,
   }
 
-const PopularTagByAgeGroup = ({navigation, ageGroupPopularTagListData, selectPopularTag, selectedPopularTagIndex}: Props) => {
-    const [popularTagListData, setPopularTagListData] = useState<Array<object>>([]);
-    const [changeSelectedTag, setChangeSelectedTag] = useState<boolean>(false);
-    const [selectedTagFeedListData, setSelectedTagFeedListData] = useState<Array<object>>([]);
-
-    /*
-    const selectPopularTag = (item: object, index: number) => {
-        var tmpPopularTagList = ageGroupPopularTagListData.map(function(tag, index2) {
-            if(index != index2) {
-                tag.selected = false
-                return tag
-            } else if(index === index2) {
-                tag.selected = true
-                return tag
-            }
-        })
-
-        //tmpPopularTagList[index].selected = !popularTagListData[index].selected;
-        setPopularTagListData(tmpPopularTagList);
-        setChangeSelectedTag(!changeSelectedTag);
-        console.log("select tag index", index)
-    }
-    */
-
-    useEffect(() => {
-      console.log("연령대별 인기태그 목록zz", ageGroupPopularTagListData[selectedPopularTagIndex].tagPosts)
-    }, [ageGroupPopularTagListData])
-
+const PopularTagByAgeGroup = ({navigation, ageGroupPopularTagListData, selectPopularTag, selectedPopularTagIndex, loadingPopularTag}: Props) => {
+   
     const renderPopularTagItem = ({item, index}: any) => {
       console.log("renderPopularTagItem", item);
         return (
@@ -386,7 +100,6 @@ const PopularTagByAgeGroup = ({navigation, ageGroupPopularTagListData, selectPop
             rating={item.starRate}
             expense={item.expense}
             address={item.address.address}
-            
             />
         )
     }
@@ -396,6 +109,28 @@ const PopularTagByAgeGroup = ({navigation, ageGroupPopularTagListData, selectPop
             <HeaderContainer>
                 <AgeGroupText>20대 인기 태그</AgeGroupText>
             </HeaderContainer>
+            {loadingPopularTag && (
+              <Placeholder
+              Animation={Fade}>
+              <PopularTagListContainer>
+                <PlaceholderLine
+                style={{width:71,height:wp('8%'),borderRadius:7, marginLeft:16}}/>
+                <PlaceholderLine
+                style={{width:71,height:wp('8%'),borderRadius:7, marginLeft:6}}/>
+                <PlaceholderLine
+                style={{width:71,height:wp('8%'),borderRadius:7, marginLeft:6}}/>
+                <PlaceholderLine
+                style={{width:71,height:wp('8%'),borderRadius:7, marginLeft:6}}/>
+                <PlaceholderLine
+                style={{width:71,height:wp('8%'),borderRadius:7, marginLeft:6}}/>
+              </PopularTagListContainer>
+              <SelectTagFeedListContainer>
+                
+              </SelectTagFeedListContainer>
+              </Placeholder>
+            )}
+            {!loadingPopularTag && (
+            <View>
             <PopularTagListContainer>
             <FlatList
             showsHorizontalScrollIndicator={false}
@@ -413,6 +148,8 @@ const PopularTagByAgeGroup = ({navigation, ageGroupPopularTagListData, selectPop
                 renderItem={renderSelectTagFeedItem}
                 />
             </SelectTagFeedListContainer>
+            </View>
+            )}
         </Container>
     )
 }

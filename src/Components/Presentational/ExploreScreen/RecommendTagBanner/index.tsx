@@ -9,6 +9,13 @@ import {useDispatch} from 'react-redux';
 import allActions from '~/action';
 import Swiper from 'react-native-swiper';
 
+import {
+    Placeholder,
+    PlaceholderLine,
+    PlaceholderMedia,
+    Fade,
+} from 'rn-placeholder'
+
 const Container = Styled.View`
  width: ${wp('100%')};
  height: ${wp('50%')};
@@ -49,9 +56,10 @@ const BannerContainer = Styled.View`
 interface Props {
     trendTagsListData: Array<object>,
     navigation: any,
+    loadingTrendTag: boolean,
 }
 
-const RecommendTagBanner = ({trendTagsListData, navigation}: Props) => {
+const RecommendTagBanner = ({trendTagsListData, navigation, loadingTrendTag}: Props) => {
     const dispatch = useDispatch();
 
     const searchToTrendTag = (item: object) => {
@@ -76,7 +84,19 @@ const RecommendTagBanner = ({trendTagsListData, navigation}: Props) => {
     
     return (
         <Container>
-            <Swiper paginationStyle={{bottom:-5}} dotStyle={{width:5, height:5}} activeDotStyle={{backgroundColor:'#56575C', width:5, height:5}}>
+            {/*
+            {loadingTrendTag && (
+                    <Placeholder
+                    Animation={Fade}>
+                    <BannerContainer>
+                    <PlaceholderMedia
+                    style={{width: wp('91.4%'), height: wp('50%'), borderRadius: 10}}/>
+                    </BannerContainer>
+                    </Placeholder>
+            )}
+            */}
+            {!loadingTrendTag && (
+             <Swiper paginationStyle={{bottom:-5}} dotStyle={{width:5, height:5}} activeDotStyle={{backgroundColor:'#56575C', width:5, height:5}}>
                 {trendTagsListData.map((item, index) => {
                     return (
                     <TouchableWithoutFeedback onPress={() => searchToTrendTag(item)}>
@@ -88,6 +108,7 @@ const RecommendTagBanner = ({trendTagsListData, navigation}: Props) => {
                     )
                 })}
             </Swiper>
+            )}
         </Container>
     )
 }

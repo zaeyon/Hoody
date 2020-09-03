@@ -375,6 +375,22 @@ const LocationSearch = ({navigation, route}: Props) => {
     }
   }
 
+  const clickToCurrentLocation = () => {
+    if(route.params?.requestType === "upload") {
+      navigation.navigate("UploadScreen", {
+        location:  route.params.currentLocation.name,
+        longitude: route.params.currentLocation.longitude,
+        latitude: route.params.currentLocation.latitude,
+      })
+    } else if(route.params?.requestType === "edit") {
+      navigation.navigate("FeedEditScreen", {
+        location:  route.params.currentLocation.name,
+        longitude: route.params.currentLocation.longitude,
+        latitude: route.params.currentLocation.latitude,
+      })
+    }
+  }
+
   
 const LocationItem = ({location, address}) => {
   return (
@@ -416,13 +432,15 @@ const LocationItem = ({location, address}) => {
                 </SearchIconContainer>
                 </SearchInputContainer>
             </SearchContainer>
+            <TouchableWithoutFeedback onPress={() => clickToCurrentLocation()}>
             <MyLocationContainer>
               <MyLocationIcon
               source={require('~/Assets/Images/ic_myLocation.png')}/>
                 <MyLocationText>
-                  내 위치 : 을지로 3가역 사랑방 칼국수
+                  {"내 위치 : " + route.params?.currentLocation.name}
                 </MyLocationText>
             </MyLocationContainer>
+            </TouchableWithoutFeedback>
             {registeredLocation && (
                           <InputedLocationContainer>
                           <InputedLocationLeftContainer>

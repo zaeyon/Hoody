@@ -13,6 +13,7 @@ import ActionSheet from 'react-native-actionsheet'
 
 import Modal from 'react-native-modal';
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
+import Geolocation from 'react-native-geolocation-service';
 
 // Local Components
 import {Rating} from '~/Components/Presentational/UploadScreen/Rating';
@@ -802,6 +803,8 @@ const FeedEditScreen = ({navigation, route}: Props) => {
     const [openState, setOpenState] = useState<boolean>(true);
     const [temporarySave, setTemporarySave] = useState<boolean>(false);
 
+    const [currentLocation, setCurrentLocation] = useState<object>({});
+
     //후기 정보 관련 state
     const [rating, setRating] = useState<string>();
     const [inputingRating, setInputingRating] = useState<string>("??")
@@ -1063,6 +1066,42 @@ const FeedEditScreen = ({navigation, route}: Props) => {
             Keyboard.removeListener("keyboardDidShow", onKeyboardDidShow);
             Keyboard.removeListener("keyboardDidHide", onKeyboardDidHide);
         }
+    }, [])
+
+    
+    useEffect(() => {
+        var hasLocationPermission = true;
+        if (hasLocationPermission) {
+            Geolocation.getCurrentPosition(
+                (position) => {
+                  console.log("탐색화면 현재 위치", position);
+                  setCurrentLocation(position.coords);
+                  fetch(
+
+                    `https://dapi.kakao.com/v2/local/geo/coord2address.json?x=${position.coords.longitude}&y=${position.coords.latitude}`,
+                    {
+                      headers: {
+                        Authorization: `KakaoAK ${API_KEY}`,
+                      },
+                    },
+                  )
+                  .then((response) => response.json())
+                  .then((json) => {
+                    console.log("현재 사용자의 행정구역정보", json.documents[0].address);
+                    setCurrentLocation({
+                        name:json.documents[0].address.address_name,
+                        latitude:position.coords.latitude,
+                        longitude:position.coords.longitude,
+                    })
+                  })
+                },
+                (error) => {
+                  // See error code charts below.
+                  console.log(error.code, error.message);
+                },
+                { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+            );
+          }
     }, [])
 
     const useMainTagComponentSize = () => {
@@ -1414,6 +1453,7 @@ const moveLocationSearch = () => {
     navigation.navigate("LocationSearch", {
         inputedLocation: location,
         requestType: "edit",
+        currentLocation: currentLocation,
     })
 }
 

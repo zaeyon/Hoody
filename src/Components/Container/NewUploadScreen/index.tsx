@@ -12,6 +12,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import ActionSheet from 'react-native-actionsheet'
 import Modal from 'react-native-modal';
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
+import Geolocation from 'react-native-geolocation-service';
 
 // Local Components
 import {Rating} from '~/Components/Presentational/UploadScreen/Rating';
@@ -837,7 +838,8 @@ const convertDateFormat = (date: any) => {
     const [subTag1Exis, setSubTag1Exis] = useState<boolean>(false);
     const [subTag2Exis, setSubTag2Exis] = useState<boolean>(false);
 
-
+    // current location
+    const [currentLocation, setCurrentLocation] = useState<object>({});
 
     // toggle input expense
     const [visibleExpenseInput, setVisibleExpenseInput] = useState<boolean>(false);
@@ -872,6 +874,7 @@ const convertDateFormat = (date: any) => {
     const expenseInput = useRef(null);
 
     const [AdditionInfoContainerHeight, setAdditionInfoContainerHeight] = useState<number>();
+    const API_KEY = 'd824d5c645bfeafcb06f24db24be7238';
 
      var focusingNewDescripInput = false;
      var inputingNewDescripText = "";
@@ -905,6 +908,42 @@ const convertDateFormat = (date: any) => {
              }, 100)
          }
      }, [route.params?.selectedImages])
+
+
+    useEffect(() => {
+        var hasLocationPermission = true;
+        if (hasLocationPermission) {
+            Geolocation.getCurrentPosition(
+                (position) => {
+                  console.log("탐색화면 현재 위치", position);
+                  setCurrentLocation(position.coords);
+                  fetch(
+
+                    `https://dapi.kakao.com/v2/local/geo/coord2address.json?x=${position.coords.longitude}&y=${position.coords.latitude}`,
+                    {
+                      headers: {
+                        Authorization: `KakaoAK ${API_KEY}`,
+                      },
+                    },
+                  )
+                  .then((response) => response.json())
+                  .then((json) => {
+                    console.log("현재 사용자의 행정구역정보", json.documents[0].address);
+                    setCurrentLocation({
+                        name:json.documents[0].address.address_name,
+                        latitude:position.coords.latitude,
+                        longitude:position.coords.longitude,
+                    })
+                  })
+                },
+                (error) => {
+                  // See error code charts below.
+                  console.log(error.code, error.message);
+                },
+                { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+            );
+          }
+    }, [])
 
 
      useEffect(() => {
@@ -1426,6 +1465,7 @@ const moveLocationSearch = () => {
     navigation.navigate("LocationSearch", {
         inputedLocation: location,
         requestType: "upload",
+        currentLocation: currentLocation,
     })
 }
 

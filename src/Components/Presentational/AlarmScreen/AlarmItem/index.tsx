@@ -13,7 +13,7 @@ const Container = Styled.View`
 `;
 
 const ProfileImageContainer = Styled.View`
- padding-top: 15px;
+ padding-top: 23px;
  padding-left: 15px;
  padding-bottom: 8px;
 `;
@@ -51,23 +51,49 @@ const AlarmDateText = Styled.Text`
  color: #8e8e8e;
 `;
 
-const AlarmItem = ({}) => {
+interface Props {
+    senderProfileImage: string,
+    senderNickname: string,
+    message: string,
+    type: string,
+    sentDate: string,
+}
+
+const AlarmItem = ({senderProfileImage, senderNickname, message, type, sentDate}: Props) => {
+
+    const formatSentDate = (date: any) => {
+        var tmpDate = new Date(date),
+        month = '' + (tmpDate.getMonth() + 1),
+        day = '' + tmpDate.getDate(),
+        year = tmpDate.getFullYear();
+
+        if(month.length < 2) month = '0' + month;
+        if(day.length < 2) day = '0' + day;
+
+        return year + "년 " + month + "월 " + day + "일";
+    }
+    
     return (
         <Container>
             <ProfileImageContainer>
                 <ProfileImage
-                source={{uri:'https://v.miraeassetdaewoo.com/resources/img/common/personal/ico_person_default.jpg'}}
+                source={{uri: senderProfileImage}}
                 />
             </ProfileImageContainer>
             <AlarmInfoContainer>
-                <NicknameText>사용자1
-                    <AlarmDescripText>
-                        님이 회원님의 게시물에 댓글을 남겼습니다.
-                    </AlarmDescripText>
+                <NicknameText>{senderNickname}
+                        {type === "Comment" && (
+                            <AlarmDescripText>
+                            님이 회원님의 게시물에 댓글을 남겼습니다.
+                            </AlarmDescripText>
+                        )}
+                        {type === "Like" && (
+                            <AlarmDescripText>
+                            님이 회원님의 게시물에 좋아요를 남겼습니다.
+                            </AlarmDescripText>
+                        )}
                 </NicknameText>
-                <AlarmDateText>
-                    3시간 전
-                </AlarmDateText>
+                <AlarmDateText>{formatSentDate(sentDate)}                </AlarmDateText>
             </AlarmInfoContainer>
 
         </Container>

@@ -5,6 +5,7 @@ import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import {isIphoneX} from 'react-native-iphone-x-helper';
 
 import AlarmItem from '~/Components/Presentational/AlarmScreen/AlarmItem';
 
@@ -51,6 +52,7 @@ height: ${wp('6.4%')};
 const AlarmListContainer = Styled.View`
 flex: 1;
 background-color: #ffffff;
+padding-bottom: ${isIphoneX() ? 32 : 55}
 `;
 
 const TEST_ALARM_DATA = [
@@ -90,6 +92,7 @@ const AlarmScreen = ({navigation, route}: Props) => {
         .then(function(response) {
             console.log("알림 리스트 response", response);
             setRefreshing(false);
+            setNotificationListData(response);
 
         })
         .catch(function(error) {
@@ -108,7 +111,13 @@ const AlarmScreen = ({navigation, route}: Props) => {
 
     const renderAlarmItem = ({item, index}: any) => {
         return (
-            <AlarmItem/>
+            <AlarmItem
+            senderProfileImage={item.senders.profileImg}
+            senderNickname={item.senders.nickname}
+            message={item.message}
+            type={item.type}
+            sentDate={item.createdAt}
+            />
         )
     }
 
@@ -129,6 +138,7 @@ const AlarmScreen = ({navigation, route}: Props) => {
             </HeaderBar>
             <AlarmListContainer>
                 <FlatList
+                showsVerticalScrollIndicator={false}
                 refreshing={refreshing}
                 onRefresh={onRefreshNotificationList}
                 data={notificationListData}

@@ -52,7 +52,7 @@ const HeaderBackIcon = Styled.Image`
 `;
 
 const HeaderTitleContainer = Styled.View`
- background-color: #707070;
+ background-color: #ffffff;
 `;
 
 const HeaderTitleText = Styled.Text`

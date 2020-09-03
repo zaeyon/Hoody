@@ -1,4 +1,5 @@
 import React from 'react';
+import {TouchableWithoutFeedback} from 'react-native';
 import Styled from 'styled-components/native';
 import {
     widthPercentageToDP as wp,
@@ -9,7 +10,6 @@ const Container = Styled.View`
  width: ${wp('100%')};
  background-color: #ffffff;
  flex-direction: row;
- flex: 1;
 `;
 
 const ProfileImageContainer = Styled.View`
@@ -34,12 +34,13 @@ const AlarmInfoContainer = Styled.View`
 `;
 
 const NicknameText = Styled.Text`
- font-weight: 600;
+ font-weight: bold;
  font-size: 16px;
  color: #333333;
 `;
 
 const AlarmDescripText = Styled.Text`
+font-weight: 500;
  font-size: 16px;
  color: #333333;
  flex-shrink: 1;
@@ -52,14 +53,17 @@ const AlarmDateText = Styled.Text`
 `;
 
 interface Props {
+    navigation: any,
     senderProfileImage: string,
     senderNickname: string,
     message: string,
     type: string,
     sentDate: string,
+    postId: string,
+    senderId: string,
 }
 
-const AlarmItem = ({senderProfileImage, senderNickname, message, type, sentDate}: Props) => {
+const AlarmItem = ({navigation, senderProfileImage, senderNickname, message, type, sentDate, postId, senderId}: Props) => {
 
     const formatSentDate = (date: any) => {
         var tmpDate = new Date(date),
@@ -72,30 +76,72 @@ const AlarmItem = ({senderProfileImage, senderNickname, message, type, sentDate}
 
         return year + "년 " + month + "월 " + day + "일";
     }
+
+
+  const moveToSenderProfile = () => {
+    navigation.navigate("AnotherUserProfileStack", {
+      screen: 'AnotherUserProfileScreen',
+      params: {requestedUserNickname: senderNickname}
+    });
+  }
+
+  const moveToFeedComment = () => {
+    navigation.navigate("FeedStack", {
+        screen: "CommentListScreen",
+        params: {
+        feedId: postId,
+        request: "Alarm",
+       }
+    })
+  }
+
+  const moveToFeedLike = () => {
+    navigation.navigate("FeedStack", {
+        screen: 'LikeListScreen',
+        params: {
+        feedId: postId,
+        request: "Alarm",
+       }
+    })
+  }
     
     return (
         <Container>
+            <TouchableWithoutFeedback onPress={() => moveToSenderProfile()}>
             <ProfileImageContainer>
                 <ProfileImage
                 source={{uri: senderProfileImage}}
                 />
             </ProfileImageContainer>
-            <AlarmInfoContainer>
-                <NicknameText>{senderNickname}
-                        {type === "Comment" && (
-                            <AlarmDescripText>
-                            님이 회원님의 게시물에 댓글을 남겼습니다.
-                            </AlarmDescripText>
-                        )}
-                        {type === "Like" && (
-                            <AlarmDescripText>
-                            님이 회원님의 게시물에 좋아요를 남겼습니다.
-                            </AlarmDescripText>
-                        )}
-                </NicknameText>
-                <AlarmDateText>{formatSentDate(sentDate)}                </AlarmDateText>
-            </AlarmInfoContainer>
-
+            </TouchableWithoutFeedback>
+            {type === "Comment" && (
+            <TouchableWithoutFeedback onPress={() => moveToFeedComment()}>
+                <AlarmInfoContainer>
+                    <NicknameText>{senderNickname}
+                    <AlarmDescripText>{"님이 회원님의 게시글에 댓글을 남겼습니다."}</AlarmDescripText>
+                    </NicknameText>
+                <AlarmDateText>{formatSentDate(sentDate)}</AlarmDateText>
+                </AlarmInfoContainer>
+            </TouchableWithoutFeedback>
+            )}
+            {type === "Like" && (
+            <TouchableWithoutFeedback onPress={() => moveToFeedLike()}>
+                <AlarmInfoContainer>
+                    <NicknameText>{senderNickname}
+                    <AlarmDescripText>{"님이 회원님의 게시글에 좋아요를 남겼습니다."}</AlarmDescripText>
+                    </NicknameText>
+                <AlarmDateText>{formatSentDate(sentDate)}</AlarmDateText>
+                </AlarmInfoContainer>
+            </TouchableWithoutFeedback>
+            )}
+            {type === "Follow" && (
+                <AlarmInfoContainer>
+                    <NicknameText>{senderNickname}
+                    <AlarmDescripText>{"님이 회원님을 팔로우 했습니다."}</AlarmDescripText>
+                    </NicknameText>
+                <AlarmDateText>{formatSentDate(sentDate)}</AlarmDateText>
+                </AlarmInfoContainer>
+            )}
         </Container>
     )
 }

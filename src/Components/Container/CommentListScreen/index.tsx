@@ -401,7 +401,8 @@ const CommentListScreen = ({navigation, route}: Props) => {
 
 
     useEffect(() => {
-      console.log("CommentListScreen navigation", navigation)
+      console.log("CommentListScreen navigation", navigation);
+      console.log("댓글불러올 피드 ID", route.params.feedId)
     }, [])
 
     useEffect(() => {
@@ -499,8 +500,13 @@ const CommentListScreen = ({navigation, route}: Props) => {
       if(route.params?.pushAlarm) {
         navigation.navigate("FeedDetailScreen", {
             commentList: commentList,
-            feedId: route.params?.postId,
+            feedId: route.params?.feedId,
             pushAlarm: true,
+        })
+      } else if(route.params?.request === "Alarm") {
+        navigation.navigate("FeedDetailScreen", {
+        feedId: route.params?.feedId,
+        request: "Alarm",
         })
       } else {
         navigation.goBack();

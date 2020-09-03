@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {
-  FlatList, View, Text, Dimensions, TouchableOpacity, TouchableWithoutFeedback, SafeAreaView,
+  FlatList, View, Text, Dimensions, TouchableOpacity, TouchableWithoutFeedback, SafeAreaView, ActivityIndicator,
 } from 'react-native';
 import Styled from 'styled-components/native';
 import {
@@ -133,6 +133,14 @@ const MyProfileReviewMapText = Styled.Text`
  font-size: 15px;
 `;
 
+const LoadingContainer = Styled.View`
+ flex: 1;
+ background-color: #FFFFFF;
+ width: ${wp('100%')};
+ height: ${hp('100%')};
+ margin-top: 250px;
+`;
+ 
  
 
 const TEST_FEED_DATA = [
@@ -349,6 +357,7 @@ const AnotherUserProfileScreen = ({navigation, route}: Props) => {
   const [refreshingProfileFeed, setRefreshingProfileFeed] = useState<boolean>(false);
   const [refreshingProfileCollection, setRefreshingProfileCollection] = useState<boolean>(false);
   const [feedMapCount, setFeedMapCount] = useState<number>(0);
+  const [loadingProfile, setLoadingProfile] = useState<boolean>(true);
 
 
   const currentUser = useSelector((state) => state.currentUser);
@@ -361,6 +370,7 @@ const AnotherUserProfileScreen = ({navigation, route}: Props) => {
 
       GetProfileFeedByList(route.params.requestedUserNickname)
       .then(function(response) {
+        setLoadingProfile(false);
         console.log(
         "GetProfileFeedByList response@@", response.posts)
         setUserInfoData(response);
@@ -578,6 +588,12 @@ const AnotherUserProfileScreen = ({navigation, route}: Props) => {
           </TouchableWithoutFeedback>
         </HeaderRightContainer>
       </HeaderBar>
+      {loadingProfile && (
+        <LoadingContainer>
+          <ActivityIndicator/>
+        </LoadingContainer>
+      )}
+      {!loadingProfile && (
       <ScrollableTabView
       loadMoreSearchFeedData={() => 0}
       loadMoreSearchCollectionData={() => 0}
@@ -618,6 +634,7 @@ const AnotherUserProfileScreen = ({navigation, route}: Props) => {
        /> 
       </CollectionListTabContainer>
       </ScrollableTabView>
+      )}
     </Container>
   )
 }

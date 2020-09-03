@@ -1,16 +1,18 @@
 import React, {useEffect, useState} from 'react';
-import {FlatList, TouchableWithoutFeedback} from 'react-native';
+import {FlatList, TouchableWithoutFeedback, StyleSheet} from 'react-native';
 import Styled from 'styled-components/native';
 import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import {isIphoneX} from 'react-native-iphone-x-helper';
+import Modal from 'react-native-modal';
 
 import AlarmItem from '~/Components/Presentational/AlarmScreen/AlarmItem';
 
 // Route
 import GETNotificationList from '~/Route/Notification/GETNotificationList';
+import DELETENotification from '~/Route/Notification/DELETENotification';
 
 const Container = Styled.SafeAreaView`
  flex: 1;
@@ -50,10 +52,74 @@ height: ${wp('6.4%')};
 `;
 
 const AlarmListContainer = Styled.View`
-flex: 1;
 background-color: #ffffff;
-padding-bottom: ${isIphoneX() ? 32 : 55}
+padding-bottom: ${isIphoneX() ? 32 : 45};
+flex: 1;
 `;
+
+const RemoveContainer = Styled.View`
+align-items: flex-end;
+`;
+
+const RemoveAllContainer = Styled.View`
+ padding-top: 7px;
+ padding-bottom: 2px;
+ padding-left: 15px;
+ padding-right: 15px;
+`;
+
+const RemoveAllText = Styled.Text`
+font-size: 15px;
+color: #C6C7CC;
+`;
+
+const OtherUsersFeedViewMoreModalContainer = Styled.View`
+width: ${wp('100%')};
+height: ${wp('36.8%')};
+border-top-left-radius: 10px;
+border-top-right-radius: 10px;
+background-color: #FFFFFF;
+`;
+
+const ModalHeaderContainer = Styled.View`
+ padding-top: 4px;
+ width: ${wp('100%')};
+ padding-bottom: 10px;
+ align-items: center;
+`;
+
+
+const ModalToggleButton = Styled.View`
+ width: ${wp('11.7%')};
+ height: ${wp('1.4%')};
+ background-color: #F4F4F7;
+ border-radius: 5px;
+`;
+
+
+const ModalTabItemContainer = Styled.View`
+ height: ${wp('17%')};
+ flex-direction: row;
+ align-items: center;
+ padding-left: 16px;
+ padding-right: 16px;
+ border-bottom-width: 0.6px;
+ border-color: #ECECEE;
+`;
+
+const ModalTabItemIconImage = Styled.Image`
+width: ${wp('6.4%')};
+height: ${wp('6.4%')};
+tint-color: #1D1E1F;
+`;
+
+const ModalTabItemLabelText = Styled.Text`
+ margin-left: 11px;
+ font-size: 18px;
+ color: #1D1E1F;
+`;
+
+
 
 const TEST_ALARM_DATA = [
     {
@@ -82,6 +148,7 @@ interface Props {
 const AlarmScreen = ({navigation, route}: Props) => {
     const [notificationListData, setNotificationListData] = useState<Array<object>>([]);
     const [refreshing, setRefreshing] = useState<boolean>(false);
+    const [visibleModal, setVisibleModal] = useState<boolean>(false);
 
     useEffect(() => {
         getNotificationList();
@@ -112,13 +179,42 @@ const AlarmScreen = ({navigation, route}: Props) => {
     const renderAlarmItem = ({item, index}: any) => {
         return (
             <AlarmItem
+            navigation={navigation}
             senderProfileImage={item.senders.profileImg}
             senderNickname={item.senders.nickname}
             message={item.message}
             type={item.type}
             sentDate={item.createdAt}
+            postId={item.id}
+            senderId={item.senders.id}
             />
         )
+    }
+
+    const alarmListHeaderContainer = () => {
+        return (
+            <RemoveContainer>
+            <TouchableWithoutFeedback onPress={() => removeAllNotify()}>
+            <RemoveAllContainer>
+                <RemoveAllText>전체삭제</RemoveAllText>
+            </RemoveAllContainer>
+            </TouchableWithoutFeedback>
+            </RemoveContainer>
+        )
+    }
+    
+    const removeAllNotify = () => {
+        DELETENotification("all")
+        .then(function(response) {
+            console.log("알림 전체 삭제", response)
+        })
+        .catch(function(error) {
+            console.log("알림 전체 삭제 실패", error)
+        })
+    }
+
+    const removeNotify = () => {
+
     }
 
     return (
@@ -138,14 +234,46 @@ const AlarmScreen = ({navigation, route}: Props) => {
             </HeaderBar>
             <AlarmListContainer>
                 <FlatList
+                ListHeaderComponent={alarmListHeaderContainer}
                 showsVerticalScrollIndicator={false}
                 refreshing={refreshing}
                 onRefresh={onRefreshNotificationList}
                 data={notificationListData}
                 renderItem={renderAlarmItem}/>
             </AlarmListContainer>
+      <Modal
+      onBackdropPress={() => setVisibleModal(false)}
+      isVisible={visibleModal}
+      backdropOpacity={0.25}
+      onSwipeComplete={() => setVisibleModal(false)}
+      swipeDirection={['down']}
+      style={styles.modal}>
+        <OtherUsersFeedViewMoreModalContainer>
+        <ModalHeaderContainer>
+        <ModalToggleButton/>
+        </ModalHeaderContainer>
+        <TouchableWithoutFeedback onPress={() => removeNotify()}>
+        <ModalTabItemContainer>
+          <ModalTabItemIconImage
+          style={{tintColor:'#1D1E1F'}}
+          source={require('~/Assets/Images/Feed/ic_remove.png')}/>
+          <ModalTabItemLabelText
+          style={{color:'#1D1E1F'}}
+          >삭제하기</ModalTabItemLabelText>
+        </ModalTabItemContainer>
+        </TouchableWithoutFeedback>
+        </OtherUsersFeedViewMoreModalContainer>
+      </Modal>
         </Container>
     )
 }
+
+
+const styles = StyleSheet.create({
+    modal: {
+      justifyContent: 'flex-end',
+      margin: 0,
+    }
+  })
 
 export default AlarmScreen;

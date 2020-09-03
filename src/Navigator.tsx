@@ -309,6 +309,14 @@ function AlarmStackScreen() {
       <AlarmStack.Screen
       name="AlarmSettingScreen"
       component={AlarmSettingScreen}/>
+      <AlarmStack.Screen
+      name="FeedStack"
+      component={FeedStackScreen}
+      />
+      <AlarmStack.Screen
+        name="AnotherUserProfileStack"
+        component={AnotherUserProfileStackScreen}
+      />
     </AlarmStack.Navigator>
   );
 }
@@ -670,6 +678,27 @@ function BottomTab() {
     return true;
   }
 
+
+  const getAlarmTabBarVisibility = (route: any) => {
+    const routeName = route.state
+    ? route.state.routes[route.state.index]
+    : '';
+
+    const stackRouteName = routeName.state
+    ? routeName.state.routes[routeName.state.index].name
+    : '';
+
+    if(routeName.name === 'FeedStack' || routeName.name === 'CollectionStack' || routeName.name === "FeedMapScreen") {
+      return false;
+    }
+
+    if(stackRouteName === "ConfirmPasswordScreen" || stackRouteName === "ChangePasswordSettingScreen" || stackRouteName === "VerifyEmailScreen") {
+      return false;
+    }
+
+    return true;
+  }
+
   return (
     <Tab.Navigator
       tabBarOptions={{
@@ -727,7 +756,7 @@ function BottomTab() {
       <Tab.Screen 
       name="Alarm" 
       component={AlarmStackScreen}
-      options={{
+      options={({route}) => ({
         tabBarIcon: ({focused}: {focused: boolean}) => (
           <Image
             source={
@@ -737,7 +766,8 @@ function BottomTab() {
             }
           />
         ),
-      }}
+        tabBarVisible: getAlarmTabBarVisibility(route)
+      })}
       />
       <Tab.Screen 
       name="Profile" 
@@ -821,7 +851,6 @@ function AppNavigator({navigation, route}: any) {
         //SplashScreen.hide();
         POSTAutoLogin(asyStorResponse.userId, asyStorResponse.sessionId)
         .then(function(response) {
-          SplashScreen.hide();
           console.log("자동로그인 성공", response);
           console.log("이메일", asyStorResponse.email);
           dispatch(allActions.userActions.setUser({
@@ -834,6 +863,9 @@ function AppNavigator({navigation, route}: any) {
           dispatch(
             allActions.userActions.setInputedKeywordList([])
           )          
+          setTimeout(() => {
+            SplashScreen.hide();
+          },10)
         })
         .catch(function(error) {
           console.log("자동로그인 실패", error);

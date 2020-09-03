@@ -11,6 +11,7 @@ import allActions from '~/action';
 import {NavigationContainer} from '@react-navigation/native';
 import Geolocation from 'react-native-geolocation-service';
 import messaging from '@react-native-firebase/messaging';
+import {isIphoneX, getBottomSpace} from 'react-native-iphone-x-helper';
 
 // Local Component
 //import FeedItem from '~/Components/Presentational/FeedListScreen/MomoizedFeedItem';
@@ -77,7 +78,7 @@ const NoFeedListContainer = Styled.View`
 
 const FeedListContainer = Styled.View`
  width: ${wp('100%')}px;
- padding-bottom: 30px;
+ padding-bottom: ${isIphoneX() ? 32 : 45}
  background-color: #ffffff;
 `;
 

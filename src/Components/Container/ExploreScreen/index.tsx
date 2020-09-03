@@ -12,6 +12,7 @@ import {
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import Swiper from 'react-native-swiper';
+import {isIphoneX} from 'react-native-iphone-x-helper';
 
 // Local Component
 import RecommendUser from '~/Components/Presentational/ExploreScreen/RecommendUser';
@@ -40,6 +41,7 @@ const BodyContainer = Styled.View`
 `;
 
 const HeaderBar = Styled.View`
+ margin-top:16px;
  width: ${wp('100%')};
  height: ${wp('13.86%')};
  flex-direction: row;
@@ -111,7 +113,7 @@ tint-color: #000000;
 const HeaderMarkerContainer = Styled.View`
 padding-left: 6px;
 padding-bottom: 13px;
-padding-top: 15px;
+padding-top: 10px;
 padding-right: 16px;
 justify-content: center;
 align-items: center;
@@ -142,7 +144,7 @@ const RecommendCollectionContainer = Styled.View`
 `;
 
 const PopularFeedListByLocationContainer = Styled.View`
- padding-bottom: 100px;
+ padding-bottom: ${isIphoneX() ? 120 : 130}
 `;
 
 const ActivityIndicatorContainer = Styled.View`

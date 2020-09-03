@@ -2461,10 +2461,10 @@
     opencollective-postinstall "^2.0.1"
     superstruct "^0.6.2"
 
-"@react-native-firebase/messaging@^7.8.3":
-  version "7.8.3"
-  resolved "https://registry.yarnpkg.com/@react-native-firebase/messaging/-/messaging-7.8.3.tgz#c1326ebb5026e05264bd76a472063789902c6459"
-  integrity sha512-m2hoaCvmAHzPNiJ1tSaitoXAvkeVFTXoXuq2IO9HN6bqnQngErqY6iGor9i7uIR4du65jUhrlYv79beLRaMyPg==
+"@react-native-firebase/messaging@^7.8.4":
+  version "7.8.4"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/messaging/-/messaging-7.8.4.tgz#2ad67556c889bea302c6306f0d3f5bcacd8295e0"
+  integrity sha512-sMgViSnQ6MM1MDgvOhxrTCIuJB8KNhqM+ZVpNI71RpQFynZMKFO1YfSaMMXZQT+Mg3tRQ0Y+wMusz7s1wvueAA==
 
 "@react-native-seoul/kakao-login@2.4.5":
   version "2.4.5"

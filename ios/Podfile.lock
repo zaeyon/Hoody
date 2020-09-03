@@ -452,7 +452,7 @@ PODS:
   - RNFBApp (8.4.1):
     - Firebase/CoreOnly (~> 6.30.0)
     - React
-  - RNFBMessaging (7.8.3):
+  - RNFBMessaging (7.8.4):
     - Firebase/Messaging (~> 6.30.0)
     - React
     - RNFBApp
@@ -769,7 +769,7 @@ SPEC CHECKSUMS:
   RNCustomizedImagePicker: 0311b7bd61302b112cb6f1c9179d1105b475d0cc
   RNDateTimePicker: c4285bfdd87430f1e575b81a4742b7586a09d53e
   RNFBApp: e4321cad5dd23b43b3b4f0ca060300b9f85cb7a4
-  RNFBMessaging: ca2afaa9449dde72fded30f93b9a4fd296d4dd60
+  RNFBMessaging: f28096dc79edf6b0a094e95c265c7224122d051d
   RNGestureHandler: 8f09cd560f8d533eb36da5a6c5a843af9f056b38
   RNGoogleSignin: ccf71ee4b6cfd324fd788a41e457e2043838c0d9
   RNReanimated: b5ccb50650ba06f6e749c7c329a1bc3ae0c88b43

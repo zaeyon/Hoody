@@ -2,7 +2,7 @@ import React, {useState, useEffect, useCallback} from 'react';
 import {NavigationContainer, useNavigation} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
-import {Image, StyleSheet, Text, Alert} from 'react-native';
+import {Image, StyleSheet, Text, Alert, SafeAreaView} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import allActions from '~/action';
 import {
@@ -12,6 +12,7 @@ import {
 import {getAutoLoginUser} from '~/AsyncStorage/User';
 import messaging from '@react-native-firebase/messaging'
 import SplashScreen from 'react-native-splash-screen'
+import {isIphoneX, getBottomSpace} from 'react-native-iphone-x-helper';
 
 import Home from '~/Tab/Home';
 import Feed from '~/Tab/Feed';
@@ -138,6 +139,14 @@ const UnauthStack = createStackNavigator();
 const NoBottomBarStack = createStackNavigator();
 const SettingStack = createStackNavigator();
 const MapStack = createStackNavigator();
+
+var bottomTabHeight;
+
+if(isIphoneX()) {
+  bottomTabHeight = wp("18%");
+} else {
+  bottomTabHeight = wp("12.8%");
+}
 
 const config = {
   animation: 'timing',
@@ -846,6 +855,7 @@ function AppNavigator({navigation, route}: any) {
   return (
     <NavigationContainer>
     {(currentUserState.loggedIn) ? (  
+   
     <NoBottomBarStack.Navigator
     headerMode="none">
       <NoBottomBarStack.Screen name="BottomTab" component={BottomTab}/>
@@ -861,8 +871,8 @@ function AppNavigator({navigation, route}: any) {
 
 const styles = StyleSheet.create({
   tabBar: {
-    paddingTop: 10,
-    height: hp('8.5%'),
+    paddingTop: isIphoneX() ? 10 : 0,
+    height: bottomTabHeight,
     position: 'absolute',
   },
 });

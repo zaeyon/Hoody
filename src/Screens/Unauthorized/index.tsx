@@ -36,6 +36,7 @@ width: ${wp('100%')};
 height: ${hp('65%')};
  justify-content: center;
  align-items: center;
+ flex: 2;
 `;
 
 const LogoImage = Styled.Image`
@@ -54,6 +55,7 @@ const AuthContainer = Styled.View`
 width: ${wp('100%')};
  justify-content: center;
  align-items: center;
+ flex: 1.4;
 `;
 
 const SocialLoginContainer = Styled.View`
@@ -176,7 +178,7 @@ const LocalContainer = Styled.View`
 width: ${wp('100%')};
 flex-direction: row;
 justify-content: space-between;
-padding-top: 23px;
+padding-top: 20px;
 padding-left: 68px;
 padding-right: 68px;
 `;

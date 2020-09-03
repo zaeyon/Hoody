@@ -18,6 +18,7 @@ const Container = Styled.SafeAreaView`
 
 
 const HeaderBar = Styled.View`
+ margin-top:16px;
  width: ${wp('100%')};
  height: ${wp('11.7%')};
  flex-direction: row;
@@ -28,7 +29,7 @@ const HeaderBar = Styled.View`
 `;
 
 const HeaderLeftContainer = Styled.View`
- padding-top: 12px;
+ padding-top: 17px;
  padding-left: 16px;
  padding-bottom: 16px;
 `;

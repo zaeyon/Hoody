@@ -7,7 +7,7 @@ import {
 import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import {FlatList, SectionList, Picker, TouchableWithoutFeedback, StyleSheet, ActivityIndicator} from 'react-native';
 import {useSelector} from 'react-redux';
-import Modal from 'react-native-modal'
+import {isIphoneX} from 'react-native-iphone-x-helper';
 
 import ProfileListFeedItem from '~/Components/Presentational/ProfileScreen/ProfileListFeedItem';
 import ProfileTileFeedItem from '~/Components/Presentational/ProfileScreen/ProfileTileFeedItem';
@@ -21,7 +21,7 @@ const UserFeedListContainer = Styled.View`
 `;
 
 const ListTypeFeedContainer = Styled.View`
-padding-bottom: 30px;
+padding-bottom: ${isIphoneX() ? wp('8%') : wp('11%')};
 `;
 
 const TileTypeFeedContainer = Styled.View`

@@ -9,6 +9,7 @@ import {useSelector} from 'react-redux';
 import AboveKeyboard from 'react-native-above-keyboard';
 import {KeyboardAwareScrollView, KeyboardAwareFlatList} from 'react-native-keyboard-aware-scroll-view';
 import Modal from 'react-native-modal';
+import {isIphoneX} from 'react-native-iphone-x-helper';
 
 import CommentItem from '~/Components/Presentational/CommentListScreen/CommentItem';
 import ReplyItem from '~/Components/Presentational/CommentListScreen/ReplyItem';
@@ -85,7 +86,7 @@ const FeedInformationContainer = Styled.View`
 
 const CommentListContainer = Styled.View`
 flex: 1;
-padding-bottom: ${wp('5%')};
+padding-bottom: ${isIphoneX() ? wp('5%') : wp('15%')};
 background-color: #ffffff;
 `;
 

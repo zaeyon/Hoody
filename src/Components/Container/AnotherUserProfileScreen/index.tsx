@@ -508,6 +508,8 @@ const AnotherUserProfileScreen = ({navigation, route}: Props) => {
   const navigateGoBack = () => {
       if(route.params?.requestScreen) {
         navigation.navigate("SearchScreen");
+      } else if(route.params?.request === "Alarm") {
+        navigation.navigate("AlarmScreen");
       } else {
         navigation.goBack();
       }

@@ -71,20 +71,20 @@ color: #898A8D;
 
 interface Props {
     navigation: any,
-    feedId: number,
+    postId: number,
     mainImage: string,
     mainTag: string,
     rating: string,
     expense: string,
     location: string,
 }
-const ScrapFeedItem = ({navigation, feedId, mainImage, mainTag, rating, expense, location}: Props) => {
+const ScrapFeedItem = ({navigation, postId, mainImage, mainTag, rating, expense, location}: Props) => {
 
     const moveToFeedDetail = () => {
         navigation.navigate("FeedStack", {
           screen: "FeedDetailScreen",
           params: {
-          feedId:feedId,
+          postId:postId,
           }
         })
       }

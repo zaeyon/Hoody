@@ -142,7 +142,7 @@ const FeedDeclareScreen = ({navigation, route}: Props) => {
     const declareFeed = () => {
         console.log("selectedReaseon", selectedReason);
 
-        POSTReport("post", route.params.feedId, selectedReason)
+        POSTReport("post", route.params.postId, selectedReason)
         .then(function(response) {
             console.log("게시글 신고 성공", response)
             navigation.goBack();

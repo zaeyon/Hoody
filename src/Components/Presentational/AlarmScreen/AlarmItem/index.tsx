@@ -1,5 +1,5 @@
 import React from 'react';
-import {TouchableWithoutFeedback} from 'react-native';
+import {TouchableWithoutFeedback, TouchableOpacity} from 'react-native';
 import Styled from 'styled-components/native';
 import {
     widthPercentageToDP as wp,
@@ -10,10 +10,11 @@ const Container = Styled.View`
  width: ${wp('100%')};
  background-color: #ffffff;
  flex-direction: row;
+ align-items: center;
 `;
 
 const ProfileImageContainer = Styled.View`
- padding-top: 23px;
+ padding-top: 10px;
  padding-left: 15px;
  padding-bottom: 8px;
 `;
@@ -25,6 +26,7 @@ const ProfileImage = Styled.Image`
 `;
 
 const AlarmInfoContainer = Styled.View`
+ width: ${wp('83%')}
  padding-left: 15px;
  padding-top: 18px;
  padding-bottom: 15px;
@@ -54,6 +56,7 @@ const AlarmDateText = Styled.Text`
 
 interface Props {
     navigation: any,
+    notifyId: number,
     senderProfileImage: string,
     senderNickname: string,
     message: string,
@@ -61,9 +64,10 @@ interface Props {
     sentDate: string,
     postId: string,
     senderId: string,
+    openNotifyModal: (notifyId:number) => void,
 }
 
-const AlarmItem = ({navigation, senderProfileImage, senderNickname, message, type, sentDate, postId, senderId}: Props) => {
+const AlarmItem = ({navigation, notifyId, senderProfileImage, senderNickname, message, type, sentDate, postId, senderId, openNotifyModal}: Props) => {
 
     const formatSentDate = (date: any) => {
         var tmpDate = new Date(date),
@@ -81,7 +85,8 @@ const AlarmItem = ({navigation, senderProfileImage, senderNickname, message, typ
   const moveToSenderProfile = () => {
     navigation.navigate("AnotherUserProfileStack", {
       screen: 'AnotherUserProfileScreen',
-      params: {requestedUserNickname: senderNickname}
+      params: {requestedUserNickname: senderNickname},
+      request: "Alarm",
     });
   }
 
@@ -89,7 +94,7 @@ const AlarmItem = ({navigation, senderProfileImage, senderNickname, message, typ
     navigation.navigate("FeedStack", {
         screen: "CommentListScreen",
         params: {
-        feedId: postId,
+        postId: postId,
         request: "Alarm",
        }
     })
@@ -99,48 +104,55 @@ const AlarmItem = ({navigation, senderProfileImage, senderNickname, message, typ
     navigation.navigate("FeedStack", {
         screen: 'LikeListScreen',
         params: {
-        feedId: postId,
+        postId: postId,
         request: "Alarm",
        }
     })
   }
+
+  const onLongPressNotify = () => {
+      console.log("onLongPressNotify")
+      openNotifyModal(notifyId);
+  }
     
     return (
         <Container>
-            <TouchableWithoutFeedback onPress={() => moveToSenderProfile()}>
+            <TouchableOpacity onPress={() => moveToSenderProfile()}>
             <ProfileImageContainer>
                 <ProfileImage
                 source={{uri: senderProfileImage}}
                 />
             </ProfileImageContainer>
-            </TouchableWithoutFeedback>
+            </TouchableOpacity>
             {type === "Comment" && (
-            <TouchableWithoutFeedback onPress={() => moveToFeedComment()}>
+            <TouchableOpacity onPress={() => moveToFeedComment()} onLongPress={() => onLongPressNotify()}>
                 <AlarmInfoContainer>
                     <NicknameText>{senderNickname}
                     <AlarmDescripText>{"님이 회원님의 게시글에 댓글을 남겼습니다."}</AlarmDescripText>
                     </NicknameText>
                 <AlarmDateText>{formatSentDate(sentDate)}</AlarmDateText>
                 </AlarmInfoContainer>
-            </TouchableWithoutFeedback>
+            </TouchableOpacity>
             )}
             {type === "Like" && (
-            <TouchableWithoutFeedback onPress={() => moveToFeedLike()}>
+            <TouchableOpacity onPress={() => moveToFeedLike()} onLongPress={() => onLongPressNotify()}>
                 <AlarmInfoContainer>
                     <NicknameText>{senderNickname}
                     <AlarmDescripText>{"님이 회원님의 게시글에 좋아요를 남겼습니다."}</AlarmDescripText>
                     </NicknameText>
                 <AlarmDateText>{formatSentDate(sentDate)}</AlarmDateText>
                 </AlarmInfoContainer>
-            </TouchableWithoutFeedback>
+            </TouchableOpacity>
             )}
             {type === "Follow" && (
+            <TouchableOpacity onPress={() => moveToSenderProfile()} onLongPress={() => onLongPressNotify()}>
                 <AlarmInfoContainer>
                     <NicknameText>{senderNickname}
                     <AlarmDescripText>{"님이 회원님을 팔로우 했습니다."}</AlarmDescripText>
                     </NicknameText>
                 <AlarmDateText>{formatSentDate(sentDate)}</AlarmDateText>
                 </AlarmInfoContainer>
+            </TouchableOpacity>
             )}
         </Container>
     )

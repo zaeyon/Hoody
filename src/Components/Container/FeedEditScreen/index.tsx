@@ -1609,7 +1609,7 @@ const clickToUploadFinish = () => {
       console.log("JSONstringify_descriptionArray", JSONstirngify_descriptionArray);
       console.log("JSONstringify_productoArray", JSONstringify_productArray);
 
-      POSTUpdate(route.params?.feedId, JSONstirngify_descriptionArray, mediaFileArray, mainTag, subTag1, subTag2, rating, expense, location, longitude, latitude, certifiedLocation, temporarySave, sequence, JSONstringify_productArray, transmitSpendDate, openState, subTagOneEdit, subTagTwoEdit, subTag1Exis, subTag2Exis)
+      POSTUpdate(route.params?.postId, JSONstirngify_descriptionArray, mediaFileArray, mainTag, subTag1, subTag2, rating, expense, location, longitude, latitude, certifiedLocation, temporarySave, sequence, JSONstringify_productArray, transmitSpendDate, openState, subTagOneEdit, subTagTwoEdit, subTag1Exis, subTag2Exis)
       .then(function(response) {
           if(response.status === 200) {
               console.log("후기 수정 성공", response);
@@ -1694,7 +1694,7 @@ const clickToTemporarySave = () => {
         console.log("JSONstringify_descriptionArray", JSONstirngify_descriptionArray);
         console.log("JSONstringify_productoArray", JSONstringify_productArray);
   
-        POSTUpdate(route.params?.feedId, JSONstirngify_descriptionArray, mediaFileArray, mainTag, subTag1, subTag2, rating, expense, location, longitude, latitude, certifiedLocation, true, sequence, JSONstringify_productArray, transmitSpendDate, openState, subTagOneEdit, subTagTwoEdit, subTag1Exis, subTag2Exis)
+        POSTUpdate(route.params?.postId, JSONstirngify_descriptionArray, mediaFileArray, mainTag, subTag1, subTag2, rating, expense, location, longitude, latitude, certifiedLocation, true, sequence, JSONstringify_productArray, transmitSpendDate, openState, subTagOneEdit, subTagTwoEdit, subTag1Exis, subTag2Exis)
         .then(function(response) {
             if(response.status === 200) {
                 console.log("후기 임시저장 성공", response);
@@ -1712,7 +1712,7 @@ const moveToFeedDetail = () => {
     navigation.navigate("FeedStack", {
         screen: "FeedDetailScreen",
         params: {
-            feedId: route.params?.feedId,
+            postId: route.params?.postId,
             update: true,
         }
     })

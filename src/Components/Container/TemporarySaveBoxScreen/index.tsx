@@ -163,16 +163,16 @@ color: #C4C4C4;
         setTemporarySaveListEdit(false);
     }
 
-    const moveToTemporaryDetail = (feedId: number) => {
+    const moveToTemporaryDetail = (postId: number) => {
         navigation.navigate("UploadScreen", {
             temporarySaved: true,
-            temporaryFeedId: feedId,
+            temporaryFeedId: postId,
         })
     }
 
-    const deleteTemporarySaveFeed = (feedId: number, index: number) => {
+    const deleteTemporarySaveFeed = (postId: number, index: number) => {
 
-        DELETEPost(feedId)
+        DELETEPost(postId)
         .then(function(response) {
             console.log("임시저장 게시글 삭제완료")
             var deletedTemporarySaveList = temporarySaveListData;

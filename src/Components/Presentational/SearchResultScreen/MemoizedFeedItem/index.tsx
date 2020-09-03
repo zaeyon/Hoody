@@ -542,7 +542,7 @@ const FeedItem = ({
     navigation.navigate("FeedStack", {
       screen: "FeedDetailScreen",
       params: {
-      feedId:id,
+      postId:id,
       createdAt: createdDate,
       currentUserLike: currentUserLike,
       currentUserScrap: currentUserScrap,

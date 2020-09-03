@@ -412,7 +412,7 @@ const ProfileListFeedItem = ({
     const tmpCreatedDate = getDateFormat(createdAt);
     setCreatedDate(tmpCreatedDate);
     console.log("description", desArray);
-    console.log("feedId", id);
+    console.log("postId", id);
     console.log("피드 상세 미디어파일",mediaFiles)
     console.log("피드 닉네임", nickname)
     setChangeState(!changeState);
@@ -570,7 +570,7 @@ const ProfileListFeedItem = ({
     navigation.navigate("FeedStack", {
       screen: "FeedDetailScreen",
       params: {
-      feedId:id,
+      postId:id,
       tagList: tagList,
       ratingArray: ratingArray,
       createdAt: createdDate,

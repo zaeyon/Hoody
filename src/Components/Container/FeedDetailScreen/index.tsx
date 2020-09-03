@@ -766,7 +766,7 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
 
       console.log("response.data.post.mainTags", TEST_FEED_DETAIL.post.mainTags);
       setParagraphData(TEST_FEED_DETAIL.postBody);
-      setPostId(route.params.feedId);
+      setPostId(route.params.postId);
       setFeedDetailInfo(TEST_FEED_DETAIL.post);
       setLikeCount(TEST_FEED_DETAIL.post.likes);
       setAllCommentCount(TEST_FEED_DETAIL.post.commentsCount+TEST_FEED_DETAIL.post.replysCount);
@@ -782,10 +782,10 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
         if(route.params?.update) {
           route.params.update = false
         }
-        if(route.params?.feedId) {
-       getFeedDetail(route.params?.feedId)
+        if(route.params?.postId) {
+       getFeedDetail(route.params?.postId)
     }
-    }, [route.params?.feedId, route.params?.update])
+    }, [route.params?.postId, route.params?.update])
 
     useEffect(() => {
       if(route.params?.commentList) {
@@ -793,16 +793,17 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
       }
     }, [route.params?.commentList])
 
-    const getFeedDetail = (feedId: number) => {
-      GetFeedDetail(feedId).then(function(response) {
+    const getFeedDetail = (postId: number) => {
+      GetFeedDetail(postId).then(function(response) {
         console.log("GetFeedDetail Success:", response.data);
+        console.log("좋아요목록", response.data.post.Likers)
         console.log("currentUser.user", currentUser.user);
         if(response.data.post.user.id === currentUser.user.userId) {
           setCurrentUserFeed(true);
         }
         response.data.post.spendDate = getDateFormat(response.data.post.spendDate)
         setParagraphData(response.data.postBody);
-        setPostId(route.params.feedId);
+        setPostId(route.params.postId);
         setFeedDetailInfo(response.data.post);
         setLikeCount(response.data.post.likes);
         setAllCommentCount(response.data.post.commentsCount+response.data.post.replysCount);
@@ -849,7 +850,7 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
 
     const moveToLikersList = () => {
       navigation.navigate("LikeListScreen",{
-        likersList: feedDetailInfo.Likers,
+        postId: route.params?.postId,
       })
     }
 
@@ -886,7 +887,7 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
         var addedLikeFeeds = currentUser.likeFeeds;
         //var realTimeAddLikeList = currentUser.realTimeAddLikeList ? currentUser.realTimeAddLikeList : [];
         const likeObj = {
-          id: route.params.feedId,
+          id: route.params.postId,
         }
   
         addedLikeFeeds.push(likeObj);
@@ -1041,14 +1042,14 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
      navigation.navigate("FeedEditScreen", {
        paragraphData: paragraphData,
        feedDetailInfo: feedDetailInfo,
-       feedId: postId,
+       postId: postId,
      });
    }
 
    const moveToFeedDeclare = () => {
      setOtherUsersFeedModalVisible(false);
      navigation.navigate("FeedDeclareScreen", {
-       feedId: postId,
+       postId: postId,
      })
    }
 
@@ -1070,7 +1071,7 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
    const onRefreshFeedDetail = () => {
      setRefreshingFeedDetail(true);
      setTimeout(() => {
-       getFeedDetail(route.params?.feedId)
+       getFeedDetail(route.params?.postId)
      }, 10)
    }
 

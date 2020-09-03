@@ -571,7 +571,7 @@ const FeedMapScreen = ({navigation, route}: Props) => {
     const renderNearFeedItem = ({item, index}: any) => {
       return (
         <NearFeedItem
-        feedId={item.id}
+        postId={item.id}
         mainTag={item.mainTags.name}
         subTag1={item.subTagOnes ? item.subTagOnes.name : null}
         subTag2={item.subTagTwos ? item.subTagTwos.name : null}

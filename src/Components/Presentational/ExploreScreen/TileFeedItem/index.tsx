@@ -70,7 +70,7 @@ height: ${wp('35.1%')};
 `;
 
 interface Props {
-    feedId: number,
+    postId: number,
     mainImageUri: string,
     mainTag: string,
     rating: number,
@@ -81,13 +81,13 @@ interface Props {
 
 
 
-const TileFeedItem = ({feedId, mainImageUri, mainTag, rating, expense, address, navigation}: Props) => {
+const TileFeedItem = ({postId, mainImageUri, mainTag, rating, expense, address, navigation}: Props) => {
 
     const moveToFeedDetail = () => {
         navigation.navigate("FeedStack", {
             screen: "FeedDetailScreen",
             params: {
-                feedId: feedId,
+                postId: postId,
             }
         })
     }

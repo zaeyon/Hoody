@@ -145,14 +145,22 @@ interface Props {
     route: any,
 }
 
+var selectedId:any;
+
 const AlarmScreen = ({navigation, route}: Props) => {
     const [notificationListData, setNotificationListData] = useState<Array<object>>([]);
     const [refreshing, setRefreshing] = useState<boolean>(false);
     const [visibleModal, setVisibleModal] = useState<boolean>(false);
+    const [update, setUpdate] = useState<boolean>(!false);
 
     useEffect(() => {
         getNotificationList();
     }, [])
+
+    const openNotifyModal = (notifyId: number) => {
+        setVisibleModal(true);
+        selectedId = notifyId
+    }
     
     const getNotificationList = () => {
         GETNotificationList()
@@ -179,13 +187,15 @@ const AlarmScreen = ({navigation, route}: Props) => {
     const renderAlarmItem = ({item, index}: any) => {
         return (
             <AlarmItem
+            openNotifyModal={openNotifyModal}
+            notifyId={item.id}
             navigation={navigation}
             senderProfileImage={item.senders.profileImg}
             senderNickname={item.senders.nickname}
             message={item.message}
             type={item.type}
             sentDate={item.createdAt}
-            postId={item.id}
+            postId={item.postId}
             senderId={item.senders.id}
             />
         )
@@ -207,14 +217,28 @@ const AlarmScreen = ({navigation, route}: Props) => {
         DELETENotification("all")
         .then(function(response) {
             console.log("알림 전체 삭제", response)
+            setNotificationListData([]);
+            setVisibleModal(false);
         })
         .catch(function(error) {
             console.log("알림 전체 삭제 실패", error)
         })
     }
 
-    const removeNotify = () => {
-
+    const removeNotify = (notifyId:number) => {
+        DELETENotification(notifyId)
+        .then(function(response) {
+            console.log("알림 삭제 성공", response);
+            var tmpNotificationListData = notificationListData;
+            const index = tmpNotificationListData.findIndex(obj => obj.id);
+            tmpNotificationListData.splice(index, 1);
+            console.log("tmpNotificationListData", tmpNotificationListData);
+            setNotificationListData(tmpNotificationListData);
+            setVisibleModal(false);
+        })
+        .catch(function(error) {
+            console.log("알림 삭제 실패", error);
+        })
     }
 
     return (
@@ -252,7 +276,7 @@ const AlarmScreen = ({navigation, route}: Props) => {
         <ModalHeaderContainer>
         <ModalToggleButton/>
         </ModalHeaderContainer>
-        <TouchableWithoutFeedback onPress={() => removeNotify()}>
+        <TouchableWithoutFeedback onPress={() => removeNotify(selectedId)}>
         <ModalTabItemContainer>
           <ModalTabItemIconImage
           style={{tintColor:'#1D1E1F'}}

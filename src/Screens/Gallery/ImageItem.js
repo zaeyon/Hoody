@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+ import React, {Component} from 'react';
 import {
   Image,
   StyleSheet,
@@ -20,7 +20,7 @@ const ImageUnselectedButton = Styled.View`
  height: ${wp('5.5%')};
  border-radius: 100;
  background-color: transparent;
- border-width: 2.5px;
+ border-width: 1.5px;
  border-color: #F5F5F5;
 `;
 
@@ -29,18 +29,17 @@ const ImageSelectedButton = Styled.View`
  width: ${wp('5.5%')};
  height: ${wp('5.5%')};
  border-radius: 100;
- background-color: #23E5D2;
- border-width: 2.5px;
- border-color: #23E5D2;
+ background-color: #267DFF;
+ border-width: 1.5px;
+ border-color: #ffffff;
  justify-content: center;
  align-items: center;
 `;
 
 const ImageSelectedCount = Styled.Text`
- ';
- font-size: 15px;
+ font-size: 13px;
+ font-weight: 600;
  color: #ffffff;
-
 `;
 
 const ImageCheckedButton = Styled.Image`

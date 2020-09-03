@@ -68,7 +68,7 @@ const FeedRatingText = Styled.Text`
 `;
 
 interface Props {
-    feedId: number,
+    postId: number,
     mainImageUri: string,
     mainTag: string,
     address: string,
@@ -76,7 +76,7 @@ interface Props {
     navigation: any,
 }
 
-const MainPopularFeedItem = ({navigation, feedId, mainImageUri, mainTag, address, rating}: Props) => {
+const MainPopularFeedItem = ({navigation, postId, mainImageUri, mainTag, address, rating}: Props) => {
 
     console.log("메인 피드 아이템 mainImageUri", mainImageUri);
 
@@ -84,7 +84,7 @@ const MainPopularFeedItem = ({navigation, feedId, mainImageUri, mainTag, address
         navigation.navigate("FeedStack", {
             screen: "FeedDetailScreen",
             params: {
-                feedId: feedId,
+                postId: postId,
                 update: true,
             }
         })

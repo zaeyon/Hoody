@@ -70,20 +70,20 @@ const FeedLocationText = Styled.Text`
 interface Props {
     navigation: any,
     mainImageUri: string,
-    feedId: number,
+    postId: number,
     mainTag: string,
     address: string,
     expense: string,
     rating: rating
 }
 
-const SubPopularFeedItem = ({navigation, mainImageUri, feedId, mainTag, address, expense, rating}: Props) => {
+const SubPopularFeedItem = ({navigation, mainImageUri, postId, mainTag, address, expense, rating}: Props) => {
 
     const moveToFeedDetail = () => {
         navigation.navigate("FeedStack", {
             screen: "FeedDetailScreen",
             params: {
-                feedId: feedId,
+                postId: postId,
             }
         })
     }

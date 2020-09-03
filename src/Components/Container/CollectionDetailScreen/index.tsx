@@ -375,7 +375,7 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
             rating={item.starRate}
             expense={item.expense}
             location={item.address ? item.address.address : null}
-            feedId={item.id}
+            postId={item.id}
             />
         )
     }

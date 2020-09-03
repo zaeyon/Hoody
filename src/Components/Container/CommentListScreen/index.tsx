@@ -4,7 +4,7 @@ import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp
 } from 'react-native-responsive-screen';
-import {FlatList, TouchableWithoutFeedback, Keyboard, ScrollView, Text, StyleSheet, RefreshControl} from 'react-native';
+import {FlatList, TouchableWithoutFeedback, Keyboard, ScrollView, Text, StyleSheet, RefreshControl, ActivityIndicator} from 'react-native';
 import {useSelector} from 'react-redux';
 import AboveKeyboard from 'react-native-above-keyboard';
 import {KeyboardAwareScrollView, KeyboardAwareFlatList} from 'react-native-keyboard-aware-scroll-view';
@@ -37,7 +37,7 @@ const HeaderLeftContainer = Styled.View`
 background-color: #ffffff;
 justify-content: center;
 align-items: center;
-padding-top: 7px;
+padding-top: 13px;
 padding-left: 16px;
 padding-bottom: 13px;
 `;
@@ -239,6 +239,12 @@ const ModalTabItemLabelText = Styled.Text`
  color: #1D1E1F;
 `;
 
+const LoadingContainer = Styled.View`
+ flex: 1;
+ background-color: #FFFFFF;
+ margin-top: 200px;
+ align-items: center;
+`;
 
 const COMMENT_DATA = 
 [
@@ -377,6 +383,7 @@ const CommentListScreen = ({navigation, route}: Props) => {
     const [reloadComment, setReloadComment] = useState<boolean>(false);
 
     const [refreshingComment, setRefreshingComment] = useState<boolean>(false);
+    const [loadingComment, setLoadingComment] = useState<boolean>(true);
 
     const currentUser = useSelector((state) => state.currentUser);
     const commentInputRef = useRef(null);
@@ -402,7 +409,7 @@ const CommentListScreen = ({navigation, route}: Props) => {
 
     useEffect(() => {
       console.log("CommentListScreen navigation", navigation);
-      console.log("댓글불러올 피드 ID", route.params.feedId)
+      console.log("댓글불러올 피드 ID", route.params.postId)
     }, [])
 
     useEffect(() => {
@@ -419,7 +426,7 @@ const CommentListScreen = ({navigation, route}: Props) => {
           setReloadComment(false)
         }
         if(route.params?.postId) {
-            console.log("route.params.feedId", route.params.feedId);
+            console.log("route.params.postId", route.params.postId);
             setPostId(route.params.postId);
             getCommentList();
             
@@ -430,6 +437,7 @@ const CommentListScreen = ({navigation, route}: Props) => {
       GetComment(route.params.postId)
             .then(function(response) {
                 console.log("댓글 불러오기 성공", response.allComment)
+                setLoadingComment(false);
                 setRefreshingComment(false);
                 setCommentList(response.allComment);
                 setAllCommentCount(response.allCommentCount)
@@ -500,12 +508,12 @@ const CommentListScreen = ({navigation, route}: Props) => {
       if(route.params?.pushAlarm) {
         navigation.navigate("FeedDetailScreen", {
             commentList: commentList,
-            feedId: route.params?.feedId,
+            postId: route.params?.postId,
             pushAlarm: true,
         })
       } else if(route.params?.request === "Alarm") {
         navigation.navigate("FeedDetailScreen", {
-        feedId: route.params?.feedId,
+        postId: route.params?.postId,
         request: "Alarm",
         })
       } else {
@@ -589,9 +597,7 @@ const CommentListScreen = ({navigation, route}: Props) => {
   const renderCommentItem = ({item, index}) => {
     var date = new Date(item.createdAt);
     date = getDateFormat(date);
-    if(item.replys[0]) {
-      console.log("item.replys[0]", item.replys[0])
-    }
+    
     return (
     <CommentItemContainer style={index === 0 && {marginTop:14}}>
     <CommentItem
@@ -626,7 +632,7 @@ const CommentListScreen = ({navigation, route}: Props) => {
        </TouchableWithoutFeedback>
        <TouchableWithoutFeedback onPress={() => 0}>
          <HeaderCenterContainer>
-         <HeaderTitleText>{"댓글 " + allCommentCount+"개"}</HeaderTitleText>
+         <HeaderTitleText>{loadingComment ? "" : ("댓글 " + allCommentCount+"개")}</HeaderTitleText>
        </HeaderCenterContainer>
        </TouchableWithoutFeedback>
        <HeaderRightContainer>
@@ -655,6 +661,12 @@ const CommentListScreen = ({navigation, route}: Props) => {
      </FeedInformationContainer>
 
      */}
+     {loadingComment && (
+       <LoadingContainer>
+         <ActivityIndicator/>
+       </LoadingContainer>
+     )}
+     {!loadingComment && (
      <KeyboardAwareScrollView
      showsVerticalScrollIndicator={false}
      refreshControl={
@@ -672,6 +684,7 @@ const CommentListScreen = ({navigation, route}: Props) => {
         />
         </CommentListContainer>
         </KeyboardAwareScrollView>
+     )}
         <FooterContainer>
           <AboveKeyboard
           style={{backgroundColor:'#ffffff'}}

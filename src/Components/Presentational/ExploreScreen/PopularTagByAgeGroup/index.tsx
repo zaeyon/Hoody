@@ -93,7 +93,7 @@ const PopularTagByAgeGroup = ({navigation, ageGroupPopularTagListData, selectPop
      console.log("선택된 태그 피드 아이템", item)
         return (
             <TileFeedItem
-            feedId={item.id}
+            postId={item.id}
             navigation={navigation}
             mainImageUri={item.mediaFiles[0] ? item.mediaFiles[0].url : ""}
             mainTag={item.mainTags.name}

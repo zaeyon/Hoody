@@ -12,6 +12,9 @@ import {
 import LikeItem from '~/Components/Presentational/LikeListScreen/LikeItem';
 import { BaseRouter } from '@react-navigation/native';
 
+// Route
+import GetFeedDetail from '~/Route/Post/GetFeedDetail';
+
 const Container = Styled.SafeAreaView`
  flex: 1;
  background-color: #ffffff;
@@ -30,7 +33,7 @@ const HeaderLeftContainer = Styled.View`
 background-color: #ffffff;
 justify-content: center;
 align-items: center;
-padding-top: 7px;
+padding-top: 13px;
 padding-left: 16px;
 padding-bottom: 13px;
 `;
@@ -120,6 +123,7 @@ const LikeListScreen = ({navigation, route}: Props) => {
     const [likersListData, setLikersListData] = useState<Array<object>>([]);
 
     useLayoutEffect(() => {
+        console.log("route", route)
         navigation.setOptions({
             transitionSpec: {
                 open: config,
@@ -129,17 +133,32 @@ const LikeListScreen = ({navigation, route}: Props) => {
     }, [navigation, route])
 
     useEffect(() => {
-        if(route.params?.likersList) {
-            console.log("route.params?.likersList", route.params.likersList);
-            setLikersListData(route.params.likersList);
+        if(route.params?.postId) {
+        getFeedLikers(route.params?.postId);
         }
-    }, [route.params?.likersList])
+        
+    }, [route.params?.postId])
+
+    const getFeedLikers = (postId: number) => {
+        GetFeedDetail(postId)
+        .then(function(response) {
+            console.log("피드 좋아요 목록 response", response.data.post.Likers);
+        })
+        .catch(function(error) {
+            console.log("피드 좋아요 목록 실패 error", error);
+        })
+    }
 
     const navigateGoBack = () => {
         if(route.params?.pushAlarm) {
             navigation.navigate("FeedDetailScreen", {
-                feedId: route.params?.postId,
+                postId: route.params?.postId,
                 pushAlarm: true,
+            })
+        } else if(route.params?.request === "Alarm") {
+            navigation.navigate("FeedDetailScreen", {
+            postId: route.params?.postId,
+            request: "Alarm",
             })
         } else {
             navigation.goBack();

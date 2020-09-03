@@ -72,7 +72,7 @@ const PopularFeedList = ({navigation, postsByWroteTagListData}: Props) => {
             <MainPopularFeedItemContainer>
             <MainPopularFeedItem
             navigation={navigation}
-            feedId={item.id}
+            postId={item.id}
             mainImageUri={item.mediaFiles[0] ? item.mediaFiles[0].url : ""}
             mainTag={item.mainTags.name}
             address={item.address ? item.address.address : null}
@@ -85,7 +85,7 @@ const PopularFeedList = ({navigation, postsByWroteTagListData}: Props) => {
             <SubPopularFeedItemContainer>
             <SubPopularFeedItem
             navigation={navigation}
-            feedId={item.id}
+            postId={item.id}
             mainImageUri={item.mediaFiles[0] ? item.mediaFiles[0].url : ""}
             mainTag={item.mainTags.name}
             address={item.address ? item.address.address : null}

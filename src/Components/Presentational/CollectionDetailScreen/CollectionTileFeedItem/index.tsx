@@ -81,18 +81,18 @@ interface Props {
     rating: number,
     expense: string,
     location: string,
-    feedId: number,
+    postId: number,
 }
 
 
 
-const CollectionTileFeedItem = ({navigation, mainImage, mainTag, rating, expense, location, feedId}: Props) => {
+const CollectionTileFeedItem = ({navigation, mainImage, mainTag, rating, expense, location, postId}: Props) => {
 
     const moveToFeedDetail = () => {
         navigation.navigate("FeedStack", {
             screen: "FeedDetailScreen",
             params: {
-            feedId: feedId,
+            postId: postId,
             }
         })
     }

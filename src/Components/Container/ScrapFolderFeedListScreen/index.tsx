@@ -209,7 +209,7 @@ const ScrapFolderFeedListScreen = ({navigation, route}: any) => {
         return (
             <ScrapFeedItem
             navigation={navigation}
-            feedId={item.id}
+            postId={item.id}
             mainImage={item.mediaFiles[0] ? item.mediaFiles[0].url : null}
             mainTag={item.mainTags.name}
             rating={item.starRate}

@@ -117,7 +117,7 @@ border-radius: 10px;
 `;
 
 interface Props {
-    feedId: number,
+    postId: number,
     mainTag: string,
     subTag1: string,
     subTag2: string,
@@ -131,14 +131,14 @@ interface Props {
     navigation: any,
 }
 
-const NearFeedItem = ({feedId, mainTag, subTag1, subTag2, rating, expense, location, likeCount, commentCount, mainImageUri, createdAt, navigation}: Props) => {
+const NearFeedItem = ({postId, mainTag, subTag1, subTag2, rating, expense, location, likeCount, commentCount, mainImageUri, createdAt, navigation}: Props) => {
 
     const moveToFeedDetail = () => {
-        console.log("feedId", feedId);
+        console.log("postId", postId);
         navigation.navigate("FeedStack", {
           screen: "FeedDetailScreen",
           params: {
-            feedId: feedId,
+            postId: postId,
             createdAt: createdAt,
           }
         })

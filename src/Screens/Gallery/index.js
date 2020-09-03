@@ -286,14 +286,12 @@ class Gallery extends Component {
     if (this.state.selectedAlbum === '모두 보기') {
       fetchParams = {
         first: 100,
-        groupTypes,
         assetType,
       };
     } else {
       groupName = this.state.selectedAlbum;
       fetchParams = {
         first: 100,
-        groupTypes,
         groupName,
         assetType,
       };
@@ -315,7 +313,10 @@ class Gallery extends Component {
     }
 
     CameraRoll.getPhotos(fetchParams).then(
-      (data) => this.appendImages(data),
+      (data) => {
+        this.appendImages(data)
+        console.log("불러온 사진22", data);
+      },
       (e) => console.log(e),
     );
   }

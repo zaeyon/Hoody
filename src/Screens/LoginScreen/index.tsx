@@ -132,6 +132,7 @@ const ItemLabelText = Styled.Text`
 
 const ItemTextInput = Styled.TextInput`
 width: ${wp('91.46%')};
+color: #000000;
 height: 50px;
 border-radius: 10px;
 background-color: #FAFAFA;

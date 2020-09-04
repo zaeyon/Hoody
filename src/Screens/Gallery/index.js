@@ -19,6 +19,8 @@ import PropTypes from 'prop-types';
 import {Dropdown} from 'react-native-material-dropdown';
 import Row from './Row';
 import ImageItem from './ImageItem';
+import AlbumItem from './AlbumItem'
+
 const styles = StyleSheet.create({
   wrapper: {
     flexGrow: 1,
@@ -152,7 +154,7 @@ class Gallery extends Component {
       loadingMore: false,
       noMore: false,
       data: [],
-      albumName: [{}],
+      albumArray: [{}],
       albumTitleCount: [],
       selectedAlbum: '모두 보기',
       visibleAlbumList: false,
@@ -174,22 +176,55 @@ class Gallery extends Component {
     const params = {
       assetType: 'All',
     };
+
+    var allPhotoCount = 0;
+
     CameraRoll.getAlbums(params).then((data) => {
-      const titleCount = data.map((x) => x.title + '(' + x.count + ')');
-      var dataTitle = data.map(function (obj) {
-        var albumObj = {};
-        albumObj.value = obj.title;
-        console.log('albumObj', albumObj);
+      console.log("앨범 목록", data)
+      var albumArray = data.map(function (obj) {
+        var albumObj = {
+          title: obj.title,
+          count: obj.count,
+        };
+
+        CameraRoll.getPhotos({
+          first: 1,
+          groupTypes: "Album",
+          groupName: obj.title
+        })
+        .then(r => {
+          console.log("앨범 이름", obj.title);
+          console.log("앨범 썸네일", r.edges[0].node.image)
+          albumObj.thumbnail = r.edges
+        })
+        .catch(err => {
+          console.log("앨범 썸네일 오류", err)
+        })
+
         return albumObj;
       });
 
-      dataTitle.unshift({value: '모두 보기'});
+      CameraRoll.getPhotos({
+        first: 1,
+        assetType: 'Photos'
+      })
+      .then(r => {
+        console.log("모두 보기 썸네일", r.edges)
+        albumArray.unshift({title: '모두 보기', thumbnail: r.edges});
+        
+       setTimeout(() => {
+        this.setState({
+          albumArray: albumArray,
+        });
+        console.log('22 albumName', this.state.albumArray);
 
-      this.setState({
-        albumName: dataTitle,
-      });
-      console.log('22 albumName', this.state.albumName);
-      console.log("this.state.selected mount", this.state.selected);
+      }, 100)
+      })
+      .catch(err => {
+        console.log("모두 보기 썸네일 err", err);
+      })
+
+
     });
   }
 
@@ -280,37 +315,37 @@ class Gallery extends Component {
   }
 
   doFetch() {
+    console.log("doFetch selectedAlbum", this.state.selectedAlbum);
     let {groupTypes, assetType} = this.props;
     let groupName;
     let fetchParams;
     if (this.state.selectedAlbum === '모두 보기') {
+      console.log("사진 모두보기");
       fetchParams = {
         first: 100,
         assetType,
       };
     } else {
+      console.log("선택한 앨밤", this.state.selectedAlbum);
       groupName = this.state.selectedAlbum;
+
       fetchParams = {
         first: 100,
+        groupTypes: "Album",
         groupName,
-        assetType,
       };
     }
-    console.log('groupNamezzzzz', groupName);
-
-    groupTypes = 'Album';
-    console.log('groupTypes', groupTypes);
-
     /*
     if (Platform.OS === 'android') {
       // not supported in android
       //delete fetchParams.groupTypes;
     }
     */
-
+   
     if (this.state.lastCursor) {
       fetchParams.after = this.state.lastCursor;
     }
+    
 
     CameraRoll.getPhotos(fetchParams).then(
       (data) => {
@@ -470,6 +505,31 @@ class Gallery extends Component {
         <Text style={[{textAlign: 'center'}, emptyTextStyle]}>{emptyText}</Text>
       );
 
+
+    const selectAlbum = (title) => {
+    this.setState({
+      visibleAlbumList: false,
+      selectedAlbum: title,
+      lastCursor: null,
+      images: [],
+    })
+
+    this.fetch()
+    }
+
+
+    const renderAlbumItem = ({item, index}) => {
+      console.log("renderAlbumItem item", item.thumbnail[0].node.image);
+      return (
+        <AlbumItem
+        albumCount={item.count}
+        albumTitle={item.title}
+        albumThumbnail={item.thumbnail[0].node.image.uri}
+        selectAlbum={selectAlbum}
+        />
+      )
+    }
+
     return (
       <Container>
         <HeaderContainer>
@@ -509,6 +569,9 @@ class Gallery extends Component {
         )}
         {this.state.visibleAlbumList && (
           <AlbumListContainer>
+            <FlatList
+            data={this.state.albumArray}
+            renderItem={renderAlbumItem}/>
           </AlbumListContainer>
         )}
       </Container>

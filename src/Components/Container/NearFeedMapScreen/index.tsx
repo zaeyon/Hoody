@@ -1,6 +1,6 @@
 import React, {useEffect, useState, createRef, useRef} from 'react';
 import Styled from 'styled-components/native';
-import {TouchableWithoutFeedback, Text, Dimensions, FlatList, StyleSheet, View} from 'react-native';
+import {TouchableWithoutFeedback, Text, Dimensions, FlatList, StyleSheet, View, ActivityIndicator} from 'react-native';
 import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp
@@ -1095,10 +1095,17 @@ const GPSIcon = Styled.Image`
 `;
 
 const HeaderShadowContainer = Styled.View`
-
  width: ${wp('100%')};
  height: 0.5px;
  background-color:#FFFFFF;
+`;
+
+const LoadingContainer = Styled.View`
+ position: absolute;
+ width: ${wp('100%')};
+ height: ${hp('100%')};
+ align-items: center;
+ justify-content: center;
 `;
 
 
@@ -1129,6 +1136,8 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
     const [locationInfo, setLocationInfo] = useState<object>({});
     const [locationFeedList, setLocationFeedList] = useState<Array<object>>([]);
     const [currentUserAddress, setCurrentUserAddress] = useState<string>();
+    const [loadingNearFeedMap, setLoadingNearFeedMap] = useState<boolean>(true);
+
     const [selectedRadius, setSelectedRadius] = useState<object>({
       index: 1,
       range: 1,
@@ -1223,6 +1232,7 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
             setNearLocationListData(tmpNearLocationListData);
             setTimeout(() => {
               setNearAllFeedListData(tmpNearAllFeedListData);
+              setLoadingNearFeedMap(false);
             })
           })
         })
@@ -1488,6 +1498,11 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
             )} 
         })}
       </MapView>
+      {loadingNearFeedMap && (
+        <LoadingContainer>
+          <ActivityIndicator/>
+        </LoadingContainer>
+      )}
       {!selectLocationMarker && (
       <SlidingUpPanel
       ref={allFeedPanelRef}

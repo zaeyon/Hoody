@@ -32,11 +32,8 @@ class Row extends PureComponent {
 
     var selectOrder;
 
-    console.log("renderImage item.node.image", item.node.image);
-    console.log("renderImage this.props.selectedImages", this.props.selectedImages);
     if(isSelected) {
       selectOrder = this.props.selectedImages.indexOf(item.node.image)+1;
-      console.log("isSelected true selectOrder", selectOrder);
     }
 
     return (

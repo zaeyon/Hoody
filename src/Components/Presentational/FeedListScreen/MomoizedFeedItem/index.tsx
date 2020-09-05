@@ -101,6 +101,8 @@ const LocationText = Styled.Text`
 
 const ExpenseRatingContainer = Styled.View`
  flex-direction: row;
+ align-items: center;
+height: ${wp('4.5%')}px;
 `;
 
 const RatingStarImage = Styled.Image`
@@ -111,6 +113,7 @@ height: ${wp('3.2%')}px;
 `;
 
 const RatingText = Styled.Text`
+margin-top: 1.5px;
 font-weight: 500;
 font-size: 13px;
 color: #1D1E1F;
@@ -160,13 +163,13 @@ const SecondImage = Styled.Image`
  border-top-right-radius: 10px;
  border-bottom-right-radius: 10px;
 resize-mode:cover;
- width: ${wp('40.5%')}px;
+ width: ${wp('40.0%')}px;
  height: ${wp('44%')}px;
 `;
 
 const ReviewImageContainer = Styled.View`
 padding-top: 10px;
-height: ${wp('82%')}px;
+height: ${wp('81%')}px;
 margin-bottom: 10px;
 `;
 
@@ -177,8 +180,8 @@ padding-top: 10px;
 const ReviewImage = Styled.Image`
 resize-mode:cover;
 border-radius: 10px; 
-width: ${wp('82%')}px
-height: ${wp('82%')}px;
+width: ${wp('81%')}px
+height: ${wp('81%')}px;
 `;
 
 const TagContainer = Styled.View`

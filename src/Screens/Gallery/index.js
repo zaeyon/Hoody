@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
 const Container = Styled.SafeAreaView`
  flex: 1;
  background-color: #FFFFFF;
- align-items: center;
+ align-items: flex-start;
 `;
 
 const HeaderContainer = Styled.View`
@@ -570,6 +570,7 @@ class Gallery extends Component {
         {this.state.visibleAlbumList && (
           <AlbumListContainer>
             <FlatList
+            showsVerticalScrollIndicator={false}
             data={this.state.albumArray}
             renderItem={renderAlbumItem}/>
           </AlbumListContainer>

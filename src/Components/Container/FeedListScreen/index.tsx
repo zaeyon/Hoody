@@ -100,12 +100,13 @@ position: absolute;
 background-color: #ffffff;
 `;
 
-const ActivityIndicatorContainer = Styled.View`
- flex: 1;
+const LoadingContainer = Styled.View`
+width: ${wp('100%')};
+height:${hp('100%')};
+margin-top: ${hp('35%')};
  background-color:#FFFFFF;
  align-items: center;
- justify-content: center;
- padding-bottom: 100px;
+
 `;
 
 const TEST_FEED_DATA = [
@@ -569,10 +570,10 @@ function FeedListScreen({navigation, route}: Props) {
           </HeaderLeftContainer>
       </HeaderBar>
       {loading && (
-        <ActivityIndicatorContainer>
+        <LoadingContainer>
           <ActivityIndicator
           size={"small"}/>
-        </ActivityIndicatorContainer>
+        </LoadingContainer>
       )}
       {!loading && (
       <ScrollView

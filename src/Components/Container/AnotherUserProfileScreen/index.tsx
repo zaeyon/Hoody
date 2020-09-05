@@ -138,7 +138,7 @@ const LoadingContainer = Styled.View`
  background-color: #FFFFFF;
  width: ${wp('100%')};
  height: ${hp('100%')};
- margin-top: 250px;
+ margin-top: ${hp('35%')};
 `;
  
  

@@ -226,7 +226,7 @@ const PickerFinishText = Styled.Text`
 
 const LoadingContainer = Styled.View`
  align-items: center;
- margin-top: 300px;
+ margin-top:${hp('35%')};
  width: ${wp('100%')};
  height: ${hp('100%')};
  background-color: #FFFFFF;

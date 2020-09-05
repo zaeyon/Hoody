@@ -242,7 +242,7 @@ const ModalTabItemLabelText = Styled.Text`
 const LoadingContainer = Styled.View`
  flex: 1;
  background-color: #FFFFFF;
- margin-top: 200px;
+ margin-top:${hp('35%')};
  align-items: center;
 `;
 

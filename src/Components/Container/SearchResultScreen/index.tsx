@@ -310,7 +310,7 @@ const LoadingContainer = Styled.View`
  width: ${wp('100%')};
  height: ${wp('100%')};
  background-color: #FFFFFF;
- margin-top: 300px;
+ margin-top: ${hp('35%')};
  align-items: center;
 `;
 

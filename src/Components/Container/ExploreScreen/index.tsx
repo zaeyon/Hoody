@@ -147,12 +147,12 @@ const PopularFeedListByLocationContainer = Styled.View`
  padding-bottom: ${isIphoneX() ? 120 : 130}
 `;
 
-const ActivityIndicatorContainer = Styled.View`
+const LoadingContainer = Styled.View`
  width: ${wp('100%')};
  height: ${hp('100%')};
  background-color:#FFFFFF;
  align-items: center;
- margin-top: 300px;
+ margin-top: ${hp('35%')};
 `;
 
 interface Props {
@@ -333,9 +333,9 @@ const ExploreScreen = ({navigation, route}: Props) => {
                 </TouchableWithoutFeedback>
             </HeaderBar>
             {loadingAll && (
-            <ActivityIndicatorContainer>
+            <LoadingContainer>
                 <ActivityIndicator/>
-            </ActivityIndicatorContainer>
+            </LoadingContainer>
             )}
             {!loadingAll && (
             <ScrollView

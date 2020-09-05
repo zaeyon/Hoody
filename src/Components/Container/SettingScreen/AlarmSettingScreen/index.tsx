@@ -1,11 +1,16 @@
 import React, {useState, useEffect} from 'react';
 import Styled from 'styled-components/native';
 import {TouchableWithoutFeedback, Switch} from 'react-native';
+import messaging from '@react-native-firebase/messaging';
 import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp
 } from 'react-native-responsive-screen';
 
+import {getNotifySetting, setNotifySetting} from '~/AsyncStorage/Notify';
+
+import POSTNotifySetting from '~/Route/Notification/POSTNotifySetting';
+import POSTAutoLogin from '~/Route/Auth/POSTAutoLogin';
 
 const Container = Styled.SafeAreaView`
  flex: 1;
@@ -28,7 +33,7 @@ const HeaderLeftContainer = Styled.View`
 `;
 
 const BackButtonContainer = Styled.View`
- padding: 7px 15px 13px 16px;
+ padding: 12.5px 15px 13px 16px;
  align-items: center;
  justify-content: center;
 `;
@@ -163,31 +168,96 @@ const AlarmSettingScreen = ({navigation, route}: Props) => {
     const [enabledCommentAlarm, setEnabledCommentAlarm] = useState<boolean>(true);
     const [enabledFollowAlarm, setEnabledFollowAlarm] = useState<boolean>(true);
     const [enabledEventAlarm, setEnabledEventAlarm] = useState<boolean>(true);
+    const [settingChange, setSettingChange] = useState<boolean>(false);
 
+    useEffect(() => {
+        getNotifySetting()
+        .then(function(response) {
+            if(!response) {
+              return    
+            } else {
+                if(response.like == false && response.comment == false && response.follower == false && response.event == false) {
+                     setEnabledPushAlarm(false);
+                } else {
+                    setEnabledPushAlarm(true);
+                    setEnabledLikeAlarm(response.like)
+                    setEnabledCommentAlarm(response.comment)
+                    setEnabledFollowAlarm(response.follower)
+                    setEnabledEventAlarm(response.event);
+                }
+            }
+        })
+        .catch(function(error) {
+            console.log("getNotifySetting error", error);
+        })
+
+    }, [])
+
+    useEffect(() => {
+        if(!enabledPushAlarm) {
+            setEnabledLikeAlarm(false);
+            setEnabledCommentAlarm(false);
+            setEnabledFollowAlarm(false);
+            setEnabledEventAlarm(false);
+        }
+        
+    }, [enabledPushAlarm])
+ 
+    useEffect(() => {
+        if(enabledEventAlarm) {
+            messaging()
+            .subscribeToTopic('event')
+            .then(() => console.log('이벤트 알림을 활성화했습니다.'));
+        } else {
+            messaging()
+            .unsubscribeFromTopic('event')
+            .then(() => console.log('이벤트 알림을 비활성화했습니다.'));
+        }
+    }, [enabledEventAlarm])
+    
     const togglePushAlarmSwitch = () => {
         setEnabledPushAlarm(!enabledPushAlarm);
+        setSettingChange(true);
     }
 
     const toggleLikeAlarmSwitch = () => {
         setEnabledLikeAlarm(!enabledLikeAlarm);
+        setSettingChange(true);
     }
 
     const toggleCommentAlarmSwitch = () => {
         setEnabledCommentAlarm(!enabledCommentAlarm);
+        setSettingChange(true);
     }
 
     const toggleFollowAlarmSwitch = () => {
         setEnabledFollowAlarm(!enabledFollowAlarm);
+        setSettingChange(true);
     }
 
     const toggleEventAlarmSwitch = () => {
         setEnabledEventAlarm(!enabledEventAlarm);
+        setSettingChange(true);
+    }
+
+    const navigateGoBack = () => {
+        navigation.goBack();
+        if(settingChange) {
+            POSTNotifySetting(enabledLikeAlarm, enabledCommentAlarm, enabledFollowAlarm)
+            .then(function(response:any) {
+                console.log("알림 설정 변경", response)
+                setNotifySetting(enabledLikeAlarm, enabledCommentAlarm, enabledFollowAlarm, enabledEventAlarm);
+            })
+            .catch(function(error:any) {
+                console.log("알림 설정 변경x", error);
+            })
+        }
     }
 
     return (
         <Container>
             <HeaderBar>
-                <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
+                <TouchableWithoutFeedback onPress={() => navigateGoBack()}>
                 <HeaderLeftContainer>
                     <BackButtonContainer>
                         <BackButton
@@ -218,6 +288,7 @@ const AlarmSettingScreen = ({navigation, route}: Props) => {
                         <TabItemLabelText>좋아요</TabItemLabelText>
                     <TabItemSwitchContainer>
                         <Switch
+                        disabled={!enabledPushAlarm ? true : false}
                         value={enabledLikeAlarm}
                         onValueChange={toggleLikeAlarmSwitch}
                         />
@@ -229,6 +300,7 @@ const AlarmSettingScreen = ({navigation, route}: Props) => {
                         <TabItemLabelText>댓글</TabItemLabelText>
                     <TabItemSwitchContainer>
                         <Switch
+                        disabled={!enabledPushAlarm ? true : false}
                         value={enabledCommentAlarm}
                         onValueChange={toggleCommentAlarmSwitch}
                         />
@@ -240,6 +312,7 @@ const AlarmSettingScreen = ({navigation, route}: Props) => {
                         <TabItemLabelText>새 팔로워</TabItemLabelText>
                     <TabItemSwitchContainer>
                         <Switch
+                        disabled={!enabledPushAlarm ? true : false}
                         value={enabledFollowAlarm}
                         onValueChange={toggleFollowAlarmSwitch}
                         />
@@ -251,6 +324,7 @@ const AlarmSettingScreen = ({navigation, route}: Props) => {
                         <ItemTitleText>이벤트 알림</ItemTitleText>
                     <TabItemSwitchContainer>
                         <Switch
+                        disabled={!enabledPushAlarm ? true : false}
                         value={enabledEventAlarm}
                         onValueChange={toggleEventAlarmSwitch}
                         />

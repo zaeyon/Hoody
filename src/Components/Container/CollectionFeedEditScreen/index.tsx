@@ -38,7 +38,7 @@ padding: 10px 15px 10px 15px;
 `;
 
 const BackButtonContainer = Styled.View`
-padding: 10px 15px 10px 15px;
+padding: 12.5px 15px 10px 15px;
  align-items: center;
  justify-content: center;
 `;

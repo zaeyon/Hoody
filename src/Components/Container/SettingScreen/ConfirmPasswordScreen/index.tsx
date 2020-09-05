@@ -33,7 +33,7 @@ const HeaderLeftContainer = Styled.View`
 `;
 
 const BackButtonContainer = Styled.View`
- padding: 7px 15px 13px 16px;
+ padding: 12.5px 15px 13px 16px;
  align-items: center;
  justify-content: center;
 `;
@@ -50,7 +50,7 @@ color: #1D1E1F;
 `;
 
 const HeaderRightContainer = Styled.View`
-padding: 7px 16px 13px 15px;
+padding: 12.5px 16px 13px 15px;
  align-items: center;
  justify-content: center;
  flex-direction: row;

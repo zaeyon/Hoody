@@ -42,7 +42,7 @@ const HeaderCancelText = Styled.Text`
 `;
 
 const BackButtonContainer = Styled.View`
- padding: 7px 16px 13px 16px;
+ padding: 12.5px 16px 13px 16px;
  align-items: center;
  justify-content: center;
 `;

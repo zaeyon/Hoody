@@ -16,7 +16,7 @@ const Container = Styled.View`
 `;
 
 const ProfileImageContainer = Styled.View`
-padding-top: 12px;
+padding-top: 15px;
 padding-left: 16px;
 padding-right: 12px;
  align-items: center;
@@ -115,10 +115,11 @@ const CommentItem = ({profileImage, nickname, comment, createAt, replys, clickTo
         if(currentUser.user?.nickname === nickname) {
             navigation.navigate("Profile")
         } else {
-            navigation.navigate("AnotherUserProfileStack", {
-              screen: "AnotherUserProfileScreen",
-              params: {requestedUserNickname: nickname}
-            });
+            navigation.navigate("AnotherUserProfileScreen",
+              {
+                  requestedUserNickname: nickname
+              }
+            );
         }
     }
 

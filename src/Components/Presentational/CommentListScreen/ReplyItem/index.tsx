@@ -15,7 +15,7 @@ const Container = Styled.View`
 `;
 
 const ProfileImageContainer = Styled.View`
-padding-top: 12px;
+padding-top: 15px;
 padding-left: 70px;
 padding-right: 12px;
  align-items: center;

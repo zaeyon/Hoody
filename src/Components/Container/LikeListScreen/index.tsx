@@ -143,6 +143,7 @@ const LikeListScreen = ({navigation, route}: Props) => {
         GetFeedDetail(postId)
         .then(function(response) {
             console.log("피드 좋아요 목록 response", response.data.post.Likers);
+            setLikersListData(response.data.post.Likers)
         })
         .catch(function(error) {
             console.log("피드 좋아요 목록 실패 error", error);

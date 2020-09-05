@@ -576,7 +576,7 @@ const FeedItem = ({
   }
 
   const moveToFeedDetail = () => {
-    navigation.navigate("FeedStack", {
+    navigation.push("FeedStack", {
       screen: "FeedDetailScreen",
       params: {
       postId:id,

@@ -81,7 +81,7 @@ interface Props {
 const ProfileTileFeedItem = ({navigation, postId, mainImage, mainTag, rating, expense, location}: Props) => {
 
     const moveToFeedDetail = () => {
-        navigation.navigate("FeedStack", {
+        navigation.push("FeedStack", {
           screen: "FeedDetailScreen",
           params: {
           postId:postId,

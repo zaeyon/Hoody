@@ -80,7 +80,7 @@ interface Props {
 const SubPopularFeedItem = ({navigation, mainImageUri, postId, mainTag, address, expense, rating}: Props) => {
 
     const moveToFeedDetail = () => {
-        navigation.navigate("FeedStack", {
+        navigation.push("FeedStack", {
             screen: "FeedDetailScreen",
             params: {
                 postId: postId,

@@ -408,7 +408,10 @@ function AnotherUserProfileStackScreen() {
        component={PinterMap} />
       <ProfileStack.Screen
       name="FollowListScreen"
-      component={FollowListScreen}/>    
+      component={FollowListScreen}/>
+      <ProfileStack.Screen
+      name="FeedStack"
+      component={FeedStackScreen}/>
       <ProfileStack.Screen
       name="FeedMapScreen"
       component={FeedMapScreen}/>

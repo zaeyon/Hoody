@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {FlatList, TouchableWithoutFeedback, StyleSheet} from 'react-native';
+import {FlatList, TouchableWithoutFeedback, StyleSheet, ActivityIndicator} from 'react-native';
 import Styled from 'styled-components/native';
 import {
     widthPercentageToDP as wp,
@@ -119,6 +119,15 @@ const ModalTabItemLabelText = Styled.Text`
  color: #1D1E1F;
 `;
 
+const LoadingContainer = Styled.View`
+ width: ${wp('100%')};
+ height: ${hp('100%')};
+ background-color: #FFFFFF;
+ align-items: center;
+ margin-top: ${hp('35%')};
+`;
+
+
 
 
 const TEST_ALARM_DATA = [
@@ -152,6 +161,7 @@ const AlarmScreen = ({navigation, route}: Props) => {
     const [refreshing, setRefreshing] = useState<boolean>(false);
     const [visibleModal, setVisibleModal] = useState<boolean>(false);
     const [update, setUpdate] = useState<boolean>(!false);
+    const [loading ,setLoading] = useState<boolean>(true);
 
     useEffect(() => {
         getNotificationList();
@@ -167,6 +177,7 @@ const AlarmScreen = ({navigation, route}: Props) => {
         .then(function(response) {
             console.log("알림 리스트 response", response);
             setRefreshing(false);
+            setLoading(false);
             setNotificationListData(response);
 
         })
@@ -256,6 +267,12 @@ const AlarmScreen = ({navigation, route}: Props) => {
                 </HeaderSettingContainer>
                 </TouchableWithoutFeedback>
             </HeaderBar>
+            {loading && (
+                <LoadingContainer>
+                    <ActivityIndicator/>
+                </LoadingContainer>
+            )}
+            {!loading && (
             <AlarmListContainer>
                 <FlatList
                 ListHeaderComponent={alarmListHeaderContainer}
@@ -265,6 +282,7 @@ const AlarmScreen = ({navigation, route}: Props) => {
                 data={notificationListData}
                 renderItem={renderAlarmItem}/>
             </AlarmListContainer>
+            )}
       <Modal
       onBackdropPress={() => setVisibleModal(false)}
       isVisible={visibleModal}

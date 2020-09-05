@@ -81,7 +81,7 @@ const MainPopularFeedItem = ({navigation, postId, mainImageUri, mainTag, address
     console.log("메인 피드 아이템 mainImageUri", mainImageUri);
 
     const moveToFeedDetail = () => {
-        navigation.navigate("FeedStack", {
+        navigation.push("FeedStack", {
             screen: "FeedDetailScreen",
             params: {
                 postId: postId,

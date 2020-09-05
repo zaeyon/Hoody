@@ -173,7 +173,7 @@ const ScrapFolderEditScreen = ({navigation, route}: Props) => {
         setScrapAlbumName(text);
     }
 
-    const createScrapAlbum = () => {
+    const finishScrapAlbumEdit = () => {
         var postIds = selectingScrapList.map((item: any, index: number) => {
           return item.id
         })
@@ -217,7 +217,7 @@ const ScrapFolderEditScreen = ({navigation, route}: Props) => {
                 </TouchableWithoutFeedback>
                 <HeaderTitleText>앨범 설정</HeaderTitleText>
                     {scrapAlbumName !== "" && selectingScrapList.length > 0 && (
-                        <TouchableWithoutFeedback onPress={() => createScrapAlbum()}>
+                        <TouchableWithoutFeedback onPress={() => finishScrapAlbumEdit()}>
                         <HeaderFinishContainer>
                         <AbledHeaderFinishText>완료</AbledHeaderFinishText>
                         </HeaderFinishContainer>

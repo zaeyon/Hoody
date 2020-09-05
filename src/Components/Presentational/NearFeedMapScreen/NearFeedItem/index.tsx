@@ -135,7 +135,7 @@ const NearFeedItem = ({postId, mainTag, subTag1, subTag2, rating, expense, locat
 
     const moveToFeedDetail = () => {
         console.log("postId", postId);
-        navigation.navigate("FeedStack", {
+        navigation.push("FeedStack", {
           screen: "FeedDetailScreen",
           params: {
             postId: postId,

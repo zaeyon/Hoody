@@ -114,15 +114,17 @@ const ScrapListScreen = ({navigation, route}: Props) => {
 
     const renderScrapFolderItem = ({item, index}: any) => {
         if(index === 0) {
-        return (
-            <ScrapFolderItem
-            folderId={item.id}
-            folderName={item.name}
-            defaultFolder={item.defaultFolder}
-            navigation={navigation}
-            feedImages={item.Posts}
-            name={item.name}/>   
-           )
+        if(item.Posts[0]) {
+            return (
+                <ScrapFolderItem
+                folderId={item.id}
+                folderName={item.name}
+                defaultFolder={item.defaultFolder}
+                navigation={navigation}
+                feedImages={item.Posts}
+                name={item.name}/>   
+               )
+        }
         } else {
         if(item.collectionScrap) {
             return (

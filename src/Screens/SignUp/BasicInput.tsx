@@ -244,27 +244,27 @@ const BasicInput = ({navigation, route}) => {
         GETEmailCheck(inputedEmail)
         .then(function(response) {
           console.log("GETEmailCheck response", response);
-          console.log('inputedEmail', inputedEmail);
-          console.log('inputedPassword', inputedPassword);
-        
-          navigation.navigate('ProfileInput', {
-            email: inputedEmail,
-            password: inputedPassword,
-            nickname: route.params?.inputedNickname,
-            birthdate: route.params?.inputedBirthdate,
-            gender: route.params?.inputedGender,
-          });
-  
-          emailInputRef.current.blur();
-          passwordInputRef.current.blur();
-          passwordConfirmInputRef.current.blur();
+          if(response.message === "이미 가입된 이메일입니다.") {
+            setEmailOverlap(true);
+          } else if(response.message === "가입할 수 있는 이메일입니다.") {
+            navigation.navigate('ProfileInput', {
+              email: inputedEmail,
+              password: inputedPassword,
+              nickname: route.params?.inputedNickname,
+              birthdate: route.params?.inputedBirthdate,
+              gender: route.params?.inputedGender,
+            });
+    
+            emailInputRef.current.blur();
+            passwordInputRef.current.blur();
+            passwordConfirmInputRef.current.blur();
+          }
           })
-          
           .catch(function(error) {
             console.log("GETEmailCheck error", error)
             if(error.status === 403) {
               console.log("이미 사용중인 이메일", error.status);
-              setEmailOverlap(true);
+              //setEmailOverlap(true);
             }
           })
 

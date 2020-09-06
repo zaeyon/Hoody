@@ -16,7 +16,7 @@ padding-bottom: 40px;
 `;
 
 const NoCollectionContainer = Styled.View`
- padding-top: 180px;
+ padding-top: ${hp('20%')}px;
  background-color: #ffffff;
  align-items: center;
  justify-content: center;

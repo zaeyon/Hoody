@@ -4,7 +4,7 @@ import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import {TouchableWithoutFeedback, Text, FlatList, ScrollView, StyleSheet, Alert, RefreshControl} from 'react-native';
+import {TouchableWithoutFeedback, Text, FlatList, ScrollView, StyleSheet, Alert, RefreshControl, ActivityIndicator} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import allActions from '~/action';
 import Modal from 'react-native-modal';
@@ -357,6 +357,14 @@ const ReportModalContainer = Styled.View`
  background-color: #FFFFFF;
  border-top-left-radius: 10px;
  border-top-right-radius: 10px;
+`;
+
+const LoadingContainer = Styled.View`
+ width: ${wp('100%')};
+ height: ${hp('100%')};
+ margin-top: ${hp('35%')};
+ align-items: center;
+ background-color: #FFFFFF;
 `;
 
 
@@ -1101,6 +1109,12 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
               </TouchableWithoutFeedback>
         </RightContainer>
       </HeaderContainer>
+      {loadingFeedInfo && (
+        <LoadingContainer>
+          <ActivityIndicator/>
+        </LoadingContainer>
+      )}
+      {!loadingFeedInfo && (
       <ScrollView
       refreshControl={
         <RefreshControl
@@ -1131,6 +1145,7 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
           paragraphData={paragraphData}
           ></FeedContent>
           </ScrollView>
+      )}
           <BottomBar>
           <InfoContainer>
             {!currentUserLike && (

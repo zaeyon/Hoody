@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import Styled from 'styled-components/native';
-import {TouchableWithoutFeedback, Platform, View} from 'react-native';
+import {TouchableWithoutFeedback, Platform, View, Alert} from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -18,7 +18,12 @@ import appleAuth, {
   AppleAuthRequestOperation,
   AppleAuthRequestScope,
   AppleAuthCredentialState,
+  AppleAuthError,
 } from '@invertase/react-native-apple-authentication';
+
+// Route
+import POSTSocialId from '~/Route/Auth/POSTSocialId';
+import GETEmailCheck from '~/Route/Auth/GETEmailCheck';
 
 const Container = Styled.View`
  flex: 1;
@@ -224,6 +229,7 @@ const Unauthorized = ({navigation}) => {
 
   async function onAppleButtonPress() {
     // performs login request
+    /*
     const appleAuthRequestResponse = await appleAuth.performRequest({
       requestedOperation: AppleAuthRequestOperation.LOGIN,
       requestedScopes: [AppleAuthRequestScope.EMAIL, AppleAuthRequestScope.FULL_NAME],
@@ -231,11 +237,52 @@ const Unauthorized = ({navigation}) => {
   
     // get current authentication state for user
     const credentialState = await appleAuth.getCredentialStateForUser(appleAuthRequestResponse.user);
-  
     // use credentialState response to ensure the user is authenticated
     if (credentialState === AppleAuthCredentialState.AUTHORIZED) {
       // user is authenticated
       console.log("credentialState", credentialState)
+    }
+    */
+
+    if(appleAuth.isSupported) {
+   const requestOptions = {
+    requestedOperation: AppleAuthRequestOperation.LOGIN,
+    requestedScopes: [AppleAuthRequestScope.EMAIL, AppleAuthRequestScope.FULL_NAME],
+  };
+
+  const { user } = await appleAuth.performRequest(requestOptions);
+
+  try {
+    const credentialState = await appleAuth.getCredentialStateForUser(user);
+    if (credentialState === AppleAuthCredentialState.AUTHORIZED) {
+      // authorized
+    }
+  } catch (error) {
+    if (error.code === AppleAuthError.CANCELED) {
+      console.log("AppleAuthError.CANCELED");
+    }
+    if (error.code === AppleAuthError.FAILED) {
+      console.log("AppleAuthError.FAILED");
+    }
+    if (error.code === AppleAuthError.INVALID_RESPONSE) {
+      console.log("INVALID_RESPONSE");
+    }
+    if (error.code === AppleAuthError.NOT_HANDLED) {
+      console.log("NOT_HANDLED")
+    }
+    if (error.code === AppleAuthError.UNKNOWN) {
+      console.log("UNKNOWN");
+    }
+  }
+
+    } else {
+      console.log("애플로그인을 지원하지않는 기기입니다.")
+      Alert.alert('애플 로그인을 지원하지않는 기기입니다.' , '' , [
+        {
+          text: "확인",
+          onPress:() => 0,
+        }
+      ])
     }
   }
 
@@ -262,7 +309,7 @@ const Unauthorized = ({navigation}) => {
       });
   };
 
-  const getKakaoProfile = () => {
+  const getKakaoProfile = (socialId: string) => {
     logCallback('Get Profile Start', setProfileLoading(true));
 
     KakaoLogins.getProfile()
@@ -272,14 +319,40 @@ const Unauthorized = ({navigation}) => {
           `Get Profile Finished:${JSON.stringify(result)}`,
           setProfileLoading(false),
         );
+        POSTSocialId(result.id, result.email, 'kakao')
+        .then(function(response) {
+          console.log("소셜로그인 성공", response)
+        })
+        .catch(function(error) {
+          console.log("소셜로그인 실패", error);
+          GETEmailCheck(result.email)
+          .then(function(response) {
+          console.log("GETEmailCheck response", response);
+          if(response.message === "이미 가입된 이메일입니다.") {
 
-        navigation.navigate('ProfileInput', {
-          socialId: result.accessToken,
-          socialEmail: result.email,
-          socialNickname: result.nickname,
-          socialGender: result.gender,
-          socialProvider: 'kakao',
-        });
+          } else if(response.message === "가입할 수 있는 이메일입니다.") {
+            
+            
+          }
+          })
+          .catch(function(error) {
+            console.log("GETEmailCheck error", error)
+            if(error.status === 403) {
+              console.log("이미 사용중인 이메일", error.status);
+              //setEmailOverlap(true);
+            }
+          })
+          /*
+          navigation.navigate('ProfileInput', {
+            socialId: result.accessToken,
+            socialEmail: result.email,
+            socialNickname: result.nickname,
+            socialGender: result.gender,
+            socialProvider: 'kakao',
+          });
+          */
+        })
+
       })
       .catch((err) => {
         logCallback(
@@ -343,6 +416,8 @@ const Unauthorized = ({navigation}) => {
     GoogleSignin.configure();
   }
   };
+
+
 
   return (
     <Container>

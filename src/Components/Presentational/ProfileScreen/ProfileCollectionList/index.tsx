@@ -13,6 +13,7 @@ const UserCollectionListContainer = Styled.View`
 width: ${wp('100%')};
 background-color: #ffffff;
 padding-bottom: 40px;
+flex: 1;
 `;
 
 const NoCollectionContainer = Styled.View`

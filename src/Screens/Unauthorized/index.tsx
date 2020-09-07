@@ -5,6 +5,8 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import {useDispatch} from 'react-redux';
+import allActions from '~/action';
 
 import KakaoLogins from '@react-native-seoul/kakao-login';
 import {
@@ -22,7 +24,7 @@ import appleAuth, {
 } from '@invertase/react-native-apple-authentication';
 
 // Route
-import POSTSocialId from '~/Route/Auth/POSTSocialId';
+import POSTSocial from '~/Route/Auth/POSTSocial';
 import GETEmailCheck from '~/Route/Auth/GETEmailCheck';
 
 const Container = Styled.View`
@@ -221,7 +223,8 @@ const Unauthorized = ({navigation}) => {
   const [loginLoading, setLoginLoading] = useState(false);
   const [profileLoading, setProfileLoading] = useState(false);
   const [token, setToken] = useState(TOKEN_EMPTY);
-  const [profile, setProfile] = useState(PROFILE_EMPTY);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     configureGoogleSignIn();
@@ -256,6 +259,7 @@ const Unauthorized = ({navigation}) => {
     const credentialState = await appleAuth.getCredentialStateForUser(user);
     if (credentialState === AppleAuthCredentialState.AUTHORIZED) {
       // authorized
+      console.log("애플 로그인 성공");
     }
   } catch (error) {
     if (error.code === AppleAuthError.CANCELED) {
@@ -274,7 +278,6 @@ const Unauthorized = ({navigation}) => {
       console.log("UNKNOWN");
     }
   }
-
     } else {
       console.log("애플로그인을 지원하지않는 기기입니다.")
       Alert.alert('애플 로그인을 지원하지않는 기기입니다.' , '' , [
@@ -309,27 +312,57 @@ const Unauthorized = ({navigation}) => {
       });
   };
 
-  const getKakaoProfile = (socialId: string) => {
+  const getKakaoProfile = () => {
     logCallback('Get Profile Start', setProfileLoading(true));
-
     KakaoLogins.getProfile()
       .then((result) => {
-        setProfile(result);
         logCallback(
           `Get Profile Finished:${JSON.stringify(result)}`,
           setProfileLoading(false),
         );
-        POSTSocialId(result.id, result.email, 'kakao')
-        .then(function(response) {
-          console.log("소셜로그인 성공", response)
-        })
-        .catch(function(error) {
-          console.log("소셜로그인 실패", error);
-          GETEmailCheck(result.email)
+        GETEmailCheck(result.email)
           .then(function(response) {
           console.log("GETEmailCheck response", response);
           if(response.message === "이미 가입된 이메일입니다.") {
-
+          if(response.provider === "kakao") {
+            POSTSocial(result.id, result.email, 'kakao')
+            .then(function(response) {
+              console.log("소셜 로그인 성공", response)
+              dispatch(
+                allActions.userActions.setUser({
+                  email: result.email,
+                  profileImage: response.user.profileImg,
+                  nickname: response.user.nickname,
+                  description: response.user.description,
+                  userId: response.user.id,
+                })
+              )
+            })
+            .catch(function(error) {
+              console.log("소셜 로그인 실패", error);
+            })
+          } else if(response.provider === "google") {
+            Alert.alert("구글로그인으로 등록된 계정입니다.", '', [
+              {
+                text: "확인",
+                onPress: () => 0,
+              }
+            ])
+          } else if(response.provier === "apple") {
+            Alert.alert("애플로그인으로 등록된 계정입니다." , '', [
+              {
+                text: '확인',
+                onPress: () => 0,
+              }
+            ])
+          } else if(response.provider === "local") {
+            Alert.alert("이미 회원가입된 계정입니다", '', [
+              {
+                text: '확인',
+                onPress: () => 0,
+              }
+            ])
+          }
           } else if(response.message === "가입할 수 있는 이메일입니다.") {
           navigation.navigate('ProfileInput', {
             socialId: result.id,
@@ -347,10 +380,6 @@ const Unauthorized = ({navigation}) => {
               //setEmailOverlap(true);
             }
           })
-          
-          
-        })
-
       })
       .catch((err) => {
         logCallback(
@@ -363,27 +392,136 @@ const Unauthorized = ({navigation}) => {
   const googleLogin = async () => {
     try {
       await GoogleSignin.hasPlayServices();
+      // Android 구글 로그인
       if(Platform.OS === "android") {
       const token = await GoogleSignin.getTokens();
       console.log('사용자 토큰', token);
       const userInfo = await GoogleSignin.signIn();
       console.log('구글 로그인 성공 사용자 정보:', userInfo);
-      navigation.navigate('ProfileInput', {
-        socialId: userInfo.idToken,
-        socialEmail: userInfo.user.email,
-        socialNickname: userInfo.user.name,
-        socialProvider: 'google',
-      })
-      } else if(Platform.OS === 'ios') {
-        const userInfo = await GoogleSignin.signIn();
-        console.log('구글 로그인 성공 사용자 정보:', userInfo);
+
+      GETEmailCheck(userInfo.user.email)
+      .then(function(response) {
+      console.log("GETEmailCheck response", response);
+      if(response.message === "이미 가입된 이메일입니다.") {
+      if(response.provider === "kakao") {
+        Alert.alert("카카오톡로그인으로 등록된 계정입니다." , '', [
+          {
+            text: '확인',
+            onPress: () => 0,
+          }
+        ])
+      } else if(response.provider === "google") {
+        POSTSocial(userInfo.user.id, userInfo.user.email, 'google')
+        .then(function(response) {
+          console.log("소셜 로그인 성공", response)
+          dispatch(
+            allActions.userActions.setUser({
+              email: userInfo.user.email,
+              profileImage: response.user.profileImg,
+              nickname: response.user.nickname,
+              description: response.user.description,
+              userId: response.user.id,
+            })
+          )
+        })
+        .catch(function(error) {
+          console.log("소셜 로그인 실패", error);
+        })
+      } else if(response.provier === "apple") {
+        Alert.alert("애플로그인으로 등록된 계정입니다." , '', [
+          {
+            text: '확인',
+            onPress: () => 0,
+          }
+        ])
+      } else if(response.provider === "local") {
+        Alert.alert("이미 회원가입된 계정입니다", '', [
+          {
+            text: '확인',
+            onPress: () => 0,
+          }
+        ])
+      }
+      } else if(response.message === "가입할 수 있는 이메일입니다.") {
         navigation.navigate('ProfileInput', {
-          socialId: userInfo.idToken,
+          socialId: userInfo.user.id,
           socialEmail: userInfo.user.email,
           socialNickname: userInfo.user.name,
           socialProvider: 'google',
         })
-        
+      }
+      })
+      .catch(function(error) {
+        console.log("GETEmailCheck error", error)
+        if(error.status === 403) {
+          console.log("이미 사용중인 이메일", error.status);
+          //setEmailOverlap(true);
+        }
+      })
+      // IOS 구글 로그인
+      } else if(Platform.OS === 'ios') {
+        const userInfo = await GoogleSignin.signIn();
+        console.log('구글 로그인 성공 사용자 정보:', userInfo);
+
+      GETEmailCheck(userInfo.user.email)
+      .then(function(response) {
+      console.log("GETEmailCheck response", response);
+      if(response.message === "이미 가입된 이메일입니다.") {
+      if(response.provider === "kakao") {
+        Alert.alert("카카오톡로그인으로 등록된 계정입니다." , '', [
+          {
+            text: '확인',
+            onPress: () => 0,
+          }
+        ])
+      } else if(response.provider === "google") {
+        POSTSocial(userInfo.user.id, userInfo.user.email, 'google')
+        .then(function(response) {
+          console.log("소셜 로그인 성공", response)
+          dispatch(
+            allActions.userActions.setUser({
+              email: userInfo.user.email,
+              profileImage: response.user.profileImg,
+              nickname: response.user.nickname,
+              description: response.user.description,
+              userId: response.user.id,
+            })
+          )
+        })
+        .catch(function(error) {
+          console.log("소셜 로그인 실패", error);
+        })
+      } else if(response.provier === "apple") {
+        Alert.alert("애플로그인으로 등록된 계정입니다." , '', [
+          {
+            text: '확인',
+            onPress: () => 0,
+          }
+        ])
+      } else if(response.provider === "local") {
+        Alert.alert("이미 회원가입된 계정입니다", '', [
+          {
+            text: '확인',
+            onPress: () => 0,
+          }
+        ])
+      }
+      } else if(response.message === "가입할 수 있는 이메일입니다.") {
+        navigation.navigate('ProfileInput', {
+          socialId: userInfo.user.id,
+          socialEmail: userInfo.user.email,
+          socialNickname: userInfo.user.name,
+          socialProvider: 'google',
+        })
+      }
+      })
+      .catch(function(error) {
+        console.log("GETEmailCheck error", error)
+        if(error.status === 403) {
+          console.log("이미 사용중인 이메일", error.status);
+          //setEmailOverlap(true);
+        }
+      })
       } 
     } catch (error) {
       console.log('구글 로그인 실패', error);

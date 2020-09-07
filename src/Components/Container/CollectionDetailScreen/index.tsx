@@ -4,7 +4,7 @@ import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import {TouchableWithoutFeedback, FlatList, ScrollView, Animated, Image, Alert} from 'react-native'
+import {TouchableWithoutFeedback, FlatList, ScrollView, Animated, Image, Alert, ActivityIndicator, View} from 'react-native'
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import ActionSheet from 'react-native-actionsheet';
@@ -288,6 +288,15 @@ const CollectionNameContainer = Styled.View`
  align-items: flex-end;
 `;
 
+const LoadingContainer = Styled.View`
+ position: absolute;
+ width: ${wp('100%')};
+ height: ${hp('100%')};
+ align-items: center;
+ background-color: #FFFFFF;
+ justify-content: center;
+`;
+
 const TEST_COLLECTION_DATA = {
         title: '컬렉션 테스트1',
         feedCount: 13,
@@ -330,6 +339,7 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
     const [currentUserScrap, setCurrentUserScrap] = useState<boolean>(false);
     const [currentUserFollow, setCurrentUserFollow] = useState<boolean>(false);
     const [likeCount, setLikeCount] = useState<number>(0);
+    const [loadingCollection, setLoadingCollection] = useState<boolean>(true);
     const H_MAX_HEIGHT = wp('100%')
     const H_MIN_HEIGHT = wp('25.6%');
     const H_SCROLL_DISTANCE = H_MAX_HEIGHT - H_MIN_HEIGHT;
@@ -352,6 +362,7 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
         if(route.params?.collectionId) {
            GETCollectionDetailInfo(route.params.collectionId)
            .then(function(response) {
+               setLoadingCollection(false);
                console.log("GETCollectionDetailInfo response", response)
                setCollectionDetailInfo(response.collection);
                setCurrentUserLike(response.collection.liked);
@@ -412,32 +423,6 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
                   .catch(function(error) {
                   console.log("컬렉션 삭제 실패 error", error);
                   })
-
-                    /*
-                  var deletedFeedIndex:number;
-                  console.log("currentUser.userAllFeeds", currentUser.userAllFeeds)
-                  if(currentUser.userAllFeeds) {
-                    currentUser.userAllFeeds.forEach((feed: object, index: number) => {
-                       if(feed.id === postId) {
-                         deletedFeedIndex = index;
-                       }
-                    })
-                  }
-                  DELETEPost(postId)
-                  .then(function(response) {
-                    console.log("피드 삭제 성공 response", response);
-                    if(currentUser.userAllFeeds) {
-                      console.log("피드삭제성공deletedFeedIndex", deletedFeedIndex);
-                      var deletedFeeds = currentUser.userAllFeeds;
-                      deletedFeeds.splice(deletedFeedIndex, 1);
-                      dispatch(allActions.userActions.setUserAllFeeds(deletedFeeds));
-                      navigation.goBack();
-                    }
-                  })
-                  .catch(function(error) {
-                    console.log("피드 삭제 error", error);
-                  })
-                  */
             }
             },
             {
@@ -556,6 +541,7 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
 
     return (
         <Container>
+            {!loadingCollection && (
            <Animated.View
             onLayout={(event) => onChangeHeaderHeight(event)}
             style={{
@@ -591,124 +577,131 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
                 </HeaderRightContainer>
                 </TouchableWithoutFeedback>
             </HeaderBar>
-            
             </Animated.View>
-            <ScrollView
-            onScroll={Animated.event([
-                {nativeEvent: { contentOffset: {y: scrollOffsetY}}}])}
-            scrollEventThrottle={5}
-            showsVerticalScrollIndicator={false}>
-            <CollectionInfoContainer style={{paddingTop:H_MAX_HEIGHT-25}}>
-            <CollectionInfoHeader>
-            <CollectionNameContainer>
-            <CollectionTitleText>{collectionDetailInfo.name}
-            </CollectionTitleText>
-            {!collectionDetailInfo.open && (
-            <PrivateText>비공개</PrivateText>
             )}
-            </CollectionNameContainer>
-            <CollectionIconContainer>
-            {!currentUserLike && (
-            <TouchableWithoutFeedback onPress={() => addLikeCollection()}>
-            <CollectionLikeContainer>
-            <CollectionLikeIcon
-            source={require('~/Assets/Images/ic_heart_outline.png')}/>
-            </CollectionLikeContainer>
-            </TouchableWithoutFeedback>
+            {!loadingCollection && (
+                  <ScrollView
+                  onScroll={Animated.event([
+                      {nativeEvent: { contentOffset: {y: scrollOffsetY}}}])}
+                  scrollEventThrottle={5}
+                  showsVerticalScrollIndicator={false}>
+                  <CollectionInfoContainer style={{paddingTop:H_MAX_HEIGHT-25}}>
+                  <CollectionInfoHeader>
+                  <CollectionNameContainer>
+                  <CollectionTitleText>{collectionDetailInfo.name}
+                  </CollectionTitleText>
+                  {!collectionDetailInfo.open && (
+                  <PrivateText>비공개</PrivateText>
+                  )}
+                  </CollectionNameContainer>
+                  <CollectionIconContainer>
+                  {!currentUserLike && (
+                  <TouchableWithoutFeedback onPress={() => addLikeCollection()}>
+                  <CollectionLikeContainer>
+                  <CollectionLikeIcon
+                  source={require('~/Assets/Images/ic_heart_outline.png')}/>
+                  </CollectionLikeContainer>
+                  </TouchableWithoutFeedback>
+                  )}
+                  {currentUserLike && (
+                  <TouchableWithoutFeedback onPress={() => deleteLikeCollection()}>
+                  <CollectionLikeContainer>
+                  <CollectionLikeIcon
+                  source={require('~/Assets/Images/ic_pressedLike.png')}/>
+                  </CollectionLikeContainer>
+                  </TouchableWithoutFeedback>
+                  )}
+                  {!currentUserScrap && (
+                  <TouchableWithoutFeedback onPress={() => addScrapCollection()}>
+                  <CollectionScrapContainer>
+                  <CollectionScrapIcon
+                  source={require('~/Assets/Images/ic_scrap_outline.png')}/>
+                  </CollectionScrapContainer>
+                  </TouchableWithoutFeedback>
+                  )}
+                  {currentUserScrap && (
+                  <TouchableWithoutFeedback onPress={() => deleteScrapCollection()}>
+                  <CollectionScrapContainer>
+                  <CollectionScrapIcon
+                  source={require('~/Assets/Images/Feed/ic_pressedScrap.png')}/>
+                  </CollectionScrapContainer>
+                  </TouchableWithoutFeedback>
+                  )}
+                  </CollectionIconContainer>
+                  </CollectionInfoHeader>
+                  <WriterProfileContainer>
+                      <TouchableWithoutFeedback onPress={() => moveToUserProfile()}>
+                      <WriterInfoContainer>
+                      <ProfileImage
+                      source={{uri:collectionDetailInfo.user?.profileImg}}/>
+                      <ProfileNicknameText>{collectionDetailInfo.user?.nickname}</ProfileNicknameText>
+                      </WriterInfoContainer>
+                      </TouchableWithoutFeedback>
+                      {currentUser.user?.nickname !== collectionDetailInfo.user?.nickname && currentUserFollow && (
+                      <TouchableWithoutFeedback onPress={() => unfollowUser()}>
+                      <FollowContainer>   
+                      <FollowText>팔로잉</FollowText>
+                      </FollowContainer>
+                      </TouchableWithoutFeedback>
+                      )}
+                      {currentUser.user?.nickname !== collectionDetailInfo.user?.nickname && !currentUserFollow && (
+                      <TouchableWithoutFeedback onPress={() => followUser()}>
+                      <FollowContainer>   
+                      <FollowText>팔로우</FollowText>
+                      </FollowContainer>
+                      </TouchableWithoutFeedback>
+                      )}
+                  </WriterProfileContainer>
+                  <CollectionDescripText>{collectionDetailInfo.description? collectionDetailInfo.description: null}
+                  </CollectionDescripText>
+                  <CollectionInfoFooter>
+                  <CollectionSocialContainer>
+                  <CollectionFeedLabelText>게시글</CollectionFeedLabelText>
+                  <CollectionInfoCountText>{collectionDetailInfo.Posts ? collectionDetailInfo.Posts.length : ""}</CollectionInfoCountText>
+                  <CollectionLikeLabelText>좋아요</CollectionLikeLabelText>
+                  <CollectionInfoCountText>{likeCount}</CollectionInfoCountText>
+                  </CollectionSocialContainer>
+                  </CollectionInfoFooter>
+                  </CollectionInfoContainer>
+                  <FlatList
+                  columnWrapperStyle={{justifyContent:'space-between', paddingLeft:16, paddingRight:15, paddingTop:11, paddingBottom:0}}
+                  numColumns={2}
+                  data={collectionDetailInfo.Posts}
+                  renderItem={renderCollectionFeedItem}
+                  />
+                  {collectionDetailInfo?.includeLocation && (
+                  <LocationMapContainer>
+                  <LocationMapHeaderBar>
+                      <LocationMapText>지도</LocationMapText>
+                      <LocationMapNextIcon
+                      source={require('~/Assets/Images/ic_mapNext.png')}/>
+                  </LocationMapHeaderBar>
+                  <MapView
+                  style={{flex:1}}
+                  provider={PROVIDER_GOOGLE}
+                  initialRegion={{
+                      latitude: 32,
+                      longitude: 121,
+                      latitudeDelta: 0.0922,
+                      longitudeDelta: 0.0421,
+                  }}>
+                      <Marker
+                      coordinate={LatLng}
+                      image={require('~/Assets/Images/ic_circleMarker.png')}>
+                      <MarkerFeedImage
+                      source={{uri:'https://d2uh4olaxaj5eq.cloudfront.net/fit-in/1080x0/3d655d9b-3ca8-4c4b-bbaf-7519bdc09f42.jpg'}}/>
+                      </Marker>
+                  </MapView>
+                  </LocationMapContainer>
+      
+                  )}
+                  </ScrollView>
             )}
-            {currentUserLike && (
-            <TouchableWithoutFeedback onPress={() => deleteLikeCollection()}>
-            <CollectionLikeContainer>
-            <CollectionLikeIcon
-            source={require('~/Assets/Images/ic_pressedLike.png')}/>
-            </CollectionLikeContainer>
-            </TouchableWithoutFeedback>
+            {loadingCollection && (
+                <LoadingContainer>
+                    <ActivityIndicator/>
+                </LoadingContainer>
             )}
-            {!currentUserScrap && (
-            <TouchableWithoutFeedback onPress={() => addScrapCollection()}>
-            <CollectionScrapContainer>
-            <CollectionScrapIcon
-            source={require('~/Assets/Images/ic_scrap_outline.png')}/>
-            </CollectionScrapContainer>
-            </TouchableWithoutFeedback>
-            )}
-            {currentUserScrap && (
-            <TouchableWithoutFeedback onPress={() => deleteScrapCollection()}>
-            <CollectionScrapContainer>
-            <CollectionScrapIcon
-            source={require('~/Assets/Images/Feed/ic_pressedScrap.png')}/>
-            </CollectionScrapContainer>
-            </TouchableWithoutFeedback>
-            )}
-            </CollectionIconContainer>
-            </CollectionInfoHeader>
-            <WriterProfileContainer>
-                <TouchableWithoutFeedback onPress={() => moveToUserProfile()}>
-                <WriterInfoContainer>
-                <ProfileImage
-                source={{uri:collectionDetailInfo.user?.profileImg}}/>
-                <ProfileNicknameText>{collectionDetailInfo.user?.nickname}</ProfileNicknameText>
-                </WriterInfoContainer>
-                </TouchableWithoutFeedback>
-                {currentUser.user?.nickname !== collectionDetailInfo.user?.nickname && currentUserFollow && (
-                <TouchableWithoutFeedback onPress={() => unfollowUser()}>
-                <FollowContainer>   
-                <FollowText>팔로잉</FollowText>
-                </FollowContainer>
-                </TouchableWithoutFeedback>
-                )}
-                {currentUser.user?.nickname !== collectionDetailInfo.user?.nickname && !currentUserFollow && (
-                <TouchableWithoutFeedback onPress={() => followUser()}>
-                <FollowContainer>   
-                <FollowText>팔로우</FollowText>
-                </FollowContainer>
-                </TouchableWithoutFeedback>
-                )}
-            </WriterProfileContainer>
-            <CollectionDescripText>{collectionDetailInfo.description? collectionDetailInfo.description: null}
-            </CollectionDescripText>
-            <CollectionInfoFooter>
-            <CollectionSocialContainer>
-            <CollectionFeedLabelText>게시글</CollectionFeedLabelText>
-            <CollectionInfoCountText>{collectionDetailInfo.Posts ? collectionDetailInfo.Posts.length : ""}</CollectionInfoCountText>
-            <CollectionLikeLabelText>좋아요</CollectionLikeLabelText>
-            <CollectionInfoCountText>{likeCount}</CollectionInfoCountText>
-            </CollectionSocialContainer>
-            </CollectionInfoFooter>
-            </CollectionInfoContainer>
-            <FlatList
-            columnWrapperStyle={{justifyContent:'space-between', paddingLeft:16, paddingRight:15, paddingTop:11, paddingBottom:0}}
-            numColumns={2}
-            data={collectionDetailInfo.Posts}
-            renderItem={renderCollectionFeedItem}
-            />
-            {collectionDetailInfo?.includeLocation && (
-            <LocationMapContainer>
-            <LocationMapHeaderBar>
-                <LocationMapText>지도</LocationMapText>
-                <LocationMapNextIcon
-                source={require('~/Assets/Images/ic_mapNext.png')}/>
-            </LocationMapHeaderBar>
-            <MapView
-            style={{flex:1}}
-            provider={PROVIDER_GOOGLE}
-            initialRegion={{
-                latitude: 32,
-                longitude: 121,
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421,
-            }}>
-                <Marker
-                coordinate={LatLng}
-                image={require('~/Assets/Images/ic_circleMarker.png')}>
-                <MarkerFeedImage
-                source={{uri:'https://d2uh4olaxaj5eq.cloudfront.net/fit-in/1080x0/3d655d9b-3ca8-4c4b-bbaf-7519bdc09f42.jpg'}}/>
-                </Marker>
-            </MapView>
-            </LocationMapContainer>
-
-            )}
-            </ScrollView>
             <ActionSheet
             ref={actionSheetRef}
             options={['취소', '컬렉션 삭제', '컬렉션 수정', '게시글 추가 및 편집']}

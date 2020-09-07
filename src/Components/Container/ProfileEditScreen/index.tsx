@@ -65,6 +65,11 @@ padding: 7px 16px 13px 16px;
  flex-direction: row;
 `;
 
+const DisabledFinishText = Styled.Text`
+font-size: 17px;
+color: #C6C7CC;
+`;
+
 const HeaderFinishText = Styled.Text`
  font-weight: 500;
  font-size: 17px;
@@ -204,7 +209,7 @@ const ProfileEditScreen = ({navigation, route}: Props) => {
 
     useEffect(() => {
         if(route.params?.selectedProfileImage) {
-            setProfileImageUri(route.params?.selectedProfileImage);
+            setProfileImageUri(route.params?.selectedProfileImage.uri);
         }
     }, [route.params?.selectedProfileImage])
 
@@ -290,11 +295,18 @@ const ProfileEditScreen = ({navigation, route}: Props) => {
                 </HeaderCancelContainer>
                 </TouchableWithoutFeedback>
                 <HeaderTitleText>프로필 편집</HeaderTitleText>
+                {nickname.length > 0 && description.length > 0 && (
                 <TouchableWithoutFeedback onPress={() => completeProfileEdit()}>
                 <HeaderFinishContainer>
                     <HeaderFinishText>완료</HeaderFinishText>
                 </HeaderFinishContainer>
                 </TouchableWithoutFeedback>
+                )}
+                {(nickname.length == 0 || description.length == 0) && (
+                <HeaderFinishContainer>
+                    <DisabledFinishText>완료</DisabledFinishText>
+                </HeaderFinishContainer>
+                )}
             </HeaderBar>
             <BodyContainer>
                 <ProfileImageContainer>

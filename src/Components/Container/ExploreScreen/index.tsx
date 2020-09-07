@@ -246,7 +246,7 @@ const ExploreScreen = ({navigation, route}: Props) => {
             setAgeGroupPopularTagListData(tmpAgeGroupPopularTagListData);
         })
         .catch(function(error) {
-            console.log("GETAgegroupPopularTag error", error);
+            console.log("GETAgeGroupPopularTag error", error);
         })
 
         GETPostsByWroteTags()

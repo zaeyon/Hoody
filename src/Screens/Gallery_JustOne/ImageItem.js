@@ -101,6 +101,10 @@ class ImageItem extends Component {
       this.props.navigation.navigate('ProfileInput', {
         selectedProfileImage: item
       });
+    } else if(this.props.requestType === "profileEdit") {
+      this.props.navigation.navigate("ProfileEditScreen", {
+        selectedProfileImage: item,
+      })
     }
   }
 

@@ -4,7 +4,7 @@ import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import {Text, ScrollView, View, FlatList, TouchableWithoutFeedback, Alert, StyleSheet, TextInput, Keyboard, KeyboardAvoidingView} from 'react-native';
+import {Text, ScrollView, View, FlatList, TouchableWithoutFeedback, Alert, StyleSheet, TextInput, Keyboard, KeyboardAvoidingView, ActivityIndicator} from 'react-native';
 import DraggableFlatList from 'react-native-draggable-flatlist';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import AboveKeyboard from 'react-native-above-keyboard';
@@ -765,6 +765,14 @@ flex-shrink: 1;
 background-color:#ffffff;
 `;
 
+const LoadingContainer = Styled.View`
+ position: absolute;
+ width: ${wp('100%')};
+ height: ${hp('100%')};
+ align-items: center;
+ justify-content: center;
+`;
+
 
 
 const bottomActionOptions = [
@@ -866,6 +874,8 @@ const convertDateFormat = (date: any) => {
     // Setting
     const [visibleSettingModal, setVisibleSettingModal] = useState<boolean>(false);
     const [selectedOpenRadioIndex, setSelectedOpenRadioIndex] = useState<number>(0);
+
+    const [loadingUpload, setLoadingUpload] = useState<boolean>(false);
 
     // useRef
     const newDescripInput = useRef(null);
@@ -1610,6 +1620,7 @@ const moveToTemporarySave = () => {
 
 
 const clickToUploadFinish = () => {
+  setLoadingUpload(true);
   console.log("업로드할 paragraphData", paragraphData);
   var sequence = "";
   var descriptionStr = "";
@@ -1663,6 +1674,7 @@ const clickToUploadFinish = () => {
       .then(function(response) {
           if(response.status === 201) {
               console.log("후기 업로드 성공", response);
+              setLoadingUpload(false);
               navigation.goBack();
           }
       })
@@ -1851,10 +1863,12 @@ const renderAddNewDescripInput = () => {
                         )}
                 </HeaderRightContainer>
             </HeaderBar>
+            
             {visibleDescripModal && (
 <HeaderBarCover>     
 </HeaderBarCover>
             )}
+           
             <BodyContainer>
                 <AdditionInfoContainer
                 onLayout={(event) => {
@@ -2016,6 +2030,11 @@ const renderAddNewDescripInput = () => {
                 
                 )}
             </BodyContainer>
+            {loadingUpload && (
+                <LoadingContainer>
+                    <ActivityIndicator/>
+                </LoadingContainer>
+            )}
             <View style={{position:'absolute', bottom:0}}>
         <View>
         <GetTextWidthContainer>

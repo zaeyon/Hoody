@@ -3,11 +3,11 @@ import axios from 'axios';
 const baseUrl = 'http://hoody-api-test-server-alb-349396782.ap-northeast-2.elb.amazonaws.com';
 
 
-const POSTSocialId = (socialId, email ,provider) => {
-    const url = baseUrl + '/auth/socialId';
+const POSTSocial = (socialId, email ,provider) => {
+    const url = baseUrl + '/auth/social';
 
-    console.log("POSTSocialId socialId", socialId);
-    console.log("POSTSocialId email", email);
+    console.log("POSTSocial socialId", socialId);
+    console.log("POSTSocial email", email);
     console.log("POSTSocial provider", provider);
 
     let form = new FormData();
@@ -32,4 +32,4 @@ const POSTSocialId = (socialId, email ,provider) => {
     });
 }
 
-export default POSTSocialId;
+export default POSTSocial;

@@ -223,8 +223,6 @@ class Gallery extends Component {
       .catch(err => {
         console.log("모두 보기 썸네일 err", err);
       })
-
-
     });
   }
 

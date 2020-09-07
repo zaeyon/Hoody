@@ -3,6 +3,7 @@ const baseUrl = 'http://hoody-api-test-server-alb-349396782.ap-northeast-2.elb.a
 
 const GETLogout = () => {
     const url = baseUrl + '/auth/logout';
+    console.log("로그아웃 요청");
 
     return new Promise(function(resolve, reject) {
         axios

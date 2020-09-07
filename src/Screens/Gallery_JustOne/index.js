@@ -22,6 +22,7 @@ import {Dropdown} from 'react-native-material-dropdown';
 
 import Row from './Row';
 import ImageItem from './ImageItem';
+import AlbumItem from '~/Screens/Gallery/AlbumItem'
 const styles = StyleSheet.create({
   wrapper: {
     flexGrow: 1,
@@ -38,10 +39,10 @@ const styles = StyleSheet.create({
 const Container = Styled.SafeAreaView`
  flex: 1;
  background-color: #FFFFFF;
- align-items: center;
+ align-items: flex-start;
 `;
 
-const HeaderBar = Styled.View`
+const HeaderContainer = Styled.View`
  width: ${wp('100%')};
  height: ${wp('11.7%')};
  background-color: #FFFFFF;
@@ -50,37 +51,36 @@ const HeaderBar = Styled.View`
  flex-direction: row;
 `;
 
-const HeaderCancelContainer = Styled.View`
- padding-top: 12px;
- padding-left: 16px;
- padding-bottom: 15px;
- align-items: center;
- justify-content: center;
+const HeaderLeftContainer = Styled.View`
+padding: 7px 15px 13px 16px;
+align-items: center;
+justify-content: center;
 `;
 
 const HeaderCancelText = Styled.Text`
  font-size: 17px;
- color: #c6c7cc;
-`;
+ color: #C6C7CC;
+ `;
 
-const HeaderFinishContainer = Styled.View`
- padding-top: 12px;
- padding-left: 16px;
- padding-right: 16px;
- padding-bottom: 15px;
+ const HeaderRightContainer = Styled.View`
+ padding: 7px 15px 13px 16px;
  align-items: center;
  justify-content: center;
+ `;
+
+ const HeaderAttachText = Styled.Text`
+font-weight: 500;
+font-size: 17px;
+color: #267DFF;
 `;
 
-const HeaderFinishText = Styled.Text`
- font-weight: 500;
- font-size: 17px;
- color: #267DFF;
+const DisabledHeaderAttachText = Styled.Text`
+font-size: 17px;
+color: #C6C7CC;
 `;
-
 
 const CloseButton = Styled.Image`
- width: ${wp('4%')};
+ width: ${wp('6.4%')};
  height: ${wp('4%')};
  tint-color: #707070;
 `;
@@ -90,6 +90,40 @@ const FinishButton = Styled.Image`
  height: ${wp('4%')};
  tint-color: #707070;
 `;
+
+const AlbumNameText = Styled.Text`
+ font-weight: 500;
+ font-size: 17px;
+ color: #1D1E1F;
+`;
+
+const DropdownIcon = Styled.Image`
+ margin-left: 7px;
+ margin-bottom: 3px;
+ width: ${wp('3.2%')};
+ height: ${wp('3.2%')};
+`;
+
+const HeaderCenterContainer = Styled.View`
+ flex-direction: row;
+ align-items: center;
+`;
+
+const AlbumListContainer = Styled.View`
+ flex: 1;
+ background-color: #FFFFFF;
+`;
+
+const ImageListContainer = Styled.View`
+
+`;
+
+
+const HeaderEmptyContainer = Styled.View`
+ width: ${wp('6.4%')};
+ height: ${wp('6.4%')};
+`;
+
 
 // helper functions
 const arrayObjectIndexOf = (array, property, value) =>
@@ -129,8 +163,10 @@ class Gallery_JustOne extends Component {
       loadingMore: false,
       noMore: false,
       data: [],
-      album: [{}],
+      albumArray: [{}],
       albumTitleCount: [],
+      selectedAlbum: '모두 보기',
+      visibleAlbumList: false,
     };
 
     this.renderFooterSpinner = this.renderFooterSpinner.bind(this);
@@ -144,6 +180,60 @@ class Gallery_JustOne extends Component {
     this.props.navigation.goBack();
     return true;
   };
+
+  componentDidMount() {
+    const params = {
+      assetType: 'All',
+    };
+
+    var allPhotoCount = 0;
+
+    CameraRoll.getAlbums(params).then((data) => {
+      console.log("앨범 목록", data)
+      var albumArray = data.map(function (obj) {
+        var albumObj = {
+          title: obj.title,
+          count: obj.count,
+        };
+
+        CameraRoll.getPhotos({
+          first: 1,
+          groupTypes: "Album",
+          groupName: obj.title
+        })
+        .then(r => {
+          console.log("앨범 이름", obj.title);
+          console.log("앨범 썸네일", r.edges[0].node.image)
+          albumObj.thumbnail = r.edges
+        })
+        .catch(err => {
+          console.log("앨범 썸네일 오류", err)
+        })
+
+        return albumObj;
+      });
+
+      CameraRoll.getPhotos({
+        first: 1,
+        assetType: 'Photos'
+      })
+      .then(r => {
+        console.log("모두 보기 썸네일", r.edges)
+        albumArray.unshift({title: '모두 보기', thumbnail: r.edges});
+        
+       setTimeout(() => {
+        this.setState({
+          albumArray: albumArray,
+        });
+        console.log('22 albumName', this.state.albumArray);
+
+      }, 100)
+      })
+      .catch(err => {
+        console.log("모두 보기 썸네일 err", err);
+      })
+    });
+  }
 
   componentWillMount() {
     this.fetch();
@@ -180,6 +270,18 @@ class Gallery_JustOne extends Component {
     });
   }
 
+  changeSelectedAlbum(data) {
+    this.setState({
+      selectedAlbum: data,
+    });
+  }
+
+  _toggleAlbumList() {
+    this.setState({
+      visibleAlbumList: !this.state.visibleAlbumList,
+    })
+  }
+
   onEndReached() {
     if (!this.state.noMore) {
       this.fetch();
@@ -214,6 +316,7 @@ class Gallery_JustOne extends Component {
     }
   }
 
+  /*
   doFetch() {
     const {groupTypes, assetType} = this.props;
 
@@ -237,6 +340,50 @@ class Gallery_JustOne extends Component {
       (e) => console.log(e),
     );
   }
+  */
+
+
+ doFetch() {
+  console.log("doFetch selectedAlbum", this.state.selectedAlbum);
+  let {groupTypes, assetType} = this.props;
+  let groupName;
+  let fetchParams;
+  if (this.state.selectedAlbum === '모두 보기') {
+    console.log("사진 모두보기");
+    fetchParams = {
+      first: 100,
+      assetType,
+    };
+  } else {
+    console.log("선택한 앨밤", this.state.selectedAlbum);
+    groupName = this.state.selectedAlbum;
+
+    fetchParams = {
+      first: 100,
+      groupTypes: "Album",
+      groupName,
+    };
+  }
+  /*
+  if (Platform.OS === 'android') {
+    // not supported in android
+    //delete fetchParams.groupTypes;
+  }
+  */
+ 
+  if (this.state.lastCursor) {
+    fetchParams.after = this.state.lastCursor;
+  }
+  
+
+  CameraRoll.getPhotos(fetchParams).then(
+    (data) => {
+      this.appendImages(data)
+      console.log("불러온 사진22", data);
+    },
+    (e) => console.log(e),
+  );
+}
 
   selectImage(image) {
     const {maximum, imagesPerRow, callback, selectSingleItem} = this.props;
@@ -344,20 +491,6 @@ class Gallery_JustOne extends Component {
       loader,
     } = this.props;
 
-    let albumName = [
-      {
-        value: '모두 보기',
-      },
-      {
-        value: 'Camera',
-      },
-      {
-        value: 'Download',
-      },
-      {
-        value: 'KakaoTalk',
-      },
-    ];
 
     if (this.state.initialLoading) {
       return (
@@ -365,6 +498,30 @@ class Gallery_JustOne extends Component {
           {loader || <ActivityIndicator />}
         </View>
       );
+    }
+
+
+    const selectAlbum = (title) => {
+      this.setState({
+        visibleAlbumList: false,
+        selectedAlbum: title,
+        lastCursor: null,
+        images: [],
+      })
+  
+      this.fetch()
+      }
+
+    const renderAlbumItem = ({item, index}) => {
+      console.log("renderAlbumItem item", item.thumbnail[0].node.image);
+      return (
+        <AlbumItem
+        albumCount={item.count}
+        albumTitle={item.title}
+        albumThumbnail={item.thumbnail[0].node.image.uri}
+        selectAlbum={selectAlbum}
+        />
+      )
     }
 
     const flatListOrEmptyText =
@@ -385,31 +542,49 @@ class Gallery_JustOne extends Component {
 
     return (
       <Container>
-        <HeaderBar>
-          <HeaderCancelContainer>
+<HeaderContainer>
           <TouchableWithoutFeedback
             onPress={() => this.props.navigation.goBack()}>
-              <HeaderCancelText>취소</HeaderCancelText>
+          <HeaderLeftContainer>
+            <HeaderCancelText>취소</HeaderCancelText>
+          </HeaderLeftContainer>
           </TouchableWithoutFeedback>
-          </HeaderCancelContainer>
-          <Dropdown
-            containerStyle={{paddingTop: 12, width: 100, height: hp('13%')}}
-            data={albumName}
-            animationDureation={0}
-            rippleOpacity={0}
-            dropdownPosition={0}
-            shadeOpacity={0}
-            value={'모두 보기'}
-            inputContainerStyle={{borderBottomWidth: 0}}
-            fontSize={18}
-          />
-          <HeaderFinishContainer>
-          <TouchableWithoutFeedback onPress={() => this._pressFinish()}>
-            <HeaderFinishText>첨부</HeaderFinishText>
-          </TouchableWithoutFeedback>
-          </HeaderFinishContainer>
-        </HeaderBar>
+          <TouchableWithoutFeedback onPress={() => this._toggleAlbumList()}>
+          <HeaderCenterContainer>
+          <AlbumNameText>{this.state.selectedAlbum}</AlbumNameText>
+          <DropdownIcon
+          source={
+            this.state.visibleAlbumList 
+            ? require('~/Assets/Images/HeaderBar/ic_dropdown_fold.png')
+            : require('~/Assets/Images/HeaderBar/ic_dropDown.png')}/>
+         </HeaderCenterContainer>
+         </TouchableWithoutFeedback>
+         {this.state.selected.length === 0 && (
+           <HeaderRightContainer>
+             <HeaderEmptyContainer/>
+           </HeaderRightContainer>
+         )}
+         {this.state.selected.length > 0 && (
+<TouchableWithoutFeedback onPress={() => this._pressFinish()}>
+<HeaderRightContainer>
+  <HeaderEmptyContainer/>
+</HeaderRightContainer>
+</TouchableWithoutFeedback>
+         )}
+        </HeaderContainer>
+        {!this.state.visibleAlbumList && (
+        <ImageListContainer>
         {flatListOrEmptyText}
+        </ImageListContainer>
+        )}
+        {this.state.visibleAlbumList && (
+          <AlbumListContainer>
+            <FlatList
+            showsVerticalScrollIndicator={false}
+            data={this.state.albumArray}
+            renderItem={renderAlbumItem}/>
+          </AlbumListContainer>
+        )}
         </Container>
     );
   }

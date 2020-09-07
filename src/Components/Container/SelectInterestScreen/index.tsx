@@ -230,6 +230,8 @@ const SelectInterestScreen = ({navigation, route}: Props) => {
             dispatch(
                 allActions.userActions.setInputedKeywordList([])
             )
+
+            setSelectedInterestList([]);
         })
         .catch(function(error) {
             console.log("관심사 선택 오류", error);

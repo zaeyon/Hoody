@@ -8,6 +8,9 @@ import {
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 
+// Route
+import POSTCategory from '~/Route/Curation/POSTCategory'
+
 
 const Container = Styled.SafeAreaView`
  flex: 1;
@@ -208,7 +211,29 @@ const SelectInterestScreen = ({navigation, route}: Props) => {
     const dispatch = useDispatch();
 
     const finishSelectInterest = () => {
-        
+        var interestListStr = JSON.stringify(selectedInterestList);
+        POSTCategory(interestListStr)
+        .then(function(response) {
+            console.log("관심사 선택 성공", response)
+            dispatch(
+                allActions.userActions.setUser({
+                    email: route.params?.email,
+                    birthDate: route.params?.birthDate,
+                    gender: route.params?.gender,
+                    socialId: route.params?.socialId,
+                    provider: route.params?.provider,
+                    profileImage: route.params?.profileImage,
+                    nickname: route.params?.nickname,
+                    userId: route.params?.userId,
+                })
+            )
+            dispatch(
+                allActions.userActions.setInputedKeywordList([])
+            )
+        })
+        .catch(function(error) {
+            console.log("관심사 선택 오류", error);
+        })
     }
 
     const skipSelectInterest = () => {
@@ -236,7 +261,7 @@ const SelectInterestScreen = ({navigation, route}: Props) => {
             tmpInterestList[index].selected  = true;
             setInterestList(tmpInterestList);
             var tmpSelectedInterestList = selectedInterestList;
-            tmpSelectedInterestList.push(item);
+            tmpSelectedInterestList.push(item.name);
             setSelectedInterestList(tmpSelectedInterestList);
             setChangeInterest(!changeInterest);
         } else {
@@ -286,9 +311,11 @@ const SelectInterestScreen = ({navigation, route}: Props) => {
             </BodyContainer>
             <BottomContainer>
                 {selectedInterestList.length > 0 && (
+                <TouchableWithoutFeedback onPress={() => finishSelectInterest()}>
                 <FinishButton>
                     <FinishText>완료</FinishText>
                 </FinishButton>
+                </TouchableWithoutFeedback>
                 )}
                 {selectedInterestList.length === 0 && (
                 <DisabledFinishButton>

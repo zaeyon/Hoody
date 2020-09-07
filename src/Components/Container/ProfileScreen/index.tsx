@@ -40,7 +40,6 @@ const FeedListTabContainer = Styled.View`
 
 const CollectionListTabContainer = Styled.View`
  background-color: #ffffff;
- flex: 1;
 `;
 
 const HeaderBar = Styled.View`

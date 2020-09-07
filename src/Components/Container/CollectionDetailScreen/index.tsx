@@ -4,7 +4,7 @@ import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import {TouchableWithoutFeedback, FlatList, ScrollView, Animated, Image, Alert, ActivityIndicator, View} from 'react-native'
+import {TouchableWithoutFeedback, FlatList, ScrollView, Animated, Image, Alert, ActivityIndicator, View, RefreshControl} from 'react-native'
 import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import ActionSheet from 'react-native-actionsheet';
@@ -49,8 +49,8 @@ padding: 12.5px 15px 10px 15px;
 `;
 
 const BackButton = Styled.Image`
- width: ${wp('8%')};
- height: ${wp('8%')};
+ width: ${wp('6.4%')};
+ height: ${wp('6.4%')};
  tint-color: #ffffff;
 `;
 
@@ -232,8 +232,8 @@ const CollectionCoverImage = Styled.Image`
 `;
 
 const CollectionMoreIcon = Styled.Image`
- width: ${wp('9%')};
- height: ${wp('9%')};
+ width: ${wp('7%')};
+ height: ${wp('7%')};
  tint-color: #ffffff;
 `;
 
@@ -340,6 +340,7 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
     const [currentUserFollow, setCurrentUserFollow] = useState<boolean>(false);
     const [likeCount, setLikeCount] = useState<number>(0);
     const [loadingCollection, setLoadingCollection] = useState<boolean>(true);
+    const [refreshingCollection, setRefreshingCollection] = useState<boolean>(false);
     const H_MAX_HEIGHT = wp('100%')
     const H_MIN_HEIGHT = wp('25.6%');
     const H_SCROLL_DISTANCE = H_MAX_HEIGHT - H_MIN_HEIGHT;
@@ -360,9 +361,16 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
             route.params.update = false
           }
         if(route.params?.collectionId) {
-           GETCollectionDetailInfo(route.params.collectionId)
+           getCollectionDetailInfo()
+        }
+
+    }, [route.params?.collectionId, route.params?.update])
+
+    const getCollectionDetailInfo = () => {
+        GETCollectionDetailInfo(route.params.collectionId)
            .then(function(response) {
                setLoadingCollection(false);
+               setRefreshingCollection(false);
                console.log("GETCollectionDetailInfo response", response)
                setCollectionDetailInfo(response.collection);
                setCurrentUserLike(response.collection.liked);
@@ -373,9 +381,12 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
            .catch(function(error) {
                console.log("GETCollectionDetailInfo error", error)
            })
-        }
+    }
 
-    }, [route.params?.collectionId, route.params?.update])
+    const onRefreshCollection = () => {
+        setRefreshingCollection(true);
+        getCollectionDetailInfo();
+    }
 
     const renderCollectionFeedItem = ({item, index}: any) => {
         return (
@@ -563,7 +574,7 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
                     <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
                     <BackButtonContainer>
                     <BackButton
-                    source={require('~/Assets/Images/ic_back.png')}/>
+                    source={require('~/Assets/Images/HeaderBar/ic_back.png')}/>
                     </BackButtonContainer>
                     </TouchableWithoutFeedback>
                 </HeaderLeftContainer>
@@ -573,7 +584,7 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
                 <TouchableWithoutFeedback onPress={() => showActionSheet()}>
                 <HeaderRightContainer>
                     <CollectionMoreIcon
-                    source={require('~/Assets/Images/ic_more.png')}/>
+                    source={require('~/Assets/Images/HeaderBar/ic_more.png')}/>
                 </HeaderRightContainer>
                 </TouchableWithoutFeedback>
             </HeaderBar>
@@ -584,7 +595,13 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
                   onScroll={Animated.event([
                       {nativeEvent: { contentOffset: {y: scrollOffsetY}}}])}
                   scrollEventThrottle={5}
-                  showsVerticalScrollIndicator={false}>
+                  showsVerticalScrollIndicator={false}
+                  refreshControl={
+                      <RefreshControl
+                      tintColor={"#000000"}
+                      refreshing={refreshingCollection}
+                      onRefresh={onRefreshCollection}/>
+                  }>
                   <CollectionInfoContainer style={{paddingTop:H_MAX_HEIGHT-25}}>
                   <CollectionInfoHeader>
                   <CollectionNameContainer>

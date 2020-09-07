@@ -331,8 +331,13 @@ const Unauthorized = ({navigation}) => {
           if(response.message === "이미 가입된 이메일입니다.") {
 
           } else if(response.message === "가입할 수 있는 이메일입니다.") {
-            
-            
+          navigation.navigate('ProfileInput', {
+            socialId: result.id,
+            socialEmail: result.email,
+            socialNickname: result.nickname,
+            socialGender: result.gender,
+            socialProvider: 'kakao',
+          });
           }
           })
           .catch(function(error) {
@@ -342,15 +347,8 @@ const Unauthorized = ({navigation}) => {
               //setEmailOverlap(true);
             }
           })
-          /*
-          navigation.navigate('ProfileInput', {
-            socialId: result.accessToken,
-            socialEmail: result.email,
-            socialNickname: result.nickname,
-            socialGender: result.gender,
-            socialProvider: 'kakao',
-          });
-          */
+          
+          
         })
 
       })

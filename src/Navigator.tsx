@@ -29,8 +29,6 @@ import ImagesFullScreen from '~/Screens/ImagesFullScreen';
 import Gallery from '~/Screens/Gallery';
 import Gallery_JustOne from '~/Screens/Gallery_JustOne';
 import Unauthorized from '~/Screens/Unauthorized';
-import BasicInput from '~/Screens/SignUp/BasicInput';
-import ProfileInput from '~/Screens/SignUp/ProfileInput';
 import LoginScreen from '~/Screens/LoginScreen';
 import ParagraphDivider from '~/Components/Test/ParagraphDivider';
 import ParagraphInput from '~/Components/Test/ParagraphInput';
@@ -48,6 +46,11 @@ import TagSearchScreen from '~/Components/Container/TagSearchScreen';
 import TestTextWidth from '~/Components/Container/TestTextWidth';
 import UploadDescripInputScreen from '~/Screens/UploadDescripInputScreen';
 import ProductUrlSearchScreen from '~/Components/Container/ProductUrlSearchScreen';
+
+// Signup Screen
+import BasicInput from '~/Screens/SignUp/BasicInput';
+import ProfileInput from '~/Screens/SignUp/ProfileInput';
+import SelectInterestScreen from '~/Components/Container/SelectInterestScreen';
 
 // Profile Screen
 import ProfileScreen from '~/Components/Container/ProfileScreen';
@@ -103,10 +106,6 @@ import CookiePolicyScreen from '~/Components/Container/SettingScreen/Information
 import OpenSourceLibraryScreen from '~/Components/Container/SettingScreen/InformationScreen/OpenSourceLibraryScreen';
 import PrivacyPolicyScreen from '~/Components/Container/SettingScreen/InformationScreen/PrivacyPolicyScreen';
 import SendFeedbackScreen from '~/Components/Container/SettingScreen/SendFeedBackScreen';
-
-
-// Select Interest Screen
-import SelectInterestScreen from '~/Components/Container/SelectInterestScreen';
 
 // Feed Edit Stack
 import FeedEditScreen from '~/Components/Container/FeedEditScreen';
@@ -513,16 +512,6 @@ function UnauthStackScreen() {
       <UnauthStack.Screen
       name="SelectInterestScreen"
       component={SelectInterestScreen}/>
-      <UnauthStack.Screen
-        name="Gallery_JustOne"
-        component={Gallery_JustOne}
-        options={({navigation, route}) => ({
-          transitionSpec: {
-            open: config,
-            close: config,
-          },
-        })}
-      />
       <UnauthStack.Screen
       name={"SettingStack"}
       component={SettingStackScreen}/>

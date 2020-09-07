@@ -6,9 +6,10 @@ import {
   Text,
   KeyboardAvoidingView,
   Keyboard,
-  keyboardEvent,
   Platform,
   SafeAreaView,
+  Alert,
+  ActivityIndicator,
 } from 'react-native';
 import {
   widthPercentageToDP as wp,
@@ -300,6 +301,9 @@ padding-left: 10px;
 padding-right: 10px;
 border-width: 1.5px;
 border-color: #FAFAFA;
+font-size: 16px;
+font-weight: 500;
+color: #1D1E1F;
 `;
 
 const BirthdateModalContainer = Styled.View`
@@ -370,6 +374,14 @@ border-color: #ECECEE;
 background-color: #ffffff;
 `;
 
+const LoadingContainer = Styled.View`
+ position: absolute;
+ width: ${wp('100%')};
+ height: ${hp('100%')};
+ align-items: center;
+ justify-content: center;
+`;
+
 
 
 const ProfileInput = ({navigation, route}) => {
@@ -418,6 +430,9 @@ const ProfileInput = ({navigation, route}) => {
   const [birthdateIndication, setBirthdateIndication] = useState('');
   const [nicknameInputFocused, setNicknameFocused] = useState<boolean>(false);
   const [selectedGenderRadioIndex, setSelectedGenderRadioIndex] = useState<number>(0);
+
+  const [nicknameOverlap, setNicknameOverlap] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   console.log("currentUser", currentUser);
 
@@ -613,6 +628,7 @@ const ProfileInput = ({navigation, route}) => {
 
   const onChangeNicknameInput = (text) => {
     setInputedNickname(text);
+    setNicknameOverlap(false);
     var strArray = text.split('');
     var blank_pattern = /[\s]/g;
     if(blank_pattern.test(text) === true) {
@@ -650,6 +666,7 @@ const ProfileInput = ({navigation, route}) => {
   }
 
   const signUp = () => {
+    setLoading(true);
     submitingNickname = inputedNickname;
     submitingSocialId = socialId;
     submitingBirthDate = formattedBirthdate;
@@ -665,38 +682,57 @@ const ProfileInput = ({navigation, route}) => {
 
     SignUp(submitingEmail, submitingPassword, submitingNickname, submitingBirthDate, submitingGender, submitingSocialId, submitingProvider, currentUser.fcmToken)
     .then(function(response) {
+      setLoading(false);
       if(response.status === 201) {
       //navigation.navigate("SelectInterestScreen");
       console.log("회원가입 성공", response)
-      dispatch(
-        allActions.userActions.setUser({
-          email: submitingEmail,
-          password: submitingPassword,
-          birthDate: Date.parse(submitingBirthDate),
-          gender: submitingGender,
-          socialId: submitingSocialId,
-          provider: submitingProvider,
-          profileImage: response.data.user.profileImg,
-          nickname: response.data.user.nickname,
-          followers: response.data.user.Followers,
-          followings: response.data.user.Followings,
-          userId: response.data.user.id,
-        }),
-      );
-      dispatch(
-        allActions.userActions.setLikeFeeds(response.data.user.LikePosts)
-      )
-      dispatch(
-        allActions.userActions.setScrapFeeds(response.data.user.scraps[0].Posts)
-      )
-      dispatch(
-        allActions.userActions.setInputedKeywordList([])
-      )
 
+
+      Alert.alert('회원가입이 완료되었습니다!', '', [
+        {
+          text: "확인",
+          onPress: () => {
+            navigation.navigate("SelectInterestScreen", {
+              email: submitingEmail,
+              birthDate: Date.parse(submitingBirthDate),
+              gender: submitingGender,
+              socialId: submitingSocialId,
+              provider: submitingProvider,
+              profileImage: response.data.user.profileImg,
+              nickname: response.data.user.nickname,
+              userId: response.data.user.id,
+            });
+            /*
+            dispatch(
+              allActions.userActions.setUser({
+                email: submitingEmail,
+                password: submitingPassword,
+                birthDate: Date.parse(submitingBirthDate),
+                gender: submitingGender,
+                socialId: submitingSocialId,
+                provider: submitingProvider,
+                profileImage: response.data.user.profileImg,
+                nickname: response.data.user.nickname,
+                userId: response.data.user.id,
+              }),
+            );
+            dispatch(
+              allActions.userActions.setInputedKeywordList([])
+            )
+            */
+          },
+        }
+      ])
       }
+
     })
     .catch(function(error) {
+      setLoading(false);
       console.log("회원가입 실패", error);
+      if(error.data.message == "이미 있는 닉네임입니다.") {
+        console.log("이미있는 닉네임")
+        setNicknameOverlap(true);
+      }
     })
     /*
     return new Promise(function (resolve, reject) {
@@ -752,11 +788,16 @@ const ProfileInput = ({navigation, route}) => {
           <HeaderEmptyContainer/>
         </HeaderRightContainer>
       </HeaderBar>
+      {loading && (
+        <LoadingContainer>
+          <ActivityIndicator/>
+        </LoadingContainer>
+      )}
       <InputContainer style={{marginTop: 10}}>
         <ItemContainer>
           <ItemLabelText>닉네임</ItemLabelText>
           <ItemTextInput
-            style={!validNickname && !nicknameInputFocused && {borderColor:'#FF3B30'} || (nicknameInputFocused) && {borderColor:'#267DFF'}}
+            style={(nicknameOverlap || (!validNickname && !nicknameInputFocused)) && {borderColor:'#FF3B30'} || (nicknameInputFocused) && {borderColor:'#267DFF'}}
             autoCapitalize={"none"}
             clearButtonMode={"while-editing"}
             onChangeText={(text: string) => onChangeNicknameInput(text)}
@@ -765,8 +806,11 @@ const ProfileInput = ({navigation, route}) => {
             onFocus={() => onFocusNicknameInput()}
             value={inputedNickname}
           />
-          {!validNickname && <UnvalidInputText>2-12자, 공백 사용 불가</UnvalidInputText>}
-          {nicknameInputFocused && <FocusInputText>2-12자, 공백 사용 불가</FocusInputText>}
+          {!validNickname && !nicknameOverlap && <UnvalidInputText>2-12자, 공백 사용 불가</UnvalidInputText>}
+          {nicknameInputFocused && !nicknameOverlap && <FocusInputText>2-12자, 공백 사용 불가</FocusInputText>}
+          {nicknameOverlap && (
+            <UnvalidInputText>이미 사용중인 닉네임입니다.</UnvalidInputText>
+          )}
         </ItemContainer>
         <BirthDateGenderContainer style={{marginTop: 33}}>
           <BirthDateContainer>

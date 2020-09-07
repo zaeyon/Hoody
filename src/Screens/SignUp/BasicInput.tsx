@@ -1,6 +1,6 @@
 import React, {useState, useLayoutEffect, useEffect, useRef} from 'react';
 import Styled from 'styled-components/native';
-import {TouchableWithoutFeedback, Keyboard, SafeAreaView} from 'react-native';
+import {TouchableWithoutFeedback, Keyboard, SafeAreaView, ActivityIndicator} from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -175,6 +175,14 @@ border-width: 1.5px;
 border-color: #FAFAFA;
 `;
 
+const LoadingContainer = Styled.View`
+ position: absolute;
+ width: ${wp('100%')};
+ height: ${hp('100%')};
+ align-items: center;
+ justify-content: center;
+`;
+
 const BasicInput = ({navigation, route}) => {
   const [inputedEmail, setInputedEmail] = useState('');
   const [inputedPassword, setInputedPassword] = useState('');
@@ -199,6 +207,8 @@ const BasicInput = ({navigation, route}) => {
   const [onFocusPassword, setOnFocusPassword] = useState<boolean>(false);
   const [onFocusPasswordConfirm, setOnFocusPasswordConfirm] = useState<boolean>(false);
   const [emailOverlap, setEmailOverlap] = useState<boolean>(false);
+
+  const [loading, setLoading] = useState<boolean>(false);
 
   var emailInputRef = useRef(null);
   var passwordInputRef = useRef(null);
@@ -232,6 +242,7 @@ const BasicInput = ({navigation, route}) => {
   }
 
   const moveToProfileInput = () => {
+    setLoading(true)
     console.log("moveToProfileInput");
     if(!confirmedEmail || !confirmedPassword || inputedPasswordSame === "") {
       console.log("No confirmed input");
@@ -243,6 +254,7 @@ const BasicInput = ({navigation, route}) => {
         console.log("이메일 중복 검사");
         GETEmailCheck(inputedEmail)
         .then(function(response) {
+          setLoading(false);
           console.log("GETEmailCheck response", response);
           if(response.message === "이미 가입된 이메일입니다.") {
             setEmailOverlap(true);
@@ -261,6 +273,7 @@ const BasicInput = ({navigation, route}) => {
           }
           })
           .catch(function(error) {
+            setLoading(false);
             console.log("GETEmailCheck error", error)
             if(error.status === 403) {
               console.log("이미 사용중인 이메일", error.status);
@@ -565,6 +578,11 @@ const BasicInput = ({navigation, route}) => {
           </TouchableWithoutFeedback>
           </AboveKeyboard>
           </FinishButtonContainer>
+          {loading && (
+            <LoadingContainer>
+              <ActivityIndicator/>
+            </LoadingContainer>
+          )}
     </Container>
   );
 };

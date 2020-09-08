@@ -7,7 +7,7 @@ const POSTUpdate = (postId, desArray, mediaArray,mainTag, subTag1, subTag2, rati
 
     console.log("postId", postId);
 
-    console.log("업로드할 사진", mediaArray);
+    console.log("수정할 사진", mediaArray);
     console.log("업로드할 desArray", desArray);
     console.log("업로드할 상품", products);
     console.log("게시글 수정 spendDate", spendDate);
@@ -23,9 +23,15 @@ const POSTUpdate = (postId, desArray, mediaArray,mainTag, subTag1, subTag2, rati
 
     var form = new FormData();
 
-    // IOS simulator 테스트용 이미지 추가
+
+    for(var i = 0; i < mediaArray.length; i++) {
+        form.append(`mediaFile`, {
+            uri: mediaArray[i].uri,
+            name: mediaArray[i].image.filename,
+            type: 'image/jpeg',
+        })
+    }
     
-    form.append('mediaFiles',  mediaArray);
     form.append('descriptions', desArray);
     form.append('starRate', rating);
     form.append('expense', expense);
@@ -63,7 +69,7 @@ const POSTUpdate = (postId, desArray, mediaArray,mainTag, subTag1, subTag2, rati
         })
         .catch(function(error) {
             console.log('error: ', error);
-            reject(error);
+            reject(error.response);
         })
     })
 }

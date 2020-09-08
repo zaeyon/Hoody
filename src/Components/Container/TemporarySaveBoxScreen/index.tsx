@@ -211,7 +211,7 @@ color: #C4C4C4;
                 )}
                 </MainTagText>
                 </TagListContainer>
-                <SaveDateText>{createdDate + " 저장됌"}</SaveDateText>
+                <SaveDateText>{createdDate + " 저장됨"}</SaveDateText>
                 </FeedInfoContainer>
                 </TouchableWithoutFeedback>
                 {temporarySaveListEdit && (

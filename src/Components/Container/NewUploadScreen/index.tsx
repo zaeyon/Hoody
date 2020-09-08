@@ -206,6 +206,7 @@ const MetaInfoContainer = Styled.View`
 const RatingExpenseContainer = Styled.View`
 width:${wp('92%')};
 flex-direction: row;
+align-items: center;
 `;
 
 const LocationSpendDateContainer = Styled.View`
@@ -237,7 +238,7 @@ const InputedRatingText = Styled.Text`
  font-size: 15px;
  font-weight: 500;
  color: #56575C;
- margin-top: 2px;
+ margin-top: 0px;
 `;
 
 const RatingInner = Styled.View`
@@ -248,6 +249,13 @@ const RatingInner = Styled.View`
 const LocationInner = Styled.View`
 flex-direction: row;
 align-items: center;
+`;
+
+const VerticalDivider = Styled.View`
+ width: 1px;
+ height: 15px;
+ margin-left: 8px;
+ background-color: #ECECEE
 `;
 
 const ExpenseInner = Styled.View`
@@ -275,7 +283,7 @@ color: #8E9199;
 `;
 
 const InputedExpenseContainer = Styled.View`
- margin-left: 15px;
+ margin-left: 8px;
  flex-direction: row;
  flex-shrink: 1;
 `;
@@ -1519,6 +1527,7 @@ const addExpense = () => {
 }
 
 const finishModifyParagraph = () => {
+    console.log("paragraphData", paragraphData);
 
     if(descripModalInputText !== null)
     {
@@ -1959,12 +1968,12 @@ const renderAddNewDescripInput = () => {
                         </RatingInner>
                     </InputedRatingContainer>
                     </TouchableWithoutFeedback>
+                    <VerticalDivider/>
                     <TouchableWithoutFeedback onPress={() => toggleInputExpense()}>
                     <InputedExpenseContainer>
                     <ExpenseInner>
-                    <InputedExpenseIcon
-                    source={require('~/Assets/Images/ic_expense_outline.png')}/>
-                    <InputedExpenseText>{expense ? expense.toLocaleString() + "원" : "소비금액"}</InputedExpenseText>
+                    <InputedExpenseText style={expense ? {color: "#56575C"
+                    }: {color: "#C6C7CC"}}>{expense ? expense.toLocaleString() + "원" : "가격 미입력"}</InputedExpenseText>
                     </ExpenseInner>
                     </InputedExpenseContainer>
                     </TouchableWithoutFeedback>

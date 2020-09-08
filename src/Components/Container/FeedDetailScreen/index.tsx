@@ -763,7 +763,8 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
     const [visibleReportModal, setVisibleReportModal] = useState<boolean>(false);
     const [imageUriArray, setImageUriArray] = useState<Array<string>>([]);
     const [refreshingFeedDetail, setRefreshingFeedDetail] = useState<boolean>(false);
-    const [loadingFeedInfo, setLoadingFeedInfo] = useState<boolean>(true)
+    const [loadingFeedInfo, setLoadingFeedInfo] = useState<boolean>(true);
+    
 
     const currentUser = useSelector((state:any) => state.currentUser);
     const dispatch = useDispatch();
@@ -804,11 +805,13 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
     const getFeedDetail = (postId: number) => {
       GetFeedDetail(postId).then(function(response) {
         console.log("GetFeedDetail Success:", response.data);
+        console.log("GetFeedDetail Succress response.data.post.Scraps", response.data.post.Scraps);
         console.log("좋아요목록", response.data.post.Likers)
         console.log("currentUser.user", currentUser.user);
         if(response.data.post.user.id === currentUser.user.userId) {
           setCurrentUserFeed(true);
         }
+        setSpendDate(response.data.post.spendDate);
         response.data.post.spendDate = getDateFormat(response.data.post.spendDate)
         setParagraphData(response.data.postBody);
         setPostId(route.params.postId);
@@ -816,8 +819,19 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
         setLikeCount(response.data.post.likes);
         setAllCommentCount(response.data.post.commentsCount+response.data.post.replysCount);
         setCreatedDate(getCreatedAtDateFormat(response.data.post.createdAt));
-        setCurrentUserLike(route.params.currentUserLike)
-        setCurrentUserScrap(route.params.currentUserScrap);
+
+        if(response.data.liked == true) {
+          setCurrentUserLike(true);
+        } else if(response.data.liked == false) {
+          setCurrentUserLike(false);
+        }
+
+        if(response.data.scraped == true) {
+          setCurrentUserScrap(true);
+        } else if(response.data.scraped == false) {
+          setCurrentUserScrap(false);
+        }
+
         setRefreshingFeedDetail(false);
         setLoadingFeedInfo(false)
     })
@@ -906,7 +920,7 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
         */
         POSTLike(currentUser.user.userId, postId)
         .then(function(response) {
-          console.log("response", response)
+          console.log("POSTLike response", response)
         })
         .catch(function(error) {
           console.log("error", error);
@@ -929,7 +943,7 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
 
       DELETELike(currentUser.user.userId, postId)
       .then(function(response) {
-        console.log("response", response)
+        console.log("DELETELike response", response)
       })
       .catch(function(error) {
         console.log("error", error)
@@ -1051,6 +1065,7 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
        paragraphData: paragraphData,
        feedDetailInfo: feedDetailInfo,
        postId: postId,
+       spendDate: spendDate,
      });
    }
 

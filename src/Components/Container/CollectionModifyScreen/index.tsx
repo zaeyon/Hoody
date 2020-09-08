@@ -4,7 +4,7 @@ import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import {TouchableWithoutFeedback, Switch, KeyboardAvoidingView, StyleSheet, Platform, ScrollView, View} from 'react-native'
+import {TouchableWithoutFeedback, Switch, KeyboardAvoidingView, StyleSheet, Platform, ScrollView, View, ActivityIndicator} from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'; 
 
 import POSTCollectionUpdate from '~/Route/Collection/POSTCollectionUpdate';
@@ -84,6 +84,12 @@ const CoverImageContainer = Styled.View`
  border-radius: 10px;
  justify-content: center;
  align-items: center;
+`;
+
+const CoverImage = Styled.Image`
+ width: ${wp('43.7%')};
+ height: ${wp('43.7%')};
+ border-radius: 10px;
 `;
 
 const EmptyCoverIcon = Styled.Image`
@@ -176,19 +182,35 @@ font-size: 16px;
 color: #333333;
 `;
 
+const LoadingContainer = Styled.View`
+ position: absolute;
+ width: ${wp('100%')};
+ height: ${hp('100%')};
+ align-items: center;
+ justify-content: center;
+`;
+
 interface Props {
     navigation: any,
     route: any,
 }
 
 const CollectionModifyScreen = ({navigation, route}: Props) => {
-    const [enabledPrivate, setEnabledPrivate] = useState<boolean>(false);
-    const [enabledIncludeLocation, setEnabledIncludeLocation] = useState<boolean>(false);
+    const [enabledPrivate, setEnabledPrivate] = useState<boolean>(!route.params?.open);
+    const [enabledIncludeLocation, setEnabledIncludeLocation] = useState<boolean>(route.params?.includeLocation);
     const [collectionNameText, setCollectionNameText] = useState<string>(route.params?.name);
     const [collectionDescripText, setCollectionDescripText] = useState<string>(route.params?.description);
     const [coverImage, setCoverImage] = useState(route.params?.coverImage);
     const [name, setName] = useState<string>(route.params?.name);
     const [description, setDescription] = useState<string>(route.params?.description);
+    const [loadingUpdate, setLoadingUpdate] = useState<boolean>(false);
+
+    useEffect(() => {
+        if(route.params?.selectedCoverImage) {
+            console.log("selectedCoverImage", route.params.selectedCoverImage)
+            setCoverImage(route.params.selectedCoverImage);
+        }
+    }, [route.params?.selectedCoverImage])
 
     const togglePrivate = () => {
         setEnabledPrivate(!enabledPrivate);
@@ -211,13 +233,20 @@ const CollectionModifyScreen = ({navigation, route}: Props) => {
     }
 
     const moveToGallery = () => {
-        navigation.navigate("Gallery_JustOne");
+        navigation.navigate("Gallery_JustOne", {
+            requestType: "CollectionModifyScreen",
+        });
     }
 
     const finishCollectionEdit = () => {
+        setLoadingUpdate(true);
         POSTCollectionUpdate(route.params?.collectionId, collectionNameText, !enabledPrivate, coverImage, collectionDescripText, enabledIncludeLocation)
         .then(function(response) {
+            setLoadingUpdate(false);
             console.log("컬렉션 수정 response", response);
+            navigation.navigate("CollectionDetailScreen", {
+                update: true,
+            })
         })
         .catch(function(error) {
             console.log("컬렉션 수정 error", error);
@@ -252,8 +281,8 @@ const CollectionModifyScreen = ({navigation, route}: Props) => {
             <CoverContainer>
             <TouchableWithoutFeedback onPress={() => moveToGallery()}>
             <CoverImageContainer>
-            <EmptyCoverIcon
-            source={require('~/Assets/Images/ic_emptyImage.png')}/>
+                <CoverImage
+                source={{uri:coverImage.uri}}/>
             </CoverImageContainer>
             </TouchableWithoutFeedback>
             <TouchableWithoutFeedback onPress={() => moveToGallery()}>
@@ -297,6 +326,11 @@ const CollectionModifyScreen = ({navigation, route}: Props) => {
             </IncludeLocationContainer>
             </View>
             </KeyboardAwareScrollView>
+            {loadingUpdate && (
+            <LoadingContainer>
+                <ActivityIndicator/>
+            </LoadingContainer>
+            )}
         </Container>
     )
 }

@@ -26,6 +26,7 @@ import appleAuth, {
 // Route
 import POSTSocial from '~/Route/Auth/POSTSocial';
 import GETEmailCheck from '~/Route/Auth/GETEmailCheck';
+import GETKakao from '~/Route/Auth/GETKakao';
 
 const Container = Styled.View`
  flex: 1;
@@ -311,6 +312,23 @@ const Unauthorized = ({navigation}) => {
         }
       });
   };
+
+  const getKakao = () => {
+    navigation.navigate("KakaoLoginScreen")
+    /*
+    GETKakao()
+    .then(function(response) {
+      console.log("getKakao response", response)
+      navigation.navigate("KakaoLoginScreen", {
+        htmlCode: response,
+      });
+    })
+    .catch(function(error) {
+      console.log("GETKakao error", error);
+
+    })
+    */
+  }
 
   const getKakaoProfile = () => {
     logCallback('Get Profile Start', setProfileLoading(true));

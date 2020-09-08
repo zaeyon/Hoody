@@ -47,6 +47,8 @@ import TestTextWidth from '~/Components/Container/TestTextWidth';
 import UploadDescripInputScreen from '~/Screens/UploadDescripInputScreen';
 import ProductUrlSearchScreen from '~/Components/Container/ProductUrlSearchScreen';
 
+import KakaoLoginScreen from '~/Components/Container/KakaoLoginScreen';
+
 // Signup Screen
 import BasicInput from '~/Screens/SignUp/BasicInput';
 import ProfileInput from '~/Screens/SignUp/ProfileInput';
@@ -247,7 +249,7 @@ function UploadStackScreen() {
         }
       }}
       />
-      <UploadStack.Screen
+      <UploadStack.Screen 
         name="LocationSearch"
         component={LocationSearch}
       />
@@ -515,6 +517,9 @@ function UnauthStackScreen() {
       <UnauthStack.Screen
       name={"SettingStack"}
       component={SettingStackScreen}/>
+      <UnauthStack.Screen
+      name={"KakaoLoginScreen"}
+      component={KakaoLoginScreen}/>
     </UnauthStack.Navigator>
   );
 }
@@ -830,11 +835,10 @@ function AppNavigator({navigation, route}: any) {
 
   useEffect(() => {
    // SplashScreen.hide();
-
-    
     getAutoLoginUser()
     .then(function(asyStorResponse) {
       console.log("responsegggg", asyStorResponse);
+      console.log("자동로그인 세션", asyStorResponse.sessionId)
       console.log("자동로그인 response.nickname", asyStorResponse.nickname);
       console.log("자동로그인 response.state", asyStorResponse.state);
       if(asyStorResponse == "NoLogined") {

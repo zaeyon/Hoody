@@ -4,7 +4,10 @@
 #import <React/RCTBundleURLProvider.h>
 #import <React/RCTRootView.h>
 #import "RNSplashScreen.h"  // here
-
+#import <Firebase.h>
+#import <RNGoogleSignin/RNGoogleSignin.h>
+#import <GoogleMaps/GoogleMaps.h>
+#import <KakaoOpenSDK/KakaoOpenSDK.h>
 #if DEBUG
 #import <FlipperKit/FlipperClient.h>
 #import <FlipperKitLayoutPlugin/FlipperKitLayoutPlugin.h>
@@ -13,17 +16,12 @@
 #import <SKIOSNetworkPlugin/SKIOSNetworkAdapter.h>
 #import <FlipperKitReactPlugin/FlipperKitReactPlugin.h>
 
-// Google
-#import <RNGoogleSignin/RNGoogleSignin.h>
-#import <GoogleMaps/GoogleMaps.h>
 
 #import <UIKit/UIKit.h>
-#import <Firebase.h>
 
 @import Firebase;
 
 // KaKao
-#import <KakaoOpenSDK/KakaoOpenSDK.h>
 
 static void InitializeFlipper(UIApplication *application) {
   FlipperClient *client = [FlipperClient sharedClient];

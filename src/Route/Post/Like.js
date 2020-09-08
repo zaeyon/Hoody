@@ -13,7 +13,7 @@ const POSTLike = (userId, postId) => {
         })
         .catch(function(error) {
             console.log("POSTLike error", error)
-            reject(error);
+            reject(error.response);
         })
     })
 }

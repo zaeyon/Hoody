@@ -39,6 +39,11 @@ const HeaderBackIcon = Styled.Image`
  height: ${wp('6.4%')};
 `;
 
+const HeaderEmptyContainer = Styled.View`
+width: ${wp('6.4%')};
+height: ${wp('6.4%')};
+`;
+
 const HeaderTitleText = Styled.Text`
  font-weight: 600;
  font-size: 18px;
@@ -167,12 +172,19 @@ const ScrapListScreen = ({navigation, route}: Props) => {
                 </HeaderBackContainer>
                 </TouchableWithoutFeedback>
                 <HeaderTitleText>스크랩</HeaderTitleText>
+                {allScrapFolderListData[0]?.Posts[0] && (
                 <TouchableWithoutFeedback onPress={() => moveToAddScrapAlbum()}>
                 <HeaderAddContainer>
                     <HeaderAddIcon
                     source={require('~/Assets/Images/HeaderBar/ic_add.png')}/>
                 </HeaderAddContainer>
                 </TouchableWithoutFeedback>
+                )}
+                {!allScrapFolderListData[0]?.Posts[0] && (
+                <HeaderAddContainer>
+                    <HeaderEmptyContainer/>
+                </HeaderAddContainer>
+                )}
             </HeaderBar>
             <BodyContainer>
                 <FlatList

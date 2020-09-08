@@ -105,6 +105,10 @@ class ImageItem extends Component {
       this.props.navigation.navigate("ProfileEditScreen", {
         selectedProfileImage: item,
       })
+    } else if(this.props.requestType === "CollectionModifyScreen") {
+      this.props.navigation.navigate("CollectionModifyScreen", {
+        selectedCoverImage: item,
+      })
     }
   }
 

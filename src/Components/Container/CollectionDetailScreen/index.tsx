@@ -297,6 +297,29 @@ const LoadingContainer = Styled.View`
  justify-content: center;
 `;
 
+
+
+const MarkerThumbnailImage = Styled.Image`
+ width: 50px;
+ height: 50px;
+ border-radius: 50px;
+`;
+
+const MarkerThumbnailContainer = Styled.View`
+ flex:1;
+ width: 66px;
+ height: 66px;
+ justify-content: center;
+ align-items: center;
+ padding-top: 0px;
+ padding-left: 0px;
+ padding-right: 3px;
+ padding-bottom: 6px;
+`;
+
+
+
+
 const TEST_COLLECTION_DATA = {
         title: '컬렉션 테스트1',
         feedCount: 13,
@@ -341,6 +364,14 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
     const [likeCount, setLikeCount] = useState<number>(0);
     const [loadingCollection, setLoadingCollection] = useState<boolean>(true);
     const [refreshingCollection, setRefreshingCollection] = useState<boolean>(false);
+    const [locationFeedList, setLocationFeedList] = useState<Array<object>>([]);
+
+    const [initialMapRegion, setInitialMapRegion] = useState<Region>({
+        latitude:  35.9,
+        longitude: 127.8,
+        latitudeDelta: 2.5022,
+        longitudeDelta: 4.0421,
+      })
     const H_MAX_HEIGHT = wp('100%')
     const H_MIN_HEIGHT = wp('25.6%');
     const H_SCROLL_DISTANCE = H_MAX_HEIGHT - H_MIN_HEIGHT;
@@ -369,9 +400,21 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
     const getCollectionDetailInfo = () => {
         GETCollectionDetailInfo(route.params.collectionId)
            .then(function(response) {
+               var tmpLocationFeedList = new Array();
                setLoadingCollection(false);
                setRefreshingCollection(false);
                console.log("GETCollectionDetailInfo response", response)
+               console.log("GETCollectionDetailInfo response.Posts", response.collection.Posts);
+               response.collection.Posts.forEach((item: any) => {
+                   if(item.address) {
+                       console.log("locationFeedList item.address", item.address)
+                       tmpLocationFeedList.push(item)
+                   }
+               })
+               setTimeout(() => {
+                   setLocationFeedList(tmpLocationFeedList)
+               }, 100)
+
                setCollectionDetailInfo(response.collection);
                setCurrentUserLike(response.collection.liked);
                setCurrentUserScrap(response.collection.scraped);
@@ -460,9 +503,13 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
         } if(index === 2) {
             navigation.navigate("CollectionModifyScreen", {
             collectionId: route.params?.collectionId,
-            coverImage: collectionDetailInfo.coverImg,
+            coverImage: {
+                uri: collectionDetailInfo.coverImg
+            },
             name: collectionDetailInfo.name,
             description: collectionDetailInfo.description,
+            open: collectionDetailInfo.open,
+            includeLocation: collectionDetailInfo.includeLocation,
         });
         } else if(index === 3) {
             moveToCollectionFeedEdit()
@@ -696,18 +743,31 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
                   <MapView
                   style={{flex:1}}
                   provider={PROVIDER_GOOGLE}
-                  initialRegion={{
-                      latitude: 32,
-                      longitude: 121,
-                      latitudeDelta: 0.0922,
-                      longitudeDelta: 0.0421,
-                  }}>
-                      <Marker
-                      coordinate={LatLng}
-                      image={require('~/Assets/Images/ic_circleMarker.png')}>
-                      <MarkerFeedImage
-                      source={{uri:'https://d2uh4olaxaj5eq.cloudfront.net/fit-in/1080x0/3d655d9b-3ca8-4c4b-bbaf-7519bdc09f42.jpg'}}/>
-                      </Marker>
+                  initialRegion={initialMapRegion}>
+                      {locationFeedList?.map((item, index) => {
+                       return (
+                        <Marker
+                        coordinate={{
+                            latitude: item.address.geographLat,
+                            longitude: item.address.geographLong,
+                        }}
+                        style={{
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                          }}
+                        image={require('~/Assets/Images/Map/ic_marker_small.png')}>
+                        <MarkerThumbnailContainer>
+                            <MarkerThumbnailImage
+                            style={!item.mediaFiles[0] && {width: 22, height: 22, marginBottom:5, marginLeft:2}}
+                            source={
+                            item.mediaFiles[0]
+                            ? {uri:item.mediaFiles[0].url}
+                            : require('~/Assets/Images/Map/ic_hash.png')
+                            }/>
+                        </MarkerThumbnailContainer>
+                        </Marker>
+                       )
+                      })}
                   </MapView>
                   </LocationMapContainer>
       

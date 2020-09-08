@@ -255,6 +255,14 @@ flex-direction: row;
 align-items: center;
 `;
 
+
+const VerticalDivider = Styled.View`
+ width: 1px;
+ height: 15px;
+ margin-left: 8px;
+ background-color: #ECECEE
+`;
+
 const ExpenseInner = Styled.View`
 flex-direction: row;
 align-items: center;
@@ -280,7 +288,7 @@ color: #8E9199;
 `;
 
 const InputedExpenseContainer = Styled.View`
- margin-left: 15px;
+ margin-left: 8px;
  flex-direction: row;
  flex-shrink: 1;
 `;
@@ -311,6 +319,7 @@ const SubTagPlaceholderText = Styled.Text`
 `;
 
 const BottomMenuBarContainer = Styled.View`
+height: 44px;
  background-color: #707070;
  justify-content: flex-end;
  position: absolute;
@@ -319,8 +328,8 @@ const BottomMenuBarContainer = Styled.View`
 
 
 const BottomMenuBar = Styled.View`
- margin-left: ${wp('7.5%')};
- width: ${wp('85%')};
+ margin-left: ${wp('4.5%')};
+ width: ${wp('91%')};
  height: 44px;
  background-color: #FAFAFA;
  border-radius: 22px;
@@ -453,12 +462,13 @@ const DescripParaText = Styled.Text`
 
 
 const ParagraphIconContainer = Styled.View`
-flex: 1;
+flex: 0.6;
+background-color: #FFFFFF;
 justify-content: center;
 align-items: center;
 padding-top: 12px;
 padding-bottom: 12px;
-padding-right: 5px;
+padding-right: 15px;
 `;
 
 
@@ -759,6 +769,15 @@ right: 0;
 `;
 
 
+const BottomMenuSettingIcon = Styled.Image`
+ width: ${wp('6.4%')};
+ height: ${wp('6.4%')};
+ tint-color: #65A2FF;
+`;
+
+
+
+
 
 
 const bottomActionOptions = [
@@ -841,7 +860,7 @@ const FeedEditScreen = ({navigation, route}: Props) => {
 
     // toggle Consumption date picker
     const [visibleConsumptionDatePicker, setVisibleConsumptionDatePicker] = useState<boolean>(false);
-    const [consumptionDate, setConsumptionDate] = useState(new Date(1598051730000));
+    const [consumptionDate, setConsumptionDate] = useState(route.params?.spendDate);
     const [consumptionDateStr, setConsumptionDateStr] = useState<string>();
     
     // Paragraph 관련 state
@@ -858,6 +877,8 @@ const FeedEditScreen = ({navigation, route}: Props) => {
     // Setting
     const [visibleSettingModal, setVisibleSettingModal] = useState<boolean>(false);
     const [selectedOpenRadioIndex, setSelectedOpenRadioIndex] = useState<number>(0);
+    const API_KEY = 'd824d5c645bfeafcb06f24db24be7238';
+
 
     // useRef
     const newDescripInput = useRef(null);
@@ -899,7 +920,31 @@ const FeedEditScreen = ({navigation, route}: Props) => {
                  setExpense(route.params.feedDetailInfo.expense);
                  setFormattedExpense(route.params.feedDetailInfo.expense.toLocaleString());
              }
-             setParagraphData(route.params.paragraphData);
+
+             var tmpParagraphData = route.params.paragraphData;
+             const tmpParagraphData2 = tmpParagraphData.map((item:any, index:any) => {
+                 console.log("tmpPAragraphData item", item)
+                 if(item.type === "image") {
+                     var imagePara = {
+                         image: item,
+                         index: item.index-1,
+                         type: "image",
+                         uri: item.url, 
+                     }
+                     
+                     return imagePara
+                 } else {
+                     item.index = item.index-1
+
+                     return item
+                 }
+             })
+
+             setTimeout(() => {
+             console.log("수정된 paragraphData", tmpParagraphData2);
+             setParagraphData(tmpParagraphData2);
+             }, 10)
+             
              setIncompleteMainTag(route.params.feedDetailInfo.mainTags.name)
              setMainTagInserted(true);
              setRating(route.params.feedDetailInfo.starRate)
@@ -1497,6 +1542,7 @@ const addExpense = () => {
 }
 
 const finishModifyParagraph = () => {
+    console.log("paragraph", paragraphData);
 
     if(descripModalInputText !== null)
     {
@@ -1618,7 +1664,8 @@ const clickToUploadFinish = () => {
           descriptionArray.push(paragraphData[i].description);
       } else if(paragraphData[i].type === 'image') {
           sequence = sequence + "M";
-          mediaFileArray.push(paragraphData[i].image);
+          mediaFileArray.push(paragraphData[i]);
+          console.log("paragraphData[i]", paragraphData[i]);
       } else if(paragraphData[i].type === 'product') {
           sequence = sequence + "P";
           productArray.push({
@@ -1702,8 +1749,9 @@ const clickToTemporarySave = () => {
             sequence = sequence + "D";
             descriptionArray.push(paragraphData[i].description);
         } else if(paragraphData[i].type === 'image') {
+            console.log("paragraphData[i]", paragraphData[i]);
             sequence = sequence + "M";
-            mediaFileArray.push(paragraphData[i].image);
+            mediaFileArray.push(paragraphData[i]);
         } else if(paragraphData[i].type === 'product') {
             sequence = sequence + "P";
             productArray.push({
@@ -1769,6 +1817,9 @@ const onPressRadioButton = (i: number, obj: object) => {
 }
 
 
+const openSettingModal = () => {
+    setVisibleSettingModal(true);
+}
 
 const renderDraggableItem = ({item, index, drag, isActive}) => {
     if(item.type === 'description') {
@@ -1966,12 +2017,12 @@ const renderAddNewDescripInput = () => {
                     </RatingInner>
                     </InputedRatingContainer>
                     </TouchableWithoutFeedback>
+                    <VerticalDivider/>
                     <TouchableWithoutFeedback onPress={() => toggleInputExpense()}>
                     <InputedExpenseContainer>
                     <ExpenseInner>
-                    <InputedExpenseIcon
-                    source={require('~/Assets/Images/ic_expense_outline.png')}/>
-                    <InputedExpenseText>{expense ? formattedExpense + "원" : "소비금액"}</InputedExpenseText>
+                    <InputedExpenseText style={expense ? {color: "#56575C"
+                    }: {color: "#C6C7CC"}}>{expense ? formattedExpense + "원" : "가격 미입력"}</InputedExpenseText>
                     </ExpenseInner>
                     </InputedExpenseContainer>
                     </TouchableWithoutFeedback>
@@ -2102,6 +2153,12 @@ const renderAddNewDescripInput = () => {
                     <BottomMenuIconContainer>
                     <BottomMenuUrlIcon
                     source={require('~/Assets/Images/ic_bottomMenu_url.png')}/>
+                    </BottomMenuIconContainer>
+                    </TouchableWithoutFeedback>
+                    <TouchableWithoutFeedback onPress={() => openSettingModal()}>
+                    <BottomMenuIconContainer>
+                    <BottomMenuSettingIcon
+                    source={require('~/Assets/Images/ic_bottomMenu_setting.png')}/>
                     </BottomMenuIconContainer>
                     </TouchableWithoutFeedback>
                 </BottomMenuBar>

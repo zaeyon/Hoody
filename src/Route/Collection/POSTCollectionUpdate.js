@@ -16,7 +16,11 @@ const POSTCollectionUpdate = (collectionId, name, open, coverImg, description, i
     formData.append("collectionId", collectionId);
     formData.append("name", name);
     formData.append("open", open);
-    formData.append("coverImg", coverImg);
+    formData.append(`coverImg`, {
+        uri: coverImg.uri,
+        name: coverImg.filename,
+        type: 'image/jpeg',
+    })
     formData.append("description", description);
     formData.append("includeLocation", includeLocation);
 

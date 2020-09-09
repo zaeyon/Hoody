@@ -18,697 +18,6 @@ import { onChange } from 'react-native-reanimated';
 // Route
 import GETSearchSurroundPost from '~/Route/Search/GETSearchSurroundPost';
 
-const TEST_NEAR_FEED_DATA = {
-  "postsNum": 18,
-  "postsByAddress": {
-    "서울특별시 중구 을지로3가": {
-      "metaData": {
-        "num": 14,
-        "SumStarRate": 54.5,
-        "AvgStarRate": 3.892857142857143,
-        "lat": 37.5658,
-        "long": 126.991,
-        "coverImg": "https://d37gdtxv8z76fx.cloudfront.net/original/1594720526950IMG_0652.JPG"
-      },
-      "posts": [
-        {
-          "spendDate": "2020-07-14",
-          "likes": 20,
-          "expense": 7500,
-          "starRate": 4,
-          "createdAt": "2020-07-15T13:12:46.000Z",
-          "commentsCount": 13,
-          "replysCount": 4,
-          "id": 31,
-          "mainTags": {
-            "name": "test"
-          },
-          "subTagOnes": {
-            "name": "hello"
-          },
-          "subTagTwos": {
-            "name": "world"
-          },
-          "address": {
-            "address": "서울특별시 중구 을지로3가",
-            "geographLong": 37.5658,
-            "geographLat": 126.991,
-            "region": "서울특별시 중구"
-          },
-          "mediaFiles": [
-            {
-              "filename": "original/1594818766512IMG_0652.JPG",
-              "size": 143232,
-              "mimetype": "image/jpeg",
-              "index": 2,
-              "url": "https://d37gdtxv8z76fx.cloudfront.net/original/1594818766512IMG_0652.JPG"
-            }
-          ]
-        },
-        {
-          "spendDate": "2020-07-14",
-          "likes": 6,
-          "expense": 7500,
-          "starRate": 4,
-          "createdAt": "2020-07-15T11:16:27.000Z",
-          "commentsCount": 0,
-          "replysCount": 0,
-          "id": 27,
-          "mainTags": {
-            "name": "test"
-          },
-          "subTagOnes": {
-            "name": "hello"
-          },
-          "subTagTwos": {
-            "name": "world"
-          },
-          "address": {
-            "address": "서울특별시 중구 을지로3가",
-            "geographLong": 37.5658,
-            "geographLat": 126.991,
-            "region": "서울특별시 중구"
-          },
-          "mediaFiles": [
-            {
-              "filename": "original/1594811787435IMG_0652.JPG",
-              "size": 143232,
-              "mimetype": "image/jpeg",
-              "index": 2,
-              "url": "https://d37gdtxv8z76fx.cloudfront.net/original/1594811787435IMG_0652.JPG"
-            }
-          ]
-        },
-        {
-          "spendDate": "2020-07-14",
-          "likes": 5,
-          "expense": 7500,
-          "starRate": 4,
-          "createdAt": "2020-07-15T09:36:00.000Z",
-          "commentsCount": 0,
-          "replysCount": 0,
-          "id": 26,
-          "mainTags": {
-            "name": "test"
-          },
-          "subTagOnes": {
-            "name": "hello"
-          },
-          "subTagTwos": {
-            "name": "world"
-          },
-          "address": {
-            "address": "서울특별시 중구 을지로3가",
-            "geographLong": 37.5658,
-            "geographLat": 126.991,
-            "region": "서울특별시 중구"
-          },
-          "mediaFiles": [
-            {
-              "filename": "original/1594805759542IMG_0652.JPG",
-              "size": 143232,
-              "mimetype": "image/jpeg",
-              "index": 2,
-              "url": "https://d37gdtxv8z76fx.cloudfront.net/original/1594805759542IMG_0652.JPG"
-            }
-          ]
-        },
-        {
-          "spendDate": "2020-07-14",
-          "likes": 3,
-          "expense": 7500,
-          "starRate": 4,
-          "createdAt": "2020-07-15T07:26:12.000Z",
-          "commentsCount": 0,
-          "replysCount": 0,
-          "id": 17,
-          "mainTags": {
-            "name": "test"
-          },
-          "subTagOnes": {
-            "name": "hello"
-          },
-          "subTagTwos": {
-            "name": "world"
-          },
-          "address": {
-            "address": "서울특별시 중구 을지로3가",
-            "geographLong": 37.5658,
-            "geographLat": 126.991,
-            "region": "서울특별시 중구"
-          },
-          "mediaFiles": [
-            {
-              "filename": "original/1594797972365IMG_0652.JPG",
-              "size": 143232,
-              "mimetype": "image/jpeg",
-              "index": 2,
-              "url": "https://d37gdtxv8z76fx.cloudfront.net/original/1594797972365IMG_0652.JPG"
-            }
-          ]
-        },
-        {
-          "spendDate": "2020-07-14",
-          "likes": 3,
-          "expense": 7500,
-          "starRate": 4,
-          "createdAt": "2020-07-15T07:26:33.000Z",
-          "commentsCount": 0,
-          "replysCount": 0,
-          "id": 18,
-          "mainTags": {
-            "name": "test"
-          },
-          "subTagOnes": {
-            "name": "hello"
-          },
-          "subTagTwos": {
-            "name": "world"
-          },
-          "address": {
-            "address": "서울특별시 중구 을지로3가",
-            "geographLong": 37.5658,
-            "geographLat": 126.991,
-            "region": "서울특별시 중구"
-          },
-          "mediaFiles": [
-            {
-              "filename": "original/1594797992819IMG_0652.JPG",
-              "size": 143232,
-              "mimetype": "image/jpeg",
-              "index": 2,
-              "url": "https://d37gdtxv8z76fx.cloudfront.net/original/1594797992819IMG_0652.JPG"
-            }
-          ]
-        },
-        {
-          "spendDate": "2020-07-06",
-          "likes": 0,
-          "expense": null,
-          "starRate": 3.5,
-          "createdAt": "2020-07-06T11:30:08.000Z",
-          "commentsCount": 0,
-          "replysCount": 0,
-          "id": 6,
-          "mainTags": {
-            "name": "test"
-          },
-          "subTagOnes": {
-            "name": "hello"
-          },
-          "subTagTwos": {
-            "name": "world"
-          },
-          "address": {
-            "address": "서울특별시 중구 을지로3가",
-            "geographLong": 37.5658,
-            "geographLat": 126.991,
-            "region": "서울특별시 중구"
-          },
-          "mediaFiles": [
-            {
-              "filename": "original/15940350080071591866431268IMG_1014.jpg",
-              "size": 1183759,
-              "mimetype": "image/jpeg",
-              "index": 2,
-              "url": "https://d37gdtxv8z76fx.cloudfront.net/original/15940350080071591866431268IMG_1014.jpg"
-            }
-          ]
-        },
-        {
-          "spendDate": "2020-07-14",
-          "likes": 0,
-          "expense": 7500,
-          "starRate": 4,
-          "createdAt": "2020-07-14T09:58:33.000Z",
-          "commentsCount": 0,
-          "replysCount": 0,
-          "id": 12,
-          "mainTags": {
-            "name": "test"
-          },
-          "subTagOnes": {
-            "name": "hello"
-          },
-          "subTagTwos": {
-            "name": "world"
-          },
-          "address": {
-            "address": "서울특별시 중구 을지로3가",
-            "geographLong": 37.5658,
-            "geographLat": 126.991,
-            "region": "서울특별시 중구"
-          },
-          "mediaFiles": [
-            {
-              "filename": "original/1594720713163IMG_0652.JPG",
-              "size": 143232,
-              "mimetype": "image/jpeg",
-              "index": 2,
-              "url": "https://d37gdtxv8z76fx.cloudfront.net/original/1594720713163IMG_0652.JPG"
-            }
-          ]
-        },
-        {
-          "spendDate": "2020-07-14",
-          "likes": 0,
-          "expense": 7500,
-          "starRate": 4,
-          "createdAt": "2020-07-14T09:53:49.000Z",
-          "commentsCount": 0,
-          "replysCount": 0,
-          "id": 9,
-          "mainTags": {
-            "name": "test"
-          },
-          "subTagOnes": {
-            "name": "hello"
-          },
-          "subTagTwos": {
-            "name": "world"
-          },
-          "address": {
-            "address": "서울특별시 중구 을지로3가",
-            "geographLong": 37.5658,
-            "geographLat": 126.991,
-            "region": "서울특별시 중구"
-          },
-          "mediaFiles": [
-            {
-              "filename": "original/1594720428725IMG_0652.JPG",
-              "size": 143232,
-              "mimetype": "image/jpeg",
-              "index": 2,
-              "url": "https://d37gdtxv8z76fx.cloudfront.net/original/1594720428725IMG_0652.JPG"
-            }
-          ]
-        },
-        {
-          "spendDate": "2020-07-06",
-          "likes": 0,
-          "expense": 10000,
-          "starRate": 3.5,
-          "createdAt": "2020-07-06T09:28:10.000Z",
-          "commentsCount": 0,
-          "replysCount": 0,
-          "id": 4,
-          "mainTags": {
-            "name": "test"
-          },
-          "subTagOnes": {
-            "name": "hello"
-          },
-          "subTagTwos": {
-            "name": "world"
-          },
-          "address": {
-            "address": "서울특별시 중구 을지로3가",
-            "geographLong": 37.5658,
-            "geographLat": 126.991,
-            "region": "서울특별시 중구"
-          },
-          "mediaFiles": [
-            {
-              "filename": "original/15940276899231591866431268IMG_1014.jpg",
-              "size": 1183759,
-              "mimetype": "image/jpeg",
-              "index": 2,
-              "url": "https://d37gdtxv8z76fx.cloudfront.net/original/15940276899231591866431268IMG_1014.jpg"
-            }
-          ]
-        },
-        {
-          "spendDate": "2020-07-14",
-          "likes": 0,
-          "expense": 7500,
-          "starRate": 4,
-          "createdAt": "2020-07-15T06:06:15.000Z",
-          "commentsCount": 0,
-          "replysCount": 0,
-          "id": 16,
-          "mainTags": {
-            "name": "test"
-          },
-          "subTagOnes": {
-            "name": "hello"
-          },
-          "subTagTwos": {
-            "name": "world"
-          },
-          "address": {
-            "address": "서울특별시 중구 을지로3가",
-            "geographLong": 37.5658,
-            "geographLat": 126.991,
-            "region": "서울특별시 중구"
-          },
-          "mediaFiles": [
-            {
-              "filename": "original/1594793170980IMG_0652.JPG",
-              "size": 143232,
-              "mimetype": "image/jpeg",
-              "index": 2,
-              "url": "https://d37gdtxv8z76fx.cloudfront.net/original/1594793170980IMG_0652.JPG"
-            }
-          ]
-        },
-        {
-          "spendDate": "2020-07-14",
-          "likes": 0,
-          "expense": 7500,
-          "starRate": 4,
-          "createdAt": "2020-07-14T09:56:11.000Z",
-          "commentsCount": 0,
-          "replysCount": 0,
-          "id": 11,
-          "mainTags": {
-            "name": "test"
-          },
-          "subTagOnes": {
-            "name": "hello"
-          },
-          "subTagTwos": {
-            "name": "world"
-          },
-          "address": {
-            "address": "서울특별시 중구 을지로3가",
-            "geographLong": 37.5658,
-            "geographLat": 126.991,
-            "region": "서울특별시 중구"
-          },
-          "mediaFiles": [
-            {
-              "filename": "original/1594720570856IMG_0652.JPG",
-              "size": 143232,
-              "mimetype": "image/jpeg",
-              "index": 2,
-              "url": "https://d37gdtxv8z76fx.cloudfront.net/original/1594720570856IMG_0652.JPG"
-            }
-          ]
-        },
-        {
-          "spendDate": "2020-07-06",
-          "likes": 0,
-          "expense": 7500,
-          "starRate": 3.5,
-          "createdAt": "2020-07-06T11:30:43.000Z",
-          "commentsCount": 1,
-          "replysCount": 0,
-          "id": 7,
-          "mainTags": {
-            "name": "test"
-          },
-          "subTagOnes": {
-            "name": "hello"
-          },
-          "subTagTwos": {
-            "name": "world"
-          },
-          "address": {
-            "address": "서울특별시 중구 을지로3가",
-            "geographLong": 37.5658,
-            "geographLat": 126.991,
-            "region": "서울특별시 중구"
-          },
-          "mediaFiles": [
-            {
-              "filename": "original/15940350429121591866431268IMG_1014.jpg",
-              "size": 1183759,
-              "mimetype": "image/jpeg",
-              "index": 2,
-              "url": "https://d37gdtxv8z76fx.cloudfront.net/original/15940350429121591866431268IMG_1014.jpg"
-            }
-          ]
-        },
-        {
-          "spendDate": "2020-07-14",
-          "likes": 0,
-          "expense": 7500,
-          "starRate": 4,
-          "createdAt": "2020-07-14T09:59:01.000Z",
-          "commentsCount": 0,
-          "replysCount": 0,
-          "id": 13,
-          "mainTags": {
-            "name": "test"
-          },
-          "subTagOnes": {
-            "name": "hello"
-          },
-          "subTagTwos": {
-            "name": "world"
-          },
-          "address": {
-            "address": "서울특별시 중구 을지로3가",
-            "geographLong": 37.5658,
-            "geographLat": 126.991,
-            "region": "서울특별시 중구"
-          },
-          "mediaFiles": [
-            {
-              "filename": "original/1594720740930IMG_0652.JPG",
-              "size": 143232,
-              "mimetype": "image/jpeg",
-              "index": 2,
-              "url": "https://d37gdtxv8z76fx.cloudfront.net/original/1594720740930IMG_0652.JPG"
-            }
-          ]
-        },
-        {
-          "spendDate": "2020-07-14",
-          "likes": 0,
-          "expense": 7500,
-          "starRate": 4,
-          "createdAt": "2020-07-14T09:55:27.000Z",
-          "commentsCount": 0,
-          "replysCount": 0,
-          "id": 10,
-          "mainTags": {
-            "name": "test"
-          },
-          "subTagOnes": {
-            "name": "hello"
-          },
-          "subTagTwos": {
-            "name": "world"
-          },
-          "address": {
-            "address": "서울특별시 중구 을지로3가",
-            "geographLong": 37.5658,
-            "geographLat": 126.991,
-            "region": "서울특별시 중구"
-          },
-          "mediaFiles": [
-            {
-              "filename": "original/1594720526950IMG_0652.JPG",
-              "size": 143232,
-              "mimetype": "image/jpeg",
-              "index": 2,
-              "url": "https://d37gdtxv8z76fx.cloudfront.net/original/1594720526950IMG_0652.JPG"
-            }
-          ]
-        }
-      ]
-    },
-    "서울특별시 중구 을지로4가": {
-      "metaData": {
-        "num": 1,
-        "SumStarRate": 3.8,
-        "AvgStarRate": 3.8,
-        "lat": 37.5652,
-        "long": 126.99,
-        "coverImg": ""
-      },
-      "posts": [
-        {
-          "spendDate": "2020-07-14",
-          "likes": 0,
-          "expense": 7500,
-          "starRate": 3.8,
-          "createdAt": "2020-07-28T06:36:49.000Z",
-          "commentsCount": 5,
-          "replysCount": 1,
-          "id": 33,
-          "mainTags": {
-            "name": "testing"
-          },
-          "subTagOnes": {
-            "name": "hellooo"
-          },
-          "subTagTwos": {
-            "name": "worlddd"
-          },
-          "address": {
-            "address": "서울특별시 중구 을지로4가",
-            "geographLong": 37.5652,
-            "geographLat": 126.99,
-            "region": "서울특별시 중구"
-          },
-          "mediaFiles": []
-        }
-      ]
-    },
-    "성북초등학교": {
-      "metaData": {
-        "num": 1,
-        "SumStarRate": 3.5,
-        "AvgStarRate": 3.5,
-        "lat": 37.5936,
-        "long": 126.998,
-        "coverImg": "https://d37gdtxv8z76fx.cloudfront.net/original/15941037553741591866431268IMG_1014.jpg"
-      },
-      "posts": [
-        {
-          "spendDate": "2020-07-06",
-          "likes": 0,
-          "expense": 7500,
-          "starRate": 3.5,
-          "createdAt": "2020-07-07T06:35:56.000Z",
-          "commentsCount": 0,
-          "replysCount": 0,
-          "id": 8,
-          "mainTags": {
-            "name": "test"
-          },
-          "subTagOnes": {
-            "name": "hello"
-          },
-          "subTagTwos": {
-            "name": "world"
-          },
-          "address": {
-            "address": "성북초등학교",
-            "geographLong": 37.5936,
-            "geographLat": 126.998,
-            "region": "서울특별시 성북구"
-          },
-          "mediaFiles": [
-            {
-              "filename": "original/15941037553741591866431268IMG_1014.jpg",
-              "size": 1183759,
-              "mimetype": "image/jpeg",
-              "index": 2,
-              "url": "https://d37gdtxv8z76fx.cloudfront.net/original/15941037553741591866431268IMG_1014.jpg"
-            }
-          ]
-        }
-      ]
-    },
-    "서울특별시 중구 을지로3가 홍원빌": {
-      "metaData": {
-        "num": 1,
-        "SumStarRate": 3.5,
-        "AvgStarRate": 3.5,
-        "lat": 37.5657,
-        "long": 126.991,
-        "coverImg": "https://d37gdtxv8z76fx.cloudfront.net/original/15940322460351591866431268IMG_1014.jpg"
-      },
-      "posts": [
-        {
-          "spendDate": "2020-07-06",
-          "likes": 0,
-          "expense": 0,
-          "starRate": 3.5,
-          "createdAt": "2020-07-06T10:44:06.000Z",
-          "commentsCount": 0,
-          "replysCount": 0,
-          "id": 5,
-          "mainTags": {
-            "name": "test2"
-          },
-          "subTagOnes": {
-            "name": "hello2"
-          },
-          "subTagTwos": {
-            "name": "world2"
-          },
-          "address": {
-            "address": "서울특별시 중구 을지로3가 홍원빌",
-            "geographLong": 37.5657,
-            "geographLat": 126.991,
-            "region": "서울특별시 중구"
-          },
-          "mediaFiles": [
-            {
-              "filename": "original/15940322460351591866431268IMG_1014.jpg",
-              "size": 1183759,
-              "mimetype": "image/jpeg",
-              "index": 2,
-              "url": "https://d37gdtxv8z76fx.cloudfront.net/original/15940322460351591866431268IMG_1014.jpg"
-            }
-          ]
-        }
-      ]
-    },
-    "114-6 Eulji-ro Jung-gu Seoul": {
-      "metaData": {
-        "num": 2,
-        "SumStarRate": 3.8,
-        "AvgStarRate": 3.8,
-        "lat": 37.5658111,
-        "long": 126.991111,
-        "coverImg": ""
-      },
-      "posts": [
-        {
-          "spendDate": "2020-07-06",
-          "likes": 0,
-          "expense": null,
-          "starRate": 3.8,
-          "createdAt": "2020-07-06T09:26:30.000Z",
-          "commentsCount": 0,
-          "replysCount": 0,
-          "id": 3,
-          "mainTags": {
-            "name": "testUpdate"
-          },
-          "subTagOnes": {
-            "name": "hello"
-          },
-          "subTagTwos": {
-            "name": "world"
-          },
-          "address": {
-            "address": "114-6 Eulji-ro Jung-gu Seoul",
-            "geographLong": 37.5658,
-            "geographLat": 126.991,
-            "region": "서울특별시 중구"
-          },
-          "mediaFiles": []
-        },
-        {
-          "spendDate": "2020-07-06",
-          "likes": 0,
-          "expense": null,
-          "starRate": 3.8,
-          "createdAt": "2020-07-06T09:26:30.000Z",
-          "commentsCount": 0,
-          "replysCount": 0,
-          "id": 3,
-          "mainTags": {
-            "name": "testUpdate"
-          },
-          "subTagOnes": {
-            "name": "hello"
-          },
-          "subTagTwos": {
-            "name": "world"
-          },
-          "address": {
-            "address": "114-6 Eulji-ro Jung-gu Seoul",
-            "geographLong": 37.5658,
-            "geographLat": 126.991,
-            "region": "서울특별시 중구"
-          },
-          "mediaFiles": []
-        }
-      ]
-    }
-  }
-}
-
-
-
-
 const Container = Styled.View`
  flex: 1;
  background-color:#ffffff;
@@ -1164,13 +473,10 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
         selected: false,
       },
     ])
+
+    const [currentUserLocation, setCurrentUserLocation] = useState<any>();
     
-    const [currentMapRegion, setCurrentMapRegion] = useState<Region>({
-      latitude:  route.params?.currentLatitude,
-      longitude: route.params?.currentLongitude,
-      latitudeDelta: 0.0022,
-      longitudeDelta: 0.0421,
-    })
+    const [currentMapRegion, setCurrentMapRegion] = useState<Region>();
 
     const [completeOpenPanel, setCompleteOpenPanel] = useState<boolean>(false);
     var allFeedPanelRef = useRef(null);
@@ -1185,7 +491,13 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
     
   const API_KEY = 'd824d5c645bfeafcb06f24db24be7238';
 
+
+  useEffect(() => {
+    loadCurrentUserLocation()
+  }, [])
+
     // 사용자 행정구역 정보 불러오기
+    /*
     useEffect(() => {
         console.log("getStatusBarHeight", getStatusBarHeight());
         if(route.params?.currentLatitude) {
@@ -1206,41 +518,115 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
             })
         }
     }, [route.params?.currentLongitude, route.params?.currentLatitude])
+  */
 
     useEffect(() => {
-      if(route.params?.currentLatitude) {
-        GETSearchSurroundPost(route.params.currentLatitude, route.params.currentLongitude, selectedRadius.range)
-        .then(function(response) {
-          console.log("GETSearchSurroundPost response", response);
-          var tmpNearLocationListData = new Array();
-          var tmpNearAllFeedListData = new Array();
-
-          for(const[key, value] of Object.entries(response.postsByAddress)) {
-            console.log("value", value);
-            tmpNearLocationListData.push({
-              location: key,
-              post: value,
-              selected: false,
-            })
-            tmpNearAllFeedListData = tmpNearAllFeedListData.concat(value.posts);
-          }
-
-          setTimeout(() => {
-            tmpNearAllFeedListData.sort(function(a, b) {
-              return b["likes"] - a["likes"];
-            })
-            setNearLocationListData(tmpNearLocationListData);
-            setTimeout(() => {
-              setNearAllFeedListData(tmpNearAllFeedListData);
-              setLoadingNearFeedMap(false);
-            })
-          })
-        })
-        .catch(function(error) {
-          console.log("GETSearchSurroundPost error", error);
-        })
-      }
+      
     }, [selectedRadius])
+    
+
+    const loadCurrentUserLocation = () => {
+      var hasLocationPermission = true;
+      if (hasLocationPermission) {
+        Geolocation.getCurrentPosition(
+            (position) => {
+              console.log("사용자 현재 위치", position);
+              setCurrentUserLocation(position.coords);
+              setCurrentMapRegion({
+              latitude:  position.coords.latitude,
+              longitude: position.coords.longitude,
+              latitudeDelta: 0.0022,
+              longitudeDelta: 0.0421,
+              })
+
+              GETSearchSurroundPost(position.coords.latitude, position.coords.longitude, selectedRadius.range)
+              .then(function(response) {
+              console.log("GETSearchSurroundPost response", response);
+              var tmpNearLocationListData = new Array();
+              var tmpNearAllFeedListData = new Array();
+
+              for(const[key, value] of Object.entries(response.postsByAddress)) {
+              console.log("value", value);
+              tmpNearLocationListData.push({
+                location: key,
+                post: value,
+                selected: false,
+              })
+              tmpNearAllFeedListData = tmpNearAllFeedListData.concat(value.posts);
+              }
+
+              setTimeout(() => {
+                tmpNearAllFeedListData.sort(function(a, b) {
+                return b["likes"] - a["likes"];
+              })
+              setNearLocationListData(tmpNearLocationListData);
+              setTimeout(() => {
+                setNearAllFeedListData(tmpNearAllFeedListData);
+                setLoadingNearFeedMap(false);
+              })
+            })
+            })
+            .catch(function(error) {
+              console.log("GETSearchSurroundPost error", error);
+            })
+
+            fetch(
+              `https://dapi.kakao.com/v2/local/geo/coord2regioncode.json?x=${position.coords.longitude}&y=${position.coords.latitude}`,
+              {
+                headers: {
+                  Authorization: `KakaoAK ${API_KEY}`,
+                },
+              },
+            )
+            .then((response) => response.json())
+            .then((json) => {
+              console.log("현재 사용자의 행정구역정보", json);
+              setCurrentUserAddress(json.documents[1].region_3depth_name)
+            })
+            },
+            (error) => {
+              // See error code charts below.
+              console.log(error.code, error.message);
+            },
+            { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+
+
+        );
+      }
+    }
+
+    const changeSelectedRadius = () => {
+      GETSearchSurroundPost(currentUserLocation.latitude, currentUserLocation.longitude, selectedRadius.range)
+              .then(function(response) {
+              console.log("GETSearchSurroundPost response", response);
+              var tmpNearLocationListData = new Array();
+              var tmpNearAllFeedListData = new Array();
+
+              for(const[key, value] of Object.entries(response.postsByAddress)) {
+              console.log("value", value);
+              tmpNearLocationListData.push({
+                location: key,
+                post: value,
+                selected: false,
+              })
+              tmpNearAllFeedListData = tmpNearAllFeedListData.concat(value.posts);
+              }
+
+              setTimeout(() => {
+                tmpNearAllFeedListData.sort(function(a, b) {
+                return b["likes"] - a["likes"];
+              })
+              setNearLocationListData(tmpNearLocationListData);
+              setTimeout(() => {
+                setNearAllFeedListData(tmpNearAllFeedListData);
+                setLoadingNearFeedMap(false);
+              })
+            })
+            })
+            .catch(function(error) {
+              console.log("GETSearchSurroundPost error", error);
+            })
+    }
 
 
     /*
@@ -1346,6 +732,7 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
       setRadiusList(tmpRadiusList);
       setSelectedRadius(item);      
       setRadiusSettingModalVisible(false);
+      changeSelectedRadius();
     }
 
     const onRegionChange = (location: any) => {
@@ -1515,12 +902,14 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
       onChangePanelState={onChangePanelState}
       completeOpenPanel={completeOpenPanel}
       >
+        {/*
         <LocationFloatingContainer>
         <LocationFloatingButton style={styles.floatingButtonShadow}>
           <GPSIcon
           source={require('~/Assets/Images/Map/ic_gps.png')}/>
         </LocationFloatingButton>
         </LocationFloatingContainer>
+        */}
         <PanelContainer
         style={styles.panelShadow}>
           <PanelHeaderContainer>
@@ -1561,12 +950,14 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
          onDragEnd={(position:any, gestureState:any) => onDragEndPanel(position,gestureState)}
       onChangePanelState={onChangePanelState}
       completeOpenPanel={completeOpenPanel}>
+        {/*
         <LocationFloatingContainer>
           <LocationFloatingButton style={styles.floatingButtonShadow}>
             <GPSIcon
             source={require('~/Assets/Images/Map/ic_gps.png')}/>
           </LocationFloatingButton>
           </LocationFloatingContainer>
+        */}
            <PanelContainer onLayout={(event) => {
              console.log("event.layout.height", event);
            }}

@@ -230,7 +230,6 @@ const SelectInterestScreen = ({navigation, route}: Props) => {
             dispatch(
                 allActions.userActions.setInputedKeywordList([])
             )
-
             setSelectedInterestList([]);
         })
         .catch(function(error) {

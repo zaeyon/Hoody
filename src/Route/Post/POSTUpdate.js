@@ -55,6 +55,7 @@ const POSTUpdate = (postId, desArray, mediaArray,mainTag, subTag1, subTag2, rati
     
     console.log("FormData", form);
     
+    
     return new Promise(function(resolve, reject) {
         axios
         .post(url, form, {

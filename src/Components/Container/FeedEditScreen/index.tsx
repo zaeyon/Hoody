@@ -4,7 +4,7 @@ import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import {Text, ScrollView, View, FlatList, TouchableWithoutFeedback, Alert, StyleSheet, TextInput, Keyboard, KeyboardAvoidingView} from 'react-native';
+import {Text, ScrollView, View, FlatList, TouchableWithoutFeedback, Alert, StyleSheet, TextInput, Keyboard, KeyboardAvoidingView, ActivityIndicator} from 'react-native';
 import DraggableFlatList from 'react-native-draggable-flatlist';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import AboveKeyboard from 'react-native-above-keyboard';
@@ -775,6 +775,14 @@ const BottomMenuSettingIcon = Styled.Image`
  tint-color: #65A2FF;
 `;
 
+const LoadingContainer = Styled.View`
+ position: absolute;
+ width: ${wp('100%')};
+ height: ${hp('100%')};
+ background-color: #00000040;
+ align-items: center;
+ justify-content: center;
+`;
 
 
 
@@ -877,6 +885,9 @@ const FeedEditScreen = ({navigation, route}: Props) => {
     // Setting
     const [visibleSettingModal, setVisibleSettingModal] = useState<boolean>(false);
     const [selectedOpenRadioIndex, setSelectedOpenRadioIndex] = useState<number>(0);
+
+    const [loading, setLoading] = useState<boolean>(false);
+
     const API_KEY = 'd824d5c645bfeafcb06f24db24be7238';
 
 
@@ -2318,6 +2329,12 @@ const renderAddNewDescripInput = () => {
                            </RadioForm>
         </SettingModalContainer>
       </Modal>
+      {loading && (
+          <LoadingContainer>
+              <ActivityIndicator/>
+          </LoadingContainer>
+
+      )}
             </Container>
     )
 }

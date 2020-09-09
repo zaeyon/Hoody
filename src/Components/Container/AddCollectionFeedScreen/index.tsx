@@ -245,7 +245,7 @@ const AddCollectionFeedScreen = ({navigation, route}: Props) => {
             })
             console.log("selectingFeedIdList", selectingFeedIdList);
             setTimeout(() => {
-                POSTCreateCollection(route.params.coverImage, route.params.title, route.params.description, route.params.private, route.params.includeLocation, selectingFeedIdList)
+                POSTCreateCollection(route.params.coverImage, route.params.title, route.params.description, !route.params.private, route.params.includeLocation, selectingFeedIdList)
                 .then(function(response) {
                     console.log("콜렉션 업로드 성공", response);
                     navigation.navigate("ProfileScreen", {

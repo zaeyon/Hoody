@@ -7,7 +7,7 @@ const POSTCreateCollection = (coverImage, name, description, open, includeLocati
     console.log("coverImage", coverImage);
     console.log("name", name);
     console.log("description", description);
-    console.log("open", open);
+    console.log("POSTcreateCollection open", open);
     console.log("includeLocation", includeLocation);
     console.log("postIds", postIds);
    

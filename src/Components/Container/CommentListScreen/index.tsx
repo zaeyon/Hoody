@@ -101,7 +101,7 @@ const ProfileImage = Styled.Image`
 const FooterContainer = Styled.View`
  width: ${wp('100%')};
  position: absolute;
- bottom: 0px;
+ bottom: 15px;
  background-color: #ffffff;
 `;
 
@@ -151,8 +151,8 @@ const CommentRegisterText = Styled.Text`
 `;
 
 const CommentRegisterContainer = Styled.View`
-padding-left: 10px;
-padding-right: 18px;
+padding-left: 5px;
+padding-right: 25px;
 justify-content: center;
 `;
 
@@ -382,6 +382,7 @@ const CommentListScreen = ({navigation, route}: Props) => {
     const [selectedCommentId, setSelectedCommentId] = useState<number>();
     const [reloadComment, setReloadComment] = useState<boolean>(false);
 
+    const [inputFocus, setInputFocus] = useState<boolean>(false);
     const [refreshingComment, setRefreshingComment] = useState<boolean>(false);
     const [loadingComment, setLoadingComment] = useState<boolean>(true);
 
@@ -685,7 +686,7 @@ const CommentListScreen = ({navigation, route}: Props) => {
         </CommentListContainer>
         </KeyboardAwareScrollView>
      )}
-        <FooterContainer>
+        <FooterContainer style={inputFocus ? {bottom:7} : (isIphoneX() ? {bottom: 30} : {bottom: 17})}>
           <AboveKeyboard
           style={{backgroundColor:'#ffffff'}}
           >
@@ -710,6 +711,9 @@ const CommentListScreen = ({navigation, route}: Props) => {
             ref={commentInputRef}
             autoCapitalize={false}
             multiline={true}
+            onFocus={() => setInputFocus(true)}
+            onSubmitEditing={() => setInputFocus(false)}
+            onEndEditing={() => setInputFocus(false)}
             placeholder={inputType==="comment" ? "댓글 달기" : "답글 달기"}
             onChangeText={(text: string) => onChangeCommentInput(text)}
             value={inputComment}

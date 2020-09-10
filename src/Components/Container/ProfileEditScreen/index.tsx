@@ -250,7 +250,6 @@ const ProfileEditScreen = ({navigation, route}: Props) => {
             modifiedProfile.nickname = nickname;
             modifiedProfile.description = description;
             modifiedProfile.profileImage = profileImageUri;
-
             setTimeout(() => {
             dispatch(allActions.userActions.setUser(modifiedProfile));
             navigation.navigate("ProfileScreen", {

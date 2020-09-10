@@ -14,6 +14,7 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import { BaseRouter } from '@react-navigation/native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'; 
 
 const Container = Styled.SafeAreaView`
   flex: 1;
@@ -115,8 +116,6 @@ const SearchResultContainer = Styled.View`
   flex-direction: column;
   width: ${wp('100%')};
   border-color: #c3c3c3;
-  justify-content: center;
-  align-items: center;
 `;
 
 const Title = Styled.View`
@@ -456,9 +455,12 @@ const LocationItem = ({location, address}) => {
                           
                           </InputedLocationContainer>
             )}
+            <KeyboardAwareScrollView
+            showsVerticalScrollIndicator={false}>
             <SearchResultContainer>
             <LocationListContainer>
               <FlatList
+                showsVerticalScrollIndicator={false}
                 keyboardShouldPersistTaps="handled"
                 data={searchResult_arr}
                 renderItem={({item}) => (
@@ -476,6 +478,7 @@ const LocationItem = ({location, address}) => {
               />
             </LocationListContainer>
           </SearchResultContainer>
+          </KeyboardAwareScrollView>
     </Container>
   );
 };

@@ -30,7 +30,7 @@ flex-direction: row;
 const MainTagText = Styled.Text`
  font-size: 15px;
  font-weight: 600;
- color: #3384ff;
+ color: #000000;
 `;
 
 const SubTagText = Styled.Text`

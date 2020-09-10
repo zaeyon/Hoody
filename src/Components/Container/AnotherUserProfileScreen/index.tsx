@@ -855,7 +855,7 @@ const AnotherUserProfileScreen = ({navigation, route}: Props) => {
               </TouchableWithoutFeedback>
             </PickerHeaderContainer>
           </YearPickerContainer>
-          </Modal>
+        </Modal>
           <Modal
           isVisible={visibleMonthPicker}
           onBackdropPress={() => cancelMonthPicker()}

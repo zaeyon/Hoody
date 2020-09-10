@@ -61,7 +61,7 @@ padding-right: 16px;
 const MainTagText = Styled.Text`
  font-size: 22px;
  font-weight: 600;
- color: #267DFF;
+ color: #000000;
  margin-right: 7px;
 `;
 

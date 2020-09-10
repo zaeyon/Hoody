@@ -199,7 +199,7 @@ opacity: 1;
 const MainTagText = Styled.Text`
  font-size: 16px;
  font-weight: 600;
- color: #3384FF;
+ color: #000000;
  margin-right: 2.5px;
 `;
 

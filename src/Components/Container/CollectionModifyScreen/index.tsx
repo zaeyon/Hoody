@@ -126,6 +126,7 @@ const TitleText = Styled.Text`
 const TitleInput = Styled.TextInput`
  margin-top: 9px;
  font-size: 17px;
+ color: #000000;
 `;
 
 const DescripInputContainer = Styled.View`
@@ -144,6 +145,7 @@ const DescripInput = Styled.TextInput`
  height: 130px;
  margin-top: 9px;
  font-size: 17px;
+ color: #000000;
  padding-bottom: 10px;
 `;
 

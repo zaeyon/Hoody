@@ -411,6 +411,9 @@ function AnotherUserProfileStackScreen() {
       name="FollowListScreen"
       component={FollowListScreen}/>
       <ProfileStack.Screen
+      name="CollectionStack"
+      component={CollectionStackScreen}/>
+      <ProfileStack.Screen
       name="FeedStack"
       component={FeedStackScreen}/>
       <ProfileStack.Screen

@@ -130,7 +130,7 @@ const TagContainer = Styled.View`
 const MainTagText = Styled.Text`
  font-weight: 600;
  font-size: 15px;
- color: #1D1E1F;
+ color: #000000;
 `;
 
 const MetadataContainer = Styled.View`

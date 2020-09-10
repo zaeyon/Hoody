@@ -111,7 +111,7 @@ const MainTagInput = Styled.TextInput`
 font-size: 24px;
 font-weight: bold;
 width: ${wp('90%')};
-color: #3384FF;
+color: #000000;
 `;
 
 const SubTagInput = Styled.TextInput`
@@ -124,7 +124,7 @@ color: #cccccc;
 const MainHashText = Styled.Text`
  margin-top: 4px;
  font-size: 24px;
- color: #3384FF;
+ color: #000000;
  font-weight: bold;
 `;
 
@@ -137,7 +137,7 @@ const SubHashText = Styled.Text`
 
 const MainTagText = Styled.Text`
 margin-right: 8px;
-color: #3384FF;
+color: #000000;
 font-size: 20px;
 font-weight: bold;
 flex-direction: row;
@@ -757,7 +757,7 @@ const TagSearchScreen = ({navigation, route}: Props) => {
                 multiline={true}
                 autoCapitalize={false}
                 placeholder={"메인태그를 입력해주세요"}
-                placeholderTextColor={"#3384FF60"}
+                placeholderTextColor={"#00000060"}
                 value={inputingMainTagText}
                 autoFocus={true}
                 onChangeText={(text:string) => changeMainTagInput(text)}

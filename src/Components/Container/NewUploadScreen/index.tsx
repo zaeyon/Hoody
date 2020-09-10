@@ -119,7 +119,7 @@ const TagInputPlaceholder = Styled.Text`
 const MainTagText = Styled.Text`
  font-weight: bold;
  font-size: 24px;
- color: #3384FF;
+ color: #000000;
  flex-shrink: 1;
  margin-right: 5px;
 `;

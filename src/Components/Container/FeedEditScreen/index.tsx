@@ -382,7 +382,7 @@ const BottomMenuAlbumIcon = Styled.Image`
 
 const AddDescripContainer = Styled.View`
  border-color: #eeeeee;
- padding: 10px 15px 150px 15px;
+ padding: 10px 15px 200px 15px;
 `;
 
 const NewDescripInput = Styled.TextInput`
@@ -573,7 +573,7 @@ const DescripInput = Styled.TextInput`
 
 const DescripModalBottomBarContainer = Styled.View`
  width: ${wp('100%')};
- height: ${hp('5.7%')};
+ height: ${hp('6.5%')};
  background-color: #FAFAFA;
  position: absolute;
  bottom: 0px;
@@ -581,7 +581,7 @@ const DescripModalBottomBarContainer = Styled.View`
 
 const DescripModalBottomBar = Styled.View`
 width: ${wp('100%')};
-height: ${hp('5.3%')};
+height: ${hp('6.5%')};
 background-color: #FAFAFA;
 flex-direction: row;
 justify-content: space-between;
@@ -595,11 +595,13 @@ const RemoveDescripIcon = Styled.Image`
 const RemoveDescripContainer = Styled.View`
 align-items: center;
 justify-content: center;
+background-color: #c3c3c3;
 padding-left: 12px;
 padding-right: 12px;
 `;
 
 const FinishDescripContainer = Styled.View`
+background-color: #c3c3c3;
 align-items: center;
 justify-content: center;
 padding-right: 12px;

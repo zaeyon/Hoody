@@ -159,6 +159,7 @@ align-items: center;
 `;
 
 const RatingTextContainer = Styled.View`
+ margin-left: 6px;
  flex-direction: row;
  width: 50px;
 `;
@@ -176,7 +177,6 @@ color: #8e8e8e;
 `;
 
 const RatingContainer = Styled.View`
- margin-left: 5px;
  flex-direction: row;
 `;
 
@@ -383,7 +383,7 @@ const BottomMenuAlbumIcon = Styled.Image`
 
 const AddDescripContainer = Styled.View`
  border-color: #eeeeee;
- padding: 10px 15px 150px 15px;
+ padding: 10px 15px 200px 15px;
 `;
 
 const NewDescripInput = Styled.TextInput`
@@ -573,7 +573,7 @@ const DescripInput = Styled.TextInput`
 
 const DescripModalBottomBarContainer = Styled.View`
  width: ${wp('100%')};
- height: ${hp('5.7%')};
+ height: ${hp('6.5%')};
  background-color: #FAFAFA;
  position: absolute;
  bottom: 0px;
@@ -581,7 +581,7 @@ const DescripModalBottomBarContainer = Styled.View`
 
 const DescripModalBottomBar = Styled.View`
 width: ${wp('100%')};
-height: ${hp('5.3%')};
+height: ${hp('6.5%')};
 background-color: #FAFAFA;
 flex-direction: row;
 justify-content: space-between;
@@ -1932,15 +1932,6 @@ const renderAddNewDescripInput = () => {
                     <MainTagProcessContainer>
                         <RatingInductionText>{"#" + incompleteMainTag  + "은(는) 몇 점인가요?"}</RatingInductionText>
                         <RatingInputContainer>
-                            <TouchableWithoutFeedback onPress={() => setMainTagProcess(false)}>
-                            <RatingTextContainer>
-                                <Text style={{fontWeight:"bold", color: '#8e8e8e', fontSize: 18}}>{inputingRating+"점"}</Text>
-                            
-                            {/*!rating && (
-                                <Text style={{fontWeight:"bold", color: '#cccccc', fontSize: 18}}>{"??점"}</Text>
-                            )*/}
-                             </RatingTextContainer>
-                             </TouchableWithoutFeedback>
                             <RatingContainer>
                             <Rating
                             type="custom"
@@ -1952,6 +1943,15 @@ const renderAddNewDescripInput = () => {
                             setRatingInMove={ratingMovling}
                             />
                             </RatingContainer>
+                        <TouchableWithoutFeedback onPress={() => setMainTagProcess(false)}>
+                            <RatingTextContainer>
+                                <Text style={{fontWeight:"bold", color: '#8e8e8e', fontSize: 18}}>{inputingRating+"점"}</Text>
+                            
+                            {/*!rating && (
+                                <Text style={{fontWeight:"bold", color: '#cccccc', fontSize: 18}}>{"??점"}</Text>
+                            )*/}
+                             </RatingTextContainer>
+                             </TouchableWithoutFeedback>
                         </RatingInputContainer>
                     </MainTagProcessContainer>
                 )} 

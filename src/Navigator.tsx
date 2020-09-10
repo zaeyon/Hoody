@@ -646,12 +646,21 @@ function BottomTab() {
   
   const getExploreTabBarVisibility = (route: any) => {
     const routeName = route.state
-    ? route.state.routes[route.state.index].name
+    ? route.state.routes[route.state.index]
     : '';
 
-    if(routeName === 'SearchScreen' || routeName === "FeedStack" || routeName === "CollectionStack" || routeName === "NearFeedMapScreen") {
+    const stackRouteName = routeName.state
+    ? routeName.state.routes[routeName.state.index].name
+    : '';
+
+    if(routeName.name === 'SearchScreen' || routeName.name === "FeedStack" || routeName.name === "CollectionStack" || routeName.name === "NearFeedMapScreen") {
       return false;
     }
+
+    if(stackRouteName === "FeedStack") {
+      return false;
+    }
+
     return true;
   }
 

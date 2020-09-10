@@ -4,7 +4,7 @@ import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import {Text, ScrollView, View, FlatList, TouchableWithoutFeedback, Alert, StyleSheet, TextInput, Keyboard, KeyboardAvoidingView, ActivityIndicator} from 'react-native';
+import {Text, ScrollView, View, FlatList, TouchableWithoutFeedback, Alert, StyleSheet, TextInput, Keyboard, KeyboardAvoidingView, ActivityIndicator, Platform} from 'react-native';
 import DraggableFlatList from 'react-native-draggable-flatlist';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import AboveKeyboard from 'react-native-above-keyboard';
@@ -904,6 +904,13 @@ const convertDateFormat = (date: any) => {
         {label: '비공개', value: 1},
       ];
 
+
+useEffect(() => {
+    if (Platform.OS === 'ios') {
+      Geolocation.requestAuthorization('always');
+    }
+  }, []);
+
      useEffect(() => {
          if(route.params?.selectedImages) {
              console.log("route.params?.selecteddddd", route.params.selectedImages)
@@ -929,14 +936,15 @@ const convertDateFormat = (date: any) => {
 
 
     useEffect(() => {
+
         var hasLocationPermission = true;
         if (hasLocationPermission) {
+            console.log("사용자 현재 위치 불러오기")
             Geolocation.getCurrentPosition(
                 (position) => {
-                  console.log("탐색화면 현재 위치", position);
-                  setCurrentLocation(position.coords);
+                  console.log("업로드 화면 현재 위치", position);
+                  //setCurrentLocation(position.coords);
                   fetch(
-
                     `https://dapi.kakao.com/v2/local/geo/coord2address.json?x=${position.coords.longitude}&y=${position.coords.latitude}`,
                     {
                       headers: {
@@ -946,7 +954,7 @@ const convertDateFormat = (date: any) => {
                   )
                   .then((response) => response.json())
                   .then((json) => {
-                    console.log("현재 사용자의 행정구역정보", json.documents[0].address);
+                    console.log("현재 사용자의 행정구역정보", json);
                     setCurrentLocation({
                         name:json.documents[0].address.address_name,
                         latitude:position.coords.latitude,

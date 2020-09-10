@@ -5,7 +5,8 @@ import {
   PermissionsAndroid,
   ToastAndroid,
   BackHandler,
-  Alert
+  Alert,
+  Platform,
 } from 'react-native';
 import Styled from 'styled-components/native';
 import {NavigationContainer} from '@react-navigation/native';
@@ -23,6 +24,7 @@ import AuthUser from '~/Auth';
 import AppNavigator from '~/Navigator';
 import Navigator from '~/Navigator';
 import RNLocation from 'react-native-location';
+import Geolocation from 'react-native-geolocation-service';
 
 // Route
 import POSTAutoLogin from '~/Route/Auth/POSTAutoLogin';
@@ -84,6 +86,13 @@ console.disableYellowBox = true;
 function App() {
   const [pushToken, setPushToken] = useState<string>();
   const [isAuthorized, setIsAuthorized] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (Platform.OS === 'ios') {
+    Geolocation.requestAuthorization('always');
+  }
+  }, []);
+
   const foregroundListener = useCallback(() => {
     messaging().onMessage(async message => {
       console.log("푸시 알림 message", message);

@@ -325,10 +325,10 @@ interface Props {
 }
 
 var feedOffset = 0;
-var feedLimit = 20;
+var feedLimit = 10;
 
 var collectionOffset = 0;
-var collectionLimit = 20;
+var collectionLimit = 10;
 
 const SearchResultScreen = ({navigation, route}: Props) => {
     const [keywordList, setKeywordList] = useState<Array<object>>([]);
@@ -409,10 +409,11 @@ const SearchResultScreen = ({navigation, route}: Props) => {
 
           setTimeout(() => {
             feedOffset = 0;
-            feedLimit = 20;
+            feedLimit = 10;
 
             collectionOffset = 0;
-            collectionLimit = 20;
+            collectionLimit = 10;
+
             setSearchQuery(query);
             keywordSearchFeedList(query, searchSort, feedOffset, feedLimit);
             keywordSearchCollectionList(query, searchSort, collectionOffset, collectionLimit);
@@ -571,7 +572,7 @@ const SearchResultScreen = ({navigation, route}: Props) => {
     const onRefreshSearchFeedData = () => {
       console.log("피드데이터 리로드")
       feedOffset = 0;
-      feedLimit = 20;
+      feedLimit = 10;
 
       setRefreshingSearchData(true);
       setNoMoreSearchFeedData(false);
@@ -583,7 +584,7 @@ const SearchResultScreen = ({navigation, route}: Props) => {
 
     const onRefreshSearchCollectionData = () => {
       collectionOffset = 0;
-      collectionLimit = 20;
+      collectionLimit = 10;
 
       setRefreshingSearchCollectionData(true);
       setNoMoreSearchCollectionData(false);
@@ -599,8 +600,8 @@ const SearchResultScreen = ({navigation, route}: Props) => {
       } else {
       console.log("게시글 검색 결과 무한 스크롤");
   
-      feedOffset = feedOffset + 20;
-      feedLimit = feedLimit + 20;
+      feedOffset = feedOffset + 10;
+      feedLimit = feedLimit + 10;
 
       console.log("offset", feedOffset);
       console.log("limit", feedLimit);
@@ -629,8 +630,8 @@ const SearchResultScreen = ({navigation, route}: Props) => {
       } else {
       console.log("컬렉션 검색 결과 무한 스크롤");
   
-      collectionOffset = collectionOffset + 20;
-      collectionLimit = collectionLimit + 20;
+      collectionOffset = collectionOffset + 10;
+      collectionLimit = collectionLimit + 10;
 
       console.log("offset", collectionOffset);
       console.log("limit", collectionLimit);

@@ -306,7 +306,7 @@ interface Props {
 }
 
 var offset = 0;
-var limit = 20;
+var limit = 10;
 
 const baseUrl = 'http://hoody-api-test-server-alb-349396782.ap-northeast-2.elb.amazonaws.com'; 
 
@@ -498,7 +498,7 @@ function FeedListScreen({navigation, route}: Props) {
 
   const onRefreshFeedListData = () => {
     offset = 0;
-    limit = 20;
+    limit = 10;
     console.log("onRefreshFeedListData")
     setRefreshing(true)
     setNoMoreFeedListData(false);
@@ -513,9 +513,12 @@ function FeedListScreen({navigation, route}: Props) {
     }
     if(!noMoreFeedListData) {
       console.log("피드리스트 데이터 더 불러오기")
-      offset = offset + 20;
-      limit = limit + 20;
+      offset = offset + 10;
+      limit = limit + 10;
       var url = baseUrl + '/feed?offset=' + offset + "&limit=" + limit;  
+
+      console.log("피드리스트데이터 불러오기 offset", offset);
+      console.log("피드리스트 데이터 불러오기 limit", limit)
      
       axios
        .get(url)
@@ -524,7 +527,7 @@ function FeedListScreen({navigation, route}: Props) {
          console.log("더이상 불러올 데이터 없음", feedListData);
          setNoMoreFeedListData(true);
        } else if(response.data.result.length > 0) {
-         console.log("불러올 데이터 존재")
+         console.log("불러올 데이터 존재", response.data.result.length)
          setFeedListData(feedListData.concat(response.data.result))
        }
        })

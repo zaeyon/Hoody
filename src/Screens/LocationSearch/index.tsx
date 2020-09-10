@@ -7,6 +7,8 @@ import {
   View,
   BackHandler,
   TouchableWithoutFeedback,
+  Platform,
+  ActivityIndicator,
 } from 'react-native';
 import {BoxShadow} from 'react-native-shadow';
 import {
@@ -15,6 +17,7 @@ import {
 } from 'react-native-responsive-screen';
 import { BaseRouter } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'; 
+import Geolocation from 'react-native-geolocation-service';
 
 const Container = Styled.SafeAreaView`
   flex: 1;
@@ -253,6 +256,10 @@ const SearchIcon = Styled.Image`
  height: ${wp('6.0%')};
 `;
 
+const LoadingContainer = Styled.View`
+margin-left: 20px;
+`;
+
 const LocationItemCon = Styled.View`
  height: 0.3px;
  width: ${wp('94%')};
@@ -273,7 +280,11 @@ interface Props {
 const LocationSearch = ({navigation, route}: Props) => {
   const [location, setLocation] = useState();
   const [searchResult_arr, setSearchResult_arr] = useState([]);
+  const [currentUserLocation, setCurrentUserLocation] = useState<any>({
+    name:""
+  });
   const [registeredLocation, setRegisteredLocation] = useState<string>();
+  const [loadingLocation, setLoadingLocation] = useState<boolean>(true);
   const API_KEY = 'd824d5c645bfeafcb06f24db24be7238';
 
   useEffect(() => {
@@ -291,6 +302,49 @@ const LocationSearch = ({navigation, route}: Props) => {
   }, []);
 
   useEffect(() => {
+    
+    if (Platform.OS === 'ios') {
+      Geolocation.requestAuthorization('always');
+    }
+
+    var hasLocationPermission = true;
+
+    if (hasLocationPermission) {
+       console.log("사용자 현재 위치 불러오기")
+       Geolocation.getCurrentPosition(
+          (position) => {
+            console.log("업로드 화면 현재 위치", position);
+            //setCurrentLocation(position.coords);
+            fetch(
+              `https://dapi.kakao.com/v2/local/geo/coord2address.json?x=${position.coords.longitude}&y=${position.coords.latitude}`,
+              {
+                headers: {
+                  Authorization: `KakaoAK ${API_KEY}`,
+                },
+              },
+            )
+            .then((response) => response.json())
+            .then((json) => {
+              setLoadingLocation(false);
+              console.log("현재 사용자의 행정구역정보", json);
+              setCurrentUserLocation({
+                  name:json.documents[0].address.address_name,
+                  latitude:position.coords.latitude,
+                  longitude:position.coords.longitude,
+              })
+            })
+          },
+          (error) => {
+            setCurrentUserLocation(false)
+            // See error code charts below.
+            console.log(error.code, error.message);
+          },
+          { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
+      );
+    }
+  }, [])
+
+  useEffect(() => {
     if(route.params?.inputedLocation) {
       setRegisteredLocation(route.params?.inputedLocation)
       setLocation(route.params.inputedLocation)
@@ -300,7 +354,7 @@ const LocationSearch = ({navigation, route}: Props) => {
 
 
   
-  const SearchLocation = (location) => {
+  const SearchLocation = (location: any) => {
     fetch(
       `https://dapi.kakao.com/v2/local/search/keyword.json?query=${location}`,
       {
@@ -377,15 +431,15 @@ const LocationSearch = ({navigation, route}: Props) => {
   const clickToCurrentLocation = () => {
     if(route.params?.requestType === "upload") {
       navigation.navigate("UploadScreen", {
-        location:  route.params.currentLocation.name,
-        longitude: route.params.currentLocation.longitude,
-        latitude: route.params.currentLocation.latitude,
+        location:  currentUserLocation.name,
+        longitude: currentUserLocation.longitude,
+        latitude: currentUserLocation.latitude,
       })
     } else if(route.params?.requestType === "edit") {
       navigation.navigate("FeedEditScreen", {
-        location:  route.params.currentLocation.name,
-        longitude: route.params.currentLocation.longitude,
-        latitude: route.params.currentLocation.latitude,
+        location:  currentUserLocation.name,
+        longitude: currentUserLocation.longitude,
+        latitude: currentUserLocation.latitude,
       })
     }
   }
@@ -436,8 +490,16 @@ const LocationItem = ({location, address}) => {
               <MyLocationIcon
               source={require('~/Assets/Images/ic_myLocation.png')}/>
                 <MyLocationText>
-                  {"내 위치 : " + route.params?.currentLocation.name}
+                  {"내 위치 : "}
                 </MyLocationText>
+                {loadingLocation && (
+                  <LoadingContainer>
+                  <ActivityIndicator/>
+                  </LoadingContainer>
+                )}
+                {!loadingLocation && (
+                  <MyLocationText>{currentUserLocation.name}</MyLocationText>
+                )}
             </MyLocationContainer>
             </TouchableWithoutFeedback>
             {registeredLocation && (

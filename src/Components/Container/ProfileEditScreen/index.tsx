@@ -1,5 +1,5 @@
 import React, {useEffect ,useState} from 'react';
-import {TouchableWithoutFeedback, Alert} from 'react-native';
+import {TouchableWithoutFeedback, Alert, ActivityIndicator} from 'react-native';
 import Styled from 'styled-components/native';
 import {
     widthPercentageToDP as wp,
@@ -183,6 +183,14 @@ font-size: 16px;
 color: #267DFF; 
 `;
 
+const LoadingContainer = Styled.View`
+position: absolute;
+width: ${wp('100%')};
+height: ${hp('100%')};
+align-items: center;
+justify-content: center;
+`;
+
 
 
 
@@ -194,11 +202,13 @@ interface Props {
 const ProfileEditScreen = ({navigation, route}: Props) => {
     const currentUser = useSelector((state) => state.currentUser);
     const dispatch = useDispatch();
-    const [currentUserProfile, setCurrentUserProfile] = useState<object>({});
+    const [currentUserProfile, setCurrentUserProfile] = useState<object>(currentUser.user);
     const [nickname ,setNickname] = useState<string>(currentUser.user?.nickname);
-    const [description, setDescription] = useState<string>(currentUser.user?.description);
+    const [description, setDescription] = useState<string>(currentUser.user?.description ? currentUser.user.description : "");
     const [profileImageUri, setProfileImageUri] = useState<any>(currentUser.user?.profileImage);
+    const [loading, setLoading] = useState<boolean>(false);
 
+    /*
     useEffect(() => {
         if(currentUser.user) {
             console.log("profileEditScreen currentUser", currentUser);
@@ -206,6 +216,7 @@ const ProfileEditScreen = ({navigation, route}: Props) => {
             setProfileImageUri(currentUser.user.profileImage);
         }
     }, [])
+    */
 
     useEffect(() => {
         if(route.params?.selectedProfileImage) {
@@ -227,10 +238,12 @@ const ProfileEditScreen = ({navigation, route}: Props) => {
     }
 
     const completeProfileEdit = () => {
+        setLoading(true);
         if(currentUser.user.nickname !== nickname) {
         console.log("닉네임 바뀜")
         POSTProfileUpdate(description, profileImageUri, nickname)
         .then(function(response ){
+            setLoading(false);
             console.log("completeProfileEdit response", response);
             var modifiedProfile = currentUser.user;
             console.log("modifiedProfile", modifiedProfile);
@@ -247,6 +260,7 @@ const ProfileEditScreen = ({navigation, route}: Props) => {
         })
         .catch(function(error) {
             console.log("completeProfileEdit error", error);
+            setLoading(false);
             if(error.status === 403) {
                 Alert.alert("이미 사용중인 닉네임입니다.", ' ', [
                    {
@@ -355,6 +369,11 @@ const ProfileEditScreen = ({navigation, route}: Props) => {
                 </PrivacySettingContainer>
                 </TouchableWithoutFeedback>
             </BodyContainer>
+            {loading && (
+                <LoadingContainer>
+                    <ActivityIndicator/>
+                </LoadingContainer>
+            )}
         </Container>
 
     )

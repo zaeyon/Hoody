@@ -144,9 +144,9 @@ const MapStack = createStackNavigator();
 var bottomTabHeight;
 
 if(isIphoneX()) {
-  bottomTabHeight = wp("18%");
+  bottomTabHeight = wp("21%");
 } else {
-  bottomTabHeight = wp("12.8%");
+  bottomTabHeight = wp("15%");
 }
 
 const config = {

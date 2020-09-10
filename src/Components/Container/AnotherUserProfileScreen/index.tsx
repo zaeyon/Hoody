@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {
-  FlatList, View, Text, Dimensions, TouchableOpacity, TouchableWithoutFeedback, SafeAreaView, ActivityIndicator,
+  FlatList, View, Text, Dimensions, TouchableOpacity, TouchableWithoutFeedback, SafeAreaView, ActivityIndicator, Picker, StyleSheet,
 } from 'react-native';
 import Styled from 'styled-components/native';
 import {
@@ -9,7 +9,7 @@ import {
 } from 'react-native-responsive-screen';
 
 import {useSelector} from 'react-redux';
-
+import Modal from 'react-native-modal';
 import ScrollableTabView, { DefaultTabBar,} from 'rn-collapsing-tab-bar';
 
 import {getCurrentUser} from '~/AsyncStorage/User';
@@ -141,6 +141,93 @@ const LoadingContainer = Styled.View`
  margin-top: ${hp('35%')};
 `;
  
+
+const ModalHeaderContainer = Styled.View`
+ padding-top: 4px;
+ width: ${wp('100%')};
+ padding-bottom: 10px;
+ align-items: center;
+`;
+
+const ProfileModalContainer = Styled.View`
+ width: ${wp('100%')};
+ height: ${wp('76%')};
+ background-color: #ffffff;
+ border-top-left-radius: 10px;
+ border-top-right-radius: 10px;
+ padding-bottom: 30px;
+`;
+
+const ModalToggleButton = Styled.View`
+ width: ${wp('11.7%')};
+ height: ${wp('1.4%')};
+ background-color: #F4F4F7;
+ border-radius: 5px;
+`;
+
+const ModalTabItemContainer = Styled.View`
+ height: ${wp('17%')};
+ flex-direction: row;
+ align-items: center;
+ padding-left: 16px;
+ padding-right: 16px;
+ border-bottom-width: 0.6px;
+ border-color: #ECECEE;
+`;
+
+const ModalTabItemIconImage = Styled.Image`
+width: ${wp('6.4%')};
+height: ${wp('6.4%')};
+tint-color: #1D1E1F;
+`;
+
+const ModalTabItemLabelText = Styled.Text`
+ margin-left: 11px;
+ font-size: 18px;
+ color: #1D1E1F;
+`;
+
+const YearPickerContainer = Styled.View`
+border-top-left-radius: 10px;
+border-top-right-radius: 10px;
+ width:${wp('100%')};
+ height: ${wp('60%')};
+ background-color: #ffffff;
+`;
+
+const MonthPickerContainer = Styled.View`
+border-top-left-radius: 10px;
+border-top-right-radius: 10px;
+ width:${wp('100%')};
+ height: ${wp('60%')};
+ background-color: #ffffff;
+`;
+
+
+const PickerHeaderContainer = Styled.View`
+ border-width: 0.6px;
+ border-color: #ECECEE;
+ width: ${wp('100%')};
+ height: ${wp('11.2%')};
+ background-color: #FAFAFA;
+ flex-direction: row;
+ justify-content: flex-end;
+ align-items: center;
+ padding-left: 16px;
+ position: absolute;
+ top: 0;
+`;
+
+const PickerFinishContainer = Styled.View`
+padding-top: 12px;
+padding-bottom: 12px;
+padding-right: 16px
+`;
+
+const PickerFinishText = Styled.Text`
+ font-size: 16px;
+ color: #267DFF;
+`;
  
 
 const TEST_FEED_DATA = [
@@ -337,12 +424,30 @@ const TEST_COLLECTION_DATA = [
 const deviceWidth = Dimensions.get("window").width;
 const containerHeight = Dimensions.get("window").height;
 
+const YEAR_LIST = [
+  2020, 2019, 2018, 2017, 2016, 2015, 2014, 2013, 2012, 2011, 2010, 2009, 2008, 2007, 2006, 2005, 2004, 2003, 2002, 2001, 2000, 1999, 1998, 1997, 1996, 1995, 1994, 1993, 1992, 1991, 1990, 1989, 1988, 1987, 1986, 1985, 1984, 1983, 1982, 1981, 1980,
+]
+
+const MONTH_LIST = [
+  12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1
+]
+
+
 interface Props {
   navigation: any,
   route: any,
 }
 
 const AnotherUserProfileScreen = ({navigation, route}: Props) => {
+
+  const getCurrentYear = (date: Date) => {
+    return date.getFullYear();
+  }
+
+  const getCurrentMonth = (date: Date) => {
+    return date.getMonth() + 1;
+  }
+
   const [feedListTabHeight, setFeedListTabHeight] = useState<number>(containerHeight);
   const [collectionListTabHeight, setCollectionListTabHeight] = useState<number>(containerHeight);
   const [userInfoData, setUserInfoData] = useState<object>({});
@@ -353,15 +458,25 @@ const AnotherUserProfileScreen = ({navigation, route}: Props) => {
    const [followed, setFollowed] = useState<boolean>(false);
 
   const [userProfileInfo, setUserProfileInfo] = useState<object>({})
+  const [feedListDataByDate, setFeedListDataByDate] = useState<Array<object>>([]);
 
   const [refreshingProfileFeed, setRefreshingProfileFeed] = useState<boolean>(false);
   const [refreshingProfileCollection, setRefreshingProfileCollection] = useState<boolean>(false);
   const [feedMapCount, setFeedMapCount] = useState<number>(0);
   const [loadingProfile, setLoadingProfile] = useState<boolean>(true);
 
+  const [visibleYearPicker, setVisibleYearPicker] = useState<boolean>(false);
+  const [visibleMonthPicker, setVisibleMonthPicker] = useState<boolean>(false);
+  const [selectedYear, setSelectedYear] = useState<number>(getCurrentYear(new Date()));
+  const [changingYear, setChangingYear] = useState<number>(getCurrentYear(new Date()));
+  const [selectedMonth, setSelectedMonth] = useState<number>(getCurrentMonth(new Date()));
+  const [changingMonth, setChangingMonth] = useState<number>(getCurrentMonth(new Date()));
+
+  const [loadingProfileFeedByList, setLoadingProfileFeedByList] = useState<boolean>(true);
+  const [loadingProfileFeedByDate, setLoadingProfileFeedByDate] = useState<boolean>(true);
+  const [loadingProfileCollection, setLoadingProfileCollection] = useState<boolean>(true);
 
   const currentUser = useSelector((state) => state.currentUser);
-
   
   useEffect(() => {
     if(route.params?.requestedUserNickname) { 
@@ -371,6 +486,8 @@ const AnotherUserProfileScreen = ({navigation, route}: Props) => {
       GetProfileFeedByList(route.params.requestedUserNickname)
       .then(function(response) {
         setLoadingProfile(false);
+        setLoadingProfileFeedByList(false);
+        getFeedListDataByDate();
         console.log(
         "GetProfileFeedByList response@@", response.posts)
         setUserInfoData(response);
@@ -431,6 +548,7 @@ const AnotherUserProfileScreen = ({navigation, route}: Props) => {
   const getFeedListData = () => {
     GetProfileFeedByList(route.params?.requestedUserNickname)
     .then(function(response) {
+      setLoadingProfileFeedByList(false);
       setUserInfoData(response);
       if(response.followed == true) {
         setFollowed(true)
@@ -469,7 +587,33 @@ const AnotherUserProfileScreen = ({navigation, route}: Props) => {
     .catch(function(error) {
       console.log("GetProfileCollection error", error);
     })
+  }
 
+
+  const getFeedListDataByDate = () => {
+    GETProfileFeedByDate(route.params?.requestedUserNickname, changingYear + "-" + changingMonth)
+    .then(function(response) {
+      setLoadingProfileFeedByDate(false);
+      setRefreshingProfileFeed(false);
+      console.log("GETProfileFeedByDate response", response)
+      var tmpFeedListByDate = new Array();
+
+      for(const[key, value] of Object.entries(response)) {
+        var date = new Date(key)
+        
+        tmpFeedListByDate.push({
+          title: date.getDate(),
+          data: [value],
+        })
+      }
+
+      setTimeout(() => {
+      setFeedListDataByDate(tmpFeedListByDate);
+      })
+    })
+    .catch(function(error) {
+      console.log("GETProfileFeedByDate error", error);
+    })
   }
 
 
@@ -525,6 +669,47 @@ const AnotherUserProfileScreen = ({navigation, route}: Props) => {
   const unfollowUser = () => {
     setFollowed(false);
   }
+
+
+  const openYearPicker = () => {
+    setVisibleYearPicker(true);
+  }
+
+  const selectYearPicker = () => {
+    setVisibleYearPicker(false);
+
+    if(changingYear != selectedYear) {
+      setLoadingProfileFeedByDate(true);
+      setSelectedYear(changingYear)
+      getFeedListDataByDate()
+    }
+  }
+
+  const cancelYearPicker = () => {
+    setChangingYear(selectedYear);
+    setVisibleYearPicker(false);
+  }
+
+  const openMonthPicker = () => {
+    setVisibleMonthPicker(true);
+  }
+
+  const selectMonthPicker = () => {
+    setSelectedMonth(changingMonth);
+    setVisibleMonthPicker(false);
+
+    if(changingMonth != selectedMonth) {
+      setLoadingProfileFeedByDate(true);
+      setSelectedMonth(changingMonth);
+      getFeedListDataByDate()
+    }
+  }
+
+  const cancelMonthPicker = () => {
+    setChangingMonth(selectedMonth);
+    setVisibleMonthPicker(false);
+  }
+
 
 
 
@@ -622,11 +807,18 @@ const AnotherUserProfileScreen = ({navigation, route}: Props) => {
       <FeedListTabContainer onLayout={(event) => measureFeedListTab(event)}
       tabLabel='게시글'>
        <ProfileFeedList
+       loadingProfileFeedByList={loadingProfileFeedByList}
+       loadingProfileFeedByDate={loadingProfileFeedByDate}
        userProfileInfo={userProfileInfo}
        navigation={navigation}
        feedListData={feedListData ? feedListData : ""}
+       feedListDataByDate={feedListDataByDate ? feedListDataByDate : []}
        currentSortType={selectedFeedSortType}
        requestNickname={userInfoData ? userInfoData.nickname : ""}
+       openYearPicker={openYearPicker}
+       openMonthPicker={openMonthPicker}
+       selectedYear={selectedYear}
+       selectedMonth={selectedMonth}
        />
       </FeedListTabContainer>
       <CollectionListTabContainer 
@@ -640,8 +832,63 @@ const AnotherUserProfileScreen = ({navigation, route}: Props) => {
       </CollectionListTabContainer>
       </ScrollableTabView>
       )}
+      <Modal
+          isVisible={visibleYearPicker}
+          onBackdropPress={() => cancelYearPicker()}
+          backdropOpacity={0.25}
+          style={styles.modalView}>
+          <YearPickerContainer>
+            <Picker
+            selectedValue={changingYear}
+            onValueChange={(itemValue, itemIndex) => setChangingYear(itemValue)}>
+            {YEAR_LIST.map((year) => {
+              return (
+                <Picker.Item label={year+"년"} value={year}/>
+              )
+            })}
+            </Picker>
+            <PickerHeaderContainer>
+              <TouchableWithoutFeedback onPress={() => selectYearPicker()}>
+              <PickerFinishContainer>
+                <PickerFinishText>완료</PickerFinishText>
+              </PickerFinishContainer>
+              </TouchableWithoutFeedback>
+            </PickerHeaderContainer>
+          </YearPickerContainer>
+          </Modal>
+          <Modal
+          isVisible={visibleMonthPicker}
+          onBackdropPress={() => cancelMonthPicker()}
+          backdropOpacity={0.25}
+          style={styles.modalView}>
+          <MonthPickerContainer>
+            <Picker
+            selectedValue={changingMonth}
+            onValueChange={(itemValue, itemIndex) => setChangingMonth(itemValue)}>
+            {MONTH_LIST.map((month) => {
+              return (
+                <Picker.Item label={month+"월"} value={month}/>
+              )
+            })}
+            </Picker>
+            <PickerHeaderContainer>
+              <TouchableWithoutFeedback onPress={() => selectMonthPicker()}>
+              <PickerFinishContainer>
+                <PickerFinishText>완료</PickerFinishText>
+              </PickerFinishContainer>
+              </TouchableWithoutFeedback>
+            </PickerHeaderContainer>
+          </MonthPickerContainer>
+          </Modal>
     </Container>
   )
 }
+
+const styles = StyleSheet.create({
+  modalView: {
+    justifyContent: 'flex-end',
+    margin: 0,
+  },
+});
 
 export default AnotherUserProfileScreen;

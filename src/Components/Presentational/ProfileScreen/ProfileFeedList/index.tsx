@@ -248,11 +248,7 @@ const ProfileFeedList = ({navigation, route, feedListData, currentSortType, onSc
         />
         </ListTypeFeedContainer>
          )}
-         {loadingProfileFeedByDate && (
-          <LoadingContainer>
-            <ActivityIndicator/>
-          </LoadingContainer>
-         )}
+         
         {(currentSortType === 'tile')  && feedListData[0] && (
         <TileTypeFeedContainer>
           <SelectingDateContainer>
@@ -267,6 +263,11 @@ const ProfileFeedList = ({navigation, route, feedListData, currentSortType, onSc
           </MonthSelectContainer>
           </TouchableWithoutFeedback>
           </SelectingDateContainer>
+          {loadingProfileFeedByDate && (
+          <LoadingContainer style={{marginTop:hp('15%')}}>
+            <ActivityIndicator/>
+          </LoadingContainer>
+         )}
           <ExpenseDaySectionListContainer>
             {loadingProfileFeedByDate && (
               <LoadingContainer>

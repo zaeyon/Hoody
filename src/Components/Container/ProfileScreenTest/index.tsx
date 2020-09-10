@@ -46,14 +46,12 @@ const HeaderBar = Styled.View`
 `;
 
 const HeaderLeftContainer = Styled.View`
- 
 `;
 
 const MyProfileSettingContainer = Styled.View`
 padding: 10px 15px 10px 15px;
 align-items: center;
- justify-content: center;
-
+justify-content: center;
 `;
 
 const MyProfileSettingButton = Styled.Image`

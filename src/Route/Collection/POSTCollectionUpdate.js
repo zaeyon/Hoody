@@ -31,7 +31,7 @@ const POSTCollectionUpdate = (collectionId, name, open, coverImg, description, i
             resolve(response);
         })
         .catch(function(error) {
-            reject(error);
+            reject(error.response);
         })
     })
 }

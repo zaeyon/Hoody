@@ -5,7 +5,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import allActions from '~/action';
 
 import KakaoLogins from '@react-native-seoul/kakao-login';
@@ -224,6 +224,7 @@ const Unauthorized = ({navigation}) => {
   const [loginLoading, setLoginLoading] = useState(false);
   const [profileLoading, setProfileLoading] = useState(false);
   const [token, setToken] = useState(TOKEN_EMPTY);
+  const currentUser = useSelector((state: any) => state.currentUser);
 
   const dispatch = useDispatch();
 
@@ -343,7 +344,7 @@ const Unauthorized = ({navigation}) => {
           console.log("GETEmailCheck response", response);
           if(response.message === "이미 가입된 이메일입니다.") {
           if(response.provider === "kakao") {
-            POSTSocial(result.id, result.email, 'kakao')
+            POSTSocial(result.id, result.email, 'kakao', currentUser.fcmToken)
             .then(function(response) {
               console.log("소셜 로그인 성공", response)
               dispatch(
@@ -429,7 +430,7 @@ const Unauthorized = ({navigation}) => {
           }
         ])
       } else if(response.provider === "google") {
-        POSTSocial(userInfo.user.id, userInfo.user.email, 'google')
+        POSTSocial(userInfo.user.id, userInfo.user.email, 'google', currentUser.fcmToken)
         .then(function(response) {
           console.log("소셜 로그인 성공", response)
           dispatch(
@@ -493,7 +494,7 @@ const Unauthorized = ({navigation}) => {
           }
         ])
       } else if(response.provider === "google") {
-        POSTSocial(userInfo.user.id, userInfo.user.email, 'google')
+        POSTSocial(userInfo.user.id, userInfo.user.email, 'google', currentUser.fcmToken)
         .then(function(response) {
           console.log("소셜 로그인 성공", response)
           dispatch(

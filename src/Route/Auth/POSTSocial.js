@@ -9,12 +9,13 @@ const POSTSocial = (socialId, email ,provider, fcmToken) => {
     console.log("POSTSocial socialId", socialId);
     console.log("POSTSocial email", email);
     console.log("POSTSocial provider", provider);
-    console.log("POSTSocial fcmToken")
+    console.log("POSTSocial fcmToken", fcmToken);
 
     let form = new FormData();
     form.append('socialId', socialId);
     form.append('email', email);
     form.append('provider', provider);
+    form.append('fcmToken', fcmToken);
 
     return new Promise(function (resolve, reject) {
       axios

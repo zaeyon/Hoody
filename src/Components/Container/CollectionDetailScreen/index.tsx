@@ -649,7 +649,7 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
                       refreshing={refreshingCollection}
                       onRefresh={onRefreshCollection}/>
                   }>
-                  <CollectionInfoContainer style={{paddingTop:H_MAX_HEIGHT-25}}>
+                  <CollectionInfoContainer style={{paddingTop:H_MAX_HEIGHT-10}}>
                   <CollectionInfoHeader>
                   <CollectionNameContainer>
                   <CollectionTitleText>{collectionDetailInfo.name}
@@ -728,6 +728,7 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
                   </CollectionInfoFooter>
                   </CollectionInfoContainer>
                   <FlatList
+                  style={{paddingBottom:20}}
                   columnWrapperStyle={{justifyContent:'space-between', paddingLeft:16, paddingRight:15, paddingTop:11, paddingBottom:0}}
                   numColumns={2}
                   data={collectionDetailInfo.Posts}

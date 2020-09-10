@@ -239,6 +239,8 @@ const CollectionModifyScreen = ({navigation, route}: Props) => {
     }
 
     const finishCollectionEdit = () => {
+        console.log("enabledPrivate", enabledPrivate);
+        console.log("enabledIncludeLocation", enabledIncludeLocation);
         setLoadingUpdate(true);
         POSTCollectionUpdate(route.params?.collectionId, collectionNameText, !enabledPrivate, coverImage, collectionDescripText, enabledIncludeLocation)
         .then(function(response) {

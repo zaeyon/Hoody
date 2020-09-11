@@ -17,9 +17,18 @@ import {useIsFocused} from '@react-navigation/native';
 import FollowItem from '~/Components/Presentational/FollowListScreen/FollowItem';
 import GETProfileFriends from '~/Route/Profile/GETProfileFriends';
 
+import ScrollableTabView from 'rn-collapsing-tab-bar'
+
+import FollowListTabBar from '~/Components/Presentational/FollowListScreen/FollowListTabBar'
+
 const Container = Styled.SafeAreaView`
  flex: 1;
  background-color: #ffffff;
+`;
+
+const EmptyContainer = Styled.View`
+ width: ${wp('100%')};
+ background-color: #FFFFFF;
 `;
 
 
@@ -64,23 +73,20 @@ height: ${wp('8%')};
 const FollowerTabContainer = Styled.View`
 width:${wp('100%')};
 background-color: #ffffff;
-flex: 1;
 `;
 
 const FollowingTabContainer = Styled.View`
 width:${wp('100%')};
  background-color: #ffffff;
- flex: 1;
+
 `;
 
-const FollowerListContainer = Styled.ScrollView`
+const FollowerListContainer = Styled.View`
 background-color: #ffffff;
-flex: 1;
 `;
 
-const FollowingListContainer = Styled.ScrollView`
+const FollowingListContainer = Styled.View`
 background-color: #ffffff;
-flex: 1;
 `;
 
 
@@ -158,6 +164,8 @@ interface Props {
     route: any,
 }
 
+const containerHeight = Dimensions.get("window").height;
+
 var requestedOffset = 0;
 var requestedLimit = 20;
 
@@ -173,6 +181,12 @@ const FollowListScreen = ({navigation, route}:Props) => {
 
     const [refreshingFollower, setRefreshingFollower] = useState<boolean>(false);
     const [refreshingFollowing, setRefreshingFollowing] = useState<boolean>(false);
+
+    const [followerListTabHeight, setFollowerListTabHeight] = useState<number>(containerHeight);
+    const [followingListTabHeight, setFollowingListTabHeight] = useState<number>(containerHeight);
+
+    const [firstTabHeight, setFirstTabHeight] = useState<number>(300);
+    const [secondTabHeight, setSecondTabHeight] = useState<number>(300);
 
     const FollowTopTab = createMaterialTopTabNavigator();
     
@@ -191,14 +205,13 @@ const FollowListScreen = ({navigation, route}:Props) => {
             console.log("팔로잉 누름")
 
             setTimeout(() => {
-            navigation.jumpTo("팔로잉 " + route.params.followingCount + "명")
+            //navigation.jumpTo("팔로잉 " + route.params.followingCount + "명")
             }, 10)
 
             GETProfileFriends("followings", inputedNickname, requestedOffset, requestedLimit, route.params.nickname)
                 .then(function(followingResponse) {
                   console.log("GETProfileFriends response", followingResponse)
                     setFollowingListData(followingResponse);
-
                     GETProfileFriends("followers", inputedNickname, requestedOffset, requestedLimit, route.params.nickname)
                 .then(function(response) {
                   console.log("GETProfileFriends response", response)
@@ -207,7 +220,9 @@ const FollowListScreen = ({navigation, route}:Props) => {
                 .catch(function(error) {
                     console.log("GETProfileFriends error", error);
                 })
+                
                 })
+                
                 .catch(function(error) {
                     console.log("GETProfileFriends error", error);
                 })
@@ -232,6 +247,7 @@ const FollowListScreen = ({navigation, route}:Props) => {
         
     }, [])
     
+    /*
     useEffect(() => {
             //setRequestedType(route.params.requestedType);
             if(route.params?.requestedType !== requestedType) {
@@ -249,12 +265,13 @@ const FollowListScreen = ({navigation, route}:Props) => {
                 })
             }
     }, [])
+    */
 
     const onRefreshFollower = () => {
-        //setRefreshingFollower(true);
+        setRefreshingFollower(true);
         GETProfileFriends("followers", inputedNickname, requestedOffset, requestedLimit, route.params.nickname)
                 .then(function(response) {
-                //setRefreshingFollower(false);
+                setRefreshingFollower(false);
                   console.log("GETProfileFriends response", response)
                     setFollowerListData(response);
                     GETProfileFriends("followings", inputedNickname, requestedOffset, requestedLimit, route.params.nickname)
@@ -272,12 +289,12 @@ const FollowListScreen = ({navigation, route}:Props) => {
     }
 
     const onRefreshFollowing = () => {
-        //setRefreshingFollowing(true);
+        setRefreshingFollowing(true);
         GETProfileFriends("followings", inputedNickname, requestedOffset, requestedLimit, route.params.nickname)
                 .then(function(followingResponse) {
                   console.log("GETProfileFriends response", followingResponse)
                     setFollowingListData(followingResponse);
-                    //setRefreshingFollowing(false);
+                    setRefreshingFollowing(false);
                     GETProfileFriends("followers", inputedNickname, requestedOffset, requestedLimit, route.params.nickname)
                 .then(function(response) {
                   console.log("GETProfileFriends response", response)
@@ -296,6 +313,16 @@ const FollowListScreen = ({navigation, route}:Props) => {
     
     const onChangeSearchInput = (text: string) => {
     }
+
+
+    const measureFollowerListTab = (event) => {
+        setFollowerListTabHeight(event.nativeEvent.layout.height);
+    }
+
+    const measureFollowingListTab = (event) => {
+        setFollowingListTabHeight(event.nativeEvent.layout.height);
+    }
+
 
     const renderFollowItem = ({item, index}: any) => {
         return (
@@ -428,6 +455,12 @@ const FollowListScreen = ({navigation, route}:Props) => {
         )
     }
 
+    const emptyContainer = () => {
+        return (
+            <EmptyContainer/>
+        )
+    }
+
     return (
         <Container>
             <HeaderBar>
@@ -443,6 +476,48 @@ const FollowListScreen = ({navigation, route}:Props) => {
                     </HeaderRightEmptyView>
                 </HeaderRightContainer>
             </HeaderBar>
+            <ScrollableTabView
+            collapsableBar={emptyContainer()}
+            refreshingFeed={refreshingFollower}
+            refreshingCollection={refreshingFollowing}
+            onRefreshFeed={onRefreshFollower}
+            onRefreshCollection={onRefreshFollowing}
+            loadMoreSearchFeedData={() => 0}
+            loadMoreSearchCollectionData={() => 0}
+            initialPage={route.params?.requestedType === "followers" ? 0 : 1}
+            tabContentHeights={[followerListTabHeight, followingListTabHeight]}
+            scrollEnabled={true}
+            showsVerticalScrollIndicator={false}
+            prerenderingSiblingsNumber={Infinity}
+            renderTabBar={() => <FollowListTabBar/>}
+            >
+            <FollowerTabContainer
+            onLayout={(event) => measureFollowerListTab(event)}
+            tabLabel="팔로워">
+            <FollowerListContainer
+            onLayout={(event) => setFirstTabHeight(event.nativeEvent.layout.height)}>
+                <FlatList
+                style={firstTabHeight < hp('90%') ? {height:hp('75%'), backgroundColor:'#ffffff'} : {height: followerListTabHeight, backgroundColor:'#ffffff'}}
+                scrollEnabled={false}
+                data={followerListData}
+                renderItem={renderFollowItem}
+                />
+            </FollowerListContainer>
+            </FollowerTabContainer>
+            <FollowingTabContainer
+            onLayout={(event) => setSecondTabHeight(event.nativeEvent.layout.height)}
+            tabLabel="팔로잉">
+            <FollowingListContainer>
+                <FlatList
+                style={secondTabHeight < hp('90%') ? {height:hp('75%'), backgroundColor: '#ffffff'} : {height: followingListTabHeight}}
+                scrollEnabled={false}
+                data={followingListData}
+                renderItem={renderFollowItem}
+                />
+            </FollowingListContainer>
+            </FollowingTabContainer>
+            </ScrollableTabView>
+            {/*
             <FollowTopTab.Navigator
             initialLayout={{ width: Dimensions.get('window').width }}
             swipeEnabled={true}
@@ -461,6 +536,7 @@ const FollowListScreen = ({navigation, route}:Props) => {
                 name={"팔로잉 " + followingCount + "명"}
                 component={FollowingListTab}/>
             </FollowTopTab.Navigator>
+            */}
         </Container>
     )
 }

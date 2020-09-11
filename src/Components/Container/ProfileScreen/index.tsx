@@ -96,13 +96,13 @@ const MyProfileReportContainer = Styled.View`
  flex-direction: row;
  justify-content: space-between;
  align-items: center;
- padding-left: 4px;
+ padding-left: 10px;
  padding-right: 12px;
 `;
 
 const MyProfileReportImage = Styled.Image`
- width: ${wp('8%')};
- height: ${wp('8%')};
+ width: ${wp('6.4%')};
+ height: ${wp('6.4%')};
 `;
 
 const MyProfileReportText = Styled.Text`
@@ -119,15 +119,15 @@ margin-left: 7px;
  border-width: 0.6px;
  border-color: #EFEFEF;
  flex-direction: row;
- padding-left: 10px;
+ padding-left: 9px;
  padding-right: 10px;
  justify-content: space-between;
  align-items: center;
 `;
 
 const MyProfileReviewMapImage = Styled.Image`
- width: ${wp('6.6%')};
- height: ${wp('6.6%')};
+ width: ${wp('5.5%')};
+ height: ${wp('5.5%')};
 `;
 
 const MyProfileReviewMapText = Styled.Text`
@@ -845,7 +845,7 @@ const ProfileScreen = ({navigation, route}: Props) => {
           <TouchableWithoutFeedback onPress={() => moveToReport()}>
           <MyProfileReportContainer>
           <MyProfileReportImage
-          source={require('~/Assets/Images/ic_report.png')}/>
+          source={require('~/Assets/Images/HeaderBar/ic_report.png')}/>
           <MyProfileReportText>리포트</MyProfileReportText>
         </MyProfileReportContainer>
         </TouchableWithoutFeedback>
@@ -853,7 +853,7 @@ const ProfileScreen = ({navigation, route}: Props) => {
           <TouchableWithoutFeedback onPress={() => moveToLocationFeedMap()}>
           <MyProfileReviewMapContainer>
             <MyProfileReviewMapImage
-            source={require('~/Assets/Images/ic_reviewMap.png')}/>
+            source={require('~/Assets/Images/HeaderBar/ic_marker.png')}/>
             <MyProfileReviewMapText>{feedMapCount}</MyProfileReviewMapText>
           </MyProfileReviewMapContainer>
           </TouchableWithoutFeedback>

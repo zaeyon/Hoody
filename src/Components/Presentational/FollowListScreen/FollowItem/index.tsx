@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {TouchableWithoutFeedback} from 'react-native';
 import Styled from 'styled-components/native';
 import {
@@ -6,6 +6,8 @@ import {
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import {useSelector} from 'react-redux';
+
+import {POSTFollowUser, DELETEUnfollowUser} from '~/Route/User/Follow';
 
 const FollowItemContainer = Styled.View`
  width: ${wp('100%')};
@@ -114,6 +116,7 @@ const DescripText = Styled.Text`
 
 interface Props {
     navigation: any,
+    userId: string,
     profileImageUri: string,
     nickname: string,
     feedCount: number,
@@ -121,9 +124,10 @@ interface Props {
     followState: boolean,
 }
 
-const FollowItem = ({navigation, profileImageUri, nickname, feedCount, description, followState}: Props) => {
+const FollowItem = ({navigation,userId, profileImageUri, nickname, feedCount, description, followState}: Props) => {
     console.log("feedCount", feedCount);
-    const currentUser = useSelector((state) => state.currentUser);
+    const [currentUserFollow, setCurrentUserFollow] = useState<boolean>(followState);
+    const currentUser = useSelector((state: any) => state.currentUser);
 
     const moveToUserProfile = () => {
         if(currentUser.user?.nickname === nickname) {
@@ -135,6 +139,31 @@ const FollowItem = ({navigation, profileImageUri, nickname, feedCount, descripti
             });
         }
     }
+
+
+    const followUser = () => {
+        setCurrentUserFollow(true);
+        POSTFollowUser(userId)
+        .then(function(response) {
+            console.log("팔로우 성공", response);
+        })
+        .catch(function(error) {
+            console.log("팔로우 실패", error);
+        })
+    }
+
+    const unfollowUser = () => {
+        setCurrentUserFollow(false);
+        DELETEUnfollowUser(userId)
+        .then(function(response) {
+            console.log("언팔로우 성공", response);
+        })
+        .catch(function(error) {
+            console.log("언팔로우 실패", error);
+        })
+    }
+
+    
 
     return (
         <FollowItemContainer>
@@ -158,15 +187,19 @@ const FollowItem = ({navigation, profileImageUri, nickname, feedCount, descripti
                 </UserProfileContainer>
                 </TouchableWithoutFeedback>
                 <FollowButtonContainer>
-                    {followState === false && (
+                    {currentUserFollow === false && (
+                        <TouchableWithoutFeedback onPress={() => followUser()}>
                         <FollowButton>
                             <FollowText>팔로우</FollowText>
                         </FollowButton>
+                        </TouchableWithoutFeedback>
                     )}
-                    {followState === true && (
+                    {currentUserFollow === true && (
+                        <TouchableWithoutFeedback onPress={() => unfollowUser()}>
                         <FollowingButton>
                             <FollowingText>팔로잉</FollowingText>
                         </FollowingButton>
+                        </TouchableWithoutFeedback>
                     )}
                 </FollowButtonContainer>
         </FollowItemContainer>

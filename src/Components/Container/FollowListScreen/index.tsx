@@ -18,7 +18,6 @@ import FollowItem from '~/Components/Presentational/FollowListScreen/FollowItem'
 import GETProfileFriends from '~/Route/Profile/GETProfileFriends';
 
 import ScrollableTabView from 'rn-collapsing-tab-bar'
-
 import FollowListTabBar from '~/Components/Presentational/FollowListScreen/FollowListTabBar'
 
 const Container = Styled.SafeAreaView`
@@ -332,7 +331,8 @@ const FollowListScreen = ({navigation, route}:Props) => {
             nickname={item.nickname}
             feedCount={item.feedCount}
             description={item.description}
-            followState={true}
+            followState={item.followed}
+            userId={item.userId}
             />
         )
     }

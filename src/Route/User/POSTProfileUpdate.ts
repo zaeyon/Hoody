@@ -14,7 +14,13 @@ const POSTProfileUpdate = ( description: string, profileImage?: string, nickname
       form.append("nickname", nickname);
       }
 
-      form.append("profileImg", profileImage);
+      form.append(`profileImg`, 
+      {
+          uri: profileImage,
+          name: "profileImage",
+          type: 'image/jpeg',
+      });
+      
       form.append("description", description);
 
       console.log("POSTProfileUpdate", form);

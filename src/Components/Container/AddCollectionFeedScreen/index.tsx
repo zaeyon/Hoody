@@ -233,7 +233,7 @@ const AddCollectionFeedScreen = ({navigation, route}: Props) => {
 
     const finishAddCollectionFeed = () => {
         console.log("triggerType", triggerType);
-        if(triggerType === "collectionFeedEdit") {
+        if(triggerType === "modifyCollection") {
             navigation.navigate("CollectionFeedEditScreen", {
                 addedCollectionFeedList: route.params?.collectionFeedList.concat(selectingFeedList)
             })
@@ -264,7 +264,7 @@ const AddCollectionFeedScreen = ({navigation, route}: Props) => {
         //console.log("preCollectionFeedList", preCollectionFeedList);
         if(route.params.triggerType === "collectionUpload") {
             navigation.navigate("CollectionUploadScreen");
-        } else if(route.params.triggerTyp === "collectionFeedEdit") {
+        } else if(route.params.triggerType === "collectionFeedEdit") {
             navigation.navigate("CollectionFeedEditScreen")
         }
     }

@@ -540,8 +540,6 @@ const SearchScreen = ({navigation}: Props) => {
     }
 
     const renderSearchResultItem = ({item, index, section}: any) => {
-        console.log("renderSearchResultItem", item)
-        console.log("section.title", section.title);
 
         if(section.title == "태그") {
         return (

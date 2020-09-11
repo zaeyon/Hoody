@@ -612,7 +612,7 @@ const FeedMapScreen = ({navigation, route}: Props) => {
       provider={PROVIDER_GOOGLE}
       onRegionChange={onRegionChange}
       initialRegion={initialMapRegion}
-      showsUserLocation={true}>
+      showsUserLocation={false}>
         {locationListData?.map((location, index) => {
           if(location.metaData.num >= 10) {
             return (

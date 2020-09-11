@@ -520,7 +520,7 @@ const ProfileScreen = ({navigation, route}: Props) => {
         console.log("요청된 프로필 정보@@@", response);
 
         let tmpFeedMapCount = 0;
-        for(var i = 0; i < response.posts.length-1; i++) {
+        for(var i = 0; i < response.posts.length; i++) {
           if(response.posts[i].address) {
             console.log("위치정보 있는 게시글", response.posts[i])
             tmpFeedMapCount = tmpFeedMapCount + 1;
@@ -606,7 +606,7 @@ const ProfileScreen = ({navigation, route}: Props) => {
       }
 
       let tmpFeedMapCount = 0;
-      for(var i = 0; i < response.posts.length-1; i++) {
+      for(var i = 0; i < response.posts.length; i++) {
         if(response.posts[i].address) {
           console.log("위치정보 있는 게시글", response.posts[i])
           tmpFeedMapCount = tmpFeedMapCount + 1;

@@ -148,7 +148,6 @@ const SearchFeedList = ({navigation, route, feedListData}: Props) => {
   const currentUser = useSelector((state) => state.currentUser);
   
     const renderSearchFeedItem = ({item, index}: any) => {
-        console.log("renderSearchFeedItem item.Likers", item.Likers);
         return (
           <MemoizedFeedItem
           id={item.id}

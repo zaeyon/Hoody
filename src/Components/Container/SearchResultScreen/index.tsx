@@ -426,7 +426,7 @@ const SearchResultScreen = ({navigation, route}: Props) => {
     const keywordSearchFeedList = (query: string, order: string, feedOffset: number, feedLimit: number) => {
       GETSearchResult("post", query, order, feedOffset, feedLimit)
             .then(function(response) {
-            console.log("GETSearchResult response", response);
+            console.log("keywordSearchFeedList response", response);
             setSearchResultFeedListData(response.data);
             setLoadingFeed(false);
             setRefreshingSearchData(false);
@@ -595,7 +595,7 @@ const SearchResultScreen = ({navigation, route}: Props) => {
     }
 
     const loadMoreSearchFeedData = () => {
-      if(noMoreSearchFeedData) {
+      if(noMoreSearchFeedData || refreshingSearchData) {
         return
       } else {
       console.log("게시글 검색 결과 무한 스크롤");
@@ -612,6 +612,7 @@ const SearchResultScreen = ({navigation, route}: Props) => {
               .then(function(response) {
               console.log("GETSearchResult response", response);
               if(response.data.length === 0) {
+                console.log("더이상 불러올 데이터 없음")
                 setNoMoreSearchFeedData(true);
               } else {
               setSearchResultFeedListData(searchResultFeedListData.concat(response.data));
@@ -625,7 +626,7 @@ const SearchResultScreen = ({navigation, route}: Props) => {
     }
 
     const loadMoreSearchCollectionData = () => {
-      if(noMoreSearchCollectionData) {
+      if(noMoreSearchCollectionData || refreshingSearchCollectionData) {
         return
       } else {
       console.log("컬렉션 검색 결과 무한 스크롤");

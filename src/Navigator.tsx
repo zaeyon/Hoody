@@ -127,6 +127,7 @@ import ProductWebView from '~/Components/Container/ProductWebView';
 
 // Route
 import POSTAutoLogin from '~/Route/Auth/POSTAutoLogin';
+import GETFeed from '~/Route/Home/GETFeed';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
@@ -156,7 +157,27 @@ const config = {
   },
 };
 
-function HomeStackScreen() {
+function HomeStackScreen({navigation}: any) {
+  const [feedListData, setFeedListData] = useState<Array<object>>([]);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('tabPress', (e:any) => {
+      // Home Feed List Reload
+      GETFeed(0, 10)
+    .then(function(response) {
+    console.log("파드 목록 가져오기 성공@@@", response);
+    //setFeedListData(response.result);
+    dispatch(allActions.feedListAction.setHomeFeedList(response.result));
+  })
+  .catch(function(error) {
+    console.log("피드 목록 가져오기 실패", error);
+  })
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
   return (
     <HomeStack.Navigator 
     headerMode="none">
@@ -356,8 +377,8 @@ function ProfileStackScreen() {
       name="FollowListScreen"
       component={FollowListScreen}/>
       <ProfileStack.Screen
-      name="AnotherUserProfileScreen"
-      component={AnotherUserProfileScreen}/>
+        name="AnotherUserProfileStack"
+        component={AnotherUserProfileStackScreen}/>
       <ProfileStack.Screen
       name="ScrapListScreen"
       component={ScrapListScreen}/>
@@ -727,7 +748,8 @@ function BottomTab() {
             }
           />
         ),
-        tabBarVisible: getTabBarVisibility(route)
+        unmountOnBlur: false,
+        tabBarVisible: getTabBarVisibility(route),
       })}
       />
       <Tab.Screen
@@ -743,7 +765,7 @@ function BottomTab() {
             }
           />
         ),
-        unmountOnBlur: true,
+        unmountOnBlur: false,
         tabBarVisible: getExploreTabBarVisibility(route)
       })}
       />

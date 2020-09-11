@@ -710,6 +710,20 @@ const AnotherUserProfileScreen = ({navigation, route}: Props) => {
     setVisibleMonthPicker(false);
   }
 
+  const moveToReport = () => {
+    Alert.alert('서비스 준비중입니다.', '', [
+      {
+        text: '확인',
+        onPress: () => 0,
+      }
+    ]);
+
+    /*
+    navigation.navigate("ReportScreen");
+    */
+  }
+
+
 
 
 
@@ -753,7 +767,8 @@ const AnotherUserProfileScreen = ({navigation, route}: Props) => {
      followerCount={userInfoData ? userInfoData.followersCount : ""}
      followingCount={userInfoData ? userInfoData.followingsCount : ""}
      feedCount={userInfoData ? userInfoData.postsCount : 0}
-     moveToFollowListScreen={moveToFollowListScreen}/>
+     moveToFollowListScreen={moveToFollowListScreen}
+     currentUserProfileBool={currentUser.user.nickname === route.params?.requestedUserNickname ? true : false}/>
    )
   }
 
@@ -769,6 +784,15 @@ const AnotherUserProfileScreen = ({navigation, route}: Props) => {
           </TouchableWithoutFeedback>
         </HeaderLeftContainer>
         <HeaderRightContainer>
+          {currentUser.user.nickname === route.params?.requestedUserNickname && (   
+          <TouchableWithoutFeedback onPress={() => moveToReport()}>
+          <MyProfileReportContainer>
+          <MyProfileReportImage
+          source={require('~/Assets/Images/ic_report.png')}/>
+          <MyProfileReportText>리포트</MyProfileReportText>
+        </MyProfileReportContainer>
+        </TouchableWithoutFeedback>
+          )}
           <TouchableWithoutFeedback onPress={() => moveToLocationFeedMap()}>
           <MyProfileReviewMapContainer>
             <MyProfileReviewMapImage

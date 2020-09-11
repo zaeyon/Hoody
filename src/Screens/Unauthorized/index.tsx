@@ -356,6 +356,9 @@ const Unauthorized = ({navigation}) => {
                   userId: response.user.id,
                 })
               )
+              dispatch(
+                allActions.userActions.setInputedKeywordList([])
+              )
             })
             .catch(function(error) {
               console.log("소셜 로그인 실패", error);
@@ -442,6 +445,9 @@ const Unauthorized = ({navigation}) => {
               userId: response.user.id,
             })
           )
+        dispatch(
+          allActions.userActions.setInputedKeywordList([])
+        )
         })
         .catch(function(error) {
           console.log("소셜 로그인 실패", error);
@@ -506,6 +512,9 @@ const Unauthorized = ({navigation}) => {
               userId: response.user.id,
             })
           )
+        dispatch(
+          allActions.userActions.setInputedKeywordList([])
+        )
         })
         .catch(function(error) {
           console.log("소셜 로그인 실패", error);

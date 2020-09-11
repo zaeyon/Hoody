@@ -112,7 +112,7 @@ const BodyContainer = Styled.View`
 const TagInputPlaceholder = Styled.Text`
  font-weight: bold;
  font-size: 24px;
- color: #3384FF;
+ color: #000000;
 `;
 
 
@@ -677,8 +677,8 @@ color: #cccccc;
 `;
 
 const RemoveDatePickerText = Styled.Text`
-font-size: 17px;
-color: #E90000;
+font-size: 30px;
+color: #cccccc;
 `;
 
 const ConsumptionDateText = Styled.Text`

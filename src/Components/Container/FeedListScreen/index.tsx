@@ -324,11 +324,13 @@ function FeedListScreen({navigation, route}: Props) {
   const [noMoreFeedListData, setNoMoreFeedListData] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const currentUser = useSelector((state: any) => state.currentUser);
-  const home = useSelector((state: any) => state.home);
+  const feedList = useSelector((state: any) => state.feedList);
   const dispatch = useDispatch();
 
+  console.log("feedList", feedList);
 
   useEffect(() => {
+    
     // Assume a message-notification contains a "type" property in the data payload of the screen to open
     messaging().onNotificationOpenedApp(remoteMessage => {
       console.log('background state notification: ',remoteMessage);
@@ -395,25 +397,9 @@ function FeedListScreen({navigation, route}: Props) {
   useEffect(() => {
     getFeedData();
     //setFeedListData(TEST_FEED_DATA);
-    if(currentUser.user) {
-    console.log("currentUser.user.likeFeeds@@", currentUser.user.likeFeeds);
-    }
-    var hasLocationPermission = true;
-    if (hasLocationPermission) {
-        Geolocation.getCurrentPosition(
-            (position) => {
-              console.log("현재 위치", position);
-              setCurrentLocation(position.coords);
-            },
-            (error) => {
-              // See error code charts below.
-              console.log(error.code, error.message);
-            },
-            { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
-        );
-      }
   }, []);
 
+  /*
   useEffect(() => {
     GETSearchAutoComplete(query, category)
     .then(function(response) {
@@ -424,6 +410,7 @@ function FeedListScreen({navigation, route}: Props) {
       console.log("검색 자동 완성 실패", error);
     })
   }, [query, category])
+  */
 
   const getAllFeedData = () => {
       // 서버테스트용 데이터
@@ -441,10 +428,11 @@ function FeedListScreen({navigation, route}: Props) {
 
 
   const getFeedData = () => {
-    GETFeed(offset, limit).then(function(response) {
+    GETFeed(offset, limit)
+    .then(function(response) {
     console.log("파드 목록 가져오기 성공@@@", response);
-    setFeedListData(response.result);
-    //dispatch(allActions.feedListAction.setHomeFeedList(response.result));
+    //setFeedListData(response.result);
+    dispatch(allActions.feedListAction.setHomeFeedList(response.result));
     setLoading(false);
     setRefreshing(false)
     setOnRefreshFeedList(!onRefreshFeedList)
@@ -528,7 +516,9 @@ function FeedListScreen({navigation, route}: Props) {
          setNoMoreFeedListData(true);
        } else if(response.data.result.length > 0) {
          console.log("불러올 데이터 존재", response.data.result.length)
-         setFeedListData(feedListData.concat(response.data.result))
+         //setFeedListData(feedListData.concat(response.data.result)) 
+        dispatch(allActions.feedListAction.setHomeFeedList(feedList.homeFeedList.concat(response.data.result)));
+        
        }
        })
        .catch(function(error) {
@@ -590,16 +580,16 @@ function FeedListScreen({navigation, route}: Props) {
       onMomentumScrollEnd={onScrollBottom}
       >
       <BodyContainer>
-      {feedListData[0] && (
+      {feedList.homeFeedList[0] && (
       <FeedListContainer>
       <FlatList
       showsVerticalScrollIndicator={false}
-      data={feedListData}
+      data={feedList.homeFeedList}
       renderItem={renderFeedItem}
       />
       </FeedListContainer>
       )}
-      {!feedListData[0] && (
+      {!feedList.homeFeedList[0] && (
       <NoFeedListContainer>
         <NoFeedText>등록된 게시글이 없습니다.</NoFeedText>
       </NoFeedListContainer>

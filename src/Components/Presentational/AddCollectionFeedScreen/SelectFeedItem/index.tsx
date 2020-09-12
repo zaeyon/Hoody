@@ -106,13 +106,6 @@ const SelectOrderCount = Styled.Text`
  color: #ffffff;
 `;
 
-const LoadingContainer = Styled.View`
-position: absolute;
- width: ${wp('100%')};
- height: ${hp('100%')};
- align-items: center;
- justify-content: center;
-`;
 
 interface Props {
     index: number,

@@ -48,7 +48,6 @@ const HeaderBar = Styled.View`
 `;
 
 const HeaderLeftContainer = Styled.View`
- 
 `;
 
 const MyProfileSettingContainer = Styled.View`

@@ -480,7 +480,7 @@ const ProfileScreen = ({navigation, route}: Props) => {
   const [feedMapCount, setFeedMapCount] = useState<number>(0);
 
   const currentUser = useSelector((state: any) => state.currentUser);
-  const currentUserProfile = useSelector((state: any) => state.currentUser);
+  const currentUserProfile = useSelector((state: any) => state.currentUser.user);
   const locationFeedList = useSelector((state: any) => state.feedList);
   const dispatch = useDispatch();
 
@@ -488,12 +488,12 @@ const ProfileScreen = ({navigation, route}: Props) => {
     if(currentUserProfile) {
       console.log("프로필 정보 변경", currentUserProfile);
       setUserProfileInfo({
-        email: currentUserProfile.user.email,
-        profileImage : currentUserProfile.user.profileImage,
-        nickname: currentUserProfile.user.nickname,
-        description: currentUserProfile.user.description,
-        birthdate: currentUserProfile.user.birthDate,
-        gender: currentUserProfile.user.gender,
+        email: currentUserProfile.email,
+        profileImage : currentUserProfile.profileImage,
+        nickname: currentUserProfile.nickname,
+        description: currentUserProfile.description,
+        birthdate: userProfileInfo?.birthdate,
+        gender: userProfileInfo?.gender,
       })
     }
   }, [currentUserProfile])
@@ -539,6 +539,7 @@ const ProfileScreen = ({navigation, route}: Props) => {
           birthdate: response.birthdate,
           gender: response.gender,
         }
+
         setUserProfileInfo(profileInfo);
         console.log("response.followed", response.followed)
       }).catch(function(error) {

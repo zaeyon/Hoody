@@ -101,6 +101,8 @@ interface Props {
 
 const SettingScreen = ({navigation, route}: Props) => {
 
+    console.log("SettingScreen route.params.profileInfo", route.params?.profileInfo)
+
     const moveToAccountSetting = () => {
         navigation.navigate("AccountSettingScreen", {
             profileInfo: route.params?.profileInfo,

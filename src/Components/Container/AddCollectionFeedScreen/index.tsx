@@ -4,7 +4,7 @@ import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import {TouchableWithoutFeedback, FlatList} from 'react-native';
+import {TouchableWithoutFeedback, FlatList, ActivityIndicator} from 'react-native';
 import {useSelector} from 'react-redux';
 
 // Local Component
@@ -101,6 +101,15 @@ border-radius: 100px;
 background-color: #ffffff;
 `;
 
+
+const LoadingContainer = Styled.View`
+position: absolute;
+ width: ${wp('100%')};
+ height: ${hp('100%')};
+ align-items: center;
+ justify-content: center;
+`;
+
 interface Props {
     navigation: any,
     route: any,
@@ -133,6 +142,7 @@ const AddCollectionFeedScreen = ({navigation, route}: Props) => {
     const [changeFeedList, setChangeFeedList] = useState<boolean>(false);
     const [triggerType, setTriggerType] = useState<string>("");
     const [cancleAddFeed, setCancleAddFeed] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolaen>(false);
 
     const currentUser = useSelector((state) => state.currentUser);
 
@@ -232,6 +242,7 @@ const AddCollectionFeedScreen = ({navigation, route}: Props) => {
     }
 
     const finishAddCollectionFeed = () => {
+        setLoading(true);
         console.log("triggerType", triggerType);
         if(triggerType === "modifyCollection") {
             navigation.navigate("CollectionFeedEditScreen", {
@@ -247,12 +258,14 @@ const AddCollectionFeedScreen = ({navigation, route}: Props) => {
             setTimeout(() => {
                 POSTCreateCollection(route.params.coverImage, route.params.title, route.params.description, !route.params.private, route.params.includeLocation, selectingFeedIdList)
                 .then(function(response) {
+                    setLoading(false);
                     console.log("콜렉션 업로드 성공", response);
                     navigation.navigate("ProfileScreen", {
                         collectionListChange: true,
                     });
                 })
                 .catch(function(error) {
+                    setLoading(false);
                     console.log("콜렉션 업로드 실패", error);
                 })  
             })
@@ -329,6 +342,11 @@ const AddCollectionFeedScreen = ({navigation, route}: Props) => {
                 data={selectableFeedList}
                 renderItem={renderMyFeedTileItem}/>
             </MyFeedTileListContainer>
+            {loading && (
+            <LoadingContainer>
+                <ActivityIndicator/>
+            </LoadingContainer>
+            )}
         </Container>
     )
 }

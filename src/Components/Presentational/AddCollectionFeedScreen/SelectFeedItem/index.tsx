@@ -4,7 +4,7 @@ import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import {TouchableWithoutFeedback} from 'react-native'
+import {TouchableWithoutFeedback, ActivityIndicator} from 'react-native'
 
 const ProfileTileFeedItemContainer = Styled.View`
  width: ${wp('47.8%')};
@@ -104,6 +104,14 @@ const SelectOrderCount = Styled.Text`
  font-weight: 600;
  font-size: 16px;
  color: #ffffff;
+`;
+
+const LoadingContainer = Styled.View`
+position: absolute;
+ width: ${wp('100%')};
+ height: ${hp('100%')};
+ align-items: center;
+ justify-content: center;
 `;
 
 interface Props {

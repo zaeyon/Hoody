@@ -13,6 +13,8 @@ import {
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 
+import {useSelector} from 'react-redux';
+
 const PropTypes = require('prop-types');
 const createReactClass = require('create-react-class');
 const Button = require('./Button');
@@ -77,6 +79,8 @@ const AnotherUserProfileTabBar = createReactClass({
     changeInFeedSortType: PropTypes.func,
     selectedFeedSortType: PropTypes.string,
     addNewCollection: PropTypes.func,
+    requestedUserNickname: PropTypes.string,
+    currentUserNickname: PropTypes.string,
   },
 
   getDefaultProps() {
@@ -181,6 +185,16 @@ const AnotherUserProfileTabBar = createReactClass({
               </TypeIconContainer>
               </TouchableWithoutFeedback>
             )}
+        </TabIconContainer>
+      )}
+      {this.props.currentUserNickname === this.props.requestedUserNickname && this.props.activeTab === 1 && (
+         <TabIconContainer>
+          <TouchableWithoutFeedback onPress={() => clickToAddCollection()}>
+            <AddCollectionContainer>
+              <AddCollectionIcon
+              source={require('~/Assets/Images/ic_addCollection.png')}/>
+            </AddCollectionContainer>
+          </TouchableWithoutFeedback>
         </TabIconContainer>
       )}
       </AnotherUserProfileTabBarContainer>

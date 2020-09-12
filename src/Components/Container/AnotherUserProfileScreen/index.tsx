@@ -40,7 +40,7 @@ const CollectionListTabContainer = Styled.View`
 
 const HeaderBar = Styled.View`
  width: ${wp('100%')};
- height: ${wp('11.7%')};
+ height: ${wp('13.8%')};
  flex-direction: row;
  align-items: center;
  justify-content: space-between;
@@ -523,7 +523,7 @@ const AnotherUserProfileScreen = ({navigation, route}: Props) => {
       GetProfileCollection(route.params.requestedUserNickname)
       .then(function(response) {
         console.log("GetProfileCollection response", response);
-        setCollectionListData(JSON.parse(response.collections));
+        setCollectionListData(response.profileUser.collections);
         setChangeProfileData(!changeProfileData);
       })
       .catch(function(error) {
@@ -635,7 +635,9 @@ const AnotherUserProfileScreen = ({navigation, route}: Props) => {
   }
 
   const addNewCollection = () => {
-    navigation.navigate("CollectionUploadScreen")
+    navigation.navigate("CollectionStack", {
+      screen: "CollectionUploadScreen"
+    })
   }
 
   const moveToFollowListScreen = (requestedType: string) => {
@@ -814,14 +816,15 @@ const AnotherUserProfileScreen = ({navigation, route}: Props) => {
       refreshingCollection={refreshingProfileCollection}
       onRefreshFeed={onRefreshProfileFeed}
       onRefreshCollection={onRefreshProfileCollection}
-      
       collapsableBar={userIntroComponent()}
       initialPage={0}
       tabContentHeights={[feedListTabHeight, collectionListTabHeight]}
       scrollEnabled={true}
       showsVerticalScrollIndicator={false}
       prerenderingSiblingsNumber={Infinity}
-      renderTabBar={() => <AnotherUserProfileTabBar 
+      renderTabBar={() => <AnotherUserProfileTabBar
+      currentUserNickname={currentUser.user.nickname}
+      requestedUserNickname={route.params?.requestedUserNickname} 
       changeInFeedSortType={changeInFeedSortType}
       selectedFeedSortType={selectedFeedSortType}
       addNewCollection={addNewCollection}

@@ -132,6 +132,7 @@ const ProfileCollectionList = ({collectionListData, navigation, profileNickname,
         return (
             <UserCollectionListContainer>
                 <FlatList
+                contentContainerStyle={{paddingBottom:170}}
                 columnWrapperStyle={{justifyContent:'space-between', paddingLeft:15, paddingRight:15, paddingTop:17, paddingBottom:10, backgroundColor:'#ffffff'}}
                 numColumns={2}
                 data={collectionListData}

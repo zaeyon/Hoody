@@ -121,6 +121,8 @@ const FeedInfoContainer = Styled.View`
  padding-left: 16px;
  padding-right: 8px;
  flex-direction: column;
+ justify-content: center;
+ background-color: #ffffff;
 `;
 
 const TagContainer = Styled.View`
@@ -158,7 +160,7 @@ color: #56575C;
 `;
 
 const DeleteContainer = Styled.View`
-margin-top: 16px;
+margin-top: 23px;
 `;
 
 const DeleteText = Styled.Text`
@@ -348,7 +350,7 @@ const CollectionFeedEditScreen = ({navigation, route}: Props) => {
      <FeedImageContainer>
          {item.mediaFiles[0] && (
          <FeedImage
-         source={{uri:item.mediaFiles[0].uri}}/>
+         source={{uri:item.mediaFiles[0].url}}/>
          )}
          {!item.mediaFiles[0] && (
          <NoImage/>

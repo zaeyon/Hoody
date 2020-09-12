@@ -11,10 +11,13 @@ const POSTCollectionFeed = (collectionId, feedIds) => {
     formData.append("collectionId", collectionId);
     formData.append("posts", feedIds);
 
+    console.log("formData", formData);
+
     return new Promise(function(resolve, reject) {
         axios
         .post(url, formData)
         .then(function(response) {
+            console.log("POSTCollectionFeed",response);
             resolve(response.data)
         })
         .catch(function(error) {

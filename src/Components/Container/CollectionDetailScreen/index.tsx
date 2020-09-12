@@ -300,8 +300,8 @@ const LoadingContainer = Styled.View`
 
 
 const MarkerThumbnailImage = Styled.Image`
- width: 50px;
- height: 50px;
+ width: 34px;
+ height: 34px;
  border-radius: 50px;
 `;
 

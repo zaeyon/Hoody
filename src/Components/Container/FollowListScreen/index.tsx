@@ -324,6 +324,7 @@ const FollowListScreen = ({navigation, route}:Props) => {
 
 
     const renderFollowItem = ({item, index}: any) => {
+        console.log("renderFollowItem item", item);
         return (
             <FollowItem
             navigation={navigation}
@@ -332,7 +333,7 @@ const FollowListScreen = ({navigation, route}:Props) => {
             feedCount={item.feedCount}
             description={item.description}
             followState={item.followed}
-            userId={item.userId}
+            userId={item.id}
             />
         )
     }

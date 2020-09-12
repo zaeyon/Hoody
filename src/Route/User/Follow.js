@@ -3,6 +3,7 @@ const baseUrl = 'http://hoody-api-test-server-alb-349396782.ap-northeast-2.elb.a
 
 const POSTFollowUser = (targetUserId) => {
     const url = baseUrl + '/user/follow?userId=' + targetUserId;
+    console.log("POSTFollowUser targetUserId", targetUserId);
 
     return new Promise(function(resolve, reject) {
         axios
@@ -20,6 +21,7 @@ const POSTFollowUser = (targetUserId) => {
 
 const DELETEUnfollowUser = (targetUserId) => {
     const url = baseUrl + '/user/follow?userId=' + targetUserId;
+    console.log("DELETEUnfollowUser targetUserId", targetUserId);
 
     return new Promise(function(resolve, reject) {
         axios

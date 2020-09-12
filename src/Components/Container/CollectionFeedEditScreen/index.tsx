@@ -313,19 +313,20 @@ const CollectionFeedEditScreen = ({navigation, route}: Props) => {
     })
   }
 
+  const removeCollectionFeed = (item:any) => {
+
+    var tmpCollectionFeedList = collectionFeedList;
+    var index = collectionFeedList.indexOf(item);
+    console.log("삭제할 게시글 index", index);
+    tmpCollectionFeedList.splice(index, 1);
+    setCollectionFeedList(tmpCollectionFeedList);
+    setChangeFeedList(!changeFeedList);
+  }
+  
+
   const renderOrderingFeedItem = ({item, index, drag, isActive}: any) => {
     console.log("renderOrderingFeedItem item", item);
     return (
-      /*
-      <OrderingFeedItem
-      mainTag={item.mainTags?.name}
-      rating={item.starRate}
-      expense={item.expense}
-      mainImageUri={item.mediaFiles[0] ? item.mediaFiles[0].uri : null}
-      drag={drag}
-      isActive={isActive}
-      />
-      */
      <FeedItemContainer>
      <FeedInfoContainer>
          <TagContainer>
@@ -337,9 +338,11 @@ const CollectionFeedEditScreen = ({navigation, route}: Props) => {
          <RatingText>{item.starRate}</RatingText>
          <ExpenseText>{item.expense ? " · " + item.expense + "원" : ""}</ExpenseText>
          </MetadataContainer>
+         <TouchableWithoutFeedback onPress={() => removeCollectionFeed(item)}>
          <DeleteContainer>
              <DeleteText>삭제</DeleteText>
          </DeleteContainer>
+         </TouchableWithoutFeedback>
      </FeedInfoContainer>
      <RightContainer>
      <FeedImageContainer>

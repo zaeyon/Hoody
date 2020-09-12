@@ -12,7 +12,15 @@ const setLocationFeedList = (locationFeedList) => {
     }
 }
 
+const setHomeTabPress = (homeTabPress) => {
+    return {
+        type: 'SET_HOME_TAB_PRESS',
+        payload: homeTabPress,
+    }
+}
+
 export default {
+    setHomeTabPress,
     setHomeFeedList,
     setLocationFeedList,
 };

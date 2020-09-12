@@ -169,6 +169,7 @@ function HomeStackScreen({navigation}: any) {
     console.log("파드 목록 가져오기 성공@@@", response);
     //setFeedListData(response.result);
     dispatch(allActions.feedListAction.setHomeFeedList(response.result));
+    dispatch(allActions.feedListAction.setHomeTabPress(true));
   })
   .catch(function(error) {
     console.log("피드 목록 가져오기 실패", error);

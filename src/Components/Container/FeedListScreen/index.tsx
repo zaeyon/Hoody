@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useMemo} from 'react';
+import React, {useEffect, useState, useMemo, useRef} from 'react';
 import {TouchableWithoutFeedback, FlatList, View, Keyboard, ScrollView, RefreshControl, ActivityIndicator} from 'react-native';
 import Styled from 'styled-components/native';
 import {
@@ -109,197 +109,6 @@ margin-top: ${hp('35%')};
 
 `;
 
-const TEST_FEED_DATA = [
-  {
-    id: 1,
-    user : {
-      profileImg: 'https://i.pinimg.com/564x/36/64/bb/3664bbe5c35418ab85850b6314a84366.jpg',
-      nickname: '카페인중독자'
-    },
-    createAt: '2020-05-22',
-    starRate: 4.5,
-    commentsCount: 12,
-    replysCount: 3,
-    likes: 23,
-    mainTags : {
-      name: '을지로'
-    },
-    subTagOnes: {
-      name: '챔프커피'
-    },
-    subTagTwos: {
-      name: '카페투어'
-    },
-    address : {
-      address: '을지로 세운 대림상가 3층'
-    },
-    expense: "7,000",
-    descriptions: [
-      {
-        description: "이태원에서 이제는 을지로 세운대림상가에 오픈을 한 을지로 '챔프커피' 3호점 입니다. 벌써 3호점이라니 대단합니다. "
-      },
-      {
-        description: "내용2"
-      }
-    ],
-    mediaFiles: [
-      {
-        type: 'image',
-        url: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2F88HeB%2Fbtqvzgs1M1X%2Ftjan249YhEJsAdZPKVSXsK%2Fimg.png'
-      },
-      {
-        type: 'image',
-        url: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FUrtBr%2FbtqvAAqwXeS%2F6g7fhDFgLs9Ks9BKvOZGZK%2Fimg.png'
-      }
-    ],
-    paragraphData: [
-      {
-        type:"description",
-        description: "내용1"
-      },
-      {
-        type:"image",
-        url: 'https://img1.daumcdn.net/thumb/R720x0/?fname=https%3A%2F%2Ft1.daumcdn.net%2Fliveboard%2Fdailylife%2F6d8abd51eb3644958240a9ca6ddf28bd.JPG',
-      },
-      {
-        type:"description",
-        description: "내용2"
-      },
-      {
-        type: 'image',
-        url: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fk.kakaocdn.net%2Fdn%2Fb8lOJh%2FbtqBtL2bmwP%2FkUzXrFiEIRfFUKWowimMRk%2Fimg.jpg'
-      }
-    ]
-  },
-  {
-    id: 2,
-    user : {
-      profileImg: 'https://img.jjang0u.com/data3/chalkadak/306/201909/15/156850056031677.jpg',
-      nickname: '고기조아'
-    },
-    createAt: '2020-06-22',
-    starRate: 4,
-    mainTags : {
-      name: '멘야하나비'
-    },
-    subTagOnes: {
-      name: '비빔라면'
-    },
-    subTagTwos: {
-      name: '일식'
-    },
-    likes: 5,
-    commentsCount: 3,
-    replysCount: 1,
-    address : {
-      address: '멘야하나비 서울본점'
-    },
-    expense: "10,900",
-    descriptions: [
-      {
-        description: "석촌 호수 인근에 위치한 '멘야하나비'는 일본 비빔라면이 주메뉴. 다소 생소해 보이지만 툭 치고 올라오는 쫄깃하고 매콤한 맛의, 볶은 고기와..."
-      },
-      {
-        description: "ㅎ"
-      }
-    ],
-    mediaFiles: [
-      {
-        type: 'image',
-        url: 'https://img1.daumcdn.net/thumb/R720x0/?fname=https%3A%2F%2Ft1.daumcdn.net%2Fliveboard%2Fdailylife%2F6d8abd51eb3644958240a9ca6ddf28bd.JPG'
-      }
-    ],
-    paragraphData: [
-      {
-        type:"description",
-        description: "내용1"
-      },
-      {
-        type:"image",
-        url: 'https://img1.daumcdn.net/thumb/R720x0/?fname=https%3A%2F%2Ft1.daumcdn.net%2Fliveboard%2Fdailylife%2F6d8abd51eb3644958240a9ca6ddf28bd.JPG',
-      },
-      {
-        type:"description",
-        description: "내용2"
-      }
-    ]
-  },
-  {
-    id: 3,
-    user : {
-      profileImg: 'https://femiwiki-uploaded-files.s3.amazonaws.com/b/b5/%EB%85%B8%EB%9E%91%EC%83%89.png',
-      nickname: '데헷'
-    },
-    createAt: '2020-05-22',
-    starRate: 1.5,
-    mainTags : {
-      name: '스타벅스'
-    },
-    subTagOnes: {
-      name: '포크커틀릿샌드위치'
-    },
-    likes: 233,
-    address : {
-      address: '스타벅스 범계역점'
-    },
-    expense: 5900,
-    descriptions: [
-      {
-        description: "겹겹히 쌓은 등심으로 풍부한 식감의 커틀릿에 할라피뇨, 당근 잼을 넣어 매콤 달콤한 맛을 살린 든든한 샌드위치.. 라고 홈페이지에 소개 되어..."
-      },
-      {
-        description: "내용2"
-      }
-    ],
-    mediaFiles: [
-      {
-        type: 'image',
-        url: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fk.kakaocdn.net%2Fdn%2FJUreB%2FbtqCpQUtIUD%2Ff2rOUTYmBhgNc4rDxbreU0%2Fimg.jpg'
-      },
-      {
-        type: 'image',
-        url: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fk.kakaocdn.net%2Fdn%2Fb8lOJh%2FbtqBtL2bmwP%2FkUzXrFiEIRfFUKWowimMRk%2Fimg.jpg'
-      },
-      {
-        type: 'image',
-        url: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fk.kakaocdn.net%2Fdn%2FJUreB%2FbtqCpQUtIUD%2Ff2rOUTYmBhgNc4rDxbreU0%2Fimg.jpg'
-      }
-    ],
-    paragraphData: [
-      {
-        type:"description",
-        description: "내용1"
-      },
-      {
-        type:"image",
-        url: 'https://img1.daumcdn.net/thumb/R720x0/?fname=https%3A%2F%2Ft1.daumcdn.net%2Fliveboard%2Fdailylife%2F6d8abd51eb3644958240a9ca6ddf28bd.JPG',
-      },
-      {
-        type:"description",
-        description: "내용2"
-      },
-      {
-        type: 'image',
-        url: 'https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fk.kakaocdn.net%2Fdn%2Fb8lOJh%2FbtqBtL2bmwP%2FkUzXrFiEIRfFUKWowimMRk%2Fimg.jpg'
-      }
-    ]
-  },
-];
-
-const POPULAR_TAG_DATE = [
-  {
-    tag_image:
-      'https://item.kakaocdn.net/do/aebede13eed766c14f8e46d68509586c7154249a3890514a43687a85e6b6cc82',
-
-    tag_name: '아무거나',
-  },
-  {
-    tag_image:
-      'https://scontent-yyz1-1.cdninstagram.com/v/t51.2885-15/sh0.08/e35/s640x640/83096173_570405996888776_2961831972565807746_n.jpg?_nc_ht=scontent-yyz1-1.cdninstagram.com&_nc_cat=108&_nc_ohc=NvpWEnbC9AcAX_R_890&oh=c8945d8c09c40c2910563e0f8a22b621&oe=5EF86D59',
-    tag_name: '배고파',
-  },
-];
-
 interface Props {
   navigation: any,
   route: any
@@ -323,14 +132,16 @@ function FeedListScreen({navigation, route}: Props) {
   const [onRefreshFeedList, setOnRefreshFeedList] = useState<boolean>(false);
   const [noMoreFeedListData, setNoMoreFeedListData] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
+
   const currentUser = useSelector((state: any) => state.currentUser);
   const feedList = useSelector((state: any) => state.feedList);
   const dispatch = useDispatch();
 
+  const homeFeedListRef = useRef(null);
+
   console.log("feedList", feedList);
 
   useEffect(() => {
-    
     // Assume a message-notification contains a "type" property in the data payload of the screen to open
     messaging().onNotificationOpenedApp(remoteMessage => {
       console.log('background state notification: ',remoteMessage);
@@ -393,6 +204,14 @@ function FeedListScreen({navigation, route}: Props) {
         }
       });
   });
+
+  useEffect(() => {
+    if(feedList.homeTabPress) {
+      console.log("홈탭 눌림");
+      homeFeedListRef.current.scrollTo({x: 0, y: 0, animated: true})
+      dispatch(allActions.feedListAction.setHomeTabPress(false))
+    }
+  }, [feedList])
 
   useEffect(() => {
     getFeedData();
@@ -570,6 +389,7 @@ function FeedListScreen({navigation, route}: Props) {
       )}
       {!loading && (
       <ScrollView
+      ref={homeFeedListRef}
       style={{backgroundColor:'#FFFFFF'}}
       showsVerticalScrollIndicator={false}
       refreshControl={

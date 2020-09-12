@@ -1638,6 +1638,7 @@ const removeParagraphIndex = (index) => {
 }
 
 const clickToUploadFinish = () => {
+  setLoading(true);
   console.log("업로드할 paragraphData", paragraphData);
   var sequence = "";
   var descriptionStr = "";
@@ -1713,11 +1714,13 @@ const clickToUploadFinish = () => {
       .then(function(response) {
           if(response.status === 200) {
               console.log("후기 수정 성공", response);
+              setLoading(false);
               moveToFeedDetail();
           }
       })
       .catch(function(error) {
           console.log("후기 수정 실패", error);
+          setLoading(false);
       });
   }, 100)
 }
@@ -2333,7 +2336,8 @@ const renderAddNewDescripInput = () => {
       </Modal>
       {loading && (
           <LoadingContainer>
-              <ActivityIndicator/>
+              <ActivityIndicator
+              color={"#FFFFFF"}/>
           </LoadingContainer>
 
       )}

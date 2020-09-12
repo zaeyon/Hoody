@@ -1,12 +1,13 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import Styled from 'styled-components/native';
-import {TouchableWithoutFeedback, SectionList, FlatList, Alert, StyleSheet} from 'react-native';
+import {TouchableWithoutFeedback, SectionList, FlatList, Alert, StyleSheet, Keyboard} from 'react-native';
 import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import {useSelector, useDispatch} from 'react-redux';
 import allActions from '~/action';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 // Route
 import GETSearchAutoComplete from '~/Route/Search/GETSearchAutoComplete';
@@ -307,6 +308,7 @@ const SearchScreen = ({navigation}: Props) => {
     const currentUser = useSelector((state: any) => state.currentUser);
     const recentSearchList = useSelector((state: any) => state.search);
     const dispatch = useDispatch();
+    const searchInput = useRef(null);
 
     useEffect(() => {
        // dispatch(allActions.userActions.setInputedKeywordList([]))
@@ -473,6 +475,8 @@ const SearchScreen = ({navigation}: Props) => {
         }) 
         }   
         } else {
+        // 검색시 Keyboard dismiss
+        Keyboard.dismiss()
         navigation.navigate("SearchResultScreen");
         }
     }
@@ -658,6 +662,7 @@ const SearchScreen = ({navigation}: Props) => {
             <HeaderSearchContainer>
                 <SearchInputContainer>
                     <SearchInput
+                    ref={searchInput}
                     editable={currentUser.inputedKeywordList ? (currentUser.inputedKeywordList.length === 3 ? false : true) : true}
                     placeholder={currentUser.inputedKeywordList ? (currentUser.inputedKeywordList.length === 3 ? "키워드는 3개까지 입력 할 수 있습니다." : "검색") : null}
                     placeholderTextColor={"C6C7CC"}

@@ -1124,25 +1124,52 @@ useEffect(() => {
                 setConsumptionDateStr(convertDateFormat(response.post.spendDate));
                 setConsumptionDate(response.post.spendDate);
 
-                if(response.subTagOnes) {
+                if(response.post.subTagOnes) {
                     setSubTag1(response.post.subTagOnes.name);
                     setSubTag1Exis(true);
                 }
 
-                if(response.subTagTwos) {
+                if(response.post.subTagTwos) {
                     setSubTag2(response.post.subTagTwos.name);
                     setSubTag2Exis(true);
                 }
 
-                if(response.address) {
+                if(response.post.address) {
                     setLocation(response.post.address.address);
                 }
 
-                if(response.expense) {
+                if(response.post.expense) {
                     setExpense(response.post.expense);
                 }
+                
+                var tmpPostBody = response.postBody.map((item:any, index:number) => {
+                    if(item.type === "image") {
+                        var obj = {    
+                            index: item.index-1,  
+                            type: 'image',
+                            uri: item.url,
+                            image: {
+                                filename: item.filename,
+                                index: item.index-1,
+                                mimetype: item.mimetype,
+                                size: item.size,
+                                type: item.type,
+                                url: item.url,
+                                uri : item.url 
+                            }
+                        }
 
-                setParagraphData(response.postBody);
+                        return obj
+                    } else {
+                        item.index = item.index-1;
+                        return item
+                    }
+                })
+
+                setTimeout(() => {
+                    console.log("tmpPostBody", tmpPostBody);
+                    setParagraphData(tmpPostBody);
+                }, 10)
                 setRating(response.post.starRate);
                 setMainTagInserted(true);
                 setIncompleteMainTag(response.post.mainTags.name);

@@ -777,6 +777,7 @@ const LoadingContainer = Styled.View`
  position: absolute;
  width: ${wp('100%')};
  height: ${hp('100%')};
+ background-color: #00000040;
  align-items: center;
  justify-content: center;
 `;
@@ -2074,11 +2075,6 @@ const renderAddNewDescripInput = () => {
                 
                 )}
             </BodyContainer>
-            {loadingUpload && (
-                <LoadingContainer>
-                    <ActivityIndicator/>
-                </LoadingContainer>
-            )}
             <View style={{position:'absolute', bottom:0}}>
         <View>
         <GetTextWidthContainer>
@@ -2305,6 +2301,12 @@ const renderAddNewDescripInput = () => {
                            </RadioForm>
         </SettingModalContainer>
       </Modal>
+      {loadingUpload && (
+                <LoadingContainer>
+                    <ActivityIndicator
+                    color={"#ffffff"}/>
+                </LoadingContainer>
+            )}
             </Container>
     )
 }

@@ -306,15 +306,11 @@ const MarkerThumbnailImage = Styled.Image`
 `;
 
 const MarkerThumbnailContainer = Styled.View`
- flex:1;
- width: 66px;
- height: 66px;
- justify-content: center;
- align-items: center;
- padding-top: 0px;
- padding-left: 0px;
- padding-right: 3px;
- padding-bottom: 6px;
+flex:1;
+justify-content: center;
+align-items: center;
+padding-top: 4.2px;
+padding-left: 7px;
 `;
 
 
@@ -405,8 +401,17 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
                setRefreshingCollection(false);
                console.log("GETCollectionDetailInfo response", response)
                console.log("GETCollectionDetailInfo response.Posts", response.collection.Posts);
-               response.collection.Posts.forEach((item: any) => {
+               response.collection.Posts.forEach((item: any, index: number) => {
                    if(item.address) {
+                       if(index === 0) {
+                           var mapRegion = {
+                            latitude:  item.address.geographLat,
+                            longitude: item.address.geographLong,
+                            latitudeDelta: 0.0022,
+                            longitudeDelta: 0.0421,
+                           }
+                           setInitialMapRegion(mapRegion)
+                       }
                        console.log("locationFeedList item.address", item.address)
                        tmpLocationFeedList.push(item)
                    }
@@ -746,6 +751,7 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
                   provider={PROVIDER_GOOGLE}
                   initialRegion={initialMapRegion}>
                       {locationFeedList?.map((item, index) => {
+                        console.log("locationFeedList item", item);
                        return (
                         <Marker
                         coordinate={{
@@ -759,7 +765,7 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
                         image={require('~/Assets/Images/Map/ic_marker_small.png')}>
                         <MarkerThumbnailContainer>
                             <MarkerThumbnailImage
-                            style={!item.mediaFiles[0] && {width: 22, height: 22, marginBottom:5, marginLeft:2}}
+                            style={!item.mediaFiles[0] && {width: 20, height: 20, marginTop:7, marginLeft:7}}
                             source={
                             item.mediaFiles[0]
                             ? {uri:item.mediaFiles[0].url}

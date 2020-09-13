@@ -49,12 +49,9 @@ const BodyContainer = Styled.View`
 `;
 
 const FooterContainer = Styled.View`
-padding-top: 10px;
-padding-bottom: 13px;
-padding-left: 5px;
-padding-right: 5px;
+padding-top: 12px;
+padding-bottom: 4px;
 `;
-
 const FooterLeftContainer = Styled.View`
 flex-direction: row;
 `;
@@ -285,8 +282,12 @@ const InfoDivider = Styled.Text`
 `;
 
 const InfoContainer = Styled.View`
- flex-direction: row;
- align-items: center;
+flex-direction: row;
+align-items: center;
+padding-top: 6px;
+padding-left: 6px;
+padding-right: 6px;
+padding-bottom: 6px;
 `;
 
 const ItemBottomBorder = Styled.View`
@@ -296,20 +297,19 @@ const ItemBottomBorder = Styled.View`
 `;
 
 const LikeIcon = Styled.Image`
-width: ${wp('4.0%')}px;
-height: ${wp('3.5%')}px;
+width: ${wp('4.4%')}px;
+height: ${wp('3.8%')}px;
 `;
 
 const CommentIcon = Styled.Image`
-width: ${wp('4%')}px;
-height: ${wp('4%')}px;
+width: ${wp('4.3%')}px;
+height: ${wp('4.3%')}px;
 `;
 
 const ScrapIcon = Styled.Image`
-width: ${wp('4.5%')}px;
-height: ${wp('4.5%')}px;
+width: ${wp('4.8%')}px;
+height: ${wp('4.8%')}px;
 `;
-
 const ExpenseText = Styled.Text`
  font-weight: 500;
  font-size: 13px;

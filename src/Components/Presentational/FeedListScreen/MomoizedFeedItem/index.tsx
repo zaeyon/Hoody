@@ -48,8 +48,8 @@ const BodyContainer = Styled.View`
 `;
 
 const FooterContainer = Styled.View`
-padding-top: 10px;
-padding-bottom: 10px;
+padding-top: 12px;
+padding-bottom: 4px;
 `;
 
 const FooterLeftContainer = Styled.View`
@@ -297,7 +297,7 @@ const ItemBottomBorder = Styled.View`
 `;
 
 const LikeIcon = Styled.Image`
-width: ${wp('4.3%')}px;
+width: ${wp('4.4%')}px;
 height: ${wp('3.8%')}px;
 `;
 

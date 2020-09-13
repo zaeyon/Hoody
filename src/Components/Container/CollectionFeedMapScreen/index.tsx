@@ -127,7 +127,16 @@ const CollectionFeedMapScreen = ({navigation, route}: Props) => {
             setLocationFeedList(route.params.locationFeedList);
         }
     }, [route.params?.locationFeedList]);
-    
+
+    const moveToFeedDetail = (postId: number) => {
+        navigation.push("FeedStack", {
+          screen: "FeedDetailScreen",
+          params: {
+          postId:postId,
+          }
+        })
+      }
+
     return (
         <Container>
             <HeaderBar>
@@ -149,6 +158,7 @@ const CollectionFeedMapScreen = ({navigation, route}: Props) => {
                         console.log("locationFeedList item", item);
                        return (
                         <Marker
+                        onPress={() => moveToFeedDetail(item.id)}
                         coordinate={{
                             latitude: item.address.geographLat,
                             longitude: item.address.geographLong,

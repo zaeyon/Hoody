@@ -49,11 +49,36 @@ padding: 12.5px 15px 10px 15px;
  justify-content: center;
 `;
 
+
+
 const BackButton = Styled.Image`
  width: ${wp('6.4%')};
  height: ${wp('6.4%')};
  tint-color: #ffffff;
 `;
+
+const BackIconBackground = Styled.View`
+ padding: 10px 10px 10px 14px;
+ width: ${wp('8%')};
+ height: ${wp('8%')};
+ background-color: #00000008;
+ align-items: center;
+ justify-content: center;
+ border-radius: 50px;
+`;
+
+
+const MoreIconBackground = Styled.View`
+ padding: 10px 10px 10px 10px;
+ width: ${wp('8%')};
+ height: ${wp('8%')};
+ background-color: #00000008;
+ align-items: center;
+ justify-content: center;
+ border-radius: 50px;
+`;
+
+
 
 const HeaderCollectionTitleText = Styled.Text`
  font-weight: 500;
@@ -144,13 +169,14 @@ const MarkerFeedImage = Styled.Image`
 const CollectionInfoContainer = Styled.View`
  width: ${wp('100%')};
  background-color: #ffffff;
- padding: 0px 16px 11px 16px;
+ padding: 10px 16px 11px 16px;
 `;
 
 const CollectionInfoHeader = Styled.View`
  flex-direction: row;
  align-items: center;
  justify-content: space-between;
+ padding-top: 20px;
  padding-bottom: 9px;
  border-bottom-width: 0.6px;
  border-color: #ececee;
@@ -369,7 +395,7 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
         latitudeDelta: 2.5022,
         longitudeDelta: 4.0421,
       })
-    const H_MAX_HEIGHT = wp('100%')
+    const H_MAX_HEIGHT = wp('90%')
     const H_MIN_HEIGHT = isIphoneX() ? wp('25.6%') : wp('19%');
     const H_SCROLL_DISTANCE = H_MAX_HEIGHT - H_MIN_HEIGHT;
 
@@ -609,6 +635,15 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
         })
     }
 
+    const moveToFeedDetail = (postId: number) => {
+        navigation.push("FeedStack", {
+          screen: "FeedDetailScreen",
+          params: {
+          postId:postId,
+          }
+        })
+      }
+
     return (
         <Container>
             {!loadingCollection && (
@@ -632,8 +667,10 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
                 <HeaderLeftContainer>
                     <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
                     <BackButtonContainer>
+                    <BackIconBackground>
                     <BackButton
                     source={require('~/Assets/Images/HeaderBar/ic_back.png')}/>
+                    </BackIconBackground>
                     </BackButtonContainer>
                     </TouchableWithoutFeedback>
                 </HeaderLeftContainer>
@@ -642,8 +679,10 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
                 )}
                 <TouchableWithoutFeedback onPress={() => showActionSheet()}>
                 <HeaderRightContainer>
+                    <MoreIconBackground>
                     <CollectionMoreIcon
                     source={require('~/Assets/Images/HeaderBar/ic_more.png')}/>
+                    </MoreIconBackground>
                 </HeaderRightContainer>
                 </TouchableWithoutFeedback>
             </HeaderBar>
@@ -763,6 +802,7 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
                         console.log("locationFeedList item", item);
                        return (
                         <Marker
+                        onPress={() => moveToFeedDetail(item.id)}
                         coordinate={{
                             latitude: item.address.geographLat,
                             longitude: item.address.geographLong,

@@ -651,7 +651,10 @@ function CollectionStackScreen() {
     <CollectionStack.Screen
       name="CollectionFeedMapScreen"
       component={CollectionFeedMapScreen}/>
-    <NoBottomBarStack.Screen 
+    <CollectionStack.Screen
+      name="FeedStack"
+      component={FeedStackScreen}/>
+    <CollectionStack.Screen 
       name="AddCollectionFeedScreen" 
       component={AddCollectionFeedScreen}/>
     </CollectionStack.Navigator>

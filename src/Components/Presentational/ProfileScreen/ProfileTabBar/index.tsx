@@ -117,7 +117,7 @@ const ProfileTabBar = createReactClass({
     const tabUnderlineStyle = {
       position: 'absolute',
       width: wp('10.5%'),
-      height: 2,
+      height: 2.0,
       backgroundColor: 'black',
       bottom: 0,
       left: 1.0,

@@ -12,7 +12,7 @@ import ProfileCollectionItem from '~/Components/Presentational/ProfileScreen/Pro
 const UserCollectionListContainer = Styled.View`
 width: ${wp('100%')};
 background-color: #ffffff;
-padding-bottom: 50px;
+padding-bottom: 150px;
 `;
 
 const NoCollectionContainer = Styled.View`
@@ -132,7 +132,8 @@ const ProfileCollectionList = ({collectionListData, navigation, profileNickname,
         return (
             <UserCollectionListContainer>
                 <FlatList
-                contentContainerStyle={{paddingBottom:170}}
+                scrollEnabled={false}
+                contentContainerStyle={{paddingBottom:0}}
                 columnWrapperStyle={{justifyContent:'space-between', paddingLeft:15, paddingRight:15, paddingTop:17, paddingBottom:10, backgroundColor:'#ffffff'}}
                 numColumns={2}
                 data={collectionListData}

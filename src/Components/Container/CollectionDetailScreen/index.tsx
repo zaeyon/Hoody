@@ -502,6 +502,12 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
         })
     }
 
+    const moveToCollectionFeedMap = () => {
+        navigation.navigate("CollectionFeedMapScreen", {
+            locationFeedList: locationFeedList,
+        })
+    }
+
     const onPressActionSheet = (index: number) => {
         console.log("actionsheet press index", index);
         if(index === 1) {
@@ -742,11 +748,13 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
                   />
                   {collectionDetailInfo?.includeLocation && (
                   <LocationMapContainer>
+                  <TouchableWithoutFeedback onPress={() => moveToCollectionFeedMap()}>
                   <LocationMapHeaderBar>
                       <LocationMapText>지도</LocationMapText>
                       <LocationMapNextIcon
                       source={require('~/Assets/Images/ic_mapNext.png')}/>
                   </LocationMapHeaderBar>
+                  </TouchableWithoutFeedback>
                   <MapView
                   style={{flex:1}}
                   provider={PROVIDER_GOOGLE}

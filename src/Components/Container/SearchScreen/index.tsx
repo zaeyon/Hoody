@@ -231,6 +231,10 @@ background-color: #F7F7F7;
 opacity: 0.7;
 `;
 
+const KeyboardAwareContainer = Styled.View`
+
+`;
+
 
 
 const TEST_RECENTLY_DATA = [
@@ -686,6 +690,9 @@ const SearchScreen = ({navigation}: Props) => {
             </TouchableWithoutFeedback>
             )}
             </HeaderBar>
+            <KeyboardAwareScrollView 
+            showsVerticalScrollIndicator={false}>
+            <KeyboardAwareContainer>
             <SelectedSearchItemListContainer>
                 <FlatList
                 keyboardShouldPersistTaps={"handled"}
@@ -711,6 +718,8 @@ const SearchScreen = ({navigation}: Props) => {
             />
         </SearchResultContainer>
             )}
+            </KeyboardAwareContainer>
+            </KeyboardAwareScrollView>
             {noInputSearch && (
                 <NoSearchInputContainer>
                     {/*

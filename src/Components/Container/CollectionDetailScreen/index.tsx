@@ -9,6 +9,7 @@ import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import { getStatusBarHeight } from 'react-native-status-bar-height';
 import ActionSheet from 'react-native-actionsheet';
 import {useSelector ,useDispatch} from 'react-redux';
+import {isIphoneX} from 'react-native-iphone-x-helper'
 import allActions from '~/action';
 
 // Local Component
@@ -369,7 +370,7 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
         longitudeDelta: 4.0421,
       })
     const H_MAX_HEIGHT = wp('100%')
-    const H_MIN_HEIGHT = wp('25.6%');
+    const H_MIN_HEIGHT = isIphoneX() ? wp('25.6%') : wp('19%');
     const H_SCROLL_DISTANCE = H_MAX_HEIGHT - H_MIN_HEIGHT;
 
     const scrollOffsetY = useRef(new Animated.Value(0)).current;

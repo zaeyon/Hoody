@@ -107,8 +107,8 @@ const AnotherUserProfileTabBar = createReactClass({
       accessibilityTraits='button'
       onPress={() => onPressHandler(page)}
     >
-      <View style={[styles.tab, this.props.tabStyle,]}>
-        <Text style={[{ color: textColor, fontWeight, fontSize: 18  }, textStyle,]}>
+      <View style={[styles.tab]}>
+        <Text style={[{ color: textColor, fontWeight, fontSize: 16  }, textStyle,]}>
           {name}
         </Text>
       </View>

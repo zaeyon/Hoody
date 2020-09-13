@@ -103,8 +103,8 @@ const ProfileTabBar = createReactClass({
       accessibilityTraits='button'
       onPress={() => onPressHandler(page)}
     >
-      <View style={[styles.tab, this.props.tabStyle,]}>
-        <Text style={[{ color: textColor, fontWeight, fontSize: 18  }, textStyle,]}>
+      <View style={[styles.tab]}>
+        <Text style={[{ color: textColor, fontWeight, fontSize: 16  }, textStyle,]}>
           {name}
         </Text>
       </View>
@@ -206,9 +206,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingBottom: 0,
     paddingTop: 13,
-    paddingLeft:15,
+    marginLeft: 15,
     width: wp('35%'),
-    height: wp('12%'),
+    height: wp('10%'),
   },
   tabs: {
     height: wp('12%'),

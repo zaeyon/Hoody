@@ -68,6 +68,7 @@ import CollectionUploadScreen from '~/Components/Container/CollectionUploadScree
 import AddCollectionFeedScreen from '~/Components/Container/AddCollectionFeedScreen';
 import CollectionModifyScreen from '~/Components/Container/CollectionModifyScreen';
 import CollectionFeedEditScreen from '~/Components/Container/CollectionFeedEditScreen';
+import CollectionFeedMapScreen from '~/Components/Container/CollectionFeedMapScreen';
 
 // Scrap Screen
 import ScrapListScreen from '~/Components/Container/ScrapListScreen';
@@ -647,6 +648,9 @@ function CollectionStackScreen() {
     <CollectionStack.Screen 
       name="CollectionFeedEditScreen" 
       component={CollectionFeedEditScreen}/>
+    <CollectionStack.Screen
+      name="CollectionFeedMapScreen"
+      component={CollectionFeedMapScreen}/>
     <NoBottomBarStack.Screen 
       name="AddCollectionFeedScreen" 
       component={AddCollectionFeedScreen}/>

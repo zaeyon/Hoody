@@ -25,7 +25,7 @@ import DELETECollection from '~/Route/Collection/DELETECollection';
 import {POSTFollowUser, DELETEUnfollowUser} from '~/Route/User/Follow';
 
 const actionSheetRef = createRef();
-const Container = Styled.SafeAreaView`
+const Container = Styled.View`
  flex: 1;
  background-color: #ffffff;
 `;
@@ -76,7 +76,7 @@ height: ${wp('8%')};
 const LocationMapContainer = Styled.View`
 margin-top: 30px;
 width: ${wp('100%')};
-height: ${wp('80%')};
+height: ${wp('90%')};
 `;
 
 const LocationMapHeaderBar = Styled.View`

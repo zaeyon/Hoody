@@ -17,7 +17,7 @@ const Container = Styled.View`
 `;
 
 const HeaderContainer = Styled.View`
-padding-top: 20px;
+margin-top: 22px;
 padding-left: 16px;
 padding-bottom: 12px;
 padding-right: 12px;

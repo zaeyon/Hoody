@@ -78,7 +78,7 @@ const NoFeedListContainer = Styled.View`
 
 const FeedListContainer = Styled.View`
  width: ${wp('100%')}px;
- padding-bottom: ${isIphoneX() ? 32 : 45}
+ padding-bottom: ${isIphoneX() ? hp("5.5%") : hp("8%")}
  background-color: #ffffff;
 `;
 
@@ -321,7 +321,6 @@ function FeedListScreen({navigation, route}: Props) {
     if(!noMoreFeedListData) {
       console.log("피드리스트 데이터 더 불러오기")
       offset = offset + 10;
-      limit = limit + 10;
       var url = baseUrl + '/feed?offset=' + offset + "&limit=" + limit;  
 
       console.log("피드리스트데이터 불러오기 offset", offset);

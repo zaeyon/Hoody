@@ -388,6 +388,7 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
     const [loadingCollection, setLoadingCollection] = useState<boolean>(true);
     const [refreshingCollection, setRefreshingCollection] = useState<boolean>(false);
     const [locationFeedList, setLocationFeedList] = useState<Array<object>>([]);
+    const [mapRegionChange, setMapRegionChange] = useState<boolean>(false);
 
     const [initialMapRegion, setInitialMapRegion] = useState<Region>({
         latitude:  35.9,
@@ -430,7 +431,7 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
                console.log("GETCollectionDetailInfo response.Posts", response.collection.Posts);
                response.collection.Posts.forEach((item: any, index: number) => {
                    if(item.address) {
-                       if(index === 0) {
+                       if(!mapRegionChange) {
                            var mapRegion = {
                             latitude:  item.address.geographLat,
                             longitude: item.address.geographLong,
@@ -438,6 +439,7 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
                             longitudeDelta: 0.0421,
                            }
                            setInitialMapRegion(mapRegion)
+                           setMapRegionChange(true);
                        }
                        console.log("locationFeedList item.address", item.address)
                        tmpLocationFeedList.push(item)

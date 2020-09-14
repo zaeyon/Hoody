@@ -207,7 +207,10 @@ const ProfileEditScreen = ({navigation, route}: Props) => {
     const [description, setDescription] = useState<string>(currentUser.user?.description ? currentUser.user.description : "");
     const [profileImageUri, setProfileImageUri] = useState<any>(currentUser.user?.profileImage);
     const [loading, setLoading] = useState<boolean>(false);
-    const [profileImage, setProfileImage] = useState<object>();
+    const [profileImage, setProfileImage] = useState<object>({
+        uri: currentUser.user?.profileImage,
+        filename: currentUser.user?.nickname + "profileImage.JPG",
+    });
 
     /*
     useEffect(() => {
@@ -221,7 +224,7 @@ const ProfileEditScreen = ({navigation, route}: Props) => {
 
     useEffect(() => {
         if(route.params?.selectedProfileImage) {
-            console.log("프로필 사진 변경됌");
+            console.log("프로필 사진 변경됌", route.params?.selectedProfileImage);
             setProfileImageUri(route.params?.selectedProfileImage.uri);
             setProfileImage(route.params.selectedProfileImage)
         }
@@ -244,7 +247,7 @@ const ProfileEditScreen = ({navigation, route}: Props) => {
         setLoading(true);
         if(currentUser.user.nickname !== nickname) {
         console.log("닉네임 바뀜")
-        POSTProfileUpdate(description, profileImageUri, nickname)
+        POSTProfileUpdate(description, profileImage, nickname)
         .then(function(response ){
             setLoading(false);
             console.log("completeProfileEdit response", response);
@@ -252,7 +255,7 @@ const ProfileEditScreen = ({navigation, route}: Props) => {
             console.log("modifiedProfile", modifiedProfile);
             modifiedProfile.nickname = nickname;
             modifiedProfile.description = description;
-            modifiedProfile.profileImage = profileImageUri;
+            modifiedProfile.profileImage = profileImage.uri;
             setTimeout(() => {
             dispatch(allActions.userActions.setUser(modifiedProfile));
             navigation.navigate("ProfileScreen", {
@@ -274,13 +277,13 @@ const ProfileEditScreen = ({navigation, route}: Props) => {
         })
         } else if(currentUser.user.nickname === nickname) {
         console.log("닉네임 안바뀜");
-        POSTProfileUpdate(description, profileImageUri)
+        POSTProfileUpdate(description, profileImage)
         .then(function(response ){
             console.log("completeProfileEdit response", response);
             var modifiedProfile = currentUser.user;
             console.log("modifiedProfile", modifiedProfile);
             modifiedProfile.description = description;
-            modifiedProfile.profileImage = profileImageUri;
+            modifiedProfile.profileImage = profileImage.uri;
             setTimeout(() => {
             dispatch(allActions.userActions.setUser(modifiedProfile));
             navigation.navigate("ProfileScreen", {
@@ -330,7 +333,7 @@ const ProfileEditScreen = ({navigation, route}: Props) => {
                     <ProfileImageBackground>
                         {currentUserProfile.profileImage && (
                             <ProfileImage
-                            source={{uri:profileImageUri}}/>
+                            source={{uri:profileImage.uri}}/>
                         )}
                         {!currentUserProfile.profileImage && (
                             <EmptyProfileImage

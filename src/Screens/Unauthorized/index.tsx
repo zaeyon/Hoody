@@ -248,8 +248,9 @@ const Unauthorized = ({navigation}) => {
       console.log("credentialState", credentialState)
     }
     */
-
+    
     if(appleAuth.isSupported) {
+      
    const requestOptions = {
     requestedOperation: AppleAuthRequestOperation.LOGIN,
     requestedScopes: [AppleAuthRequestScope.EMAIL, AppleAuthRequestScope.FULL_NAME],
@@ -261,7 +262,8 @@ const Unauthorized = ({navigation}) => {
     const credentialState = await appleAuth.getCredentialStateForUser(user);
     if (credentialState === AppleAuthCredentialState.AUTHORIZED) {
       // authorized
-      console.log("애플 로그인 성공");
+      console.log("애플 로그인 성공 user", user);
+      console.log("애플 로그인 성공 credentialState", credentialState);
     }
   } catch (error) {
     if (error.code === AppleAuthError.CANCELED) {

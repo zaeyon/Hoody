@@ -1,7 +1,7 @@
 import axios from 'axios';
 const baseUrl = 'http://hoody-api-test-server-alb-349396782.ap-northeast-2.elb.amazonaws.com';
 
-const POSTProfileUpdate = ( description: string, profileImage?: string, nickname?: string) => {
+const POSTProfileUpdate = ( description: string, profileImage?: object, nickname?: string) => {
   const url = baseUrl + '/user/profile/update';
 
   console.log("수정된 nickname", nickname);
@@ -16,8 +16,8 @@ const POSTProfileUpdate = ( description: string, profileImage?: string, nickname
 
       form.append(`profileImg`, 
       {
-          uri: profileImage,
-          name: "profileImage",
+          uri: profileImage.uri,
+          name: profileImage.filename,
           type: 'image/jpeg',
       });
       

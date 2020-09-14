@@ -866,7 +866,7 @@ const FeedEditScreen = ({navigation, route}: Props) => {
 
     // toggle Consumption date picker
     const [visibleConsumptionDatePicker, setVisibleConsumptionDatePicker] = useState<boolean>(false);
-    const [consumptionDate, setConsumptionDate] = useState(route.params?.spendDate);
+    const [consumptionDate, setConsumptionDate] = useState(new Date(route.params?.spendDate));
     const [consumptionDateStr, setConsumptionDateStr] = useState<string>();
     
     // Paragraph 관련 state
@@ -1616,6 +1616,11 @@ const removeConsumptionDate = () => {
     setVisibleBottomMenuBar(true)
 }
 
+const cancelConsumptionDate = () => {
+    setVisibleConsumptionDatePicker(false);
+    setVisibleBottomMenuBar(true);
+}
+
 const showBottomActionSheet = (index) => {
     console.log("showBottomActionSheet index", index);
     selectingParagraphIndex = index;
@@ -2242,7 +2247,7 @@ const renderAddNewDescripInput = () => {
             {visibleConsumptionDatePicker && (
                 <ConsumptionDatePickerContainer>
                 <ConsumptionDatePickerHeaderBar>
-                    <TouchableWithoutFeedback onPress={() => setVisibleConsumptionDatePicker(false)}>
+                    <TouchableWithoutFeedback onPress={() => cancelConsumptionDate()}>
                     <CancelDatePickerContainer>
                     <CancelDatePickerText>취소</CancelDatePickerText>
                     </CancelDatePickerContainer>

@@ -821,7 +821,7 @@ function BottomTab() {
             }
           />
         ),
-        unmountOnBlur: true,
+        unmountOnBlur: false,
         tabBarVisible: getProfileTabBarVisibility(route)
       })}
       listeners={({navigation, route}) => ({

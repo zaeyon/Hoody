@@ -1061,19 +1061,23 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
 
    const moveToFeedEdit = () => {
      setMyFeedModalVisible(false);
-     navigation.navigate("FeedEditScreen", {
-       paragraphData: paragraphData,
-       feedDetailInfo: feedDetailInfo,
-       postId: postId,
-       spendDate: spendDate,
-     });
+     setTimeout(() => {
+      navigation.navigate("FeedEditScreen", {
+        paragraphData: paragraphData,
+        feedDetailInfo: feedDetailInfo,
+        postId: postId,
+        spendDate: spendDate,
+      });
+     }, 10)
    }
 
    const moveToFeedDeclare = () => {
      setOtherUsersFeedModalVisible(false);
-     navigation.navigate("FeedDeclareScreen", {
-       postId: postId,
-     })
+     setTimeout(() => {
+      navigation.navigate("FeedDeclareScreen", {
+        postId: postId,
+      })
+     }, 10)
    }
 
    const moveToImageFull = (imageUri:string) => {

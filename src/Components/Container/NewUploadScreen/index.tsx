@@ -321,7 +321,6 @@ const BottomMenuBarContainer = Styled.View`
  bottom: 15;
 `;
 
-
 const BottomMenuBar = Styled.View`
  margin-left: ${wp('4.5%')};
  width: ${wp('91%')};
@@ -677,8 +676,8 @@ color: #cccccc;
 `;
 
 const RemoveDatePickerText = Styled.Text`
-font-size: 30px;
-color: #cccccc;
+font-size: 17px;
+color: #FF3B30;
 `;
 
 const ConsumptionDateText = Styled.Text`
@@ -1623,9 +1622,14 @@ const modifyRating = () => {
 }
 
 const removeConsumptionDate = () => {
-    setConsumptionDateStr(null);
+    setConsumptionDateStr("없음");
     setVisibleConsumptionDatePicker(false);
     setVisibleBottomMenuBar(true)
+}
+
+const cancelConsumptionDate = () => {
+    setVisibleConsumptionDatePicker(false);
+    setVisibleBottomMenuBar(true);
 }
 
 const showBottomActionSheet = (index) => {
@@ -2213,7 +2217,7 @@ const renderAddNewDescripInput = () => {
             {visibleConsumptionDatePicker && (
                 <ConsumptionDatePickerContainer>
                 <ConsumptionDatePickerHeaderBar>
-                    <TouchableWithoutFeedback onPress={() => setVisibleConsumptionDatePicker(false)}>
+                    <TouchableWithoutFeedback onPress={() => cancelConsumptionDate()}>
                     <CancelDatePickerContainer>
                     <CancelDatePickerText>취소</CancelDatePickerText>
                     </CancelDatePickerContainer>

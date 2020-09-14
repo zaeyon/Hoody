@@ -101,6 +101,7 @@ const MyProfileReportImage = Styled.Image`
 `;
 
 const MyProfileReportText = Styled.Text`
+ margin-left: 3px;
  color: #505866;
  font-weight: 600;
  font-size: 15px;

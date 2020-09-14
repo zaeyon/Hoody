@@ -97,7 +97,7 @@ const MyProfileReportContainer = Styled.View`
  flex-direction: row;
  justify-content: space-between;
  align-items: center;
- padding-left: 10px;
+ padding-left: 7px;
  padding-right: 12px;
 `;
 
@@ -107,6 +107,7 @@ const MyProfileReportImage = Styled.Image`
 `;
 
 const MyProfileReportText = Styled.Text`
+ margin-left: 3px;
  color: #505866;
  font-weight: 600;
  font-size: 15px;

@@ -131,9 +131,12 @@ const FollowItem = ({navigation,userId, profileImageUri, nickname, feedCount, de
 
     const moveToUserProfile = () => {
         if(currentUser.user?.nickname === nickname) {
-            navigation.navigate("Profile")
+            navigation.push("AnotherUserProfileStack", {
+                screen: "AnotherUserProfileScreen",
+                params: {requestedUserNickname: nickname}
+              });
         } else {
-            navigation.navigate("AnotherUserProfileStack", {
+            navigation.push("AnotherUserProfileStack", {
               screen: "AnotherUserProfileScreen",
               params: {requestedUserNickname: nickname}
             });

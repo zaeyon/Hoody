@@ -1,6 +1,6 @@
 import React, {useEffect, useState, createRef, useRef} from 'react';
 import Styled from 'styled-components/native';
-import {TouchableWithoutFeedback, Text, Dimensions, FlatList, StyleSheet, View} from 'react-native';
+import {TouchableWithoutFeedback, Text, Dimensions, FlatList, StyleSheet, View, ActivityIndicator} from 'react-native';
 import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp
@@ -347,6 +347,15 @@ const GPSIcon = Styled.Image`
  height: ${wp('6.4%')};
 `;
 
+const LoadingContainer = Styled.View`
+ width: ${wp('100%')};
+ height: ${hp('100%')};
+ position: absolute;
+ align-items: center;
+ justify-content: center;
+ background-color: #00000030;
+`;
+
 
 
 
@@ -391,6 +400,8 @@ const FeedMapScreen = ({navigation, route}: Props) => {
     const [refreshingMap, setRefreshingMap] = useState<boolean>(false);
     const [completeOpenPanel, setCompleteOpenPanel] = useState<boolean>(false);
 
+    const [loading, setLoading] = useState<boolean>(true);
+
     const [initialCamera, setInitialCamera] = useState<object>({
       center: {
       latitude:  35.9,
@@ -408,6 +419,7 @@ const FeedMapScreen = ({navigation, route}: Props) => {
       if(route.params?.nickname) {
         GETUserMap(route.params?.nickname)
         .then(function(response) {
+          setLoading(false);
           console.log("사용자 피드 지도 데이터 불어오기 성공", response);
           var tmpLocationListData = new Array();
           var tmpAllFeedListData = new Array();
@@ -434,14 +446,17 @@ const FeedMapScreen = ({navigation, route}: Props) => {
           }, 10)
         })
         .catch(function(error) {
+          setLoading(false);
           console.log("사용자 피드 지도 데이터 불어오기 실패", error);
         })
       }
     }, [route.params?.nickname])
 
     const getUserFeedMapData = () => {
+      setLoading(true);
       GETUserMap(route.params?.nickname)
         .then(function(response) {
+          setLoading(false);
         
           console.log("사용자 피드 지도 데이터 불어오기 성공", response);
           var tmpLocationListData = new Array();
@@ -470,6 +485,7 @@ const FeedMapScreen = ({navigation, route}: Props) => {
           }, 10)
         })
         .catch(function(error) {
+          setLoading(false);
           console.log("사용자 피드 지도 데이터 불어오기 실패", error);
         })
       
@@ -789,7 +805,12 @@ const FeedMapScreen = ({navigation, route}: Props) => {
              />
            </PanelContainer>
          </SlidingUpPanel>
-
+      )}
+      {loading && (
+           <LoadingContainer>
+             <ActivityIndicator
+             color={"#FFFFFF"}/>
+           </LoadingContainer>
       )}
     </Container>
   );

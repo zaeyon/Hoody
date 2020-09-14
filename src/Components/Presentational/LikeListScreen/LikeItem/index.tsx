@@ -50,9 +50,12 @@ const LikeItem = ({nickname, profileImage, navigation}: Props) => {
 
    const moveToUserProfile = () => {
     if(currentUser.user?.nickname === nickname) {
-        navigation.navigate("Profile")
+        navigation.push("AnotherUserProfileStack", {
+            screen: "AnotherUserProfileScreen",
+            params: {requestedUserNickname: nickname}
+          });
     } else {
-        navigation.navigate("AnotherUserProfileStack", {
+        navigation.push("AnotherUserProfileStack", {
           screen: "AnotherUserProfileScreen",
           params: {requestedUserNickname: nickname}
         });

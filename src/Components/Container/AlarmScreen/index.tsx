@@ -178,7 +178,8 @@ const AlarmScreen = ({navigation, route}: Props) => {
             console.log("알림 리스트 response", response);
             setRefreshing(false);
             setLoading(false);
-            setNotificationListData(response);
+            const reversedArray = response.reverse();
+            setNotificationListData(reversedArray);
 
         })
         .catch(function(error) {

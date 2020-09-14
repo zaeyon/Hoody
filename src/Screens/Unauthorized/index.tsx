@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import Styled from 'styled-components/native';
-import {TouchableWithoutFeedback, Platform, View, Alert} from 'react-native';
+import {TouchableWithoutFeedback, Platform, View, Alert, ActivityIndicator} from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -204,6 +204,15 @@ font-weight: 600;
  color: #ffffff;
 `;
 
+const LoadingContainer = Styled.View`
+ position: absolute;
+ width: ${wp('100%')};
+ height: ${hp('100%')};
+ align-items: center;
+ justify-content: center;
+ background-color: #00000030;
+`;
+
 if (!KakaoLogins) {
   console.log('Module is Not Linked');
 }
@@ -224,7 +233,10 @@ const Unauthorized = ({navigation}) => {
   const [loginLoading, setLoginLoading] = useState(false);
   const [profileLoading, setProfileLoading] = useState(false);
   const [token, setToken] = useState(TOKEN_EMPTY);
+  const [loadingGoogle, setLoadingGoogle] = useState<boolean>(false);
+  const [loadingKakao, setLoadingKakao] = useState<boolean>(false);
   const currentUser = useSelector((state: any) => state.currentUser);
+
 
   const dispatch = useDispatch();
 
@@ -256,15 +268,30 @@ const Unauthorized = ({navigation}) => {
     requestedScopes: [AppleAuthRequestScope.EMAIL, AppleAuthRequestScope.FULL_NAME],
   };
 
-  const { user } = await appleAuth.performRequest(requestOptions);
+  const { user, email, nonce, identityToken, realUserStatus } = await appleAuth.performRequest(requestOptions);
 
   try {
+    /*
     const credentialState = await appleAuth.getCredentialStateForUser(user);
+
     if (credentialState === AppleAuthCredentialState.AUTHORIZED) {
       // authorized
       console.log("애플 로그인 성공 user", user);
+      console.log("애플 로그인 성공 email", email);
+      console.log("애플 로그인 성공 nonce", identityToken);
+      console.log("애플 로그인 성공 nonce", nonce);
+      console.log("애플 로그인 성공 realUserStatus", realUserStatus);
       console.log("애플 로그인 성공 credentialState", credentialState);
     }
+      */
+      
+     console.log("애플 로그인 성공 user", user);
+     console.log("애플 로그인 성공 email", email);
+     console.log("애플 로그인 성공 identityToken", identityToken);
+     console.log("애플 로그인 성공 nonce", nonce);
+     console.log("애플 로그인 성공 realUserStatus", realUserStatus);
+     
+    
   } catch (error) {
     if (error.code === AppleAuthError.CANCELED) {
       console.log("AppleAuthError.CANCELED");
@@ -294,6 +321,7 @@ const Unauthorized = ({navigation}) => {
   }
 
   const kakaoLogin = () => {
+    setLoadingKakao(true)
     logCallback('Login Start', setLoginLoading(true));
     KakaoLogins.login()
       .then((result) => {
@@ -305,6 +333,7 @@ const Unauthorized = ({navigation}) => {
         getKakaoProfile();
       })
       .catch((err) => {
+        setLoadingKakao(false);
         if (err.code === 'E_CANCELLED_OPERATION') {
           logCallback(`Login Canclled:${err.message}`, setLoginLoading(false));
         } else {
@@ -348,6 +377,7 @@ const Unauthorized = ({navigation}) => {
           if(response.provider === "kakao") {
             POSTSocial(result.id, result.email, 'kakao', currentUser.fcmToken)
             .then(function(response) {
+              setLoadingKakao(false)
               console.log("소셜 로그인 성공", response)
               dispatch(
                 allActions.userActions.setUser({
@@ -364,8 +394,10 @@ const Unauthorized = ({navigation}) => {
             })
             .catch(function(error) {
               console.log("소셜 로그인 실패", error);
+              setLoadingKakao(false);
             })
           } else if(response.provider === "google") {
+            setLoadingKakao(false);
             Alert.alert("구글로그인으로 등록된 계정입니다.", '', [
               {
                 text: "확인",
@@ -373,6 +405,7 @@ const Unauthorized = ({navigation}) => {
               }
             ])
           } else if(response.provier === "apple") {
+            setLoadingKakao(false);
             Alert.alert("애플로그인으로 등록된 계정입니다." , '', [
               {
                 text: '확인',
@@ -380,6 +413,7 @@ const Unauthorized = ({navigation}) => {
               }
             ])
           } else if(response.provider === "local") {
+            setLoadingKakao(false);
             Alert.alert("이미 회원가입된 계정입니다", '', [
               {
                 text: '확인',
@@ -388,6 +422,7 @@ const Unauthorized = ({navigation}) => {
             ])
           }
           } else if(response.message === "가입할 수 있는 이메일입니다.") {
+            setLoadingKakao(false);
           navigation.navigate('ProfileInput', {
             socialId: result.id,
             socialEmail: result.email,
@@ -398,6 +433,7 @@ const Unauthorized = ({navigation}) => {
           }
           })
           .catch(function(error) {
+            setLoadingKakao(false);
             console.log("GETEmailCheck error", error)
             if(error.status === 403) {
               console.log("이미 사용중인 이메일", error.status);
@@ -406,6 +442,7 @@ const Unauthorized = ({navigation}) => {
           })
       })
       .catch((err) => {
+        setLoadingKakao(false);
         logCallback(
           `Get Profile Failed:${err.code} ${err.message}`,
           setProfileLoading(false),
@@ -415,6 +452,7 @@ const Unauthorized = ({navigation}) => {
 
   const googleLogin = async () => {
     try {
+      setLoadingGoogle(true)
       await GoogleSignin.hasPlayServices();
       // Android 구글 로그인
       if(Platform.OS === "android") {
@@ -428,6 +466,7 @@ const Unauthorized = ({navigation}) => {
       console.log("GETEmailCheck response", response);
       if(response.message === "이미 가입된 이메일입니다.") {
       if(response.provider === "kakao") {
+        setLoadingGoogle(false);
         Alert.alert("카카오톡로그인으로 등록된 계정입니다." , '', [
           {
             text: '확인',
@@ -437,6 +476,7 @@ const Unauthorized = ({navigation}) => {
       } else if(response.provider === "google") {
         POSTSocial(userInfo.user.id, userInfo.user.email, 'google', currentUser.fcmToken)
         .then(function(response) {
+          setLoadingGoogle(false);
           console.log("소셜 로그인 성공", response)
           dispatch(
             allActions.userActions.setUser({
@@ -453,8 +493,10 @@ const Unauthorized = ({navigation}) => {
         })
         .catch(function(error) {
           console.log("소셜 로그인 실패", error);
+          setLoadingGoogle(false);
         })
       } else if(response.provier === "apple") {
+        setLoadingGoogle(false);
         Alert.alert("애플로그인으로 등록된 계정입니다." , '', [
           {
             text: '확인',
@@ -462,6 +504,7 @@ const Unauthorized = ({navigation}) => {
           }
         ])
       } else if(response.provider === "local") {
+        setLoadingGoogle(false)
         Alert.alert("이미 회원가입된 계정입니다", '', [
           {
             text: '확인',
@@ -470,6 +513,7 @@ const Unauthorized = ({navigation}) => {
         ])
       }
       } else if(response.message === "가입할 수 있는 이메일입니다.") {
+        setLoadingGoogle(false)
         navigation.navigate('ProfileInput', {
           socialId: userInfo.user.id,
           socialEmail: userInfo.user.email,
@@ -479,6 +523,7 @@ const Unauthorized = ({navigation}) => {
       }
       })
       .catch(function(error) {
+        setLoadingGoogle(false);
         console.log("GETEmailCheck error", error)
         if(error.status === 403) {
           console.log("이미 사용중인 이메일", error.status);
@@ -495,6 +540,7 @@ const Unauthorized = ({navigation}) => {
       console.log("GETEmailCheck response", response);
       if(response.message === "이미 가입된 이메일입니다.") {
       if(response.provider === "kakao") {
+        setLoadingGoogle(false)
         Alert.alert("카카오톡로그인으로 등록된 계정입니다." , '', [
           {
             text: '확인',
@@ -504,6 +550,7 @@ const Unauthorized = ({navigation}) => {
       } else if(response.provider === "google") {
         POSTSocial(userInfo.user.id, userInfo.user.email, 'google', currentUser.fcmToken)
         .then(function(response) {
+          setLoadingGoogle(false);
           console.log("소셜 로그인 성공", response)
           dispatch(
             allActions.userActions.setUser({
@@ -519,9 +566,11 @@ const Unauthorized = ({navigation}) => {
         )
         })
         .catch(function(error) {
+          setLoadingGoogle(false);
           console.log("소셜 로그인 실패", error);
         })
       } else if(response.provier === "apple") {
+        setLoadingGoogle(false);
         Alert.alert("애플로그인으로 등록된 계정입니다." , '', [
           {
             text: '확인',
@@ -529,6 +578,7 @@ const Unauthorized = ({navigation}) => {
           }
         ])
       } else if(response.provider === "local") {
+        setLoadingGoogle(false);
         Alert.alert("이미 회원가입된 계정입니다", '', [
           {
             text: '확인',
@@ -537,6 +587,7 @@ const Unauthorized = ({navigation}) => {
         ])
       }
       } else if(response.message === "가입할 수 있는 이메일입니다.") {
+        setLoadingGoogle(false)
         navigation.navigate('ProfileInput', {
           socialId: userInfo.user.id,
           socialEmail: userInfo.user.email,
@@ -546,6 +597,7 @@ const Unauthorized = ({navigation}) => {
       }
       })
       .catch(function(error) {
+        setLoadingGoogle(false);
         console.log("GETEmailCheck error", error)
         if(error.status === 403) {
           console.log("이미 사용중인 이메일", error.status);
@@ -554,6 +606,7 @@ const Unauthorized = ({navigation}) => {
       })
       } 
     } catch (error) {
+      setLoadingGoogle(false);
       console.log('구글 로그인 실패', error);
       console.log('statusCodes', statusCodes);
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
@@ -636,6 +689,18 @@ const Unauthorized = ({navigation}) => {
           </TouchableWithoutFeedback>
       </LocalContainer>
       </AuthContainer>
+      {loadingGoogle && (
+        <LoadingContainer>
+          <ActivityIndicator
+          color={"#ffffff"}/>
+        </LoadingContainer>
+      )}
+      {loadingKakao && (
+        <LoadingContainer>
+          <ActivityIndicator
+          color={"#ffffff"}/>
+        </LoadingContainer>
+      )}
     </Container>
   );
 };

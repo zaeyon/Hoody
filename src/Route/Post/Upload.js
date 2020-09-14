@@ -34,7 +34,7 @@ const PostUpload = (desArray, mediaArray,mainTag, subTag1, subTag2, rating, expe
     for(var i = 0; i < mediaArray.length; i++) {
         form.append(`mediaFiles`, {
             uri: mediaArray[i].uri,
-            name: mediaArray[i].filename,
+            name: mediaArray[i].filename.toLowerCase(),
             type: 'image/jpeg',
         })
     }

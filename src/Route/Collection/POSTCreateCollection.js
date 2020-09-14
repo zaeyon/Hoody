@@ -15,7 +15,7 @@ const POSTCreateCollection = (coverImage, name, description, open, includeLocati
     form.append('open', open);
     form.append(`coverImg`, {
         uri: coverImage.uri,
-        name: coverImage.filename,
+        name: coverImage.filename.toLowerCase(),
         type: 'image/jpeg',
     })
     form.append("includeLocation", includeLocation);

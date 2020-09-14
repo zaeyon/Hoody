@@ -21,7 +21,7 @@ const UserFeedListContainer = Styled.View`
 `;
 
 const ListTypeFeedContainer = Styled.View`
-padding-bottom: ${isIphoneX() ? wp('8%') : wp('11%')};
+padding-bottom: ${isIphoneX() ? hp('5.5%') : hp('8.5%')};
 `;
 
 const TileTypeFeedContainer = Styled.View`

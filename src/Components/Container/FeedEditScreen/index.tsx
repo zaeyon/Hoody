@@ -786,10 +786,6 @@ const LoadingContainer = Styled.View`
  justify-content: center;
 `;
 
-
-
-
-
 const bottomActionOptions = [
     '취소',
     <Text style={{color: 'red'}}>삭제</Text>

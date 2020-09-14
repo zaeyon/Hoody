@@ -8,6 +8,7 @@ import {
 import Modal from 'react-native-modal';
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 import {useSelector, useDispatch} from 'react-redux';
+import {isIphoneX} from 'react-native-iphone-x-helper';
 import allActions from '~/action';
 
 // Import Local Component
@@ -216,6 +217,7 @@ const FeedListTabContainer = Styled.View`
 const CollectionListTabContainer = Styled.View`
  background-color: #ffffff;
  padding-top: 3px;
+padding-bottom: ${isIphoneX() ? hp('8%') : hp('11%')};
 `;
 
 const SingleKeywordContainer = Styled.View`
@@ -601,7 +603,6 @@ const SearchResultScreen = ({navigation, route}: Props) => {
       console.log("게시글 검색 결과 무한 스크롤");
   
       feedOffset = feedOffset + 10;
-      feedLimit = feedLimit + 10;
 
       console.log("offset", feedOffset);
       console.log("limit", feedLimit);
@@ -615,6 +616,7 @@ const SearchResultScreen = ({navigation, route}: Props) => {
                 console.log("더이상 불러올 데이터 없음")
                 setNoMoreSearchFeedData(true);
               } else {
+              console.log("불러올 데이터 존재 response.data.length", response.data.length);
               setSearchResultFeedListData(searchResultFeedListData.concat(response.data));
               }
               })
@@ -632,7 +634,6 @@ const SearchResultScreen = ({navigation, route}: Props) => {
       console.log("컬렉션 검색 결과 무한 스크롤");
   
       collectionOffset = collectionOffset + 10;
-      collectionLimit = collectionLimit + 10;
 
       console.log("offset", collectionOffset);
       console.log("limit", collectionLimit);
@@ -645,6 +646,7 @@ const SearchResultScreen = ({navigation, route}: Props) => {
               if(response.data.length === 0) {
                 setNoMoreSearchCollectionData(true);
               } else {
+              console.log("불러올 데이터 존재 response.data.length", response.data.length);
               setSearchResultCollectionListData(searchResultCollectionListData.concat(response.data));
               }
               })

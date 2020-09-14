@@ -27,7 +27,7 @@ const POSTUpdate = (postId, desArray, mediaArray,mainTag, subTag1, subTag2, rati
     for(var i = 0; i < mediaArray.length; i++) {
         form.append(`mediaFile`, {
             uri: mediaArray[i].uri,
-            name: mediaArray[i].image.filename,
+            name: mediaArray[i].image.filename.toLowerCase(),
             type: 'image/jpeg',
         })
     }

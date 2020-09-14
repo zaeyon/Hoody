@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import Styled from 'styled-components/native';
-import {Text, TouchableWithoutFeedback, StyleSheet, Alert} from 'react-native';
+import {Text, TouchableWithoutFeedback, StyleSheet, Alert, ActivityIndicator} from 'react-native';
 import axios from 'axios';
 import {resolvePlugin} from '@babel/core';
 import {useSelector, useDispatch} from 'react-redux';
@@ -198,6 +198,16 @@ const UnvaildInputText = Styled.Text`
  font-size: 13px;
 `;
 
+const LoadingContainer = Styled.View`
+ position: absolute;
+ width: ${wp('100%')};
+ height: ${hp('100%')};
+ align-items: center;
+ justify-content: center;
+ background-color: #00000030;
+`;
+
+
 function LoginTitle() {
   return <Text style={{fontSize: 17, }}>로그인</Text>;
 }
@@ -210,6 +220,7 @@ const LoginScreen = ({navigation}) => {
   const [emailInputState, setEmailInputState] = useState<string>("noInput");
   const [emailInputFocus, setEmailInputFocus] = useState<boolean>(false);
   const [passwordInputFocus, setPasswordInputFocus] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const counter = useSelector((state) => state.counter);
   const currentUser = useSelector((state) => state.currentUser);
   const dispatch = useDispatch();
@@ -269,6 +280,7 @@ const LoginScreen = ({navigation}) => {
   }
 
   const clickLoginButton = () => {
+    setLoading(true)
     var regExp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i;
     var blank_pattern = /[\s]/g;
 
@@ -282,6 +294,7 @@ const LoginScreen = ({navigation}) => {
     console.log('로그인 요청!! password', submitingPassword);
     Login(submitingEmail, submitingPassword, currentUser.fcmToken)
     .then(function(response) {
+      setLoading(false)
       console.log('로그인성공 유저 정보@@', response.data.user);
       console.log("로그인성공 user.id", response.data.user.id);
       console.log("유저스크랩정보", response.data.user.scraps[0].Posts);
@@ -319,6 +332,7 @@ const LoginScreen = ({navigation}) => {
       })
     })
     .catch(function (error) {
+      setLoading(false)
       console.log("error: ", error);
       if(error.data.message === "You are not a member") {
         Alert.alert('등록되지 않은 계정입니다.', '', [
@@ -407,6 +421,12 @@ const LoginScreen = ({navigation}) => {
         <FindPasswordText>비밀번호 찾기</FindPasswordText>
         </TouchableWithoutFeedback>
       </FooterContainer>
+      {loading && (
+        <LoadingContainer>
+          <ActivityIndicator
+          color={"#FFFFFF"}/>
+        </LoadingContainer>
+      )}
     </Container>
   );
 };

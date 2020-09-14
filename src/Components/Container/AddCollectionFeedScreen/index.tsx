@@ -107,6 +107,7 @@ position: absolute;
  width: ${wp('100%')};
  height: ${hp('100%')};
  align-items: center;
+ background-color: #00000030;
  justify-content: center;
 `;
 
@@ -142,7 +143,7 @@ const AddCollectionFeedScreen = ({navigation, route}: Props) => {
     const [changeFeedList, setChangeFeedList] = useState<boolean>(false);
     const [triggerType, setTriggerType] = useState<string>("");
     const [cancleAddFeed, setCancleAddFeed] = useState<boolean>(false);
-    const [loading, setLoading] = useState<boolaen>(false);
+    const [loading, setLoading] = useState<boolean>(false);
 
     const currentUser = useSelector((state) => state.currentUser);
 
@@ -344,7 +345,8 @@ const AddCollectionFeedScreen = ({navigation, route}: Props) => {
             </MyFeedTileListContainer>
             {loading && (
             <LoadingContainer>
-                <ActivityIndicator/>
+                <ActivityIndicator
+                color={"#ffffff"}/>
             </LoadingContainer>
             )}
         </Container>

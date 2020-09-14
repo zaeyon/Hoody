@@ -242,14 +242,14 @@ const CollectionUploadScreen = ({navigation, route}: Props) => {
                 </HeaderLeftContainer>
                 </TouchableWithoutFeedback>
                 <HeaderTitleText>새 컬렉션</HeaderTitleText>
-                {collectionTitleText !== "" && collectionDescripText !== "" && (
+                {collectionTitleText !== "" && collectionDescripText !== "" && collectionCoverImage && (
                 <TouchableWithoutFeedback onPress={() => moveToAddFeedScreen()}>
                     <HeaderRightContainer>
                        <AbledHeaderNextText>다음</AbledHeaderNextText>
                     </HeaderRightContainer>
                 </TouchableWithoutFeedback>
                 )}
-                {(collectionTitleText === "" || collectionDescripText === "") && (
+                {(collectionTitleText === "" || collectionDescripText === "" || !collectionCoverImage) && (
                     <HeaderRightContainer>
                     <DisabledHeaderNextText>다음</DisabledHeaderNextText>
                     </HeaderRightContainer>

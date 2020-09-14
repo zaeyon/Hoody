@@ -893,7 +893,7 @@ function AppNavigator({navigation, route}: any) {
           console.log("이메일", asyStorResponse.email);
           dispatch(allActions.userActions.setUser({
             email: asyStorResponse.email,
-            profileImage: response.user.profileImg,
+            profileImage: response.user.thumbnailImg,
             nickname: response.user.nickname,
             description: response.user.description,
             userId: response.user.id,

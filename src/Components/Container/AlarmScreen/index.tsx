@@ -202,7 +202,7 @@ const AlarmScreen = ({navigation, route}: Props) => {
             openNotifyModal={openNotifyModal}
             notifyId={item.id}
             navigation={navigation}
-            senderProfileImage={item.senders.profileImg}
+            senderProfileImage={item.senders.thumbnailImg}
             senderNickname={item.senders.nickname}
             message={item.message}
             type={item.type}

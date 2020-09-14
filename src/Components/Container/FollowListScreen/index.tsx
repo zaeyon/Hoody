@@ -328,7 +328,7 @@ const FollowListScreen = ({navigation, route}:Props) => {
         return (
             <FollowItem
             navigation={navigation}
-            profileImageUri={item.profileImg}
+            profileImageUri={item.thumbnailImg}
             nickname={item.nickname}
             feedCount={item.feedCount}
             description={item.description}

@@ -778,7 +778,7 @@ const SearchResultScreen = ({navigation, route}: Props) => {
         return (
             <MemoizedFeedItem
                   id={item.id}
-                  profile_image={item.user.profileImg}
+                  profile_image={item.user.thumbnailImg}
                   nickname={item.user.nickname}
                   createdAt={item.createdAt}
                   rating={item.starRate}
@@ -807,7 +807,7 @@ const SearchResultScreen = ({navigation, route}: Props) => {
         name={item.name ? item.name : null}
         navigation={navigation}
         profileNickname={item.Posts[0] ? item.Posts[0].user.nickname : null}
-        profileImage={item.Posts[0] ? item.Posts[0].user.profileImg : null}
+        profileImage={item.Posts[0] ? item.Posts[0].user.thumbnailImg : null}
         />
 
       )

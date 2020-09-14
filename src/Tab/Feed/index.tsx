@@ -213,7 +213,7 @@ function Feed({navigation, route}: Props) {
         renderItem={({item}) => (
                 <FeedItem
                   id={item.id}
-                  profile_image={item.user.profileImg}
+                  profile_image={item.user.thumbnailImg}
                   nickname={item.user.nickname}
                   write_time={item.createdAt}
                   rating={item.starRate}

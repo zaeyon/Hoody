@@ -698,7 +698,7 @@ const ProfileInput = ({navigation, route}) => {
               gender: submitingGender,
               socialId: submitingSocialId,
               provider: submitingProvider,
-              profileImage: response.data.user.profileImg,
+              profileImage: response.data.user.thumbnailImg,
               nickname: response.data.user.nickname,
               userId: response.data.user.id,
             });
@@ -711,7 +711,7 @@ const ProfileInput = ({navigation, route}) => {
                 gender: submitingGender,
                 socialId: submitingSocialId,
                 provider: submitingProvider,
-                profileImage: response.data.user.profileImg,
+                profileImage: response.data.user.thumbnailImg,
                 nickname: response.data.user.nickname,
                 userId: response.data.user.id,
               }),

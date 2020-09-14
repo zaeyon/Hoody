@@ -7,6 +7,7 @@ import {
 } from 'react-native-responsive-screen';
 import {useDispatch, useSelector} from 'react-redux';
 import allActions from '~/action';
+import jwtDecode from 'jwt-decode';
 
 import KakaoLogins from '@react-native-seoul/kakao-login';
 import {
@@ -229,12 +230,28 @@ const PROFILE_EMPTY = {
   profile_image_url: '',
 };
 
+interface tokenType {
+  aud: string,
+  auth_time: number,
+  c_hash: string,
+  email: string,
+  email_verified: string,
+  exp: number,
+  iat: number,
+  is_private_email: string,
+  iss: string,
+  nonce: string,
+  nonce_supported: boolean,
+  sub: string
+}
+
 const Unauthorized = ({navigation}) => {
   const [loginLoading, setLoginLoading] = useState(false);
   const [profileLoading, setProfileLoading] = useState(false);
   const [token, setToken] = useState(TOKEN_EMPTY);
   const [loadingGoogle, setLoadingGoogle] = useState<boolean>(false);
   const [loadingKakao, setLoadingKakao] = useState<boolean>(false);
+  const [loadingApple, setLoadingApple] = useState<boolean>(false);
   const currentUser = useSelector((state: any) => state.currentUser);
 
 
@@ -245,6 +262,7 @@ const Unauthorized = ({navigation}) => {
   }, []);
 
   async function onAppleButtonPress() {
+    setLoadingApple(true);
     // performs login request
     /*
     const appleAuthRequestResponse = await appleAuth.performRequest({
@@ -271,7 +289,7 @@ const Unauthorized = ({navigation}) => {
   const { user, email, nonce, identityToken, realUserStatus } = await appleAuth.performRequest(requestOptions);
 
   try {
-    /*
+    
     const credentialState = await appleAuth.getCredentialStateForUser(user);
 
     if (credentialState === AppleAuthCredentialState.AUTHORIZED) {
@@ -282,14 +300,92 @@ const Unauthorized = ({navigation}) => {
       console.log("애플 로그인 성공 nonce", nonce);
       console.log("애플 로그인 성공 realUserStatus", realUserStatus);
       console.log("애플 로그인 성공 credentialState", credentialState);
+
+     const decodedToken: tokenType = jwtDecode(identityToken);
+     console.log("애플 로그인 성공 decodedToken", decodedToken);
+
+     GETEmailCheck(decodedToken.email)
+     .then(function(response) {
+     console.log("GETEmailCheck response", response);
+     if(response.message === "이미 가입된 이메일입니다.") {
+     if(response.provider === "apple") {
+       POSTSocial(decodedToken.sub, decodedToken.email, 'apple', currentUser.fcmToken)
+       .then(function(response) {
+         setLoadingApple(false)
+         console.log("소셜 로그인 성공", response)
+         dispatch(
+           allActions.userActions.setUser({
+             email: decodedToken.email,
+             profileImage: response.user.thumbnailImg,
+             nickname: response.user.nickname,
+             description: response.user.description,
+             userId: response.user.id,
+           })
+         )
+         dispatch(
+           allActions.userActions.setInputedKeywordList([])
+         )
+       })
+       .catch(function(error) {
+         console.log("소셜 로그인 실패", error);
+         setLoadingApple(false);
+       })
+     } else if(response.provider === "google") {
+       setLoadingApple(false);
+       Alert.alert("구글 로그인으로 등록된 계정입니다.", '', [
+         {
+           text: "확인",
+           onPress: () => 0,
+         }
+       ])
+     } else if(response.provier === "kakao") {
+       setLoadingApple(false);
+       Alert.alert("카카오톡 로그인으로 등록된 계정입니다." , '', [
+         {
+           text: '확인',
+           onPress: () => 0,
+         }
+       ])
+     } else if(response.provider === "local") {
+       setLoadingApple(false);
+       Alert.alert("이미 회원가입된 계정입니다", '', [
+         {
+           text: '확인',
+           onPress: () => 0,
+         }
+       ])
+     }
+     } else if(response.message === "가입할 수 있는 이메일입니다.") {
+       setLoadingApple(false);
+     navigation.navigate('ProfileInput', {
+       socialId: decodedToken.sub,
+       socialEmail: decodedToken.email,
+       socialProvider: 'apple',
+     });
+     }
+     })
+     .catch(function(error) {
+       setLoadingApple(false);
+       console.log("GETEmailCheck error", error)
+       if(error.status === 403) {
+         console.log("이미 사용중인 이메일", error.status);
+         //setEmailOverlap(true);
+       }
+     })
+
+
     }
-      */
       
+      /*
      console.log("애플 로그인 성공 user", user);
      console.log("애플 로그인 성공 email", email);
      console.log("애플 로그인 성공 identityToken", identityToken);
      console.log("애플 로그인 성공 nonce", nonce);
      console.log("애플 로그인 성공 realUserStatus", realUserStatus);
+
+     const decodedToken: tokenType = jwtDecode(identityToken);
+     console.log("애플 로그인 성공 decodedToken", decodedToken);
+     */
      
     
   } catch (error) {
@@ -382,7 +478,7 @@ const Unauthorized = ({navigation}) => {
               dispatch(
                 allActions.userActions.setUser({
                   email: result.email,
-                  profileImage: response.user.profileImg,
+                  profileImage: response.user.thumbnailImg,
                   nickname: response.user.nickname,
                   description: response.user.description,
                   userId: response.user.id,
@@ -481,7 +577,7 @@ const Unauthorized = ({navigation}) => {
           dispatch(
             allActions.userActions.setUser({
               email: userInfo.user.email,
-              profileImage: response.user.profileImg,
+              profileImage: response.user.thumbnailImg,
               nickname: response.user.nickname,
               description: response.user.description,
               userId: response.user.id,
@@ -555,7 +651,7 @@ const Unauthorized = ({navigation}) => {
           dispatch(
             allActions.userActions.setUser({
               email: userInfo.user.email,
-              profileImage: response.user.profileImg,
+              profileImage: response.user.thumbnailImg,
               nickname: response.user.nickname,
               description: response.user.description,
               userId: response.user.id,
@@ -696,6 +792,12 @@ const Unauthorized = ({navigation}) => {
         </LoadingContainer>
       )}
       {loadingKakao && (
+        <LoadingContainer>
+          <ActivityIndicator
+          color={"#ffffff"}/>
+        </LoadingContainer>
+      )}
+      {loadingApple && (
         <LoadingContainer>
           <ActivityIndicator
           color={"#ffffff"}/>

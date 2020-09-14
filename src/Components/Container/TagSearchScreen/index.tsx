@@ -754,7 +754,7 @@ const TagSearchScreen = ({navigation, route}: Props) => {
             >
                 <MainHashText>#</MainHashText>
                 <MainTagInput
-                multiline={true}
+                multiline={false}
                 autoCapitalize={false}
                 placeholder={"메인태그를 입력해주세요"}
                 placeholderTextColor={"#00000060"}
@@ -768,7 +768,7 @@ const TagSearchScreen = ({navigation, route}: Props) => {
             <HashTagInputContainer>
                 <SubHashText>#</SubHashText>
                 <SubTagInput
-                multiline={true}
+                multiline={false}
                 autoCapitalize={false}
                 placeholder={"서브태그 입력"}
                 placeholderTextColor={"#C6C7CC60"}
@@ -781,7 +781,7 @@ const TagSearchScreen = ({navigation, route}: Props) => {
             <HashTagInputContainer>
                 <SubHashText>#</SubHashText>
                 <SubTagInput
-                multiline={true}
+                multiline={false}
                 autoCapitalize={false}
                 placeholder={"서브태그 입력"}
                 placeholderTextColor={"#C6C7CC60"}

@@ -166,10 +166,10 @@ const LikeListScreen = ({navigation, route}: Props) => {
         }
     }
 
-    const renderLikeItem = ({item,index}) => (
+    const renderLikeItem = ({item,index}: any) => (
         <LikeItem
         nickname={item.nickname}
-        profileImage={item.profileImg}
+        profileImage={item.thumbnailImg}
         navigation={navigation}
         />
     )

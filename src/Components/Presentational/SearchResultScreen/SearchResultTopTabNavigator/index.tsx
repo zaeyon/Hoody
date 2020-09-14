@@ -44,7 +44,7 @@ const SearchResultTopTabNavigator = ({feedResultListData, collectionResultListDa
         return (
             <FeedItem
                   id={item.id}
-                  profile_image={item.user.profileImg}
+                  profile_image={item.user.thumbnailImg}
                   nickname={item.user.nickname}
                   createdAt={item.createdAt}
                   rating={item.starRate}

@@ -584,7 +584,7 @@ const CommentListScreen = ({navigation, route}: Props) => {
      return (
        <ReplyItem
        replyId={item.id}
-       profileImage={item.user.profileImg}
+       profileImage={item.user.thumbnailImg}
        nickname={item.user.nickname}
        description={item.description}
        createAt={date.toString()}
@@ -604,7 +604,7 @@ const CommentListScreen = ({navigation, route}: Props) => {
     <CommentItem
     commentId={item.id}
     clickToReply={clickToReply}
-    profileImage={item.user.profileImg}
+    profileImage={item.user.thumbnailImg}
     nickname={item.user.nickname}
     comment={item.description}
     replys={item.replys}

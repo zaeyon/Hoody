@@ -302,7 +302,7 @@ const LoginScreen = ({navigation}) => {
         dispatch(
           allActions.userActions.setUser({
             email: submitingEmail,
-            profileImage: response.data.user.profileImg,
+            profileImage: response.data.user.thumbnailImg,
             nickname: response.data.user.nickname,
             description: response.data.user.description,
             userId: response.data.user.id,

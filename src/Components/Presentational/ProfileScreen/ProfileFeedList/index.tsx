@@ -36,6 +36,8 @@ font-size: 22px;
 `;
 
 const MonthSelectContainer = Styled.View`
+flex-direction: row;
+align-items: center;
 `;
 
 const SelectingMonthText = Styled.Text`
@@ -124,6 +126,12 @@ const LoadingContainer = Styled.View`
  background-color: #FFFFFF;
 `;
 
+const DropdownIcon = Styled.Image`
+ width: ${wp('3.2%')};
+ height: ${wp('3.2%')};
+`;
+
+
   const TEST_SECTION_DATA = [
     {
       title: '30일',
@@ -177,8 +185,8 @@ const ProfileFeedList = ({navigation, route, feedListData, currentSortType, onSc
         return (
           <MemoizedFeedItem
           id={item.id}
-          profile_image={userProfileInfo.profileImage}
-          nickname={userProfileInfo.nickname}
+          profile_image={item.user.thumbnailImg}
+          nickname={item.user.nickname}
           createdAt={item.createdAt}
           rating={item.starRate}
           main_tag={item.mainTags.name}
@@ -260,6 +268,9 @@ const ProfileFeedList = ({navigation, route, feedListData, currentSortType, onSc
           <TouchableWithoutFeedback onPress={() => openMonthPicker()}>
           <MonthSelectContainer>
             <SelectingMonthText>{selectedMonth + "월"}</SelectingMonthText>
+            <DropdownIcon
+                style={{marginLeft:5}}
+                source={require('~/Assets/Images/Report/ic_dropdown.png')}/>
           </MonthSelectContainer>
           </TouchableWithoutFeedback>
           </SelectingDateContainer>

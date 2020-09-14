@@ -1140,7 +1140,7 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
       <InformationContainer>
    <FeedInformation
    loadingFeedInfo={loadingFeedInfo}
-   profileImage={feedDetailInfo.user.profileImg}
+   profileImage={feedDetailInfo.user.thumbnailImg}
    profileNickname={feedDetailInfo.user.nickname}
    createdAt={createdDate}
    mainTag={feedDetailInfo.mainTags ? feedDetailInfo.mainTags.name : null}

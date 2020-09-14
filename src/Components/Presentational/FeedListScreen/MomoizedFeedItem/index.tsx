@@ -81,8 +81,8 @@ const CreatedAtText = Styled.Text`
 
 const WriterProfileImage = Styled.Image`
 border-radius: 100px;
-width: ${wp('9.6%')}px;
-height: ${wp('9.6%')}px;
+width: ${wp('10.6%')}px;
+height: ${wp('10.6%')}px;
 `;
 
 const WriterNickname = Styled.Text`

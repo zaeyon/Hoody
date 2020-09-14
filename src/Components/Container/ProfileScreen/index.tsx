@@ -535,7 +535,7 @@ const ProfileScreen = ({navigation, route}: Props) => {
         
         var profileInfo = {
           email: currentUser.user.email,
-          profileImage : response.profileImg,
+          profileImage : response.thumbnailImg,
           nickname: response.nickname,
           description: response.description,
           birthdate: response.birthdate,

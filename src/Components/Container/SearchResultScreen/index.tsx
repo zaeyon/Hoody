@@ -43,7 +43,7 @@ const HeaderLeftContainer = Styled.View`
  padding-top: 12px;
  padding-left: 16px;
  padding-bottom: 16px;
- padding-right: 16px;
+ padding-right: 0px;
  background-color: #ffffff;
 `;
 
@@ -54,6 +54,7 @@ const HeaderBackIcon = Styled.Image`
 
 const HeaderTitleContainer = Styled.View`
  background-color: #ffffff;
+ width: 310px;
 `;
 
 const HeaderTitleText = Styled.Text`
@@ -830,6 +831,7 @@ const SearchResultScreen = ({navigation, route}: Props) => {
                 </TouchableWithoutFeedback>
                 <HeaderTitleContainer>
                 <FlatList
+                showsHorizontalScrollIndicator={false}
                 contentContainerStyle={{backgroundColor:'#ffffff', justifyContent:'center', alignItems:'center'}}
                 horizontal={true}
                 data={keyword.inputedKeywordList}

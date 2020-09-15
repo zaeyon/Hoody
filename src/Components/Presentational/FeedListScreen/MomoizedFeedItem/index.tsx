@@ -101,9 +101,11 @@ const ExpenseRatingContainer = Styled.View`
  flex-direction: row;
  align-items: center;
 height: ${wp('4.5%')}px;
+background-color:#ffffff;
 `;
 
 const RatingStarImage = Styled.Image`
+margin-top: 1px;
 margin-left: 5px;
 margin-right: 3px;
 width: ${wp('3.2%')}px;
@@ -111,7 +113,6 @@ height: ${wp('3.2%')}px;
 `;
 
 const RatingText = Styled.Text`
-margin-top: 1.5px;
 font-weight: 500;
 font-size: 13px;
 color: #1D1E1F;

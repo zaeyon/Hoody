@@ -22,6 +22,7 @@ padding-right: 12px;
 `;
 
 const CommentRightContainer = Styled.View`
+padding-right: 120px;
 `;
 
 const HeaderContainer = Styled.View`
@@ -110,14 +111,17 @@ const ReplyItem = ({navigation, profileImage, nickname, description, createAt, r
 
     const moveToUserProfile = () => {
         if(currentUser.user?.nickname === nickname) {
-            navigation.navigate("Profile")
+            navigation.push("AnotherUserProfileStack", {
+                screen: "AnotherUserProfileScreen",
+                params: {requestedUserNickname: nickname}
+              });
         } else {
-            navigation.navigate("AnotherUserProfileStack", {
+            navigation.push("AnotherUserProfileStack", {
               screen: "AnotherUserProfileScreen",
               params: {requestedUserNickname: nickname}
             });
         }
-    }
+      }
 
     const onLongPressComment = () => {
         console.log("replyId", replyId);

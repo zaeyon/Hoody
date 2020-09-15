@@ -86,7 +86,7 @@ const FeedInformationContainer = Styled.View`
 
 const CommentListContainer = Styled.View`
 flex: 1;
-padding-bottom: ${isIphoneX() ? wp('5%') : wp('15%')};
+padding-bottom: ${isIphoneX() ? wp('10%') : wp('20%')};
 background-color: #ffffff;
 `;
 
@@ -101,7 +101,6 @@ const ProfileImage = Styled.Image`
 const FooterContainer = Styled.View`
  width: ${wp('100%')};
  position: absolute;
- bottom: 15px;
  background-color: #ffffff;
 `;
 
@@ -110,8 +109,8 @@ width: ${wp('100%')}
 align-items: center;
 flex-direction: row;
 padding-left: ${wp('4.2%')}px;
-padding-bottom: 8px;
-padding-top: 8px;
+padding-bottom: 20px;
+padding-top: 5px;
 background-color: #ffffff;
 `;
 
@@ -133,7 +132,7 @@ border-width: 1px;
 border-color: #efefef;
 flex-direction: row;
 padding-left: 18px;
-
+background-color:#ffffff;
 align-items: center;
 `;
 
@@ -157,14 +156,14 @@ justify-content: center;
 `;
 
 const InputingReplyContainer = Styled.View`
+ height: ${wp('10.6%')};
  width:${wp('100%')};
  align-items: center;
- padding-top: 12px;
- padding-bottom: 12px;
  padding-left: 16px;
  background-color: #ECECEE;
  flex-direction: row;
  justify-content: space-between;
+ align-items: center;
 `;
 
 const InputingReplyText = Styled.Text`
@@ -173,6 +172,8 @@ const InputingReplyText = Styled.Text`
 `;
 
 const InputingReplyCancelContainer = Styled.View`
+padding-top: 16px;
+padding-bottom: 16px;
 padding-left: 16px;
 padding-right: 16px;
 align-items: center;
@@ -240,117 +241,25 @@ const ModalTabItemLabelText = Styled.Text`
 `;
 
 const LoadingContainer = Styled.View`
- flex: 1;
- background-color: #FFFFFF;
- margin-top:${hp('35%')};
+ width: ${wp('100%')};
+ margin-top: ${hp('35%')};
  align-items: center;
+ justify-content: center;
 `;
 
-const COMMENT_DATA = 
-[
-  {
-    "id": 6,
-    "description": "하하하",
-    "Like": 0,
-    "createdAt": "2020-06-19T07:02:28.000Z",
-    "updatedAt": "2020-06-19T07:02:28.000Z",
-    "deletedAt": null,
-    "userId": "43430460-b1f9-11ea-adb1-11494bb1448b",
-    "postId": 1,
-    "replyId": null,
-    "user": {
-      "id": "43430460-b1f9-11ea-adb1-11494bb1448b",
-      "nickname": "카카카카ㅏ",
-      "profileImg": "https://s.gravatar.com/avatar/39333a72e7d0c0deb714d292ba6b2198?s=80&r=x&d=mp"
-    },
-    "replys": []
-  },
-  {
-    "id": 5,
-    "description": "Zzq",
-    "Like": 0,
-    "createdAt": "2020-06-19T06:57:22.000Z",
-    "updatedAt": "2020-06-19T06:57:22.000Z",
-    "deletedAt": null,
-    "userId": "43430460-b1f9-11ea-adb1-11494bb1448b",
-    "postId": 1,
-    "replyId": null,
-    "user": {
-      "id": "43430460-b1f9-11ea-adb1-11494bb1448b",
-      "nickname": "카카카카ㅏ",
-      "profileImg": "https://s.gravatar.com/avatar/39333a72e7d0c0deb714d292ba6b2198?s=80&r=x&d=mp"
-    },
-    "replys": []
-  },
-  {
-    "id": 4,
-    "description": "Zz",
-    "Like": 0,
-    "createdAt": "2020-06-19T06:56:57.000Z",
-    "updatedAt": "2020-06-19T06:56:57.000Z",
-    "deletedAt": null,
-    "userId": "43430460-b1f9-11ea-adb1-11494bb1448b",
-    "postId": 1,
-    "replyId": null,
-    "user": {
-      "id": "43430460-b1f9-11ea-adb1-11494bb1448b",
-      "nickname": "카카카카ㅏ",
-      "profileImg": "https://s.gravatar.com/avatar/39333a72e7d0c0deb714d292ba6b2198?s=80&r=x&d=mp"
-    },
-    "replys": []
-  },
-  {
-    "id": 3,
-    "description": "Ddddd",
-    "Like": 0,
-    "createdAt": "2020-06-19T06:55:14.000Z",
-    "updatedAt": "2020-06-19T06:55:14.000Z",
-    "deletedAt": null,
-    "userId": "43430460-b1f9-11ea-adb1-11494bb1448b",
-    "postId": 1,
-    "replyId": null,
-    "user": {
-      "id": "43430460-b1f9-11ea-adb1-11494bb1448b",
-      "nickname": "카카카카ㅏ",
-      "profileImg": "https://s.gravatar.com/avatar/39333a72e7d0c0deb714d292ba6b2198?s=80&r=x&d=mp"
-    },
-    "replys": []
-  },
-  {
-    "id": 2,
-    "description": "Ddddd",
-    "Like": 0,
-    "createdAt": "2020-06-19T06:55:09.000Z",
-    "updatedAt": "2020-06-19T06:55:09.000Z",
-    "deletedAt": null,
-    "userId": "43430460-b1f9-11ea-adb1-11494bb1448b",
-    "postId": 1,
-    "replyId": null,
-    "user": {
-      "id": "43430460-b1f9-11ea-adb1-11494bb1448b",
-      "nickname": "카카카카ㅏ",
-      "profileImg": "https://s.gravatar.com/avatar/39333a72e7d0c0deb714d292ba6b2198?s=80&r=x&d=mp"
-    },
-    "replys": []
-  },
-  {
-    "id": 1,
-    "description": "testing comment",
-    "Like": 0,
-    "createdAt": "2020-06-19T05:45:56.000Z",
-    "updatedAt": "2020-06-19T05:45:56.000Z",
-    "deletedAt": null,
-    "userId": "77be8000-b1e2-11ea-a9ed-a1269359ec27",
-    "postId": 1,
-    "replyId": null,
-    "user": {
-      "id": "77be8000-b1e2-11ea-a9ed-a1269359ec27",
-      "nickname": "jiwon11",
-      "profileImg": "https://s.gravatar.com/avatar/2770f6d3995b48fffe01fe6b5c368adf?s=80&r=x&d=mp"
-    },
-    "replys": []
-  }
-]
+const EmptyContainer = Styled.View`
+ background-color: #FFFFFF;
+ width: ${wp('100%')};
+`;
+
+const LoadingRegisterContainer = Styled.View`
+position: absolute;
+width: ${wp('100%')};
+height: ${hp('100%')};
+background-color: #00000030;
+align-items: center;
+justify-content: center;
+`;
 
 const config = {
   animation: 'timing',
@@ -385,6 +294,7 @@ const CommentListScreen = ({navigation, route}: Props) => {
     const [inputFocus, setInputFocus] = useState<boolean>(false);
     const [refreshingComment, setRefreshingComment] = useState<boolean>(false);
     const [loadingComment, setLoadingComment] = useState<boolean>(true);
+    const [loadingRegister, setLoadingRegister] = useState<boolean>(false);
 
     const currentUser = useSelector((state) => state.currentUser);
     const commentInputRef = useRef(null);
@@ -469,22 +379,26 @@ const CommentListScreen = ({navigation, route}: Props) => {
 
 
    const postComment = () => {
+    setLoadingRegister(true)
    if(inputType === "comment") {
     POSTComment(postId, inputComment)
     .then(function(response) {
         console.log("response", response);
         GetComment(route.params.postId)
         .then(function(response) {
+        setLoadingRegister(false);
             console.log("댓글 불러오기 성공", response)
             setCommentList(response.allComment);
             setInputComment("")
             Keyboard.dismiss();
         })
         .catch(function(error) {
+          setLoadingRegister(false);
             console.log("댓글 불러오기 실패", error);
         })
     })
     .catch(function(error) {
+        setLoadingRegister(false);
         console.log("error", error);
     })
    } else if(inputType === 'reply') {
@@ -493,6 +407,7 @@ const CommentListScreen = ({navigation, route}: Props) => {
            console.log("response", response);
            GetComment(route.params.postId)
            .then(function(response) {
+         setLoadingRegister(false);
                console.log("댓글 불러오기 성공", response)
                setCommentList(response.allComment);
                setInputComment("")
@@ -502,6 +417,10 @@ const CommentListScreen = ({navigation, route}: Props) => {
            .catch(function(error) {
                console.log("댓글 불러오기 실패", error);
            })
+       })
+       .catch(function(error) {
+         setLoadingRegister(false);
+         console.log("")
        })
    }}
 
@@ -577,6 +496,7 @@ const CommentListScreen = ({navigation, route}: Props) => {
    }
 
    const renderReplyItem = ({item, index}: any) => {
+     console.log("renderReplyItem item", item);
      var date = new Date(item.createdAt);
      date = getDateFormat(date);
      
@@ -676,7 +596,8 @@ const CommentListScreen = ({navigation, route}: Props) => {
        onRefresh={onRefreshComment}/>
      }
      >
-      <CommentListContainer>
+      <CommentListContainer
+      style={inputType === "reply" && { paddingBottom: isIphoneX() ? wp('20%') : wp('30%')}}>
          <FlatList
         showsVerticalScrollIndicator={false}
         refreshing={false}
@@ -686,7 +607,7 @@ const CommentListScreen = ({navigation, route}: Props) => {
         </CommentListContainer>
         </KeyboardAwareScrollView>
      )}
-        <FooterContainer style={inputFocus ? {bottom:7} : (isIphoneX() ? {bottom: 30} : {bottom: 17})}>
+        <FooterContainer style={inputFocus ? {bottom:0} : (isIphoneX() ? {bottom: 0} : {bottom: 0})}>
           <AboveKeyboard
           style={{backgroundColor:'#ffffff'}}
           >
@@ -703,7 +624,7 @@ const CommentListScreen = ({navigation, route}: Props) => {
             </InputingReplyContainer>
 
           )}
-        <CommentContainer>
+        <CommentContainer style={inputFocus && {paddingBottom:5}}>
         <ProfileImage
             source={{uri:currentUser.user?.profileImage}}/>
         <CommentInputContainer>
@@ -773,6 +694,12 @@ const CommentListScreen = ({navigation, route}: Props) => {
         </TouchableWithoutFeedback>
         </OtherUsersFeedViewMoreModalContainer>
       </Modal>
+      {loadingRegister && (
+        <LoadingRegisterContainer>
+          <ActivityIndicator
+          color={"#ffffff"}/>
+        </LoadingRegisterContainer>
+      )}
     </Container>
     )
 }

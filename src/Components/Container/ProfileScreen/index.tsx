@@ -505,6 +505,7 @@ const ProfileScreen = ({navigation, route}: Props) => {
   useEffect(() => {
     if(currentUser.user) { 
     console.log("currentUser.user.profileImage", currentUser.user.profileImage);
+    console.log("currentUser", currentUser);
       GetProfileFeedByList(currentUser.user.nickname)
       .then(function(response) {
         setLoadingProfileFeedByList(false);

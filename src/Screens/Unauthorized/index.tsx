@@ -290,16 +290,18 @@ const Unauthorized = ({navigation}) => {
 
   try {
     
-    const credentialState = await appleAuth.getCredentialStateForUser(user);
+    // 실제 기기에서만 동작
+    //const credentialState = await appleAuth.getCredentialStateForUser(user);
 
-    if (credentialState === AppleAuthCredentialState.AUTHORIZED) {
+    // 실제 기기에서만 동작
+    //if (credentialState === AppleAuthCredentialState.AUTHORIZED) {
       // authorized
       console.log("애플 로그인 성공 user", user);
       console.log("애플 로그인 성공 email", email);
       console.log("애플 로그인 성공 nonce", identityToken);
       console.log("애플 로그인 성공 nonce", nonce);
       console.log("애플 로그인 성공 realUserStatus", realUserStatus);
-      console.log("애플 로그인 성공 credentialState", credentialState);
+      //console.log("애플 로그인 성공 credentialState", credentialState);
 
      const decodedToken: tokenType = jwtDecode(identityToken);
      console.log("애플 로그인 성공 decodedToken", decodedToken);
@@ -374,7 +376,7 @@ const Unauthorized = ({navigation}) => {
      })
 
 
-    }
+    //}
       
       /*
      console.log("애플 로그인 성공 user", user);

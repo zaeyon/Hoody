@@ -23,6 +23,7 @@ padding-right: 12px;
 `;
 
 const CommentRightContainer = Styled.View`
+padding-right: 75px;
 `;
 
 const HeaderContainer = Styled.View`
@@ -113,15 +114,17 @@ const CommentItem = ({profileImage, nickname, comment, createAt, replys, clickTo
 
     const moveToUserProfile = () => {
         if(currentUser.user?.nickname === nickname) {
-            navigation.navigate("Profile")
+            navigation.push("AnotherUserProfileStack", {
+                screen: "AnotherUserProfileScreen",
+                params: {requestedUserNickname: nickname}
+              });
         } else {
-            navigation.navigate("AnotherUserProfileScreen",
-              {
-                  requestedUserNickname: nickname
-              }
-            );
+            navigation.push("AnotherUserProfileStack", {
+              screen: "AnotherUserProfileScreen",
+              params: {requestedUserNickname: nickname}
+            });
         }
-    }
+      }
 
     const onLongPressComment = () => {
         openCommentModal(nickname, commentId)

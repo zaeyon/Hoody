@@ -664,12 +664,20 @@ function CollectionStackScreen() {
 function BottomTab() {
   const currentUser = useSelector((state: any) => state.currentUser)
 
-  const getTabBarVisibility = (route: any) => {
+  const getHomeTabBarVisibility = (route: any) => {
     const routeName = route.state
-    ? route.state.routes[route.state.index].name
+    ? route.state.routes[route.state.index]
     : '';
 
-    if(routeName === 'FeedStack') {
+    const stackRouteName = routeName.state
+    ? routeName.state.routes[routeName.state.index].name
+    : '';
+
+    if(routeName.name === 'FeedStack') {
+      return false;
+    }
+
+    if(stackRouteName === "FeedStack") {
       return false;
     }
 
@@ -709,7 +717,7 @@ function BottomTab() {
       return false;
     }
 
-    if(stackRouteName === "ConfirmPasswordScreen" || stackRouteName === "ChangePasswordSettingScreen" || stackRouteName === "VerifyEmailScreen") {
+    if(stackRouteName === "ConfirmPasswordScreen" || stackRouteName === "ChangePasswordSettingScreen" || stackRouteName === "VerifyEmailScreen" || stackRouteName === "FeedStack") {
       return false;
     }
 
@@ -730,7 +738,7 @@ function BottomTab() {
       return false;
     }
 
-    if(stackRouteName === "ConfirmPasswordScreen" || stackRouteName === "ChangePasswordSettingScreen" || stackRouteName === "VerifyEmailScreen") {
+    if(stackRouteName === "ConfirmPasswordScreen" || stackRouteName === "ChangePasswordSettingScreen" || stackRouteName === "VerifyEmailScreen" || stackRouteName === "FeedStack") {
       return false;
     }
 
@@ -757,7 +765,7 @@ function BottomTab() {
           />
         ),
         unmountOnBlur: false,
-        tabBarVisible: getTabBarVisibility(route),
+        tabBarVisible: getHomeTabBarVisibility(route),
       })}
       />
       <Tab.Screen
@@ -841,12 +849,8 @@ function BottomTab() {
 }
 
 function AppNavigator({navigation, route}: any) {
-  const [currentUser, setAutoLoginUser] = useState({
-    email:"",
-    state:"logout",
-  });
   const [changeUserState, setChangeUserState] = useState<boolean>(false);
-  const currentUserState = useSelector((state) => state.currentUser)
+  const currentUser = useSelector((state: any) => state.currentUser)
   const [pushToken, setPushToken] = useState<string>();
   const [isAuthorized, setIsAuthorized] = useState<boolean>(false);
   const dispatch = useDispatch();
@@ -867,6 +871,47 @@ function AppNavigator({navigation, route}: any) {
       if (fcmToken) {
         console.log("fcmToken 존재", fcmToken);
         dispatch(allActions.userActions.setFcmToken(fcmToken));
+
+
+    console.log("currentUser.fcmToken", fcmToken);
+    // SplashScreen.hide();
+     getAutoLoginUser()
+     .then(function(asyStorResponse) {
+       console.log("responsegggg", asyStorResponse);
+       console.log("자동로그인 세션", asyStorResponse.sessionId)
+       console.log("자동로그인 response.nickname", asyStorResponse.nickname);
+       console.log("자동로그인 response.state", asyStorResponse.state);
+       if(asyStorResponse == "NoLogined") {
+         SplashScreen.hide();
+       } else if(asyStorResponse.userId) {
+         //SplashScreen.hide();
+         POSTAutoLogin(asyStorResponse.userId, asyStorResponse.sessionId, fcmToken)
+         .then(function(response) {
+           console.log("자동로그인 성공", response);
+           console.log("이메일", asyStorResponse.email);
+           dispatch(allActions.userActions.setUser({
+             email: asyStorResponse.email,
+             profileImage: response.user.thumbnailImg,
+             nickname: response.user.nickname,
+             description: response.user.description,
+             userId: response.user.id,
+           }))
+           dispatch(
+             allActions.keywordAction.setInputedKeywordList([])
+           )          
+           setTimeout(() => {
+             SplashScreen.hide();
+           },10)
+         })
+         .catch(function(error) {
+           console.log("자동로그인 실패", error);
+           SplashScreen.hide();
+         })
+       }
+     })
+     .catch(function(error) {
+       console.log("error", error);
+     })
       }
     } else {
       const authorized = await messaging().requestPermission()
@@ -874,8 +919,14 @@ function AppNavigator({navigation, route}: any) {
     }
   }, [])
 
-
   useEffect(() => {
+    handlePushToken()
+  }, [])
+
+  /*
+  useEffect(() => {
+
+    console.log("currentUser.fcmToken", currentUser.fcmToken);
    // SplashScreen.hide();
     getAutoLoginUser()
     .then(function(asyStorResponse) {
@@ -887,7 +938,7 @@ function AppNavigator({navigation, route}: any) {
         SplashScreen.hide();
       } else if(asyStorResponse.userId) {
         //SplashScreen.hide();
-        POSTAutoLogin(asyStorResponse.userId, asyStorResponse.sessionId)
+        POSTAutoLogin(asyStorResponse.userId, asyStorResponse.sessionId, currentUser.fcmToken)
         .then(function(response) {
           console.log("자동로그인 성공", response);
           console.log("이메일", asyStorResponse.email);
@@ -916,16 +967,12 @@ function AppNavigator({navigation, route}: any) {
     })
     
   }, [])
-  
-
-  useEffect(() => {
-    handlePushToken()
-  }, [])
+ 
+  */
 
   return (
     <NavigationContainer>
-    {(currentUserState.loggedIn) ? (  
-   
+    {(currentUser.loggedIn) ? (  
     <NoBottomBarStack.Navigator
     headerMode="none">
       <NoBottomBarStack.Screen name="BottomTab" component={BottomTab}/>

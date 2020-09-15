@@ -844,7 +844,7 @@
 				CODE_SIGN_ENTITLEMENTS = hoogingApp/hoogingApp.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200911;
+				CURRENT_PROJECT_VERSION = 20200915;
 				DEVELOPMENT_TEAM = HC9LUKBNP4;
 				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -855,7 +855,7 @@
 				INFOPLIST_FILE = hoogingApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 1.05;
+				MARKETING_VERSION = 1.06;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -879,13 +879,13 @@
 				CODE_SIGN_ENTITLEMENTS = hoogingApp/hoogingAppRelease.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 20200911;
+				CURRENT_PROJECT_VERSION = 20200915;
 				DEVELOPMENT_TEAM = HC9LUKBNP4;
 				HEADER_SEARCH_PATHS = "$(inherited)";
 				INFOPLIST_FILE = hoogingApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 1.05;
+				MARKETING_VERSION = 1.06;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",

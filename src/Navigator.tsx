@@ -899,7 +899,7 @@ function AppNavigator({navigation, route}: any) {
             userId: response.user.id,
           }))
           dispatch(
-            allActions.userActions.setInputedKeywordList([])
+            allActions.keywordAction.setInputedKeywordList([])
           )          
           setTimeout(() => {
             SplashScreen.hide();

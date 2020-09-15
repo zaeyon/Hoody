@@ -73,8 +73,8 @@ const RecommendTagBanner = ({trendTagsListData, navigation, loadingTrendTag}: Pr
             },
             type : "태그"
         }]
-        dispatch(allActions.userActions.setInputedKeywordList(trendTag));
-
+        //dispatch(allActions.userActions.setInputedKeywordList(trendTag));
+        dispatch(allActions.keywordAction.setInputedKeywordList(trendTag));
         setTimeout(() => {
             navigation.navigate("SearchResultScreen", {
                 requestType: "trendTag"

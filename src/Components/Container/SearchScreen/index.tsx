@@ -311,6 +311,7 @@ const SearchScreen = ({navigation}: Props) => {
 
     const currentUser = useSelector((state: any) => state.currentUser);
     const recentSearchList = useSelector((state: any) => state.search);
+    const keyword = useSelector((state: any) => state.keyword);
     const dispatch = useDispatch();
     const searchInput = useRef(null);
 
@@ -330,7 +331,7 @@ const SearchScreen = ({navigation}: Props) => {
             setNoInputSearch(false);
             GETSearchAutoComplete(text)
             .then(function(response) {
-                var tmpKeywordList = currentUser.inputedKeywordList;
+                var tmpKeywordList = keyword.inputedKeywordList;
                 var tmpAutoCompleteListData = new Array();
                 console.log("response", response);
 
@@ -399,15 +400,16 @@ const SearchScreen = ({navigation}: Props) => {
            tmpSearchResultListData[2].data[index].selected = true;
            setSearchResultListData(tmpSearchResultListData);
        }
-       var tmpSelectedSearchItemList = currentUser.inputedKeywordList;
+       var tmpSelectedSearchItemList = keyword.inputedKeywordList;
        tmpSelectedSearchItemList.push({
            item: item,
            type: type
        });
        setTimeout(() => {
-        dispatch(allActions.userActions.setInputedKeywordList(tmpSelectedSearchItemList))
+        //dispatch(allActions.userActions.setInputedKeywordList(tmpSelectedSearchItemList))
+        dispatch(allActions.keywordAction.setInputedKeywordList(tmpSelectedSearchItemList))
         setInputingSearchText("")
-        console.log("currentUser.inputedKeywordList", currentUser.inputedKeywordList);
+        console.log("keyword.inputedKeywordList", keyword.inputedKeywordList);
        }, 10)
     } else {
             return 0;
@@ -417,10 +419,11 @@ const SearchScreen = ({navigation}: Props) => {
 
     const removeSelectedSearchItem = (requestedItem: object, index: number) => {
         console.log("removeSelectedSearchItem requestedItem", requestedItem);
-        var removedSelectedItem = currentUser.inputedKeywordList;
+        var removedSelectedItem = keyword.inputedKeywordList;
         removedSelectedItem.splice(index, 1);
-        dispatch(allActions.userActions.setInputedKeywordList(removedSelectedItem))
+        //dispatch(allActions.userActions.setInputedKeywordList(removedSelectedItem))
         //setChangeSelectedSearchItem(!changeSelectedSearchItem);
+        dispatch(allActions.keywordAction.setInputedKeywordList(removedSelectedItem))
 
         var tmpSearchResultListData = searchResultListData;
 
@@ -452,7 +455,7 @@ const SearchScreen = ({navigation}: Props) => {
 
     const searchToInputedKeywordList = () => {
         if(inputingSearchText !== "") {
-            var tmpKeywordList = currentUser.inputedKeywordList;
+            var tmpKeywordList = keyword.inputedKeywordList;
             tmpKeywordList.push(
                 {
                     item: {
@@ -463,19 +466,20 @@ const SearchScreen = ({navigation}: Props) => {
             )
 
             setTimeout(() => {
-                dispatch(allActions.userActions.setInputedKeywordList(tmpKeywordList));
+                //dispatch(allActions.userActions.setInputedKeywordList(tmpKeywordList));
+                dispatch(allActions.keywordAction.setInputedKeywordList(tmpKeywordList));
                 setInputingSearchText("");
             })
         }
 
 
-        if(currentUser.inputedKeywordList.length === 1 && currentUser.inputedKeywordList[0].type === "계정") {
-        if(currentUser.user.nickname === currentUser.inputedKeywordList[0].item.nickname) {
+        if(keyword.inputedKeywordList.length === 1 && keyword.inputedKeywordList[0].type === "계정") {
+        if(currentUser.user.nickname === keyword.inputedKeywordList[0].item.nickname) {
         navigation.navigate("Profile");
         } else {
         navigation.navigate("AnotherUserProfileStack", {
             screen: 'AnotherUserProfileScreen',
-            params: {requestedUserNickname: currentUser.inputedKeywordList[0].item.nickname}
+            params: {requestedUserNickname: keyword.inputedKeywordList[0].item.nickname}
         }) 
         }   
         } else {
@@ -487,7 +491,8 @@ const SearchScreen = ({navigation}: Props) => {
 
     const navigateGoBack = () => {
         navigation.goBack();
-        dispatch(allActions.userActions.setInputedKeywordList([]))
+        //dispatch(allActions.userActions.setInputedKeywordList([]))
+        dispatch(allActions.keywordAction.setInputedKeywordList([]));
     }
 
     const renderSelectedItem = ({item,index}: any) => {
@@ -515,7 +520,7 @@ const SearchScreen = ({navigation}: Props) => {
                     <SearchResultItemLeftContainer>
                         <SearchResultItemIconContainer>
                         <ProfileSearchItemImage
-                        source={{uri:item.item.profileImg}}/>
+                        source={{uri:item.item.thumbnailImg}}/>
                         </SearchResultItemIconContainer>
                         <SearchItemText>{item.item.nickname}</SearchItemText>
                     </SearchResultItemLeftContainer>
@@ -572,7 +577,7 @@ const SearchScreen = ({navigation}: Props) => {
                 <SearchResultItemLeftContainer>
                     <SearchResultItemIconContainer>
                     <ProfileSearchItemImage
-                    source={{uri:item.profileImg}}/>
+                    source={{uri:item.thumbnailImg}}/>
                     </SearchResultItemIconContainer>
                     <SearchItemText>{item.nickname}</SearchItemText>
                 </SearchResultItemLeftContainer>
@@ -667,8 +672,8 @@ const SearchScreen = ({navigation}: Props) => {
                 <SearchInputContainer>
                     <SearchInput
                     ref={searchInput}
-                    editable={currentUser.inputedKeywordList ? (currentUser.inputedKeywordList.length === 3 ? false : true) : true}
-                    placeholder={currentUser.inputedKeywordList ? (currentUser.inputedKeywordList.length === 3 ? "키워드는 3개까지 입력 할 수 있습니다." : "검색") : null}
+                    editable={keyword.inputedKeywordList ? (keyword.inputedKeywordList.length === 3 ? false : true) : true}
+                    placeholder={keyword.inputedKeywordList ? (keyword.inputedKeywordList.length === 3 ? "키워드는 3개까지 입력 할 수 있습니다." : "검색") : null}
                     placeholderTextColor={"C6C7CC"}
                     autoFocus={true}
                     value={inputingSearchText}
@@ -677,12 +682,12 @@ const SearchScreen = ({navigation}: Props) => {
                     />
                 </SearchInputContainer>
             </HeaderSearchContainer>
-            {noInputSearch && !currentUser.inputedKeywordList[0] && (
+            {noInputSearch && !keyword.inputedKeywordList[0] && (
                 <HeaderRightContainer>
                 <DisabledHeaderSearchText>검색</DisabledHeaderSearchText>
             </HeaderRightContainer>
             )}
-            {(currentUser.inputedKeywordList[0] || !noInputSearch) && (
+            {(keyword.inputedKeywordList[0] || !noInputSearch) && (
             <TouchableWithoutFeedback onPress={() => searchToInputedKeywordList()}>
             <HeaderRightContainer>
                 <HeaderSearchText>검색</HeaderSearchText>

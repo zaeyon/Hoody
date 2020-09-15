@@ -80,7 +80,8 @@ const LocationTagItem = ({tagItem, tagName, feedCount, navigation}:Props) => {
             type: "태그"
         })
 
-        dispatch(allActions.userActions.setInputedKeywordList(tmpSelectedSearchItemList));
+        //dispatch(allActions.userActions.setInputedKeywordList(tmpSelectedSearchItemList));
+        dispatch(allActions.keywordAction.setInputedKeywordList(tmpSelectedSearchItemList));
 
         setTimeout(() => {
         navigation.navigate("SearchResultScreen")

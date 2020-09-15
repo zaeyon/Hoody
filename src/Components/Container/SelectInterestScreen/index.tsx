@@ -252,7 +252,7 @@ const SelectInterestScreen = ({navigation, route}: Props) => {
         )
 
         dispatch(
-            allActions.userActions.setInputedKeywordList([])
+            allActions.keywordAction.setInputedKeywordList([])
         )
     }
 

@@ -317,7 +317,7 @@ const LoginScreen = ({navigation}) => {
         )
         */
         dispatch(
-          allActions.userActions.setInputedKeywordList([])
+          allActions.keywordAction.setInputedKeywordList([])
         )
       }
       GETRecentSearch(0, 20)

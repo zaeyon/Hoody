@@ -361,6 +361,7 @@ const SearchResultScreen = ({navigation, route}: Props) => {
 
     
     const currentUser = useSelector((state: any) => state.currentUser);
+    const keyword = useSelector((state: any) => state.keyword);
     const dispatch = useDispatch();
 
     var radio_props = [
@@ -371,43 +372,45 @@ const SearchResultScreen = ({navigation, route}: Props) => {
     var query = "";
 
     useEffect(() => {
-      if(currentUser?.inputedKeywordList) {
-        console.log("currentUser.inputedKeywordList", currentUser.inputedKeywordList);
-        if(currentUser.inputedKeywordList.length === 1) {
-          if(currentUser.inputedKeywordList[0].type === "계정") {
-            if(currentUser.user.nickname === currentUser.inputedKeywordList[0].item.nickname) {
+      if(keyword?.inputedKeywordList) {
+        console.log("keyword.inputedKeywordList", keyword.inputedKeywordList);
+        if(keyword?.inputedKeywordList.length === 1) {
+          if(keyword?.inputedKeywordList[0].type === "계정") {
+            if(currentUser.user.nickname === keyword.inputedKeywordList[0].item.nickname) {
               navigation.navigate("Profile");
             } else {
               navigation.navigate("AnotherUserProfileStack", {
                 screen: 'AnotherUserProfileScreen',
-                params: {requestedUserNickname: currentUser.inputedKeywordList[0].item.nickname, requestScreen: "SearchResultScreen"}
+                params: {requestedUserNickname: keyword.inputedKeywordList[0].item.nickname, requestScreen: "SearchResultScreen"}
             }) 
             }
           } else {
             setSingleKeyword(true);
           }
         }
+      
 
-        currentUser.inputedKeywordList.forEach((keyword: any, index: number) => {
-          if(keyword.type === "태그") {
-            if(index === currentUser.inputedKeywordList.length-1) {
-              query = query + "tag:" + keyword.item.name  
+        keyword.inputedKeywordList.forEach((keywordObj: any, index: number) => {
+          if(keywordObj.type === "태그") {
+            if(index === keyword?.inputedKeywordList.length-1) {
+              query = query + "tag:" + keywordObj.item.name  
             } else {
-              query = query + "tag:" + keyword.item.name + ","
+              query = query + "tag:" + keywordObj.item.name + ","
             }
-          } else if(keyword.type === "계정") {
-            if(index === currentUser.inputedKeywordList.length-1) {
-              query = query + "user:" + keyword.item.nickname
+          } else if(keywordObj.type === "계정") {
+            if(index === keyword?.inputedKeywordList.length-1) {
+              query = query + "user:" + keywordObj.item.nickname
             } else {
-              query = query + "user:" + keyword.item.nickname + ","
+              query = query + "user:" + keywordObj.item.nickname + ","
             } 
-          } else if(keyword.type === "장소") {
-            if(index === currentUser.inputedKeywordList.length-1) {
-              query = query + "address:" + keyword.item.address
+          } else if(keywordObj.type === "장소") {
+            if(index === keyword?.inputedKeywordList.length-1) {
+              query = query + "address:" + keywordObj.item.address
             } else {
-              query = query + "address:" + keyword.item.address + ","
+              query = query + "address:" + keywordObj.item.address + ","
             }
           }
+          
 
           setTimeout(() => {
             feedOffset = 0;
@@ -423,7 +426,7 @@ const SearchResultScreen = ({navigation, route}: Props) => {
         })
       }
 
-    }, [currentUser, searchSort])
+    }, [keyword, searchSort])
 
     const keywordSearchFeedList = (query: string, order: string, feedOffset: number, feedLimit: number) => {
       GETSearchResult("post", query, order, feedOffset, feedLimit)
@@ -437,24 +440,24 @@ const SearchResultScreen = ({navigation, route}: Props) => {
             } else {
               setNoSearchFeedList(false);
             }
-            var tmpKeywordList = currentUser?.inputedKeywordList;
-            if(currentUser?.inputedKeywordList.length === 1) {
-              if(currentUser.inputedKeywordList[0]?.type === "태그") {
-                if(response.tagFollowing[currentUser.inputedKeywordList[0]?.item.name]) {
+            var tmpKeywordList = keyword?.inputedKeywordList;
+            if(keyword?.inputedKeywordList.length === 1) {
+              if(keyword.inputedKeywordList[0]?.type === "태그") {
+                if(response.tagFollowing[keyword.inputedKeywordList[0]?.item.name]) {
                   console.log("태그 팔로우됌")
                   setCurrentUserFollowing(true)
                 } else {
                   setCurrentUserFollowing(false)
                 } 
-              } else if(currentUser.inputedKeywordList[0]?.type === "계정") {
-                if(response.tagFollowing[currentUser.inputedKeywordList[0]?.item.nickname]) {
+              } else if(keyword.inputedKeywordList[0]?.type === "계정") {
+                if(response.tagFollowing[keyword.inputedKeywordList[0]?.item.nickname]) {
                   setCurrentUserFollowing(true)
                 } else {
                   setCurrentUserFollowing(false)
                 }
               }
             }
-            //dispatch(allActions.userActions.setInputedKeywordList(tmpKeywordList));
+
             })
             .catch(function(error) {
             console.log("GETSearchResult error", error);
@@ -517,14 +520,15 @@ const SearchResultScreen = ({navigation, route}: Props) => {
     }
 
     const removeKeywordItem = (index:number) => {
-        var removedKeywordList = currentUser.inputedKeywordList;
+        var removedKeywordList = keyword.inputedKeywordList;
         removedKeywordList.splice(index, 1);
-        dispatch(allActions.userActions.setInputedKeywordList(removedKeywordList));
+        //dispatch(allActions.userActions.setInputedKeywordList(removedKeywordList));
+        dispatch(allActions.keywordAction.setInputedKeywordList(removedKeywordList));
     }
 
     const followKeyword = () => {
       setCurrentUserFollowing(true)
-      POSTFollowTag(currentUser.inputedKeywordList[0]?.item.id)
+      POSTFollowTag(keyword.inputedKeywordList[0]?.item.id)
       .then(function(response) {
         console.log("followKeyword response", response);
       })
@@ -535,7 +539,7 @@ const SearchResultScreen = ({navigation, route}: Props) => {
 
     const unfollowKeyword = () => {
       setCurrentUserFollowing(false);
-      DELETEUnfollowTag(currentUser.inputedKeywordList[0]?.item.id)
+      DELETEUnfollowTag(keyword.inputedKeywordList[0]?.item.id)
       .then(function(response) {
         console.log("unfollowKeyword response", response);
       })
@@ -547,11 +551,12 @@ const SearchResultScreen = ({navigation, route}: Props) => {
 
     const selectKeywordListItem = (index: number) => {
       console.log("index", index);
-      var tmpKeywordList = currentUser.inputedKeywordList;
+      var tmpKeywordList = keyword.inputedKeywordList;
       var selectedSingleKeywordList = tmpKeywordList.splice(index, 1);
-      dispatch(allActions.userActions.setInputedKeywordList(selectedSingleKeywordList));
+      //dispatch(allActions.userActions.setInputedKeywordList(selectedSingleKeywordList));
+      dispatch(allActions.keywordAction.setInputedKeywordList(selectedSingleKeywordList));
       console.log("selectedSingleKeywordList", selectedSingleKeywordList);
-      console.log("currentUser.inputedKeywordList", currentUser.inputedKeywordList);
+      console.log("keyword.inputedKeywordList", keyword.inputedKeywordList);
     }
 
     const selectProfileKeywordListItem = (index: number, item: object) => {
@@ -566,7 +571,8 @@ const SearchResultScreen = ({navigation, route}: Props) => {
       navigation.goBack();
       setTimeout(() => {
         if(route.params?.requestType === "trendTag") {
-          dispatch(allActions.userActions.setInputedKeywordList([]))
+          //dispatch(allActions.userActions.setInputedKeywordList([]))
+          dispatch(allActions.keywordAction.setInputedKeywordList([]))
         }
       })
     }
@@ -666,7 +672,7 @@ const SearchResultScreen = ({navigation, route}: Props) => {
               showsHorizontalScrollIndicator={false}
               keyboardShouldPersistTaps={"handled"}
               horizontal={true}
-              data={currentUser.inputedKeywordList}
+              data={keyword.inputedKeywordList}
               renderItem={renderKeywordItem}
               />
           </KeywordItemListContainer>    
@@ -674,14 +680,14 @@ const SearchResultScreen = ({navigation, route}: Props) => {
       } else {
         return (
           <SingleKeywordItemContainer>
-            {currentUser.inputedKeywordList[0]?.type === "태그" && (
+            {keyword.inputedKeywordList[0]?.type === "태그" && (
               <SingleKeywordContainer>
                 <SingleKeywordInfoContainer>
               <SingleKeywordImage
               source={require('~/Assets/Images/SearchResult/ic_tagImage.png')}/>
               <SingleKeywordTextContainer>
-              <SingleKeywordFeedCountText>{((currentUser.inputedKeywordList[0]?.item.reviewNum != undefined) ? currentUser.inputedKeywordList[0]?.item.reviewNum : "0")  + "개의 게시물"}</SingleKeywordFeedCountText>
-                <SingleKeywordDescripText>{currentUserFollowing ? "이미 팔로우하신 태그입니다." : "#" + currentUser.inputedKeywordList[0]?.item.name + "를(을) 팔로우하고 소식을 받아보세요."}</SingleKeywordDescripText>
+              <SingleKeywordFeedCountText>{((keyword.inputedKeywordList[0]?.item.reviewNum != undefined) ? keyword.inputedKeywordList[0]?.item.reviewNum : "0")  + "개의 게시물"}</SingleKeywordFeedCountText>
+                <SingleKeywordDescripText>{currentUserFollowing ? "이미 팔로우하신 태그입니다." : "#" + keyword.inputedKeywordList[0]?.item.name + "를(을) 팔로우하고 소식을 받아보세요."}</SingleKeywordDescripText>
               </SingleKeywordTextContainer>
               </SingleKeywordInfoContainer>
               {currentUserFollowing && (
@@ -700,14 +706,14 @@ const SearchResultScreen = ({navigation, route}: Props) => {
               )}
               </SingleKeywordContainer>
             )}
-            {currentUser.inputedKeywordList[0]?.type === "장소" && (
+            {keyword.inputedKeywordList[0]?.type === "장소" && (
               <SingleKeywordContainer>
                 <SingleKeywordInfoContainer>
               <SingleKeywordImage
               source={require('~/Assets/Images/SearchResult/ic_placeImage.png')}/>
               <SingleKeywordTextContainer>
-                <SingleKeywordFeedCountText>{(currentUser.inputedKeywordList[0]?.item.reviewNum != undefined) ? currentUser.inputedKeywordList[0]?.item.reviewNum : "0"  + "개의 게시물"}</SingleKeywordFeedCountText>
-                <SingleKeywordDescripText>{currentUser.inputedKeywordList[0]?.item.address}</SingleKeywordDescripText>
+                <SingleKeywordFeedCountText>{(keyword.inputedKeywordList[0]?.item.reviewNum != undefined) ? keyword.inputedKeywordList[0]?.item.reviewNum : "0"  + "개의 게시물"}</SingleKeywordFeedCountText>
+                <SingleKeywordDescripText>{keyword.inputedKeywordList[0]?.item.address}</SingleKeywordDescripText>
               </SingleKeywordTextContainer>
               </SingleKeywordInfoContainer>
               </SingleKeywordContainer>
@@ -740,7 +746,7 @@ const SearchResultScreen = ({navigation, route}: Props) => {
                 <TouchableWithoutFeedback onPress={() => selectProfileKeywordListItem(index, item)}>
                 <KeywordProfileContainer>
                     <KeywordItemProfileImage
-                    source={{uri:item.item.profileImg}}/>
+                    source={{uri:item.item.thumbnailImg}}/>
                     <KeywordItemText
                     style={{marginLeft: 6}}
                     >{item.item.nickname}</KeywordItemText>
@@ -826,22 +832,24 @@ const SearchResultScreen = ({navigation, route}: Props) => {
                 <FlatList
                 contentContainerStyle={{backgroundColor:'#ffffff', justifyContent:'center', alignItems:'center'}}
                 horizontal={true}
-                data={currentUser.inputedKeywordList}
+                data={keyword.inputedKeywordList}
                 renderItem={({item, index}) => {
                   if(item.type === "태그") {
                   return (
-                    <HeaderTitleText>{index === currentUser.inputedKeywordList.length-1 ?"#" + item.item.name : "#" + item.item.name +", "}</HeaderTitleText>
+                    <HeaderTitleText>{index === keyword?.inputedKeywordList.length-1 ?"#" + item.item.name : "#" + item.item.name +", "}</HeaderTitleText>
                     )
                   } else if(item.type === "장소") {
                   return (
-                    <HeaderTitleText>{index === currentUser.inputedKeywordList.length-1 ? item.item.address : item.item.address + ", "}</HeaderTitleText>
+                    <HeaderTitleText>{index === keyword?.inputedKeywordList.length-1 ? item.item.address : item.item.address + ", "}</HeaderTitleText>
                   )
                   } else if(item.type === "계정") {
                   return (
-                    <HeaderTitleText>{index === currentUser.inputedKeywordList.length-1 ? item.item.nickname : item.item.nickname + ", "}</HeaderTitleText>
+                    <HeaderTitleText>{index === keyword?.inputedKeywordList.length-1 ? item.item.nickname : item.item.nickname + ", "}</HeaderTitleText>
                   )
                   }
-                }}/>
+                }
+                
+                }/>
                 </HeaderTitleContainer>
                 <TouchableWithoutFeedback onPress={() => showFilterModal()}>
                     <HeaderRightContainer>

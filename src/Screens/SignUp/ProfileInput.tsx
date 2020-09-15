@@ -715,7 +715,7 @@ const ProfileInput = ({navigation, route}) => {
                 nickname: response.data.user.nickname,
                 userId: response.data.user.id,
               }),
-            );
+            
             dispatch(
               allActions.userActions.setInputedKeywordList([])
             )

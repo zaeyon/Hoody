@@ -323,7 +323,7 @@ const Unauthorized = ({navigation}) => {
            })
          )
          dispatch(
-           allActions.userActions.setInputedKeywordList([])
+           allActions.keywordAction.setInputedKeywordList([])
          )
        })
        .catch(function(error) {
@@ -485,7 +485,7 @@ const Unauthorized = ({navigation}) => {
                 })
               )
               dispatch(
-                allActions.userActions.setInputedKeywordList([])
+                allActions.keywordAction.setInputedKeywordList([])
               )
             })
             .catch(function(error) {
@@ -584,7 +584,7 @@ const Unauthorized = ({navigation}) => {
             })
           )
         dispatch(
-          allActions.userActions.setInputedKeywordList([])
+          allActions.keywordAction.setInputedKeywordList([])
         )
         })
         .catch(function(error) {
@@ -658,7 +658,7 @@ const Unauthorized = ({navigation}) => {
             })
           )
         dispatch(
-          allActions.userActions.setInputedKeywordList([])
+          allActions.keywordAction.setInputedKeywordList([])
         )
         })
         .catch(function(error) {

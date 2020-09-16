@@ -108,19 +108,25 @@ interface Props {
     rating: number,
     expense: number,
     address: string,
+    product: any,
 }
 
 
-const SelectFeedItem = ({selected, index, onSelectCircle, mainImage, mainTag, rating, expense, address}: Props) => {
+const SelectFeedItem = ({selected, index, onSelectCircle, mainImage, mainTag, rating, expense, address, product}: Props) => {
 
     return (
+     <TouchableWithoutFeedback onPress={() => onSelectCircle(index)}>
         <SelectFeedContainer>
         <SelectScrapItemContainer>
             {mainImage && (
             <TileFeedImage
             source={{uri:mainImage.url}}/>
             )}
-            {!mainImage && (
+            {!mainImage && product[0] && (
+            <TileFeedImage
+            source={{uri:product[0].image}}/>
+            )}
+            {!mainImage && !product[0] && (
             <NoFeedImage/>
             )}
             <TagListContainer>
@@ -150,6 +156,7 @@ const SelectFeedItem = ({selected, index, onSelectCircle, mainImage, mainTag, ra
             )}
         </SelectCircleContainer>
         </SelectFeedContainer>
+        </TouchableWithoutFeedback>
     )
 }
 

@@ -284,7 +284,7 @@ const AddCollectionFeedScreen = ({navigation, route}: Props) => {
     }
 
     const renderMyFeedTileItem = ({item, index}:any) => {
-
+        console.log("renderMyFeedTileItem", item);
         var selectOrder:number;
 
         if(item.selected) {
@@ -303,6 +303,7 @@ const AddCollectionFeedScreen = ({navigation, route}: Props) => {
             rating={item.starRate}
             expense={item.expense ? item.expense : null}
             location={item.address ? item.address.address : null}
+            product={item.Products ? item.Products : null}
             />
         )
     }

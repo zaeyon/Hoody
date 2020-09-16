@@ -10,10 +10,9 @@ import {useSelector} from 'react-redux';
 import {isIphoneX} from 'react-native-iphone-x-helper';
 
 import ProfileListFeedItem from '~/Components/Presentational/ProfileScreen/ProfileListFeedItem';
-import ProfileTileFeedItem from '~/Components/Presentational/ProfileScreen/ProfileTileFeedItem';
+import TileFeedItem from '~/Components/Presentational/TileFeedItem';
 import FeedItem from '~/Components/Presentational/ProfileScreen/FeedItem';
 import MemoizedFeedItem from '~/Components/Presentational/FeedListScreen/MomoizedFeedItem';
-
 
 const UserFeedListContainer = Styled.View`
  width: ${wp('100%')};
@@ -217,14 +216,15 @@ const ProfileFeedList = ({navigation, route, feedListData, currentSortType, onSc
         numColumns={2}
         renderItem={({item, index}) => {
           return (
-            <ProfileTileFeedItem
+            <TileFeedItem
             navigation={navigation}
             postId={item.id}
-            mainImage={item.mediaFiles[0] ? item.mediaFiles[0].url : null}
+            product={item.Products}
+            mainImage={item.mediaFiles[0] ? item.mediaFiles[0] : ""}
             mainTag={item.mainTags.name}
             rating={item.starRate}
-            expense={item.expense ? item.expense +"원" : null}
-            location={item.address ? item.address.address : null}
+            expense={item.expense}
+            address={item.address ? item.address.address : ""}
             />
           )
         }}/>

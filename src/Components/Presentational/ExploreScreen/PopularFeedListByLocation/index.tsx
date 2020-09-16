@@ -6,7 +6,7 @@ import {
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 
-import TileFeedItem from '~/Components/Presentational/ExploreScreen/TileFeedItem';
+import TileFeedItem from '~/Components/Presentational/TileFeedItem';
 import LocationTagItem from '~/Components/Presentational/ExploreScreen/LocationTagItem';
 
 const Container = Styled.View`
@@ -68,15 +68,16 @@ const PopularFeedListByLocation = ({navigation,hotPlaceData, placeName}: Props) 
 
     const renderLocationPopularFeedItem = ({item, index}: any) => {
         return (
-        <TileFeedItem
-        navigation={navigation}
-        mainImageUri={item.mediaFiles[0] ? item.mediaFiles[0].thumbnailImg : ""}
-        postId={item.id}
-        mainTag={item.mainTags.name}
-        address={item.address ? item.address.address : null}
-        expense={item.expense ? item.expense : null}
-        rating={item.starRate}
-        />
+            <TileFeedItem
+            navigation={navigation}
+            postId={item.id}
+            product={item.Products}
+            mainImage={item.mediaFiles[0] ? item.mediaFiles[0] : ""}
+            mainTag={item.mainTags.name}
+            rating={item.starRate}
+            expense={item.expense}
+            address={item.address ? item.address.address : ""}
+            />
         )
     }
 

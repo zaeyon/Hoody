@@ -224,7 +224,7 @@ interface Props {
 
 const ScrapFolderItem = ({folderId, folderName, defaultFolder, defaultFolderId, feedImages, name, navigation}: Props) => {
     
-    console.log("feedImages", feedImages);
+    console.log("feedImages[0].mediaFiles", feedImages[0].mediaFiles);
 
     const moveToScrapFolderFeedList = () => {
         navigation.navigate("ScrapFolderFeedListScreen", {
@@ -243,7 +243,7 @@ const ScrapFolderItem = ({folderId, folderName, defaultFolder, defaultFolderId, 
         <OneFeedScrapCoverContainer>
             {feedImages[0].mediaFiles[0] && (
                 <ScrapFolderCoverImage
-                source={{uri:feedImages[0].mediaFiles[0].url}}/>
+                source={{uri:feedImages[0].mediaFiles[0].thumbnailImg}}/>
             )}
             {!feedImages[0].mediaFiles[0] && (
                 <NoScrapFolderCoverImage/>
@@ -254,14 +254,14 @@ const ScrapFolderItem = ({folderId, folderName, defaultFolder, defaultFolderId, 
         <TwoFeedScrapCoverContainer>
             {feedImages[0].mediaFiles[0] && (
                <TowFeedScrapLeftCoverImage
-               source={{uri:feedImages[0].mediaFiles[0].url}}/>   
+               source={{uri:feedImages[0].mediaFiles[0].thumbnailImg}}/>   
             )}
             {!feedImages[0].mediaFiles[0] && (
                 <TowFeedScrapLeftEmptyImage/>
             )}
             {feedImages[1].mediaFiles[0] && (
                <TowFeedScrapRightCoverImage
-               source={{uri:feedImages[1].mediaFiles[0].url}}/>   
+               source={{uri:feedImages[1].mediaFiles[0].thumbnailImg}}/>   
             )}
             {!feedImages[1].mediaFiles[0] && (
                 <TowFeedScrapRightEmptyImage/>
@@ -273,14 +273,14 @@ const ScrapFolderItem = ({folderId, folderName, defaultFolder, defaultFolderId, 
             <ThreeFeedScrapCoverTopContainer>
             {feedImages[0].mediaFiles[0] && (
                <ThreeFeedScrapFirstCoverImage
-               source={{uri:feedImages[0].mediaFiles[0].url}}/>   
+               source={{uri:feedImages[0].mediaFiles[0].thumbnailImg}}/>   
             )}
             {!feedImages[0].mediaFiles[0] && (
                 <ThreeFeedScrapFirstEmptyImage/>
             )}
             {feedImages[1].mediaFiles[0] && (
                <ThreeFeedScrapSecondCoverImage
-               source={{uri:feedImages[1].mediaFiles[0].url}}/>   
+               source={{uri:feedImages[1].mediaFiles[0].thumbnailImg}}/>   
             )}
             {!feedImages[1].mediaFiles[0] && (
                 <ThreeFeedScrapSecondEmptyImage/>
@@ -288,7 +288,7 @@ const ScrapFolderItem = ({folderId, folderName, defaultFolder, defaultFolderId, 
             </ThreeFeedScrapCoverTopContainer>
             {feedImages[2].mediaFiles[0] && (
                 <ThreeFeedScrapThirdCoverImage
-                source={{uri:feedImages[2].mediaFiles[0].url}}/>
+                source={{uri:feedImages[2].mediaFiles[0].thumbnailImg}}/>
             )}
             {!feedImages[2].mediaFiles[0] && (
                 <ThreeFeedScrapThirdEmptyImage/>
@@ -300,14 +300,14 @@ const ScrapFolderItem = ({folderId, folderName, defaultFolder, defaultFolderId, 
             <ManyFeedScrapCoverTopContainer>
             {feedImages[0].mediaFiles[0] && (
                <ManyFeedScrapFirstCoverImage
-               source={{uri:feedImages[0].mediaFiles[0].url}}/>   
+               source={{uri:feedImages[0].mediaFiles[0].thumbnailImg}}/>   
             )}
             {!feedImages[0].mediaFiles[0] && (
                 <ManyFeedScrapFirstEmptyImage/>
             )}
             {feedImages[1].mediaFiles[0] && (
                <ManyFeedScrapSecondCoverImage
-               source={{uri:feedImages[1].mediaFiles[0].url}}/>   
+               source={{uri:feedImages[1].mediaFiles[0].thumbnailImg}}/>   
             )}
             {!feedImages[1].mediaFiles[0] && (
                 <ManyFeedScrapSecondEmptyImage/>
@@ -316,14 +316,14 @@ const ScrapFolderItem = ({folderId, folderName, defaultFolder, defaultFolderId, 
             <ManyFeedScrapCoverBottomContainer>
             {feedImages[2].mediaFiles[0] && (
                 <ManyFeedScrapThirdCoverImage
-                source={{uri:feedImages[2].mediaFiles[0].url}}/>
+                source={{uri:feedImages[2].mediaFiles[0].thumbnailImg}}/>
             )}
             {!feedImages[2].mediaFiles[0] && (
                 <ManyFeedScrapThirdEmptyImage/>
             )}
             {feedImages[3].mediaFiles[0] && (
                 <ManyFeedScrapFourthCoverImage
-                source={{uri:feedImages[3].mediaFiles[0].url}}/>
+                source={{uri:feedImages[3].mediaFiles[0].thumbnailImg}}/>
             )}
             {!feedImages[3].mediaFiles[0] && (
                 <ManyFeedScrapFourthEmptyImage/>

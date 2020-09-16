@@ -13,7 +13,7 @@ import {isIphoneX} from 'react-native-iphone-x-helper'
 import allActions from '~/action';
 
 // Local Component
-import CollectionTileFeedItem from '~/Components/Presentational/CollectionDetailScreen/CollectionTileFeedItem';
+import TileFeedItem from '~/Components/Presentational/TileFeedItem';
 
 // Route
 import GETCollectionDetailInfo from '~/Route/Collection/GETCollectionDetailInfo';
@@ -466,15 +466,17 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
     }
 
     const renderCollectionFeedItem = ({item, index}: any) => {
+        console.log("renderCollectionFeedItem item", item)
         return (
-            <CollectionTileFeedItem
+            <TileFeedItem
             navigation={navigation}
-            mainImage={item.mediaFiles[0] ? item.mediaFiles[0] : null}
+            postId={item.id}
+            product={item.Products}
+            mainImage={item.mediaFiles[0] ? item.mediaFiles[0] : ""}
             mainTag={item.mainTags.name}
             rating={item.starRate}
             expense={item.expense}
-            location={item.address ? item.address.address : null}
-            postId={item.id}
+            address={item.address ? item.address.address : ""}
             />
         )
     }
@@ -664,7 +666,7 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
             }}>    
             <CollectionCoverImage
             blurRadius={headerBlur ? 40: 0}
-            source={{uri:collectionDetailInfo.coverImg ? collectionDetailInfo.coverImg : ""}}/>
+            source={{uri:collectionDetailInfo.thumbnailImg ? collectionDetailInfo.thumbnailImg : ""}}/>
             <HeaderBar style={{marginTop: getStatusBarHeight()}}>
                 <HeaderLeftContainer>
                     <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
@@ -750,7 +752,7 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
                       <TouchableWithoutFeedback onPress={() => moveToUserProfile()}>
                       <WriterInfoContainer>
                       <ProfileImage
-                      source={{uri:collectionDetailInfo.user?.profileImg}}/>
+                      source={{uri:collectionDetailInfo.user?.thumbnailImg}}/>
                       <ProfileNicknameText>{collectionDetailInfo.user?.nickname}</ProfileNicknameText>
                       </WriterInfoContainer>
                       </TouchableWithoutFeedback>
@@ -781,7 +783,7 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
                   </CollectionInfoFooter>
                   </CollectionInfoContainer>
                   <FlatList
-                  style={{paddingBottom:20}}
+                  contentContainerStyle={{paddingBottom:35}}
                   columnWrapperStyle={{justifyContent:'space-between', paddingLeft:16, paddingRight:15, paddingTop:11, paddingBottom:0}}
                   numColumns={2}
                   data={collectionDetailInfo.Posts}

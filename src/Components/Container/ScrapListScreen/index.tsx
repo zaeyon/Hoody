@@ -5,6 +5,7 @@ import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import {isIphoneX} from 'react-native-iphone-x-helper';
 
 import ScrapFolderItem from '~/Components/Presentational/ScrapListScreen/ScrapFolderItem';
 //import ScrapFolderItem from '~/Components/Presentational/ScrapListScreen/ScrapFolderItemTest';
@@ -65,7 +66,7 @@ const HeaderAddIcon = Styled.Image`
 const BodyContainer = Styled.View`
  flex: 1;
  background-color: #ffffff;
- padding-bottom: 40px;
+ padding-bottom: ${isIphoneX() ? hp("7/5%") : hp("10%")}
 `;
 
 const TEST_SCRAP_FOLDER_LIST = [

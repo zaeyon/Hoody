@@ -780,37 +780,12 @@ const SearchResultScreen = ({navigation, route}: Props) => {
         }
     }
 
-
-    const renderFeedItem = ({item, index}: any) => {
-        return (
-            <MemoizedFeedItem
-                  id={item.id}
-                  profile_image={item.user.thumbnailImg}
-                  nickname={item.user.nickname}
-                  createdAt={item.createdAt}
-                  rating={item.starRate}
-                  main_tag={item.mainTags.name}
-                  sub_tag1={item.subTagOnes?item.subTagOnes.name:null}
-                  sub_tag2={item.subTagTwos?item.subTagTwos.name:null}
-                  like_count={item.likes}
-                  comment_count={item.commentsCount}
-                  reply_count={item.replysCount}
-                  mediaFiles={item.mediaFiles}
-                  image_count={item.mediaFiles.length}
-                  location={item.address?item.address.address:null}
-                  expense={item.expense?item.expense:null}
-                  desArray={item.descriptions}
-                  navigation={navigation}
-                  productArray={item.Products}
-                />
-        )
-    }
-
     const renderCollectionItem = ({item, index}: any) => {
+      console.log("rencerCollectionItem", item);
       return (
         <CollectionItem
         collectionId={item.id ? item.id : null}
-        coverImage={item.coverImg ? item.coverImg : null}
+        coverImage={item.thumbnailImg ? item.thumbnailImg : null}
         name={item.name ? item.name : null}
         navigation={navigation}
         profileNickname={item.Posts[0] ? item.Posts[0].user.nickname : null}
@@ -828,7 +803,7 @@ const SearchResultScreen = ({navigation, route}: Props) => {
                     <HeaderBackIcon
                     source={require('~/Assets/Images/HeaderBar/ic_back.png')}/>
                 </HeaderLeftContainer>
-                </TouchableWithoutFeedback>
+                </TouchableWithoutFeedback> 
                 <HeaderTitleContainer>
                 <FlatList
                 showsHorizontalScrollIndicator={false}

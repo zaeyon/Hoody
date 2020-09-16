@@ -91,7 +91,7 @@ const ProfileCollectionList = ({collectionListData, navigation, profileNickname,
             style={index == collectionListData.length-1}>
             <ProfileCollectionItem
             collectionId={item.id}
-            coverImage={item.coverImg ? item.coverImg : ""}
+            coverImage={item.thumbnailImg ? item.thumbnailImg : ""}
             name={item.name}
             navigation={navigation}
             profileNickname={profileNickname}

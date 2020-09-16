@@ -340,7 +340,7 @@ const Unauthorized = ({navigation}) => {
            onPress: () => 0,
          }
        ])
-     } else if(response.provier === "kakao") {
+     } else if(response.provider === "kakao") {
        setLoadingApple(false);
        Alert.alert("카카오톡 로그인으로 등록된 계정입니다." , '', [
          {
@@ -502,7 +502,7 @@ const Unauthorized = ({navigation}) => {
                 onPress: () => 0,
               }
             ])
-          } else if(response.provier === "apple") {
+          } else if(response.provider === "apple") {
             setLoadingKakao(false);
             Alert.alert("애플로그인으로 등록된 계정입니다." , '', [
               {
@@ -593,7 +593,7 @@ const Unauthorized = ({navigation}) => {
           console.log("소셜 로그인 실패", error);
           setLoadingGoogle(false);
         })
-      } else if(response.provier === "apple") {
+      } else if(response.provider === "apple") {
         setLoadingGoogle(false);
         Alert.alert("애플로그인으로 등록된 계정입니다." , '', [
           {
@@ -667,7 +667,8 @@ const Unauthorized = ({navigation}) => {
           setLoadingGoogle(false);
           console.log("소셜 로그인 실패", error);
         })
-      } else if(response.provier === "apple") {
+      } else if(response.provider === "apple") {
+        console.log("애플로 이미 가입된 계정")
         setLoadingGoogle(false);
         Alert.alert("애플로그인으로 등록된 계정입니다." , '', [
           {

@@ -76,18 +76,18 @@ color: #898A8D;
 
 interface Props {
     navigation: any,
-    product: object,
+    product?: any,
     mainImage: string,
     mainTag: string,
     rating: number,
     expense: string,
-    location: string,
+    address: string,
     postId: number,
 }
 
 
 
-const CollectionTileFeedItem = ({navigation, product, mainImage, mainTag, rating, expense, location, postId}: Props) => {
+const TileFeedItem = ({navigation, product, mainImage, mainTag, rating, expense, address, postId}: Props) => {
 
     const moveToFeedDetail = () => {
         navigation.push("FeedStack", {
@@ -101,15 +101,15 @@ const CollectionTileFeedItem = ({navigation, product, mainImage, mainTag, rating
     return (
         <TouchableWithoutFeedback onPress={() => moveToFeedDetail()}>
         <ProfileTileFeedItemContainer>
-            {mainImage && (
+            {mainImage !== "" && (
             <TileFeedImage
             source={{uri:mainImage.thumbnailImg}}/>
             )}
-            {!mainImage && product[0] && (
+            {mainImage === "" && product[0] && (
             <TileFeedImage
             source={{uri:product[0].image}}/>
             )}
-            {!mainImage && !product[0] && (
+            {mainImage === "" && !product[0] && (
                 <NoFeedImage></NoFeedImage>
             )}
             <FeedInfoContainer>
@@ -123,7 +123,7 @@ const CollectionTileFeedItem = ({navigation, product, mainImage, mainTag, rating
                 <ExpenseText>{expense ? " · " + expense+"원" : null}</ExpenseText>
             </RatingExpenseContainer>
             <LocationContainer>
-                <LocationText>{location ? location : null}</LocationText>
+                <LocationText>{address ? address : null}</LocationText>
             </LocationContainer>
             </FeedInfoContainer>
         </ProfileTileFeedItemContainer>
@@ -131,4 +131,4 @@ const CollectionTileFeedItem = ({navigation, product, mainImage, mainTag, rating
     )
 }
 
-export default CollectionTileFeedItem;
+export default TileFeedItem;

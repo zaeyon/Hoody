@@ -194,6 +194,7 @@ const AddScrapAlbumScreen = ({navigation, route}: Props) => {
             rating={item.starRate}
             expense={item.expense}
             address={item.address ? item.address.address : null}
+            product={item.Products}
             />
         )
     }

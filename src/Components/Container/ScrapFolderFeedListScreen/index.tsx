@@ -6,9 +6,11 @@ import {
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import Modal from 'react-native-modal';
+import {isIphoneX} from 'react-native-iphone-x-helper';
 
 // Local Component
 import ScrapFeedItem from '~/Components/Presentational/ScrapFolderFeedListScreen/ScrapFeedItem';
+import TileFeedItem from '~/Components/Presentational/TileFeedItem';
 
 // Route
 import GETScrapFolder from '~/Route/Scrap/GETScrapFolder';
@@ -76,6 +78,7 @@ padding: 7px 16px 7px 15px;
 const BodyContainer = Styled.View`
  width: ${wp('100%')};
  flex: 1;
+ padding-bottom: ${isIphoneX() ? hp("5.5%") : hp("8%")}
  background-color: #ffffff;
 `;
 
@@ -207,14 +210,16 @@ const ScrapFolderFeedListScreen = ({navigation, route}: any) => {
 
     const renderScrapFeedItem = ({item, index}: any) => {
         return (
-            <ScrapFeedItem
-            navigation={navigation}
-            postId={item.id}
-            mainImage={item.mediaFiles[0] ? item.mediaFiles[0].url : null}
-            mainTag={item.mainTags.name}
-            rating={item.starRate}
-            expense={item.expense ? item.expense + "원" : null}
-            location={item.address ? item.address.address : null}/>
+        <TileFeedItem
+          navigation={navigation}
+          postId={item.id}
+          product={item.Products}
+          mainImage={item.mediaFiles[0] ? item.mediaFiles[0] : ""}
+          mainTag={item.mainTags.name}
+          rating={item.starRate}
+          expense={item.expense}
+          address={item.address ? item.address.address : ""}
+          />
         )
     }
 
@@ -245,6 +250,7 @@ const ScrapFolderFeedListScreen = ({navigation, route}: any) => {
             <BodyContainer>
                 {feedListData[0] && (
                 <FlatList
+                showsVerticalScrollIndicator={false}
                 columnWrapperStyle={{justifyContent:'space-between',paddingTop: 14, paddingLeft: 14, paddingRight: 14, marginVertical:6}}
                 numColumns={2}
                 data={feedListData}

@@ -11,7 +11,7 @@ import {
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 
-import TileFeedItem from '~/Components/Presentational/ExploreScreen/TileFeedItem';
+import TileFeedItem from '~/Components/Presentational/TileFeedItem';
 
 import {
   Placeholder,
@@ -92,13 +92,14 @@ const PopularTagByAgeGroup = ({navigation, ageGroupPopularTagListData, selectPop
     const renderSelectTagFeedItem = ({item, index}: any) => {
         return (
             <TileFeedItem
-            postId={item.id}
             navigation={navigation}
-            mainImageUri={item.mediaFiles[0] ? item.mediaFiles[0].thumbnailImg : ""}
+            postId={item.id}
+            product={item.Products}
+            mainImage={item.mediaFiles[0] ? item.mediaFiles[0] : ""}
             mainTag={item.mainTags.name}
             rating={item.starRate}
             expense={item.expense}
-            address={item.address.address}
+            address={item.address ? item.address.address : ""}
             />
         )
     }

@@ -695,12 +695,13 @@ const SearchScreen = ({navigation}: Props) => {
             </TouchableWithoutFeedback>
             )}
             </HeaderBar>
-            <KeyboardAwareScrollView 
+            <KeyboardAwareScrollView
+            keyboardShouldPersistTaps="handled"
             showsVerticalScrollIndicator={false}>
             <KeyboardAwareContainer>
             <SelectedSearchItemListContainer>
                 <FlatList
-                keyboardShouldPersistTaps={"handled"}
+                keyboardShouldPersistTaps="handled"
                 data={currentUser?.inputedKeywordList}
                 renderItem={renderSelectedItem}
                 />
@@ -708,7 +709,7 @@ const SearchScreen = ({navigation}: Props) => {
             {(inputingSearchText !== "")&& (
             <SearchResultContainer>
             <SectionList
-            keyboardShouldPersistTaps={"handled"}
+            keyboardShouldPersistTaps="handled"
             sections={searchResultListData}
             keyExtractor={(item, index) => item + index}
             renderItem={renderSearchResultItem}

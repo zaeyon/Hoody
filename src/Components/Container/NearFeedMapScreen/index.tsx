@@ -189,8 +189,8 @@ background-color: #00000095;
 `;
 
 const OneMoreThanFeedCountBackground = Styled.View`
-padding-top: 4px;
-padding-bottom: 4px;
+padding-top: 2px;
+padding-bottom: 2px;
 padding-left: 7.5px;
 padding-right: 7.5px;
 border-radius: 50px;
@@ -817,7 +817,7 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
           image={require('~/Assets/Images/Map/ic_marker_big.png')}>
             <MarkerThumbnailContainer>
               <MarkerThumbnailImage
-                 style={!location.post.metaData.coverImg && {width: 40, height: 40, marginBottom:11, marginRight:8}}
+                 style={!location.post.metaData.coverImg && {width: 30, height: 30, marginBottom:0, marginRight:0}}
                  source={
                  location.post.metaData.coverImg
                  ? {uri:location.post.metaData.coverImg}
@@ -869,7 +869,7 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
             image={require('~/Assets/Images/Map/ic_marker_small.png')}>
               <OneMoreThenMarkerThumbnailContainer>
               <SmallMarkerThumbnailImage
-              style={!location.post.metaData.coverImg && {width: 20, height: 20, marginBottom:11, marginRight:8}}
+              style={!location.post.metaData.coverImg && {width: 20, height: 20, marginBottom:0, marginRight:0}}
               source={
               location.post.metaData.coverImg
               ? {uri:location.post.metaData.coverImg}
@@ -879,7 +879,6 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
               <OneMoreThanFeedCountBackground>
                 <OneMoreThanFeedCountText style={{opacity:9}} >{location.post.metaData.num}</OneMoreThanFeedCountText>
               </OneMoreThanFeedCountBackground>
-              <OneMoreThanFeedCountText2>{location.post.metaData.num}</OneMoreThanFeedCountText2>
               </FeedCountContainer>
               </OneMoreThenMarkerThumbnailContainer>
             </Marker>

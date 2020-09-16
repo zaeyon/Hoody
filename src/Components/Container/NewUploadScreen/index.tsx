@@ -191,7 +191,6 @@ const AdditionInfoBottomBorder = Styled.View`
 
 const ContentContainer = Styled.View`
  width:${wp('100%')};
- padding-bottom: 10px;
 `;
 
 const MetaInfoContainer = Styled.View`
@@ -315,23 +314,22 @@ const SubTagPlaceholderText = Styled.Text`
 `;
 
 const BottomMenuBarContainer = Styled.View`
- background-color: #707070;
  justify-content: flex-end;
  position: absolute;
- bottom: 15;
+ bottom: 25;
 `;
 
 const BottomMenuBar = Styled.View`
- margin-left: ${wp('4.5%')};
- width: ${wp('91%')};
+ margin-left: ${wp('7.5%')};
+ width: ${wp('85%')};
  height: 44px;
  background-color: #FAFAFA;
  border-radius: 22px;
  flex-direction: row;
  justify-content: space-between;
  align-items: center;
- padding-left: 20px;
- padding-right: 20px;
+ padding-left: 13px;
+ padding-right: 13px;
 `;
 
 const BottomMenuTIcon = Styled.Image`
@@ -346,38 +344,43 @@ const BottomMenuDivider = Styled.View`
 `;
 
 const BottomMenuUrlIcon = Styled.Image`
- width: ${wp('8%')};
- height: ${wp('8%')};
+ width: ${wp('6.4%')};
+ height: ${wp('6.4%')};
+ tint-color: #56575C;
 `;
 
 const BottomMenuSettingIcon = Styled.Image`
  width: ${wp('6.4%')};
  height: ${wp('6.4%')};
- tint-color: #65A2FF;
+ tint-color: #56575C;
 `;
 
 
 const BottomMenuLocationIcon = Styled.Image`
  width: ${wp('8%')};
  height: ${wp('8%')};
+ tint-color: #56575C;
 `;
 
 
 const BottomMenuExpenseIcon = Styled.Image`
  width: ${wp('8%')};
  height: ${wp('8%')};
+ tint-color: #56575C;
 `;
 
 
 const BottomMenuCalendarIcon = Styled.Image`
  width: ${wp('8%')};
  height: ${wp('8%')};
+ tint-color: #56575C;
 `;
 
 
 const BottomMenuAlbumIcon = Styled.Image`
  width: ${wp('8%')};
  height: ${wp('8%')};
+ tint-color: #56575C;
 `;
 
 const AddDescripContainer = Styled.View`
@@ -385,22 +388,11 @@ const AddDescripContainer = Styled.View`
  padding: 23px 15px 200px 15px;
 `;
 
-const NewDescripInput = Styled.TextInput`
- font-size: 17px;
- color: #4b4b4b;
- padding-bottom: 10px;
-`;
-
-const BottomMenuTextContainer = Styled.View`
- width: ${wp('16%')};
- height: 44px;
- justify-content: center;
- align-items: center;
-`;
 
 const BottomMenuIconContainer = Styled.View`
- width: ${wp('13.8%')};
- height: 44px;
+ width: ${wp('12%')};
+ height: 40px;
+ background-color: #fafafa;
  justify-content: center;
  align-items: center;
 `;
@@ -462,19 +454,20 @@ const DescripParaText = Styled.Text`
 
 
 const ParagraphIconContainer = Styled.View`
-flex: 1;
+width: ${wp('8%')};
 justify-content: center;
 align-items: center;
 padding-top: 12px;
 padding-bottom: 12px;
 padding-right: 5px;
+background-color: #ffffff;
 `;
 
 
 const ParagraphIcon = Styled.Image`
  width: ${wp('7%')};
  height: ${wp('7%')};
- margin-left: 15px;
+ margin-left: 0px;
  tint-color: #707070;
 `;
 
@@ -1801,8 +1794,6 @@ const clickToTemporarySave = () => {
 
 const renderDraggableItem = ({item, index, drag, isActive}: any) => {
     if(item.type === 'description') {
-        console.log("renderDraggableItem index", index);
-        console.log("renderDraggableItem paragraphData.length", paragraphData.length-1);
         return (
             <ParagraphContainer>
             <DescripParagraphContainer>
@@ -2079,35 +2070,7 @@ const renderAddNewDescripInput = () => {
                 
                 )}
             </BodyContainer>
-            <View style={{position:'absolute', bottom:0}}>
-        <View>
-        <GetTextWidthContainer>
-        </GetTextWidthContainer>
-        <TWInputContainer>
-        <GetWidthTagText
-        onLayout={onMainTagLayout}
-              >{"#" + mainTag}</GetWidthTagText>
-        </TWInputContainer>
-        </View>
-        <View>
-        <GetTextWidthContainer>
-        </GetTextWidthContainer>
-        <TWInputContainer>
-        <GetWidthTagText
-        onLayout={onSubTag1Layout}
-              >{"#" + subTag1}</GetWidthTagText>
-        </TWInputContainer>
-        </View>
-        <View>
-        <GetTextWidthContainer>
-        </GetTextWidthContainer>
-        <TWInputContainer>
-        <GetWidthTagText
-        onLayout={onSubTag2Layout}
-              >{"#" + subTag2}</GetWidthTagText>
-        </TWInputContainer>
-        </View>
-        </View>
+          
             {mainTag && !mainTagProcess && visibleBottomMenuBar && !visibleDescripModal && (
                 <BottomMenuBarContainer>
                 <AboveKeyboard>
@@ -2139,7 +2102,7 @@ const renderAddNewDescripInput = () => {
                     <TouchableWithoutFeedback onPress={() => moveProductUrlSearch()}>
                     <BottomMenuIconContainer>
                     <BottomMenuUrlIcon
-                    source={require('~/Assets/Images/ic_bottomMenu_url.png')}/>
+                    source={require('~/Assets/Images/ic_bottomMenu_link.png')}/>
                     </BottomMenuIconContainer>
                     </TouchableWithoutFeedback>
                     <TouchableWithoutFeedback onPress={() => openSettingModal()}>
@@ -2311,6 +2274,35 @@ const renderAddNewDescripInput = () => {
                     color={"#ffffff"}/>
                 </LoadingContainer>
             )}
+              <View style={{position:'absolute', bottom:-1000}}>
+        <View>
+        <GetTextWidthContainer>
+        </GetTextWidthContainer>
+        <TWInputContainer>
+        <GetWidthTagText
+        onLayout={onMainTagLayout}
+              >{"#" + mainTag}</GetWidthTagText>
+        </TWInputContainer>
+        </View>
+        <View>
+        <GetTextWidthContainer>
+        </GetTextWidthContainer>
+        <TWInputContainer>
+        <GetWidthTagText
+        onLayout={onSubTag1Layout}
+              >{"#" + subTag1}</GetWidthTagText>
+        </TWInputContainer>
+        </View>
+        <View>
+        <GetTextWidthContainer>
+        </GetTextWidthContainer>
+        <TWInputContainer>
+        <GetWidthTagText
+        onLayout={onSubTag2Layout}
+              >{"#" + subTag2}</GetWidthTagText>
+        </TWInputContainer>
+        </View>
+        </View>
             </Container>
     )
 }

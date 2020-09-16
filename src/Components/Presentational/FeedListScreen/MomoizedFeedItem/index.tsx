@@ -324,7 +324,6 @@ interface Props {
   nickname: string;
   createdAt: string;
   rating: number;
-  main_image: string;
   main_tag: string;
   sub_tag1?: string;
   sub_tag2?: string;
@@ -350,7 +349,6 @@ const FeedItem = ({
   nickname,
   createdAt,
   rating,
-  main_image,
   main_tag,
   sub_tag1,
   sub_tag2,
@@ -409,6 +407,7 @@ const FeedItem = ({
     }
 
     setLikeCount(like_count);
+    setAllCommentCount(comment_count+reply_count);
     
     // 현재 사용자 좋아요 여부 
     //var index = currentUser.likeFeeds?.findIndex(obj => obj.id === id);
@@ -619,13 +618,13 @@ const FeedItem = ({
           )}
           {mediaFiles.length === 1 && (
           <ReviewImageContainer>
-          <ReviewImage source={{uri:mediaFiles[0].url}}/>
+          <ReviewImage source={{uri:mediaFiles[0].thumbnailImg}}/>
           </ReviewImageContainer>
           )}
           {mediaFiles.length > 1 && (
             <ManyReviewImageContainer>
-              <FirstImage source={{uri:mediaFiles[0].url}}/>
-              <SecondImage source={{uri:mediaFiles[1].url}}/>
+              <FirstImage source={{uri:mediaFiles[0].thumbnailImg}}/>
+              <SecondImage source={{uri:mediaFiles[1].thumbnailImg}}/>
               {mediaFiles.length > 2 && (
               <ImageCountBackground>
           <ImageCountText>+{mediaFiles.length-2}</ImageCountText>

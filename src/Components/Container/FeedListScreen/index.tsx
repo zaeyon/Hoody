@@ -346,6 +346,7 @@ function FeedListScreen({navigation, route}: Props) {
   }
 
   const renderFeedItem = ({item, index}: any) => {
+    console.log("홈화면 renderFeedItem item", item);
     return (
       <MomoizedFeedItem
         id={item.id}

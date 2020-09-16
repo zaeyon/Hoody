@@ -58,6 +58,7 @@ const ProductDescription = Styled.Text`
 `;
 
 const ShopContainer = Styled.View`
+padding-right: 13px;
  margin-top: 6px;
  flex-direction: row;
  align-items: center;

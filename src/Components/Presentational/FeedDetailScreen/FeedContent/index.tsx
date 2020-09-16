@@ -94,7 +94,7 @@ const renderItem = ({item, index}: any) => {
             <TouchableWithoutFeedback onPress={() => moveToImageFull(item.url)}>
             <ImageContainer>
                 <ReviewImage
-                source={{uri: item.url}}/>
+                source={{uri: item.thumbnailImg}}/>
             </ImageContainer>
             </TouchableWithoutFeedback>
         )

@@ -17,9 +17,7 @@ const HeaderCancelContainer = Styled.View`
  padding-left: 16px;
  padding-bottom: 14px;
  padding-right: 16px;
- position: absolute;
- top: 0;
- left: 0;
+ background-color:#ffffff;
 `;
 
 const HeaderCancelIcon = Styled.Image`

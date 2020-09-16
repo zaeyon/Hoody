@@ -25,6 +25,13 @@ const FeedMainImage = Styled.Image`
  border-radius: 10px;
 `;
 
+const NoFeedImageContainer = Styled.View`
+width: ${wp('28%')};
+height: ${wp('19.6%')};
+border-radius: 10px;
+background-color: #ECECEE;
+`;
+
 const FeedInfoContainer = Styled.View`
  padding-top: 8px;
  padding-bottom: 8px;
@@ -74,7 +81,7 @@ interface Props {
     mainTag: string,
     address: string,
     expense: string,
-    rating: rating
+    rating: string,
 }
 
 const SubPopularFeedItem = ({navigation, mainImageUri, postId, mainTag, address, expense, rating}: Props) => {
@@ -91,10 +98,17 @@ const SubPopularFeedItem = ({navigation, mainImageUri, postId, mainTag, address,
     return (
         <TouchableWithoutFeedback onPress={() => moveToFeedDetail()}>
         <Container>
+            {mainImageUri !== "" && (
             <FeedImageContainer>
                 <FeedMainImage
                 source={{uri:mainImageUri ? mainImageUri : ""}}/>
             </FeedImageContainer>
+            )}
+            {mainImageUri === "" && (
+            <FeedImageContainer>
+            <NoFeedImageContainer/>
+            </FeedImageContainer>
+            )}
             <FeedInfoContainer>
                 <FeedTagText>{"#"+mainTag}</FeedTagText>
                 <FeedRatingExpenseContainer>

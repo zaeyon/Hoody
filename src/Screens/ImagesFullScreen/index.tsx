@@ -19,10 +19,14 @@ flex: 1;
 `;
 
 const HeaderCancelContainer = Styled.View`
- padding-top: 50px
+width: ${wp('100%')};
+height: ${wp('11.7%')};
+ padding-top: 35px
  padding-left: 16px;
  padding-bottom: 14px;
  padding-right: 16px;
+ flex-direction: row;
+ align-items: center;
  position: absolute;
  top: 0;
  left: 0;

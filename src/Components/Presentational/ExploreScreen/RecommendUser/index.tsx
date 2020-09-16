@@ -109,10 +109,8 @@ const RecommendUser = ({navigation, recommendUserListData, loadingRecommendUser}
                 <UserNicknameText>{item.nickname}</UserNicknameText>
             </RecommendUserItemContainer>
             </TouchableWithoutFeedback>
-            
         )
     }
-
 
     return (
         <Container>

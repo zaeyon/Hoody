@@ -60,6 +60,7 @@ interface Props {
 }
 
 const RecommendTagBanner = ({trendTagsListData, navigation, loadingTrendTag}: Props) => {
+    console.log("RecommendTagBanner", trendTagsListData);
     const dispatch = useDispatch();
 
     const searchToTrendTag = (item: object) => {
@@ -102,7 +103,7 @@ const RecommendTagBanner = ({trendTagsListData, navigation, loadingTrendTag}: Pr
                     <TouchableWithoutFeedback onPress={() => searchToTrendTag(item)}>
                     <BannerContainer>
                     <BannerImage
-                    source={{uri:item.coverImg ? item.coverImg : ""}}/>
+                    source={{uri:item.thumbnailImg ? item.thumbnailImg : ""}}/>
                     </BannerContainer>
                     </TouchableWithoutFeedback>
                     )

@@ -106,8 +106,8 @@ const MarkerThumbnailContainer = Styled.View`
  align-items: center;
  padding-top: 0px;
  padding-left: 0px;
- padding-right: 3px;
- padding-bottom: 6px;
+ padding-right: 2.5px;
+ padding-bottom: 8px;
 `;
 
 
@@ -130,8 +130,8 @@ const OneMoreThenMarkerThumbnailContainer = Styled.View`
 flex:1;
  justify-content: center;
  align-items: center;
- padding-top: 4.2px;
- padding-left: 7px;
+ padding-bottom: 7.8px;
+ padding-right: 2.5px;
  width: 50px;
  height: 50px;
 `;
@@ -754,7 +754,7 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
         location={item.address ? item.address.address : null}
         likeCount={item.likes}
         commentCount={item.commentsCount + item.replysCount}
-        mainImageUri={item.mediaFiles[0] ? item.mediaFiles[0].url: null}
+        mainImageUri={item.mediaFiles[0] ? item.mediaFiles[0].thumbnailImg: null}
         createdAt={item.createdAt}
         navigation={navigation}
         />
@@ -801,6 +801,7 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
       initialRegion={currentMapRegion}
       showsUserLocation={true}>
         {nearLocationListData?.map((location, index) => {
+          console.log("nearLocationListData", location)
           if(location.post.metaData.num >= 10) {
           return (
           <Marker

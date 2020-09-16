@@ -39,42 +39,6 @@ const MainRecommendCollectionItemContainer = Styled.View`
 const SubRecommendCollectionItemContainer = Styled.View`
 `;
 
-const TEST_MAIN_RECOMMEND_COLLECTION_DATA = [
-    {
-        index: 1,
-        coverImage: 'https://i.pinimg.com/564x/91/d0/27/91d027db14d4632fb134ac3686ed533a.jpg',
-        name: '꽃구경',
-        nickname: '나나'
-    }, 
-    {
-        index: 2,
-        coverImage: 'https://i.pinimg.com/564x/1e/c5/cf/1ec5cfe40a6ac6d18a551d6fbbcee181.jpg',
-        name: '피크닉',
-        nickname:'피크닉조아요'
-    }
-]
-
-const TEST_SUB_RECOMMEND_COLLECTION_DATA = [
-    {
-        index: 1,
-        coverImage: 'https://i.pinimg.com/564x/91/d0/27/91d027db14d4632fb134ac3686ed533a.jpg',
-        name: '꽃구경',
-        nickname: '나나'
-    }, 
-    {
-        index: 2,
-        coverImage: 'https://i.pinimg.com/564x/1e/c5/cf/1ec5cfe40a6ac6d18a551d6fbbcee181.jpg',
-        name: '피크닉',
-        nickname:'피크닉조아요'
-    },
-    {
-        index: 3,
-        coverImage: 'https://i.pinimg.com/564x/1e/c5/cf/1ec5cfe40a6ac6d18a551d6fbbcee181.jpg',
-        name: '피크닉',
-        nickname:'피크닉조아요'
-    },
-]
-
 interface Props {
     navigation: any,
     recommendMainCollectionListData: Array<object>,
@@ -82,15 +46,12 @@ interface Props {
 }
 
 const RecommendCollectionList = ({navigation, recommendMainCollectionListData, recommendSubCollectionListData}: Props) => {
-
-    console.log("RecommendCollectionList recommendMainCollectionListData", recommendMainCollectionListData);
-
     const renderMainRecommendCollectionItem = ({item, index}: any) => {
         return (
         <MainRecommendCollectionItemContainer style={index !== 0 && styles.mainCollectionItem}>
             <MainRecommendCollectionItem
             collectionId={item.id}
-            coverImage={item.coverImg ? item.coverImg : ""}
+            coverImage={item.thumbnailImg ? item.thumbnailImg : ""}
             name={item.name}
             nickname={item.user?.nickname}
             navigation={navigation}

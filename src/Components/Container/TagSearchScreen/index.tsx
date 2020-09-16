@@ -111,7 +111,7 @@ const MainTagInput = Styled.TextInput`
 font-size: 24px;
 font-weight: bold;
 width: ${wp('90%')};
-color: #000000;
+color: #267DFF;
 `;
 
 const SubTagInput = Styled.TextInput`
@@ -124,7 +124,7 @@ color: #cccccc;
 const MainHashText = Styled.Text`
  margin-top: 4px;
  font-size: 24px;
- color: #000000;
+ color: #267DFF;
  font-weight: bold;
 `;
 
@@ -137,7 +137,7 @@ const SubHashText = Styled.Text`
 
 const MainTagText = Styled.Text`
 margin-right: 8px;
-color: #000000;
+color: #267DFF;
 font-size: 20px;
 font-weight: bold;
 flex-direction: row;
@@ -716,6 +716,51 @@ const TagSearchScreen = ({navigation, route}: Props) => {
         }
     }
 
+    const onSubmitMainTagInput = (event: any) => {
+        const tag = event.nativeEvent.text;
+        setInputMainTag(tag)
+        setMainTagExis(true);
+        setInputingMainTag(false);
+        if(!inputSubTag1) {
+            setInputingSubTag1(true)
+        }
+        if(!inputSubTag2 && inputSubTag1) {
+            setInputingSubTag2(true)
+        }
+        
+        var tmpTagList = tagList;
+        tmpTagList[0] = tag;
+        setTagList(tmpTagList);
+        setMainTagWidth(mainTagSize.width);
+    }
+
+    const onSubmitSubTag1Input = (event: any) => {
+        const tag = event.nativeEvent.text;
+        setInputSubTag1(tag)
+        setSubTag1Exis(true)
+        setInputingSubTag1(false)
+        if(!inputSubTag2) {
+            setInputingSubTag2(true)
+        }
+
+        var tmpTagList = tagList;
+        tmpTagList[1] = tag;
+        setTagList(tmpTagList);
+        setSubTag1Width(subTag1Size.width);
+    }
+
+    const onSubmitSubTag2Input = (event: any) => {
+        const tag = event.nativeEvent.text;
+        setInputSubTag2(tag)
+        setSubTag2Exis(true)
+        setInputingSubTag2(false)
+
+        var tmpTagList = tagList;
+        tmpTagList[2] = tag;
+        setTagList(tmpTagList);
+        setSubTag2Width(subTag2Size.width);
+    }
+
     const renderAutoCompletedTagItem = ({item , index}: any) => {
         return (
             <TouchableWithoutFeedback onPress={() => selectTag(item)}>
@@ -755,12 +800,13 @@ const TagSearchScreen = ({navigation, route}: Props) => {
                 <MainHashText>#</MainHashText>
                 <MainTagInput
                 multiline={false}
-                autoCapitalize={false}
+                autoCapitalize={"none"}
                 placeholder={"메인태그를 입력해주세요"}
-                placeholderTextColor={"#00000060"}
+                placeholderTextColor={"#267DFF60"}
                 value={inputingMainTagText}
                 autoFocus={true}
-                onChangeText={(text:string) => changeMainTagInput(text)}
+                onChangeText={(text: string) => changeMainTagInput(text)}
+                onSubmitEditing={(event: any) => onSubmitMainTagInput(event)}
                 />
             </HashTagInputContainer>
             )}
@@ -769,11 +815,12 @@ const TagSearchScreen = ({navigation, route}: Props) => {
                 <SubHashText>#</SubHashText>
                 <SubTagInput
                 multiline={false}
-                autoCapitalize={false}
+                autoCapitalize={"none"}
                 placeholder={"서브태그 입력"}
                 placeholderTextColor={"#C6C7CC60"}
                 value={inputingSubTag1Text}
                 onChangeText={(text:string) => changeSubTag1Input(text)}
+                onSubmitEditing={(event: any) => onSubmitSubTag1Input(event)}
                 />
             </HashTagInputContainer>
             )}
@@ -782,11 +829,12 @@ const TagSearchScreen = ({navigation, route}: Props) => {
                 <SubHashText>#</SubHashText>
                 <SubTagInput
                 multiline={false}
-                autoCapitalize={false}
+                autoCapitalize={"none"}
                 placeholder={"서브태그 입력"}
                 placeholderTextColor={"#C6C7CC60"}
                 value={inputingSubTag2Text}
-                onChangeText={(text:string) => changeSubTag2Input(text)}/>
+                onChangeText={(text:string) => changeSubTag2Input(text)}
+                onSubmitEditing={(event: any) => onSubmitSubTag2Input(event)}/>
             </HashTagInputContainer>
             )}
             {inputMainTag && inputSubTag1 && inputSubTag2 && !inputingMainTag && !inputingSubTag1 && !inputingSubTag2 && (

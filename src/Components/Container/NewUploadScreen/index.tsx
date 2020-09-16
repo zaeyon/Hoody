@@ -112,14 +112,14 @@ const BodyContainer = Styled.View`
 const TagInputPlaceholder = Styled.Text`
  font-weight: bold;
  font-size: 24px;
- color: #000000;
+ color: #267DFF;
 `;
 
 
 const MainTagText = Styled.Text`
  font-weight: bold;
  font-size: 24px;
- color: #000000;
+ color: #267DFF;
  flex-shrink: 1;
  margin-right: 5px;
 `;
@@ -137,13 +137,13 @@ margin-right: 5px;
 
 const TagListContainer = Styled.View`
  flex-direction: row;
- padding : 10px 15px 0px 15px;
+ padding : 10px 15px 0px 14px;
  background-color: #ffffff;
 `;
 
 const MainTagProcessContainer = Styled.View`
 margin-top: 5px;
-padding: 0px 15px 0px 15px;
+padding: 15px 15px 0px 15px;
 `;
 
 const RatingInductionText = Styled.Text`
@@ -196,8 +196,8 @@ const ContentContainer = Styled.View`
 
 const MetaInfoContainer = Styled.View`
  width: ${wp('100%')};
- margin-top: 7px;
- padding: 0px 15px 10px 15px;
+ margin-top: 10px;
+ padding: 0px 16px 10px 16px;
  flex-direction: column;
  border-bottom-width: 0.8px;
  border-color: #f1f1f1;
@@ -210,7 +210,7 @@ align-items: center;
 `;
 
 const LocationSpendDateContainer = Styled.View`
-padding-top: 5px;
+margin-top: 8px;
 flex-direction: row;
 align-items: center;
 `;
@@ -382,7 +382,7 @@ const BottomMenuAlbumIcon = Styled.Image`
 
 const AddDescripContainer = Styled.View`
  border-color: #eeeeee;
- padding: 10px 15px 200px 15px;
+ padding: 23px 15px 200px 15px;
 `;
 
 const NewDescripInput = Styled.TextInput`
@@ -836,7 +836,7 @@ const convertDateFormat = (date: any) => {
 
     //후기 정보 관련 state
     const [rating, setRating] = useState<string>();
-    const [inputingRating, setInputingRating] = useState<string>("??");
+    const [inputingRating, setInputingRating] = useState<string>("");
     const [incompleteMainTag, setIncompleteMainTag] = useState<string>();
     const [mainTag, setMainTag] = useState<string>();
     const [subTag1, setSubTag1] = useState<string>();
@@ -1337,7 +1337,7 @@ useEffect(() => {
         setMainTagProcess(false);
         setMainTagInserted(true);
         setMainTag(incompleteMainTag);
-        setInputingRating("??");
+        setInputingRating("");
     }
 
     const ratingMovling = (rating) => {
@@ -1935,10 +1935,10 @@ const renderAddNewDescripInput = () => {
                     <MainTagText>
                         {"#" + incompleteMainTag}
                         { subTag1 && (
-                            <SubTagText>{" #" + subTag1}</SubTagText>
+                            <SubTagText style={{marginLeft:1}}>{"  #" + subTag1}</SubTagText>
                         )}
                         {subTag2 && (
-                            <SubTagText>{' #' + subTag2}</SubTagText>
+                            <SubTagText style={{marginLeft:1}}>{'  #' + subTag2}</SubTagText>
                         )}
                         </MainTagText>
                 )}    
@@ -1946,7 +1946,7 @@ const renderAddNewDescripInput = () => {
                     <MainTagText>
                         {"#" + mainTag}
                         { subTag1 && (
-                            <SubTagText>{" #" + subTag1}</SubTagText>
+                            <SubTagText style={{marginLeft:1}}>{" #" + subTag1}</SubTagText>
                         )}
                         { !subTag1 && (
                             <SubTagText style={{
@@ -1955,11 +1955,11 @@ const renderAddNewDescripInput = () => {
 
                         )}
                         {subTag2 && (
-                            <SubTagText>{' #' + subTag2}</SubTagText>
+                            <SubTagText style={{marginLeft:1}}>{' #' + subTag2}</SubTagText>
                         )}
                         {subTag1 && !subTag2 && (
                             <SubTagText style={{
-                                opacity:0.3
+                                opacity:0.3, marginLeft:1
                             }}>{" #태그추가"}</SubTagText>
 
                         )}
@@ -1985,7 +1985,7 @@ const renderAddNewDescripInput = () => {
                             </RatingContainer>
                         <TouchableWithoutFeedback onPress={() => setMainTagProcess(false)}>
                             <RatingTextContainer>
-                                <Text style={{fontWeight:"bold", color: '#8e8e8e', fontSize: 18}}>{inputingRating+"점"}</Text>
+                                <Text style={{fontWeight:"bold", color: '#8e8e8e', fontSize: 18}}>{inputingRating !== "" ? (inputingRating+"점") : ""}</Text>
                             
                             {/*!rating && (
                                 <Text style={{fontWeight:"bold", color: '#cccccc', fontSize: 18}}>{"??점"}</Text>
@@ -2003,7 +2003,7 @@ const renderAddNewDescripInput = () => {
                     <RatingInner>
                     <RatingStarImage
                     source={require('~/Assets/Images/ic_newStar.png')}/>
-                    <InputedRatingText style={{marginLeft: 3}}
+                    <InputedRatingText style={{marginLeft: 5}}
                     >{rating+"점"}</InputedRatingText>
                         </RatingInner>
                     </InputedRatingContainer>

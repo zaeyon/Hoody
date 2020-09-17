@@ -54,7 +54,8 @@ const HeaderBackIcon = Styled.Image`
 
 const HeaderTitleContainer = Styled.View`
  background-color: #ffffff;
- width: 310px;
+ width: ${wp('70%')};
+ align-items: center;
 `;
 
 const HeaderTitleText = Styled.Text`
@@ -806,8 +807,8 @@ const SearchResultScreen = ({navigation, route}: Props) => {
                 </TouchableWithoutFeedback> 
                 <HeaderTitleContainer>
                 <FlatList
+                contentContainerStyle={{alignItems: 'center'}}
                 showsHorizontalScrollIndicator={false}
-                contentContainerStyle={{backgroundColor:'#ffffff', justifyContent:'center', alignItems:'center'}}
                 horizontal={true}
                 data={keyword.inputedKeywordList}
                 renderItem={({item, index}) => {

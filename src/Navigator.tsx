@@ -866,26 +866,21 @@ function AppNavigator({navigation, route}: any) {
 
 
   useEffect(() => {
-    handlePushToken()
-    SplashScreen.hide();
+    checkAutoLogin()
+    //SplashScreen.hide();
   }, [])
 
   const handlePushToken = useCallback(async () => {
-
     const authStatus = await messaging().requestPermission();
-    //await messaging().registerDeviceForRemoteMessages();
-
     const enabled =
       authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL
 
     if (enabled) {
       const fcmToken = await messaging().getToken()
-      //const fcmToken = "11"
-      if (fcmToken) {
-        console.log("fcmToken 존재", fcmToken);
-        dispatch(allActions.userActions.setFcmToken(fcmToken));
-
+      
+    console.log("fcmToken 존재", fcmToken);
+    dispatch(allActions.userActions.setFcmToken(fcmToken));
 
     console.log("currentUser.fcmToken", fcmToken);
     // SplashScreen.hide();
@@ -897,8 +892,9 @@ function AppNavigator({navigation, route}: any) {
        console.log("자동로그인 response.state", asyStorResponse.state);
        if(asyStorResponse == "NoLogined") {
          SplashScreen.hide();
+
        } else if(asyStorResponse.userId) {
-         //SplashScreen.hide();
+         SplashScreen.hide();
          POSTAutoLogin(asyStorResponse.userId, asyStorResponse.sessionId, fcmToken)
          .then(function(response) {
            console.log("자동로그인 성공", response);
@@ -926,7 +922,7 @@ function AppNavigator({navigation, route}: any) {
      .catch(function(error) {
        console.log("error", error);
      })
-      }
+
     } else {
       const authorized = await messaging().requestPermission()
       if (authorized) setIsAuthorized(true)
@@ -934,9 +930,150 @@ function AppNavigator({navigation, route}: any) {
   }, [])
 
 
+  const checkAutoLogin = useCallback(async () => {
+     getAutoLoginUser()
+     .then(async function(asyStorResponse) {
+       console.log("responsegggg", asyStorResponse);
+       console.log("자동로그인 세션", asyStorResponse.sessionId)
+       console.log("자동로그인 response.nickname", asyStorResponse.nickname);
+       console.log("자동로그인 response.state", asyStorResponse.state);
+       if(asyStorResponse == "NoLogined") {
+         SplashScreen.hide();
+         const authStatus = await messaging().requestPermission();
+         const enabled =
+         authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+         authStatus === messaging.AuthorizationStatus.PROVISIONAL
+
+         if (enabled) {
+          const fcmToken = await messaging().getToken()
+          if(fcmToken) {
+          dispatch(allActions.userActions.setFcmToken(fcmToken));
+          }
+        } else {
+          const authorized = await messaging().requestPermission()
+          if (authorized) setIsAuthorized(true)
+        }
+
+      } else if(asyStorResponse.userId) {
+         SplashScreen.hide();
+         const authStatus = await messaging().requestPermission();
+         const enabled =
+         authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+         authStatus === messaging.AuthorizationStatus.PROVISIONAL
+         var fcmToken;
+
+         if (enabled) {
+          fcmToken = await messaging().getToken()
+          if(fcmToken) {
+          dispatch(allActions.userActions.setFcmToken(fcmToken));
+          }
+        } else {
+          const authorized = await messaging().requestPermission()
+          if (authorized) setIsAuthorized(true)
+        }
+
+         POSTAutoLogin(asyStorResponse.userId, asyStorResponse.sessionId, fcmToken)
+         .then(function(response) {
+          
+           console.log("자동로그인 성공", response);
+           console.log("이메일", asyStorResponse.email);
+           dispatch(allActions.userActions.setUser({
+             email: asyStorResponse.email,
+             profileImage: response.user.thumbnailImg,
+             nickname: response.user.nickname,
+             description: response.user.description,
+             userId: response.user.id,
+           }))
+           dispatch(
+             allActions.keywordAction.setInputedKeywordList([])
+           )          
+           setTimeout(() => {
+             SplashScreen.hide();
+           },100)
+         })
+         .catch(function(error) {
+           console.log("자동로그인 실패", error);
+           SplashScreen.hide();
+         })
+       }
+     })
+     .catch(function(error) {
+       console.log("error", error);
+     })
+  }, [])
+
+
+  /*
+  const checkAutoLogin = useCallback(async () => {
+     getAutoLoginUser()
+    .then(function(asyStorResponse) {
+    if(asyStorResponse == "NoLogined") {
+      SplashScreen.hide();   
+
+      const authStatus = await messaging().requestPermission();
+
+      const enabled =
+      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL
+
+      var fcmToken = ""
+
+      if(enabled) {
+        fcmToken = await messaging().getToken()
+        if (fcmToken) {
+        dispatch(allActions.userActions.setFcmToken(fcmToken));
+        }
+      }
+
+    } else if(asyStorResponse.userId) {
+         SplashScreen.hide();
+         const authStatus = await messaging().requestPermission();
+
+    const enabled =
+      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL
+      
+         var fcmToken = "";
+
+         if(enabled) {
+          fcmToken = await messaging().getToken()
+         if (fcmToken) {
+          dispatch(allActions.userActions.setFcmToken(fcmToken));
+          }
+        }
+
+        POSTAutoLogin(asyStorResponse.userId, asyStorResponse.sessionId, fcmToken)
+         .then(function(response) {
+           console.log("자동로그인 성공", response);
+           console.log("이메일", asyStorResponse.email);
+           dispatch(allActions.userActions.setUser({
+             email: asyStorResponse.email,
+             profileImage: response.user.thumbnailImg,
+             nickname: response.user.nickname,
+             description: response.user.description,
+             userId: response.user.id,
+           }))
+           dispatch(
+             allActions.keywordAction.setInputedKeywordList([])
+           )          
+           setTimeout(() => {
+             SplashScreen.hide();
+           },10)
+         })
+         .catch(function(error) {
+           console.log("자동로그인 실패", error);
+         })
+       }
+     })
+     .catch(function(error) {
+       console.log("error", error);
+     })
+    
+  }
+*/
+
   /*
   useEffect(() => {
-
     console.log("currentUser.fcmToken", currentUser.fcmToken);
    // SplashScreen.hide();
     getAutoLoginUser()
@@ -976,9 +1113,7 @@ function AppNavigator({navigation, route}: any) {
     .catch(function(error) {
       console.log("error", error);
     })
-    
   }, [])
- 
   */
 
   return (

@@ -725,24 +725,6 @@ const ProfileInput = ({navigation, route}) => {
               nickname: response.data.user.nickname,
               userId: response.data.user.id,
             });
-            /*
-            dispatch(
-              allActions.userActions.setUser({
-                email: submitingEmail,
-                password: submitingPassword,
-                birthDate: Date.parse(submitingBirthDate),
-                gender: submitingGender,
-                socialId: submitingSocialId,
-                provider: submitingProvider,
-                profileImage: response.data.user.thumbnailImg,
-                nickname: response.data.user.nickname,
-                userId: response.data.user.id,
-              }),
-            
-            dispatch(
-              allActions.userActions.setInputedKeywordList([])
-            )
-            */
           },
         }
       ])
@@ -757,41 +739,6 @@ const ProfileInput = ({navigation, route}) => {
         setNicknameOverlap(true);
       }
     })
-    /*
-    return new Promise(function (resolve, reject) {
-      axios
-        .post(url, form, {
-          //withCredentials: true,
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            Accept: 'application/json; charset=utf-8' 
-          },
-        })
-        .then(function (response) {
-          console.log('response : ', response);
-          resolve(response.data);
-          if (response.status === 201) {
-            console.log('회원가입 성공');
-            dispatch(
-              allActions.userActions.setUser({
-                email: submitingEmail,
-                password: submitingPassword,
-                nickname: submitingNickname,
-                birthDate: Date.parse(submitingBirthDate),
-                gender: submitingGender,
-                socialId: submitingSocialId,
-                provider: submitingProvider,
-              }),
-            );
-          } else if(response.status === 400) {
-            console.log("response", response);
-          }
-        })
-        .catch(function (response) {
-          console.log("response", response);
-        });
-    });
-    */
   };
 
 

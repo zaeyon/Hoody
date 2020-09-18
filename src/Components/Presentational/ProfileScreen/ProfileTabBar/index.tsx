@@ -104,7 +104,7 @@ const ProfileTabBar = createReactClass({
       onPress={() => onPressHandler(page)}
     >
       <View style={[styles.tab]}>
-        <Text style={[{ color: textColor, fontWeight, fontSize: 16  }, textStyle,]}>
+        <Text style={[{ color: textColor, fontWeight, fontSize: 18  }, textStyle,]}>
           {name}
         </Text>
       </View>

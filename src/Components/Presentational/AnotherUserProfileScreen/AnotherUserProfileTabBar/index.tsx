@@ -108,7 +108,7 @@ const AnotherUserProfileTabBar = createReactClass({
       onPress={() => onPressHandler(page)}
     >
       <View style={[styles.tab]}>
-        <Text style={[{ color: textColor, fontWeight, fontSize: 16  }, textStyle,]}>
+        <Text style={[{ color: textColor, fontWeight, fontSize: 18  }, textStyle,]}>
           {name}
         </Text>
       </View>
@@ -124,6 +124,7 @@ const AnotherUserProfileTabBar = createReactClass({
       height: 2,
       backgroundColor: 'black',
       bottom: 0,
+      left: 1,
       flex: 1,
       flexDirection:'row',
     };

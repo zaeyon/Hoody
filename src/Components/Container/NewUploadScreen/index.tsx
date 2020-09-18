@@ -13,6 +13,7 @@ import ActionSheet from 'react-native-actionsheet'
 import Modal from 'react-native-modal';
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
 import Geolocation from 'react-native-geolocation-service';
+import {isIphoneX} from 'react-native-iphone-x-helper';
 
 // Local Components
 import {Rating} from '~/Components/Presentational/UploadScreen/Rating';
@@ -316,7 +317,7 @@ const SubTagPlaceholderText = Styled.Text`
 const BottomMenuBarContainer = Styled.View`
  justify-content: flex-end;
  position: absolute;
- bottom: 25;
+ bottom: ${isIphoneX() ? 25 : 15}
 `;
 
 const BottomMenuBar = Styled.View`

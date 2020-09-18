@@ -673,11 +673,11 @@ function BottomTab() {
     ? routeName.state.routes[routeName.state.index].name
     : '';
 
-    if(routeName.name === 'FeedStack') {
+    if(routeName.name === 'FeedStack' || routeName.name === 'CollectionStack') {
       return false;
     }
 
-    if(stackRouteName === "FeedStack") {
+    if(stackRouteName === "FeedStack" || stackRouteName === 'CollectionStack') {
       return false;
     }
 
@@ -697,7 +697,7 @@ function BottomTab() {
       return false;
     }
 
-    if(stackRouteName === "FeedStack") {
+    if(stackRouteName === "FeedStack" || stackRouteName === "CollectionStack") {
       return false;
     }
 
@@ -717,7 +717,7 @@ function BottomTab() {
       return false;
     }
 
-    if(stackRouteName === "ConfirmPasswordScreen" || stackRouteName === "ChangePasswordSettingScreen" || stackRouteName === "VerifyEmailScreen" || stackRouteName === "FeedStack") {
+    if(stackRouteName === "ConfirmPasswordScreen" || stackRouteName === "ChangePasswordSettingScreen" || stackRouteName === "VerifyEmailScreen" || stackRouteName === "FeedStack" || stackRouteName === "CollectionStack") {
       return false;
     }
 
@@ -738,7 +738,7 @@ function BottomTab() {
       return false;
     }
 
-    if(stackRouteName === "ConfirmPasswordScreen" || stackRouteName === "ChangePasswordSettingScreen" || stackRouteName === "VerifyEmailScreen" || stackRouteName === "FeedStack") {
+    if(stackRouteName === "ConfirmPasswordScreen" || stackRouteName === "ChangePasswordSettingScreen" || stackRouteName === "VerifyEmailScreen" || stackRouteName === "FeedStack" || stackRouteName === "CollectionStack") {
       return false;
     }
 
@@ -864,10 +864,24 @@ function AppNavigator({navigation, route}: any) {
     return unsubscribe;
   }, []);
 
+
+  useEffect(() => {
+    handlePushToken()
+    SplashScreen.hide();
+  }, [])
+
   const handlePushToken = useCallback(async () => {
-    const enabled = await messaging().hasPermission()
+
+    const authStatus = await messaging().requestPermission();
+    //await messaging().registerDeviceForRemoteMessages();
+
+    const enabled =
+      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
     if (enabled) {
       const fcmToken = await messaging().getToken()
+      //const fcmToken = "11"
       if (fcmToken) {
         console.log("fcmToken 존재", fcmToken);
         dispatch(allActions.userActions.setFcmToken(fcmToken));
@@ -919,9 +933,6 @@ function AppNavigator({navigation, route}: any) {
     }
   }, [])
 
-  useEffect(() => {
-    handlePushToken()
-  }, [])
 
   /*
   useEffect(() => {

@@ -304,15 +304,14 @@ color: #007AFF;
 `;
 
 const PrivateText = Styled.Text`
- margin-left: 5px;
  font-weight: 500;
  font-size: 15px;
  color: #C6C7CC;
 `;
 
 const CollectionNameContainer = Styled.View`
- flex-direction: row;
- align-items: flex-end;
+ flex-direction: column;
+ width: ${wp("72%")};
 `;
 
 const LoadingContainer = Styled.View`

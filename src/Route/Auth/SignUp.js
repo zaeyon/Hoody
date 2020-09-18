@@ -9,6 +9,7 @@ const SignUp = (email, password, nickname, birthdate, gender, socialId, provider
     const url = baseUrl + '/auth/signUp';
 
     console.log("Signup fcmToken", fcmToken);
+    console.log("SignUp birthdate", birthdate);
 
     let form = new FormData();
 

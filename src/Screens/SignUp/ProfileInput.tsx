@@ -22,6 +22,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import allActions from '~/action';
 import AboveKeyboard from 'react-native-above-keyboard';
 import SignUp from '~/Route/Auth/SignUp';
+import DatePicker from 'react-native-datepicker'
 
 const Container = Styled.SafeAreaView`
  flex: 1;
@@ -179,6 +180,7 @@ const BirthDateContainer = Styled.View`
 flex-direction: column;
 `;
 
+
 const GenderContainer = Styled.View`
 flex-direction: column;
 `;
@@ -312,6 +314,15 @@ position: absolute;
 bottom: 0;
 `;
 
+
+const IOS14BirthDateModalContainer = Styled.View`
+width: ${wp('100%')};
+height: ${wp('35%')};
+position: absolute;
+bottom: 0;
+background-color:#fafafa
+`;
+
 const ModalHeaderContainer = Styled.View`
  border-width: 0.6px;
  border-color: #ECECEE;
@@ -424,17 +435,18 @@ const ProfileInput = ({navigation, route}) => {
   const [provider, setProvider] = useState('local');
 
   const [visibleBirthdatePicker, setVisibleBirthdatePicker] = useState<boolean>(false);
+  const [visibleBirthdatePickerIOS14, setVisibleBirthdatePickerIOS14] = useState<boolean>(false);
   const [visibleGenderModal, setVisibleGenderModal] = useState<boolean>(false);
 
   const [formattedBirthdate, setFormattedBirthdate] = useState<string>("");
   const [birthdateIndication, setBirthdateIndication] = useState('');
-  const [nicknameInputFocused, setNicknameFocused] = useState<boolean>(false);
+  const [nicknameInputFocused, setNicknameInputFocused] = useState<boolean>(false);
   const [selectedGenderRadioIndex, setSelectedGenderRadioIndex] = useState<number>(0);
 
   const [nicknameOverlap, setNicknameOverlap] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
 
-  console.log("currentUser", currentUser);
+  const [iosVersion, setIosVersion] = useState<number>(parseInt(Platform.Version, 10));
 
 
   var radio_props = [
@@ -591,17 +603,28 @@ const ProfileInput = ({navigation, route}) => {
   const showBirthdatePicker = () => {
     setVisibleBirthdatePicker(!visibleBirthdatePicker);
     setVisibleGenderModal(false);
+    setNicknameInputFocused(false);
+    Keyboard.dismiss();
+  };
+
+
+  const showBirthdatePickerIOS14 = () => {
+    setVisibleBirthdatePickerIOS14(!visibleBirthdatePickerIOS14);
+    setVisibleGenderModal(false);
+    setNicknameInputFocused(false)
     Keyboard.dismiss();
   };
 
   const showGenderSettingModal = () => {
     setVisibleGenderModal(!visibleGenderModal);
     setVisibleBirthdatePicker(false);
+    setNicknameInputFocused(false);
     Keyboard.dismiss();
   }
 
   const onChangeBirthdatePicker = (event, date) => {
     setBirthdate(date)
+    setNicknameInputFocused(false);
   }
 
   const applyBirthdate = () => {
@@ -643,13 +666,13 @@ const ProfileInput = ({navigation, route}) => {
   }
 
   const onFocusNicknameInput = () => {
-    setNicknameFocused(true);
+    setNicknameInputFocused(true);
     setVisibleBirthdatePicker(false);
     setVisibleGenderModal(false);
   }
 
   const onUnfocusNicknameInput = (text:string) => {
-    setNicknameFocused(false);
+    setNicknameInputFocused(false);
     checkNickname(text)
   }
 
@@ -821,6 +844,28 @@ const ProfileInput = ({navigation, route}) => {
               </BirthDateBackground>
             </TouchableWithoutFeedback>
           </BirthDateContainer>
+          {/*
+          {iosVersion >= 14 && (
+          <BirthDateContainer>
+          <ItemLabelText>생년월일</ItemLabelText>
+          <BirthDateBackground 
+          style={[visibleBirthdatePickerIOS14 && {borderColor:'#267DFF'}, {paddingLeft:0, backgroundColor:'#ffffff'}]}>
+          <DateTimePicker
+                locale={'ko_KR.UTF-8'}
+                style={{flex:1, 
+                width: wp('44%'),
+                height: wp('13.33%')}}
+                testID="birthdatePicker"
+                value={birthdate}
+                onChange={(event,date) => onChangeBirthdatePicker(event,date)}
+                display='spinner'
+                is24Hour={true}
+                maximumDate={new Date()}>
+              </DateTimePicker>
+              </BirthDateBackground>
+        </BirthDateContainer>
+        )}
+          */}
           <GenderContainer>
             {/*
             <GenderButtonContainer>
@@ -858,7 +903,7 @@ style={(!confirmedNickname || !confirmedBirthDate || !confirmedGender) &&{backgr
 </AboveKeyboard>
 </FinishButtonContainer>
       )}
-      {visibleBirthdatePicker && (
+      {visibleBirthdatePicker &&  (
         <BirthdateModalContainer>
           <ModalHeaderContainer>
             <TouchableWithoutFeedback onPress={() => applyBirthdate()}>
@@ -874,7 +919,7 @@ style={(!confirmedNickname || !confirmedBirthDate || !confirmedGender) &&{backgr
                 value={birthdate}
                 onChange={(event,date) => onChangeBirthdatePicker(event,date)}
                 mode={'date'}
-                display="default"
+                display='spinner'
                 is24Hour={true}
                 maximumDate={new Date()}
               />

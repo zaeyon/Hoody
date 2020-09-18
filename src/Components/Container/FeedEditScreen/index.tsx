@@ -10,6 +10,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import AboveKeyboard from 'react-native-above-keyboard';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import ActionSheet from 'react-native-actionsheet'
+import {isIphoneX} from 'react-native-iphone-x-helper';
 
 import Modal from 'react-native-modal';
 import RadioForm, {RadioButton, RadioButtonInput, RadioButtonLabel} from 'react-native-simple-radio-button';
@@ -321,8 +322,8 @@ const SubTagPlaceholderText = Styled.Text`
 const BottomMenuBarContainer = Styled.View`
  justify-content: flex-end;
  position: absolute;
- bottom: 25;
-`;
+ bottom: ${isIphoneX() ? 25 : 15}`
+ ;
 
 
 const BottomMenuBar = Styled.View`

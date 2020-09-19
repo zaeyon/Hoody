@@ -327,7 +327,7 @@ const ModalHeaderContainer = Styled.View`
  border-width: 0.6px;
  border-color: #ECECEE;
  width: ${wp('100%')};
- height: ${wp('11.2%')};
+ height: ${wp('12.5%')};
  background-color: #FAFAFA;
  flex-direction: row;
  justify-content: flex-end;
@@ -899,7 +899,7 @@ style={(!confirmedNickname || !confirmedBirthDate || !confirmedGender) &&{backgr
                                 onPress={() => onPressRadioButton(i)}
                                 labelHorizontal={true}
                                 labelStyle={{fontSize: 16, color: '#1D1E1F'}}
-                                labelWrapStyle={{paddingRight: 250, backgroundColor:'#ffffff'}}/>
+                                labelWrapStyle={{paddingRight: 200, backgroundColor:'#ffffff'}}/>
                             </RadioButton>
                             <RadioButtonInput
                                 obj={obj}

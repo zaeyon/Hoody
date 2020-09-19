@@ -88,7 +88,6 @@ padding: 10px 15px 10px 15px;
 `;
 
 const MyProfileReportContainer = Styled.View`
- width: ${wp('22%')};
  height: ${wp('9')};
  background-color: #FAFAFA;
  border-radius: 22px;
@@ -97,8 +96,8 @@ const MyProfileReportContainer = Styled.View`
  flex-direction: row;
  justify-content: space-between;
  align-items: center;
- padding-left: 7px;
- padding-right: 12px;
+ padding-left: 9px;
+ padding-right: 9px;
 `;
 
 const MyProfileReportImage = Styled.Image`

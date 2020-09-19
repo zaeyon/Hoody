@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import Styled from 'styled-components/native';
-import {FlatList, TouchableWithoutFeedback, View, StyleSheet} from 'react-native';
+import {FlatList, TouchableWithoutFeedback, View, StyleSheet, Dimensions} from 'react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -15,6 +15,8 @@ import GetFeedDetail from '~/Route/Post/GetFeedDetail';
 import {POSTLike, DELETELike} from '~/Route/Post/Like';
 import POSTScrapFeed from '~/Route/Post/Scrap/POSTScrapFeed';
 import DELETEScrapFeed from '~/Route/Post/Scrap/DELETEScrapFeed';
+
+const deviceWidth = Dimensions.get('window').width
 
 const Container = Styled.View`
 
@@ -34,7 +36,7 @@ const LeftContainer = Styled.View`
 `;
 
 const RightContainer = Styled.View`
- width: ${wp('88%')}px;
+width: ${deviceWidth < 375 ? wp('86.0%') : wp('88.0%')}px;
  padding: 5px 20px 0px 7px;
 `;
 
@@ -154,7 +156,7 @@ const FirstImage = Styled.Image`
  border-top-left-radius: 10px;
  border-bottom-left-radius: 10px;
 resize-mode:cover;
-width: ${wp('40.5%')}px;
+width: ${deviceWidth < 375 ? wp('38.5%') : wp('40.5%')}px;
 height: ${wp('44%')}px;
 `;
 
@@ -163,7 +165,7 @@ const SecondImage = Styled.Image`
  border-top-right-radius: 10px;
  border-bottom-right-radius: 10px;
 resize-mode:cover;
- width: ${wp('40.0%')}px;
+width: ${deviceWidth < 375 ? wp('38.5%') : wp('40.5%')}px;
  height: ${wp('44%')}px;
 `;
 
@@ -180,7 +182,7 @@ padding-top: 10px;
 const ReviewImage = Styled.Image`
 resize-mode:cover;
 border-radius: 10px; 
-width: ${wp('81%')}px
+width: ${deviceWidth < 375 ? wp('77%') + 2.5 : wp('81%')}px;
 height: ${wp('81%')}px;
 `;
 
@@ -328,7 +330,7 @@ interface Props {
   main_tag: string;
   sub_tag1?: string;
   sub_tag2?: string;
-  review_content: array;
+  review_content: any;
   image_count: number;
   like_count: number;
   comment_count: number;

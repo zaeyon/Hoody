@@ -40,7 +40,7 @@ const HeaderTagPlaceholderContainer = Styled.View`
 
 const HeaderBar = Styled.View`
  width: ${wp('100%')};
- height: ${wp('11.7%')};
+ height: ${wp('13.8%')};
  flex-direction: row;
  align-items: center;
  justify-content: space-between;
@@ -58,7 +58,7 @@ const HeaderLeftContainer = Styled.View`
 padding-top: 7px;
  padding-left: 16px;
  padding-right: 16px;
- padding-bottom: 13px;
+ padding-bottom: 8px;
  align-items: center;
  justify-content: center;
 `;

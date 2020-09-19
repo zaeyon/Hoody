@@ -96,7 +96,7 @@ const RecommendUser = ({navigation, recommendUserListData, loadingRecommendUser}
         navigation.navigate("AnotherUserProfileStack", {
           screen: "AnotherUserProfileScreen",
           params: {requestedUserNickname: nickname}
-        });
+     });
     }
   }
 
@@ -154,7 +154,7 @@ const RecommendUser = ({navigation, recommendUserListData, loadingRecommendUser}
                     </RecommendUserListContainer>
                 </Placeholder>
             )}
-            {!loadingRecommendUser && (
+            {!loadingRecommendUser && recommendUserListData[0] && (
             <RecommendUserListContainer>
                 <FlatList
                 showsHorizontalScrollIndicator={false}

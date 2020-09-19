@@ -149,28 +149,26 @@ const DescripInput = Styled.TextInput`
 const PrivateSettingContainer = Styled.View`
  margin-top: 10px;
  width: ${wp('100%')};
- height: ${wp('15%')};
  flex-direction: row;
  align-items: center;
  justify-content: space-between;
- padding: 18px 16px 18px 16px;
+ padding: 17px 16px 17px 16px;
  background-color: #ffffff;
  border-bottom-width: 0.6px;
  border-color: #eeeeee;
 `;
 
 const PrivateSettingText = Styled.Text`
- font-size: 16px;
+ font-size: 17px;
  color: #333333;
 `;
 
 const IncludeLocationContainer = Styled.View`
 width: ${wp('100%')};
-height: ${wp('15%')};
 flex-direction: row;
 align-items: center;
 justify-content: space-between;
-padding: 18px 16px 18px 16px;
+padding: 17px 16px 17px 16px;
 background-color: #ffffff;
 border-bottom-width: 0.6px;
 border-color: #eeeeee;

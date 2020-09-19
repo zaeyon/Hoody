@@ -6,6 +6,7 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import AboveKeyboard from 'react-native-above-keyboard';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 // Route
 import GETEmailCheck from '~/Route/Auth/GETEmailCheck';
@@ -15,7 +16,6 @@ const Container = Styled.SafeAreaView`
  background-color: #ffffff;
  align-items: center;
 `;
-
 
 const HeaderBar = Styled.View`
  width: ${wp('100%')};
@@ -58,8 +58,6 @@ const HeaderEmptyContainer = Styled.View`
  height: ${wp('6.4%')};
 `;
 
-
-
 const NextText = Styled.Text`
  font-size: 17px;
  color: #000000;
@@ -74,9 +72,8 @@ align-self: flex-start;
 `;
 
 const InputContainer = Styled.View`
- width: ${wp('85%')};
- height: ${hp('70%')};
  align-items: center;
+ padding-bottom: 80px;
 `;
 
 const LabelInputContainer = Styled.View`
@@ -181,6 +178,9 @@ const LoadingContainer = Styled.View`
  height: ${hp('100%')};
  align-items: center;
  justify-content: center;
+`;
+
+const BodyContainer = Styled.View`
 `;
 
 const BasicInput = ({navigation, route}) => {
@@ -500,6 +500,8 @@ const BasicInput = ({navigation, route}) => {
           <HeaderEmptyContainer/>
         </HeaderRightContainer>
       </HeaderBar>
+      <KeyboardAwareScrollView
+      showsVerticalScrollIndicator={false}>
       <InputContainer style={{marginTop: 10}}>
         <ItemContainer>
           <ItemLabelText>이메일</ItemLabelText>
@@ -568,6 +570,7 @@ const BasicInput = ({navigation, route}) => {
           )}
         </ItemContainer>
       </InputContainer>
+      </KeyboardAwareScrollView>
           <FinishButtonContainer>
           <AboveKeyboard>
 

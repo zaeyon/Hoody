@@ -6,6 +6,7 @@ import {
   Animated,
   ViewPropTypes,
   TouchableWithoutFeedback,
+  Dimensions
 } from 'react-native'
 import Styled from 'styled-components/native';
 import {
@@ -60,6 +61,8 @@ const AddCollectionContainer = Styled.View`
  padding-right: 8px;
 `;
 
+const deviceWidth = Dimensions.get('window').width;
+
 
 
 const ProfileTabBar = createReactClass({
@@ -96,15 +99,14 @@ const ProfileTabBar = createReactClass({
     const fontWeight = 'bold';
 
     return <Button
-      style={{ flex: 1, backgroundColor:'#ffffff'}}
+      style={{ flex: 1}}
       key={name}
       accessible={true}
       accessibilityLabel={name}
       accessibilityTraits='button'
-      onPress={() => onPressHandler(page)}
-    >
-      <View style={[styles.tab]}>
-        <Text style={[{ color: textColor, fontWeight, fontSize: 18  }, textStyle,]}>
+      onPress={() => onPressHandler(page)}>
+      <View style={page === 1 ? [styles.tab, deviceWidth < 375 && {marginLeft: 13}] : [styles.tab]}>
+        <Text style={[{color: textColor, fontWeight, fontSize: 18}, textStyle,]}>
           {name}
         </Text>
       </View>
@@ -116,7 +118,7 @@ const ProfileTabBar = createReactClass({
     const numberOfTabs = this.props.tabs.length;
     const tabUnderlineStyle = {
       position: 'absolute',
-      width: wp('10.5%'),
+      width: deviceWidth > 370 ? wp('10.5%') : wp('13.4%'),
       height: 2.0,
       backgroundColor: 'black',
       bottom: 0,
@@ -127,7 +129,7 @@ const ProfileTabBar = createReactClass({
 
     const translateX = this.props.scrollValue.interpolate({
       inputRange: [0, 1],
-      outputRange: [16, wp('20%')],
+      outputRange: deviceWidth > 370 ? [16, wp('18%')] : [16, wp('23%')],
     });
 
     const changeInFeedSortType = (sortType: string) => {
@@ -206,7 +208,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingBottom: 0,
     paddingTop: 13,
-    marginLeft: 15,
+    marginRight: 15,
     width: wp('35%'),
     height: wp('10%'),
   },
@@ -218,6 +220,7 @@ const styles = StyleSheet.create({
     borderTopWidth: 0,
     borderLeftWidth: 0,
     borderRightWidth: 0,
+    paddingLeft: 15,
     borderColor: '#ccc',
   },
   transparentIcon : {

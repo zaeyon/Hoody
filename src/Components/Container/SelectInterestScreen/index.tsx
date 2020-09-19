@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import Styled from 'styled-components/native';
-import {TouchableWithoutFeedback, FlatList} from 'react-native';
+import {TouchableWithoutFeedback, FlatList, Dimensions} from 'react-native';
 import {useDispatch} from 'react-redux';
 import allActions from '~/action';
 import {
@@ -84,7 +84,7 @@ const InterestItemBackground = Styled.View`
 `;
 
 const InterestItemText = Styled.Text`
- font-size: 18px;
+ font-size: 16px;
  color: #56575C;
 `;
 
@@ -210,6 +210,10 @@ const SelectInterestScreen = ({navigation, route}: Props) => {
     const [changeInterest, setChangeInterest] = useState<boolean>(false);
     const dispatch = useDispatch();
 
+    const deviceWidth = Dimensions.get('window').width;
+
+    console.log("deviceWidth", deviceWidth);
+
     const finishSelectInterest = () => {
         var interestListStr = JSON.stringify(selectedInterestList);
         POSTCategory(interestListStr)
@@ -303,7 +307,7 @@ const SelectInterestScreen = ({navigation, route}: Props) => {
             <BodyContainer>
                 <FlatList
                 style={{paddingTop:10}}
-                numColumns={4}
+                numColumns={deviceWidth < 375 ? 3 : 4}
                 columnWrapperStyle={{marginBottom:10}}
                 data={interestList}
                 renderItem={renderInterestItem}

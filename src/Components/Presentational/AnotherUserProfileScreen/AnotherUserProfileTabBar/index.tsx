@@ -100,7 +100,7 @@ const AnotherUserProfileTabBar = createReactClass({
     const fontWeight = 'bold';
 
     return <Button
-      style={{ flex: 1, backgroundColor:'#ffffff'}}
+      style={{ flex: 1}}
       key={name}
       accessible={true}
       accessibilityLabel={name}

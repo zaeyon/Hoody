@@ -9,10 +9,12 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 // Route
 import Login from '~/Route/Auth/Login';
 import GETRecentSearch from '~/Route/Search/GETRecentSearch';
+
 
 const Input = Styled.TextInput`
 position: relative;
@@ -186,6 +188,7 @@ margin-top: 5px;
 width: ${wp('100%')};
 justify-content: center;
 align-items: center;
+padding-bottom: 30px;
 `;
 
 const UnvaildInputText = Styled.Text`
@@ -374,11 +377,12 @@ const LoginScreen = ({navigation}) => {
         <HeaderEmptyContainer/>
         </HeaderRightContainer>
       </HeaderBar>
+      <KeyboardAwareScrollView
+      showsVerticalScrollIndicator={false}>
       <BodyContainer>
         <ItemContainer>
           <ItemLabelText>이메일</ItemLabelText>
           <ItemTextInput
-         
           style={(emailInputState === "unvalid" && {borderColor: '#FF3B30'}) || (emailInputFocus && {borderColor:'#267DFF'})}
           onChangeText={(text:string) => onChangeEmailInput(text)}
           autoCapitalize={"none"}
@@ -421,6 +425,7 @@ const LoginScreen = ({navigation}) => {
         <FindPasswordText>비밀번호 찾기</FindPasswordText>
         </TouchableWithoutFeedback>
       </FooterContainer>
+      </KeyboardAwareScrollView>
       {loading && (
         <LoadingContainer>
           <ActivityIndicator

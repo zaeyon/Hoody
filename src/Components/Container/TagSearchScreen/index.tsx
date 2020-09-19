@@ -15,7 +15,7 @@ const Container = Styled.SafeAreaView`
 
 const HeaderBar = Styled.View`
  width: ${wp('100%')};
- height: ${wp('11.7%')};
+ height: ${wp('13.8%')};
  flex-direction: row;
  align-items: center;
  justify-content: space-between;

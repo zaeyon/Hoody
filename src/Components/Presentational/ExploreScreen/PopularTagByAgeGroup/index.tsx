@@ -144,7 +144,7 @@ const PopularTagByAgeGroup = ({navigation, ageGroupPopularTagListData, selectPop
                 contentContainerStyle={{paddingLeft:16, paddingRight:16}}
                 columnWrapperStyle={{marginTop:8}}
                 numColumns={2}
-                data={ageGroupPopularTagListData[selectedPopularTagIndex].tagPosts}
+                data={ageGroupPopularTagListData[selectedPopularTagIndex]?.tagPosts}
                 renderItem={renderSelectTagFeedItem}
                 />
             </SelectTagFeedListContainer>

@@ -129,6 +129,7 @@ import ProductWebView from '~/Components/Container/ProductWebView';
 // Route
 import POSTAutoLogin from '~/Route/Auth/POSTAutoLogin';
 import GETFeed from '~/Route/Home/GETFeed';
+import POSTFcmToken from '~/Route/Auth/POSTFcmToken';
 
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
@@ -955,24 +956,7 @@ function AppNavigator({navigation, route}: any) {
         }
 
       } else if(asyStorResponse.userId) {
-         SplashScreen.hide();
-         const authStatus = await messaging().requestPermission();
-         const enabled =
-         authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-         authStatus === messaging.AuthorizationStatus.PROVISIONAL
-         var fcmToken;
-
-         if (enabled) {
-          fcmToken = await messaging().getToken()
-          if(fcmToken) {
-          dispatch(allActions.userActions.setFcmToken(fcmToken));
-          }
-        } else {
-          const authorized = await messaging().requestPermission()
-          if (authorized) setIsAuthorized(true)
-        }
-
-         POSTAutoLogin(asyStorResponse.userId, asyStorResponse.sessionId, fcmToken)
+         POSTAutoLogin(asyStorResponse.userId, asyStorResponse.sessionId)
          .then(function(response) {
           
            console.log("자동로그인 성공", response);
@@ -987,13 +971,37 @@ function AppNavigator({navigation, route}: any) {
            dispatch(
              allActions.keywordAction.setInputedKeywordList([])
            )          
-           setTimeout(() => {
+           setTimeout(async () => {
              SplashScreen.hide();
-           },100)
+
+             const authStatus = await messaging().requestPermission();
+             const enabled =
+              authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+              authStatus === messaging.AuthorizationStatus.PROVISIONAL
+             var fcmToken;
+
+             if (enabled) {
+              fcmToken = await messaging().getToken()
+             if(fcmToken) {
+              dispatch(allActions.userActions.setFcmToken(fcmToken));
+              POSTFcmToken(asyStorResponse.userId, fcmToken)
+              .then(function(response) {
+                console.log("POSTFcmToken response", response)
+              })
+              .catch(function(error) {
+                console.log("POSTFcmToken error", error)
+              })
+             }
+             } else {
+              const authorized = await messaging().requestPermission()
+              if (authorized) setIsAuthorized(true)
+             }
+           },10)
          })
          .catch(function(error) {
            console.log("자동로그인 실패", error);
            SplashScreen.hide();
+           
          })
        }
      })

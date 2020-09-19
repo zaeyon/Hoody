@@ -191,23 +191,6 @@ const ExploreScreen = ({navigation, route}: Props) => {
         getRecommendData()
     }, [])
 
-    useEffect(() => {
-        var hasLocationPermission = true;
-        if (hasLocationPermission) {
-            Geolocation.getCurrentPosition(
-                (position) => {
-                  console.log("탐색화면 현재 위치", position);
-                  setCurrentUserLocation(position.coords);
-                },
-                (error) => {
-                  // See error code charts below.
-                  console.log(error.code, error.message);
-                },
-                { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
-            );
-          }
-    }, [])
-
     const getRecommendData = () => {
         GETRecommendUser()
         .then(function(response) {
@@ -293,10 +276,7 @@ const ExploreScreen = ({navigation, route}: Props) => {
 
     const moveToNearFeedMap = () => {
         console.log("currentLocation", currentUserLocation);
-        navigation.navigate("NearFeedMapScreen", {
-          currentLatitude: currentUserLocation.latitude,
-          currentLongitude: currentUserLocation.longitude,
-      })
+        navigation.navigate("NearFeedMapScreen")
     }
 
     const selectPopularTag =(item:object, index:number) => {

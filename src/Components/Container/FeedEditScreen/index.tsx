@@ -386,7 +386,7 @@ const BottomMenuAlbumIcon = Styled.Image`
 
 const AddDescripContainer = Styled.View`
 border-color: #eeeeee;
-padding: 23px 15px 200px 15px;
+padding: 23px 15px 23px 15px;
 `;
 
 const NewDescripInput = Styled.TextInput`
@@ -561,7 +561,10 @@ color: #cccccc;
 const DescripModalContainer = Styled.View`
  width: ${wp('100%')};
  height: ${hp('100%')};
+ background-color:#ffffff;
  padding: 20px 15px 20px 15px;
+ 
+
 `;
 
 const DescripPlaceholder = Styled.Text`
@@ -600,13 +603,13 @@ const RemoveDescripIcon = Styled.Image`
 const RemoveDescripContainer = Styled.View`
 align-items: center;
 justify-content: center;
-background-color: #c3c3c3;
+background-color: #fafafa;
 padding-left: 12px;
 padding-right: 12px;
 `;
 
 const FinishDescripContainer = Styled.View`
-background-color: #c3c3c3;
+background-color: #fafafa;
 align-items: center;
 justify-content: center;
 padding-right: 12px;
@@ -791,6 +794,15 @@ const LoadingContainer = Styled.View`
  justify-content: center;
 `;
 
+
+const LoadingGetPostContainer = Styled.View`
+ position: absolute;
+ width: ${wp('100%')};
+ height: ${hp('100%')};
+ align-items: center;
+ justify-content: center;
+`;
+
 const bottomActionOptions = [
     '취소',
     <Text style={{color: 'red'}}>삭제</Text>
@@ -890,6 +902,8 @@ const FeedEditScreen = ({navigation, route}: Props) => {
     const [selectedOpenRadioIndex, setSelectedOpenRadioIndex] = useState<number>(0);
 
     const [loading, setLoading] = useState<boolean>(false);
+    const [loadingGetTempo, setLoadingGetTempo] = useState<boolean>(false);
+    const [loadingGetPost, setLoadingGetPost] = useState<boolean>(true);
 
     const API_KEY = 'd824d5c645bfeafcb06f24db24be7238';
 
@@ -957,6 +971,7 @@ const FeedEditScreen = ({navigation, route}: Props) => {
              setTimeout(() => {
              console.log("수정된 paragraphData", tmpParagraphData2);
              setParagraphData(tmpParagraphData2);
+             setLoadingGetPost(false);
              }, 10)
              
              setIncompleteMainTag(route.params.feedDetailInfo.mainTags.name)
@@ -1911,19 +1926,10 @@ const renderDraggableItem = ({item, index, drag, isActive}) => {
 
 const renderAddNewDescripInput = () => {
     return (
-        <TouchableWithoutFeedback onPress={() => showDescripModal()}>
-        <AddDescripContainer>
-        {/*
-        <NewDescripInput
-        ref={newDescripInput}
-        placeholder={!paragraphData[0] ? "나의 소비에 이야기를 담아주세요" : ""}
-        multiline={true}
-        onFocus={(nativeEvent) => onFocusNewDescripInput(nativeEvent)}
-        onChangeText={(text:string) => onChangeNewDescripInput(text)}
-        editable={false}
-        />*/}
-        <DescripPlaceholder>나의 소비에 이야기를 담아주세요</DescripPlaceholder>
-    </AddDescripContainer>
+    <TouchableWithoutFeedback onPress={() => showDescripModal()}>
+        <AddDescripContainer style={{paddingBottom:200}}>
+            <DescripPlaceholder>나의 소비에 이야기를 담아주세요</DescripPlaceholder>
+        </AddDescripContainer>
     </TouchableWithoutFeedback>
     )
 
@@ -2104,14 +2110,14 @@ const renderAddNewDescripInput = () => {
                 {visibleDescripModal && (
                 <DescripModalContainer>
                     <DescripInput
+                    style={{height: hp('26%'), paddingBottom:25}}
                     multiline={true}
                     autoFocus={true}
                     onChangeText={(text: string) => onChangeDescripModalInput(text)}
-                    autoCapitalize={false}
+                    autoCapitalize="none"
                     value={descripModalInputText}
                     />
                 </DescripModalContainer>
-                
                 )}
             </BodyContainer>
            
@@ -2211,12 +2217,6 @@ const renderAddNewDescripInput = () => {
                         <AbledFinishDescripText>완료</AbledFinishDescripText>
                         </FinishDescripContainer>
                         </TouchableWithoutFeedback>
-                            
-                            {/*descripModalInputText === null && (
-                                <FinishDescripContainer>
-                                <DisabledFinishDescripText>완료</DisabledFinishDescripText>
-                                </FinishDescripContainer>
-                            )*/}
                         </DescripModalBottomBar>
                     </AboveKeyboard>
                 </DescripModalBottomBarContainer>
@@ -2318,7 +2318,14 @@ const renderAddNewDescripInput = () => {
               color={"#FFFFFF"}/>
           </LoadingContainer>
       )}
-       <View style={{position:'absolute', bottom:-1000}}>
+      {loadingGetPost && (
+          <LoadingGetPostContainer>
+              <ActivityIndicator
+              color={"#707070"}/>
+          </LoadingGetPostContainer>
+
+      )}
+       <View style={{position:'absolute', bottom:-1000, backgroundColor:'#ffffff'}}>
         <View>
         <GetTextWidthContainer>
         </GetTextWidthContainer>

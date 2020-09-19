@@ -386,7 +386,7 @@ const BottomMenuAlbumIcon = Styled.Image`
 
 const AddDescripContainer = Styled.View`
  border-color: #eeeeee;
- padding: 23px 15px 200px 15px;
+ padding: 23px 15px 23px 15px;
 `;
 
 
@@ -547,9 +547,10 @@ color: #cccccc;
 `;
 
 const DescripModalContainer = Styled.View`
- width: ${wp('100%')};
- height: ${hp('100%')};
- padding: 20px 15px 20px 15px;
+width: ${wp('100%')};
+height: ${hp('100%')};
+background-color:#ffffff;
+padding: 20px 15px 20px 15px;
 `;
 
 const DescripPlaceholder = Styled.Text`
@@ -878,6 +879,7 @@ const convertDateFormat = (date: any) => {
     const [selectedOpenRadioIndex, setSelectedOpenRadioIndex] = useState<number>(0);
 
     const [loadingUpload, setLoadingUpload] = useState<boolean>(false);
+    const [loadingGetTempo, setLoadingGetTempo] = useState<boolean>(false);
 
     // useRef
     const newDescripInput = useRef(null);
@@ -1110,6 +1112,7 @@ useEffect(() => {
 
     useEffect(() => {
         if(route.params?.temporarySaved) {
+            setLoadingGetTempo(true);
             route.params.temporarySaved = false;
             GETPostTemporaryDetail(route.params?.temporaryFeedId)
             .then(function(response) {
@@ -1117,6 +1120,7 @@ useEffect(() => {
                 setMainTag(response.post.mainTags.name);
                 setConsumptionDateStr(convertDateFormat(response.post.spendDate));
                 setConsumptionDate(response.post.spendDate);
+                setLoadingGetTempo(false);
 
                 if(response.post.subTagOnes) {
                     setSubTag1(response.post.subTagOnes.name);
@@ -1859,23 +1863,12 @@ const renderDraggableItem = ({item, index, drag, isActive}: any) => {
 
 const renderAddNewDescripInput = () => {
     return (
-        <TouchableWithoutFeedback onPress={() => showDescripModal()}>
-        <AddDescripContainer>
-        {/*
-        <NewDescripInput
-        ref={newDescripInput}
-        placeholder={!paragraphData[0] ? "나의 소비에 이야기를 담아주세요" : ""}
-        multiline={true}
-        onFocus={(nativeEvent) => onFocusNewDescripInput(nativeEvent)}
-        onChangeText={(text:string) => onChangeNewDescripInput(text)}
-        editable={false}
-        />*/}
-        <DescripPlaceholder>나의 소비에 이야기를 담아주세요</DescripPlaceholder>
-    </AddDescripContainer>
+    <TouchableWithoutFeedback onPress={() => showDescripModal()}>
+        <AddDescripContainer style={{paddingBottom:200}}>
+            <DescripPlaceholder>나의 소비에 이야기를 담아주세요</DescripPlaceholder>
+        </AddDescripContainer>
     </TouchableWithoutFeedback>
     )
-
-    //return footer;
 }
 
     return (
@@ -2061,10 +2054,11 @@ const renderAddNewDescripInput = () => {
                 {visibleDescripModal && (
                 <DescripModalContainer>
                     <DescripInput
+                    style={{height: hp('26%'), paddingBottom:25}}
                     multiline={true}
                     autoFocus={true}
                     onChangeText={(text: string) => onChangeDescripModalInput(text)}
-                    autoCapitalize={false}
+                    autoCapitalize="none"
                     value={descripModalInputText}
                     />
                 </DescripModalContainer>
@@ -2274,7 +2268,13 @@ const renderAddNewDescripInput = () => {
                     <ActivityIndicator
                     color={"#ffffff"}/>
                 </LoadingContainer>
-            )}
+      )}
+      {loadingGetTempo && (
+        <LoadingContainer style={{backgroundColor:"#ffffff00"}}>
+            <ActivityIndicator
+            color={"#000000"}/>
+        </LoadingContainer>
+      )}
               <View style={{position:'absolute', bottom:-1000}}>
         <View>
         <GetTextWidthContainer>

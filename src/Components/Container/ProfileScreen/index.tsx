@@ -741,7 +741,9 @@ const ProfileScreen = ({navigation, route}: Props) => {
   }
 
   const moveToProfileEdit = () => {
-    navigation.navigate("ProfileEditScreen");
+    navigation.navigate("ProfileEditScreen", {
+      userProfileInfo: userProfileInfo,
+    });
     setProfileModalVisible(false);
   }
 

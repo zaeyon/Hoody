@@ -7,6 +7,7 @@ import {
 } from 'react-native-responsive-screen';
 import {useSelector, useDispatch} from 'react-redux';
 import allActions from '~/action';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 import POSTProfileUpdate from '~/Route/User/POSTProfileUpdate';
 
@@ -77,7 +78,6 @@ const HeaderFinishText = Styled.Text`
 `;
 
 const BodyContainer = Styled.View`
- flex: 1;
  background-color: #e5e5e570;
 `;
 
@@ -240,7 +240,13 @@ const ProfileEditScreen = ({navigation, route}: Props) => {
     }
 
     const moveToAccountSetting = () => {
-        navigation.navigate("AccountSettingScreen");
+
+    navigation.navigate("SettingStack", {
+        screen: 'AccountSettingScreen',
+        params: {
+          profileInfo: route.params.userProfileInfo,
+        }
+      });
     }
 
     const completeProfileEdit = () => {
@@ -327,6 +333,9 @@ const ProfileEditScreen = ({navigation, route}: Props) => {
                 </HeaderFinishContainer>
                 )}
             </HeaderBar>
+            <KeyboardAwareScrollView
+            style={{backgroundColor:"#e5e5e570"}}
+            showsVerticalScrollIndicator={false}>
             <BodyContainer>
                 <ProfileImageContainer>
                     <TouchableWithoutFeedback onPress={() => moveToGallery()}>
@@ -374,6 +383,7 @@ const ProfileEditScreen = ({navigation, route}: Props) => {
                 </PrivacySettingContainer>
                 </TouchableWithoutFeedback>
             </BodyContainer>
+            </KeyboardAwareScrollView>
             {loading && (
                 <LoadingContainer>
                     <ActivityIndicator/>

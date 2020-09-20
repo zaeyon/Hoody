@@ -190,14 +190,14 @@ const FollowItem = ({navigation,userId, profileImageUri, nickname, feedCount, de
                 </UserProfileContainer>
                 </TouchableWithoutFeedback>
                 <FollowButtonContainer>
-                    {currentUserFollow === false && (
+                    {currentUserFollow === false && currentUser.user.nickname !== nickname && (
                         <TouchableWithoutFeedback onPress={() => followUser()}>
                         <FollowButton>
                             <FollowText>팔로우</FollowText>
                         </FollowButton>
                         </TouchableWithoutFeedback>
                     )}
-                    {currentUserFollow === true && (
+                    {currentUserFollow === true && currentUser.user.nickname !== nickname && (
                         <TouchableWithoutFeedback onPress={() => unfollowUser()}>
                         <FollowingButton>
                             <FollowingText>팔로잉</FollowingText>

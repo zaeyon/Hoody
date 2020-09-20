@@ -31,7 +31,7 @@ const Container = Styled.SafeAreaView`
 
 const HeaderBar = Styled.View`
  width: ${wp('100%')};
- height: ${wp('11.7%')};
+ height: ${wp('18%')};
  flex-direction: row;
  align-items: center;
  justify-content: space-between;
@@ -40,9 +40,9 @@ const HeaderBar = Styled.View`
 `;
 
 const HeaderLeftContainer = Styled.View`
- padding-top: 12px;
+ padding-top: 17px;
  padding-left: 16px;
- padding-bottom: 16px;
+ padding-bottom: 10px;
  padding-right: 0px;
  background-color: #ffffff;
 `;
@@ -56,6 +56,8 @@ const HeaderTitleContainer = Styled.View`
  background-color: #ffffff;
  width: ${wp('70%')};
  align-items: center;
+ justify-content: center;
+ padding-top: 10px
 `;
 
 const HeaderTitleText = Styled.Text`
@@ -67,8 +69,8 @@ const HeaderTitleText = Styled.Text`
 const HeaderRightContainer = Styled.View`
 padding-left: 16px;
 padding-right: 16px;
-padding-top: 12px;
-padding-bottom: 16px;
+padding-top: 17px;
+padding-bottom: 10px;
 background-color: #ffffff;
 `;
 

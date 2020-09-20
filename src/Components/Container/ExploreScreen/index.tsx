@@ -43,7 +43,7 @@ const BodyContainer = Styled.View`
 const HeaderBar = Styled.View`
  margin-top:16px;
  width: ${wp('100%')};
- height: ${wp('13.86%')};
+ height: ${wp('13.8%')};
  flex-direction: row;
  align-items: center;
  justify-content: space-between;

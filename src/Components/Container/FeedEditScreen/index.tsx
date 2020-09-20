@@ -1748,6 +1748,8 @@ const clickToUploadFinish = () => {
 
 
 const clickToTemporarySave = () => {
+    setLoading(true);
+
     console.log("임시저장 paragraphData", paragraphData);
     var sequence = "";
     var descriptionStr = "";
@@ -1822,11 +1824,13 @@ const clickToTemporarySave = () => {
         POSTUpdate(route.params?.postId, JSONstirngify_descriptionArray, mediaFileArray, mainTag, subTag1, subTag2, rating, expense, location, longitude, latitude, certifiedLocation, true, sequence, JSONstringify_productArray, transmitSpendDate, openState, subTagOneEdit, subTagTwoEdit, subTag1Exis, subTag2Exis)
         .then(function(response) {
             if(response.status === 200) {
+                setLoading(false);
                 console.log("후기 임시저장 성공", response);
                 moveToFeedDetail();
             }
         })
         .catch(function(error) {
+            setLoading(false);
             console.log("후기 임시저장 실패", error);
         });
     }, 100)
@@ -2086,6 +2090,7 @@ const renderAddNewDescripInput = () => {
                     scrollEnabled={enableScrollViewScroll}
                     ref={scrollViewRef}
                     >
+                {!loadingGetPost && (
                 <ContentContainer>
                         <DraggableFlatList
                         showsVerticalScrollIndicator={false}
@@ -2105,6 +2110,7 @@ const renderAddNewDescripInput = () => {
                         ListFooterComponent={renderAddNewDescripInput}
                         /> 
                 </ContentContainer>
+                )}
                 </KeyboardAwareScrollView>
                 )}
                 {visibleDescripModal && (

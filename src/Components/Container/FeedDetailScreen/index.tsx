@@ -1005,7 +1005,8 @@ const FeedDetailScreen = ({navigation, route}: Props) => {
       if(currentUserFeed) {
         setMyFeedModalVisible(true)
       } else {
-        setOtherUsersFeedModalVisible(true);
+        //setOtherUsersFeedModalVisible(true);
+        setMyFeedModalVisible(true)
         //setVisibleReportModal(true);
       }
     }

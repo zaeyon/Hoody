@@ -105,7 +105,7 @@ const ProfileTabBar = createReactClass({
       accessibilityLabel={name}
       accessibilityTraits='button'
       onPress={() => onPressHandler(page)}>
-      <View style={page === 1 ? [styles.tab, deviceWidth < 375 && {marginLeft: 13}] : [styles.tab]}>
+      <View style={page === 1 ? [styles.tab, deviceWidth < 375 ? {marginLeft: 10} : {marginLeft: 7}] : [styles.tab]}>
         <Text style={[{color: textColor, fontWeight, fontSize: 18}, textStyle,]}>
           {name}
         </Text>
@@ -118,18 +118,18 @@ const ProfileTabBar = createReactClass({
     const numberOfTabs = this.props.tabs.length;
     const tabUnderlineStyle = {
       position: 'absolute',
-      width: deviceWidth > 370 ? wp('10.5%') : wp('13.4%'),
+      width: deviceWidth > 370 ? wp('11.6%') : wp('13.0%'),
       height: 2.0,
       backgroundColor: 'black',
       bottom: 0,
-      left: 1.0,
+      left: 0.8,
       flex: 1,
       flexDirection:'row',
     };
 
     const translateX = this.props.scrollValue.interpolate({
       inputRange: [0, 1],
-      outputRange: deviceWidth > 370 ? [16, wp('18%')] : [16, wp('23%')],
+      outputRange: deviceWidth > 370 ? [16, wp('20%')] : [16, wp('25%')],
     });
 
     const changeInFeedSortType = (sortType: string) => {

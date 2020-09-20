@@ -174,7 +174,7 @@ class Gallery extends Component {
 
   componentDidMount() {
     const params = {
-      assetType: 'All',
+      assetType: 'Photos',
     };
 
     var allPhotoCount = 0;

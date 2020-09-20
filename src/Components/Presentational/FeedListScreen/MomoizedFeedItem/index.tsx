@@ -137,8 +137,8 @@ margin-bottom: 5px;
 `;
 
 const ImageCountBackground = Styled.View`
- top: 15px;
- right: 2px;
+ top: 17px;
+ right: 5px;
  padding: 5px 9px 5px 9px;
  position: absolute;
  border-radius: 26px;

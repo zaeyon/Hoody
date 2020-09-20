@@ -142,6 +142,7 @@ const SearchInput = Styled.TextInput`
  background-color: #F3F3F3;
  padding-left: ${wp('10%')};
  font-size: 18px;
+ color: #000000;
 `;
 
 const SearchContainer = Styled.View`

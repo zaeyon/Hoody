@@ -568,6 +568,7 @@ const NearFeedMapScreen = ({navigation, route}: Props) => {
             })
             .catch(function(error) {
               console.log("GETSearchSurroundPost error", error);
+              setLoadingNearFeedMap(false);
             })
 
             fetch(

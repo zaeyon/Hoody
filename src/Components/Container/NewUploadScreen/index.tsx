@@ -1733,6 +1733,7 @@ const clickToUploadFinish = () => {
 
 
 const clickToTemporarySave = () => {
+    setLoadingUpload(true);
     console.log("임시저장 paragraphData", paragraphData);
     var sequence = "";
     var descriptionStr = "";
@@ -1785,11 +1786,13 @@ const clickToTemporarySave = () => {
         PostUpload(JSONstirngify_descriptionArray, mediaFileArray, mainTag, subTag1, subTag2, rating, expense,location, longitude, latitude, certifiedLocation, true, sequence, JSONstringify_productArray, transmitSpendDate, openState, subTag1Exis, subTag2Exis)
         .then(function(response) {
             if(response.status === 201) {
+                setLoadingUpload(false);
                 console.log("게시글 임시저장 성공", response);
                 navigation.goBack();
             }
         })
         .catch(function(error) {
+            setLoadingUpload(false);
             console.log("게시글 임시저장 실패", error);
         });
     }, 100)

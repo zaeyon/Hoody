@@ -340,6 +340,7 @@ const ExploreScreen = ({navigation, route}: Props) => {
             navigation={navigation}
             />
             </RecommendTagBannerContainer>
+            {/*
             <PopularTagByAgeGroupContainer>
                 <PopularTagByAgeGroup
                 loadingPopularTag={loadingPopularTag}
@@ -349,6 +350,7 @@ const ExploreScreen = ({navigation, route}: Props) => {
                 selectedPopularTagIndex={selectedPopularTagIndex}
                 />
             </PopularTagByAgeGroupContainer>
+            */}
             <PopularFeedListContainer>
                 <PopularFeedList
                 navigation={navigation}

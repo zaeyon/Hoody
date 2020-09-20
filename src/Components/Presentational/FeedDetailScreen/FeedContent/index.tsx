@@ -32,7 +32,7 @@ justify-content: center;
 `;
 
 const ReviewDescription = Styled.Text`
- font-size: 14px;
+ font-size: 15.5px;
  color: #4B4B4B;
 `;
 

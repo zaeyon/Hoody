@@ -717,40 +717,48 @@ const TagSearchScreen = ({navigation, route}: Props) => {
     }
 
     const onSubmitMainTagInput = (event: any) => {
-        const tag = event.nativeEvent.text;
-        setInputMainTag(tag)
-        setMainTagExis(true);
-        setInputingMainTag(false);
-        if(!inputSubTag1) {
-            setInputingSubTag1(true)
+        const tag = event.nativeEvent.text.trim();
+
+        if(tag !== "") {
+            setInputMainTag(tag)
+            setMainTagExis(true);
+            setInputingMainTag(false);
+            if(!inputSubTag1) {
+                setInputingSubTag1(true)
+            }
+            if(!inputSubTag2 && inputSubTag1) {
+                setInputingSubTag2(true)
+            }
+            
+            var tmpTagList = tagList;
+            tmpTagList[0] = tag;
+            setTagList(tmpTagList);
+            setMainTagWidth(mainTagSize.width);
         }
-        if(!inputSubTag2 && inputSubTag1) {
-            setInputingSubTag2(true)
-        }
-        
-        var tmpTagList = tagList;
-        tmpTagList[0] = tag;
-        setTagList(tmpTagList);
-        setMainTagWidth(mainTagSize.width);
     }
 
     const onSubmitSubTag1Input = (event: any) => {
-        const tag = event.nativeEvent.text;
-        setInputSubTag1(tag)
-        setSubTag1Exis(true)
-        setInputingSubTag1(false)
-        if(!inputSubTag2) {
-            setInputingSubTag2(true)
-        }
+        const tag = event.nativeEvent.text.trim();
 
-        var tmpTagList = tagList;
-        tmpTagList[1] = tag;
-        setTagList(tmpTagList);
-        setSubTag1Width(subTag1Size.width);
+        if(tag !== "") {
+            setInputSubTag1(tag)
+            setSubTag1Exis(true)
+            setInputingSubTag1(false)
+            if(!inputSubTag2) {
+                setInputingSubTag2(true)
+            }
+    
+            var tmpTagList = tagList;
+            tmpTagList[1] = tag;
+            setTagList(tmpTagList);
+            setSubTag1Width(subTag1Size.width);
+        }
     }
 
     const onSubmitSubTag2Input = (event: any) => {
-        const tag = event.nativeEvent.text;
+        const tag = event.nativeEvent.text.trim();
+
+        if(tag !== "") {
         setInputSubTag2(tag)
         setSubTag2Exis(true)
         setInputingSubTag2(false)
@@ -759,6 +767,7 @@ const TagSearchScreen = ({navigation, route}: Props) => {
         tmpTagList[2] = tag;
         setTagList(tmpTagList);
         setSubTag2Width(subTag2Size.width);
+        }
     }
 
     const renderAutoCompletedTagItem = ({item , index}: any) => {

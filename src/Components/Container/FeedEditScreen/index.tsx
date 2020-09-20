@@ -2050,7 +2050,7 @@ const renderAddNewDescripInput = () => {
                     <InputedExpenseContainer>
                     <ExpenseInner>
                     <InputedExpenseText style={expense ? {color: "#56575C"
-                    }: {color: "#C6C7CC"}}>{expense ? formattedExpense + "원" : "가격 미입력"}</InputedExpenseText>
+                    }: {color: "#C6C7CC"}}>{expense ? formattedExpense + "원" : "소비금액 미입력"}</InputedExpenseText>
                     </ExpenseInner>
                     </InputedExpenseContainer>
                     </TouchableWithoutFeedback>

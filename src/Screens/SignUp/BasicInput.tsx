@@ -165,6 +165,7 @@ width: ${wp('91.46%')};
 height: ${wp('13.33%')};
 border-radius: 10px;
 background-color: #FAFAFA;
+color: #000000;
 margin-top: 10px;
 padding-left: 10px;
 padding-right: 10px;

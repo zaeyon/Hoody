@@ -10,32 +10,38 @@ import {
 const Container = Styled.SafeAreaView`
  flex: 1;
  background-color: #000000;
- justify-content: center;
- align-items: center;
 `;
 
 const PullImage = Styled.Image`
 flex: 1;
 `;
 
-const HeaderCancelContainer = Styled.View`
-width: ${wp('100%')};
-height: ${wp('11.7%')};
- padding-top: 35px
- padding-left: 16px;
- padding-bottom: 14px;
- padding-right: 16px;
+
+const HeaderContainer = Styled.View`
+ width: ${wp('100%')};
+ height: ${wp('13.8%')};
  flex-direction: row;
  align-items: center;
- position: absolute;
- top: 0;
- left: 0;
+ justify-content:space-between;
+`;
+
+const LeftContainer = Styled.View`
+justify-content: center;
+align-items: center;
+padding-top: 7px;
+padding-left: 16px;
+padding-bottom: 13px;
 `;
 
 const HeaderCancelIcon = Styled.Image`
  width: ${wp('6.4%')};
  height: ${wp('6.4%')};
  tint-color: #ffffff;
+`;
+
+const ImagesContainer = Styled.View`
+ flex: 1;
+ background-color: #000000;
 `;
 
 interface Props {
@@ -73,21 +79,25 @@ const ImagePullScreen = ({route, navigation}: Props) => {
 
   return (
     <Container>
+      <HeaderContainer>
+      <TouchableWithoutFeedback onPress={() => navigation.goBack()}>
+        <LeftContainer>
+          <HeaderCancelIcon
+          source={require('~/Assets/Images/HeaderBar/ic_X.png')}/>
+        </LeftContainer>
+      </TouchableWithoutFeedback>
+      </HeaderContainer>
+      <ImagesContainer>
       <SliderBox
         images={imagesUrl_arr}
         disableOnPress={true}
         resizeMode="contain"
-        sliderBoxHeight={hp('100%')}
+        sliderBoxHeight={hp('88%')}
         imageIndex={imageIndex}
         dotColor="#267DFF"
         inactiveDotColor="#cccccc"
       />
-<TouchableWithoutFeedback onPress={() => navigation.goBack()}>
-<HeaderCancelContainer>
-        <HeaderCancelIcon
-        source={require('~/Assets/Images/HeaderBar/ic_X.png')}/>
-      </HeaderCancelContainer>
-      </TouchableWithoutFeedback>
+      </ImagesContainer>
     </Container>
   );
 };

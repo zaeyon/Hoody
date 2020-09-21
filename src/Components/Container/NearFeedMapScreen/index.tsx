@@ -35,7 +35,7 @@ const HeaderBar = Styled.View`
 
 const HeaderLeftContainer = Styled.View`
 padding-left: 16px;
-padding-bottom: 13px;
+padding-bottom: 5px;
 padding-top: 15px;
 padding-right: 16px;
 background-color: #ffffff;

@@ -269,6 +269,7 @@ const ExploreScreen = ({navigation, route}: Props) => {
 
     const onRefreshRecommendData = () => {
         setRefreshingRecommendData(true);
+        setSelectedPopularTagIndex(0);
         setTimeout(() => {
             getRecommendData()
         }, 10)

@@ -16,7 +16,8 @@ padding-bottom: 150px;
 `;
 
 const NoCollectionContainer = Styled.View`
- padding-top: ${hp('20%')}px;
+ 
+ padding-top: ${hp('19%')}px;
  background-color: #ffffff;
  align-items: center;
  justify-content: center;
@@ -57,10 +58,16 @@ const CollectionItemContainer = Styled.View`
 `;
 
 
-const NoCollectionText = Styled.Text`
+const NoCollectionMainText = Styled.Text`
+ font-size: 19px;
+ font-weight: 600;
+ color: #1D1E1F;
+ `;
+
+ const NoCollectionSubText = Styled.Text`
  font-size: 16px;
- color: #4B4B4B;
-`;
+ color: #56575C;
+ `;
 
 interface Props {
     collectionListData: Array<object>;
@@ -73,6 +80,9 @@ interface Props {
 const ProfileCollectionList = ({collectionListData, navigation, profileNickname, profileImage, requestNickname}: Props) => {
     const [addNewCollection, setAddNewCollection] = useState<boolean>(true);
     const currentUser = useSelector((state) => state.currentUser);
+
+    console.log("ProfileCollectionList requestNickname", requestNickname);
+    console.log("ProfileCollectionList currentUser.user.nickname", currentUser.user.nickname);
     
     useEffect(() => {
         console.log("collectionList", collectionListData)  
@@ -104,27 +114,15 @@ const ProfileCollectionList = ({collectionListData, navigation, profileNickname,
     if(!collectionListData[0]) {
     if(currentUser.user?.nickname === requestNickname) {
         return (
-            /*
-            <NoCollectionContainer style={{marginTop:-100}}>
-            <TouchableWithoutFeedback onPress={() => moveToCollectionUpload()}>
-            <AddCollectionButton>
-                <AddCollectionIcon
-                source={require('~/Assets/Images/ic_bluePlus.png')}
-                />
-            </AddCollectionButton>
-            </TouchableWithoutFeedback>
-            <AddCollectionMainText>첫 컬렉션을 만들어 보세요 :)</AddCollectionMainText>
-            <AddCollectionSubText>나만의 키워드로 게시글들을 분류할 수 있어요.</AddCollectionSubText>
-        </NoCollectionContainer>
-        */
             <NoCollectionContainer>
-                <NoCollectionText>등록된 컬렉션이 없어요.</NoCollectionText>
+                <NoCollectionMainText>첫 컬렉션을 만들어 보세요 ;)</NoCollectionMainText>
+                <NoCollectionSubText>나만의 키워드로 게시글을 분류할 수 있어요.</NoCollectionSubText>
             </NoCollectionContainer>
         )
     } else if(currentUser.user?.nickname !== requestNickname) {
         return (
             <NoCollectionContainer>
-                <NoCollectionText>등록된 컬렉션이 없어요.</NoCollectionText>
+                <NoCollectionMainText>등록된 컬렉션이 없네요.</NoCollectionMainText>
             </NoCollectionContainer>
         )
     }

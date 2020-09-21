@@ -907,6 +907,7 @@ const ProfileScreen = ({navigation, route}: Props) => {
        profileNickname={userInfoData.nickname ? userInfoData.nickname : null}
        collectionListData={collectionListData}
        navigation={navigation}
+       requestNickname={currentUser.user.nickname}
        /> 
       </CollectionListTabContainer>
       </ScrollableTabView>

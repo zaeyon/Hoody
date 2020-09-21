@@ -47,7 +47,7 @@ font-size: 22px;
 
 const NoFeedContainer = Styled.View`
  width:${wp('100%')};
- padding-top: ${hp('20%')}px;
+ padding-top: ${hp('17%')}px;
  align-items: center;
 `;
 
@@ -129,6 +129,27 @@ const DropdownIcon = Styled.Image`
  width: ${wp('3.2%')};
  height: ${wp('3.2%')};
 `;
+
+
+const NoFeedEmoji = Styled.Image`
+ width: ${wp('6.4%')};
+ height: ${wp('6.4%')};
+`;
+
+const NoFeedMainText = Styled.Text`
+margin-top: 8px;
+font-weight: 600;
+color: #1D1E1F;
+font-size: 18px;
+
+`;
+
+const NoFeedSubText = Styled.Text`
+margin-top: 5px;
+font-size: 15px;
+color: #56575C;
+`;
+
 
 
   const TEST_SECTION_DATA = [
@@ -236,9 +257,10 @@ const ProfileFeedList = ({navigation, route, feedListData, currentSortType, onSc
         <UserFeedListContainer>
           {!feedListData[0] && !loadingProfileFeedByList && !loadingProfileFeedByDate && (
         <NoFeedContainer>
-        <NoFeedText>
-          등록된 후기가 없어요.
-        </NoFeedText>
+         <NoFeedEmoji
+        source={require('~/Assets/Images/Emoji/emo_noFeed.png')}/>
+        <NoFeedMainText>아직 게시글이 없네요.</NoFeedMainText>
+        <NoFeedSubText>자신의 소비에대해 이야기를 남겨보세요!</NoFeedSubText>
       </NoFeedContainer>
           )}
           {loadingProfileFeedByList && (

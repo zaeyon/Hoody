@@ -70,7 +70,7 @@ const ReviewMapIcon = Styled.Image`
 const NoFeedListContainer = Styled.View`
  width: ${wp('100%')};
  height: ${hp('100%')};
- padding-bottom: 200px;
+ padding-bottom: ${hp('30%')}
  background-color: #ffffff;
  justify-content: center;
  align-items: center;
@@ -80,11 +80,6 @@ const FeedListContainer = Styled.View`
  width: ${wp('100%')}px;
  padding-bottom: ${isIphoneX() ? hp("5.5%") : hp("8%")}
  background-color: #ffffff;
-`;
-
-const NoFeedText = Styled.Text`
- font-size: 17px;
- color: #c3c3c3;
 `;
 
 const BodyContainer = Styled.View`
@@ -106,8 +101,27 @@ height:${hp('100%')};
 margin-top: ${hp('35%')};
  background-color:#FFFFFF;
  align-items: center;
+`;
+
+const NoFeedEmoji = Styled.Image`
+ width: ${wp('6.4%')};
+ height: ${wp('6.4%')};
+`;
+
+const NoFeedMainText = Styled.Text`
+margin-top: 8px;
+font-weight: 600;
+color: #1D1E1F;
+font-size: 18px;
 
 `;
+
+const NoFeedSubText = Styled.Text`
+margin-top: 5px;
+font-size: 15px;
+color: #56575C;
+`;
+
 
 interface Props {
   navigation: any,
@@ -215,41 +229,12 @@ function FeedListScreen({navigation, route}: Props) {
 
   useEffect(() => {
     getFeedData();
-    //setFeedListData(TEST_FEED_DATA);
   }, []);
-
-  /*
-  useEffect(() => {
-    GETSearchAutoComplete(query, category)
-    .then(function(response) {
-      console.log("검색 자동 완성", response);
-      setAutoComplete(response.result);
-    })
-    .catch(function(error) {
-      console.log("검색 자동 완성 실패", error);
-    })
-  }, [query, category])
-  */
-
-  const getAllFeedData = () => {
-      // 서버테스트용 데이터
-      //setFeedListData(TEST_FEED_DATA);
-    GetAllFeed().then(function(response) {
-      setFeedListData(response);
-      setRefreshing(false)
-      setOnRefreshFeedList(!onRefreshFeedList)
-      console.log("파드 목록 가져오기 성공@@", response);
-    })
-    .catch(function(error) {
-      console.log("피드 목록 가져오기 실패", error);
-    })
-  };
-
 
   const getFeedData = () => {
     GETFeed(offset, limit)
     .then(function(response) {
-    console.log("파드 목록 가져오기 성공@@@", response);
+    console.log("홈 피드 목록 가져오기 성공", response);
     //setFeedListData(response.result);
     dispatch(allActions.feedListAction.setHomeFeedList(response.result));
     setLoading(false);
@@ -271,23 +256,6 @@ function FeedListScreen({navigation, route}: Props) {
     setSearchFocus(false);
     Keyboard.dismiss();
     }
-  }
-
-  const changingSearchInput = (text:string) => {
-    setQuery(text);
-  }
-
-  const changeSearchCategory = (changedCategory: string) => {
-    setCategory(changedCategory)
-  }
-
-  const moveNearFeedMap = () => {
-      console.log("currentLocation", currentLocation);
-
-      navigation.navigate("NearFeedMapScreen", {
-        currentLatitude: currentLocation.latitude,
-        currentLongitude: currentLocation.longitude,
-    })
   }
 
   const isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }: any) => {
@@ -411,7 +379,10 @@ function FeedListScreen({navigation, route}: Props) {
       )}
       {!feedList.homeFeedList[0] && (
       <NoFeedListContainer>
-        <NoFeedText>등록된 게시글이 없습니다.</NoFeedText>
+        <NoFeedEmoji
+        source={require('~/Assets/Images/Emoji/emo_noFeed.png')}/>
+        <NoFeedMainText>아직 게시글이 없네요.</NoFeedMainText>
+        <NoFeedSubText>     추천 친구를 팔로우하고{"\n"}피드를 풍성하게 만들어보세요!</NoFeedSubText>
       </NoFeedListContainer>
       )}
       </BodyContainer>

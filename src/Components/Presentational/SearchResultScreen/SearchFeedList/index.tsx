@@ -44,9 +44,9 @@ font-weight: bold;
 font-size: 22px;
 `;
 
-const NoFeedContainer = Styled.View`
+const NoSearchResultContainer = Styled.View`
  width:${wp('100%')};
- margin-top: 180px;
+ padding-top: ${hp('22%')};
  align-items: center;
 `;
 
@@ -116,6 +116,24 @@ const PickerFinishText = Styled.Text`
  color: #267DFF;
 `;
 
+const NoSearchResultEmoji = Styled.Image`
+ width: ${wp('6.4%')};
+ height: ${wp('6.4%')};
+`;
+
+const NoSearchResultMainText = Styled.Text`
+margin-top: 8px;
+font-weight: 600;
+color: #1D1E1F;
+font-size: 18px;
+`;
+
+const NoSearchResultSubText = Styled.Text`
+margin-top: 8px;
+color: #56575C;
+font-size: 15px;
+`;
+
   const TEST_SECTION_DATA = [
     {
       title: '30일',
@@ -176,11 +194,15 @@ const SearchFeedList = ({navigation, route, feedListData}: Props) => {
     return (
         <UserFeedListContainer>
           {!feedListData[0] && (
-        <NoFeedContainer>
-        <NoFeedText>
-          등록된 후기가 없어요.
-        </NoFeedText>
-      </NoFeedContainer>
+        <NoSearchResultContainer>
+          <NoSearchResultEmoji
+          source={require('~/Assets/Images/Emoji/emo_noSearchResult.png')}/>
+          <NoSearchResultMainText>
+            검색 결과가 없네요.
+          </NoSearchResultMainText>
+          <NoSearchResultSubText>원하는 게시물을 찾지 못했다면{"\n"}   직접 게시물을 올려보세요!
+          </NoSearchResultSubText>
+      </NoSearchResultContainer>
           )}
          {feedListData[0] && (
         <ListTypeFeedContainer>

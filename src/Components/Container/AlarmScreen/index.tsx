@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {FlatList, TouchableWithoutFeedback, StyleSheet, ActivityIndicator} from 'react-native';
+import {FlatList, TouchableWithoutFeedback, StyleSheet, ActivityIndicator, ScrollView, RefreshControl} from 'react-native';
 import Styled from 'styled-components/native';
 import {
     widthPercentageToDP as wp,
@@ -127,27 +127,26 @@ const LoadingContainer = Styled.View`
  margin-top: ${hp('35%')};
 `;
 
+const NoAlarmEmoji = Styled.Image`
+ width: ${wp('6.4%')};
+ height: ${wp('6.4%')};
+`;
 
+const NoAlarmMainText = Styled.Text`
+margin-top: 8px;
+font-weight: 600;
+color: #1D1E1F;
+font-size: 18px;
+`;
 
-
-const TEST_ALARM_DATA = [
-    {
-        index: 1,
-        nickname: "사용자1"
-    },
-    {
-        index: 2,
-        nickname: "사용자2"
-    },
-    {
-        index: 3,
-        nickname: "사용자3"
-    },
-    {
-        index: 4,
-        nickname: "사용자4"
-    },
-]
+const NoAlarmListContainer = Styled.View`
+ width: ${wp('100%')};
+ height: ${hp('100%')};
+ padding-bottom: ${hp('30%')}
+ background-color: #ffffff;
+ justify-content: center;
+ align-items: center;
+`;
 
 interface Props {
     navigation: any,
@@ -273,7 +272,7 @@ const AlarmScreen = ({navigation, route}: Props) => {
                     <ActivityIndicator/>
                 </LoadingContainer>
             )}
-            {!loading && (
+            {!loading && notificationListData[0] && (
             <AlarmListContainer>
                 <FlatList
                 ListHeaderComponent={alarmListHeaderContainer}
@@ -283,6 +282,23 @@ const AlarmScreen = ({navigation, route}: Props) => {
                 data={notificationListData}
                 renderItem={renderAlarmItem}/>
             </AlarmListContainer>
+            )}
+            {!loading && !notificationListData[0] && (
+            <ScrollView
+            showsVerticalScrollIndicator={false}
+            refreshControl={
+                <RefreshControl
+                refreshing={refreshing}
+                onRefresh={onRefreshNotificationList}/>
+            }>
+            <NoAlarmListContainer>
+                <NoAlarmEmoji
+                source={require('~/Assets/Images/Emoji/emo_noAlarm.png')}/>
+                <NoAlarmMainText>
+                    {"아직 소식이 없네요."}
+                </NoAlarmMainText>
+            </NoAlarmListContainer>
+            </ScrollView>
             )}
       <Modal
       onBackdropPress={() => setVisibleModal(false)}

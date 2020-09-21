@@ -300,17 +300,11 @@ const SingleKeywordFollowingText = Styled.Text`
 `;
 
 const NoSearchResultContainer = Styled.View`
- width: ${wp('100%')};
- height: ${hp('50%')};
+ width:${wp('100%')};
+ padding-top: ${hp('22%')};
  align-items: center;
- justify-content: center;
- background-color: #ffffff;
 `;
 
-const NoSearchResultText = Styled.Text`
- font-size: 15px;
- color: #56575C;
-`;
 
 const LoadingContainer = Styled.View`
  width: ${wp('100%')};
@@ -318,6 +312,26 @@ const LoadingContainer = Styled.View`
  background-color: #FFFFFF;
  margin-top: ${hp('35%')};
  align-items: center;
+`;
+
+
+const NoSearchResultEmoji = Styled.Image`
+ width: ${wp('6.4%')};
+ height: ${wp('6.4%')};
+`;
+
+const NoSearchResultMainText = Styled.Text`
+margin-top: 8px;
+font-weight: 600;
+color: #1D1E1F;
+font-size: 18px;
+
+`;
+
+const NoSearchResultSubText = Styled.Text`
+margin-top: 5px;
+font-size: 15px;
+color: #56575C;
 `;
 
 
@@ -888,7 +902,12 @@ const SearchResultScreen = ({navigation, route}: Props) => {
             )}
             {noSearchCollectionList && !loadingCollection && (
             <NoSearchResultContainer>
-              <NoSearchResultText>검색된 컬렉션이 없어요.</NoSearchResultText>
+              <NoSearchResultEmoji
+              source={require('~/Assets/Images/Emoji/emo_noSearchResult.png')}/><NoSearchResultMainText>
+              검색 결과가 없네요.
+            </NoSearchResultMainText>
+            <NoSearchResultSubText>원하는 게시물을 찾지 못했다면{"\n"}   직접 게시물을 올려보세요!
+            </NoSearchResultSubText>
             </NoSearchResultContainer>
             )}
             </CollectionListTabContainer>

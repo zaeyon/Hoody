@@ -62,7 +62,7 @@ const RecommendCollectionList = ({navigation, recommendMainCollectionListData, r
 
     const renderSubRecommendCollectionItem = ({item, index}: any) => {
         return (
-            <SubRecommendCollectionItemContainer style={index !== 0 && styles.subCollectionItem}>
+            <SubRecommendCollectionItemContainer style={index%3 !== 0 && styles.subCollectionItem}>
                 <SubRecommendCollectionItem
                 collectionId={item.id}
                 coverImage={item.coverImg ? item.coverImg : ""}
@@ -87,7 +87,8 @@ const RecommendCollectionList = ({navigation, recommendMainCollectionListData, r
             </MainRecommendCollectionContainer>
             <SubRecommendCollectionContainer>
                 <FlatList
-                contentContainerStyle={{backgroundColor:'#ffffff',  justifyContent: 'center', alignItems:'center'}}
+                contentContainerStyle={{backgroundColor:'#ffffff',  justifyContent: 'center', paddingLeft: 16}}
+                columnWrapperStyle={{marginTop: 3}}
                 horizontal={false}
                 numColumns={3}
                 data={recommendSubCollectionListData}

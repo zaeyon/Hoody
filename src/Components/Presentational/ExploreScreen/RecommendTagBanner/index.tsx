@@ -97,7 +97,7 @@ const RecommendTagBanner = ({trendTagsListData, navigation, loadingTrendTag}: Pr
             )}
             */}
             {!loadingTrendTag && (
-             <Swiper paginationStyle={{bottom:-5}} dotStyle={{width:5, height:5}} activeDotStyle={{backgroundColor:'#56575C', width:5, height:5}}>
+             <Swiper paginationStyle={{bottom:-11}} dotStyle={{width:5, height:5}} activeDotStyle={{backgroundColor:'#56575C', width:5, height:5}}>
                 {trendTagsListData.map((item, index) => {
                     return (
                     <TouchableWithoutFeedback onPress={() => searchToTrendTag(item)}>

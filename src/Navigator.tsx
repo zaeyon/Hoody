@@ -896,7 +896,7 @@ function AppNavigator({navigation, route}: any) {
 
        } else if(asyStorResponse.userId) {
          SplashScreen.hide();
-         POSTAutoLogin(asyStorResponse.userId, asyStorResponse.sessionId, fcmToken)
+         POSTAutoLogin(asyStorResponse.userId, asyStorResponse.sessionId)
          .then(function(response) {
            console.log("자동로그인 성공", response);
            console.log("이메일", asyStorResponse.email);
@@ -939,6 +939,7 @@ function AppNavigator({navigation, route}: any) {
        console.log("자동로그인 response.nickname", asyStorResponse.nickname);
        console.log("자동로그인 response.state", asyStorResponse.state);
        if(asyStorResponse == "NoLogined") {
+
          SplashScreen.hide();
          const authStatus = await messaging().requestPermission();
          const enabled =
@@ -948,6 +949,7 @@ function AppNavigator({navigation, route}: any) {
          if (enabled) {
           const fcmToken = await messaging().getToken()
           if(fcmToken) {
+          console.log("로그인된 사용자 없을때 fcmToken", fcmToken);
           dispatch(allActions.userActions.setFcmToken(fcmToken));
           }
         } else {
@@ -958,7 +960,6 @@ function AppNavigator({navigation, route}: any) {
       } else if(asyStorResponse.userId) {
          POSTAutoLogin(asyStorResponse.userId, asyStorResponse.sessionId)
          .then(function(response) {
-          
            console.log("자동로그인 성공", response);
            console.log("이메일", asyStorResponse.email);
            dispatch(allActions.userActions.setUser({
@@ -978,10 +979,10 @@ function AppNavigator({navigation, route}: any) {
              const enabled =
               authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
               authStatus === messaging.AuthorizationStatus.PROVISIONAL
-             var fcmToken;
-
+            
              if (enabled) {
-              fcmToken = await messaging().getToken()
+              const fcmToken = await messaging().getToken()
+
              if(fcmToken) {
               dispatch(allActions.userActions.setFcmToken(fcmToken));
               POSTFcmToken(asyStorResponse.userId, fcmToken)

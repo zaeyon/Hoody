@@ -443,23 +443,6 @@ const Unauthorized = ({navigation}) => {
       });
   };
 
-  const getKakao = () => {
-    navigation.navigate("KakaoLoginScreen")
-    /*
-    GETKakao()
-    .then(function(response) {
-      console.log("getKakao response", response)
-      navigation.navigate("KakaoLoginScreen", {
-        htmlCode: response,
-      });
-    })
-    .catch(function(error) {
-      console.log("GETKakao error", error);
-
-    })
-    */
-  }
-
   const getKakaoProfile = () => {
     logCallback('Get Profile Start', setProfileLoading(true));
     KakaoLogins.getProfile()

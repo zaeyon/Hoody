@@ -70,7 +70,7 @@ const SelectTagFeedListContainer = Styled.View`
   interface Props {
     navigation: any,
     ageGroupPopularTagListData: Array<object>,
-    selectPopularTag: (item:number, index:number) => 0,
+    selectPopularTag: (item:number, index:number) => void,
     selectedPopularTagIndex: number,
     loadingPopularTag: boolean,
   }
@@ -90,6 +90,8 @@ const PopularTagByAgeGroup = ({navigation, ageGroupPopularTagListData, selectPop
     }
 
     const renderSelectTagFeedItem = ({item, index}: any) => {
+        console.log("선택한 태그 변경", item);
+        console.log("선택한 태그 selectedPopularTagIndex", selectedPopularTagIndex);
         return (
             <TileFeedItem
             navigation={navigation}
@@ -108,28 +110,7 @@ const PopularTagByAgeGroup = ({navigation, ageGroupPopularTagListData, selectPop
         <Container>
             <HeaderContainer>
                 <AgeGroupText>20대 인기 태그</AgeGroupText>
-            </HeaderContainer>
-            {loadingPopularTag && (
-              <Placeholder
-              Animation={Fade}>
-              <PopularTagListContainer>
-                <PlaceholderLine
-                style={{width:71,height:wp('8%'),borderRadius:7, marginLeft:16}}/>
-                <PlaceholderLine
-                style={{width:71,height:wp('8%'),borderRadius:7, marginLeft:6}}/>
-                <PlaceholderLine
-                style={{width:71,height:wp('8%'),borderRadius:7, marginLeft:6}}/>
-                <PlaceholderLine
-                style={{width:71,height:wp('8%'),borderRadius:7, marginLeft:6}}/>
-                <PlaceholderLine
-                style={{width:71,height:wp('8%'),borderRadius:7, marginLeft:6}}/>
-              </PopularTagListContainer>
-              <SelectTagFeedListContainer>
-                
-              </SelectTagFeedListContainer>
-              </Placeholder>
-            )}
-            {!loadingPopularTag && (
+            </HeaderContainer>  
             <View>
             <PopularTagListContainer>
             <FlatList
@@ -149,7 +130,6 @@ const PopularTagByAgeGroup = ({navigation, ageGroupPopularTagListData, selectPop
                 />
             </SelectTagFeedListContainer>
             </View>
-            )}
         </Container>
     )
 }

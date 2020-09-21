@@ -45,8 +45,11 @@ interface Props {
 const SubRecommendCollectionItem = ({collectionId, coverImage, name, nickname, navigation}: Props) => {
 
     const moveToCollectionDetailScreen = () => {
-        navigation.navigate("CollectionDetailScreen", {
-            collectionId: collectionId,
+        navigation.navigate("CollectionStack", {
+            screen: "CollectionDetailScreen",
+            params: {
+                collectionId: collectionId,
+            }
         });
     }
     

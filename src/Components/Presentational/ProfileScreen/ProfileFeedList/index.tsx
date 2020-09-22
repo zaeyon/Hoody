@@ -260,7 +260,7 @@ const ProfileFeedList = ({navigation, route, feedListData, currentSortType, onSc
          <NoFeedEmoji
         source={require('~/Assets/Images/Emoji/emo_noFeed.png')}/>
         <NoFeedMainText>아직 게시글이 없네요.</NoFeedMainText>
-        <NoFeedSubText>자신의 소비에대해 이야기를 남겨보세요!</NoFeedSubText>
+        <NoFeedSubText>자신의 소비에 대해 이야기를 남겨보세요!</NoFeedSubText>
       </NoFeedContainer>
           )}
           {loadingProfileFeedByList && (

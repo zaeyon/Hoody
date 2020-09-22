@@ -86,6 +86,7 @@ interface Props {
 }
 
 const RecommendUser = ({navigation, recommendUserListData, loadingRecommendUser}: Props) => {
+    console.log("recommendUserListData", recommendUserListData);
 
     const currentUser = useSelector((state) => state.currentUser);
 

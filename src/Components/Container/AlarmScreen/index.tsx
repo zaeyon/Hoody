@@ -295,7 +295,7 @@ const AlarmScreen = ({navigation, route}: Props) => {
                 <NoAlarmEmoji
                 source={require('~/Assets/Images/Emoji/emo_noAlarm.png')}/>
                 <NoAlarmMainText>
-                    {"아직 소식이 없네요."}
+                    {"소식이 없네요."}
                 </NoAlarmMainText>
             </NoAlarmListContainer>
             </ScrollView>

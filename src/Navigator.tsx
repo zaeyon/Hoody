@@ -956,7 +956,6 @@ function AppNavigator({navigation, route}: any) {
           const authorized = await messaging().requestPermission()
           if (authorized) setIsAuthorized(true)
         }
-
       } else if(asyStorResponse.userId) {
          POSTAutoLogin(asyStorResponse.userId, asyStorResponse.sessionId)
          .then(function(response) {
@@ -981,7 +980,8 @@ function AppNavigator({navigation, route}: any) {
               authStatus === messaging.AuthorizationStatus.PROVISIONAL
             
              if (enabled) {
-              const fcmToken = await messaging().getToken()
+              const fcmToken = await messaging().getToken();
+
 
              if(fcmToken) {
               dispatch(allActions.userActions.setFcmToken(fcmToken));
@@ -1002,6 +1002,8 @@ function AppNavigator({navigation, route}: any) {
          .catch(function(error) {
            console.log("자동로그인 실패", error);
            SplashScreen.hide();
+
+           
            
          })
        }

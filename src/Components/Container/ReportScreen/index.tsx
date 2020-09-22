@@ -69,7 +69,7 @@ background-color: #ffffff;
 
 const SelectDateContainer = Styled.View`
 padding-top: 18px;
-padding-left: 16px;
+padding-left: 13px;
 padding-right: 16px;
 padding-bottom: 3px;
 flex-direction: row;

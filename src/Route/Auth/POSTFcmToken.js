@@ -14,6 +14,8 @@ const POSTFcmToken = (userId, fcmToken) => {
     form.append('id', userId);
     form.append("fcmToken", fcmToken);
 
+    console.log("POSTFcmToken form", form);
+
     return new Promise(function (resolve, reject) {
       axios
         .post(url, form, {

@@ -712,16 +712,16 @@ const ProfileScreen = ({navigation, route}: Props) => {
   }
 
   const moveToReport = () => {
+    /*
     Alert.alert('서비스 준비중입니다.', '', [
       {
         text: '확인',
         onPress: () => 0,
       }
     ]);
-
-    /*
-    navigation.navigate("ReportScreen");
     */
+    navigation.navigate("ReportScreen");
+
   }
 
   const moveToSetting = () => {

@@ -75,7 +75,7 @@ const AverageInfo = ({avgRating, avgExpense, postCount}: Props) => {
                     <ConsumpInfoRatingStarIcon
                     source={require('~/Assets/Images/ic_newStar.png')}/>
                     <ConsumpInfoContentText
-                    style={{marginLeft:3.5}}>{avgRating + "점"}</ConsumpInfoContentText>
+                    style={{marginLeft:3.5}}>{Number(avgRating).toFixed(1) + "점"}</ConsumpInfoContentText>
                     </ConsumpInfoRatingContainer>
                 </ConsumpInfoItemContainer>
                 <ConsumpInfoItemContainer>

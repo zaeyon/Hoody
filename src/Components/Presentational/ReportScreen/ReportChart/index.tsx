@@ -144,7 +144,7 @@ const ReportChart = ({weekListData, maximumExpense}: Props) => {
     const renderWeekItem = ({item, index}: any) => {
         return (
          <WeekBarContainer style={{justifyContent:'flex-end'}}>
-            <WeekBar style={item.data.TotalExpense == maximumExpense ? {height: wp('40.46%')} : {height: wp('40.46%') * (item.data.TotalExpense / maximumExpense)}}/>
+            <WeekBar style={item.data.TotalExpense == maximumExpense ? {height: wp('40.46%'), backgroundColor: "#267DFF"} : {height: wp('40.46%') * (item.data.TotalExpense / maximumExpense)}}/>
         </WeekBarContainer>
         )
     }

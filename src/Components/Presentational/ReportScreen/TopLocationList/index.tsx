@@ -60,14 +60,23 @@ interface Props {
 const TopLocationList = ({navigation, type, changeTopLocationType, topPopularAddressListData, topInterestAddressListData}: Props) => {
 
     const renderPopularTopLocationItem = ({item, index}: any) => {
+        console.log("renderPopularTopLocationItem", item);
         return (
-            <TopLocationItem/>
+            <TopLocationItem
+            navigation={navigation}
+            rank={index+1}
+            address={item.region}
+            avgRating={item.AvgStarRate}/>
         )
     }
 
     const renderInterestTopLocationItem = ({item, index}: any) => {
         return (
-            <TopLocationItem/>
+            <TopLocationItem
+            navigation={navigation}
+            rank={index+1}
+            address={item.region}
+            avgRating={item.AvgStarRate}/>
         )
     }
 

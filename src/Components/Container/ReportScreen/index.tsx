@@ -74,6 +74,7 @@ height: ${wp('6.4%')};
 const BodyContainer = Styled.ScrollView`
 flex: 1;
 background-color: #ffffff;
+
 `;
 
 const SelectDateContainer = Styled.View`
@@ -133,7 +134,7 @@ const Top5TagListContainer = Styled.View`
 `;
 
 const TopLocationListContainer = Styled.View`
- padding-bottom: 50px;
+ padding-bottom: 70px;
 `;
 
 const IntervalContainer = Styled.View`
@@ -252,7 +253,8 @@ const ReportScreen = ({navigation, route}: Props) => {
       getTopPopularTagList()
       getTopInterestTagList()
       getTopPopularAddressList()
-    }, [])
+      getTopInterestAddressList()
+    }, [selectedYear, selectedMonth])
 
     const getWeeklyArrangementData = () => {
       GETWeeklyArrangement(selectedYear + "-" + selectedMonth)
@@ -285,7 +287,6 @@ const ReportScreen = ({navigation, route}: Props) => {
             setWeekListData(arrangementPerWeeksArray);
             setLoading(false);
         }, 10)
-
       })
       .catch(function(error) {
         console.log("GETWeeklyArrangement error", error);
@@ -326,7 +327,7 @@ const ReportScreen = ({navigation, route}: Props) => {
     }
 
     const getTopPopularAddressList = () => {
-      GETTopAddressList("interest", selectedYear + "-" + selectedMonth)
+      GETTopAddressList("popular", selectedYear + "-" + selectedMonth)
       .then(function(response) {
         console.log("GETTopPopularAddressList response", response);
         setTopPopularAddressListData(response);
@@ -334,11 +335,17 @@ const ReportScreen = ({navigation, route}: Props) => {
       .catch(function(error) {
         console.log("GETTopPopularAddressList error", error);
       })
-      
     }
 
-    const getTopInterestAddressTagList = () => {
-
+    const getTopInterestAddressList = () => {
+      GETTopAddressList("interest", selectedYear + '-' + selectedMonth)
+      .then(function(response) {
+        console.log("GETTopInterestAddressList response", response);
+        setTopInterestAddressListData(response);
+      })
+      .catch(function(error) {
+        console.log("GETTopInterestAddressList error", error);
+      })
     }
 
     const changeTop5TagType = (type:string) => {
@@ -349,14 +356,12 @@ const ReportScreen = ({navigation, route}: Props) => {
         setTopLocationType(type);
     }
 
-
   const openYearPicker = () => {
     setVisibleYearPicker(true);
   }
 
   const selectYearPicker = () => {
     setVisibleYearPicker(false);
-
     if(changingYear != selectedYear) {
       setSelectedYear(changingYear)
     }

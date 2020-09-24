@@ -66,17 +66,24 @@ width: ${wp('3.2%')};
 height: ${wp('3.2%')};
 `;
 
-const TopLocationItem = () => {
+interface Props {
+    navigation: any,
+    rank: number,
+    address: string,
+    avgRating: number,
+}
+
+const TopLocationItem = ({navigation, rank, address, avgRating}: Props) => {
     return (
         <Container>
             <TagContainer>
-                <TagRankingText>1</TagRankingText>
-                <TagNameText>#카페</TagNameText>
+                <TagRankingText>{rank}</TagRankingText>
+                <TagNameText>{address}</TagNameText>
             </TagContainer>
             <TagEvaluateContainer>
                 <TagStarIcon
                 source={require('~/Assets/Images/Report/ic_newStar.png')}/>
-                <TagEvaluateValueText>10</TagEvaluateValueText>
+                <TagEvaluateValueText>{avgRating}</TagEvaluateValueText>
                 <TagDisclosureIcon
                 source={require('~/Assets/Images/Report/ic_disclosure.png')}/>
             </TagEvaluateContainer>

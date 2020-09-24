@@ -14,14 +14,6 @@ import messaging from '@react-native-firebase/messaging'
 import SplashScreen from 'react-native-splash-screen'
 import {isIphoneX, getBottomSpace} from 'react-native-iphone-x-helper';
 
-import Home from '~/Tab/Home';
-import Feed from '~/Tab/Feed';
-import Upload from '~/Tab/Upload';
-import Alarm from '~/Tab/Alarm';
-import Profile from '~/Tab/Profile';
-import Search from '~/Screens/Search';
-import FeedDetail from '~/Screens/FeedDetail';
-import PinterMap from '~/Screens/PinterMap';
 import UncertifiedProfile from '~/Screens/UncertifiedProfile';
 import CertifiedProfile from '~/Screens/CertifiedProfile';
 import LocationSearch from '~/Screens/LocationSearch';
@@ -354,9 +346,6 @@ function ProfileStackScreen() {
         name="ProfileScreen"
         component={ProfileScreen}
       />
-      <ProfileStack.Screen 
-      name="PinterMap"
-       component={PinterMap} />
       <ProfileStack.Screen
         name="UncertifiedProfile"
         component={UncertifiedProfile}

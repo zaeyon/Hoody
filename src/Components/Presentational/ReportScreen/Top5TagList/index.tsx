@@ -54,21 +54,34 @@ interface Props {
     navigation: any,
     type: string,
     changeTop5TagType: (type:string) => void,
+    topInterestTagListData: Array<object>,
+    topPopularTagListData: Array<object>,
 }
 
-const Top5TagList = ({navigation, type, changeTop5TagType}: Props) => {
+const Top5TagList = ({navigation, type, changeTop5TagType, topInterestTagListData, topPopularTagListData}: Props) => {
 
     const renderPopularTop5TagItem = ({item, index}: any) => {
         return (
             <PopularTop5TagItem
-            navigation={navigation}/>
+            navigation={navigation}
+            tagRank={index+1}
+            tagName={item.tagName}
+            totalView={item.hits}
+            totalLike={item.likes}
+            totalComment={item.commentCounts}
+            />
         )
     }
 
     const renderInterestTop5TagItem = ({item, index}: any) => {
         return (
             <InterestTop5TagItem
-            navigation={navigation}/>
+            navigation={navigation}
+            tagRank={index+1}
+            tagName={item.tagName}
+            postCount={item.postNum}
+            totalExpense={Math.floor(item.AvgExpense)}
+            avgRating={item.AvgStarRate.toFixed(1)}/>
         )
     }
 
@@ -76,7 +89,7 @@ const Top5TagList = ({navigation, type, changeTop5TagType}: Props) => {
     return (
         <Container>
             <TitleContainer>
-                <TitleText>TOP 5 태그</TitleText>
+                <TitleText>태그</TitleText>
                 <SortTypeContainer>
                     <SortTypeContainer>
                         <TouchableWithoutFeedback onPress={() => changeTop5TagType("popular")}>
@@ -92,12 +105,12 @@ const Top5TagList = ({navigation, type, changeTop5TagType}: Props) => {
             <Top5TagListContainer>
                 {type === "popular" && (
                 <FlatList
-                data={[1,2,3,4,5]}
+                data={topPopularTagListData}
                 renderItem={renderPopularTop5TagItem}/>
                 )}
                 {type === "interest" && (
                 <FlatList
-                data={[1,2,3,4,5]}
+                data={topInterestTagListData}
                 renderItem={renderInterestTop5TagItem}/>
                 )}
             </Top5TagListContainer>

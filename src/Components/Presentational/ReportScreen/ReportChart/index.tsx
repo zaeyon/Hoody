@@ -1,15 +1,18 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Styled from 'styled-components/native';
 import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import Dash from 'react-native-dash';
+import { FlatList } from 'react-native-gesture-handler';
 
 const Container = Styled.View`
- padding-top: 20px;
+margin-top: 10px
+padding-top: 30px;
  padding-left: 16px;
  padding-right: 16px;
- padding-bottom: 24px;
+ padding-bottom: 0px;
  background-color: #FFFFFF;
 `;
 
@@ -46,45 +49,152 @@ font-size: 20px;
 color: #1D1E1F;
 `;
 
-const ConsumpChart = Styled.View`
+const BarChartContainer = Styled.View`
 width: ${wp('91.46%')};
-height: ${wp('46.66%')};
-background-color: #c3c3c3;
-`;
-
-
-const ConsumpChartContainer = Styled.View`
-padding-top: 40px;
-padding-bottom: 24px;
+background-color: #ffffff;
+padding-bottom: 30px;
 background-color: #ffffff;
 align-items: center;
 `;
 
-const ReportChart = ({}) => {
+const BarChartBackground = Styled.View`
+width: ${wp('91.46%')};
+height: ${wp('40.46%')};
+background-color: #fafafa;
+`;
+
+const BarChartDividerContainer = Styled.View`
+flex: 1;
+justify-content: space-between;
+`;
+
+const BarChartDivider = Styled.View`
+ background-color: #ECECEE;
+ width: ${wp('91.46%')};
+ height: 2px;
+`;
+
+const MaximumExpenseContainer = Styled.View`
+ padding-left: 6.24px;
+ padding-right: 6.24px;
+ height: ${wp('6%')};
+ background: #FFDB4D;
+ position: absolute;
+ top: -${wp('5.5%')};
+ left: 0;
+ align-items: center;
+ justify-content: center;
+`;
+
+const WeekBarChartContainer = Styled.View`
+position: absolute;
+bottom: 0;
+left: 0;
+width: ${wp('91.46%')};
+height: ${wp('40.46%')};
+`;
+
+const MaximumExpenseText = Styled.Text`
+font-weight: 500;
+font-size: 13px;
+color: #1D1E1F;
+`;
+
+const WeekBarContainer = Styled.View`
+width: ${wp('18.292%')};
+align-items: center;
+`;
+
+const WeekBar = Styled.View`
+width: ${wp('2.7%')};
+background: #65A2FF;
+height: 100px;
+`;
+
+const WeekBarXaxis = Styled.Text`
+font-weight: 500;
+font-size: 14px;
+color: #8E9199;
+`;
+
+const WeekBarTotalExpenseText = Styled.Text`
+margin-top: 2px;
+font-weight: 500;
+font-size: 14px;
+color: #8E9199;
+`;
+
+const WeekBarXaxisContainer = Styled.View`
+margin-top: 8px;
+width: ${wp('91.46%')};
+`;
+
+const WeekBarXaxisItemContainer = Styled.View`
+width: ${wp('18.292%')};
+align-items: center;
+`;
+
+interface Props {
+    weekListData: Array<object>,
+    maximumExpense: number,
+}
+
+const ReportChart = ({weekListData, maximumExpense}: Props) => {
+    
+    const renderWeekItem = ({item, index}: any) => {
+        return (
+         <WeekBarContainer style={{justifyContent:'flex-end'}}>
+            <WeekBar style={item.data.TotalExpense == maximumExpense ? {height: wp('40.46%')} : {height: wp('40.46%') * (item.data.TotalExpense / maximumExpense)}}/>
+        </WeekBarContainer>
+        )
+    }
+
+        
+    const renderWeekXaxisItem = ({item, index}: any) => {
+      return (
+        <WeekBarXaxisItemContainer>
+          <WeekBarXaxis style={item.week === "ThisWeek" && {color: '#1D1E1F'}}>{item.week === "ThisWeek" ? "이번 주" : item.data.weeks + "째 주"}</WeekBarXaxis>
+          <WeekBarTotalExpenseText style={item.week === "ThisWeek" && {color: '#1D1E1F'}}>{item.data.TotalExpense ? Number(item.data.TotalExpense).toLocaleString() + "원" : "0원"}</WeekBarTotalExpenseText>
+        </WeekBarXaxisItemContainer>
+      )
+    }
+    
     return (
         <Container>
-            <ConsumpInfoContainer>
-                <ConsumpInfoItemContainer>
-                    <ConsumpInfoLabelText>평균 만족도</ConsumpInfoLabelText>
-                    <ConsumpInfoRatingContainer>
-                    <ConsumpInfoRatingStarIcon
-                    source={require('~/Assets/Images/ic_newStar.png')}/>
-                    <ConsumpInfoContentText
-                    style={{marginLeft:3.5}}>3.5</ConsumpInfoContentText>
-                    </ConsumpInfoRatingContainer>
-                </ConsumpInfoItemContainer>
-                <ConsumpInfoItemContainer>
-                    <ConsumpInfoLabelText>평균 소비금액</ConsumpInfoLabelText>
-                    <ConsumpInfoContentText>33,000원</ConsumpInfoContentText>
-                </ConsumpInfoItemContainer>
-                <ConsumpInfoItemContainer>
-                    <ConsumpInfoLabelText>총 게시글</ConsumpInfoLabelText>
-                    <ConsumpInfoContentText>30개</ConsumpInfoContentText>
-                </ConsumpInfoItemContainer>
-            </ConsumpInfoContainer>
-            <ConsumpChartContainer>
-                <ConsumpChart/>
-            </ConsumpChartContainer>
+                <BarChartContainer>
+                    <BarChartBackground>
+                        <BarChartDividerContainer>
+                            <Dash 
+                            style={{width:wp('91.1%')}}
+                            dashLength={7}
+                            dashThickness={2}
+                            dashColor={"#FFDB4D"}/>
+                            <BarChartDivider/>
+                            <BarChartDivider/>
+                            <BarChartDivider/>
+                            <BarChartDivider/>
+                            <BarChartDivider/>
+                        </BarChartDividerContainer>
+                <WeekBarChartContainer>
+                <FlatList
+                scrollEnabled={false}
+                style={{width: wp('91.46%'), height: wp('40.46%')}}
+                data={weekListData}
+                horizontal={true}
+                renderItem={renderWeekItem}/>
+                </WeekBarChartContainer>
+                    </BarChartBackground>
+                <WeekBarXaxisContainer>
+                <FlatList
+                scrollEnabled={false}
+                data={weekListData}
+                horizontal={true}
+                renderItem={renderWeekXaxisItem}/>
+                </WeekBarXaxisContainer>
+                <MaximumExpenseContainer>
+                    <MaximumExpenseText>{Number(maximumExpense)?.toLocaleString() + "원"}</MaximumExpenseText>
+                </MaximumExpenseContainer>
+                </BarChartContainer>
         </Container>
     )
 }

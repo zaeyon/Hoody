@@ -69,9 +69,14 @@ height: ${wp('3.2%')};
 
 interface Props {
     navigation: any,
+    tagRank: number,
+    tagName: string,
+    postCount: number,
+    totalExpense: Number,
+    avgRating: number,
 }
 
-const InterestTop5TagItem = ({navigation}: Props) => {
+const InterestTop5TagItem = ({navigation, tagRank, tagName, postCount, totalExpense, avgRating}: Props) => {
 
     const moveToTopInterestTagDetail = () => {
         navigation.navigate("TopInterestTagDetailScreen");
@@ -81,19 +86,19 @@ const InterestTop5TagItem = ({navigation}: Props) => {
     <TouchableWithoutFeedback onPress={() => moveToTopInterestTagDetail()}>
         <Container>
             <TagContainer>
-                <TagRankingText>1</TagRankingText>
-                <TagNameText>#카페</TagNameText>
+                <TagRankingText>{tagRank}</TagRankingText>
+                <TagNameText>{"#" + tagName}</TagNameText>
             </TagContainer>
             <TagEvaluateContainer>
                 <TagPostIcon
                 source={require('~/Assets/Images/Report/ic_post.png')}/>
-                <TagEvaluateValueText>12</TagEvaluateValueText>
+                <TagEvaluateValueText>{postCount}</TagEvaluateValueText>
                 <TagWonIcon
                 source={require('~/Assets/Images/Report/ic_won.png')}/>
-                <TagEvaluateValueText>22</TagEvaluateValueText>
+                <TagEvaluateValueText>{totalExpense.toLocaleString()}</TagEvaluateValueText>
                 <TagStarIcon
                 source={require('~/Assets/Images/Report/ic_newStar.png')}/>
-                <TagEvaluateValueText>10</TagEvaluateValueText>
+                <TagEvaluateValueText>{avgRating}</TagEvaluateValueText>
                 <TagDisclosureIcon
                 source={require('~/Assets/Images/Report/ic_disclosure.png')}/>
             </TagEvaluateContainer>

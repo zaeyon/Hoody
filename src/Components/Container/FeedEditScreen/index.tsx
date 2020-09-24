@@ -25,7 +25,7 @@ import POSTProductUrl from '~/Route/Post/POSTProductUrl';
 import GETSearchAutoComplete from '~/Route/Search/GETSearchAutoComplete';
 import POSTUpdate from '~/Route/Post/POSTUpdate';
 
-const ratingImage = require('~/Assets/Images/ic_star4.png');
+const ratingImage = require('~/Assets/Images/ic_swipeStar.png');
 
 const actionSheetRef = createRef();
 
@@ -165,6 +165,7 @@ align-items: center;
 `;
 
 const RatingTextContainer = Styled.View`
+ margin-left: 6px;
  flex-direction: row;
  width: 50px;
 `;
@@ -2017,11 +2018,6 @@ const renderAddNewDescripInput = () => {
                     <MainTagProcessContainer>
                         <RatingInductionText>{"#" + incompleteMainTag  + "은(는) 몇 점인가요?"}</RatingInductionText>
                         <RatingInputContainer>
-                            <TouchableWithoutFeedback onPress={() => setMainTagProcess(false)}>
-                            <RatingTextContainer>
-                                <Text style={{fontWeight:"bold", color: '#8e8e8e', fontSize: 18}}>{inputingRating !== "" ? (inputingRating + "점") : ""}</Text>
-                             </RatingTextContainer>
-                             </TouchableWithoutFeedback>
                             <RatingContainer>
                             <Rating
                             type="custom"
@@ -2033,6 +2029,11 @@ const renderAddNewDescripInput = () => {
                             setRatingInMove={ratingMoving}
                             />
                             </RatingContainer>
+                            <TouchableWithoutFeedback onPress={() => setMainTagProcess(false)}>
+                            <RatingTextContainer>
+                                <Text style={{fontWeight:"bold", color: '#8e8e8e', fontSize: 18}}>{inputingRating !== "" ? (inputingRating + "점") : ""}</Text>
+                             </RatingTextContainer>
+                             </TouchableWithoutFeedback>
                         </RatingInputContainer>
                     </MainTagProcessContainer>
                 )} 

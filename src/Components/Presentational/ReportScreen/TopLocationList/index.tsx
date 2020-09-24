@@ -53,9 +53,11 @@ interface Props {
     navigation: any,
     type: string,
     changeTopLocationType: (type:string) => void,
+    topPopularAddressListData: Array<object>,
+    topInterestAddressListData: Array<object>,
 }
 
-const TopLocationList = ({navigation, type, changeTopLocationType}: Props) => {
+const TopLocationList = ({navigation, type, changeTopLocationType, topPopularAddressListData, topInterestAddressListData}: Props) => {
 
     const renderPopularTopLocationItem = ({item, index}: any) => {
         return (
@@ -88,12 +90,12 @@ const TopLocationList = ({navigation, type, changeTopLocationType}: Props) => {
             <Top5TagListContainer>
                 {type === "popular" && (
                 <FlatList
-                data={[1,2,3,4,5]}
+                data={topPopularAddressListData}
                 renderItem={renderPopularTopLocationItem}/>
                 )}
                 {type === "interest" && (
                 <FlatList
-                data={[1,2,3,4,5]}
+                data={topInterestAddressListData}
                 renderItem={renderInterestTopLocationItem}/>
                 )}
             </Top5TagListContainer>

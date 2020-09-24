@@ -25,7 +25,7 @@ import POSTProductUrl from '~/Route/Post/POSTProductUrl';
 import GETSearchAutoComplete from '~/Route/Search/GETSearchAutoComplete';
 import GETPostTemporaryDetail from '~/Route/Post/GETPostTemporaryDetail';
 
-const ratingImage = require('~/Assets/Images/ic_star4.png');
+const ratingImage = require('~/Assets/Images/ic_swipeStar.png');
 
 const actionSheetRef = createRef();
 

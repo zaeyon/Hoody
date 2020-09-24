@@ -1,16 +1,25 @@
 import React, {useEffect, useState} from 'react';
 import Styled from 'styled-components/native';
-import {TouchableWithoutFeedback, Picker, StyleSheet, View} from 'react-native';
+import {TouchableWithoutFeedback, Picker, StyleSheet, View, ActivityIndicator} from 'react-native';
 import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import Modal from 'react-native-modal';
+import allActions from '~/action';
+import {useSelector, useDispatch} from 'react-redux';
 
 // Local Component
+import AverageInfo from '~/Components/Presentational/ReportScreen/AverageInfo';
 import ReportChart from '~/Components/Presentational/ReportScreen/ReportChart';
 import Top5TagList from '~/Components/Presentational/ReportScreen/Top5TagList';
 import TopLocationList from '~/Components/Presentational/ReportScreen/TopLocationList';
+
+// Route
+import GETWeeklyArrangement from '~/Route/Arrangement/GETWeeklyArrangement';
+import GETTopTagList from '~/Route/Arrangement/GETTopTagList';
+import GETTopAddress from '~/Route/Arrangement/GETTopAddressList';
+import GETTopAddressList from '~/Route/Arrangement/GETTopAddressList';
 
 const Container = Styled.SafeAreaView`
  flex: 1;
@@ -174,6 +183,14 @@ const PickerFinishText = Styled.Text`
  color: #267DFF;
 `;
 
+const LoadingContainer = Styled.View`
+ width: ${wp('100%')};
+ height: ${hp('100%')};
+ background-color:#FFFFFF;
+ align-items: center;
+ margin-top: ${hp('35%')};
+`;
+
 const YEAR_LIST = [
     2020, 2019, 2018, 2017, 2016, 2015, 2014, 2013, 2012, 2011, 2010, 2009, 2008, 2007, 2006, 2005, 2004, 2003, 2002, 2001, 2000, 1999, 1998, 1997, 1996, 1995, 1994, 1993, 1992, 1991, 1990, 1989, 1988, 1987, 1986, 1985, 1984, 1983, 1982, 1981, 1980,
   ]
@@ -206,6 +223,123 @@ const ReportScreen = ({navigation, route}: Props) => {
     const [changingYear, setChangingYear] = useState<number>(getCurrentYear(new Date()));
     const [selectedMonth, setSelectedMonth] = useState<number>(getCurrentMonth(new Date()));
     const [changingMonth, setChangingMonth] = useState<number>(getCurrentMonth(new Date()));
+    const [loading, setLoading] = useState<boolean>(true);
+    const [weeklyArrangementData, setWeeklyArrangementData] = useState<Object> ({
+      "arrangementPerMonth": [],
+      "arrangementPerWeeks": {
+        "1째 주": [[Object]],
+        "2째 주": [[Object]],
+        "3째 주": [[Object]],
+        "5째 주": [[Object]],
+        "이번 주": [[Object]]
+    }
+    });
+
+    const [weekListData, setWeekListData] = useState<Array<object>>([]);
+    const [maximumExpense, setMaximumExpense] = useState<Number>(0);
+    const [maximumExpenseChange, setMaximumExpenseChange] = useState<boolean>(false);
+
+    const [topPopularTagListData, setTopPopularTagListData] = useState<Array<object>>([]);
+    const [topInterestTagListData, setTopInterestTagListData] = useState<Array<object>>([]);
+
+    const [topPopularAddressListData, setTopPopularAddressListData] = useState<Array<object>>([]);
+    const [topInterestAddressListData, setTopInterestAddressListData] = useState<Array<object>>([]);
+
+    const currentUser = useSelector((state: any) => state.currentUser);
+
+    useEffect(() => {
+      getWeeklyArrangementData()
+      getTopPopularTagList()
+      getTopInterestTagList()
+      getTopPopularAddressList()
+    }, [])
+
+    const getWeeklyArrangementData = () => {
+      GETWeeklyArrangement(selectedYear + "-" + selectedMonth)
+      .then(function(response) {
+        console.log("GETWeeklyArrangement response", response. arrangementPerWeeks);
+        setWeeklyArrangementData(response);
+
+        var arrangementPerWeeksArray = new Array();
+        var tmpMaximumExpense = 0;
+        
+        for(const [key, value] of Object.entries(response.arrangementPerWeeks)) {
+            console.log("사용자 주별 소비데이터 분석");
+            var weekObj = {
+                week: key,
+                data: value[0],
+                maximum: false,
+            }
+
+            if(tmpMaximumExpense < Number(value[0].TotalExpense)) {
+                console.log("value[0].TotalExpense", value[0].TotalExpense)
+                weekObj.maximum = true
+                tmpMaximumExpense = value[0].TotalExpense
+            }
+
+            arrangementPerWeeksArray.push(weekObj);
+        }
+
+        setTimeout(() => {
+            setMaximumExpense(Number(tmpMaximumExpense))
+            setWeekListData(arrangementPerWeeksArray);
+            setLoading(false);
+        }, 10)
+
+      })
+      .catch(function(error) {
+        console.log("GETWeeklyArrangement error", error);
+      })
+    }
+
+    const getTopPopularTagList = () => {
+      GETTopTagList("popular", selectedYear + "-" + selectedMonth)
+      .then(function(response) {
+        console.log("GETTopPopularTagList response", response);
+
+        var sortedTagList = response.sort(function(a, b) {
+          return b.popular - a.popular;
+        })
+
+        setTimeout(() => {
+          console.log("정렬된 데이터", sortedTagList);
+          setTopPopularTagListData(sortedTagList);
+        }, 10)
+
+
+       
+      })
+      .catch(function(error) {
+        console.log("GETTopPopularTagList error", error);
+      })
+    }
+
+    const getTopInterestTagList = () => {
+      GETTopTagList("interest", selectedYear + "-" + selectedMonth)
+      .then(function(response) {
+        console.log("GETTopInterestTagList response", response);
+        setTopInterestTagListData(response);
+      })
+      .catch(function(error) {
+        console.log("GETTopInterestTagList error", error);
+      })
+    }
+
+    const getTopPopularAddressList = () => {
+      GETTopAddressList("interest", selectedYear + "-" + selectedMonth)
+      .then(function(response) {
+        console.log("GETTopPopularAddressList response", response);
+        setTopPopularAddressListData(response);
+      })
+      .catch(function(error) {
+        console.log("GETTopPopularAddressList error", error);
+      })
+      
+    }
+
+    const getTopInterestAddressTagList = () => {
+
+    }
 
     const changeTop5TagType = (type:string) => {
         setTop5TagType(type);
@@ -288,16 +422,25 @@ const ReportScreen = ({navigation, route}: Props) => {
                 </TouchableWithoutFeedback>
                 </SelectDateContainer>
                 <TitleContainer>
-                    <TitleText>재연님의 소비만족도</TitleText>
+                    <TitleText>{currentUser.user.nickname + "님의 소비만족도"}</TitleText>
                 </TitleContainer>
                 <ReportChartContainer>
-                <ReportChart/>
+                <AverageInfo
+                avgRating={weeklyArrangementData.arrangementPerMonth[0] ? weeklyArrangementData.arrangementPerMonth[0].AvgStarRate : ""}
+                avgExpense={weeklyArrangementData.arrangementPerMonth[0] ? Math.floor(weeklyArrangementData.arrangementPerMonth[0].AvgExpense) : ""} 
+                postCount={weeklyArrangementData.arrangementPerMonth[0] ? weeklyArrangementData.arrangementPerMonth[0].postCount : ""}
+                />
+                <ReportChart
+                weekListData={weekListData}
+                maximumExpense={maximumExpense}/>
                 </ReportChartContainer>
                 <IntervalContainer>
                 </IntervalContainer>
                 <Top5TagListContainer>
                 <Top5TagList
                 type={top5TagType}
+                topPopularTagListData={topPopularTagListData}
+                topInterestTagListData={topInterestTagListData}
                 changeTop5TagType={changeTop5TagType}
                 navigation={navigation}/>
                 </Top5TagListContainer>
@@ -306,7 +449,9 @@ const ReportScreen = ({navigation, route}: Props) => {
                 <TopLocationList
                 type={topLocationType}
                 changeTopLocationType={changeTopLocationType}
-                navigation={navigation}/>
+                navigation={navigation}
+                topPopularAddressListData={topPopularAddressListData}
+                topInterestAddressListData={topInterestAddressListData}/>
                 </TopLocationListContainer>
             </BodyContainer>
             <Modal
@@ -357,6 +502,11 @@ const ReportScreen = ({navigation, route}: Props) => {
             </PickerHeaderContainer>
           </MonthPickerContainer>
           </Modal>
+          {loading && (
+            <LoadingContainer>
+              <ActivityIndicator/>
+            </LoadingContainer>
+          )}
         </Container>
     )
 }

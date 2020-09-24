@@ -70,9 +70,14 @@ height: ${wp('3.2%')};
 
 interface Props {
     navigation: any,
+    tagRank: number,
+    tagName: string,
+    totalView: number,
+    totalLike: number,
+    totalComment: number,
 }
 
-const PopularTop5TagItem = ({navigation}: Props) => {
+const PopularTop5TagItem = ({navigation, tagRank, tagName, totalView, totalLike, totalComment}: Props) => {
 
     const moveToPopularTagDetail = () => {
         navigation.navigate("TopPopularTagDetailScreen")
@@ -82,19 +87,19 @@ const PopularTop5TagItem = ({navigation}: Props) => {
     <TouchableWithoutFeedback onPress={() => moveToPopularTagDetail()}>
         <Container>
             <TagContainer>
-                <TagRankingText>1</TagRankingText>
-                <TagNameText>#카페</TagNameText>
+                <TagRankingText>{tagRank}</TagRankingText>
+                <TagNameText>{"#" + tagName}</TagNameText>
             </TagContainer>
             <TagEvaluateContainer>
                 <TagViewIcon
                 source={require('~/Assets/Images/Report/ic_view.png')}/>
-                <TagEvaluateValueText>12</TagEvaluateValueText>
+                <TagEvaluateValueText>{totalView}</TagEvaluateValueText>
                 <TagLikeIcon
                 source={require('~/Assets/Images/Report/ic_like.png')}/>
-                <TagEvaluateValueText>22</TagEvaluateValueText>
+                <TagEvaluateValueText>{totalLike}</TagEvaluateValueText>
                 <TagCommentIcon
                 source={require('~/Assets/Images/Report/ic_comment.png')}/>
-                <TagEvaluateValueText>10</TagEvaluateValueText>
+                <TagEvaluateValueText>{totalComment}</TagEvaluateValueText>
                 <TagDisclosureIcon
                 source={require('~/Assets/Images/Report/ic_disclosure.png')}/>
             </TagEvaluateContainer>

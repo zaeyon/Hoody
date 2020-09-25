@@ -140,11 +140,13 @@ interface Props {
 }
 
 const ReportChart = ({weekListData, maximumExpense}: Props) => {
+    console.log("ReportChart weekListData", weekListData);
     
     const renderWeekItem = ({item, index}: any) => {
+        console.log("renderWeekItem item", item);
         return (
          <WeekBarContainer style={{justifyContent:'flex-end'}}>
-            <WeekBar style={item.data.TotalExpense == maximumExpense ? {height: wp('40.46%'), backgroundColor: "#267DFF"} : {height: wp('40.46%') * (item.data.TotalExpense / maximumExpense)}}/>
+            <WeekBar style={item.data.TotalExpense == maximumExpense ? {height: wp('40.46%'), backgroundColor: "#267DFF"} : {height: wp('40.46%') * ((item.data.TotalExpense ? item.data.TotalExpense : 0)/ (maximumExpense ? maximumExpense : 1))}}/>
         </WeekBarContainer>
         )
     }

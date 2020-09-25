@@ -65,6 +65,8 @@ interface Props {
     postCount: number,
 }
 
+
+
 const AverageInfo = ({avgRating, avgExpense, postCount}: Props) => {
     return (
         <Container>
@@ -80,11 +82,11 @@ const AverageInfo = ({avgRating, avgExpense, postCount}: Props) => {
                 </ConsumpInfoItemContainer>
                 <ConsumpInfoItemContainer>
                     <ConsumpInfoLabelText>평균 소비금액</ConsumpInfoLabelText>
-                    <ConsumpInfoContentText>{avgExpense.toLocaleString() + "원"}</ConsumpInfoContentText>
+                    <ConsumpInfoContentText>{avgExpense ? (avgExpense.toLocaleString() + "원") : "0원"}</ConsumpInfoContentText>
                 </ConsumpInfoItemContainer>
                 <ConsumpInfoItemContainer>
                     <ConsumpInfoLabelText>총 게시글</ConsumpInfoLabelText>
-                    <ConsumpInfoContentText>{postCount + "개"}</ConsumpInfoContentText>
+                    <ConsumpInfoContentText>{postCount ? postCount + "개" : "0개"}</ConsumpInfoContentText>
                 </ConsumpInfoItemContainer>
             </ConsumpInfoContainer>
         </Container>

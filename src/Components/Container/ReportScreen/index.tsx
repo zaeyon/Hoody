@@ -187,9 +187,18 @@ const PickerFinishText = Styled.Text`
 const LoadingContainer = Styled.View`
  width: ${wp('100%')};
  height: ${hp('100%')};
+ position: absolute;
  background-color:#FFFFFF;
  align-items: center;
- margin-top: ${hp('35%')};
+ justify-content: center;
+`;
+
+const ChangeDateLoadingContainer = Styled.View`
+ width: ${wp('100%')};
+ height: ${hp('100%')};
+ position: absolute;
+ align-items: center;
+ justify-content: center;
 `;
 
 const YEAR_LIST = [
@@ -225,6 +234,7 @@ const ReportScreen = ({navigation, route}: Props) => {
     const [selectedMonth, setSelectedMonth] = useState<number>(getCurrentMonth(new Date()));
     const [changingMonth, setChangingMonth] = useState<number>(getCurrentMonth(new Date()));
     const [loading, setLoading] = useState<boolean>(true);
+    const [loadingChangeDate, setLoadingChangeDate] = useState<boolean>(false);
     const [weeklyArrangementData, setWeeklyArrangementData] = useState<Object> ({
       "arrangementPerMonth": [],
       "arrangementPerWeeks": {
@@ -249,6 +259,7 @@ const ReportScreen = ({navigation, route}: Props) => {
     const currentUser = useSelector((state: any) => state.currentUser);
 
     useEffect(() => {
+      setLoadingChangeDate(true);
       getWeeklyArrangementData()
       getTopPopularTagList()
       getTopInterestTagList()
@@ -286,6 +297,7 @@ const ReportScreen = ({navigation, route}: Props) => {
             setMaximumExpense(Number(tmpMaximumExpense))
             setWeekListData(arrangementPerWeeksArray);
             setLoading(false);
+            setLoadingChangeDate(false);
         }, 10)
       })
       .catch(function(error) {
@@ -511,6 +523,12 @@ const ReportScreen = ({navigation, route}: Props) => {
             <LoadingContainer>
               <ActivityIndicator/>
             </LoadingContainer>
+          )}
+          {loadingChangeDate && (
+            <ChangeDateLoadingContainer>
+              <ActivityIndicator/>
+            </ChangeDateLoadingContainer>
+
           )}
         </Container>
     )

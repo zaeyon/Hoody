@@ -5,9 +5,14 @@ import {
     heightPercentageToDP as hp
 } from 'react-native-responsive-screen';
 import {TouchableWithoutFeedback, FlatList, TextInput ,Keyboard, KeyboardAvoidingView, StyleSheet, Text, View} from 'react-native'
+import AboveKeyboard from 'react-native-above-keyboard';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+
+// Route
 import GETTagAutoComplete from '~/Route/Search/GETTagAutoComplete';
 
 const Container = Styled.SafeAreaView`
+  flex:1;
   background-color: #ffffff;
   align-items: center;
 `;
@@ -225,7 +230,9 @@ const DivideBorder = Styled.View`
 `;
 
 const TagResultContainer = Styled.View`
-padding: 15px; 15px 15px 15px;
+flex:1;
+
+padding: 0px; 15px 15px 15px;
 border-color: #ececee;
 
 `;
@@ -257,12 +264,13 @@ color: #4090FC;
 
 const DisabledNextText = Styled.Text`
 font-size: 17px;
- color: #cccccc;
+ color: #267DFF;
+ opacity: 0.4;
 `;
 
 const AbledNextText = Styled.Text`
 font-size: 17px;
- color: #3384FF;
+ color: #267DFF;
 `;
 
 const MaxTagCountText = Styled.Text`
@@ -308,6 +316,44 @@ const MaximumTagCountText = Styled.Text`
  right: 30;
 `;
 
+const WriteButtonContainer = Styled.View`
+ width: ${wp('100%')};
+ height: ${hp('10%')};
+ padding-left: ${wp('31.7%')};
+ position: absolute;
+ bottom: 16px;
+`;
+
+const WriteButtonText = Styled.Text`
+color: #FFFFFF;
+font-weight: bold;
+font-size: 18px;
+`;
+
+const DisabledWriteButtonText = Styled.Text`
+color: #8E9199;
+font-weight: bold;
+font-size: 18px;
+`;
+
+const DisabledWriteButton = Styled.View`
+ width: ${wp('36.5%')};
+ height: ${wp('10.1%')};
+ background-color: #ECECEE;
+ border-radius: 100px;
+ align-items: center;
+ justify-content: center;
+`;
+
+const AbledWriteButton = Styled.View`
+width: ${wp('36.5%')};
+height: ${wp('10.1%')};
+background-color: #267DFF;
+border-radius: 100px;
+align-items: center;
+justify-content: center;
+`;
+
 const RESULT_DATA_TEST = [
     {
         name: '리뷰테스트1',
@@ -336,7 +382,7 @@ const TagSearchScreen = ({navigation, route}: Props) => {
     const [inputingSubTag1, setInputingSubTag1] = useState<boolean>(false);
     const [inputingSubTag2, setInputingSubTag2] = useState<boolean>(false);
 
-    const [inputingMainTagText, setInputingMainTagText] = useState<string>();
+    const [inputingMainTagText, setInputingMainTagText] = useState<string>("");
     const [inputingSubTag1Text, setInputingSubTag1Text] = useState<string>();
     const [inputingSubTag2Text, setInputingSubTag2Text] = useState<string>();
 
@@ -349,6 +395,10 @@ const TagSearchScreen = ({navigation, route}: Props) => {
     const [modifingTagText, setModifingTagText] = useState<string>();
 
     const [changingInputedTag, setChangingInputedTag] = useState<boolean>(false);
+
+    const [inputingMainTagText2, setInputingMainTagText2] = useState<string>("");
+    const [inputingSubTag1Text2, setInputingSubTag1Text2] = useState<string>("");
+    const [inputingSubTag2Text2, setInputingSubTag2Text2] = useState<string>("");
 
     useEffect(() => {
         setChangingInputedTag(!changingInputedTag)
@@ -436,7 +486,7 @@ const TagSearchScreen = ({navigation, route}: Props) => {
    // const [subTag2Size, subTag2OnLayout] = useTagComponentSize();
   
 
-    const selectTag = (item) => {
+    const selectTag = (item: any) => {
         if(inputingMainTag) {
         console.log("item", item);
         setInputingMainTagText(item.name);
@@ -451,6 +501,7 @@ const TagSearchScreen = ({navigation, route}: Props) => {
         setTagList(tmpTagList);
         setMainTagWidth(mainTagSize.width);
         setTagAutoCompletedList([]);
+        setInputingMainTagText2("")
 
         } else if(inputingSubTag1) {
         setInputingSubTag1Text(item.name);
@@ -465,6 +516,7 @@ const TagSearchScreen = ({navigation, route}: Props) => {
         setTagList(tmpTagList);
         setSubTag1Width(subTag1Size.width);
         setTagAutoCompletedList([])
+        setInputingSubTag1Text2("");
         } else if(inputingSubTag2) {
         setInputingSubTag2Text(item.name);
         setInputSubTag2(item.name)
@@ -475,17 +527,18 @@ const TagSearchScreen = ({navigation, route}: Props) => {
         setTagList(tmpTagList);
         setSubTag2Width(subTag2Size.width);
         setTagAutoCompletedList([])
+        setInputingSubTag2Text2("");
         }
     }
 
-    const changeMainTagInput = (query) => {
+    const changeMainTagInput = (query: any) => {
         if(query === " ") {
          setInputingMainTagText("");
    
         } else {
             var tmpTag = query.trim();
         setInputingMainTagText(tmpTag);
-
+        setInputingMainTagText2(tmpTag);
         if(query === "") {
             console.log("입력된 검색어 없음");
             setTagAutoCompletedList([]);
@@ -494,6 +547,7 @@ const TagSearchScreen = ({navigation, route}: Props) => {
         } else {
           if(query.search(/\s/) != -1) {
             var tag = query.trim();
+            /*
             console.log("공백 존재")
             console.log("query", query)       
             setInputMainTag(tag)
@@ -512,6 +566,7 @@ const TagSearchScreen = ({navigation, route}: Props) => {
 
             console.log("메인태그 길이", mainTagSize.width)
             setMainTagWidth(mainTagSize.width);
+            */
         } else {
         console.log("태그자동완성 tmpTag", tmpTag);
         GETTagAutoComplete(tmpTag)
@@ -530,82 +585,98 @@ const TagSearchScreen = ({navigation, route}: Props) => {
 
     const changeSubTag1Input = (query) => {
 
-        var tmpTag = query.trim();
-        setInputingSubTag1Text(tmpTag);
+        if(query === " ") {
+            setInputingSubTag1Text("");
 
-        console.log("inputingSubTag1", inputingSubTag1);
-
-        if(query.search(/\s/) != -1) {
-            var tag = query.trim();
-            console.log("공백 존재")
-            setInputSubTag1(tag)
-            setSubTag1Exis(true)
-            setInputingSubTag1(false)
-            if(!inputSubTag2) {
-                setInputingSubTag2(true)
-            }
-            var tmpTagList = tagList;
-            tmpTagList[1] = tag;
-            setTagList(tmpTagList);
-
-            console.log("서브태그 길이", subTag1Size.width)
-            setSubTag1Width(subTag1Size.width);
-
-            console.log("메인태그 길이!!!", mainTagWidth);
-            //console.log("서브태그1 길이", subTag1Width);
-        
         } else {
-        if(tmpTag != "") {
-            console.log("태그자동완성 tmpTag", tmpTag);
-            GETTagAutoComplete(tmpTag)
-            .then(function(response) {
-                console.log("서브태그1 자동완성", response)
-                setTagAutoCompletedList(response);
-            })
-            .catch(function(error) {
-                console.log("태그 자동완성 실패", error);
-            })
-            } else if(tmpTag === "") {
-                console.log("입력된거 없음")
-                setTagAutoCompletedList([]);
-            }
-        }   
-    }
-
-    const changeSubTag2Input = (query) => {
-
-        var tmpTag = query.trim();
-        setInputingSubTag2Text(tmpTag);
-
-        if(query.search(/\s/) != -1) {
-            var tag = query.trim()
-            console.log("공백 존재")
-        
-            setInputSubTag2(tag)
-            setSubTag2Exis(true)
-            setInputingSubTag2(false)
-            var tmpTagList = tagList;
-            tmpTagList[2] = tag;
-            setTagList(tmpTagList);
-
-            console.log("서브태그2 길이", subTag2Size.width);
-            setSubTag2Width(subTag2Size.width);
-        
-        } else {
+            
+            var tmpTag = query.trim();
+            setInputingSubTag1Text(tmpTag);
+            setInputingSubTag1Text2(tmpTag);
+    
+            console.log("inputingSubTag1", inputingSubTag1);
+    
+            if(query.search(/\s/) != -1) {
+                var tag = query.trim();
+                /*
+                console.log("공백 존재")
+                setInputSubTag1(tag)
+                setSubTag1Exis(true)
+                setInputingSubTag1(false)
+                if(!inputSubTag2) {
+                    setInputingSubTag2(true)
+                }
+                var tmpTagList = tagList;
+                tmpTagList[1] = tag;
+                setTagList(tmpTagList);
+    
+                console.log("서브태그 길이", subTag1Size.width)
+                setSubTag1Width(subTag1Size.width);
+    
+                console.log("메인태그 길이!!!", mainTagWidth);
+                //console.log("서브태그1 길이", subTag1Width);
+                */
+            
+            } else {
             if(tmpTag != "") {
                 console.log("태그자동완성 tmpTag", tmpTag);
                 GETTagAutoComplete(tmpTag)
                 .then(function(response) {
-                    console.log("서브태그2 자동완성", response)
+                    console.log("서브태그1 자동완성", response)
                     setTagAutoCompletedList(response);
                 })
                 .catch(function(error) {
                     console.log("태그 자동완성 실패", error);
                 })
                 } else if(tmpTag === "") {
+                    console.log("입력된거 없음")
                     setTagAutoCompletedList([]);
-            }
-        }  
+                }
+            }   
+        }
+    }
+
+    const changeSubTag2Input = (query: any) => {
+
+        if(query === " ") {
+            setInputingSubTag2Text("")
+            
+        } else {
+            var tmpTag = query.trim();
+            setInputingSubTag2Text(tmpTag);
+            setInputingSubTag2Text2(tmpTag);
+            if(query.search(/\s/) != -1) {
+                var tag = query.trim()
+                console.log("공백 존재")
+                /*
+            
+                setInputSubTag2(tag)
+                setSubTag2Exis(true)
+                setInputingSubTag2(false)
+                var tmpTagList = tagList;
+                tmpTagList[2] = tag;
+                setTagList(tmpTagList);
+    
+                console.log("서브태그2 길이", subTag2Size.width);
+                setSubTag2Width(subTag2Size.width);
+                */
+            
+            } else {
+                if(tmpTag != "") {
+                    console.log("태그자동완성 tmpTag", tmpTag);
+                    GETTagAutoComplete(tmpTag)
+                    .then(function(response) {
+                        console.log("서브태그2 자동완성", response)
+                        setTagAutoCompletedList(response);
+                    })
+                    .catch(function(error) {
+                        console.log("태그 자동완성 실패", error);
+                    })
+                    } else if(tmpTag === "") {
+                        setTagAutoCompletedList([]);
+                }
+            }  
+        }
     }
 
     // 화살표함수는 현재환경을 따르게할때 유용
@@ -614,11 +685,13 @@ const TagSearchScreen = ({navigation, route}: Props) => {
         console.log("!changingInputedTag", changingInputedTag)
 
         if(route.params?.requestType === 'upload') {
+            console.log("메인태그만 존재")
             navigation.navigate('UploadScreen', {
-              mainTag: inputingMainTagText ? inputingMainTagText : null,
+              mainTag: inputMainTag,
               mainTagWidth: mainTagWidth,
               subTag1: null,
               subTag2: null,
+              tagChange: true,
         })
         } else if(route.params?.requestType === 'edit') {
             navigation.navigate('FeedEditScreen', {
@@ -626,6 +699,7 @@ const TagSearchScreen = ({navigation, route}: Props) => {
               mainTagWidth: mainTagWidth,
               subTag1: null,
               subTag2: null,
+              tagChange: true,
             })
         }
         } else if (inputMainTag && inputSubTag1 && !inputSubTag2) {
@@ -635,7 +709,8 @@ const TagSearchScreen = ({navigation, route}: Props) => {
                     mainTagWidth: mainTagWidth,
                     subTag1: inputSubTag1,
                     subTag1Width: subTag1Width,
-                    subTag2: null
+                    subTag2: null,
+                    tagChange: true,
                 })
             } else if(route.params?.requestType === 'edit') {
                 navigation.navigate('FeedEditScreen', {
@@ -643,7 +718,8 @@ const TagSearchScreen = ({navigation, route}: Props) => {
                     mainTagWidth: mainTagWidth,
                     subTag1: inputSubTag1,
                     subTag1Width: subTag1Width,
-                    subTag2: null
+                    subTag2: null,
+                    tagChange: true,
                 })
             }
         } else if (inputMainTag && inputSubTag1 && inputSubTag2) {
@@ -655,6 +731,7 @@ const TagSearchScreen = ({navigation, route}: Props) => {
                     subTag1Width: subTag1Width,
                     subTag2: inputSubTag2,
                     subTag2Width: subTag2Width,
+                    tagChange: true,
                 })
             } else if(route.params?.requestType === 'edit') {
                 navigation.navigate('FeedEditScreen', {
@@ -664,6 +741,7 @@ const TagSearchScreen = ({navigation, route}: Props) => {
                     subTag1Width: subTag1Width,
                     subTag2: inputSubTag2,
                     subTag2Width: subTag2Width,
+                    tagChange: true,
                 })
             }
         }
@@ -734,6 +812,7 @@ const TagSearchScreen = ({navigation, route}: Props) => {
             tmpTagList[0] = tag;
             setTagList(tmpTagList);
             setMainTagWidth(mainTagSize.width);
+            setInputingMainTagText2("");
         }
     }
 
@@ -752,6 +831,7 @@ const TagSearchScreen = ({navigation, route}: Props) => {
             tmpTagList[1] = tag;
             setTagList(tmpTagList);
             setSubTag1Width(subTag1Size.width);
+            setInputingSubTag1Text2("");
         }
     }
 
@@ -767,6 +847,47 @@ const TagSearchScreen = ({navigation, route}: Props) => {
         tmpTagList[2] = tag;
         setTagList(tmpTagList);
         setSubTag2Width(subTag2Size.width);
+        setInputingSubTag2Text2("");
+        }
+    }
+
+    const registerTag = () => {
+        if(inputingMainTag) {
+            setInputMainTag(inputingMainTagText2)
+            setMainTagExis(true);
+            setInputingMainTag(false);
+            if(!inputSubTag1) {
+            setInputingSubTag1(true)
+            }
+            if(!inputSubTag2 && inputSubTag1) {
+            setInputingSubTag2(true)
+            }
+            var tmpTagList = tagList;
+            tmpTagList[0] = inputingMainTagText2;
+            setTagList(tmpTagList);
+            setMainTagWidth(mainTagSize.width);
+            setInputingMainTagText2("");
+        } else if(inputingSubTag1) {
+            setInputSubTag1(inputingSubTag1Text2)
+            setSubTag1Exis(true)
+            setInputingSubTag1(false)
+            if(!inputSubTag2) {
+                setInputingSubTag2(true)
+            }
+            var tmpTagList = tagList;
+            tmpTagList[1] = inputingSubTag1Text2;
+            setTagList(tmpTagList);
+            setSubTag1Width(subTag1Size.width);
+            setInputingSubTag1Text2("")
+        } else if(inputingSubTag2) {
+            setInputSubTag2(inputingSubTag2Text2)
+            setSubTag2Exis(true)
+            setInputingSubTag2(false)
+            var tmpTagList = tagList;
+            tmpTagList[2] = inputingSubTag2Text2;
+            setTagList(tmpTagList);
+            setSubTag2Width(subTag2Size.width);
+            setInputingSubTag2Text2("")
         }
     }
 
@@ -791,12 +912,22 @@ const TagSearchScreen = ({navigation, route}: Props) => {
                 </HeaderLeftContainer>
                 </TouchableWithoutFeedback>
                 <HeaderRightContainer>
+                    {/*
                     {!inputMainTag && (
                         <DisabledNextText>다음</DisabledNextText>
                     )}
                     {inputMainTag && (
                         <TouchableWithoutFeedback onPress={() => moveUpload()}>
                         <AbledNextText>다음</AbledNextText>
+                        </TouchableWithoutFeedback>
+                    )}
+                    */}
+                    {(inputingMainTagText2?.trim() === "" && inputingSubTag1Text2?.trim() === "" && inputingSubTag2Text2?.trim() === "") && (
+                        <DisabledNextText>등록</DisabledNextText>
+                    )}
+                    {(inputingMainTagText2?.trim() !== "" || inputingSubTag1Text2.trim() !== "" || inputingSubTag2Text2.trim() !== "") && (
+                        <TouchableWithoutFeedback onPress={() => registerTag()}>
+                        <AbledNextText>등록</AbledNextText>
                         </TouchableWithoutFeedback>
                     )}
                 </HeaderRightContainer>
@@ -1078,9 +1209,10 @@ const TagSearchScreen = ({navigation, route}: Props) => {
                 </InputedTagRowContainer>
                 </InputedTagColumnContainer>
             )}
-            <MaximumTagCountText>공백으로 태그 입력 / 태그 최대 3개</MaximumTagCountText>
+            <MaximumTagCountText>태그 최대 3개</MaximumTagCountText>
             </InputedTagListContainer>
         </TagContainer>
+
         <View style={{position:'absolute', bottom:0}}>
         <View>
         <GetTextWidthContainer>
@@ -1113,13 +1245,39 @@ const TagSearchScreen = ({navigation, route}: Props) => {
         <DivideBorder/>
         {tagAutoCompletedList !== null && (
         <TagResultContainer>
+        <KeyboardAwareScrollView
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}>
         <FlatList
+        style={{backgroundColor:'#ffffff', marginTop:10}}
         keyboardShouldPersistTaps="handled"
         data={tagAutoCompletedList?tagAutoCompletedList:[]}
         renderItem={renderAutoCompletedTagItem}/>
+        </KeyboardAwareScrollView>
     </TagResultContainer>
+        )} 
+        {inputMainTag && (
+        <WriteButtonContainer>
+                <AboveKeyboard>
+                <TouchableWithoutFeedback onPress={() => moveUpload()}>
+                <AbledWriteButton>
+                    <WriteButtonText>글 쓰러가기</WriteButtonText>
+                </AbledWriteButton>
+                </TouchableWithoutFeedback>
+                </AboveKeyboard>
+        </WriteButtonContainer>
         )}
-        
+        {/*
+        {!inputMainTag && (
+        <WriteButtonContainer>
+                <AboveKeyboard>
+                <DisabledWriteButton>
+                    <DisabledWriteButtonText>글 쓰러가기</DisabledWriteButtonText>
+                </DisabledWriteButton>
+                </AboveKeyboard>
+        </WriteButtonContainer>
+        )}
+        */}
     </Container>
     );
 }

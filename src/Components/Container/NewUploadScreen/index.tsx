@@ -1025,11 +1025,22 @@ useEffect(() => {
 
     useEffect(() => {
  console.log("입력된 태그 변경!!")
-        if(route.params?.mainTag && !route.params?.subTag1 && !route.params?.subTag2) {
+ console.log("태그 변경됨", route);
+ console.log("메인태그", route.params?.mainTag);
+ console.log("서브태그1", route.params?.subTag1);
+ console.log("서브태그2", route.params?.subTag2);
+ if(route.params?.tagChange) {
+     route.params.tagChange = false
+ }
+
+        if(route.params?.mainTag && route.params?.subTag1 == null && route.params?.subTag2 == null) {
+            console.log("서브태그 없음");
 
             setMainTagExis(true);
             setSubTag1Exis(false);
             setSubTag2Exis(false);
+            setSubTag1(null);
+            setSubTag2(null);
 
             if(route.params?.mainTag !== mainTag) {
                 console.log("메인태그만존재")
@@ -1041,12 +1052,12 @@ useEffect(() => {
                 setSubTag1(undefined)
                 setSubTag2(undefined)
             } else {
-                console.log("메인태그 일치")
+                console.log("메인태그 일치ㅋㅋ")
                 setMainTag(route.params.mainTag);
                 setSubTag1(undefined)
                 setSubTag2(undefined)
             }
-        } else if(route.params?.mainTag && route.params?.subTag1 && !route.params?.subTag2) { 
+        } else if(route.params?.mainTag && route.params?.subTag1 && route.params?.subTag2 == null) { 
             
             setMainTagExis(true);
             setSubTag1Exis(true);
@@ -1090,7 +1101,7 @@ useEffect(() => {
             setAllTagText(route.params.mainTag + " " + route.params.subTag1 + " " + route.params.subTag2);
             
         }
-    }, [route.params?.mainTag, route.params?.subTag1, route.params?.subTag2])
+    }, [route.params?.mainTag, route.params?.subTag1, route.params?.subTag2, route.params?.tagChange])
 
     useEffect(() => {
         console.log("scrollToEnd paragraphChange");

@@ -197,6 +197,7 @@ const ChangeDateLoadingContainer = Styled.View`
  width: ${wp('100%')};
  height: ${hp('100%')};
  position: absolute;
+ background-color: #00000020;
  align-items: center;
  justify-content: center;
 `;
@@ -389,8 +390,8 @@ const ReportScreen = ({navigation, route}: Props) => {
   }
 
   const selectMonthPicker = () => {
-    setSelectedMonth(changingMonth);
     setVisibleMonthPicker(false);
+    setSelectedMonth(changingMonth);
 
     if(changingMonth != selectedMonth) {
       setSelectedMonth(changingMonth);
@@ -398,8 +399,9 @@ const ReportScreen = ({navigation, route}: Props) => {
   }
 
   const cancelMonthPicker = () => {
-    setChangingMonth(selectedMonth);
     setVisibleMonthPicker(false);
+    setChangingMonth(selectedMonth);
+
   }
 
     return (

@@ -11,6 +11,7 @@ import {setAutoLoginUser} from '~/AsyncStorage/User';
 
 // Route
 import GETLogout from '~/Route/Auth/GETLogout';
+import GETSignOut from '~/Route/Auth/GETSignOut';
 
 const Container = Styled.SafeAreaView`
  flex: 1;
@@ -247,6 +248,34 @@ const AccountSettingScreen = ({navigation, route}: Props) => {
       );
     }
 
+    const signOut = () => {
+        Alert.alert(
+            '정말 회원탈퇴 하시겠습니까?', 
+            ' ', 
+            [
+            {
+                text: '확인',
+                onPress: () => {
+                   GETSignOut()
+                   .then(function(response) {
+                   console.log("signOut response", response);
+                   dispatch(allActions.userActions.logOut())
+                   setAutoLoginUser("","","","", "logout");
+                })
+                .catch(function(error) {
+                console.log("signOut error", error);
+                })
+            }
+            },
+            {
+                text: '취소',
+                onPress: () => 0,
+                style: 'cancel',
+            }
+        ],      
+      );
+    }
+
     return (
         <Container>
             <HeaderBar>
@@ -313,15 +342,16 @@ const AccountSettingScreen = ({navigation, route}: Props) => {
                     </TabItemInfoContainer>
                     </TabItemContainer>
                     </TouchableWithoutFeedback>
+                    <TouchableWithoutFeedback onPress={() => logout()}>
                     <TabItemContainer>
-                        <TouchableWithoutFeedback onPress={() => logout()}>
                         <TabToggleContainer>
                             <TabToggleText>
                                 로그아웃
                             </TabToggleText>
                         </TabToggleContainer>
-                        </TouchableWithoutFeedback>
                         </TabItemContainer>
+                        </TouchableWithoutFeedback>
+                    <TouchableWithoutFeedback onPress={() => signOut()}>
                         <TabItemContainer>
                         <TabToggleContainer>
                             <TabToggleText>
@@ -329,6 +359,7 @@ const AccountSettingScreen = ({navigation, route}: Props) => {
                             </TabToggleText>
                         </TabToggleContainer>
                         </TabItemContainer>
+                    </TouchableWithoutFeedback>
             </BodyContainer>
         </Container>
         

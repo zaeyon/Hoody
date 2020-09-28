@@ -12,21 +12,18 @@ import {NavigationContainer} from '@react-navigation/native';
 import Geolocation from 'react-native-geolocation-service';
 import messaging from '@react-native-firebase/messaging';
 import {isIphoneX, getBottomSpace} from 'react-native-iphone-x-helper';
+import Carousel from 'react-native-snap-carousel';
 
 // Local Component
-//import FeedItem from '~/Components/Presentational/FeedListScreen/MomoizedFeedItem';
-import MomoizedFeedItem from '~/Components/Presentational/FeedListScreen/MomoizedFeedItem';
-
-import PopularTagItem from '~/Components/Presentational/FeedListScreen/PopularTagItem';
-import SearchBar from '~/Components/Presentational/FeedListScreen/SearchBar'
-import SearchResult from '~/Components/SearchResult';
-import SearchAutoComplete from '~/Components/Presentational/SearchScreen/SearchAutoCompleteItem';
+//import FeedItem from '~/Components/Presentational/FeedListScreen/MemoizedFeedItem';
+import MemoizedFeedItem from '~/Components/Presentational/FeedListScreen/MemoizedFeedItem';
+import RecommendUserItem from '~/Components/Presentational/FeedListScreen/RecommendUserItem';
 
 // Route
 import GetAllFeed from '~/Route/Post/TestFeed';
 import GETSearchAutoComplete from '~/Route/Search/GETSearchAutoComplete';
 import GETFeed from '~/Route/Home/GETFeed';
-
+import GETRecommendUser from '~/Route/Home/GETRecommendUser'
 
 
 const Container = Styled.SafeAreaView`
@@ -70,10 +67,15 @@ const ReviewMapIcon = Styled.Image`
 const NoFeedListContainer = Styled.View`
  width: ${wp('100%')};
  height: ${hp('100%')};
- padding-bottom: ${hp('30%')}
  background-color: #ffffff;
  justify-content: center;
  align-items: center;
+`;
+
+const RecommendUserListContainer = Styled.View`
+ width: ${wp('100%')};
+ height: ${hp('80%')};
+ background-color: #ffffff;
 `;
 
 const FeedListContainer = Styled.View`
@@ -122,6 +124,12 @@ font-size: 15px;
 color: #56575C;
 `;
 
+const WelcomeText = Styled.Text`
+font-weight: 600;
+font-size: 18px;
+color: #3384FF;
+`;
+
 
 interface Props {
   navigation: any,
@@ -146,6 +154,7 @@ function FeedListScreen({navigation, route}: Props) {
   const [onRefreshFeedList, setOnRefreshFeedList] = useState<boolean>(false);
   const [noMoreFeedListData, setNoMoreFeedListData] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
+  const [recommendUserList, setRecommendUserList] = useState<Array<object>>([]);
 
   const currentUser = useSelector((state: any) => state.currentUser);
   const feedList = useSelector((state: any) => state.feedList);
@@ -240,9 +249,33 @@ function FeedListScreen({navigation, route}: Props) {
     setLoading(false);
     setRefreshing(false)
     setOnRefreshFeedList(!onRefreshFeedList)
+
+    if(response.result.length === 0) {
+      GETRecommendUser()
+      .then(function(response) {
+        console.log("GETRecommendUser response", response)
+        console.log("추천유저 정보", response[0].userList);
+        var tmpRecommendUserList = new Array();
+
+        response.forEach((item:any, index:number) => {
+          console.log("item.userList", item.userList);
+          tmpRecommendUserList = tmpRecommendUserList.concat(item.userList);
+        })
+
+        setTimeout(() => {
+          console.log("tmpRecommendUserList", tmpRecommendUserList)
+          setRecommendUserList(tmpRecommendUserList);
+        }, 100)
+      })
+      .catch(function(error) {
+        console.log("GETRecommendUser error", error);
+      })
+    }
   })
   .catch(function(error) {
     console.log("피드 목록 가져오기 실패", error);
+    setLoading(false)
+    setRefreshing(false)
   })
 };
 
@@ -308,7 +341,8 @@ function FeedListScreen({navigation, route}: Props) {
        }
        })
        .catch(function(error) {
-         console.log("피드 불러오기 실패", error);       
+         console.log("피드 불러오기 실패", error);    
+        
        })
   }
   }
@@ -316,7 +350,7 @@ function FeedListScreen({navigation, route}: Props) {
   const renderFeedItem = ({item, index}: any) => {
     console.log("홈화면 renderFeedItem item", item);
     return (
-      <MomoizedFeedItem
+      <MemoizedFeedItem
         id={item.id}
         profile_image={item.user.thumbnailImg}
         nickname={item.user.nickname}
@@ -340,6 +374,19 @@ function FeedListScreen({navigation, route}: Props) {
         userScrap={item.Scraps}
         />
    )
+}
+
+const renderRecommendUserItem = ({item, index}: any) => {
+  console.log("renderRecommendUserItem item", item);
+  return (
+    <RecommendUserItem
+    profileImage={item.thumbnailImg}
+    nickname={item.nickname}
+    description={item.description}
+    postList={item.posts}
+    followed={item.Followers[0] ? true : false}
+    userId={item.id}/>
+  )
 }
   
   return (
@@ -379,10 +426,23 @@ function FeedListScreen({navigation, route}: Props) {
       )}
       {!feedList.homeFeedList[0] && (
       <NoFeedListContainer>
+        {/*
         <NoFeedEmoji
         source={require('~/Assets/Images/Emoji/emo_noFeed.png')}/>
-        <NoFeedMainText>아직 게시글이 없네요.</NoFeedMainText>
+        */}
+        <WelcomeText>후디에 오신 것을 환영합니다!</WelcomeText>
         <NoFeedSubText>     추천 친구를 팔로우하고{"\n"}피드를 풍성하게 만들어보세요!</NoFeedSubText>
+        <RecommendUserListContainer>
+        <Carousel
+          contentContainerCustomStyle={isIphoneX() ? {paddingTop: 50} : {paddingTop:31}}
+          layout={"default"}
+          data={recommendUserList}
+          renderItem={renderRecommendUserItem}
+          sliderWidth={wp('100%')}
+          sliderHeight={hp('100%')}
+          itemHeight={wp('100%')}
+          itemWidth={wp('69%')}/>
+          </RecommendUserListContainer>
       </NoFeedListContainer>
       )}
       </BodyContainer>

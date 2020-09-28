@@ -651,7 +651,7 @@ const CollectionDetailScreen = ({navigation, route}: Props) => {
         <Container>
             {!loadingCollection && (
            <Animated.View
-            onLayout={(event) => onChangeHeaderHeight(event)}
+            onLayout={(event:any) => onChangeHeaderHeight(event)}
             style={{
             position: "absolute",
             left: 0,

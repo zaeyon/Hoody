@@ -521,16 +521,15 @@ const ReportScreen = ({navigation, route}: Props) => {
             </PickerHeaderContainer>
           </MonthPickerContainer>
           </Modal>
-          {loading && (
-            <LoadingContainer>
-              <ActivityIndicator/>
-            </LoadingContainer>
-          )}
           {loadingChangeDate && (
             <ChangeDateLoadingContainer>
               <ActivityIndicator/>
             </ChangeDateLoadingContainer>
-
+          )}
+          {loading && (
+            <LoadingContainer>
+              <ActivityIndicator/>
+            </LoadingContainer>
           )}
         </Container>
     )

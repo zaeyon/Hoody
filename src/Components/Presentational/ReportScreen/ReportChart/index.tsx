@@ -91,7 +91,7 @@ position: absolute;
 bottom: 0;
 left: 0;
 width: ${wp('91.46%')};
-height: ${wp('40.46%')};
+height: ${wp('50.46%')};
 `;
 
 const MaximumExpenseText = Styled.Text`
@@ -105,10 +105,27 @@ width: ${wp('18.292%')};
 align-items: center;
 `;
 
+const WeekRatingContainer = Styled.View`
+align-items: center;
+flex-direction: row;
+margin-bottom: 2px;
+`;
+
+const WeekRatingStarIcon = Styled.Image`
+width: ${wp('3.2%')};
+height: ${wp('3.2%')};
+`;
+
+const WeekRatingText = Styled.Text`
+margin-left: 5px;
+font-weight: 500;
+font-size: 14px;
+color: #267DFF;
+`;
+
 const WeekBar = Styled.View`
 width: ${wp('2.7%')};
 background: #65A2FF;
-height: 100px;
 `;
 
 const WeekBarXaxis = Styled.Text`
@@ -146,6 +163,13 @@ const ReportChart = ({weekListData, maximumExpense}: Props) => {
         console.log("renderWeekItem item", item);
         return (
          <WeekBarContainer style={{justifyContent:'flex-end'}}>
+             {item.data.AvgStarRate && (
+             <WeekRatingContainer>
+                 <WeekRatingStarIcon
+                 source={require('~/Assets/Images/ic_newStar.png')}/>
+                 <WeekRatingText>{item.data.AvgStarRate}</WeekRatingText>
+             </WeekRatingContainer>
+             )}
             <WeekBar style={item.data.TotalExpense == maximumExpense ? {height: wp('40.46%'), backgroundColor: "#267DFF"} : {height: wp('40.46%') * ((item.data.TotalExpense ? item.data.TotalExpense : 0)/ (maximumExpense ? maximumExpense : 1))}}/>
         </WeekBarContainer>
         )

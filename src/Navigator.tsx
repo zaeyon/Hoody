@@ -109,7 +109,7 @@ import FeedEditScreen from '~/Components/Container/FeedEditScreen';
 import ReportScreen from '~/Components/Container/ReportScreen';
 import TopPopularTagDetailScreen from '~/Components/Container/ReportScreen/TopPopularTagDetailScreen';
 import TopInterestTagDetailScreen from '~/Components/Container/ReportScreen/TopInterestTagDetailScreen';
-
+import TopLocationDetailScreen from '~/Components/Container/ReportScreen/TopLocationDetailScreen';
 // Declare Screen
 import FeedDeclareScreen from '~/Components/Container/FeedDeclareScreen';
 import CommentDeclareScreen from '~/Components/Container/CommentDeclareScreen';
@@ -404,6 +404,9 @@ function ProfileStackScreen() {
       <ProfileStack.Screen
       name="TopInterestTagDetailScreen"
       component={TopInterestTagDetailScreen}/>
+      <ProfileStack.Screen
+      name="TopLocationDetailScreen"
+      component={TopLocationDetailScreen}/>
     </ProfileStack.Navigator>
   );
 }

@@ -79,7 +79,13 @@ interface Props {
 const InterestTop5TagItem = ({navigation, tagRank, tagName, postCount, totalExpense, avgRating}: Props) => {
 
     const moveToTopInterestTagDetail = () => {
-        navigation.navigate("TopInterestTagDetailScreen");
+        navigation.navigate("TopInterestTagDetailScreen", {
+            tagRank: tagRank,
+            tagName: tagName,
+            postCount: postCount,
+            totalExpense: totalExpense,
+            avgRating: avgRating,
+        });
     }
 
     return (

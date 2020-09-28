@@ -6,7 +6,7 @@ import {
 } from 'react-native-responsive-screen';
 import {TouchableWithoutFeedback, FlatList, SectionList, View, Image} from 'react-native';
 import {useSelector} from 'react-redux';
-import GETTopTagDetailList from '~/Route/Arrangement/GETTopTagDetailList';
+import GETTopAddressDetailList from '~/Route/Arrangement/GETTopAddressDetailList';
 
 
 
@@ -126,6 +126,16 @@ interface Props {
     route: any,
 }
 
+interface ItemData {
+    mainTags: any,
+    starRate: any,
+    expense: any,
+    location: any,
+    likes: any,
+    commentsCount: any,
+    mediaFiles: Array<any>,
+}
+
 const TopPopularTagDetailScreen = ({navigation, route}: Props) => {
 
     const getCurrentYear = (date: Date) => {
@@ -136,18 +146,17 @@ const TopPopularTagDetailScreen = ({navigation, route}: Props) => {
         return date.getMonth() + 1;
       }
 
-    const { tagName } = route.params;
-    const { tagRank } = route.params;
-    const { totalComment } = route.params;
-    const { totalView } = route.params;
-    const { totalLike } = route.params;
+    const {address} = route.params;
+    const {avgRating} = route.params;
+    const {rank} = route.params;
     const [selectedYear, setSelectedYear] = useState<number>(getCurrentYear(new Date()));
     const [selectedMonth, setSelectedMonth] = useState<number>(getCurrentMonth(new Date()));
-    const [topTagDetailListData, setTopTagDetailListData] = useState<Array<any>>([]);
+    const [topAddressDetailListData, setTopAddressDetailListData] = useState<Array<object>>([]);
     
 
-    const Item = ({ item }) => (
-        <BodyContainer style={{marginBottom: 2, paddingLeft:15, paddingRight:15}}>
+    const Item = ({item}) => (
+        <BodyContainer style={{marginBottom: 1, paddingLeft:15, paddingRight:15}}>
+            {console.log(item)}
             <View style={{flex: 1, height: 150, flexDirection: 'row'}}>
                 <View style={{flex: 2, flexDirection: 'column', justifyContent: 'center'}}>
                     <DetailItemTagText>#{item.mainTags.name}</DetailItemTagText>
@@ -156,7 +165,7 @@ const TopPopularTagDetailScreen = ({navigation, route}: Props) => {
                         source={require('~/Assets/Images/ic_newStar.png')}/>
                         <DetailItemRatingText>{item.starRate} . {item.expense}원</DetailItemRatingText>
                     </View>
-                    <DetailItemLocationText>{item.address==null?"":item.address.address}</DetailItemLocationText>
+                    <DetailItemLocationText>{item.location}</DetailItemLocationText>
                     <View style={{marginTop: 20, flexDirection: 'row'}}>
                         <DetailItemRatingStarIcon
                         source={require('~/Assets/Images/ic_heart_outline.png')}/>
@@ -167,12 +176,11 @@ const TopPopularTagDetailScreen = ({navigation, route}: Props) => {
                     </View>
                 </View>
                 <View style={{justifyContent: 'center'}}>
-                <Image style={{height: 110, width: 110,borderRadius:10}}
-                source={{uri:item.mediaFiles[0]==undefined?"":item.mediaFiles[0].thumbnailImg}}>
+                <Image style={{height: 110, width: 110,borderRadius:10}} 
+                source={{uri: item.mediaFiles[0]==undefined?"":item.mediaFiles[0].url}}>
                 </Image>
                 </View>
             </View>
-            
             
         </BodyContainer>
     );
@@ -183,41 +191,35 @@ const TopPopularTagDetailScreen = ({navigation, route}: Props) => {
             </View>
         </BodyContainer>
     )
-
+    
     useEffect(() => {
-        getTopTagDetailList();
+        getTopAddressDetailList();
     }, [])
 
-    const getTopTagDetailList = () => {
-        GETTopTagDetailList(tagName, selectedYear + "-" + selectedMonth)
+    const getTopAddressDetailList = () => {
+        GETTopAddressDetailList(address, selectedYear + "-" + selectedMonth)
       .then(function(response) {
         console.log("GETTopTagDetailList response", response);
-        const DATA = renderTopTagDetailList(response);
-        setTimeout(() => {
-            console.log("DATA" ,DATA);
-            setTopTagDetailListData(DATA);    
-        }, 100);
-        
-        console.log("setting top tag detail list data")
+        setTopAddressDetailListData(response);
+        console.log(response);
+
       })
       .catch(function(error) {
-        console.log("GETTopTagDetailList error", error);
+        console.log("GETTopAddressDetailList error", error);
       })
     }
-    
-    const renderTopTagDetailList = (data) => {
-        let DATA = [];
-        console.log("render" + data[0])
-        
-        Object.keys(data.ByDate).forEach(key => {
-            console.log("data.ByDate[key]", data.ByDate[key]);
+
+    const renderTopAddressDetailList = (topAddressDetailListData) => {
+        const DATA = [];
+        Object.keys(topAddressDetailListData).forEach(key => {
             let childData = new Object();
             childData.title = key;
-            childData.data = data.ByDate[key];
+            childData.data = topAddressDetailListData[key].posts;
             DATA.push(childData);
         });
         return DATA;
     }
+    
 
     return (
         <Container>
@@ -231,7 +233,7 @@ const TopPopularTagDetailScreen = ({navigation, route}: Props) => {
                   </BackButtonContainer>
               </HeaderLeftContainer>
               </TouchableWithoutFeedback>
-              <HeaderTitleText>#{tagName}</HeaderTitleText>
+              <HeaderTitleText>#{address}</HeaderTitleText>
               <HeaderRightContainer>
                   <HeaderViewMoreIcon
                   source={require('~/Assets/Images/HeaderBar/ic_more.png')}/>
@@ -239,21 +241,21 @@ const TopPopularTagDetailScreen = ({navigation, route}: Props) => {
               </HeaderContainer>
               <TagEvaluateContainer>
                   <TagEvaluateItemContainer style={{flex:2}}>
-                      <TagEvaluateItemLabelText>조회수</TagEvaluateItemLabelText>
+                      <TagEvaluateItemLabelText></TagEvaluateItemLabelText>
                       <TagValueContainer>
-                      <TagEvaluateItemValueText>{ totalView }</TagEvaluateItemValueText>
+                      <TagEvaluateItemValueText></TagEvaluateItemValueText>
                       </TagValueContainer>
                   </TagEvaluateItemContainer>
                     <TagEvaluateItemContainer style={{flex:1}}>
-                        <TagEvaluateItemLabelText>하트</TagEvaluateItemLabelText>
+                        <TagEvaluateItemLabelText></TagEvaluateItemLabelText>
                         <TagValueContainer>
-                        <TagEvaluateItemValueText>{ totalLike }</TagEvaluateItemValueText>
+                        <TagEvaluateItemValueText></TagEvaluateItemValueText>
                         </TagValueContainer>
                     </TagEvaluateItemContainer>
                     <TagEvaluateItemContainer style={{flex:2}}>
-                        <TagEvaluateItemLabelText>댓글</TagEvaluateItemLabelText>
+                        <TagEvaluateItemLabelText></TagEvaluateItemLabelText>
                         <TagValueContainer>
-                        <TagEvaluateItemValueText>{totalComment}</TagEvaluateItemValueText>
+                        <TagEvaluateItemValueText></TagEvaluateItemValueText>
                         </TagValueContainer>
                     </TagEvaluateItemContainer>
                 </TagEvaluateContainer>
@@ -265,9 +267,10 @@ const TopPopularTagDetailScreen = ({navigation, route}: Props) => {
                     <TagEvaluateItemLabelText>7월 2일-7월 28일</TagEvaluateItemLabelText>
                 </View>
             
+            
                 <View>
                     <SectionList
-                        sections={topTagDetailListData}
+                        sections={renderTopAddressDetailList(topAddressDetailListData)}
                         keyExtractor={(item, index) => ""+index}
                         renderItem={({item})=><Item item={item}/>}
                         renderSectionHeader={({section: {title}})=>(

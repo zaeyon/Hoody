@@ -80,7 +80,13 @@ interface Props {
 const PopularTop5TagItem = ({navigation, tagRank, tagName, totalView, totalLike, totalComment}: Props) => {
 
     const moveToPopularTagDetail = () => {
-        navigation.navigate("TopPopularTagDetailScreen")
+        navigation.navigate("TopPopularTagDetailScreen", {
+            tagName: tagName,
+            tagRank: tagRank,
+            totalComment: totalComment,
+            totalView: totalView,
+            totalLike: totalLike,
+        })
     }
 
     return (

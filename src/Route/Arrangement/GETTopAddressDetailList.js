@@ -1,9 +1,8 @@
-import axios from 'axios'; // api 호출 모듈
-// 최상단 URL
+import axios from 'axios';
 const baseUrl = 'http://hoody-api-test-server-alb-349396782.ap-northeast-2.elb.amazonaws.com';
 
-const GETWeeklyArrangement = (yearMonth) => {
-    const url = baseUrl + '/arrangement/month-weeks?yearMonth=' + yearMonth;
+const GETTopAddressDetailList = (region, yearMonth) => {
+    const url = baseUrl + '/arrangement/addresses/detail?region=' + region + "&yearMonth=" + yearMonth;  
 
     return new Promise(function(resolve, reject) {
         axios
@@ -17,4 +16,4 @@ const GETWeeklyArrangement = (yearMonth) => {
     })
 }
 
-export default GETWeeklyArrangement;
+export default GETTopAddressDetailList;

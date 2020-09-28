@@ -21,6 +21,7 @@ import GETTopTagList from '~/Route/Arrangement/GETTopTagList';
 import GETTopAddress from '~/Route/Arrangement/GETTopAddressList';
 import GETTopAddressList from '~/Route/Arrangement/GETTopAddressList';
 
+
 const Container = Styled.SafeAreaView`
  flex: 1;
  background-color: #ffffff;

@@ -4,6 +4,7 @@ import {
     widthPercentageToDP as wp,
     heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 const Container = Styled.View`
 flex-direction: row;
@@ -74,7 +75,17 @@ interface Props {
 }
 
 const TopLocationItem = ({navigation, rank, address, avgRating}: Props) => {
+
+    const moveToTopLocationDetail = () => {
+        navigation.navigate("TopLocationDetailScreen", {
+            address: address,
+            avgRating: avgRating,
+            rank: rank,
+        })
+    }
+
     return (
+    <TouchableWithoutFeedback onPress={() => moveToTopLocationDetail()}>
         <Container>
             <TagContainer>
                 <TagRankingText>{rank}</TagRankingText>
@@ -88,6 +99,7 @@ const TopLocationItem = ({navigation, rank, address, avgRating}: Props) => {
                 source={require('~/Assets/Images/Report/ic_disclosure.png')}/>
             </TagEvaluateContainer>
         </Container>
+    </TouchableWithoutFeedback>
     )
 }
 

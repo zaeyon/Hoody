@@ -7,6 +7,7 @@ import {
 import {TouchableWithoutFeedback, FlatList, TextInput ,Keyboard, KeyboardAvoidingView, StyleSheet, Text, View} from 'react-native'
 import AboveKeyboard from 'react-native-above-keyboard';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {isIphoneX} from 'react-native-iphone-x-helper'; 
 
 // Route
 import GETTagAutoComplete from '~/Route/Search/GETTagAutoComplete';
@@ -321,7 +322,7 @@ const WriteButtonContainer = Styled.View`
  height: ${hp('10%')};
  padding-left: ${wp('31.7%')};
  position: absolute;
- bottom: 16px;
+ bottom: ${isIphoneX() ? 23 : 16}
 `;
 
 const WriteButtonText = Styled.Text`

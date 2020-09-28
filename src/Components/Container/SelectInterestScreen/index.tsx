@@ -9,7 +9,8 @@ import {
 } from 'react-native-responsive-screen';
 
 // Route
-import POSTCategory from '~/Route/Curation/POSTCategory'
+import POSTCategory from '~/Route/Curation/Category/POSTCategory'
+import GETCategoryList from '~/Route/Curation/Category/GETCategoryList';
 
 
 const Container = Styled.SafeAreaView`
@@ -205,14 +206,34 @@ interface InterestObj {
 
 
 const SelectInterestScreen = ({navigation, route}: Props) => {
-    const [interestList, setInterestList] = useState<Array<InterestObj>>(INTEREST_ITEM_LIST);
+    const [interestList, setInterestList] = useState<Array<InterestObj>>();
     const [selectedInterestList, setSelectedInterestList] = useState<Array<object>>([])
     const [changeInterest, setChangeInterest] = useState<boolean>(false);
     const dispatch = useDispatch();
 
     const deviceWidth = Dimensions.get('window').width;
 
-    console.log("deviceWidth", deviceWidth);
+    useEffect(() => {
+        GETCategoryList()
+        .then(function(response) {
+            console.log("GETCategoryList response", response)
+            const tmpListData = response.map((category:any, index:number) => {
+                var obj = {
+                    name: category,
+                    selected: false,
+                }
+                return obj
+            })
+
+            setTimeout(() => {
+                setInterestList(tmpListData)
+            }, 10)
+        })
+        .catch(function(error) {
+            console.log("GETCategoryList error", error);
+        })
+    }, [])
+
 
     const finishSelectInterest = () => {
         var interestListStr = JSON.stringify(selectedInterestList);

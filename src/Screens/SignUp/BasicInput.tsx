@@ -251,6 +251,7 @@ const BasicInput = ({navigation, route}) => {
     } else {
       if(inputedPassword !== inputedPasswordSame) {
         setPasswordSame(false);
+        setLoading(false);
       } else {
         console.log("이메일 중복 검사");
         GETEmailCheck(inputedEmail)

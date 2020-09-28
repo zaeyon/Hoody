@@ -12,7 +12,7 @@ import {isIphoneX} from 'react-native-iphone-x-helper';
 import ProfileListFeedItem from '~/Components/Presentational/ProfileScreen/ProfileListFeedItem';
 import TileFeedItem from '~/Components/Presentational/TileFeedItem';
 import FeedItem from '~/Components/Presentational/ProfileScreen/FeedItem';
-import MemoizedFeedItem from '~/Components/Presentational/FeedListScreen/MomoizedFeedItem';
+import MemoizedFeedItem from '~/Components/Presentational/FeedListScreen/MemoizedFeedItem';
 
 const UserFeedListContainer = Styled.View`
  width: ${wp('100%')};

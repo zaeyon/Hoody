@@ -78,6 +78,7 @@ import AlarmScreen from '~/Components/Container/AlarmScreen';
 import ExploreScreen from '~/Components/Container/ExploreScreen';
 import SearchScreen from '~/Components/Container/SearchScreen';
 import SearchResultScreen from '~/Components/Container/SearchResultScreen';
+import TrendTagSearchResultScreen from '~/Components/Container/TrendTagSearchResultScreen';
 
 // Upload Screen
 import TemporarySaveBoxScreen from '~/Components/Container/TemporarySaveBoxScreen';
@@ -220,6 +221,9 @@ function ExploreStackScreen() {
       <ExploreStack.Screen
       name="AnotherUserProfileStack"
       component={AnotherUserProfileStackScreen}/>
+      <ExploreStack.Screen
+      name="TrendTagSearchResultScreen"
+      component={TrendTagSearchResultScreen}/>
       <ExploreStack.Screen
       name="NearFeedMapScreen"
       component={NearFeedMapScreen}
@@ -420,9 +424,6 @@ function AnotherUserProfileStackScreen() {
         name="AnotherUserProfileScreen"
         component={AnotherUserProfileScreen}
       />
-      <ProfileStack.Screen 
-      name="PinterMap"
-       component={PinterMap} />
       <ProfileStack.Screen
       name="FollowListScreen"
       component={FollowListScreen}/>
@@ -925,29 +926,29 @@ function AppNavigator({navigation, route}: any) {
 
   const checkAutoLogin = useCallback(async () => {
      getAutoLoginUser()
-     .then(async function(asyStorResponse) {
+     .then(function(asyStorResponse) {
        console.log("responsegggg", asyStorResponse);
        console.log("자동로그인 세션", asyStorResponse.sessionId)
        console.log("자동로그인 response.nickname", asyStorResponse.nickname);
        console.log("자동로그인 response.state", asyStorResponse.state);
        if(asyStorResponse == "NoLogined") {
-
          SplashScreen.hide();
-         const authStatus = await messaging().requestPermission();
-         const enabled =
-         authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-         authStatus === messaging.AuthorizationStatus.PROVISIONAL
-
-         if (enabled) {
-          const fcmToken = await messaging().getToken()
-          if(fcmToken) {
-          console.log("로그인된 사용자 없을때 fcmToken", fcmToken);
-          dispatch(allActions.userActions.setFcmToken(fcmToken));
-          }
-        } else {
-          const authorized = await messaging().requestPermission()
-          if (authorized) setIsAuthorized(true)
-        }
+         setTimeout(async () => {
+          const authStatus = await messaging().requestPermission();
+          const enabled =
+          authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+          authStatus === messaging.AuthorizationStatus.PROVISIONAL
+          if (enabled) {
+           const fcmToken = await messaging().getToken()
+           if(fcmToken) {
+           console.log("로그인된 사용자 없을때 fcmToken", fcmToken);
+           dispatch(allActions.userActions.setFcmToken(fcmToken));
+           }
+         } else {
+           const authorized = await messaging().requestPermission()
+           if (authorized) setIsAuthorized(true)
+         }
+         }, 10)
       } else if(asyStorResponse.userId) {
          POSTAutoLogin(asyStorResponse.userId, asyStorResponse.sessionId)
          .then(function(response) {
@@ -991,12 +992,21 @@ function AppNavigator({navigation, route}: any) {
              }
            },10)
          })
-         .catch(function(error) {
+         .catch(async function(error) {
            console.log("자동로그인 실패", error);
            SplashScreen.hide();
+           const authStatus = await messaging().requestPermission();
+           const enabled =
+            authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+            authStatus === messaging.AuthorizationStatus.PROVISIONAL
 
-           
-           
+            if(enabled) {
+              const fcmToken = await messaging().getToken();
+
+              if(fcmToken) {
+                dispatch(allActions.userActions.setFcmToken(fcmToken));
+              }
+            }
          })
        }
      })

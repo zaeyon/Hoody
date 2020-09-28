@@ -10,7 +10,7 @@ import axios from 'axios';
 import allActions from '~/action';
 
 
-import MomoizedFeedItem from '~/Components/Presentational/FeedListScreen/MomoizedFeedItem';
+import MemoizedFeedItem from '~/Components/Presentational/FeedListScreen/MemoizedFeedItem';
 
 
 const Container = Styled.SafeAreaView`
@@ -56,7 +56,7 @@ const FeedList = ({navigation, route, feedListData, refreshing, onRefreshFeedLis
 
   const renderFeedItem = ({item, index}: any) => {
     return (
-      <MomoizedFeedItem
+      <MemoizedFeedItem
         id={item.id}
         profile_image={item.user.thumbnailImg}
         nickname={item.user.nickname}

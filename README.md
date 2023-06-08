@@ -40,8 +40,6 @@
 
 [https://www.figma.com/file/E1AbKKeKZTTDrWbAVL89zy/UI?type=design&node-id=1255%3A6784&t=la2VUeUHHmp1nt3B-1](https://www.figma.com/file/E1AbKKeKZTTDrWbAVL89zy/UI?type=design&node-id=1255%3A6784&t=la2VUeUHHmp1nt3B-1)
 
----
-
 ## 🛠️ 기술 스택
 
 ### • Platform - iOS, Android

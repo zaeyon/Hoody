@@ -18,14 +18,14 @@
 
 ### • 대표 사진
 <div>
-<img width="33%" alt="피드" src="https://user-images.githubusercontent.com/49143255/243345027-de09eb9e-de58-4c22-a861-1a5cf35fa24a.png"/>
-<img width="33%" alt="리뷰" src="https://user-images.githubusercontent.com/49143255/243345003-0dd7e7e5-e53d-4ff2-bb05-e5a8296ebc01.png"/>
-<img width="33%" alt="추천" src="https://user-images.githubusercontent.com/49143255/243345016-554fa9ab-bfbb-4d9c-8863-b10f3e723ed6.png"/>
+<img width="32%" alt="피드" src="https://user-images.githubusercontent.com/49143255/243345027-de09eb9e-de58-4c22-a861-1a5cf35fa24a.png"/>
+<img width="32%" alt="리뷰" src="https://user-images.githubusercontent.com/49143255/243345003-0dd7e7e5-e53d-4ff2-bb05-e5a8296ebc01.png"/>
+<img width="32%" alt="추천" src="https://user-images.githubusercontent.com/49143255/243345016-554fa9ab-bfbb-4d9c-8863-b10f3e723ed6.png"/>
 </div>
 <div>
-<img width="33%" alt="지도" src="https://user-images.githubusercontent.com/49143255/243345011-cf5e011b-f761-4492-bfa2-c84d432b3eb0.png"/>
-<img width="33%" alt="컬렉션" src="https://user-images.githubusercontent.com/49143255/243345021-a3fc8541-3500-4ef4-8fb7-48eddfc49f66.png"/>
-<img width="33%" alt="분석" src="https://user-images.githubusercontent.com/49143255/243345010-2217e81b-4131-42bc-8b17-2271aa3f64aa.png"/>
+<img width="32%" alt="지도" src="https://user-images.githubusercontent.com/49143255/243345011-cf5e011b-f761-4492-bfa2-c84d432b3eb0.png"/>
+<img width="32%" alt="컬렉션" src="https://user-images.githubusercontent.com/49143255/243345021-a3fc8541-3500-4ef4-8fb7-48eddfc49f66.png"/>
+<img width="32%" alt="분석" src="https://user-images.githubusercontent.com/49143255/243345010-2217e81b-4131-42bc-8b17-2271aa3f64aa.png"/>
  </div>
 
 ### • 참여

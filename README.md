@@ -105,7 +105,7 @@ Container 컴포넌트에선 비즈니스 로직과 상태 관리, 라우팅에 
 - 하단바의 가운데 + 버튼을 통해 자신의 소비에 대해 상세한 글을 작성할 수 있습니다.
 - 태그, 별점, 금액, 위치(네이버 장소 API 연동), 날짜, 링크와 같은 정보를 추가할 수 있고 글/사진의 문단을 드래그하여 조정하여 보다 상세한 게시글을 작성할 수 있습니다.
 
-<img alt="글작성" width="30%" src="https://test-video-hosting.s3.ap-northeast-2.amazonaws.com/post.gif"/>
+<img alt="글작성" width="30%" src="https://test-video-hosting.s3.ap-northeast-2.amazonaws.com/%E1%84%80%E1%85%B3%E1%86%AF%E1%84%8C%E1%85%A1%E1%86%A8%E1%84%89%E1%85%A5%E1%86%BC+(1).gif"/>
 
 
 ### 3. 마이 프로필 탭 - 소비 리포트 & 소비 지도 2:21-2:27 2:28 - 2:48

@@ -105,7 +105,7 @@ Container 컴포넌트에선 비즈니스 로직과 상태 관리, 라우팅에 
 - 하단바의 가운데 + 버튼을 통해 자신의 소비에 대해 상세한 글을 작성할 수 있습니다.
 - 태그, 별점, 금액, 위치(네이버 장소 API 연동), 날짜, 링크와 같은 정보를 추가할 수 있고 글/사진의 문단을 드래그하여 조정하여 보다 상세한 게시글을 작성할 수 있습니다.
 
-[소비 게시글 작성 테스트 영상](https://test-video-hosting.s3.ap-northeast-2.amazonaws.com/post.mp4)
+[게시글 작성 테스트 영상 보기](https://test-video-hosting.s3.ap-northeast-2.amazonaws.com/post.mp4)
 
 <img alt="글작성" width="30%" src="https://user-images.githubusercontent.com/49143255/244361360-bc5c0970-0344-4f2c-bf87-31570be1733c.png"/>
 
